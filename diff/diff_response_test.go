@@ -18,6 +18,7 @@ func TestGetDiffResponse_Diff(t *testing.T) {
 	require.Equal(t,
 		&diff.DiffSummary{
 			Diff:              true,
+			AddedEndpoints:    0,
 			DeletedEndpoints:  1,
 			ModifiedEndpoints: 1,
 		},

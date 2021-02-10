@@ -8,19 +8,27 @@ import (
 )
 
 type DiffResult struct {
+	AddedEndpoints    []string          `json:"addedEndpoints,omitempty"`
 	DeletedEndpoints  []string          `json:"deletedEndpoints,omitempty"`
 	ModifiedEndpoints ModifiedEndpoints `json:"modifiedEndpoints,omitempty"`
 }
 
 func (diffResult *DiffResult) empty() bool {
-	return len(diffResult.DeletedEndpoints) == 0 && len(diffResult.ModifiedEndpoints) == 0
+	return len(diffResult.AddedEndpoints) == 0 &&
+		len(diffResult.DeletedEndpoints) == 0 &&
+		len(diffResult.ModifiedEndpoints) == 0
 }
 
 func newDiffResult() *DiffResult {
 	return &DiffResult{
+		AddedEndpoints:    []string{},
 		DeletedEndpoints:  []string{},
 		ModifiedEndpoints: ModifiedEndpoints{},
 	}
+}
+
+func (diffResult *DiffResult) addAddedEndpoint(endpoint string) {
+	diffResult.AddedEndpoints = append(diffResult.AddedEndpoints, endpoint)
 }
 
 func (diffResult *DiffResult) addDeletedEndpoint(endpoint string) {
@@ -29,7 +37,7 @@ func (diffResult *DiffResult) addDeletedEndpoint(endpoint string) {
 
 func (diffResult *DiffResult) addModifiedEndpoint(entrypoint1 string, pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) {
 
-	diff := diffEndpoints(pathItem1, pathItem2)
+	diff := diffEndpoint(pathItem1, pathItem2)
 	if !diff.empty() {
 		diffResult.ModifiedEndpoints.addEndpointDiff(entrypoint1, pathItem1, pathItem2)
 	}

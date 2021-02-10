@@ -38,7 +38,7 @@ func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, p
 	}
 }
 
-func diffEndpoints(pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) *EndpointDiff {
+func diffEndpoint(pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) *EndpointDiff {
 	endpointDiff := newEndpointDiff()
 
 	endpointDiff.diffOperation(pathItem1.Connect, pathItem2.Connect, "CONNECT")
