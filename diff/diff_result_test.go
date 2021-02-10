@@ -14,9 +14,9 @@ func TestFilterByRegex(t *testing.T) {
 		ModifiedEndpoints: diff.ModifiedEndpoints{"abc": &diff.EndpointDiff{}},
 	}
 
-	diffResult.FilterByRegex("a.*")
+	diffResult.FilterByRegex("ab")
 
-	require.Equal(t, []string{"a"}, diffResult.AddedEndpoints)
+	require.Empty(t, diffResult.AddedEndpoints)
 	require.Equal(t, []string{"ab"}, diffResult.DeletedEndpoints)
 	require.Contains(t, diffResult.ModifiedEndpoints, "abc")
 }

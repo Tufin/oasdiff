@@ -52,7 +52,7 @@ func (diffResult *DiffResult) FilterByRegex(filter string) {
 
 	diffResult.AddedEndpoints = filterEndpoints(diffResult.AddedEndpoints, r)
 	diffResult.DeletedEndpoints = filterEndpoints(diffResult.DeletedEndpoints, r)
-	diffResult.filterModifiedEndpoints(r)
+	diffResult.ModifiedEndpoints = filterModifiedEndpoints(diffResult.ModifiedEndpoints, r)
 }
 
 func filterEndpoints(endpoints []string, r *regexp.Regexp) []string {
@@ -66,15 +66,16 @@ func filterEndpoints(endpoints []string, r *regexp.Regexp) []string {
 	return result
 }
 
-func (diffResult *DiffResult) filterModifiedEndpoints(r *regexp.Regexp) {
+func filterModifiedEndpoints(modifiedEndpoints ModifiedEndpoints, r *regexp.Regexp) ModifiedEndpoints {
 	result := ModifiedEndpoints{}
-	for endpoint, endpointDiff := range diffResult.ModifiedEndpoints {
+
+	for endpoint, endpointDiff := range modifiedEndpoints {
 		if r.MatchString(endpoint) {
 			result[endpoint] = endpointDiff
 		}
 	}
 
-	diffResult.ModifiedEndpoints = result
+	return result
 }
 
 func (diffResult *DiffResult) GetSummary() *DiffSummary {
