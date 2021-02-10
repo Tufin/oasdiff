@@ -8,23 +8,23 @@ import (
 )
 
 type DiffResult struct {
-	MissingEndpoints  []string          `json:"missingEndpoints,omitempty"`
+	DeletedEndpoints  []string          `json:"deletedEndpoints,omitempty"`
 	ModifiedEndpoints ModifiedEndpoints `json:"modifiedEndpoints,omitempty"`
 }
 
 func (diffResult *DiffResult) empty() bool {
-	return len(diffResult.MissingEndpoints) == 0 && len(diffResult.ModifiedEndpoints) == 0
+	return len(diffResult.DeletedEndpoints) == 0 && len(diffResult.ModifiedEndpoints) == 0
 }
 
 func newDiffResult() *DiffResult {
 	return &DiffResult{
-		MissingEndpoints:  []string{},
+		DeletedEndpoints:  []string{},
 		ModifiedEndpoints: ModifiedEndpoints{},
 	}
 }
 
-func (diffResult *DiffResult) addMissingEndpoint(endpoint string) {
-	diffResult.MissingEndpoints = append(diffResult.MissingEndpoints, endpoint)
+func (diffResult *DiffResult) addDeletedEndpoint(endpoint string) {
+	diffResult.DeletedEndpoints = append(diffResult.DeletedEndpoints, endpoint)
 }
 
 func (diffResult *DiffResult) addModifiedEndpoint(entrypoint1 string, pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) {
@@ -42,19 +42,19 @@ func (diffResult *DiffResult) FilterByRegex(filter string) {
 		return
 	}
 
-	diffResult.filterMissingEndpoints(r)
+	diffResult.filterDeletedEndpoints(r)
 	diffResult.filterModifiedEndpoints(r)
 }
 
-func (diffResult *DiffResult) filterMissingEndpoints(r *regexp.Regexp) {
+func (diffResult *DiffResult) filterDeletedEndpoints(r *regexp.Regexp) {
 	result := []string{}
-	for _, endpoint := range diffResult.MissingEndpoints {
+	for _, endpoint := range diffResult.DeletedEndpoints {
 		if r.MatchString(endpoint) {
 			result = append(result, endpoint)
 		}
 	}
 
-	diffResult.MissingEndpoints = result
+	diffResult.DeletedEndpoints = result
 }
 
 func (diffResult *DiffResult) filterModifiedEndpoints(r *regexp.Regexp) {

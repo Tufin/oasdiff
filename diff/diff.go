@@ -16,7 +16,7 @@ func Diff(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string) *DiffResult
 		pathItem2, ok := findEndpoint(entrypoint1, prefix, s2.Paths)
 
 		if !ok {
-			result.addMissingEndpoint(entrypoint1)
+			result.addDeletedEndpoint(entrypoint1)
 			continue
 		}
 

@@ -5,21 +5,21 @@ import (
 )
 
 type EndpointDiff struct {
-	MissingOperations  MissingOperations  `json:"missingOperations,omitempty"`
+	DeletedOperations  DeletedOperations  `json:"deletedOperations,omitempty"`
 	ModifiedOperations ModifiedOperations `json:"modifiedOperations,omitempty"`
 }
 
-type MissingOperations map[string]struct{}
+type DeletedOperations map[string]struct{}
 
 func newEndpointDiff() *EndpointDiff {
 	return &EndpointDiff{
-		MissingOperations:  MissingOperations{},
+		DeletedOperations:  DeletedOperations{},
 		ModifiedOperations: ModifiedOperations{},
 	}
 }
 
 func (endpointDiff *EndpointDiff) empty() bool {
-	return len(endpointDiff.MissingOperations) == 0 && endpointDiff.ModifiedOperations.empty()
+	return len(endpointDiff.DeletedOperations) == 0 && endpointDiff.ModifiedOperations.empty()
 }
 
 func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, pathItem2 *openapi3.Operation, method string) {
@@ -28,7 +28,7 @@ func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, p
 	}
 
 	if pathItem2 == nil {
-		endpointDiff.MissingOperations[method] = struct{}{}
+		endpointDiff.DeletedOperations[method] = struct{}{}
 		return
 	}
 

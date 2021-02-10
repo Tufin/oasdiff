@@ -5,7 +5,7 @@ import (
 )
 
 type MethodDiff struct {
-	MissingParams  map[string]ParamNames `json:"missingParams,omitempty"`  // key is param location
+	DeletedParams  map[string]ParamNames `json:"deletedParams,omitempty"`  // key is param location
 	ModifiedParams map[string]ParamDiffs `json:"modifiedParams,omitempty"` // key is param location
 }
 
@@ -14,21 +14,21 @@ type ParamDiffs map[string]ParamDiff // key is param name
 
 func newMethodDiff() *MethodDiff {
 	return &MethodDiff{
-		MissingParams:  map[string]ParamNames{},
+		DeletedParams:  map[string]ParamNames{},
 		ModifiedParams: map[string]ParamDiffs{},
 	}
 }
 
 func (methodDiff *MethodDiff) empty() bool {
-	return len(methodDiff.MissingParams) == 0 && len(methodDiff.ModifiedParams) == 0
+	return len(methodDiff.DeletedParams) == 0 && len(methodDiff.ModifiedParams) == 0
 }
 
-func (methodDiff *MethodDiff) addMissingParam(param *openapi3.Parameter) {
+func (methodDiff *MethodDiff) addDeletedParam(param *openapi3.Parameter) {
 
-	if paramNames, ok := methodDiff.MissingParams[param.In]; ok {
+	if paramNames, ok := methodDiff.DeletedParams[param.In]; ok {
 		paramNames[param.Name] = struct{}{}
 	} else {
-		methodDiff.MissingParams[param.In] = ParamNames{param.Name: struct{}{}}
+		methodDiff.DeletedParams[param.In] = ParamNames{param.Name: struct{}{}}
 	}
 }
 
@@ -52,7 +52,7 @@ func diffParameters(params1 openapi3.Parameters, params2 openapi3.Parameters) *M
 					result.addModifiedParam(paramRef1.Value, diff)
 				}
 			} else {
-				result.addMissingParam(paramRef1.Value)
+				result.addDeletedParam(paramRef1.Value)
 			}
 		}
 	}

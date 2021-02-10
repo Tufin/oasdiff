@@ -18,21 +18,21 @@ func TestDiff_Same(t *testing.T) {
 	s, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
-	require.Empty(t, diff.Diff(s, s, "").MissingEndpoints)
+	require.Empty(t, diff.Diff(s, s, "").DeletedEndpoints)
 }
 
-func TestDiff_MissingEndpoint(t *testing.T) {
+func TestDiff_DeletedEndpoint(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
 	s2, err := load.LoadPath(test2)
 	require.NoError(t, err)
 
-	require.Empty(t, diff.Diff(s2, s1, "").MissingEndpoints)
-	require.EqualValues(t, []string{"/api/{domain}/{project}/install-command"}, diff.Diff(s1, s2, "").MissingEndpoints)
+	require.Empty(t, diff.Diff(s2, s1, "").DeletedEndpoints)
+	require.EqualValues(t, []string{"/api/{domain}/{project}/install-command"}, diff.Diff(s1, s2, "").DeletedEndpoints)
 }
 
-func TestDiff_MissingOperation(t *testing.T) {
+func TestDiff_DeletedOperation(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
@@ -40,11 +40,11 @@ func TestDiff_MissingOperation(t *testing.T) {
 	require.NoError(t, err)
 
 	require.Equal(t,
-		diff.MissingOperations{"POST": struct{}{}},
-		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].MissingOperations)
+		diff.DeletedOperations{"POST": struct{}{}},
+		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].DeletedOperations)
 }
 
-func TestDiff_MissingParam(t *testing.T) {
+func TestDiff_DeletedParam(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
@@ -53,7 +53,7 @@ func TestDiff_MissingParam(t *testing.T) {
 
 	require.Equal(t,
 		diff.ParamNames{"X-Auth-Name": struct{}{}},
-		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].MissingParams["header"])
+		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].DeletedParams["header"])
 }
 
 func TestDiff_TypeDiff(t *testing.T) {
