@@ -69,7 +69,7 @@ func TestDiff_TypeDiff(t *testing.T) {
 			OldValue: "string",
 			NewValue: "integer",
 		},
-		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["path"]["domain"].ShcemaDiff.TypeDiff)
+		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["path"]["domain"].SchemaDiff.TypeDiff)
 }
 
 func TestDiff_EnumDiff(t *testing.T) {
@@ -81,7 +81,7 @@ func TestDiff_EnumDiff(t *testing.T) {
 
 	require.Equal(t,
 		true,
-		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/install-command"].ModifiedOperations["GET"].ModifiedParams["path"]["project"].ShcemaDiff.EnumDiff)
+		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/install-command"].ModifiedOperations["GET"].ModifiedParams["path"]["project"].SchemaDiff.EnumDiff)
 }
 
 func TestDiff_NotDiff(t *testing.T) {
@@ -93,5 +93,5 @@ func TestDiff_NotDiff(t *testing.T) {
 
 	require.Equal(t,
 		true,
-		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["query"]["image"].ShcemaDiff.NotDiff)
+		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["query"]["image"].SchemaDiff.NotDiff)
 }

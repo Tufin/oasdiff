@@ -12,7 +12,7 @@ type ParamDiff struct {
 	AllowReservedDiff   *ValueDiff  `json:"allow_reservedDiff,omitempty"`
 	DeprecatedDiff      *ValueDiff  `json:"deprecatedDiff,omitempty"`
 	RequiredDiff        *ValueDiff  `json:"requiredDiff,omitempty"`
-	ShcemaDiff          *SchemaDiff `json:"schemaDiff,omitempty"`
+	SchemaDiff          *SchemaDiff `json:"schemaDiff,omitempty"`
 	ExampleDiff         *ValueDiff  `json:"exampleDiff,omitempty"`
 	ExamplesDiff        *ValueDiff  `json:"examplesDiff,omitempty"`
 	ContentDiff         *ValueDiff  `json:"contentDiff,omitempty"`
@@ -41,7 +41,7 @@ func diffParamValues(param1 *openapi3.Parameter, param2 *openapi3.Parameter) Par
 	result.RequiredDiff = getValueDiff(param1.Required, param2.Required)
 
 	if schemaDiff := diffSchema(param1.Schema, param2.Schema); !schemaDiff.empty() {
-		result.ShcemaDiff = &schemaDiff
+		result.SchemaDiff = &schemaDiff
 	}
 
 	if diffExample(param1.Example, param2.Example) {
