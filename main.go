@@ -32,10 +32,7 @@ func main() {
 		return
 	}
 
-	result := diff.Diff(auto, manual, prefix)
-	result.FilterByRegex(filter)
-
-	bytes, err := json.MarshalIndent(result, "", " ")
+	bytes, err := json.MarshalIndent(diff.GetDiffResponse(auto, manual, prefix, filter), "", " ")
 	if err != nil {
 		log.Errorf("failed to marshal result with '%v'", err)
 		return

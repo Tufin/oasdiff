@@ -12,6 +12,10 @@ type DiffResult struct {
 	ModifiedEndpoints ModifiedEndpoints `json:"modifiedEndpoints,omitempty"`
 }
 
+func (diffResult *DiffResult) empty() bool {
+	return len(diffResult.MissingEndpoints) == 0 && len(diffResult.ModifiedEndpoints) == 0
+}
+
 func newDiffResult() *DiffResult {
 	return &DiffResult{
 		MissingEndpoints:  []string{},
@@ -62,4 +66,8 @@ func (diffResult *DiffResult) filterModifiedEndpoints(r *regexp.Regexp) {
 	}
 
 	diffResult.ModifiedEndpoints = result
+}
+
+func (diffResult *DiffResult) GetSummary() *DiffSummary {
+	return getDiffSummary(diffResult)
 }
