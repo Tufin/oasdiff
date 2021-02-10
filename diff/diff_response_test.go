@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-func TestGetDiffResponse(t *testing.T) {
+func TestGetDiffResponse_Diff(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
@@ -22,4 +22,17 @@ func TestGetDiffResponse(t *testing.T) {
 			ModifiedEndpoints: 1,
 		},
 		diff.GetDiffResponse(s1, s2, "", "").DiffSummary)
+}
+
+func TestGetDiffResponse_NoDiff(t *testing.T) {
+	s, err := load.LoadPath(test1)
+	require.NoError(t, err)
+
+	require.Equal(t,
+		&diff.DiffSummary{
+			Diff:              false,
+			MissingEndpoints:  0,
+			ModifiedEndpoints: 0,
+		},
+		diff.GetDiffResponse(s, s, "", "").DiffSummary)
 }
