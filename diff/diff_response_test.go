@@ -5,13 +5,14 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 func TestGetDiffResponse_Diff(t *testing.T) {
-	s1, err := diff.LoadPath(test1)
+	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
-	s2, err := diff.LoadPath(test2)
+	s2, err := load.LoadPath(test2)
 	require.NoError(t, err)
 
 	require.Equal(t,
@@ -25,7 +26,7 @@ func TestGetDiffResponse_Diff(t *testing.T) {
 }
 
 func TestGetDiffResponse_NoDiff(t *testing.T) {
-	s, err := diff.LoadPath(test1)
+	s, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
 	require.Equal(t,
@@ -38,10 +39,10 @@ func TestGetDiffResponse_NoDiff(t *testing.T) {
 }
 
 func TestGetDiffResponse_Prefix(t *testing.T) {
-	s2, err := diff.LoadPath(test2)
+	s2, err := load.LoadPath(test2)
 	require.NoError(t, err)
 
-	s4, err := diff.LoadPath(test4)
+	s4, err := load.LoadPath(test4)
 	require.NoError(t, err)
 
 	require.Equal(t,

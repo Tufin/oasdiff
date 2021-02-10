@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -15,17 +16,17 @@ const (
 )
 
 func TestDiff_Same(t *testing.T) {
-	s, err := diff.LoadPath(test1)
+	s, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
 	require.Empty(t, diff.Diff(s, s, "").DeletedEndpoints)
 }
 
 func TestDiff_DeletedEndpoint(t *testing.T) {
-	s1, err := diff.LoadPath(test1)
+	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
-	s2, err := diff.LoadPath(test2)
+	s2, err := load.LoadPath(test2)
 	require.NoError(t, err)
 
 	require.Empty(t, diff.Diff(s2, s1, "").DeletedEndpoints)
@@ -33,10 +34,10 @@ func TestDiff_DeletedEndpoint(t *testing.T) {
 }
 
 func TestDiff_DeletedOperation(t *testing.T) {
-	s1, err := diff.LoadPath(test1)
+	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
-	s2, err := diff.LoadPath(test2)
+	s2, err := load.LoadPath(test2)
 	require.NoError(t, err)
 
 	require.Equal(t,
@@ -45,10 +46,10 @@ func TestDiff_DeletedOperation(t *testing.T) {
 }
 
 func TestDiff_DeletedParam(t *testing.T) {
-	s1, err := diff.LoadPath(test1)
+	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
-	s2, err := diff.LoadPath(test2)
+	s2, err := load.LoadPath(test2)
 	require.NoError(t, err)
 
 	require.Equal(t,
@@ -57,10 +58,10 @@ func TestDiff_DeletedParam(t *testing.T) {
 }
 
 func TestDiff_TypeDiff(t *testing.T) {
-	s1, err := diff.LoadPath(test1)
+	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
-	s2, err := diff.LoadPath(test2)
+	s2, err := load.LoadPath(test2)
 	require.NoError(t, err)
 
 	require.Equal(t,
@@ -72,10 +73,10 @@ func TestDiff_TypeDiff(t *testing.T) {
 }
 
 func TestDiff_EnumDiff(t *testing.T) {
-	s1, err := diff.LoadPath(test1)
+	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
-	s3, err := diff.LoadPath(test3)
+	s3, err := load.LoadPath(test3)
 	require.NoError(t, err)
 
 	require.Equal(t,
@@ -84,10 +85,10 @@ func TestDiff_EnumDiff(t *testing.T) {
 }
 
 func TestDiff_NotDiff(t *testing.T) {
-	s1, err := diff.LoadPath(test1)
+	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
-	s3, err := diff.LoadPath(test3)
+	s3, err := load.LoadPath(test3)
 	require.NoError(t, err)
 
 	require.Equal(t,

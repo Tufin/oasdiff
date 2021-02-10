@@ -7,13 +7,14 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
-var manualSwagger, autoSwagger, prefix, filter string
+var base, revision, prefix, filter string
 
 func init() {
-	flag.StringVar(&manualSwagger, "base", "", "base swagger file")
-	flag.StringVar(&autoSwagger, "revision", "", "revised swagger file")
+	flag.StringVar(&base, "base", "", "base swagger file")
+	flag.StringVar(&revision, "revision", "", "revised swagger file")
 	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base swagger but not in revision swagger")
 	flag.StringVar(&filter, "filter", "", "regex to filter results by endpoints")
 }
@@ -21,12 +22,12 @@ func init() {
 func main() {
 	flag.Parse()
 
-	base, err := diff.Load(manualSwagger)
+	base, err := load.Load(base)
 	if err != nil {
 		return
 	}
 
-	revision, err := diff.Load(autoSwagger)
+	revision, err := load.Load(revision)
 	if err != nil {
 		return
 	}
