@@ -7,7 +7,6 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 var manualSwagger, autoSwagger, prefix, filter string
@@ -22,12 +21,12 @@ func init() {
 func main() {
 	flag.Parse()
 
-	base, err := load.Load(manualSwagger)
+	base, err := diff.Load(manualSwagger)
 	if err != nil {
 		return
 	}
 
-	revision, err := load.Load(autoSwagger)
+	revision, err := diff.Load(autoSwagger)
 	if err != nil {
 		return
 	}

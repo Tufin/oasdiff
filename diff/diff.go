@@ -25,4 +25,3 @@ func Diff(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string) *DiffResult
 
 	return result
 }
-

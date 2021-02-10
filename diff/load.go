@@ -1,4 +1,4 @@
-package load
+package diff
 
 import (
 	"net/url"
