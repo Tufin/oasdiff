@@ -12,6 +12,7 @@ const (
 	test1 = "../data/openapi-test1.yaml"
 	test2 = "../data/openapi-test2.yaml"
 	test3 = "../data/openapi-test3.yaml"
+	test4 = "../data/openapi-test4.yaml"
 )
 
 func TestDiff_Same(t *testing.T) {

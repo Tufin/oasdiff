@@ -37,3 +37,19 @@ func TestGetDiffResponse_NoDiff(t *testing.T) {
 		},
 		diff.GetDiffResponse(s, s, "", "").DiffSummary)
 }
+
+func TestGetDiffResponse_Prefix(t *testing.T) {
+	s2, err := load.LoadPath(test2)
+	require.NoError(t, err)
+
+	s4, err := load.LoadPath(test4)
+	require.NoError(t, err)
+
+	require.Equal(t,
+		&diff.DiffSummary{
+			Diff:              false,
+			DeletedEndpoints:  0,
+			ModifiedEndpoints: 0,
+		},
+		diff.GetDiffResponse(s4, s2, "/prefix", "").DiffSummary)
+}
