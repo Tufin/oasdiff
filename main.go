@@ -16,7 +16,7 @@ func init() {
 	flag.StringVar(&manualSwagger, "base", "", "base swagger file")
 	flag.StringVar(&autoSwagger, "revision", "", "revised swagger file")
 	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base swagger but not in revision swagger")
-	flag.StringVar(&filter, "filter", "", "regex to filter results")
+	flag.StringVar(&filter, "filter", "", "regex to filter results by endpoints")
 }
 
 func main() {
