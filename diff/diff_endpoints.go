@@ -6,22 +6,22 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-type PathItemPair struct {
+type pathItemPair struct {
 	PathItem1 *openapi3.PathItem
 	PathItem2 *openapi3.PathItem
 }
 
-type PathItemPairs map[string]*PathItemPair
+type pathItemPairs map[string]*pathItemPair
 
-func diffEndpoints(paths1 openapi3.Paths, paths2 openapi3.Paths, prefix string) (openapi3.Paths, openapi3.Paths, PathItemPairs) {
+func diffEndpoints(paths1 openapi3.Paths, paths2 openapi3.Paths, prefix string) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
 
 	added := openapi3.Paths{}
 	deleted := openapi3.Paths{}
-	other := PathItemPairs{}
+	other := pathItemPairs{}
 
 	for endpoint1, pathItem1 := range paths1 {
 		if pathItem2, ok := findEndpoint(strings.TrimPrefix(endpoint1, prefix), paths2); ok {
-			other[endpoint1] = &PathItemPair{
+			other[endpoint1] = &pathItemPair{
 				PathItem1: pathItem1,
 				PathItem2: pathItem2,
 			}

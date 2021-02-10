@@ -7,6 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Load is a convenience function that opens a swagger spec from a URL or a local path based on the format of the path parameter
 func Load(path string) (*openapi3.Swagger, error) {
 
 	uri, err := url.ParseRequestURI(path)
@@ -26,6 +27,7 @@ func Load(path string) (*openapi3.Swagger, error) {
 	return swagger, nil
 }
 
+// LoadPath opens a swagger spec from a local path
 func LoadPath(path string) (*openapi3.Swagger, error) {
 
 	loader := openapi3.NewSwaggerLoader()
@@ -40,6 +42,7 @@ func LoadPath(path string) (*openapi3.Swagger, error) {
 	return swagger, nil
 }
 
+// LoadPath opens a swagger spec from a URL
 func LoadURI(path *url.URL) (*openapi3.Swagger, error) {
 
 	loader := openapi3.NewSwaggerLoader()

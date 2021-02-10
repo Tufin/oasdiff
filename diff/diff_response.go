@@ -7,6 +7,7 @@ type DiffResponse struct {
 	DiffSummary *DiffSummary `json:"diffSummary,omitempty"`
 }
 
+// GetDiffResponse returns the diff between two OAS (swagger) specs including a diff summary 
 func GetDiffResponse(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string, filter string) DiffResponse {
 	diffResult := Diff(s1, s2, prefix)
 	diffResult.FilterByRegex(filter)
