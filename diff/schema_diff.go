@@ -36,7 +36,7 @@ func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) Schema
 
 	value1, value2, status := getSchemaValues(schema1, schema2)
 
-	if status != SchemaStatusOK {
+	if status != schemaStatusOK {
 		return getSchemaDiff(status)
 	}
 
@@ -55,59 +55,59 @@ func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) Schema
 	return result
 }
 
-type SchemaStatus int
+type schemaStatus int
 
 const (
-	SchemaStatusOK SchemaStatus = iota
-	SchemaStatusNoSchemas
-	SchemaStatusSchemaAdded
-	SchemaStatusSchemaDeleted
-	SchemaStatusNoValues
-	SchemaStatusValueAdded
-	SchemaStatusValueDeleted
+	schemaStatusOK schemaStatus = iota
+	schemaStatusNoSchemas
+	schemaStatusSchemaAdded
+	schemaStatusSchemaDeleted
+	schemaStatusNoValues
+	schemaStatusValueAdded
+	schemaStatusValueDeleted
 )
 
-func getSchemaValues(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *openapi3.Schema, SchemaStatus) {
+func getSchemaValues(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *openapi3.Schema, schemaStatus) {
 
 	if schema1 == nil && schema2 == nil {
-		return nil, nil, SchemaStatusNoSchemas
+		return nil, nil, schemaStatusNoSchemas
 	}
 
 	if schema1 == nil && schema2 != nil {
-		return nil, nil, SchemaStatusSchemaAdded
+		return nil, nil, schemaStatusSchemaAdded
 	}
 
 	if schema1 != nil && schema2 == nil {
-		return nil, nil, SchemaStatusSchemaDeleted
+		return nil, nil, schemaStatusSchemaDeleted
 	}
 
 	value1 := schema1.Value
 	value2 := schema2.Value
 
 	if value1 == nil && value2 == nil {
-		return nil, nil, SchemaStatusNoValues
+		return nil, nil, schemaStatusNoValues
 	}
 
 	if value1 == nil && value2 != nil {
-		return nil, nil, SchemaStatusValueAdded
+		return nil, nil, schemaStatusValueAdded
 	}
 
 	if value1 != nil && value2 == nil {
-		return nil, nil, SchemaStatusValueDeleted
+		return nil, nil, schemaStatusValueDeleted
 	}
 
-	return value1, value2, SchemaStatusOK
+	return value1, value2, schemaStatusOK
 }
 
-func getSchemaDiff(schemaStatus SchemaStatus) SchemaDiff {
-	switch schemaStatus {
-	case SchemaStatusSchemaAdded:
+func getSchemaDiff(status schemaStatus) SchemaDiff {
+	switch status {
+	case schemaStatusSchemaAdded:
 		return SchemaDiff{SchemaAdded: true}
-	case SchemaStatusSchemaDeleted:
+	case schemaStatusSchemaDeleted:
 		return SchemaDiff{SchemaDeleted: true}
-	case SchemaStatusValueAdded:
+	case schemaStatusValueAdded:
 		return SchemaDiff{ValueAdded: true}
-	case SchemaStatusValueDeleted:
+	case schemaStatusValueDeleted:
 		return SchemaDiff{ValueDeleted: true}
 	}
 
