@@ -22,17 +22,17 @@ func init() {
 func main() {
 	flag.Parse()
 
-	manual, err := load.Load(manualSwagger)
+	base, err := load.Load(manualSwagger)
 	if err != nil {
 		return
 	}
 
-	auto, err := load.Load(autoSwagger)
+	revision, err := load.Load(autoSwagger)
 	if err != nil {
 		return
 	}
 
-	bytes, err := json.MarshalIndent(diff.GetDiffResponse(auto, manual, prefix, filter), "", " ")
+	bytes, err := json.MarshalIndent(diff.GetDiffResponse(base, revision, prefix, filter), "", " ")
 	if err != nil {
 		log.Errorf("failed to marshal result with '%v'", err)
 		return
