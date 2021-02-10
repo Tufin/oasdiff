@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// Diff finds s1-s2 endpoints (appear in s1 but not in s2)
+// Diff finds changes between two OAS specs
 func Diff(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string) *DiffResult {
 
 	result := newDiffResult()
