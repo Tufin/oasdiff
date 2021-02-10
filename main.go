@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/apex/log"
+	log "github.com/sirupsen/logrus"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )

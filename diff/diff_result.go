@@ -3,8 +3,8 @@ package diff
 import (
 	"regexp"
 
-	"github.com/apex/log"
 	"github.com/getkin/kin-openapi/openapi3"
+	log "github.com/sirupsen/logrus"
 )
 
 type DiffResult struct {

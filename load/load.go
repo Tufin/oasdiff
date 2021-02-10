@@ -3,15 +3,15 @@ package load
 import (
 	"net/url"
 
-	"github.com/apex/log"
 	"github.com/getkin/kin-openapi/openapi3"
+	log "github.com/sirupsen/logrus"
 )
 
 func Load(path string) (*openapi3.Swagger, error) {
 
-	url, err := url.ParseRequestURI(path)
+	uri, err := url.ParseRequestURI(path)
 	if err == nil {
-		swagger, err := LoadURI(url)
+		swagger, err := LoadURI(uri)
 		if err != nil {
 			return nil, err
 		}
