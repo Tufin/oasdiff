@@ -7,3 +7,5 @@ require (
 	github.com/sirupsen/logrus v1.7.0
 	github.com/stretchr/testify v1.5.1
 )
+
+replace github.com/tufin/oasdiff/load => ../load
