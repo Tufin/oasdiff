@@ -8,4 +8,4 @@ require (
 	github.com/stretchr/testify v1.5.1
 )
 
-replace github.com/tufin/oasdiff/load => ../load
+replace github.com/tufin/oasdiff/load => ./load
