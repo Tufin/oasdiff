@@ -37,10 +37,7 @@ func (diffResult *DiffResult) addDeletedEndpoint(endpoint string) {
 
 func (diffResult *DiffResult) addModifiedEndpoint(entrypoint1 string, pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) {
 
-	diff := diffEndpoint(pathItem1, pathItem2)
-	if !diff.empty() {
-		diffResult.ModifiedEndpoints.addEndpointDiff(entrypoint1, pathItem1, pathItem2)
-	}
+	diffResult.ModifiedEndpoints.addEndpointDiff(entrypoint1, pathItem1, pathItem2)
 }
 
 func (diffResult *DiffResult) FilterByRegex(filter string) {

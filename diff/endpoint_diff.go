@@ -5,29 +5,39 @@ import (
 )
 
 type EndpointDiff struct {
-	DeletedOperations  DeletedOperations  `json:"deletedOperations,omitempty"`
+	AddedOperations    OperationMap       `json:"addedOperations,omitempty"`
+	DeletedOperations  OperationMap       `json:"deletedOperations,omitempty"`
 	ModifiedOperations ModifiedOperations `json:"modifiedOperations,omitempty"`
 }
 
-type DeletedOperations map[string]struct{}
+type OperationMap map[string]struct{}
 
 func newEndpointDiff() *EndpointDiff {
 	return &EndpointDiff{
-		DeletedOperations:  DeletedOperations{},
+		AddedOperations:    OperationMap{},
+		DeletedOperations:  OperationMap{},
 		ModifiedOperations: ModifiedOperations{},
 	}
 }
 
 func (endpointDiff *EndpointDiff) empty() bool {
-	return len(endpointDiff.DeletedOperations) == 0 && endpointDiff.ModifiedOperations.empty()
+	return len(endpointDiff.AddedOperations) == 0 &&
+		len(endpointDiff.DeletedOperations) == 0 &&
+		endpointDiff.ModifiedOperations.empty()
 }
 
 func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, pathItem2 *openapi3.Operation, method string) {
-	if pathItem1 == nil {
+
+	if pathItem1 == nil && pathItem2 == nil {
 		return
 	}
 
-	if pathItem2 == nil {
+	if pathItem1 == nil && pathItem2 != nil {
+		endpointDiff.AddedOperations[method] = struct{}{}
+		return
+	}
+
+	if pathItem1 != nil && pathItem2 == nil {
 		endpointDiff.DeletedOperations[method] = struct{}{}
 		return
 	}

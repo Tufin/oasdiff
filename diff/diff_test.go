@@ -33,6 +33,18 @@ func TestDiff_DeletedEndpoint(t *testing.T) {
 	require.EqualValues(t, []string{"/api/{domain}/{project}/install-command"}, diff.Diff(s1, s2, "").DeletedEndpoints)
 }
 
+func TestDiff_AddedOperation(t *testing.T) {
+	s1, err := load.LoadPath(test1)
+	require.NoError(t, err)
+
+	s2, err := load.LoadPath(test2)
+	require.NoError(t, err)
+
+	require.Equal(t,
+		diff.OperationMap{"POST": struct{}{}},
+		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].AddedOperations)
+}
+
 func TestDiff_DeletedOperation(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
@@ -41,7 +53,7 @@ func TestDiff_DeletedOperation(t *testing.T) {
 	require.NoError(t, err)
 
 	require.Equal(t,
-		diff.DeletedOperations{"POST": struct{}{}},
+		diff.OperationMap{"POST": struct{}{}},
 		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].DeletedOperations)
 }
 
