@@ -70,8 +70,8 @@ paths:
         required: true
         schema:
           enum:
-          - generic-bank
           - tufin
+          - generic-bank
           type: string
       - in: path
         name: project

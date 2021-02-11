@@ -1,8 +1,6 @@
 package diff
 
 import (
-	"reflect"
-
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -113,10 +111,6 @@ func getSchemaDiff(status schemaStatus) SchemaDiff {
 
 	// all other cases -> empty diff
 	return SchemaDiff{}
-}
-
-func getEnumDiff(enum1 []interface{}, enum2 []interface{}) bool {
-	return !reflect.DeepEqual(enum1, enum2)
 }
 
 func getDiffSchemas(schemaRefs1 openapi3.SchemaRefs, schemaRefs2 openapi3.SchemaRefs) bool {
