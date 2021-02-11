@@ -5,9 +5,9 @@ import (
 )
 
 type EndpointDiff struct {
-	AddedOperations    OperationMap       `json:"addedOperations,omitempty"`
-	DeletedOperations  OperationMap       `json:"deletedOperations,omitempty"`
-	ModifiedOperations ModifiedOperations `json:"modifiedOperations,omitempty"`
+	AddedOperations    OperationMap       `json:"addedMethods,omitempty"`
+	DeletedOperations  OperationMap       `json:"deletedMethods,omitempty"`
+	ModifiedOperations ModifiedOperations `json:"modifiedMethods,omitempty"`
 }
 
 type OperationMap map[string]struct{}
