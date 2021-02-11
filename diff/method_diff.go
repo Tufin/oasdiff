@@ -5,6 +5,7 @@ import (
 )
 
 type MethodDiff struct {
+	AddedParams    map[string]ParamNames `json:"addedParams,omitempty"`    // key is param location (path, query, header or cookie)
 	DeletedParams  map[string]ParamNames `json:"deletedParams,omitempty"`  // key is param location
 	ModifiedParams map[string]ParamDiffs `json:"modifiedParams,omitempty"` // key is param location
 }
@@ -14,13 +15,25 @@ type ParamDiffs map[string]ParamDiff // key is param name
 
 func newMethodDiff() *MethodDiff {
 	return &MethodDiff{
+		AddedParams:    map[string]ParamNames{},
 		DeletedParams:  map[string]ParamNames{},
 		ModifiedParams: map[string]ParamDiffs{},
 	}
 }
 
 func (methodDiff *MethodDiff) empty() bool {
-	return len(methodDiff.DeletedParams) == 0 && len(methodDiff.ModifiedParams) == 0
+	return len(methodDiff.AddedParams) == 0 &&
+		len(methodDiff.DeletedParams) == 0 &&
+		len(methodDiff.ModifiedParams) == 0
+}
+
+func (methodDiff *MethodDiff) addAddedParam(param *openapi3.Parameter) {
+
+	if paramNames, ok := methodDiff.AddedParams[param.In]; ok {
+		paramNames[param.Name] = struct{}{}
+	} else {
+		methodDiff.AddedParams[param.In] = ParamNames{param.Name: struct{}{}}
+	}
 }
 
 func (methodDiff *MethodDiff) addDeletedParam(param *openapi3.Parameter) {
@@ -53,6 +66,14 @@ func diffParameters(params1 openapi3.Parameters, params2 openapi3.Parameters) *M
 				}
 			} else {
 				result.addDeletedParam(paramRef1.Value)
+			}
+		}
+	}
+
+	for _, paramRef2 := range params2 {
+		if paramRef2 != nil && paramRef2.Value != nil {
+			if _, ok := findParam(paramRef2.Value, params1); !ok {
+				result.addAddedParam(paramRef2.Value)
 			}
 		}
 	}

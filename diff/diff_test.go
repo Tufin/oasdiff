@@ -57,6 +57,18 @@ func TestDiff_DeletedOperation(t *testing.T) {
 		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].DeletedOperations)
 }
 
+func TestDiff_AddedParam(t *testing.T) {
+	s1, err := load.LoadPath(test1)
+	require.NoError(t, err)
+
+	s2, err := load.LoadPath(test2)
+	require.NoError(t, err)
+
+	require.Equal(t,
+		diff.ParamNames{"X-Auth-Name": struct{}{}},
+		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].AddedParams["header"])
+}
+
 func TestDiff_DeletedParam(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
