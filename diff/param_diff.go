@@ -5,17 +5,15 @@ import (
 )
 
 type ParamDiff struct {
-	DescriptionDiff     *ValueDiff  `json:"descriptionDiff,omitempty"`
-	StyleDiff           *ValueDiff  `json:"styleDiff,omitempty"`
-	ExplodeDiff         *ValueDiff  `json:"explodeDiff,omitempty"`
-	AllowEmptyValueDiff *ValueDiff  `json:"allow_empty_valueDiff,omitempty"`
-	AllowReservedDiff   *ValueDiff  `json:"allow_reservedDiff,omitempty"`
-	DeprecatedDiff      *ValueDiff  `json:"deprecatedDiff,omitempty"`
-	RequiredDiff        *ValueDiff  `json:"requiredDiff,omitempty"`
-	SchemaDiff          *SchemaDiff `json:"schemaDiff,omitempty"`
-	ExampleDiff         *ValueDiff  `json:"exampleDiff,omitempty"`
-	ExamplesDiff        *ValueDiff  `json:"examplesDiff,omitempty"`
-	ContentDiff         *ValueDiff  `json:"contentDiff,omitempty"`
+	DescriptionDiff     *ValueDiff   `json:"descriptionDiff,omitempty"`
+	StyleDiff           *ValueDiff   `json:"styleDiff,omitempty"`
+	ExplodeDiff         *ValueDiff   `json:"explodeDiff,omitempty"`
+	AllowEmptyValueDiff *ValueDiff   `json:"allow_empty_valueDiff,omitempty"`
+	AllowReservedDiff   *ValueDiff   `json:"allow_reservedDiff,omitempty"`
+	DeprecatedDiff      *ValueDiff   `json:"deprecatedDiff,omitempty"`
+	RequiredDiff        *ValueDiff   `json:"requiredDiff,omitempty"`
+	SchemaDiff          *SchemaDiff  `json:"schemaDiff,omitempty"`
+	ContentDiff         *ContentDiff `json:"contentDiff,omitempty"`
 }
 
 func (paramDiff ParamDiff) empty() bool {
@@ -44,16 +42,8 @@ func diffParamValues(param1 *openapi3.Parameter, param2 *openapi3.Parameter) Par
 		result.SchemaDiff = &schemaDiff
 	}
 
-	if diffExample(param1.Example, param2.Example) {
-		result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
-	}
-
-	if diffExamples(param1.Examples, param2.Examples) {
-		result.ExamplesDiff = getValueDiff(param1.Examples, param2.Examples)
-	}
-
-	if diffContent(param1.Content, param2.Content) {
-		result.ContentDiff = getValueDiff(param1.Content, param2.Content)
+	if contentDiff := diffContent(param1.Content, param2.Content); !contentDiff.empty() {
+		result.ContentDiff = &contentDiff
 	}
 
 	return result
@@ -72,16 +62,4 @@ func derefExplode(pExplode *bool) bool {
 	}
 
 	return *pExplode
-}
-
-func diffExample(example1 interface{}, example2 interface{}) bool {
-	return false
-}
-
-func diffExamples(examples1 openapi3.Examples, examples2 openapi3.Examples) bool {
-	return false
-}
-
-func diffContent(content1 openapi3.Content, content2 openapi3.Content) bool {
-	return false
 }

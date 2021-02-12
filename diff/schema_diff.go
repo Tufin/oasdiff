@@ -18,6 +18,7 @@ type SchemaDiff struct {
 	FormatDiff      *ValueDiff `json:"formatDiff,omitempty"`
 	DescriptionDiff *ValueDiff `json:"descriptionDiff,omitempty"`
 	EnumDiff        bool       `json:"enumDiff,omitempty"`
+	PropertiesDiff  bool       `json:"propertiesDiff,omitempty"`
 }
 
 func (schemaDiff SchemaDiff) empty() bool {
@@ -27,7 +28,8 @@ func (schemaDiff SchemaDiff) empty() bool {
 		schemaDiff.TitleDiff == nil &&
 		schemaDiff.FormatDiff == nil &&
 		schemaDiff.DescriptionDiff == nil &&
-		!schemaDiff.EnumDiff
+		!schemaDiff.EnumDiff &&
+		!schemaDiff.PropertiesDiff
 }
 
 func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) SchemaDiff {
@@ -49,6 +51,7 @@ func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) Schema
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
 	result.DescriptionDiff = getValueDiff(value1.Description, value2.Description)
 	result.EnumDiff = getEnumDiff(value1.Enum, value2.Enum)
+	result.PropertiesDiff = getDiffSchemaMap(value1.Properties, value2.Properties)
 
 	return result
 }
@@ -113,6 +116,23 @@ func getSchemaDiff(status schemaStatus) SchemaDiff {
 	return SchemaDiff{}
 }
 
+func getDiffSchemaMap(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) bool {
+
+	for schemaName1, schemaRef1 := range schemas1 {
+		schemaRef2, ok := schemas2[schemaName1]
+		if !ok {
+			return true
+		}
+
+		if diff := diffSchema(schemaRef1, schemaRef2); !diff.empty() {
+			return true
+		}
+	}
+
+	// TODO: handle added schemas
+	return false
+}
+
 func getDiffSchemas(schemaRefs1 openapi3.SchemaRefs, schemaRefs2 openapi3.SchemaRefs) bool {
 
 	for _, schemaRef1 := range schemaRefs1 {
@@ -122,6 +142,8 @@ func getDiffSchemas(schemaRefs1 openapi3.SchemaRefs, schemaRefs2 openapi3.Schema
 			}
 		}
 	}
+
+	// TODO: handle added schemas
 	return false
 }
 

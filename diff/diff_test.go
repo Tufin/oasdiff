@@ -119,3 +119,15 @@ func TestDiff_NotDiff(t *testing.T) {
 		true,
 		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["query"]["image"].SchemaDiff.NotDiff)
 }
+
+func TestDiff_ContentDiff(t *testing.T) {
+	s1, err := load.LoadPath(test1)
+	require.NoError(t, err)
+
+	s2, err := load.LoadPath(test2)
+	require.NoError(t, err)
+
+	require.Equal(t,
+		true,
+		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff)
+}

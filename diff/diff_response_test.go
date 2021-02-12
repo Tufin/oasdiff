@@ -47,9 +47,9 @@ func TestGetDiffResponse_Prefix(t *testing.T) {
 
 	require.Equal(t,
 		&diff.DiffSummary{
-			Diff:              false,
+			Diff:              true,
 			DeletedEndpoints:  0,
-			ModifiedEndpoints: 0,
+			ModifiedEndpoints: 1,
 		},
 		diff.GetDiffResponse(s4, s2, "/prefix", "").DiffSummary)
 }

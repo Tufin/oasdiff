@@ -36,7 +36,6 @@ func (diffResult *DiffResult) addDeletedEndpoint(endpoint string) {
 }
 
 func (diffResult *DiffResult) addModifiedEndpoint(entrypoint1 string, pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) {
-
 	diffResult.ModifiedEndpoints.addEndpointDiff(entrypoint1, pathItem1, pathItem2)
 }
 
