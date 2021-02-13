@@ -42,6 +42,7 @@ func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) Schema
 
 	result := SchemaDiff{}
 
+	// ExtensionProps
 	result.OneOfDiff = getDiffSchemas(value1.OneOf, value2.OneOf)
 	result.AnyOfDiff = getDiffSchemas(value1.AnyOf, value2.AnyOf)
 	result.AllOfDiff = getDiffSchemas(value1.AllOf, value2.AllOf)
@@ -51,7 +52,35 @@ func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) Schema
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
 	result.DescriptionDiff = getValueDiff(value1.Description, value2.Description)
 	result.EnumDiff = getEnumDiff(value1.Enum, value2.Enum)
+	// Default
+	// Example
+	// ExternalDocs
+	// AdditionalPropertiesAllowed
+	// UniqueItems
+	// ExclusiveMin
+	// ExclusiveMax
+	// Nullable
+	// ReadOnly
+	// WriteOnly
+	// AllowEmptyValue
+	// XML
+	// Deprecated
+	// Min
+	// Max
+	// MultipleOf
+	// MinLength
+	// MaxLength
+	// Pattern
+	// compiledPattern
+	// MinItems
+	// MaxItems
+	// Items
+	// Required
 	result.PropertiesDiff = getDiffSchemaMap(value1.Properties, value2.Properties)
+	// MinProps
+	// MaxProps
+	// AdditionalProperties
+	// Discriminator
 
 	return result
 }
