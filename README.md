@@ -1,13 +1,18 @@
 # OpenAPI Spec Diff
 
 
-## Command-line
+## Swagger diff from the command-line
 ```
 go build
 ./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 
-## Go module
+## Help
+```
+./oasdiff --help
+```
+
+## Embedding into your Go program
 ```
 package main
 
