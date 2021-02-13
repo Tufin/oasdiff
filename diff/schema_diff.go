@@ -5,31 +5,32 @@ import (
 )
 
 type SchemaDiff struct {
-	SchemaAdded     bool       `json:"schemaAdded,omitempty"`
-	SchemaDeleted   bool       `json:"schemaDelete,omitempty"`
-	ValueAdded      bool       `json:"valueAdded,omitempty"`
-	ValueDeleted    bool       `json:"valueDeleted,omitempty"`
-	OneOfDiff       bool       `json:"oneOfDiff,omitempty"`
-	AnyOfDiff       bool       `json:"anyOfDiff,omitempty"`
-	AllOfDiff       bool       `json:"allOfDiff,omitempty"`
-	NotDiff         bool       `json:"notDiff,omitempty"`
-	TypeDiff        *ValueDiff `json:"typeDiff,omitempty"`
-	TitleDiff       *ValueDiff `json:"titleDiff,omitempty"`
-	FormatDiff      *ValueDiff `json:"formatDiff,omitempty"`
-	DescriptionDiff *ValueDiff `json:"descriptionDiff,omitempty"`
-	EnumDiff        bool       `json:"enumDiff,omitempty"`
-	PropertiesDiff  bool       `json:"propertiesDiff,omitempty"`
+	SchemaAdded         bool       `json:"schemaAdded,omitempty"`
+	SchemaDeleted       bool       `json:"schemaDelete,omitempty"`
+	ValueAdded          bool       `json:"valueAdded,omitempty"`
+	ValueDeleted        bool       `json:"valueDeleted,omitempty"`
+	OneOfDiff           bool       `json:"oneOfDiff,omitempty"`
+	AnyOfDiff           bool       `json:"anyOfDiff,omitempty"`
+	AllOfDiff           bool       `json:"allOfDiff,omitempty"`
+	NotDiff             bool       `json:"notDiff,omitempty"`
+	TypeDiff            *ValueDiff `json:"typeDiff,omitempty"`
+	TitleDiff           *ValueDiff `json:"titleDiff,omitempty"`
+	FormatDiff          *ValueDiff `json:"formatDiff,omitempty"`
+	DescriptionDiff     *ValueDiff `json:"descriptionDiff,omitempty"`
+	EnumDiff            bool       `json:"enumDiff,omitempty"`
+	UniqueItemsDiff     *ValueDiff `json:"uniqueItemsDiff,omitempty"`
+	ExclusiveMinDiff    *ValueDiff `json:"exclusiveMinDiff,omitempty"`
+	ExclusiveMaxDiff    *ValueDiff `json:"exclusiveMaxDiff,omitempty"`
+	NullableDiff        *ValueDiff `json:"nullableDiff,omitempty"`
+	ReadOnlyDiff        *ValueDiff `json:"readOnlyDiffDiff,omitempty"`
+	WriteOnlyDiff       *ValueDiff `json:"writeOnlyDiffDiff,omitempty"`
+	AllowEmptyValueDiff *ValueDiff `json:"allowEmptyValueDiff,omitempty"`
+	DeprecatedDiff      *ValueDiff `json:"deprecatedDiff,omitempty"`
+	PropertiesDiff      bool       `json:"propertiesDiff,omitempty"`
 }
 
 func (schemaDiff SchemaDiff) empty() bool {
-	return !schemaDiff.SchemaAdded && !schemaDiff.SchemaDeleted && !schemaDiff.ValueAdded && !schemaDiff.ValueDeleted &&
-		!schemaDiff.OneOfDiff && !schemaDiff.AnyOfDiff && !schemaDiff.AllOfDiff && !schemaDiff.NotDiff &&
-		schemaDiff.TypeDiff == nil &&
-		schemaDiff.TitleDiff == nil &&
-		schemaDiff.FormatDiff == nil &&
-		schemaDiff.DescriptionDiff == nil &&
-		!schemaDiff.EnumDiff &&
-		!schemaDiff.PropertiesDiff
+	return schemaDiff == SchemaDiff{}
 }
 
 func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) SchemaDiff {
@@ -56,15 +57,15 @@ func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) Schema
 	// Example
 	// ExternalDocs
 	// AdditionalPropertiesAllowed
-	// UniqueItems
-	// ExclusiveMin
-	// ExclusiveMax
-	// Nullable
-	// ReadOnly
-	// WriteOnly
-	// AllowEmptyValue
+	result.UniqueItemsDiff = getValueDiff(value1.UniqueItems, value2.UniqueItems)
+	result.ExclusiveMinDiff = getValueDiff(value1.ExclusiveMin, value2.ExclusiveMin)
+	result.ExclusiveMaxDiff = getValueDiff(value1.ExclusiveMax, value2.ExclusiveMax)
+	result.NullableDiff = getValueDiff(value1.Nullable, value2.Nullable)
+	result.ReadOnlyDiff = getValueDiff(value1.ReadOnly, value2.ReadOnly)
+	result.WriteOnlyDiff = getValueDiff(value1.WriteOnly, value2.WriteOnly)
+	result.AllowEmptyValueDiff = getValueDiff(value1.AllowEmptyValue, value2.AllowEmptyValue)
 	// XML
-	// Deprecated
+	result.DeprecatedDiff = getValueDiff(value1.Deprecated, value2.Deprecated)
 	// Min
 	// Max
 	// MultipleOf
