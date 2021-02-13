@@ -1,145 +1,87 @@
 package diff_test
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
 
-const (
-	test1 = "../data/openapi-test1.yaml"
-	test2 = "../data/openapi-test2.yaml"
-	test3 = "../data/openapi-test3.yaml"
-	test4 = "../data/openapi-test4.yaml"
-)
+func l(t *testing.T, v int) *openapi3.Swagger {
+	s, err := load.LoadPath(fmt.Sprintf("../data/openapi-test%d.yaml", v))
+	require.NoError(t, err)
+	return s
+}
 
 func TestDiff_Same(t *testing.T) {
-	s, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
+	s := l(t, 1)
 	require.Empty(t, diff.Diff(s, s, "").DeletedEndpoints)
 }
 
-func TestDiff_DeletedEndpoint(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
+func TestDiff_DeletedEndpointEmpty(t *testing.T) {
+	require.Empty(t, diff.Diff(l(t, 2), l(t, 1), "").DeletedEndpoints)
+}
 
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
-	require.Empty(t, diff.Diff(s2, s1, "").DeletedEndpoints)
-	require.EqualValues(t, []string{"/api/{domain}/{project}/install-command"}, diff.Diff(s1, s2, "").DeletedEndpoints)
+func TestDiff_DeletedEndpointNotEmpty(t *testing.T) {
+	require.EqualValues(t, []string{"/api/{domain}/{project}/install-command"}, diff.Diff(l(t, 1), l(t, 2), "").DeletedEndpoints)
 }
 
 func TestDiff_AddedOperation(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		diff.OperationMap{"POST": struct{}{}},
-		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].AddedOperations)
+		diff.Diff(l(t, 1), l(t, 2), "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].AddedOperations)
 }
 
 func TestDiff_DeletedOperation(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		diff.OperationMap{"POST": struct{}{}},
-		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].DeletedOperations)
+		diff.Diff(l(t, 2), l(t, 1), "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].DeletedOperations)
 }
 
 func TestDiff_AddedParam(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		diff.ParamNames{"X-Auth-Name": struct{}{}},
-		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].AddedParams["header"])
+		diff.Diff(l(t, 2), l(t, 1), "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].AddedParams["header"])
 }
 
 func TestDiff_DeletedParam(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		diff.ParamNames{"X-Auth-Name": struct{}{}},
-		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].DeletedParams["header"])
+		diff.Diff(l(t, 1), l(t, 2), "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].DeletedParams["header"])
 }
 
 func TestSchemaDiff_TypeDiff(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		&diff.ValueDiff{
 			OldValue: "string",
 			NewValue: "integer",
 		},
-		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["path"]["domain"].SchemaDiff.TypeDiff)
+		diff.Diff(l(t, 1), l(t, 2), "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["path"]["domain"].SchemaDiff.TypeDiff)
 }
 
 func TestSchemaDiff_EnumDiff(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s3, err := load.LoadPath(test3)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		true,
-		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/install-command"].ModifiedOperations["GET"].ModifiedParams["path"]["project"].SchemaDiff.EnumDiff)
+		diff.Diff(l(t, 1), l(t, 3), "").ModifiedEndpoints["/api/{domain}/{project}/install-command"].ModifiedOperations["GET"].ModifiedParams["path"]["project"].SchemaDiff.EnumDiff)
 }
 
 func TestSchemaDiff_NotDiff(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s3, err := load.LoadPath(test3)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		true,
-		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["query"]["image"].SchemaDiff.NotDiff)
+		diff.Diff(l(t, 1), l(t, 3), "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["query"]["image"].SchemaDiff.NotDiff)
 }
 
 func TestSchemaDiff_ContentDiff(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		true,
-		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff)
+		diff.Diff(l(t, 2), l(t, 1), "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff)
 }
 
 func TestSchemaDiff_AnyOfDiff(t *testing.T) {
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
-	s4, err := load.LoadPath(test4)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		true,
-		diff.Diff(s4, s2, "/prefix").ModifiedEndpoints["/prefix/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["token"].SchemaDiff.AnyOfDiff)
+		diff.Diff(l(t, 4), l(t, 2), "/prefix").ModifiedEndpoints["/prefix/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["token"].SchemaDiff.AnyOfDiff)
 }

@@ -5,16 +5,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 func TestGetDiffResponse_Diff(t *testing.T) {
-	s1, err := load.LoadPath(test1)
-	require.NoError(t, err)
-
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		&diff.DiffSummary{
 			Diff:              true,
@@ -22,12 +15,11 @@ func TestGetDiffResponse_Diff(t *testing.T) {
 			DeletedEndpoints:  1,
 			ModifiedEndpoints: 1,
 		},
-		diff.GetDiffResponse(s1, s2, "", "").DiffSummary)
+		diff.GetDiffResponse(l(t, 1), l(t, 2), "", "").DiffSummary)
 }
 
 func TestGetDiffResponse_NoDiff(t *testing.T) {
-	s, err := load.LoadPath(test1)
-	require.NoError(t, err)
+	s := l(t, 1)
 
 	require.Equal(t,
 		&diff.DiffSummary{
@@ -39,17 +31,11 @@ func TestGetDiffResponse_NoDiff(t *testing.T) {
 }
 
 func TestGetDiffResponse_Prefix(t *testing.T) {
-	s2, err := load.LoadPath(test2)
-	require.NoError(t, err)
-
-	s4, err := load.LoadPath(test4)
-	require.NoError(t, err)
-
 	require.Equal(t,
 		&diff.DiffSummary{
 			Diff:              true,
 			DeletedEndpoints:  0,
 			ModifiedEndpoints: 1,
 		},
-		diff.GetDiffResponse(s4, s2, "/prefix", "").DiffSummary)
+		diff.GetDiffResponse(l(t, 4), l(t, 2), "/prefix", "").DiffSummary)
 }
