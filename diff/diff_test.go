@@ -81,7 +81,7 @@ func TestDiff_DeletedParam(t *testing.T) {
 		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].DeletedParams["header"])
 }
 
-func TestDiff_TypeDiff(t *testing.T) {
+func TestSchemaDiff_TypeDiff(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
@@ -96,7 +96,7 @@ func TestDiff_TypeDiff(t *testing.T) {
 		diff.Diff(s1, s2, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["path"]["domain"].SchemaDiff.TypeDiff)
 }
 
-func TestDiff_EnumDiff(t *testing.T) {
+func TestSchemaDiff_EnumDiff(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
@@ -108,7 +108,7 @@ func TestDiff_EnumDiff(t *testing.T) {
 		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/install-command"].ModifiedOperations["GET"].ModifiedParams["path"]["project"].SchemaDiff.EnumDiff)
 }
 
-func TestDiff_NotDiff(t *testing.T) {
+func TestSchemaDiff_NotDiff(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
@@ -120,7 +120,7 @@ func TestDiff_NotDiff(t *testing.T) {
 		diff.Diff(s1, s3, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["query"]["image"].SchemaDiff.NotDiff)
 }
 
-func TestDiff_ContentDiff(t *testing.T) {
+func TestSchemaDiff_ContentDiff(t *testing.T) {
 	s1, err := load.LoadPath(test1)
 	require.NoError(t, err)
 
@@ -130,4 +130,16 @@ func TestDiff_ContentDiff(t *testing.T) {
 	require.Equal(t,
 		true,
 		diff.Diff(s2, s1, "").ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff)
+}
+
+func TestSchemaDiff_AnyOfDiff(t *testing.T) {
+	s2, err := load.LoadPath(test2)
+	require.NoError(t, err)
+
+	s4, err := load.LoadPath(test4)
+	require.NoError(t, err)
+
+	require.Equal(t,
+		true,
+		diff.Diff(s4, s2, "/prefix").ModifiedEndpoints["/prefix/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["token"].SchemaDiff.AnyOfDiff)
 }
