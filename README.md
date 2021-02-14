@@ -4,30 +4,32 @@ The diff report is a go struct which can also be marshalled like this:
 ```json
 {
  "diffResult": {
-  "modifiedEndpoints": {
-   "/prefix/api/{domain}/{project}/badges/security-score/": {
-    "modifiedMethods": {
-     "GET": {
-      "addedParams": {
-       "query": {
-        "filter": {}
-       }
-      },
-      "modifiedParams": {
-       "path": {
-        "domain": {
-         "schemaDiff": {
-          "minDiff": {
-           "oldValue": null,
-           "newValue": 7
-          }
-         }
+  "pathsDiff": {
+   "modifiedEndpoints": {
+    "/prefix/api/{domain}/{project}/badges/security-score/": {
+     "modifiedMethods": {
+      "GET": {
+       "addedParams": {
+        "query": {
+         "filter": {}
         }
        },
-       "query": {
-        "token": {
-         "schemaDiff": {
-          "anyOfDiff": true
+       "modifiedParams": {
+        "path": {
+         "domain": {
+          "schemaDiff": {
+           "minDiff": {
+            "oldValue": null,
+            "newValue": 7
+           }
+          }
+         }
+        },
+        "query": {
+         "token": {
+          "schemaDiff": {
+           "anyOfDiff": true
+          }
          }
         }
        }
