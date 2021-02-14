@@ -9,7 +9,7 @@ import (
 
 func TestFilterByRegex(t *testing.T) {
 	diffResult := diff.DiffResult{
-		&diff.PathsDiff{
+		&diff.PathDiff{
 			AddedEndpoints:    []string{"a"},
 			DeletedEndpoints:  []string{"ab"},
 			ModifiedEndpoints: diff.ModifiedEndpoints{"abc": &diff.EndpointDiff{}},
@@ -18,7 +18,7 @@ func TestFilterByRegex(t *testing.T) {
 
 	diffResult.FilterByRegex("ab")
 
-	require.Empty(t, diffResult.PathsDiff.AddedEndpoints)
-	require.Equal(t, []string{"ab"}, diffResult.PathsDiff.DeletedEndpoints)
-	require.Contains(t, diffResult.PathsDiff.ModifiedEndpoints, "abc")
+	require.Empty(t, diffResult.PathDiff.AddedEndpoints)
+	require.Equal(t, []string{"ab"}, diffResult.PathDiff.DeletedEndpoints)
+	require.Contains(t, diffResult.PathDiff.ModifiedEndpoints, "abc")
 }

@@ -11,7 +11,7 @@ func TestGetDiffResponse_Diff(t *testing.T) {
 	require.Equal(t,
 		&diff.DiffSummary{
 			Diff: true,
-			PathsDiffSummary: diff.PathsDiffSummary{
+			PathDiffSummary: diff.PathDiffSummary{
 				AddedEndpoints:    0,
 				DeletedEndpoints:  1,
 				ModifiedEndpoints: 1,
@@ -26,7 +26,7 @@ func TestGetDiffResponse_NoDiff(t *testing.T) {
 	require.Equal(t,
 		&diff.DiffSummary{
 			Diff: false,
-			PathsDiffSummary: diff.PathsDiffSummary{
+			PathDiffSummary: diff.PathDiffSummary{
 				DeletedEndpoints:  0,
 				ModifiedEndpoints: 0,
 			},
@@ -38,7 +38,7 @@ func TestGetDiffResponse_Prefix(t *testing.T) {
 	require.Equal(t,
 		&diff.DiffSummary{
 			Diff: true,
-			PathsDiffSummary: diff.PathsDiffSummary{
+			PathDiffSummary: diff.PathDiffSummary{
 				DeletedEndpoints:  0,
 				ModifiedEndpoints: 1,
 			},

@@ -1,11 +1,11 @@
 package diff
 
 type DiffResult struct {
-	PathsDiff *PathsDiff `json:"pathsDiff,omitempty"`
+	PathDiff *PathDiff `json:"pathDiff,omitempty"`
 }
 
 func (diffResult *DiffResult) empty() bool {
-	return diffResult.PathsDiff == nil || diffResult.PathsDiff.empty()
+	return diffResult.PathDiff == nil || diffResult.PathDiff.empty()
 }
 
 func (diffResult *DiffResult) getSummary() *DiffSummary {
@@ -14,8 +14,8 @@ func (diffResult *DiffResult) getSummary() *DiffSummary {
 		Diff: !diffResult.empty(),
 	}
 
-	if diffResult.PathsDiff != nil {
-		result.PathsDiffSummary = diffResult.PathsDiff.getSummary()
+	if diffResult.PathDiff != nil {
+		result.PathDiffSummary = diffResult.PathDiff.getSummary()
 	}
 
 	return &result
@@ -27,7 +27,7 @@ func newDiffResult() *DiffResult {
 
 // FilterByRegex filters diff endpoints by regex
 func (diffResult *DiffResult) FilterByRegex(filter string) {
-	if diffResult.PathsDiff != nil {
-		diffResult.PathsDiff.filterByRegex(filter)
+	if diffResult.PathDiff != nil {
+		diffResult.PathDiff.filterByRegex(filter)
 	}
 }

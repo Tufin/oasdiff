@@ -9,8 +9,8 @@ func Diff(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string) *DiffResult
 
 	result := newDiffResult()
 
-	if pathsDiff := diffPaths(s1.Paths, s2.Paths, prefix); !pathsDiff.empty() {
-		result.PathsDiff = pathsDiff
+	if pathDiff := diffPaths(s1.Paths, s2.Paths, prefix); !pathDiff.empty() {
+		result.PathDiff = pathDiff
 	}
 
 	return result

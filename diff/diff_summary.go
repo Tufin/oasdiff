@@ -2,10 +2,10 @@ package diff
 
 type DiffSummary struct {
 	Diff bool `json:"diff"`
-	PathsDiffSummary
+	PathDiffSummary
 }
 
-type PathsDiffSummary struct {
+type PathDiffSummary struct {
 	AddedEndpoints    int `json:"addedEndpoints"`
 	DeletedEndpoints  int `json:"deletedEndpoints"`
 	ModifiedEndpoints int `json:"modifiedEndpoints"`
