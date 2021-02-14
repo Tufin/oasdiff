@@ -26,6 +26,9 @@ type SchemaDiff struct {
 	WriteOnlyDiff       *ValueDiff `json:"writeOnlyDiffDiff,omitempty"`
 	AllowEmptyValueDiff *ValueDiff `json:"allowEmptyValueDiff,omitempty"`
 	DeprecatedDiff      *ValueDiff `json:"deprecatedDiff,omitempty"`
+	MinDiff             *ValueDiff `json:"minDiff,omitempty"`
+	MaxDiff             *ValueDiff `json:"maxDiff,omitempty"`
+	MultipleOf          *ValueDiff `json:"multipleOfDiff,omitempty"`
 	PropertiesDiff      bool       `json:"propertiesDiff,omitempty"`
 }
 
@@ -66,8 +69,9 @@ func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) Schema
 	result.AllowEmptyValueDiff = getValueDiff(value1.AllowEmptyValue, value2.AllowEmptyValue)
 	// XML
 	result.DeprecatedDiff = getValueDiff(value1.Deprecated, value2.Deprecated)
-	// Min
-	// Max
+	result.MinDiff = getFloat64RefDiff(value1.Min, value2.Min)
+	result.MaxDiff = getFloat64RefDiff(value1.Max, value2.Max)
+	result.MultipleOf = getFloat64RefDiff(value1.MultipleOf, value2.MultipleOf)
 	// MultipleOf
 	// MinLength
 	// MaxLength

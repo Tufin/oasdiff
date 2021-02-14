@@ -85,3 +85,12 @@ func TestSchemaDiff_AnyOfDiff(t *testing.T) {
 		true,
 		diff.Diff(l(t, 4), l(t, 2), "/prefix").ModifiedEndpoints["/prefix/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["token"].SchemaDiff.AnyOfDiff)
 }
+
+func TestSchemaDiff_MinDiff(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			OldValue: nil,
+			NewValue: float64(7),
+		},
+		diff.Diff(l(t, 4), l(t, 2), "/prefix").ModifiedEndpoints["/prefix/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["path"]["domain"].SchemaDiff.MinDiff)
+}

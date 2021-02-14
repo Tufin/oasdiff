@@ -48,6 +48,7 @@ paths:
           format: non-negative integer
           pattern: ^(?:\d+)$
           type: integer
+          minimum: 7
       - in: path
         name: project
         required: true
