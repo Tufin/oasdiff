@@ -4,7 +4,7 @@ The diff report is a go struct which can also be marshalled like this:
 ```json
 {
  "diffResult": {
-  "pathsDiff": {
+  "pathDiff": {
    "modifiedEndpoints": {
     "/prefix/api/{domain}/{project}/badges/security-score/": {
      "modifiedMethods": {

@@ -94,3 +94,15 @@ func TestSchemaDiff_MinDiff(t *testing.T) {
 		},
 		diff.Diff(l(t, 4), l(t, 2), "/prefix").PathDiff.ModifiedEndpoints["/prefix/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["path"]["domain"].SchemaDiff.MinDiff)
 }
+
+func TestSchemaDiff_AddedSchemas(t *testing.T) {
+	require.Contains(t,
+		diff.Diff(l(t, 1), l(t, 5), "").SchemaDiff.AddedSchemas,
+		"requests")
+}
+
+func TestSchemaDiff_DeletedSchemas(t *testing.T) {
+	require.Contains(t,
+		diff.Diff(l(t, 5), l(t, 1), "").SchemaDiff.DeletedSchemas,
+		"requests")
+}

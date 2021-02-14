@@ -1,11 +1,13 @@
 package diff
 
 type DiffResult struct {
-	PathDiff *PathDiff `json:"pathDiff,omitempty"`
+	PathDiff   *PathDiff             `json:"pathDiff,omitempty"`
+	SchemaDiff *SchemaCollectionDiff `json:"schemaDiff,omitempty"`
 }
 
 func (diffResult *DiffResult) empty() bool {
-	return diffResult.PathDiff == nil || diffResult.PathDiff.empty()
+	return diffResult.PathDiff == nil &&
+		diffResult.SchemaDiff == nil
 }
 
 func (diffResult *DiffResult) getSummary() *DiffSummary {
@@ -16,6 +18,10 @@ func (diffResult *DiffResult) getSummary() *DiffSummary {
 
 	if diffResult.PathDiff != nil {
 		result.PathDiffSummary = diffResult.PathDiff.getSummary()
+	}
+
+	if diffResult.SchemaDiff != nil {
+		result.SchemaDiffSummary = diffResult.SchemaDiff.getSummary()
 	}
 
 	return &result

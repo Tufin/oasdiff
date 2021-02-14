@@ -14,6 +14,7 @@ func TestFilterByRegex(t *testing.T) {
 			DeletedEndpoints:  []string{"ab"},
 			ModifiedEndpoints: diff.ModifiedEndpoints{"abc": &diff.EndpointDiff{}},
 		},
+		&diff.SchemaCollectionDiff{},
 	}
 
 	diffResult.FilterByRegex("ab")
