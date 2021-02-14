@@ -10,8 +10,3 @@ type PathsDiffSummary struct {
 	DeletedEndpoints  int `json:"deletedEndpoints"`
 	ModifiedEndpoints int `json:"modifiedEndpoints"`
 }
-
-func getDiffSummary(diffResult *DiffResult) *DiffSummary {
-
-	return diffResult.getSummary()
-}

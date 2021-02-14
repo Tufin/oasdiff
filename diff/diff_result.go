@@ -25,12 +25,9 @@ func newDiffResult() *DiffResult {
 	return &DiffResult{}
 }
 
+// FilterByRegex filters diff endpoints by regex
 func (diffResult *DiffResult) FilterByRegex(filter string) {
 	if diffResult.PathsDiff != nil {
 		diffResult.PathsDiff.filterByRegex(filter)
 	}
-}
-
-func (diffResult *DiffResult) GetSummary() *DiffSummary {
-	return getDiffSummary(diffResult)
 }
