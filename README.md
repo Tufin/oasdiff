@@ -1,5 +1,5 @@
 # OpenAPI Spec Diff
-A go module for reporting changes between versions of OpenAPI Specifications.  
+A go module for reporting changes between versions of OpenAPI (Swagger) files.    
 The diff report is a go struct which can also be marshalled like this:
 ```json
 {
