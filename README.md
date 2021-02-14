@@ -1,9 +1,60 @@
 # OpenAPI Spec Diff
-
-
-## Swagger diff from the command-line
+A go module for reporting changes between versions of OpenAPI Specifications.  
+The diff report is a go struct which can also be marshalled like this:
+```json
+{
+ "diffResult": {
+  "modifiedEndpoints": {
+   "/prefix/api/{domain}/{project}/badges/security-score/": {
+    "modifiedMethods": {
+     "GET": {
+      "addedParams": {
+       "query": {
+        "filter": {}
+       }
+      },
+      "modifiedParams": {
+       "path": {
+        "domain": {
+         "schemaDiff": {
+          "minDiff": {
+           "oldValue": null,
+           "newValue": 7
+          }
+         }
+        }
+       },
+       "query": {
+        "token": {
+         "schemaDiff": {
+          "anyOfDiff": true
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "diffSummary": {
+  "diff": true,
+  "addedEndpoints": 0,
+  "deletedEndpoints": 0,
+  "modifiedEndpoints": 1
+ }
+}
 ```
+
+## Build
+```
+git clone https://github.com/Tufin/oasdiff.git
+cd oasdiff
 go build
+```
+
+## Running from the command-line
+```
 ./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 
