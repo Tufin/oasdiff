@@ -5,19 +5,22 @@ import (
 )
 
 type SchemaCollectionDiff struct {
-	AddedSchemas   []string `json:"addedSchemas,omitempty"`
-	DeletedSchemas []string `json:"deletedSchemas,omitempty"`
+	AddedSchemas    []string `json:"addedSchemas,omitempty"`
+	DeletedSchemas  []string `json:"deletedSchemas,omitempty"`
+	ModifiedSchemas []string `json:"modifiedSchemas,omitempty"`
 }
 
 func (diff *SchemaCollectionDiff) empty() bool {
 	return len(diff.AddedSchemas) == 0 &&
-		len(diff.DeletedSchemas) == 0
+		len(diff.DeletedSchemas) == 0 &&
+		len(diff.ModifiedSchemas) == 0
 }
 
 func newSchemaDiff() *SchemaCollectionDiff {
 	return &SchemaCollectionDiff{
-		AddedSchemas:   []string{},
-		DeletedSchemas: []string{},
+		AddedSchemas:    []string{},
+		DeletedSchemas:  []string{},
+		ModifiedSchemas: []string{},
 	}
 }
 
@@ -25,7 +28,7 @@ func diffSchemaCollection(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) 
 
 	result := newSchemaDiff()
 
-	addedSchemas, deletedSchemas := diffSchemas(schemas1, schemas2)
+	addedSchemas, deletedSchemas, modifiedSchemas := diffSchemas(schemas1, schemas2)
 
 	for schema := range addedSchemas {
 		result.addAddedSchema(schema)
@@ -35,22 +38,28 @@ func diffSchemaCollection(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) 
 		result.addDeletedSchema(schema)
 	}
 
+	for schema := range modifiedSchemas {
+		result.addModifiedSchema(schema)
+	}
+
 	return result
 }
 
-func diffSchemas(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi3.Schemas) {
+func diffSchemas(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi3.Schemas, openapi3.Schemas) {
 
 	added := openapi3.Schemas{}
 	deleted := openapi3.Schemas{}
+	modified := openapi3.Schemas{}
 
 	for schemaName1, schemaRef1 := range schemas1 {
 		schemaRef2, ok := schemas2[schemaName1]
 		if !ok {
 			deleted[schemaName1] = schemaRef1
+			continue
 		}
 
 		if diff := diffSchema(schemaRef1, schemaRef2); !diff.empty() {
-			// TODO: handle modified schemas
+			modified[schemaName1] = schemaRef1
 		}
 	}
 
@@ -61,7 +70,7 @@ func diffSchemas(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) (openapi3
 		}
 	}
 
-	return added, deleted
+	return added, deleted, modified
 }
 
 func (diff *SchemaCollectionDiff) addAddedSchema(schema string) {
@@ -72,9 +81,14 @@ func (diff *SchemaCollectionDiff) addDeletedSchema(schema string) {
 	diff.DeletedSchemas = append(diff.DeletedSchemas, schema)
 }
 
+func (diff *SchemaCollectionDiff) addModifiedSchema(schema string) {
+	diff.ModifiedSchemas = append(diff.ModifiedSchemas, schema)
+}
+
 func (diff *SchemaCollectionDiff) getSummary() SchemaDiffSummary {
 	return SchemaDiffSummary{
-		AddedSchemas:   len(diff.AddedSchemas),
-		DeletedSchemas: len(diff.DeletedSchemas),
+		AddedSchemas:    len(diff.AddedSchemas),
+		DeletedSchemas:  len(diff.DeletedSchemas),
+		ModifiedSchemas: len(diff.ModifiedSchemas),
 	}
 }

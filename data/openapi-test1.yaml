@@ -97,3 +97,11 @@ paths:
         default:
           description: Tufin
       servers: []
+components:
+  schemas:
+    network-policies:
+      additionalProperties: true
+      properties:
+        netpols:
+          type: string
+      type: object     

@@ -13,6 +13,7 @@ type PathDiffSummary struct {
 }
 
 type SchemaDiffSummary struct {
-	AddedSchemas   int `json:"addedSchemas"`
-	DeletedSchemas int `json:"deletedSchemas"`
+	AddedSchemas    int `json:"addedSchemas"`
+	DeletedSchemas  int `json:"deletedSchemas"`
+	ModifiedSchemas int `json:"modifiedSchemas"`
 }
