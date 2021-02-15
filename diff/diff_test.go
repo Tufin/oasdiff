@@ -106,3 +106,13 @@ func TestSchemaDiff_DeletedSchemas(t *testing.T) {
 		diff.Diff(l(t, 5), l(t, 1), "").SchemaDiff.DeletedSchemas,
 		"requests")
 }
+
+func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			OldValue: true,
+			NewValue: false,
+		},
+		diff.Diff(l(t, 1), l(t, 5), "").SchemaDiff.ModifiedSchemas["network-policies"].AdditionalPropertiesAllowedDiff,
+		"requests")
+}

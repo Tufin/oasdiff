@@ -5,9 +5,9 @@ import (
 )
 
 type SchemaCollectionDiff struct {
-	AddedSchemas    []string `json:"addedSchemas,omitempty"`
-	DeletedSchemas  []string `json:"deletedSchemas,omitempty"`
-	ModifiedSchemas []string `json:"modifiedSchemas,omitempty"`
+	AddedSchemas    []string        `json:"addedSchemas,omitempty"`
+	DeletedSchemas  []string        `json:"deletedSchemas,omitempty"`
+	ModifiedSchemas ModifiedSchemas `json:"modifiedSchemas,omitempty"`
 }
 
 func (diff *SchemaCollectionDiff) empty() bool {
@@ -20,15 +20,22 @@ func newSchemaDiff() *SchemaCollectionDiff {
 	return &SchemaCollectionDiff{
 		AddedSchemas:    []string{},
 		DeletedSchemas:  []string{},
-		ModifiedSchemas: []string{},
+		ModifiedSchemas: ModifiedSchemas{},
 	}
 }
+
+type schemaRefPair struct {
+	SchemaRef1 *openapi3.SchemaRef
+	SchemaRef2 *openapi3.SchemaRef
+}
+
+type schemaRefPairs map[string]*schemaRefPair
 
 func diffSchemaCollection(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) *SchemaCollectionDiff {
 
 	result := newSchemaDiff()
 
-	addedSchemas, deletedSchemas, modifiedSchemas := diffSchemas(schemas1, schemas2)
+	addedSchemas, deletedSchemas, otherSchemas := diffSchemas(schemas1, schemas2)
 
 	for schema := range addedSchemas {
 		result.addAddedSchema(schema)
@@ -38,18 +45,18 @@ func diffSchemaCollection(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) 
 		result.addDeletedSchema(schema)
 	}
 
-	for schema := range modifiedSchemas {
-		result.addModifiedSchema(schema)
+	for schema, schemaRefPair := range otherSchemas {
+		result.addModifiedSchema(schema, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
 	}
 
 	return result
 }
 
-func diffSchemas(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi3.Schemas, openapi3.Schemas) {
+func diffSchemas(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi3.Schemas, schemaRefPairs) {
 
 	added := openapi3.Schemas{}
 	deleted := openapi3.Schemas{}
-	modified := openapi3.Schemas{}
+	other := schemaRefPairs{}
 
 	for schemaName1, schemaRef1 := range schemas1 {
 		schemaRef2, ok := schemas2[schemaName1]
@@ -58,8 +65,9 @@ func diffSchemas(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) (openapi3
 			continue
 		}
 
-		if diff := diffSchema(schemaRef1, schemaRef2); !diff.empty() {
-			modified[schemaName1] = schemaRef1
+		other[schemaName1] = &schemaRefPair{
+			SchemaRef1: schemaRef1,
+			SchemaRef2: schemaRef2,
 		}
 	}
 
@@ -70,7 +78,7 @@ func diffSchemas(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) (openapi3
 		}
 	}
 
-	return added, deleted, modified
+	return added, deleted, other
 }
 
 func (diff *SchemaCollectionDiff) addAddedSchema(schema string) {
@@ -81,8 +89,8 @@ func (diff *SchemaCollectionDiff) addDeletedSchema(schema string) {
 	diff.DeletedSchemas = append(diff.DeletedSchemas, schema)
 }
 
-func (diff *SchemaCollectionDiff) addModifiedSchema(schema string) {
-	diff.ModifiedSchemas = append(diff.ModifiedSchemas, schema)
+func (diff *SchemaCollectionDiff) addModifiedSchema(schema1 string, schemaRef1 *openapi3.SchemaRef, schemaRef2 *openapi3.SchemaRef) {
+	diff.ModifiedSchemas.addSchemaDiff(schema1, schemaRef1, schemaRef2)
 }
 
 func (diff *SchemaCollectionDiff) getSummary() SchemaDiffSummary {
