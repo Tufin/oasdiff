@@ -22,12 +22,14 @@ func init() {
 func main() {
 	flag.Parse()
 
-	base, err := load.Load(base)
+	loader := load.NewSwaggerLoader()
+
+	base, err := loader.From(base)
 	if err != nil {
 		return
 	}
 
-	revision, err := load.Load(revision)
+	revision, err := loader.From(revision)
 	if err != nil {
 		return
 	}
