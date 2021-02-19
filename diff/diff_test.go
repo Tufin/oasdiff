@@ -92,6 +92,12 @@ func TestSchemaDiff_MediaTypeDeleted(t *testing.T) {
 		diff.Diff(l(t, 1), l(t, 5), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["header"]["user"].ContentDiff.MediaTypeAdded)
 }
 
+func TestSchemaDiff_MediaTypeModified(t *testing.T) {
+	require.Equal(t,
+		true,
+		diff.Diff(l(t, 1), l(t, 5), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["cookie"]["test"].ContentDiff.MediaTypeDiff)
+}
+
 func TestSchemaDiff_AnyOfDiff(t *testing.T) {
 	require.Equal(t,
 		true,
