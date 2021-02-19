@@ -17,6 +17,10 @@ paths:
                   type: string
                 color:
                   type: string
+      - in: header
+        name: user
+        schema:
+          type: string
       - in: query
         name: image
         schema:

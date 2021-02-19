@@ -42,15 +42,15 @@ func TestDiff_DeletedOperation(t *testing.T) {
 }
 
 func TestDiff_AddedParam(t *testing.T) {
-	require.Equal(t,
-		diff.ParamNames{"X-Auth-Name": struct{}{}},
-		diff.Diff(l(t, 2), l(t, 1), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].AddedParams["header"])
+	require.Contains(t,
+		diff.Diff(l(t, 2), l(t, 1), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].AddedParams["header"],
+		"X-Auth-Name")
 }
 
 func TestDiff_DeletedParam(t *testing.T) {
-	require.Equal(t,
-		diff.ParamNames{"X-Auth-Name": struct{}{}},
-		diff.Diff(l(t, 1), l(t, 2), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].DeletedParams["header"])
+	require.Contains(t,
+		diff.Diff(l(t, 1), l(t, 2), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].DeletedParams["header"],
+		"X-Auth-Name")
 }
 
 func TestSchemaDiff_TypeDiff(t *testing.T) {
@@ -78,6 +78,18 @@ func TestSchemaDiff_ContentDiff(t *testing.T) {
 	require.Equal(t,
 		true,
 		diff.Diff(l(t, 2), l(t, 1), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score/"].ModifiedOperations["GET"].ModifiedParams["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff)
+}
+
+func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
+	require.Equal(t,
+		true,
+		diff.Diff(l(t, 5), l(t, 1), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["header"]["user"].ContentDiff.MediaTypeAdded)
+}
+
+func TestSchemaDiff_MediaTypeDeleted(t *testing.T) {
+	require.Equal(t,
+		false,
+		diff.Diff(l(t, 1), l(t, 5), "").PathDiff.ModifiedEndpoints["/api/{domain}/{project}/badges/security-score"].ModifiedOperations["GET"].ModifiedParams["header"]["user"].ContentDiff.MediaTypeAdded)
 }
 
 func TestSchemaDiff_AnyOfDiff(t *testing.T) {

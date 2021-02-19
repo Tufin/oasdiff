@@ -17,6 +17,15 @@ paths:
                   type: string
                 color:
                   type: string
+      - in: header
+        name: user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
       - in: query
         name: image
         schema:
