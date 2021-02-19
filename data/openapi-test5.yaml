@@ -21,6 +21,12 @@ paths:
         name: user
         schema:
           type: string
+      - in: cookie
+        name: test
+        content:
+          application/xml:
+            schema:
+              type: object
       - in: query
         name: image
         schema:

@@ -26,6 +26,12 @@ paths:
               properties:
                 name:
                   type: string
+      - in: cookie
+        name: test
+        content:
+          application/json:
+            schema:
+              type: object
       - in: query
         name: image
         schema:
