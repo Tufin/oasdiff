@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/Tufin/oasdiff/branch/master/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/Tufin/oasdiff)
+
 # OpenAPI Spec Diff
 A go module for reporting changes between versions of OpenAPI (Swagger) files.    
 The diff report is a go struct which can also be marshalled like this:
