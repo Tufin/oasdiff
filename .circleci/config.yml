@@ -12,6 +12,7 @@ jobs:
           covermode: atomic
           failfast: true
           race: true
+          codecov-upload: true
 orbs:
   go: circleci/go@1.5.0
 version: 2.1
