@@ -6,7 +6,7 @@ import (
 
 type SchemaDiff struct {
 	SchemaAdded                     bool       `json:"schemaAdded,omitempty"`
-	SchemaDeleted                   bool       `json:"schemaDelete,omitempty"`
+	SchemaDeleted                   bool       `json:"schemaDeleted,omitempty"`
 	ValueAdded                      bool       `json:"valueAdded,omitempty"`
 	ValueDeleted                    bool       `json:"valueDeleted,omitempty"`
 	OneOfDiff                       bool       `json:"oneOfDiff,omitempty"`
