@@ -14,7 +14,6 @@ jobs:
           race: true
       - codecov/upload:
           file: cover-source.out
-          token: bd25b822-dfeb-42ce-a905-dd1925e75b59    
 orbs:
   go: circleci/go@1.5.0
   codecov: codecov/codecov@1.1.3
