@@ -1,13 +1,26 @@
 package diff
 
-import (
-	"github.com/getkin/kin-openapi/openapi3"
-)
+import "github.com/getkin/kin-openapi/openapi3"
 
-// Diff returns the diff between two OAS (swagger) specs
-func Diff(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string) *DiffResult {
+type Response struct {
+	Result  *Result  `json:"diff,omitempty"`
+	Summary *Summary `json:"summary,omitempty"`
+}
 
-	result := newDiffResult()
+// Run returns the diff between two OAS specs including a summary
+func Run(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string, filter string) Response {
+	diff := getResult(s1, s2, prefix)
+	diff.FilterByRegex(filter)
+
+	return Response{
+		Result:  diff,
+		Summary: diff.getSummary(),
+	}
+}
+
+func getResult(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string) *Result {
+
+	result := newResult()
 
 	if pathDiff := diffPaths(s1.Paths, s2.Paths, prefix); !pathDiff.empty() {
 		result.PathDiff = pathDiff

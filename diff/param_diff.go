@@ -5,15 +5,15 @@ import (
 )
 
 type ParamDiff struct {
-	DescriptionDiff     *ValueDiff   `json:"descriptionDiff,omitempty"`
-	StyleDiff           *ValueDiff   `json:"styleDiff,omitempty"`
-	ExplodeDiff         *ValueDiff   `json:"explodeDiff,omitempty"`
-	AllowEmptyValueDiff *ValueDiff   `json:"allow_empty_valueDiff,omitempty"`
-	AllowReservedDiff   *ValueDiff   `json:"allow_reservedDiff,omitempty"`
-	DeprecatedDiff      *ValueDiff   `json:"deprecatedDiff,omitempty"`
-	RequiredDiff        *ValueDiff   `json:"requiredDiff,omitempty"`
-	SchemaDiff          *SchemaDiff  `json:"schemaDiff,omitempty"`
-	ContentDiff         *ContentDiff `json:"contentDiff,omitempty"`
+	DescriptionDiff     *ValueDiff   `json:"description,omitempty"`
+	StyleDiff           *ValueDiff   `json:"style,omitempty"`
+	ExplodeDiff         *ValueDiff   `json:"explode,omitempty"`
+	AllowEmptyValueDiff *ValueDiff   `json:"allow_empty_value,omitempty"`
+	AllowReservedDiff   *ValueDiff   `json:"allow_reserved,omitempty"`
+	DeprecatedDiff      *ValueDiff   `json:"deprecated,omitempty"`
+	RequiredDiff        *ValueDiff   `json:"required,omitempty"`
+	SchemaDiff          *SchemaDiff  `json:"schema,omitempty"`
+	ContentDiff         *ContentDiff `json:"content,omitempty"`
 }
 
 func (paramDiff ParamDiff) empty() bool {

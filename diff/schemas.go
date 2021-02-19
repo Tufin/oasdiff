@@ -5,9 +5,9 @@ import (
 )
 
 type SchemaCollectionDiff struct {
-	AddedSchemas    []string        `json:"addedSchemas,omitempty"`
-	DeletedSchemas  []string        `json:"deletedSchemas,omitempty"`
-	ModifiedSchemas ModifiedSchemas `json:"modifiedSchemas,omitempty"`
+	AddedSchemas    []string        `json:"added,omitempty"`
+	DeletedSchemas  []string        `json:"deleted,omitempty"`
+	ModifiedSchemas ModifiedSchemas `json:"modified,omitempty"`
 }
 
 func (diff *SchemaCollectionDiff) empty() bool {
@@ -93,10 +93,10 @@ func (diff *SchemaCollectionDiff) addModifiedSchema(schema1 string, schemaRef1 *
 	diff.ModifiedSchemas.addSchemaDiff(schema1, schemaRef1, schemaRef2)
 }
 
-func (diff *SchemaCollectionDiff) getSummary() SchemaDiffSummary {
-	return SchemaDiffSummary{
-		AddedSchemas:    len(diff.AddedSchemas),
-		DeletedSchemas:  len(diff.DeletedSchemas),
-		ModifiedSchemas: len(diff.ModifiedSchemas),
+func (diff *SchemaCollectionDiff) getSummary() *SchemaSummary {
+	return &SchemaSummary{
+		Added:    len(diff.AddedSchemas),
+		Deleted:  len(diff.DeletedSchemas),
+		Modified: len(diff.ModifiedSchemas),
 	}
 }

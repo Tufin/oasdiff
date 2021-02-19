@@ -5,32 +5,31 @@ A go module for reporting changes between versions of OpenAPI (Swagger) files.
 The diff report is a go struct which can also be marshalled like this:
 ```json
 {
- "diffResult": {
-  "pathDiff": {
-   "modifiedEndpoints": {
-    "/prefix/api/{domain}/{project}/badges/security-score/": {
-     "modifiedMethods": {
-      "GET": {
-       "addedParams": {
-        "query": {
-         "filter": {}
-        }
-       },
-       "modifiedParams": {
-        "path": {
-         "domain": {
-          "schemaDiff": {
-           "minDiff": {
-            "oldValue": null,
-            "newValue": 7
+ "diff": {
+  "endpoints": {
+   "modified": {
+    "/api/{domain}/{project}/badges/security-score": {
+     "operations": {
+      "modified": {
+       "GET": {
+        "parameters": {
+         "modified": {
+          "cookie": {
+           "test": {
+            "content": {
+             "mediaTypeDiff": true
+            }
            }
-          }
-         }
-        },
-        "query": {
-         "token": {
-          "schemaDiff": {
-           "anyOfDiff": true
+          },
+          "header": {
+           "user": {
+            "schema": {
+             "schemaDeleted": true
+            },
+            "content": {
+             "mediaTypeAdded": true
+            }
+           }
           }
          }
         }
@@ -39,13 +38,36 @@ The diff report is a go struct which can also be marshalled like this:
      }
     }
    }
+  },
+  "schemas": {
+   "deleted": [
+    "requests"
+   ],
+   "modified": {
+    "network-policies": {
+     "additionalPropertiesAllowed": {
+      "oldValue": false,
+      "newValue": true
+     }
+    },
+    "rules": {
+     "additionalPropertiesAllowed": {
+      "oldValue": false,
+      "newValue": null
+     }
+    }
+   }
   }
  },
- "diffSummary": {
+ "summary": {
   "diff": true,
-  "addedEndpoints": 0,
-  "deletedEndpoints": 0,
-  "modifiedEndpoints": 1
+  "paths": {
+   "modified": 1
+  },
+  "schemas": {
+   "deleted": 1,
+   "modified": 2
+  }
  }
 }
 ```
@@ -82,17 +104,19 @@ import (
 )
 
 func main() {
-	base, err := load.Load("../oasdiff/data/openapi-test1.yaml")
+	loader := load.NewSwaggerLoader()
+
+	base, err := loader.From(base)
 	if err != nil {
 		return
 	}
 
-	revision, err := load.Load("../oasdiff/data/openapi-test2.yaml")
+	revision, err := loader.From(revision)
 	if err != nil {
 		return
 	}
 
-	bytes, err := json.MarshalIndent(diff.GetDiffResponse(base, revision, "", ""), "", " ")
+	bytes, err := json.MarshalIndent(diff.Run(base, revision, prefix, filter), "", " ")
 	if err != nil {
 		log.Errorf("failed to marshal result with '%v'", err)
 		return

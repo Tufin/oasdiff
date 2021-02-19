@@ -5,9 +5,13 @@ import (
 )
 
 type MethodDiff struct {
-	AddedParams    map[string]ParamNames `json:"addedParams,omitempty"`    // key is param location (path, query, header or cookie)
-	DeletedParams  map[string]ParamNames `json:"deletedParams,omitempty"`  // key is param location
-	ModifiedParams map[string]ParamDiffs `json:"modifiedParams,omitempty"` // key is param location
+	Params `json:"parameters,omitempty"`
+}
+
+type Params struct {
+	AddedParams    map[string]ParamNames `json:"added,omitempty"`    // key is param location (path, query, header or cookie)
+	DeletedParams  map[string]ParamNames `json:"deleted,omitempty"`  // key is param location
+	ModifiedParams map[string]ParamDiffs `json:"modified,omitempty"` // key is param location
 }
 
 type ParamNames map[string]struct{}  // key is param name
@@ -15,9 +19,11 @@ type ParamDiffs map[string]ParamDiff // key is param name
 
 func newMethodDiff() *MethodDiff {
 	return &MethodDiff{
-		AddedParams:    map[string]ParamNames{},
-		DeletedParams:  map[string]ParamNames{},
-		ModifiedParams: map[string]ParamDiffs{},
+		Params: Params{
+			AddedParams:    map[string]ParamNames{},
+			DeletedParams:  map[string]ParamNames{},
+			ModifiedParams: map[string]ParamDiffs{},
+		},
 	}
 }
 

@@ -8,9 +8,9 @@ import (
 )
 
 type PathDiff struct {
-	AddedEndpoints    []string          `json:"addedEndpoints,omitempty"`
-	DeletedEndpoints  []string          `json:"deletedEndpoints,omitempty"`
-	ModifiedEndpoints ModifiedEndpoints `json:"modifiedEndpoints,omitempty"`
+	AddedEndpoints    []string          `json:"added,omitempty"`
+	DeletedEndpoints  []string          `json:"deleted,omitempty"`
+	ModifiedEndpoints ModifiedEndpoints `json:"modified,omitempty"`
 }
 
 func (pathDiff *PathDiff) empty() bool {
@@ -48,11 +48,11 @@ func diffPaths(paths1 openapi3.Paths, paths2 openapi3.Paths, prefix string) *Pat
 	return result
 }
 
-func (pathDiff *PathDiff) getSummary() PathDiffSummary {
-	return PathDiffSummary{
-		AddedEndpoints:    len(pathDiff.AddedEndpoints),
-		DeletedEndpoints:  len(pathDiff.DeletedEndpoints),
-		ModifiedEndpoints: len(pathDiff.ModifiedEndpoints),
+func (pathDiff *PathDiff) getSummary() *PathSummary {
+	return &PathSummary{
+		Added:    len(pathDiff.AddedEndpoints),
+		Deleted:  len(pathDiff.DeletedEndpoints),
+		Modified: len(pathDiff.ModifiedEndpoints),
 	}
 }
 

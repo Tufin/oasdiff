@@ -9,28 +9,28 @@ type SchemaDiff struct {
 	SchemaDeleted                   bool       `json:"schemaDeleted,omitempty"`
 	ValueAdded                      bool       `json:"valueAdded,omitempty"`
 	ValueDeleted                    bool       `json:"valueDeleted,omitempty"`
-	OneOfDiff                       bool       `json:"oneOfDiff,omitempty"`
-	AnyOfDiff                       bool       `json:"anyOfDiff,omitempty"`
-	AllOfDiff                       bool       `json:"allOfDiff,omitempty"`
-	NotDiff                         bool       `json:"notDiff,omitempty"`
-	TypeDiff                        *ValueDiff `json:"typeDiff,omitempty"`
-	TitleDiff                       *ValueDiff `json:"titleDiff,omitempty"`
-	FormatDiff                      *ValueDiff `json:"formatDiff,omitempty"`
-	DescriptionDiff                 *ValueDiff `json:"descriptionDiff,omitempty"`
-	EnumDiff                        bool       `json:"enumDiff,omitempty"`
-	AdditionalPropertiesAllowedDiff *ValueDiff `json:"additionalPropertiesAllowedDiff,omitempty"`
-	UniqueItemsDiff                 *ValueDiff `json:"uniqueItemsDiff,omitempty"`
-	ExclusiveMinDiff                *ValueDiff `json:"exclusiveMinDiff,omitempty"`
-	ExclusiveMaxDiff                *ValueDiff `json:"exclusiveMaxDiff,omitempty"`
-	NullableDiff                    *ValueDiff `json:"nullableDiff,omitempty"`
-	ReadOnlyDiff                    *ValueDiff `json:"readOnlyDiffDiff,omitempty"`
-	WriteOnlyDiff                   *ValueDiff `json:"writeOnlyDiffDiff,omitempty"`
-	AllowEmptyValueDiff             *ValueDiff `json:"allowEmptyValueDiff,omitempty"`
-	DeprecatedDiff                  *ValueDiff `json:"deprecatedDiff,omitempty"`
-	MinDiff                         *ValueDiff `json:"minDiff,omitempty"`
-	MaxDiff                         *ValueDiff `json:"maxDiff,omitempty"`
-	MultipleOf                      *ValueDiff `json:"multipleOfDiff,omitempty"`
-	PropertiesDiff                  bool       `json:"propertiesDiff,omitempty"`
+	OneOfDiff                       bool       `json:"oneOf,omitempty"`
+	AnyOfDiff                       bool       `json:"anyOf,omitempty"`
+	AllOfDiff                       bool       `json:"allOf,omitempty"`
+	NotDiff                         bool       `json:"not,omitempty"`
+	TypeDiff                        *ValueDiff `json:"type,omitempty"`
+	TitleDiff                       *ValueDiff `json:"title,omitempty"`
+	FormatDiff                      *ValueDiff `json:"format,omitempty"`
+	DescriptionDiff                 *ValueDiff `json:"description,omitempty"`
+	EnumDiff                        bool       `json:"enum,omitempty"`
+	AdditionalPropertiesAllowedDiff *ValueDiff `json:"additionalPropertiesAllowed,omitempty"`
+	UniqueItemsDiff                 *ValueDiff `json:"uniqueItems,omitempty"`
+	ExclusiveMinDiff                *ValueDiff `json:"exclusiveMin,omitempty"`
+	ExclusiveMaxDiff                *ValueDiff `json:"exclusiveMax,omitempty"`
+	NullableDiff                    *ValueDiff `json:"nullable,omitempty"`
+	ReadOnlyDiff                    *ValueDiff `json:"readOnlyDiff,omitempty"`
+	WriteOnlyDiff                   *ValueDiff `json:"writeOnlyDiff,omitempty"`
+	AllowEmptyValueDiff             *ValueDiff `json:"allowEmptyValue,omitempty"`
+	DeprecatedDiff                  *ValueDiff `json:"deprecated,omitempty"`
+	MinDiff                         *ValueDiff `json:"min,omitempty"`
+	MaxDiff                         *ValueDiff `json:"max,omitempty"`
+	MultipleOf                      *ValueDiff `json:"multipleOf,omitempty"`
+	PropertiesDiff                  bool       `json:"properties,omitempty"`
 }
 
 func (schemaDiff SchemaDiff) empty() bool {
