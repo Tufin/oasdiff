@@ -16,6 +16,7 @@ type SwaggerLoader struct {
 	Loader Loader
 }
 
+// NewSwaggerLoader returns a loader object that can be used to load swagger specs
 func NewSwaggerLoader() *SwaggerLoader {
 	loader := openapi3.NewSwaggerLoader()
 	loader.IsExternalRefsAllowed = true

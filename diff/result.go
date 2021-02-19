@@ -1,39 +1,39 @@
 package diff
 
-type Result struct {
+type Diff struct {
 	PathDiff   *PathDiff             `json:"endpoints,omitempty"`
 	SchemaDiff *SchemaCollectionDiff `json:"schemas,omitempty"`
 }
 
-func (diffResult *Result) empty() bool {
-	return diffResult.PathDiff == nil &&
-		diffResult.SchemaDiff == nil
+func (diff *Diff) empty() bool {
+	return diff.PathDiff == nil &&
+		diff.SchemaDiff == nil
 }
 
-func (diffResult *Result) getSummary() *Summary {
+func (diff *Diff) getSummary() *Summary {
 
 	result := Summary{
-		Diff: !diffResult.empty(),
+		Diff: !diff.empty(),
 	}
 
-	if diffResult.PathDiff != nil {
-		result.PathSummary = diffResult.PathDiff.getSummary()
+	if diff.PathDiff != nil {
+		result.PathSummary = diff.PathDiff.getSummary()
 	}
 
-	if diffResult.SchemaDiff != nil {
-		result.SchemaSummary = diffResult.SchemaDiff.getSummary()
+	if diff.SchemaDiff != nil {
+		result.SchemaSummary = diff.SchemaDiff.getSummary()
 	}
 
 	return &result
 }
 
-func newResult() *Result {
-	return &Result{}
+func newDiff() *Diff {
+	return &Diff{}
 }
 
 // FilterByRegex filters diff endpoints by regex
-func (diffResult *Result) FilterByRegex(filter string) {
-	if diffResult.PathDiff != nil {
-		diffResult.PathDiff.filterByRegex(filter)
+func (diff *Diff) FilterByRegex(filter string) {
+	if diff.PathDiff != nil {
+		diff.PathDiff.filterByRegex(filter)
 	}
 }

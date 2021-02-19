@@ -8,7 +8,7 @@ import (
 )
 
 func TestFilterByRegex(t *testing.T) {
-	diffResult := diff.Result{
+	diffResult := diff.Diff{
 		&diff.PathDiff{
 			AddedEndpoints:    []string{"a"},
 			DeletedEndpoints:  []string{"ab"},
