@@ -16,7 +16,7 @@ func (diff *SchemaCollectionDiff) empty() bool {
 		len(diff.ModifiedSchemas) == 0
 }
 
-func newSchemaDiff() *SchemaCollectionDiff {
+func newSchemaCollectionDiff() *SchemaCollectionDiff {
 	return &SchemaCollectionDiff{
 		AddedSchemas:    []string{},
 		DeletedSchemas:  []string{},
@@ -33,7 +33,7 @@ type schemaRefPairs map[string]*schemaRefPair
 
 func diffSchemaCollection(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) *SchemaCollectionDiff {
 
-	result := newSchemaDiff()
+	result := newSchemaCollectionDiff()
 
 	addedSchemas, deletedSchemas, otherSchemas := diffSchemas(schemas1, schemas2)
 
