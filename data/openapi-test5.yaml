@@ -118,4 +118,10 @@ components:
       properties:
         netpols:
           type: string
+      type: object
+    rules:
+      additionalProperties: false
+      properties:
+        netpols:
+          type: string
       type: object      

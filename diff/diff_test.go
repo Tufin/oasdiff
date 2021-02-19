@@ -128,3 +128,23 @@ func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
 		diff.Diff(l(t, 1), l(t, 5), "").SchemaDiff.ModifiedSchemas["network-policies"].AdditionalPropertiesAllowedDiff,
 		"requests")
 }
+
+func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			OldValue: nil,
+			NewValue: false,
+		},
+		diff.Diff(l(t, 1), l(t, 5), "").SchemaDiff.ModifiedSchemas["rules"].AdditionalPropertiesAllowedDiff,
+		"requests")
+}
+
+func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			OldValue: false,
+			NewValue: nil,
+		},
+		diff.Diff(l(t, 5), l(t, 1), "").SchemaDiff.ModifiedSchemas["rules"].AdditionalPropertiesAllowedDiff,
+		"requests")
+}

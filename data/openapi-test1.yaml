@@ -113,4 +113,9 @@ components:
       properties:
         netpols:
           type: string
-      type: object     
+      type: object
+    rules:
+      properties:
+        netpols:
+          type: string
+      type: object      

@@ -17,7 +17,7 @@ func TestGetDiffResponse_Diff(t *testing.T) {
 				ModifiedEndpoints: 1,
 			},
 			SchemaDiffSummary: diff.SchemaDiffSummary{
-				DeletedSchemas: 1,
+				DeletedSchemas: 2,
 			},
 		},
 		diff.GetDiffResponse(l(t, 1), l(t, 2), "", "").DiffSummary)
