@@ -29,33 +29,22 @@ func NewSwaggerMockLoader() *load.SwaggerLoader {
 	}
 }
 
-func TestLoadPath_NoError(t *testing.T) {
-	_, err := NewSwaggerMockLoader().FromPath("openapi-test1.yaml")
-	require.NoError(t, err)
-}
-
-func TestLoadPath_Error(t *testing.T) {
-	_, err := NewSwaggerMockLoader().FromPath("null")
+func TestLoad_FileError(t *testing.T) {
+	_, err := load.NewSwaggerLoader().From("null")
 	require.Error(t, err)
 }
 
-func TestLoadURI_NoError(t *testing.T) {
-	path, err := url.ParseRequestURI("http://localhost/openapi-test1.yaml")
-	require.NoError(t, err)
-
-	_, err = NewSwaggerMockLoader().FromURI(path)
-	require.NoError(t, err)
-}
-
-func TestLoadURI_Error(t *testing.T) {
-	path, err := url.ParseRequestURI("http://localhost/null")
-	require.NoError(t, err)
-
-	_, err = NewSwaggerMockLoader().FromURI(path)
-	require.Error(t, err)
-}
-
-func TestLoad_NoError(t *testing.T) {
+func TestLoad_File(t *testing.T) {
 	_, err := NewSwaggerMockLoader().From("openapi-test1.yaml")
 	require.NoError(t, err)
+}
+
+func TestLoad_URI(t *testing.T) {
+	_, err := NewSwaggerMockLoader().From("http://localhost/openapi-test1.yaml")
+	require.NoError(t, err)
+}
+
+func TestLoad_URIError(t *testing.T) {
+	_, err := NewSwaggerMockLoader().From("http://localhost/null")
+	require.Error(t, err)
 }
