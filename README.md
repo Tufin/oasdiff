@@ -1,76 +1,7 @@
 [![codecov](https://codecov.io/gh/Tufin/oasdiff/branch/master/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/Tufin/oasdiff)
 
 # OpenAPI Spec Diff
-A go module for reporting changes between versions of OpenAPI (Swagger) files.    
-The diff report is a go struct which can also be marshalled like this:
-```json
-{
- "diff": {
-  "endpoints": {
-   "modified": {
-    "/api/{domain}/{project}/badges/security-score": {
-     "operations": {
-      "modified": {
-       "GET": {
-        "parameters": {
-         "modified": {
-          "cookie": {
-           "test": {
-            "content": {
-             "mediaTypeDiff": true
-            }
-           }
-          },
-          "header": {
-           "user": {
-            "schema": {
-             "schemaDeleted": true
-            },
-            "content": {
-             "mediaTypeAdded": true
-            }
-           }
-          }
-         }
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "schemas": {
-   "deleted": [
-    "requests"
-   ],
-   "modified": {
-    "network-policies": {
-     "additionalPropertiesAllowed": {
-      "oldValue": false,
-      "newValue": true
-     }
-    },
-    "rules": {
-     "additionalPropertiesAllowed": {
-      "oldValue": false,
-      "newValue": null
-     }
-    }
-   }
-  }
- },
- "summary": {
-  "diff": true,
-  "paths": {
-   "modified": 1
-  },
-  "schemas": {
-   "deleted": 1,
-   "modified": 2
-  }
- }
-}
-```
+A diff tool for OpenAPI Spec 3
 
 ## Build
 ```
