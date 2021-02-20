@@ -48,8 +48,7 @@ func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, p
 		return
 	}
 
-	diff := diffParameters(pathItem1.Parameters, pathItem2.Parameters)
-	if !diff.empty() {
+	if diff := diffParameters(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
 		endpointDiff.ModifiedOperations[method] = diff
 	}
 }
