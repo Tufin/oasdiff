@@ -26,7 +26,9 @@ func TestDiff_DeletedEndpointEmpty(t *testing.T) {
 }
 
 func TestDiff_DeletedEndpointNotEmpty(t *testing.T) {
-	require.EqualValues(t, []string{"/api/{domain}/{project}/install-command"}, diff.Run(l(t, 1), l(t, 2), "", "").Diff.PathDiff.DeletedEndpoints)
+	require.EqualValues(t,
+		[]string{"/api/{domain}/{project}/install-command"},
+		diff.Run(l(t, 1), l(t, 2), "", "").Diff.PathDiff.DeletedEndpoints)
 }
 
 func TestDiff_AddedOperation(t *testing.T) {
@@ -194,7 +196,5 @@ func TestPrefix(t *testing.T) {
 }
 
 func TestFilterByRegex(t *testing.T) {
-
-	result := diff.Run(l(t, 1), l(t, 2), "", "x")
-	require.Nil(t, result.Summary.PathSummary)
+	require.Nil(t, diff.Run(l(t, 1), l(t, 2), "", "x").Summary.PathSummary)
 }
