@@ -30,7 +30,16 @@ type SchemaDiff struct {
 	MinDiff                         *ValueDiff `json:"min,omitempty"`
 	MaxDiff                         *ValueDiff `json:"max,omitempty"`
 	MultipleOf                      *ValueDiff `json:"multipleOf,omitempty"`
+	MinLength                       *ValueDiff `json:"minLength,omitempty"`
+	MaxLength                       *ValueDiff `json:"maxLength,omitempty"`
+	Pattern                         *ValueDiff `json:"pattern,omitempty"`
+	MinItems                        *ValueDiff `json:"minItems,omitempty"`
+	MaxItems                        *ValueDiff `json:"maxItems,omitempty"`
+	Items                           bool       `json:"items,omitempty"`
 	PropertiesDiff                  bool       `json:"properties,omitempty"`
+	MinProps                        *ValueDiff `json:"minProps,omitempty"`
+	MaxProps                        *ValueDiff `json:"maxProps,omitempty"`
+	AdditionalProperties            bool       `json:"additionalProperties,omitempty"`
 }
 
 func (schemaDiff SchemaDiff) empty() bool {
@@ -73,19 +82,18 @@ func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) Schema
 	result.MinDiff = getFloat64RefDiff(value1.Min, value2.Min)
 	result.MaxDiff = getFloat64RefDiff(value1.Max, value2.Max)
 	result.MultipleOf = getFloat64RefDiff(value1.MultipleOf, value2.MultipleOf)
-	// MultipleOf
-	// MinLength
-	// MaxLength
-	// Pattern
-	// compiledPattern
-	// MinItems
-	// MaxItems
-	// Items
+	result.MinLength = getValueDiff(value1.MinLength, value2.MinLength)
+	result.MaxLength = getValueDiff(value1.MaxLength, value2.MaxLength)
+	result.Pattern = getValueDiff(value1.Pattern, value2.Pattern)
+	// compiledPattern is derived from pattern -> no need to diff
+	result.MinItems = getValueDiff(value1.MinItems, value2.MinItems)
+	result.MaxItems = getValueDiff(value1.MaxItems, value2.MaxItems)
+	result.Items = !diffSchema(value1.Items, value2.Items).empty()
 	// Required
 	result.PropertiesDiff = getDiffSchemaMap(value1.Properties, value2.Properties)
-	// MinProps
-	// MaxProps
-	// AdditionalProperties
+	result.MinProps = getValueDiff(value1.MinProps, value2.MinProps)
+	result.MaxProps = getValueDiff(value1.MaxProps, value2.MaxProps)
+	result.AdditionalProperties = !diffSchema(value1.AdditionalProperties, value2.AdditionalProperties).empty()
 	// Discriminator
 
 	return result
