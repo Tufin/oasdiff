@@ -4,7 +4,8 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-type ModifiedEndpoints map[string]*EndpointDiff // key is endpoint (path)
+// ModifiedEndpoints maps endpoints (paths) to thier diff
+type ModifiedEndpoints map[string]*EndpointDiff
 
 func (modifiedEndpoints ModifiedEndpoints) addEndpointDiff(entrypoint1 string, pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) {
 

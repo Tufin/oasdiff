@@ -5,25 +5,38 @@ import (
 )
 
 type MethodDiff struct {
-	Params `json:"parameters,omitempty"`
+	Params    `json:"parameters,omitempty"`
 }
 
 type Params struct {
-	AddedParams    map[string]ParamNames `json:"added,omitempty"`    // key is param location (path, query, header or cookie)
-	DeletedParams  map[string]ParamNames `json:"deleted,omitempty"`  // key is param location
-	ModifiedParams map[string]ParamDiffs `json:"modified,omitempty"` // key is param location
+	AddedParams    ParamNamesByLocation `json:"added,omitempty"`
+	DeletedParams  ParamNamesByLocation `json:"deleted,omitempty"`
+	ModifiedParams ParamDiffByLocation  `json:"modified,omitempty"`
 }
 
-type ParamNames map[string]struct{}  // key is param name
-type ParamDiffs map[string]ParamDiff // key is param name
+// ParamNamesByLocation maps param location (path, query, header or cookie) to the params in this location
+type ParamNamesByLocation map[string]ParamNames
+
+// ParamDiffByLocation maps param location (path, query, header or cookie) to param diffs in this location
+type ParamDiffByLocation map[string]ParamDiffs
+
+func newParams() Params {
+	return Params{
+		AddedParams:    ParamNamesByLocation{},
+		DeletedParams:  ParamNamesByLocation{},
+		ModifiedParams: ParamDiffByLocation{},
+	}
+}
+
+// ParamNames is a set of parameter names
+type ParamNames map[string]struct{}
+
+// ParamDiffs is map of parameter names to their respective diffs
+type ParamDiffs map[string]ParamDiff
 
 func newMethodDiff() *MethodDiff {
 	return &MethodDiff{
-		Params: Params{
-			AddedParams:    map[string]ParamNames{},
-			DeletedParams:  map[string]ParamNames{},
-			ModifiedParams: map[string]ParamDiffs{},
-		},
+		Params: newParams(),
 	}
 }
 
