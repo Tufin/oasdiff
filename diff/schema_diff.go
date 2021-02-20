@@ -17,7 +17,7 @@ type SchemaDiff struct {
 	TitleDiff                       *ValueDiff `json:"title,omitempty"`
 	FormatDiff                      *ValueDiff `json:"format,omitempty"`
 	DescriptionDiff                 *ValueDiff `json:"description,omitempty"`
-	EnumDiff                        bool       `json:"enum,omitempty"`
+	EnumDiff                        *EnumDiff  `json:"enum,omitempty"`
 	AdditionalPropertiesAllowedDiff *ValueDiff `json:"additionalPropertiesAllowed,omitempty"`
 	UniqueItemsDiff                 *ValueDiff `json:"uniqueItems,omitempty"`
 	ExclusiveMinDiff                *ValueDiff `json:"exclusiveMin,omitempty"`

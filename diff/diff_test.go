@@ -66,7 +66,10 @@ func TestSchemaDiff_TypeDiff(t *testing.T) {
 
 func TestSchemaDiff_EnumDiff(t *testing.T) {
 	require.Equal(t,
-		true,
+		&diff.EnumDiff{
+			Added:   []interface{}{"test1"},
+			Deleted: []interface{}{},
+		},
 		diff.Run(l(t, 1), l(t, 3), "", "").Diff.PathDiff.ModifiedEndpoints["/api/{domain}/{project}/install-command"].ModifiedOperations["GET"].ModifiedParams["path"]["project"].SchemaDiff.EnumDiff)
 }
 
