@@ -1,39 +1,20 @@
 package diff
 
-type Diff struct {
-	PathDiff   *PathDiff             `json:"endpoints,omitempty"`
-	SchemaDiff *SchemaCollectionDiff `json:"schemas,omitempty"`
+import "github.com/getkin/kin-openapi/openapi3"
+
+// Result contains a diff and a summary
+type Result struct {
+	Diff    *Diff    `json:"diff,omitempty"`
+	Summary *Summary `json:"summary,omitempty"`
 }
 
-func (diff *Diff) empty() bool {
-	return diff.PathDiff == nil &&
-		diff.SchemaDiff == nil
-}
+// Run returns the diff between two OAS specs including a summary
+func Run(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string, filter string) Result {
+	diff := getDiff(s1, s2, prefix)
+	diff.filterByRegex(filter)
 
-func (diff *Diff) getSummary() *Summary {
-
-	result := Summary{
-		Diff: !diff.empty(),
-	}
-
-	if diff.PathDiff != nil {
-		result.PathSummary = diff.PathDiff.getSummary()
-	}
-
-	if diff.SchemaDiff != nil {
-		result.SchemaSummary = diff.SchemaDiff.getSummary()
-	}
-
-	return &result
-}
-
-func newDiff() *Diff {
-	return &Diff{}
-}
-
-// FilterByRegex filters diff endpoints by regex
-func (diff *Diff) FilterByRegex(filter string) {
-	if diff.PathDiff != nil {
-		diff.PathDiff.filterByRegex(filter)
+	return Result{
+		Diff:    diff,
+		Summary: diff.getSummary(),
 	}
 }

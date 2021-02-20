@@ -2,34 +2,66 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// Result contains a diff and a summary
-type Result struct {
-	Diff    *Diff    `json:"diff,omitempty"`
-	Summary *Summary `json:"summary,omitempty"`
+type Diff struct {
+	PathDiff   *PathDiff             `json:"endpoints,omitempty"`
+	SchemaDiff *SchemaCollectionDiff `json:"schemas,omitempty"`
 }
 
-// Run returns the diff between two OAS specs including a summary
-func Run(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string, filter string) Result {
-	diff := getDiff(s1, s2, prefix)
-	diff.FilterByRegex(filter)
+func newDiff() *Diff {
+	return &Diff{}
+}
 
-	return Result{
-		Diff:    diff,
-		Summary: diff.getSummary(),
-	}
+func (diff *Diff) empty() bool {
+	return diff.PathDiff == nil &&
+		diff.SchemaDiff == nil
 }
 
 func getDiff(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string) *Diff {
 
-	result := newDiff()
+	diff := newDiff()
 
-	if pathDiff := diffPaths(s1.Paths, s2.Paths, prefix); !pathDiff.empty() {
-		result.PathDiff = pathDiff
+	diff.setPathDiff(diffPaths(s1.Paths, s2.Paths, prefix))
+	diff.setSchemaDiff(diffSchemaCollection(s1.Components.Schemas, s2.Components.Schemas))
+
+	return diff
+}
+
+func (diff *Diff) setPathDiff(pathDiff *PathDiff) {
+	diff.PathDiff = nil
+
+	if !pathDiff.empty() {
+		diff.PathDiff = pathDiff
+	}
+}
+
+func (diff *Diff) setSchemaDiff(schemaCollectionDiff *SchemaCollectionDiff) {
+	diff.SchemaDiff = nil
+
+	if !schemaCollectionDiff.empty() {
+		diff.SchemaDiff = schemaCollectionDiff
+	}
+}
+
+func (diff *Diff) getSummary() *Summary {
+
+	result := Summary{
+		Diff: !diff.empty(),
 	}
 
-	if schemaDiff := diffSchemaCollection(s1.Components.Schemas, s2.Components.Schemas); !schemaDiff.empty() {
-		result.SchemaDiff = schemaDiff
+	if diff.PathDiff != nil {
+		result.PathSummary = diff.PathDiff.getSummary()
 	}
 
-	return result
+	if diff.SchemaDiff != nil {
+		result.SchemaSummary = diff.SchemaDiff.getSummary()
+	}
+
+	return &result
+}
+
+func (diff *Diff) filterByRegex(filter string) {
+	if diff.PathDiff != nil {
+
+		diff.setPathDiff(diff.PathDiff.filterByRegex(filter))
+	}
 }

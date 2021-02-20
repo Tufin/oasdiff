@@ -192,3 +192,9 @@ func TestPrefix(t *testing.T) {
 		},
 		diff.Run(l(t, 4), l(t, 2), "/prefix", "").Summary)
 }
+
+func TestFilterByRegex(t *testing.T) {
+
+	result := diff.Run(l(t, 1), l(t, 2), "", "x")
+	require.Nil(t, result.Summary.PathSummary)
+}

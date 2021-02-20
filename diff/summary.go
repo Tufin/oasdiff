@@ -2,7 +2,7 @@ package diff
 
 type Summary struct {
 	Diff          bool           `json:"diff"`
-	PathSummary   *PathSummary   `json:"paths,omitempty"`
+	PathSummary   *PathSummary   `json:"endpoints,omitempty"`
 	SchemaSummary *SchemaSummary `json:"schemas,omitempty"`
 }
 

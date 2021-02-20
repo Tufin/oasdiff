@@ -68,16 +68,19 @@ func (pathDiff *PathDiff) addModifiedEndpoint(entrypoint1 string, pathItem1 *ope
 	pathDiff.ModifiedEndpoints.addEndpointDiff(entrypoint1, pathItem1, pathItem2)
 }
 
-func (pathDiff *PathDiff) filterByRegex(filter string) {
+func (pathDiff PathDiff) filterByRegex(filter string) *PathDiff {
+
 	r, err := regexp.Compile(filter)
 	if err != nil {
 		log.Errorf("Failed to compile filter regex '%s' with '%v'", filter, err)
-		return
+		return &pathDiff
 	}
 
 	pathDiff.AddedEndpoints = filterEndpoints(pathDiff.AddedEndpoints, r)
 	pathDiff.DeletedEndpoints = filterEndpoints(pathDiff.DeletedEndpoints, r)
 	pathDiff.ModifiedEndpoints = filterModifiedEndpoints(pathDiff.ModifiedEndpoints, r)
+
+	return &pathDiff
 }
 
 func filterEndpoints(endpoints []string, r *regexp.Regexp) []string {
