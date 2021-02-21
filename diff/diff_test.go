@@ -136,7 +136,7 @@ func TestResponseAdded(t *testing.T) {
 func TestResponseDeleted(t *testing.T) {
 	require.Contains(t,
 		diff.Run(l(t, 3), l(t, 1), "", "").Diff.PathDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Deleted,
-		"200")
+		"default")
 }
 
 func TestSchemaDiff_AddedSchemas(t *testing.T) {
