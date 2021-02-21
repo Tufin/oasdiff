@@ -222,3 +222,7 @@ func TestPrefix(t *testing.T) {
 func TestFilterByRegex(t *testing.T) {
 	require.Nil(t, diff.Run(l(t, 1), l(t, 2), "", "x").Summary.PathSummary)
 }
+
+func TestFilterByRegex_Invalid(t *testing.T) {
+	require.Equal(t, true, diff.Run(l(t, 1), l(t, 2), "", "[").Summary.Diff)
+}
