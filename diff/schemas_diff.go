@@ -4,25 +4,27 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-type SchemaCollectionDiff struct {
-	AddedSchemas    SchemaList      `json:"added,omitempty"`
-	DeletedSchemas  SchemaList      `json:"deleted,omitempty"`
-	ModifiedSchemas ModifiedSchemas `json:"modified,omitempty"`
+// SchemasDiff describes the schema diff between two OAS specs
+type SchemasDiff struct {
+	Added    SchemaList      `json:"added,omitempty"`
+	Deleted  SchemaList      `json:"deleted,omitempty"`
+	Modified ModifiedSchemas `json:"modified,omitempty"`
 }
 
+// SchemaList is a list of schema names
 type SchemaList []string
 
-func (diff *SchemaCollectionDiff) empty() bool {
-	return len(diff.AddedSchemas) == 0 &&
-		len(diff.DeletedSchemas) == 0 &&
-		len(diff.ModifiedSchemas) == 0
+func (schemasDiff *SchemasDiff) empty() bool {
+	return len(schemasDiff.Added) == 0 &&
+		len(schemasDiff.Deleted) == 0 &&
+		len(schemasDiff.Modified) == 0
 }
 
-func newSchemaCollectionDiff() *SchemaCollectionDiff {
-	return &SchemaCollectionDiff{
-		AddedSchemas:    SchemaList{},
-		DeletedSchemas:  SchemaList{},
-		ModifiedSchemas: ModifiedSchemas{},
+func newSchemasDiff() *SchemasDiff {
+	return &SchemasDiff{
+		Added:    SchemaList{},
+		Deleted:  SchemaList{},
+		Modified: ModifiedSchemas{},
 	}
 }
 
@@ -33,9 +35,9 @@ type schemaRefPair struct {
 
 type schemaRefPairs map[string]*schemaRefPair
 
-func diffSchemaCollection(schemas1, schemas2 openapi3.Schemas) *SchemaCollectionDiff {
+func getSchemasDiff(schemas1, schemas2 openapi3.Schemas) *SchemasDiff {
 
-	result := newSchemaCollectionDiff()
+	result := newSchemasDiff()
 
 	addedSchemas, deletedSchemas, otherSchemas := diffSchemas(schemas1, schemas2)
 
@@ -83,22 +85,22 @@ func diffSchemas(schemas1, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi
 	return added, deleted, other
 }
 
-func (diff *SchemaCollectionDiff) addAddedSchema(schema string) {
-	diff.AddedSchemas = append(diff.AddedSchemas, schema)
+func (schemasDiff *SchemasDiff) addAddedSchema(schema string) {
+	schemasDiff.Added = append(schemasDiff.Added, schema)
 }
 
-func (diff *SchemaCollectionDiff) addDeletedSchema(schema string) {
-	diff.DeletedSchemas = append(diff.DeletedSchemas, schema)
+func (schemasDiff *SchemasDiff) addDeletedSchema(schema string) {
+	schemasDiff.Deleted = append(schemasDiff.Deleted, schema)
 }
 
-func (diff *SchemaCollectionDiff) addModifiedSchema(schema1 string, schemaRef1, schemaRef2 *openapi3.SchemaRef) {
-	diff.ModifiedSchemas.addSchemaDiff(schema1, schemaRef1, schemaRef2)
+func (schemasDiff *SchemasDiff) addModifiedSchema(schema1 string, schemaRef1, schemaRef2 *openapi3.SchemaRef) {
+	schemasDiff.Modified.addSchemaDiff(schema1, schemaRef1, schemaRef2)
 }
 
-func (diff *SchemaCollectionDiff) getSummary() *SchemaSummary {
+func (schemasDiff *SchemasDiff) getSummary() *SchemaSummary {
 	return &SchemaSummary{
-		Added:    len(diff.AddedSchemas),
-		Deleted:  len(diff.DeletedSchemas),
-		Modified: len(diff.ModifiedSchemas),
+		Added:    len(schemasDiff.Added),
+		Deleted:  len(schemasDiff.Deleted),
+		Modified: len(schemasDiff.Modified),
 	}
 }

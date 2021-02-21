@@ -4,7 +4,8 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-type ParamDiff struct {
+// ParameterDiff is a diff between two parameters
+type ParameterDiff struct {
 	DescriptionDiff     *ValueDiff   `json:"description,omitempty"`
 	StyleDiff           *ValueDiff   `json:"style,omitempty"`
 	ExplodeDiff         *ValueDiff   `json:"explode,omitempty"`
@@ -16,13 +17,13 @@ type ParamDiff struct {
 	ContentDiff         *ContentDiff `json:"content,omitempty"`
 }
 
-func (paramDiff ParamDiff) empty() bool {
-	return paramDiff == ParamDiff{}
+func (parameterDiff ParameterDiff) empty() bool {
+	return parameterDiff == ParameterDiff{}
 }
 
-func diffParamValues(param1, param2 *openapi3.Parameter) ParamDiff {
+func diffParameterValues(param1, param2 *openapi3.Parameter) ParameterDiff {
 
-	result := ParamDiff{}
+	result := ParameterDiff{}
 
 	// TODO: ExtensionProps
 

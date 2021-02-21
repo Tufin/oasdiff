@@ -2,9 +2,10 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
+// Diff describes the changes between two OAS specs
 type Diff struct {
-	PathDiff   *PathDiff             `json:"paths,omitempty"`
-	SchemaDiff *SchemaCollectionDiff `json:"schemas,omitempty"`
+	PathDiff   *PathsDiff   `json:"paths,omitempty"`
+	SchemaDiff *SchemasDiff `json:"schemas,omitempty"`
 }
 
 func newDiff() *Diff {
@@ -20,25 +21,25 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *Diff {
 
 	diff := newDiff()
 
-	diff.setPathDiff(diffPaths(s1.Paths, s2.Paths, prefix))
-	diff.setSchemaDiff(diffSchemaCollection(s1.Components.Schemas, s2.Components.Schemas))
+	diff.setPath(getPathsDiff(s1.Paths, s2.Paths, prefix))
+	diff.setSchemas(getSchemasDiff(s1.Components.Schemas, s2.Components.Schemas))
 
 	return diff
 }
 
-func (diff *Diff) setPathDiff(pathDiff *PathDiff) {
+func (diff *Diff) setPath(paths *PathsDiff) {
 	diff.PathDiff = nil
 
-	if !pathDiff.empty() {
-		diff.PathDiff = pathDiff
+	if !paths.empty() {
+		diff.PathDiff = paths
 	}
 }
 
-func (diff *Diff) setSchemaDiff(schemaCollectionDiff *SchemaCollectionDiff) {
+func (diff *Diff) setSchemas(schemas *SchemasDiff) {
 	diff.SchemaDiff = nil
 
-	if !schemaCollectionDiff.empty() {
-		diff.SchemaDiff = schemaCollectionDiff
+	if !schemas.empty() {
+		diff.SchemaDiff = schemas
 	}
 }
 
@@ -62,6 +63,6 @@ func (diff *Diff) getSummary() *Summary {
 func (diff *Diff) filterByRegex(filter string) {
 	if diff.PathDiff != nil {
 
-		diff.setPathDiff(diff.PathDiff.filterByRegex(filter))
+		diff.setPath(diff.PathDiff.filterByRegex(filter))
 	}
 }

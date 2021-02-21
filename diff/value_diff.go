@@ -1,5 +1,6 @@
 package diff
 
+// ValueDiff describes the diff between two values
 type ValueDiff struct {
 	OldValue interface{} `json:"oldValue"`
 	NewValue interface{} `json:"newValue"`

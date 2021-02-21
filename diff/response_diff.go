@@ -2,6 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
+// ResponseDiff describes the diff between two responses
 type ResponseDiff struct {
 }
 

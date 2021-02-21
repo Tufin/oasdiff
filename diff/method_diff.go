@@ -4,9 +4,10 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
+// MethodDiff is the diff between two methods
 type MethodDiff struct {
-	ParamDiff    *Params    `json:"parameters,omitempty"`
-	ResponseDiff *Responses `json:"responses,omitempty"`
+	ParamDiff    *ParametersDiff `json:"parameters,omitempty"`
+	ResponseDiff *ResponsesDiff  `json:"responses,omitempty"`
 }
 
 func newMethodDiff() *MethodDiff {

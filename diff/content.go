@@ -6,6 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
+// ContentDiff is a diff between two OAS contents
 type ContentDiff struct {
 	MediaTypeAdded   bool `json:"mediaTypeAdded,omitempty"`
 	MediaTypeDeleted bool `json:"mediaTypeDeleted,omitempty"`

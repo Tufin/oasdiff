@@ -2,11 +2,13 @@ package diff
 
 import "reflect"
 
+// EnumDiff is the diff between two OAS enums
 type EnumDiff struct {
 	Added   EnumValues `json:"added,omitempty"`
 	Deleted EnumValues `json:"deleted,omitempty"`
 }
 
+// EnumValues is a list of enum values
 type EnumValues []interface{}
 
 func newEnumDiff() *EnumDiff {

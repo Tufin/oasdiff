@@ -2,16 +2,17 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-type Params struct {
+// ParametersDiff is the diff of parameters between two two operations
+type ParametersDiff struct {
 	Added    ParamNamesByLocation `json:"added,omitempty"`
 	Deleted  ParamNamesByLocation `json:"deleted,omitempty"`
 	Modified ParamDiffByLocation  `json:"modified,omitempty"`
 }
 
-func (params *Params) empty() bool {
-	return len(params.Added) == 0 &&
-		len(params.Deleted) == 0 &&
-		len(params.Modified) == 0
+func (parametersDiff *ParametersDiff) empty() bool {
+	return len(parametersDiff.Added) == 0 &&
+		len(parametersDiff.Deleted) == 0 &&
+		len(parametersDiff.Modified) == 0
 }
 
 // ParamNamesByLocation maps param location (path, query, header or cookie) to the params in this location
@@ -20,8 +21,8 @@ type ParamNamesByLocation map[string]ParamNames
 // ParamDiffByLocation maps param location (path, query, header or cookie) to param diffs in this location
 type ParamDiffByLocation map[string]ParamDiffs
 
-func newParams() *Params {
-	return &Params{
+func newParametersDiff() *ParametersDiff {
+	return &ParametersDiff{
 		Added:    ParamNamesByLocation{},
 		Deleted:  ParamNamesByLocation{},
 		Modified: ParamDiffByLocation{},
@@ -32,43 +33,43 @@ func newParams() *Params {
 type ParamNames map[string]struct{}
 
 // ParamDiffs is map of parameter names to their respective diffs
-type ParamDiffs map[string]ParamDiff
+type ParamDiffs map[string]ParameterDiff
 
-func (params *Params) addAddedParam(param *openapi3.Parameter) {
+func (parametersDiff *ParametersDiff) addAddedParam(param *openapi3.Parameter) {
 
-	if paramNames, ok := params.Added[param.In]; ok {
+	if paramNames, ok := parametersDiff.Added[param.In]; ok {
 		paramNames[param.Name] = struct{}{}
 	} else {
-		params.Added[param.In] = ParamNames{param.Name: struct{}{}}
+		parametersDiff.Added[param.In] = ParamNames{param.Name: struct{}{}}
 	}
 }
 
-func (params *Params) addDeletedParam(param *openapi3.Parameter) {
+func (parametersDiff *ParametersDiff) addDeletedParam(param *openapi3.Parameter) {
 
-	if paramNames, ok := params.Deleted[param.In]; ok {
+	if paramNames, ok := parametersDiff.Deleted[param.In]; ok {
 		paramNames[param.Name] = struct{}{}
 	} else {
-		params.Deleted[param.In] = ParamNames{param.Name: struct{}{}}
+		parametersDiff.Deleted[param.In] = ParamNames{param.Name: struct{}{}}
 	}
 }
 
-func (params *Params) addModifiedParam(param *openapi3.Parameter, diff ParamDiff) {
+func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter, diff ParameterDiff) {
 
-	if paramDiffs, ok := params.Modified[param.In]; ok {
+	if paramDiffs, ok := parametersDiff.Modified[param.In]; ok {
 		paramDiffs[param.Name] = diff
 	} else {
-		params.Modified[param.In] = ParamDiffs{param.Name: diff}
+		parametersDiff.Modified[param.In] = ParamDiffs{param.Name: diff}
 	}
 }
 
-func getParamDiff(params1, params2 openapi3.Parameters) *Params {
+func getParamDiff(params1, params2 openapi3.Parameters) *ParametersDiff {
 
-	result := newParams()
+	result := newParametersDiff()
 
 	for _, paramRef1 := range params1 {
 		if paramRef1 != nil && paramRef1.Value != nil {
 			if paramValue2, ok := findParam(paramRef1.Value, params2); ok {
-				if diff := diffParamValues(paramRef1.Value, paramValue2); !diff.empty() {
+				if diff := diffParameterValues(paramRef1.Value, paramValue2); !diff.empty() {
 					result.addModifiedParam(paramRef1.Value, diff)
 				}
 			} else {

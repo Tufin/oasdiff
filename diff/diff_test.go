@@ -21,11 +21,11 @@ func TestDiff_Same(t *testing.T) {
 	require.Empty(t, diff.Run(s, s, "", "").Diff.PathDiff)
 }
 
-func TestDiff_DeletedEndpointEmpty(t *testing.T) {
+func TestDiff_DeletedPathsEmpty(t *testing.T) {
 	require.Empty(t, diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathDiff.Deleted)
 }
 
-func TestDiff_DeletedEndpointNotEmpty(t *testing.T) {
+func TestDiff_DeletedPathsNotEmpty(t *testing.T) {
 	require.EqualValues(t,
 		[]string{"/api/{domain}/{project}/install-command"},
 		diff.Run(l(t, 1), l(t, 2), "", "").Diff.PathDiff.Deleted)
@@ -141,13 +141,13 @@ func TestResponseDeleted(t *testing.T) {
 
 func TestSchemaDiff_AddedSchemas(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemaDiff.AddedSchemas,
+		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemaDiff.Added,
 		"requests")
 }
 
 func TestSchemaDiff_DeletedSchemas(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemaDiff.DeletedSchemas,
+		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemaDiff.Deleted,
 		"requests")
 }
 
@@ -157,7 +157,7 @@ func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
 			OldValue: true,
 			NewValue: false,
 		},
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemaDiff.ModifiedSchemas["network-policies"].AdditionalPropertiesAllowedDiff,
+		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemaDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff,
 		"requests")
 }
 
@@ -167,7 +167,7 @@ func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
 			OldValue: nil,
 			NewValue: false,
 		},
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemaDiff.ModifiedSchemas["rules"].AdditionalPropertiesAllowedDiff,
+		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemaDiff.Modified["rules"].AdditionalPropertiesAllowedDiff,
 		"requests")
 }
 
@@ -177,7 +177,7 @@ func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
 			OldValue: false,
 			NewValue: nil,
 		},
-		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemaDiff.ModifiedSchemas["rules"].AdditionalPropertiesAllowedDiff,
+		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemaDiff.Modified["rules"].AdditionalPropertiesAllowedDiff,
 		"requests")
 }
 

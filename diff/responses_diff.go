@@ -4,16 +4,17 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-type Responses struct {
+// ResponsesDiff describes the diff between responses of two endpoints
+type ResponsesDiff struct {
 	Added    ResponseList      `json:"added,omitempty"`
 	Deleted  ResponseList      `json:"deleted,omitempty"`
 	Modified ModifiedResponses `json:"modified,omitempty"`
 }
 
-func (responses *Responses) empty() bool {
-	return len(responses.Added) == 0 &&
-		len(responses.Deleted) == 0 &&
-		len(responses.Modified) == 0
+func (responsesDiff *ResponsesDiff) empty() bool {
+	return len(responsesDiff.Added) == 0 &&
+		len(responsesDiff.Deleted) == 0 &&
+		len(responsesDiff.Modified) == 0
 }
 
 // ResponseList is a list of response values
@@ -22,13 +23,13 @@ type ResponseList []string
 // ModifiedResponses is map of response value to their respective diffs
 type ModifiedResponses map[string]ResponseDiff
 
-func newResponses() *Responses {
-	return &Responses{}
+func newResponsesDiff() *ResponsesDiff {
+	return &ResponsesDiff{}
 }
 
-func getResponseDiff(responses1, responses2 openapi3.Responses) *Responses {
+func getResponseDiff(responses1, responses2 openapi3.Responses) *ResponsesDiff {
 
-	result := newResponses()
+	result := newResponsesDiff()
 
 	for responseValue1, responseRef1 := range responses1 {
 		if responseRef1 != nil && responseRef1.Value != nil {
