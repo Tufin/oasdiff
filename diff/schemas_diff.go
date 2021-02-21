@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// SchemasDiff describes the schema diff between two OAS specs
+// SchemasDiff is a diff between two sets of schemas 
 type SchemasDiff struct {
 	Added    SchemaList      `json:"added,omitempty"`
 	Deleted  SchemaList      `json:"deleted,omitempty"`

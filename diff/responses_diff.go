@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ResponsesDiff describes the diff between responses of two endpoints
+// ResponsesDiff is a diff between two sets of responses
 type ResponsesDiff struct {
 	Added    ResponseList      `json:"added,omitempty"`
 	Deleted  ResponseList      `json:"deleted,omitempty"`

@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// PathsDiff describes the paths diff between two OAS specs
+// PathsDiff is a diff between two sets of paths
 type PathsDiff struct {
 	Added    PathList      `json:"added,omitempty"`
 	Deleted  PathList      `json:"deleted,omitempty"`
