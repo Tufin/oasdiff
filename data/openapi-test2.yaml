@@ -19,6 +19,7 @@ paths:
                   type: number
       - in: query
         name: image
+        explode: true
         schema:
           description: alphanumeric with underscore, dash, period, slash and colon
           example: tufinim/generic-bank:cia-latest
