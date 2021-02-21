@@ -1,16 +1,34 @@
 package diff
 
+import "github.com/getkin/kin-openapi/openapi3"
+
 type Responses struct {
-	Added    map[string]ResponseNames `json:"added,omitempty"`    // key is param location (path, query, header or cookie)
-	Deleted  map[string]ResponseNames `json:"deleted,omitempty"`  // key is param location
-	Modified map[string]ResponseDiffs `json:"modified,omitempty"` // key is param location
+	Added    map[string]ResponseList      `json:"added,omitempty"`
+	Deleted  map[string]ResponseList      `json:"deleted,omitempty"`
+	Modified map[string]ModifiedResponses `json:"modified,omitempty"`
 }
 
-// ResponseNames is a set of parameter names
-type ResponseNames map[string]struct{}
+func (responses *Responses) empty() bool {
+	return len(responses.Added) == 0 &&
+		len(responses.Deleted) == 0 &&
+		len(responses.Modified) == 0
+}
 
-// ResponseDiffs is map of parameter names to their respective diffs
-type ResponseDiffs map[string]ResponseDiff
+// ResponseList is a set of response values
+type ResponseList map[string]struct{}
+
+// ModifiedResponses is map of response value to their respective diffs
+type ModifiedResponses map[string]ResponseDiff
 
 type ResponseDiff struct {
+}
+
+func newResponses() *Responses {
+	return &Responses{}
+}
+
+func getResponseDiff(responses1, responses2 openapi3.Responses) *Responses {
+	result := newResponses()
+
+	return result
 }

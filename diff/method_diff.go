@@ -5,7 +5,8 @@ import (
 )
 
 type MethodDiff struct {
-	ParamDiff *Params `json:"parameters,omitempty"`
+	ParamDiff    *Params    `json:"parameters,omitempty"`
+	ResponseDiff *Responses `json:"responses,omitempty"`
 }
 
 func newMethodDiff() *MethodDiff {
@@ -13,7 +14,8 @@ func newMethodDiff() *MethodDiff {
 }
 
 func (methodDiff *MethodDiff) empty() bool {
-	return methodDiff.ParamDiff == nil
+	return methodDiff.ParamDiff == nil &&
+		methodDiff.ResponseDiff == nil
 }
 
 func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
@@ -22,6 +24,10 @@ func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 
 	if diff := getParamDiff(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
 		result.ParamDiff = diff
+	}
+
+	if diff := getResponseDiff(pathItem1.Responses, pathItem2.Responses); !diff.empty() {
+		result.ResponseDiff = diff
 	}
 
 	return result
