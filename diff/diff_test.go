@@ -55,6 +55,15 @@ func TestDiff_DeletedParam(t *testing.T) {
 		"X-Auth-Name")
 }
 
+func TestDiff_ModifiedParam(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			OldValue: true,
+			NewValue: (interface{})(nil),
+		},
+		diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["image"].ExplodeDiff)
+}
+
 func TestSchemaDiff_TypeDiff(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
