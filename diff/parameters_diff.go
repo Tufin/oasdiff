@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// ParametersDiff is the diff of parameters between two operations
+// ParametersDiff is the diff between two sets of parameters
 type ParametersDiff struct {
 	Added    ParamNamesByLocation `json:"added,omitempty"`
 	Deleted  ParamNamesByLocation `json:"deleted,omitempty"`

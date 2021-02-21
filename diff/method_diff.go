@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// MethodDiff is the diff between two methods
+// MethodDiff is the diff between two OAS operations (methods)
 type MethodDiff struct {
 	ParamDiff    *ParametersDiff `json:"parameters,omitempty"`
 	ResponseDiff *ResponsesDiff  `json:"responses,omitempty"`

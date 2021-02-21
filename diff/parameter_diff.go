@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ParameterDiff is a diff between two parameters
+// ParameterDiff is a diff between two OAS parameters
 type ParameterDiff struct {
 	DescriptionDiff     *ValueDiff   `json:"description,omitempty"`
 	StyleDiff           *ValueDiff   `json:"style,omitempty"`

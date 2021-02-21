@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// PathDiff is the diff between two paths
+// PathDiff is the diff between two OAS paths
 type PathDiff struct {
 	Operations `json:"operations,omitempty"`
 }
