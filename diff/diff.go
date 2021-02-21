@@ -3,7 +3,7 @@ package diff
 import "github.com/getkin/kin-openapi/openapi3"
 
 type Diff struct {
-	PathDiff   *PathDiff             `json:"endpoints,omitempty"`
+	PathDiff   *PathDiff             `json:"paths,omitempty"`
 	SchemaDiff *SchemaCollectionDiff `json:"schemas,omitempty"`
 }
 
