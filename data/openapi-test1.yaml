@@ -75,8 +75,8 @@ paths:
           pattern: ^(?:[a-z]+)$
           type: string
       responses:
-        default:
-          description: Tufin
+        '200':
+          description: OK
       servers: []
   /api/{domain}/{project}/install-command:
     get:
@@ -108,6 +108,10 @@ paths:
           - test
           - eks
           type: string
+      - in: header
+        name: network-policies
+        schema: 
+          $ref: '#/components/schemas/network-policies'
       responses:
         default:
           description: Tufin
