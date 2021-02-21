@@ -21,7 +21,7 @@ func (parameterDiff ParameterDiff) empty() bool {
 	return parameterDiff == ParameterDiff{}
 }
 
-func diffParameterValues(param1, param2 *openapi3.Parameter) ParameterDiff {
+func getParameterDiff(param1, param2 *openapi3.Parameter) ParameterDiff {
 
 	result := ParameterDiff{}
 
@@ -35,11 +35,11 @@ func diffParameterValues(param1, param2 *openapi3.Parameter) ParameterDiff {
 	result.DeprecatedDiff = getValueDiff(param1.Deprecated, param2.Deprecated)
 	result.RequiredDiff = getValueDiff(param1.Required, param2.Required)
 
-	if schemaDiff := diffSchema(param1.Schema, param2.Schema); !schemaDiff.empty() {
+	if schemaDiff := getSchemaDiff(param1.Schema, param2.Schema); !schemaDiff.empty() {
 		result.SchemaDiff = &schemaDiff
 	}
 
-	if contentDiff := diffContent(param1.Content, param2.Content); !contentDiff.empty() {
+	if contentDiff := getContentDiff(param1.Content, param2.Content); !contentDiff.empty() {
 		result.ContentDiff = &contentDiff
 	}
 

@@ -27,7 +27,7 @@ func newResponsesDiff() *ResponsesDiff {
 	return &ResponsesDiff{}
 }
 
-func getResponseDiff(responses1, responses2 openapi3.Responses) *ResponsesDiff {
+func getResponsesDiff(responses1, responses2 openapi3.Responses) *ResponsesDiff {
 
 	result := newResponsesDiff()
 

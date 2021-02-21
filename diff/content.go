@@ -26,7 +26,7 @@ func (contentDiff ContentDiff) empty() bool {
 	return contentDiff == newContentDiff()
 }
 
-func diffContent(content1 openapi3.Content, content2 openapi3.Content) ContentDiff {
+func getContentDiff(content1 openapi3.Content, content2 openapi3.Content) ContentDiff {
 
 	result := newContentDiff()
 
@@ -59,7 +59,7 @@ func diffContent(content1 openapi3.Content, content2 openapi3.Content) ContentDi
 		return result
 	}
 
-	if schemaDiff := diffSchema(mediaTypeValue1.Schema, mediaTypeValue2.Schema); !schemaDiff.empty() {
+	if schemaDiff := getSchemaDiff(mediaTypeValue1.Schema, mediaTypeValue2.Schema); !schemaDiff.empty() {
 		result.SchemaDiff = &schemaDiff
 	}
 

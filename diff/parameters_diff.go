@@ -62,14 +62,14 @@ func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter
 	}
 }
 
-func getParamDiff(params1, params2 openapi3.Parameters) *ParametersDiff {
+func getParametersDiff(params1, params2 openapi3.Parameters) *ParametersDiff {
 
 	result := newParametersDiff()
 
 	for _, paramRef1 := range params1 {
 		if paramRef1 != nil && paramRef1.Value != nil {
 			if paramValue2, ok := findParam(paramRef1.Value, params2); ok {
-				if diff := diffParameterValues(paramRef1.Value, paramValue2); !diff.empty() {
+				if diff := getParameterDiff(paramRef1.Value, paramValue2); !diff.empty() {
 					result.addModifiedParam(paramRef1.Value, diff)
 				}
 			} else {

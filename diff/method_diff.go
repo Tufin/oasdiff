@@ -23,11 +23,11 @@ func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 
 	result := newMethodDiff()
 
-	if diff := getParamDiff(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
+	if diff := getParametersDiff(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
 		result.ParamDiff = diff
 	}
 
-	if diff := getResponseDiff(pathItem1.Responses, pathItem2.Responses); !diff.empty() {
+	if diff := getResponsesDiff(pathItem1.Responses, pathItem2.Responses); !diff.empty() {
 		result.ResponseDiff = diff
 	}
 

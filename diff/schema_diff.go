@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// SchemaDiff is a diff between two schemas 
+// SchemaDiff is a diff between two schemas
 type SchemaDiff struct {
 	SchemaAdded                     bool       `json:"schemaAdded,omitempty"`
 	SchemaDeleted                   bool       `json:"schemaDeleted,omitempty"`
@@ -47,12 +47,12 @@ func (schemaDiff SchemaDiff) empty() bool {
 	return schemaDiff == SchemaDiff{}
 }
 
-func diffSchema(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
+func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 
 	value1, value2, status := getSchemaValues(schema1, schema2)
 
 	if status != schemaStatusOK {
-		return getSchemaDiff(status)
+		return toSchemaDiff(status)
 	}
 
 	result := SchemaDiff{}
@@ -61,7 +61,7 @@ func diffSchema(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 	result.OneOfDiff = getDiffSchemas(value1.OneOf, value2.OneOf)
 	result.AnyOfDiff = getDiffSchemas(value1.AnyOf, value2.AnyOf)
 	result.AllOfDiff = getDiffSchemas(value1.AllOf, value2.AllOf)
-	result.NotDiff = !diffSchema(value1.Not, value2.Not).empty()
+	result.NotDiff = !getSchemaDiff(value1.Not, value2.Not).empty()
 	result.TypeDiff = getValueDiff(value1.Type, value2.Type)
 	result.TitleDiff = getValueDiff(value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
@@ -89,12 +89,12 @@ func diffSchema(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 	// compiledPattern is derived from pattern -> no need to diff
 	result.MinItems = getValueDiff(value1.MinItems, value2.MinItems)
 	result.MaxItems = getValueDiff(value1.MaxItems, value2.MaxItems)
-	result.Items = !diffSchema(value1.Items, value2.Items).empty()
+	result.Items = !getSchemaDiff(value1.Items, value2.Items).empty()
 	// Required
 	result.PropertiesDiff = getDiffSchemaMap(value1.Properties, value2.Properties)
 	result.MinProps = getValueDiff(value1.MinProps, value2.MinProps)
 	result.MaxProps = getValueDiff(value1.MaxProps, value2.MaxProps)
-	result.AdditionalProperties = !diffSchema(value1.AdditionalProperties, value2.AdditionalProperties).empty()
+	result.AdditionalProperties = !getSchemaDiff(value1.AdditionalProperties, value2.AdditionalProperties).empty()
 	// Discriminator
 
 	return result
@@ -144,7 +144,7 @@ func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *o
 	return value1, value2, schemaStatusOK
 }
 
-func getSchemaDiff(status schemaStatus) SchemaDiff {
+func toSchemaDiff(status schemaStatus) SchemaDiff {
 	switch status {
 	case schemaStatusSchemaAdded:
 		return SchemaDiff{SchemaAdded: true}
@@ -172,7 +172,7 @@ func schemaMapContained(schemas1, schemas2 openapi3.Schemas) bool {
 			return false
 		}
 
-		if diff := diffSchema(schemaRef1, schemaRef2); !diff.empty() {
+		if diff := getSchemaDiff(schemaRef1, schemaRef2); !diff.empty() {
 			return false
 		}
 	}
@@ -203,7 +203,7 @@ func findSchema(schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs)
 			continue
 		}
 
-		if diff := diffSchema(schemaRef1, schemaRef2); diff.empty() {
+		if diff := getSchemaDiff(schemaRef1, schemaRef2); diff.empty() {
 			return true
 		}
 	}
