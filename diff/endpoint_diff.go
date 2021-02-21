@@ -9,9 +9,9 @@ type EndpointDiff struct {
 }
 
 type Operations struct {
-	AddedOperations    OperationList      `json:"added,omitempty"`
-	DeletedOperations  OperationList      `json:"deleted,omitempty"`
-	ModifiedOperations ModifiedOperations `json:"modified,omitempty"`
+	Added    OperationList      `json:"added,omitempty"`
+	Deleted  OperationList      `json:"deleted,omitempty"`
+	Modified ModifiedOperations `json:"modified,omitempty"`
 }
 
 type OperationList []string
@@ -19,17 +19,17 @@ type OperationList []string
 func newEndpointDiff() *EndpointDiff {
 	return &EndpointDiff{
 		Operations: Operations{
-			AddedOperations:    OperationList{},
-			DeletedOperations:  OperationList{},
-			ModifiedOperations: ModifiedOperations{},
+			Added:    OperationList{},
+			Deleted:  OperationList{},
+			Modified: ModifiedOperations{},
 		},
 	}
 }
 
 func (endpointDiff *EndpointDiff) empty() bool {
-	return len(endpointDiff.AddedOperations) == 0 &&
-		len(endpointDiff.DeletedOperations) == 0 &&
-		endpointDiff.ModifiedOperations.empty()
+	return len(endpointDiff.Added) == 0 &&
+		len(endpointDiff.Deleted) == 0 &&
+		endpointDiff.Modified.empty()
 }
 
 func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, pathItem2 *openapi3.Operation, method string) {
@@ -39,17 +39,17 @@ func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, p
 	}
 
 	if pathItem1 == nil && pathItem2 != nil {
-		endpointDiff.AddedOperations = append(endpointDiff.AddedOperations, method)
+		endpointDiff.Added = append(endpointDiff.Added, method)
 		return
 	}
 
 	if pathItem1 != nil && pathItem2 == nil {
-		endpointDiff.DeletedOperations = append(endpointDiff.AddedOperations, method)
+		endpointDiff.Deleted = append(endpointDiff.Added, method)
 		return
 	}
 
-	if diff := diffParameters(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
-		endpointDiff.ModifiedOperations[method] = diff
+	if diff := getMethodDiff(pathItem1, pathItem2); !diff.empty() {
+		endpointDiff.Modified[method] = diff
 	}
 }
 

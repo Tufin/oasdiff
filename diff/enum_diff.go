@@ -3,14 +3,16 @@ package diff
 import "reflect"
 
 type EnumDiff struct {
-	Added   []interface{} `json:"added,omitempty"`
-	Deleted []interface{} `json:"deleted,omitempty"`
+	Added   EnumValues `json:"added,omitempty"`
+	Deleted EnumValues `json:"deleted,omitempty"`
 }
+
+type EnumValues []interface{}
 
 func newEnumDiff() *EnumDiff {
 	return &EnumDiff{
-		Added:   []interface{}{},
-		Deleted: []interface{}{},
+		Added:   EnumValues{},
+		Deleted: EnumValues{},
 	}
 }
 
@@ -19,7 +21,7 @@ func (enumDiff *EnumDiff) empty() bool {
 		len(enumDiff.Deleted) == 0
 }
 
-func getEnumDiff(enum1 []interface{}, enum2 []interface{}) *EnumDiff {
+func getEnumDiff(enum1 EnumValues, enum2 EnumValues) *EnumDiff {
 
 	if enum1 == nil && enum2 == nil {
 		return nil
@@ -46,7 +48,7 @@ func getEnumDiff(enum1 []interface{}, enum2 []interface{}) *EnumDiff {
 	return diff
 }
 
-func findValue(value interface{}, enum []interface{}) bool {
+func findValue(value interface{}, enum EnumValues) bool {
 	for _, other := range enum {
 		if reflect.DeepEqual(value, other) {
 			return true

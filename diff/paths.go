@@ -8,22 +8,24 @@ import (
 )
 
 type PathDiff struct {
-	AddedEndpoints    []string          `json:"added,omitempty"`
-	DeletedEndpoints  []string          `json:"deleted,omitempty"`
-	ModifiedEndpoints ModifiedEndpoints `json:"modified,omitempty"`
+	Added    EndpointList      `json:"added,omitempty"`
+	Deleted  EndpointList      `json:"deleted,omitempty"`
+	Modified ModifiedEndpoints `json:"modified,omitempty"`
 }
 
+type EndpointList []string
+
 func (pathDiff *PathDiff) empty() bool {
-	return len(pathDiff.AddedEndpoints) == 0 &&
-		len(pathDiff.DeletedEndpoints) == 0 &&
-		len(pathDiff.ModifiedEndpoints) == 0
+	return len(pathDiff.Added) == 0 &&
+		len(pathDiff.Deleted) == 0 &&
+		len(pathDiff.Modified) == 0
 }
 
 func newPathDiff() *PathDiff {
 	return &PathDiff{
-		AddedEndpoints:    []string{},
-		DeletedEndpoints:  []string{},
-		ModifiedEndpoints: ModifiedEndpoints{},
+		Added:    []string{},
+		Deleted:  []string{},
+		Modified: ModifiedEndpoints{},
 	}
 }
 
@@ -50,22 +52,22 @@ func diffPaths(paths1 openapi3.Paths, paths2 openapi3.Paths, prefix string) *Pat
 
 func (pathDiff *PathDiff) getSummary() *PathSummary {
 	return &PathSummary{
-		Added:    len(pathDiff.AddedEndpoints),
-		Deleted:  len(pathDiff.DeletedEndpoints),
-		Modified: len(pathDiff.ModifiedEndpoints),
+		Added:    len(pathDiff.Added),
+		Deleted:  len(pathDiff.Deleted),
+		Modified: len(pathDiff.Modified),
 	}
 }
 
 func (pathDiff *PathDiff) addAddedEndpoint(endpoint string) {
-	pathDiff.AddedEndpoints = append(pathDiff.AddedEndpoints, endpoint)
+	pathDiff.Added = append(pathDiff.Added, endpoint)
 }
 
 func (pathDiff *PathDiff) addDeletedEndpoint(endpoint string) {
-	pathDiff.DeletedEndpoints = append(pathDiff.DeletedEndpoints, endpoint)
+	pathDiff.Deleted = append(pathDiff.Deleted, endpoint)
 }
 
 func (pathDiff *PathDiff) addModifiedEndpoint(entrypoint1 string, pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) {
-	pathDiff.ModifiedEndpoints.addEndpointDiff(entrypoint1, pathItem1, pathItem2)
+	pathDiff.Modified.addEndpointDiff(entrypoint1, pathItem1, pathItem2)
 }
 
 func (pathDiff PathDiff) filterByRegex(filter string) *PathDiff {
@@ -76,9 +78,9 @@ func (pathDiff PathDiff) filterByRegex(filter string) *PathDiff {
 		return &pathDiff
 	}
 
-	pathDiff.AddedEndpoints = filterEndpoints(pathDiff.AddedEndpoints, r)
-	pathDiff.DeletedEndpoints = filterEndpoints(pathDiff.DeletedEndpoints, r)
-	pathDiff.ModifiedEndpoints = filterModifiedEndpoints(pathDiff.ModifiedEndpoints, r)
+	pathDiff.Added = filterEndpoints(pathDiff.Added, r)
+	pathDiff.Deleted = filterEndpoints(pathDiff.Deleted, r)
+	pathDiff.Modified = filterModifiedEndpoints(pathDiff.Modified, r)
 
 	return &pathDiff
 }
