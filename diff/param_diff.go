@@ -20,7 +20,7 @@ func (paramDiff ParamDiff) empty() bool {
 	return paramDiff == ParamDiff{}
 }
 
-func diffParamValues(param1 *openapi3.Parameter, param2 *openapi3.Parameter) ParamDiff {
+func diffParamValues(param1, param2 *openapi3.Parameter) ParamDiff {
 
 	result := ParamDiff{}
 
@@ -49,7 +49,7 @@ func diffParamValues(param1 *openapi3.Parameter, param2 *openapi3.Parameter) Par
 	return result
 }
 
-func diffExplode(pExplode1 *bool, pExplode2 *bool) bool {
+func diffExplode(pExplode1, pExplode2 *bool) bool {
 	explode1 := derefExplode(pExplode1)
 	explode2 := derefExplode(pExplode2)
 

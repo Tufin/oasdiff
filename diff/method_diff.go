@@ -16,7 +16,7 @@ func (methodDiff *MethodDiff) empty() bool {
 	return methodDiff.ParamDiff == nil
 }
 
-func getMethodDiff(pathItem1 *openapi3.Operation, pathItem2 *openapi3.Operation) *MethodDiff {
+func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 
 	result := newMethodDiff()
 

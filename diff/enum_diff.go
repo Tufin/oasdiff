@@ -21,7 +21,7 @@ func (enumDiff *EnumDiff) empty() bool {
 		len(enumDiff.Deleted) == 0
 }
 
-func getEnumDiff(enum1 EnumValues, enum2 EnumValues) *EnumDiff {
+func getEnumDiff(enum1, enum2 EnumValues) *EnumDiff {
 
 	if enum1 == nil && enum2 == nil {
 		return nil

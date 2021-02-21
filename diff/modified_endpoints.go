@@ -7,7 +7,7 @@ import (
 // ModifiedEndpoints maps endpoints (paths) to thier diff
 type ModifiedEndpoints map[string]*EndpointDiff
 
-func (modifiedEndpoints ModifiedEndpoints) addEndpointDiff(entrypoint1 string, pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) {
+func (modifiedEndpoints ModifiedEndpoints) addEndpointDiff(entrypoint1 string, pathItem1, pathItem2 *openapi3.PathItem) {
 
 	if diff := diffEndpoint(pathItem1, pathItem2); !diff.empty() {
 		modifiedEndpoints[entrypoint1] = diff

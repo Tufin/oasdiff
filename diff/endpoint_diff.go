@@ -32,7 +32,7 @@ func (endpointDiff *EndpointDiff) empty() bool {
 		endpointDiff.Modified.empty()
 }
 
-func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, pathItem2 *openapi3.Operation, method string) {
+func (endpointDiff *EndpointDiff) diffOperation(pathItem1, pathItem2 *openapi3.Operation, method string) {
 
 	if pathItem1 == nil && pathItem2 == nil {
 		return
@@ -53,7 +53,7 @@ func (endpointDiff *EndpointDiff) diffOperation(pathItem1 *openapi3.Operation, p
 	}
 }
 
-func diffEndpoint(pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) *EndpointDiff {
+func diffEndpoint(pathItem1, pathItem2 *openapi3.PathItem) *EndpointDiff {
 	endpointDiff := newEndpointDiff()
 
 	endpointDiff.diffOperation(pathItem1.Connect, pathItem2.Connect, "CONNECT")

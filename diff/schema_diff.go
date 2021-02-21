@@ -46,7 +46,7 @@ func (schemaDiff SchemaDiff) empty() bool {
 	return schemaDiff == SchemaDiff{}
 }
 
-func diffSchema(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) SchemaDiff {
+func diffSchema(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 
 	value1, value2, status := getSchemaValues(schema1, schema2)
 
@@ -111,7 +111,7 @@ const (
 	schemaStatusValueDeleted
 )
 
-func getSchemaValues(schema1 *openapi3.SchemaRef, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *openapi3.Schema, schemaStatus) {
+func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *openapi3.Schema, schemaStatus) {
 
 	if schema1 == nil && schema2 == nil {
 		return nil, nil, schemaStatusNoSchemas
@@ -159,12 +159,12 @@ func getSchemaDiff(status schemaStatus) SchemaDiff {
 	return SchemaDiff{}
 }
 
-func getDiffSchemaMap(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) bool {
+func getDiffSchemaMap(schemas1, schemas2 openapi3.Schemas) bool {
 
 	return !schemaMapContained(schemas1, schemas2) || !schemaMapContained(schemas2, schemas1)
 }
 
-func schemaMapContained(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) bool {
+func schemaMapContained(schemas1, schemas2 openapi3.Schemas) bool {
 	for schemaName1, schemaRef1 := range schemas1 {
 		schemaRef2, ok := schemas2[schemaName1]
 		if !ok {
@@ -179,12 +179,12 @@ func schemaMapContained(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) bo
 	return true
 }
 
-func getDiffSchemas(schemaRefs1 openapi3.SchemaRefs, schemaRefs2 openapi3.SchemaRefs) bool {
+func getDiffSchemas(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
 
 	return !schemaRefsContained(schemaRefs1, schemaRefs2) || !schemaRefsContained(schemaRefs2, schemaRefs1)
 }
 
-func schemaRefsContained(schemaRefs1 openapi3.SchemaRefs, schemaRefs2 openapi3.SchemaRefs) bool {
+func schemaRefsContained(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
 	for _, schemaRef1 := range schemaRefs1 {
 		if schemaRef1 != nil && schemaRef1.Value != nil {
 			if !findSchema(schemaRef1, schemaRefs2) {

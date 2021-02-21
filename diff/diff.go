@@ -16,7 +16,7 @@ func (diff *Diff) empty() bool {
 		diff.SchemaDiff == nil
 }
 
-func getDiff(s1 *openapi3.Swagger, s2 *openapi3.Swagger, prefix string) *Diff {
+func getDiff(s1, s2 *openapi3.Swagger, prefix string) *Diff {
 
 	diff := newDiff()
 

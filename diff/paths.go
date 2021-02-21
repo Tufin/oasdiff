@@ -29,7 +29,7 @@ func newPathDiff() *PathDiff {
 	}
 }
 
-func diffPaths(paths1 openapi3.Paths, paths2 openapi3.Paths, prefix string) *PathDiff {
+func diffPaths(paths1, paths2 openapi3.Paths, prefix string) *PathDiff {
 
 	result := newPathDiff()
 
@@ -66,7 +66,7 @@ func (pathDiff *PathDiff) addDeletedEndpoint(endpoint string) {
 	pathDiff.Deleted = append(pathDiff.Deleted, endpoint)
 }
 
-func (pathDiff *PathDiff) addModifiedEndpoint(entrypoint1 string, pathItem1 *openapi3.PathItem, pathItem2 *openapi3.PathItem) {
+func (pathDiff *PathDiff) addModifiedEndpoint(entrypoint1 string, pathItem1, pathItem2 *openapi3.PathItem) {
 	pathDiff.Modified.addEndpointDiff(entrypoint1, pathItem1, pathItem2)
 }
 

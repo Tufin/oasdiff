@@ -5,7 +5,7 @@ type ValueDiff struct {
 	NewValue interface{} `json:"newValue"`
 }
 
-func getValueDiff(value1 interface{}, value2 interface{}) *ValueDiff {
+func getValueDiff(value1, value2 interface{}) *ValueDiff {
 	if value1 == value2 {
 		return nil
 	}
@@ -16,7 +16,7 @@ func getValueDiff(value1 interface{}, value2 interface{}) *ValueDiff {
 	}
 }
 
-func getFloat64RefDiff(valueRef1 *float64, valueRef2 *float64) *ValueDiff {
+func getFloat64RefDiff(valueRef1, valueRef2 *float64) *ValueDiff {
 	if valueRef1 == nil && valueRef2 == nil {
 		return nil
 	}
@@ -38,7 +38,7 @@ func getFloat64RefDiff(valueRef1 *float64, valueRef2 *float64) *ValueDiff {
 	return getValueDiff(*valueRef1, *valueRef2)
 }
 
-func getBoolRefDiff(valueRef1 *bool, valueRef2 *bool) *ValueDiff {
+func getBoolRefDiff(valueRef1, valueRef2 *bool) *ValueDiff {
 	if valueRef1 == nil && valueRef2 == nil {
 		return nil
 	}

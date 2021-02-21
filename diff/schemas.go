@@ -33,7 +33,7 @@ type schemaRefPair struct {
 
 type schemaRefPairs map[string]*schemaRefPair
 
-func diffSchemaCollection(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) *SchemaCollectionDiff {
+func diffSchemaCollection(schemas1, schemas2 openapi3.Schemas) *SchemaCollectionDiff {
 
 	result := newSchemaCollectionDiff()
 
@@ -54,7 +54,7 @@ func diffSchemaCollection(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) 
 	return result
 }
 
-func diffSchemas(schemas1 openapi3.Schemas, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi3.Schemas, schemaRefPairs) {
+func diffSchemas(schemas1, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi3.Schemas, schemaRefPairs) {
 
 	added := openapi3.Schemas{}
 	deleted := openapi3.Schemas{}
@@ -91,7 +91,7 @@ func (diff *SchemaCollectionDiff) addDeletedSchema(schema string) {
 	diff.DeletedSchemas = append(diff.DeletedSchemas, schema)
 }
 
-func (diff *SchemaCollectionDiff) addModifiedSchema(schema1 string, schemaRef1 *openapi3.SchemaRef, schemaRef2 *openapi3.SchemaRef) {
+func (diff *SchemaCollectionDiff) addModifiedSchema(schema1 string, schemaRef1, schemaRef2 *openapi3.SchemaRef) {
 	diff.ModifiedSchemas.addSchemaDiff(schema1, schemaRef1, schemaRef2)
 }
 
