@@ -118,6 +118,18 @@ func TestSchemaDiff_MinDiff(t *testing.T) {
 		diff.Run(l(t, 4), l(t, 2), "/prefix", "").Diff.PathDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["path"]["domain"].SchemaDiff.MinDiff)
 }
 
+func TestResponseAdded(t *testing.T) {
+	require.Contains(t,
+		diff.Run(l(t, 1), l(t, 3), "", "").Diff.PathDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Added,
+		"default")
+}
+
+func TestResponseDeleted(t *testing.T) {
+	require.Contains(t,
+		diff.Run(l(t, 3), l(t, 1), "", "").Diff.PathDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Deleted,
+		"200")
+}
+
 func TestSchemaDiff_AddedSchemas(t *testing.T) {
 	require.Contains(t,
 		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemaDiff.AddedSchemas,
