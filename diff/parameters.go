@@ -61,7 +61,7 @@ func (params *Params) addModifiedParam(param *openapi3.Parameter, diff ParamDiff
 	}
 }
 
-func getParamDiff(params1 openapi3.Parameters, params2 openapi3.Parameters) *Params {
+func getParamDiff(params1, params2 openapi3.Parameters) *Params {
 
 	result := newParams()
 
