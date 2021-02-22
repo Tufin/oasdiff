@@ -20,7 +20,7 @@ func (responsesDiff *ResponsesDiff) empty() bool {
 // ResponseList is a list of response values
 type ResponseList []string
 
-// ModifiedResponses is map of response value to their respective diffs
+// ModifiedResponses is map of response values to their respective diffs
 type ModifiedResponses map[string]ResponseDiff
 
 func newResponsesDiff() *ResponsesDiff {
