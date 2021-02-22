@@ -142,13 +142,22 @@ func TestResponseDeleted(t *testing.T) {
 		"default")
 }
 
-func TestResponseModified(t *testing.T) {
+func TestResponseDescriptionModified(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
 			From: "Tufin",
 			To:   "Tufin1",
 		},
 		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
+}
+
+func TestResponseContentModified(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: "object",
+			To:   "string",
+		},
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Modified["201"].ContentDiff.SchemaDiff.TypeDiff)
 }
 
 func TestResponseDespcriptionNil(t *testing.T) {

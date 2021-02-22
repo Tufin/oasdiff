@@ -72,6 +72,12 @@ paths:
       responses:
         default:
           description: Tufin
+        '201':
+          description: none
+          content:
+            application/xml:
+              schema:
+                type: object
       servers: []
   /api/{domain}/{project}/install-command:
     get:

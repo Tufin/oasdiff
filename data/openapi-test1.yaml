@@ -77,6 +77,12 @@ paths:
       responses:
         '200':
           description: OK
+        '201':
+          description: none
+          content:
+            application/xml:
+              schema:
+                type: string
       servers: []
   /api/{domain}/{project}/install-command:
     get:
