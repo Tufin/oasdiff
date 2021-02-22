@@ -151,7 +151,7 @@ func TestResponseModified(t *testing.T) {
 		diff.Run(l(t, 3), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
 }
 
-func TestResponseModifiedNil(t *testing.T) {
+func TestResponseDespcriptionNil(t *testing.T) {
 
 	s3 := l(t, 3)
 	s3.Paths["/api/{domain}/{project}/install-command"].Get.Responses["default"].Value.Description = nil
@@ -184,8 +184,7 @@ func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
 			From: true,
 			To:   false,
 		},
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff,
-		"requests")
+		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff)
 }
 
 func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
@@ -194,8 +193,7 @@ func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
 			From: nil,
 			To:   false,
 		},
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff,
-		"requests")
+		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
 }
 
 func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
@@ -204,8 +202,29 @@ func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
 			From: false,
 			To:   nil,
 		},
-		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff,
-		"requests")
+		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
+}
+
+func TestSchemaDiff_ModifiedSchemasValueDeleted(t *testing.T) {
+	s5 := l(t, 5)
+	s5.Components.Schemas["network-policies"].Value = nil
+
+	d := diff.Run(l(t, 1), s5, "", "")
+
+	require.Equal(t,
+		true,
+		d.Diff.SchemasDiff.Modified["network-policies"].ValueDeleted)
+}
+
+func TestSchemaDiff_ModifiedSchemasValueAdded(t *testing.T) {
+	s5 := l(t, 5)
+	s5.Components.Schemas["network-policies"].Value = nil
+
+	d := diff.Run(s5, l(t, 1), "", "")
+
+	require.Equal(t,
+		true,
+		d.Diff.SchemasDiff.Modified["network-policies"].ValueAdded)
 }
 
 func TestSummary(t *testing.T) {
