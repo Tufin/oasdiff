@@ -129,3 +129,10 @@ components:
         netpols:
           type: string
       type: object      
+  parameters:
+      network-policies:
+        name: network-policies
+        in: header
+        schema: 
+          $ref: '#/components/schemas/network-policies'
+
