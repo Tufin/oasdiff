@@ -7,6 +7,7 @@ type SpecDiff struct {
 	PathsDiff      *PathsDiff      `json:"paths,omitempty"`      // deep diff of paths including their schemas, parameters, responses etc.
 	SchemasDiff    *SchemasDiff    `json:"schemas,omitempty"`    // diff of top-level schemas (under components)
 	ParametersDiff *ParametersDiff `json:"parameters,omitempty"` // diff of top-level parameters (under components)
+	HeadersDiff    *HeadersDiff    `json:"headers,omitempty"`    // diff of top-level headers (under components)
 	ResponsesDiff  *ResponsesDiff  `json:"responses,omitempty"`  // diff of top-level responses (under components)
 }
 
@@ -25,6 +26,7 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 	diff.setPathsDiff(getPathsDiff(s1.Paths, s2.Paths, prefix))
 	diff.setSchemasDiff(getSchemasDiff(s1.Components.Schemas, s2.Components.Schemas))
 	diff.setParametersDiff(getParametersDiff(toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
+	diff.setHeadersDiff(getHeadersDiff(s1.Components.Headers, s2.Components.Headers))
 	diff.setResponsesDiff(getResponsesDiff(s1.Components.Responses, s2.Components.Responses))
 
 	return diff
@@ -54,6 +56,14 @@ func (specDiff *SpecDiff) setParametersDiff(parametersDiff *ParametersDiff) {
 	}
 }
 
+func (specDiff *SpecDiff) setHeadersDiff(headersDiff *HeadersDiff) {
+	specDiff.HeadersDiff = nil
+
+	if !headersDiff.empty() {
+		specDiff.HeadersDiff = headersDiff
+	}
+}
+
 func (specDiff *SpecDiff) setResponsesDiff(responsesDiff *ResponsesDiff) {
 	specDiff.ResponsesDiff = nil
 
@@ -78,6 +88,10 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	if specDiff.ParametersDiff != nil {
 		result.ParameterSummary = specDiff.ParametersDiff.getSummary()
+	}
+
+	if specDiff.HeadersDiff != nil {
+		result.HeaderSummary = specDiff.HeadersDiff.getSummary()
 	}
 
 	if specDiff.ResponsesDiff != nil {

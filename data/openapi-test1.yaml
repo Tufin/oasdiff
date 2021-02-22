@@ -141,4 +141,15 @@ components:
         in: header
         schema: 
           $ref: '#/components/schemas/network-policies'
-
+  headers:
+    test:
+      schema: 
+        $ref: '#/components/schemas/network-policies'
+    new:
+      schema: 
+        $ref: '#/components/schemas/network-policies'
+    testc:
+      content: 
+        application/json:
+          schema:
+            type: object

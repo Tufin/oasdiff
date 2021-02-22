@@ -151,6 +151,36 @@ func TestResponseDescriptionModified(t *testing.T) {
 		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
 }
 
+func TestHeaderAdded(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.HeadersDiff.Added,
+		"new")
+}
+
+func TestHeaderDeleted(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 1), l(t, 5), "", "").SpecDiff.HeadersDiff.Deleted,
+		"new")
+}
+
+func TestHeaderModifiedSchema(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: false,
+			To:   true,
+		},
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.HeadersDiff.Modified["test"].SchemaDiff.AdditionalPropertiesAllowedDiff)
+}
+
+func TestHeaderModifiedContent(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: "string",
+			To:   "object",
+		},
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.HeadersDiff.Modified["testc"].ContentDiff.SchemaDiff.TypeDiff)
+}
+
 func TestResponseContentModified(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
@@ -251,6 +281,9 @@ func TestSummary(t *testing.T) {
 			},
 			ParameterSummary: &diff.SummaryDetails{
 				Deleted: 1,
+			},
+			HeaderSummary: &diff.SummaryDetails{
+				Deleted: 3,
 			},
 		},
 		diff.Get(l(t, 1), l(t, 2), "", "").Summary)
