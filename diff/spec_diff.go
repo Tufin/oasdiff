@@ -4,10 +4,10 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SpecDiff describes the changes between two OAS specs
 type SpecDiff struct {
-	PathsDiff      *PathsDiff      `json:"paths,omitempty"`
-	SchemasDiff    *SchemasDiff    `json:"schemas,omitempty"`
-	ParametersDiff *ParametersDiff `json:"parameters,omitempty"`
-	ResponsesDiff  *ResponsesDiff  `json:"responses,omitempty"`
+	PathsDiff      *PathsDiff      `json:"paths,omitempty"`      // deep diff of paths including their schemas, parameters, responses etc.
+	SchemasDiff    *SchemasDiff    `json:"schemas,omitempty"`    // diff of top-level schemas (under components)
+	ParametersDiff *ParametersDiff `json:"parameters,omitempty"` // diff of top-level parameters (under components)
+	ResponsesDiff  *ResponsesDiff  `json:"responses,omitempty"`  // diff of top-level responses (under components)
 }
 
 func newSpecDiff() *SpecDiff {
