@@ -156,14 +156,12 @@ func TestResponseDespcriptionNil(t *testing.T) {
 	s3 := l(t, 3)
 	s3.Paths["/api/{domain}/{project}/install-command"].Get.Responses["default"].Value.Description = nil
 
-	d := diff.Run(s3, l(t, 1), "", "")
-
 	require.Equal(t,
 		&diff.ValueDiff{
 			From: interface{}(nil),
 			To:   "Tufin1",
 		},
-		d.Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
+		diff.Run(s3, l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestSchemaDiff_AddedSchemas(t *testing.T) {
@@ -209,22 +207,25 @@ func TestSchemaDiff_ModifiedSchemasValueDeleted(t *testing.T) {
 	s5 := l(t, 5)
 	s5.Components.Schemas["network-policies"].Value = nil
 
-	d := diff.Run(l(t, 1), s5, "", "")
-
 	require.Equal(t,
 		true,
-		d.Diff.SchemasDiff.Modified["network-policies"].ValueDeleted)
+		diff.Run(l(t, 1), s5, "", "").Diff.SchemasDiff.Modified["network-policies"].ValueDeleted)
 }
 
 func TestSchemaDiff_ModifiedSchemasValueAdded(t *testing.T) {
 	s5 := l(t, 5)
 	s5.Components.Schemas["network-policies"].Value = nil
 
-	d := diff.Run(s5, l(t, 1), "", "")
-
 	require.Equal(t,
 		true,
-		d.Diff.SchemasDiff.Modified["network-policies"].ValueAdded)
+		diff.Run(s5, l(t, 1), "", "").Diff.SchemasDiff.Modified["network-policies"].ValueAdded)
+}
+
+func TestSchemaDiff_ModifiedSchemasBothValuesNil(t *testing.T) {
+	s5 := l(t, 5)
+	s5.Components.Schemas["network-policies"].Value = nil
+
+	require.False(t, diff.Run(s5, s5, "", "").Summary.Diff)
 }
 
 func TestSummary(t *testing.T) {
