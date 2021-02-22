@@ -9,13 +9,10 @@ import (
 
 // PathsDiff is a diff between two sets of paths
 type PathsDiff struct {
-	Added    PathList      `json:"added,omitempty"`
-	Deleted  PathList      `json:"deleted,omitempty"`
+	Added    StringList    `json:"added,omitempty"`
+	Deleted  StringList    `json:"deleted,omitempty"`
 	Modified ModifiedPaths `json:"modified,omitempty"`
 }
-
-// PathList is a list of paths
-type PathList []string
 
 func (pathsDiff *PathsDiff) empty() bool {
 	return len(pathsDiff.Added) == 0 &&
@@ -87,7 +84,7 @@ func (pathsDiff PathsDiff) filterByRegex(filter string) *PathsDiff {
 	return &pathsDiff
 }
 
-func filterPaths(paths PathList, r *regexp.Regexp) []string {
+func filterPaths(paths StringList, r *regexp.Regexp) []string {
 	result := []string{}
 	for _, path := range paths {
 		if r.MatchString(path) {

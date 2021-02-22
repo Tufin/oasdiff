@@ -6,13 +6,10 @@ import (
 
 // SchemasDiff is a diff between two sets of schemas
 type SchemasDiff struct {
-	Added    SchemaList      `json:"added,omitempty"`
-	Deleted  SchemaList      `json:"deleted,omitempty"`
+	Added    StringList      `json:"added,omitempty"`
+	Deleted  StringList      `json:"deleted,omitempty"`
 	Modified ModifiedSchemas `json:"modified,omitempty"`
 }
-
-// SchemaList is a list of schema names
-type SchemaList []string
 
 func (schemasDiff *SchemasDiff) empty() bool {
 	return len(schemasDiff.Added) == 0 &&
@@ -22,8 +19,8 @@ func (schemasDiff *SchemasDiff) empty() bool {
 
 func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
-		Added:    SchemaList{},
-		Deleted:  SchemaList{},
+		Added:    StringList{},
+		Deleted:  StringList{},
 		Modified: ModifiedSchemas{},
 	}
 }

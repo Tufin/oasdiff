@@ -6,8 +6,8 @@ import (
 
 // HeadersDiff is a diff between two sets of headers
 type HeadersDiff struct {
-	Added    HeaderList      `json:"added,omitempty"`
-	Deleted  HeaderList      `json:"deleted,omitempty"`
+	Added    StringList      `json:"added,omitempty"`
+	Deleted  StringList      `json:"deleted,omitempty"`
 	Modified ModifiedHeaders `json:"modified,omitempty"`
 }
 
@@ -17,16 +17,13 @@ func (headersDiff *HeadersDiff) empty() bool {
 		len(headersDiff.Modified) == 0
 }
 
-// HeaderList is a list of header values
-type HeaderList []string
-
 // ModifiedHeaders is map of header values to their respective diffs
 type ModifiedHeaders map[string]HeaderDiff
 
 func newHeadersDiff() *HeadersDiff {
 	return &HeadersDiff{
-		Added:    HeaderList{},
-		Deleted:  HeaderList{},
+		Added:    StringList{},
+		Deleted:  StringList{},
 		Modified: ModifiedHeaders{},
 	}
 }

@@ -11,19 +11,16 @@ type PathDiff struct {
 
 // Operations is the diff between two sets of operations (methods)
 type Operations struct {
-	Added    OperationList      `json:"added,omitempty"`
-	Deleted  OperationList      `json:"deleted,omitempty"`
+	Added    StringList         `json:"added,omitempty"`
+	Deleted  StringList         `json:"deleted,omitempty"`
 	Modified ModifiedOperations `json:"modified,omitempty"`
 }
-
-// OperationList is a list of operations (HTTP methods)
-type OperationList []string
 
 func newPathDiff() *PathDiff {
 	return &PathDiff{
 		Operations: Operations{
-			Added:    OperationList{},
-			Deleted:  OperationList{},
+			Added:    StringList{},
+			Deleted:  StringList{},
 			Modified: ModifiedOperations{},
 		},
 	}

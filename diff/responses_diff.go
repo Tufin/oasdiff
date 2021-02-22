@@ -6,8 +6,8 @@ import (
 
 // ResponsesDiff is a diff between two sets of responses
 type ResponsesDiff struct {
-	Added    ResponseList      `json:"added,omitempty"`
-	Deleted  ResponseList      `json:"deleted,omitempty"`
+	Added    StringList        `json:"added,omitempty"`
+	Deleted  StringList        `json:"deleted,omitempty"`
 	Modified ModifiedResponses `json:"modified,omitempty"`
 }
 
@@ -17,16 +17,13 @@ func (responsesDiff *ResponsesDiff) empty() bool {
 		len(responsesDiff.Modified) == 0
 }
 
-// ResponseList is a list of response values
-type ResponseList []string
-
 // ModifiedResponses is map of response values to their respective diffs
 type ModifiedResponses map[string]ResponseDiff
 
 func newResponsesDiff() *ResponsesDiff {
 	return &ResponsesDiff{
-		Added:    ResponseList{},
-		Deleted:  ResponseList{},
+		Added:    StringList{},
+		Deleted:  StringList{},
 		Modified: ModifiedResponses{},
 	}
 }

@@ -14,9 +14,9 @@ type MethodDiff struct {
 	OperationIDDiff *ValueDiff      `json:"operationID,omitempty"` // diff of 'operationID' property
 	ParamDiff       *ParametersDiff `json:"parameters,omitempty"`  // diff of 'parameters' property
 	// RequestBody
-	ResponseDiff *ResponsesDiff `json:"responses,omitempty"` // diff of 'responses' property
-	// Callbacks
-	DeprecatedDiff *ValueDiff `json:"deprecated,omitempty"` // diff of 'deprecated' property
+	ResponseDiff   *ResponsesDiff `json:"responses,omitempty"`  // diff of 'responses' property
+	CallbacksDiff  *CallbacksDiff `json:"callbacks,omitempty"`  // diff of 'callbacks' property
+	DeprecatedDiff *ValueDiff     `json:"deprecated,omitempty"` // diff of 'deprecated' property
 	// Security
 	// Servers
 	// ExternalDocs
