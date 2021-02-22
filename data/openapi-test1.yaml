@@ -121,6 +121,11 @@ paths:
       responses:
         default:
           description: Tufin1
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Request limit per hour.
       servers: []
 components:
   schemas:

@@ -125,7 +125,7 @@ func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
 		diff.Get(s1, s5, "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["cookie"]["test"].ContentDiff)
 
 	require.Nil(t,
-		diff.Get(s5,s1, "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["cookie"]["test"].ContentDiff)
+		diff.Get(s5, s1, "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["cookie"]["test"].ContentDiff)
 }
 
 func TestSchemaDiff_AnyOfDiff(t *testing.T) {
@@ -162,6 +162,15 @@ func TestResponseDescriptionModified(t *testing.T) {
 			To:   "Tufin1",
 		},
 		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
+}
+
+func TestResponseHeadersModified(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: "Request limit per min.",
+			To:   "Request limit per hour.",
+		},
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].DescriptionDiff)
 }
 
 func TestHeaderAdded(t *testing.T) {

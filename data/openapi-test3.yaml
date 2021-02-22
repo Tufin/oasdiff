@@ -87,4 +87,9 @@ paths:
       responses:
         default:
           description: Tufin
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Request limit per min.
       servers: []
