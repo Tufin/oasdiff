@@ -5,7 +5,7 @@ A diff tool for OpenAPI Spec 3.
 
 ## Unique features vs. other OAS3 diff tools
 - go module
-- deep diff deep into schemas, parameters, enums etc.
+- deep diff into paths, schemas, parameters, responses, enums etc.
 
 ## Build
 ```
