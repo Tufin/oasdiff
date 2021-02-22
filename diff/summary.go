@@ -1,6 +1,6 @@
 package diff
 
-// Summary summarizes the changes between two specs
+// Summary summarizes the changes between two OAS specs
 type Summary struct {
 	Diff             bool            `json:"diff"`
 	PathSummary      *SummaryDetails `json:"paths,omitempty"`
@@ -9,9 +9,9 @@ type Summary struct {
 	ResponsesSummary *SummaryDetails `json:"responses,omitempty"`
 }
 
-// SummaryDetails summarizes the path changes between two specs
+// SummaryDetails summarizes the changes between equivalent parts of the two OAS spec: paths, schemas, parameters, responses etc.
 type SummaryDetails struct {
-	Added    int `json:"added,omitempty"`
-	Deleted  int `json:"deleted,omitempty"`
-	Modified int `json:"modified,omitempty"`
+	Added    int `json:"added,omitempty"`    // how many items were added
+	Deleted  int `json:"deleted,omitempty"`  // how many items were deleted
+	Modified int `json:"modified,omitempty"` // how many items were modified
 }

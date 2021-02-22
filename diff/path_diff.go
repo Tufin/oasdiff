@@ -16,7 +16,7 @@ type Operations struct {
 	Modified ModifiedOperations `json:"modified,omitempty"`
 }
 
-// OperationList is a list of operations (methods)
+// OperationList is a list of operations (HTTP methods)
 type OperationList []string
 
 func newPathDiff() *PathDiff {
