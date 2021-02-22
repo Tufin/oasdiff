@@ -24,7 +24,11 @@ type ResponseList []string
 type ModifiedResponses map[string]ResponseDiff
 
 func newResponsesDiff() *ResponsesDiff {
-	return &ResponsesDiff{}
+	return &ResponsesDiff{
+		Added:    ResponseList{},
+		Deleted:  ResponseList{},
+		Modified: ModifiedResponses{},
+	}
 }
 
 func getResponsesDiff(responses1, responses2 openapi3.Responses) *ResponsesDiff {
@@ -35,7 +39,7 @@ func getResponsesDiff(responses1, responses2 openapi3.Responses) *ResponsesDiff 
 		if responseRef1 != nil && responseRef1.Value != nil {
 			if responseValue2, ok := responses2[responseValue1]; ok {
 				if diff := diffResponseValues(responseRef1.Value, responseValue2.Value); !diff.empty() {
-					// result.addModifiedResponse(responseRef1.Value, diff)
+					result.Modified[responseValue1] = diff
 				}
 			} else {
 				result.Deleted = append(result.Deleted, responseValue1)

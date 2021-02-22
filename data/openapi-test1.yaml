@@ -114,7 +114,7 @@ paths:
           $ref: '#/components/schemas/network-policies'
       responses:
         default:
-          description: Tufin
+          description: Tufin1
       servers: []
 components:
   schemas:

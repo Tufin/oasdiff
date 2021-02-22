@@ -58,8 +58,8 @@ func TestDiff_DeletedParam(t *testing.T) {
 func TestDiff_ModifiedParam(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
-			OldValue: true,
-			NewValue: (interface{})(nil),
+			From: true,
+			To:   (interface{})(nil),
 		},
 		diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["image"].ExplodeDiff)
 }
@@ -67,8 +67,8 @@ func TestDiff_ModifiedParam(t *testing.T) {
 func TestSchemaDiff_TypeDiff(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
-			OldValue: "string",
-			NewValue: "integer",
+			From: "string",
+			To:   "integer",
 		},
 		diff.Run(l(t, 1), l(t, 2), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["path"]["domain"].SchemaDiff.TypeDiff)
 }
@@ -121,8 +121,8 @@ func TestSchemaDiff_AnyOfDiff(t *testing.T) {
 func TestSchemaDiff_MinDiff(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
-			OldValue: nil,
-			NewValue: float64(7),
+			From: nil,
+			To:   float64(7),
 		},
 		diff.Run(l(t, 4), l(t, 2), "/prefix", "").Diff.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["path"]["domain"].SchemaDiff.MinDiff)
 }
@@ -137,6 +137,15 @@ func TestResponseDeleted(t *testing.T) {
 	require.Contains(t,
 		diff.Run(l(t, 3), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Deleted,
 		"default")
+}
+
+func TestResponseModified(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: "Tufin",
+			To:   "Tufin1",
+		},
+		diff.Run(l(t, 3), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestSchemaDiff_AddedSchemas(t *testing.T) {
@@ -154,8 +163,8 @@ func TestSchemaDiff_DeletedSchemas(t *testing.T) {
 func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
-			OldValue: true,
-			NewValue: false,
+			From: true,
+			To:   false,
 		},
 		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff,
 		"requests")
@@ -164,8 +173,8 @@ func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
 func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
-			OldValue: nil,
-			NewValue: false,
+			From: nil,
+			To:   false,
 		},
 		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff,
 		"requests")
@@ -174,8 +183,8 @@ func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
 func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
-			OldValue: false,
-			NewValue: nil,
+			From: false,
+			To:   nil,
 		},
 		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff,
 		"requests")
