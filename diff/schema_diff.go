@@ -162,26 +162,6 @@ func toSchemaDiff(status schemaStatus) SchemaDiff {
 	return SchemaDiff{}
 }
 
-func getDiffSchemaMap(schemas1, schemas2 openapi3.Schemas) bool {
-
-	return !schemaMapContained(schemas1, schemas2) || !schemaMapContained(schemas2, schemas1)
-}
-
-func schemaMapContained(schemas1, schemas2 openapi3.Schemas) bool {
-	for schemaName1, schemaRef1 := range schemas1 {
-		schemaRef2, ok := schemas2[schemaName1]
-		if !ok {
-			return false
-		}
-
-		if diff := getSchemaDiff(schemaRef1, schemaRef2); !diff.empty() {
-			return false
-		}
-	}
-
-	return true
-}
-
 func getDiffSchemas(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
 
 	return !schemaRefsContained(schemaRefs1, schemaRefs2) || !schemaRefsContained(schemaRefs2, schemaRefs1)

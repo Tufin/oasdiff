@@ -90,8 +90,11 @@ func TestSchemaDiff_NotDiff(t *testing.T) {
 
 func TestSchemaDiff_ContentDiff(t *testing.T) {
 	require.Equal(t,
-		true,
-		diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff)
+		&diff.ValueDiff{
+			From: "number",
+			To:   "string",
+		},
+		diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff)
 }
 
 func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
