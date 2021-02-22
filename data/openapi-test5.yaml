@@ -17,6 +17,8 @@ paths:
                   type: string
                 color:
                   type: string
+              required:
+              - type
       - in: header
         name: user
         schema:
