@@ -1,7 +1,11 @@
 [![codecov](https://codecov.io/gh/Tufin/oasdiff/branch/master/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/Tufin/oasdiff)
 
 # OpenAPI Spec Diff
-A diff tool for OpenAPI Spec 3
+A diff tool for OpenAPI Spec 3.  
+
+## Unique features vs. other OAS3 diff tools
+- go module
+- deep diff deep into schemas, parameters, enums etc.
 
 ## Build
 ```
