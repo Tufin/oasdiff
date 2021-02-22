@@ -82,6 +82,18 @@ func TestSchemaDiff_EnumDiff(t *testing.T) {
 		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ParamDiff.Modified["path"]["project"].SchemaDiff.EnumDiff)
 }
 
+func TestSchemaDiff_RequiredAdded(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 1), l(t, 5), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["query"]["filter"].ContentDiff.SchemaDiff.Required.Added,
+		"type")
+}
+
+func TestSchemaDiff_RequiredDeleted(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["query"]["filter"].ContentDiff.SchemaDiff.Required.Deleted,
+		"type")
+}
+
 func TestSchemaDiff_NotDiff(t *testing.T) {
 	require.Equal(t,
 		true,

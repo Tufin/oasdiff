@@ -37,6 +37,7 @@ type SchemaDiff struct {
 	MinItems                        *ValueDiff   `json:"minItems,omitempty"`                    // diff of 'minItems' property
 	MaxItems                        *ValueDiff   `json:"maxItems,omitempty"`                    // diff of 'maxItems' property
 	Items                           bool         `json:"items,omitempty"`                       // whether 'items' property was modified or not
+	Required                        *StringsDiff `json:"required,omitempty"`                    // diff of 'required' property
 	PropertiesDiff                  *SchemasDiff `json:"properties,omitempty"`                  // diff of 'properties' property
 	MinProps                        *ValueDiff   `json:"minProps,omitempty"`                    // diff of 'minProps' property
 	MaxProps                        *ValueDiff   `json:"maxProps,omitempty"`                    // diff of 'maxProps' property
@@ -90,7 +91,7 @@ func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 	result.MinItems = getValueDiff(value1.MinItems, value2.MinItems)
 	result.MaxItems = getValueDiff(value1.MaxItems, value2.MaxItems)
 	result.Items = !getSchemaDiff(value1.Items, value2.Items).empty()
-	// Required
+	result.Required = getStringsDiff(value1.Required, value2.Required)
 	if diff := getSchemasDiff(value1.Properties, value2.Properties); !diff.empty() {
 		result.PropertiesDiff = diff
 	}
