@@ -151,6 +151,21 @@ func TestResponseModified(t *testing.T) {
 		diff.Run(l(t, 3), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
 }
 
+func TestResponseModifiedNil(t *testing.T) {
+
+	s3 := l(t, 3)
+	s3.Paths["/api/{domain}/{project}/install-command"].Get.Responses["default"].Value.Description = nil
+
+	d := diff.Run(s3, l(t, 1), "", "")
+
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: interface{}(nil),
+			To:   "Tufin1",
+		},
+		d.Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
+}
+
 func TestSchemaDiff_AddedSchemas(t *testing.T) {
 	require.Contains(t,
 		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Added,
