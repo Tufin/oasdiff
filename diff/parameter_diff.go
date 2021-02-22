@@ -6,15 +6,15 @@ import (
 
 // ParameterDiff is a diff between two OAS parameters
 type ParameterDiff struct {
-	DescriptionDiff     *ValueDiff   `json:"description,omitempty"`
-	StyleDiff           *ValueDiff   `json:"style,omitempty"`
-	ExplodeDiff         *ValueDiff   `json:"explode,omitempty"`
-	AllowEmptyValueDiff *ValueDiff   `json:"allow_empty_value,omitempty"`
-	AllowReservedDiff   *ValueDiff   `json:"allow_reserved,omitempty"`
-	DeprecatedDiff      *ValueDiff   `json:"deprecated,omitempty"`
-	RequiredDiff        *ValueDiff   `json:"required,omitempty"`
-	SchemaDiff          *SchemaDiff  `json:"schema,omitempty"`
-	ContentDiff         *ContentDiff `json:"content,omitempty"`
+	DescriptionDiff     *ValueDiff   `json:"description,omitempty"`     // diff of 'description' property
+	StyleDiff           *ValueDiff   `json:"style,omitempty"`           // diff of 'style' property
+	ExplodeDiff         *ValueDiff   `json:"explode,omitempty"`         // diff of 'explode' property
+	AllowEmptyValueDiff *ValueDiff   `json:"allowEmptyValue,omitempty"` // diff of 'allowEmptyValue' property
+	AllowReservedDiff   *ValueDiff   `json:"allowReserved,omitempty"`   // diff of 'allowReserved' property
+	DeprecatedDiff      *ValueDiff   `json:"deprecated,omitempty"`      // diff of 'deprecated' property
+	RequiredDiff        *ValueDiff   `json:"required,omitempty"`        // diff of 'required' property
+	SchemaDiff          *SchemaDiff  `json:"schema,omitempty"`          // diff of 'schema' property
+	ContentDiff         *ContentDiff `json:"content,omitempty"`         // diff of 'content' property
 }
 
 func (parameterDiff ParameterDiff) empty() bool {
