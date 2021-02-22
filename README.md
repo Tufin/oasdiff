@@ -41,12 +41,12 @@ import (
 func main() {
 	loader := load.NewOASLoader()
 
-	base, err := loader.From("v1.yaml")
+	base, err := loader.From("https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test1.yaml")
 	if err != nil {
 		return
 	}
 
-	revision, err := loader.From("v2.yaml")
+	revision, err := loader.From("https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test2.yaml")
 	if err != nil {
 		return
 	}
