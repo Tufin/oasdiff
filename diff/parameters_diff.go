@@ -108,3 +108,11 @@ func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openap
 func equalParams(param1 *openapi3.Parameter, param2 *openapi3.Parameter) bool {
 	return param1.Name == param2.Name && param1.In == param2.In
 }
+
+func (parametersDiff *ParametersDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
+		Added:    len(parametersDiff.Added),
+		Deleted:  len(parametersDiff.Deleted),
+		Modified: len(parametersDiff.Modified),
+	}
+}

@@ -52,8 +52,8 @@ func getPathsDiff(paths1, paths2 openapi3.Paths, prefix string) *PathsDiff {
 	return result
 }
 
-func (pathsDiff *PathsDiff) getSummary() *PathSummary {
-	return &PathSummary{
+func (pathsDiff *PathsDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
 		Added:    len(pathsDiff.Added),
 		Deleted:  len(pathsDiff.Deleted),
 		Modified: len(pathsDiff.Modified),

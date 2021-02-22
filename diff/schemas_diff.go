@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// SchemasDiff is a diff between two sets of schemas 
+// SchemasDiff is a diff between two sets of schemas
 type SchemasDiff struct {
 	Added    SchemaList      `json:"added,omitempty"`
 	Deleted  SchemaList      `json:"deleted,omitempty"`
@@ -97,8 +97,8 @@ func (schemasDiff *SchemasDiff) addModifiedSchema(schema1 string, schemaRef1, sc
 	schemasDiff.Modified.addSchemaDiff(schema1, schemaRef1, schemaRef2)
 }
 
-func (schemasDiff *SchemasDiff) getSummary() *SchemaSummary {
-	return &SchemaSummary{
+func (schemasDiff *SchemasDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
 		Added:    len(schemasDiff.Added),
 		Deleted:  len(schemasDiff.Deleted),
 		Modified: len(schemasDiff.Modified),

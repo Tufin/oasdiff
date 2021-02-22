@@ -212,13 +212,16 @@ func TestSummary(t *testing.T) {
 	require.Equal(t,
 		&diff.Summary{
 			Diff: true,
-			PathSummary: &diff.PathSummary{
+			PathSummary: &diff.SummaryDetails{
 				Added:    0,
 				Deleted:  1,
 				Modified: 1,
 			},
-			SchemaSummary: &diff.SchemaSummary{
+			SchemaSummary: &diff.SummaryDetails{
 				Deleted: 2,
+			},
+			ParameterSummary: &diff.SummaryDetails{
+				Deleted: 1,
 			},
 		},
 		diff.Run(l(t, 1), l(t, 2), "", "").Summary)
@@ -238,7 +241,7 @@ func TestPrefix(t *testing.T) {
 	require.Equal(t,
 		&diff.Summary{
 			Diff: true,
-			PathSummary: &diff.PathSummary{
+			PathSummary: &diff.SummaryDetails{
 				Deleted:  0,
 				Modified: 1,
 			},
