@@ -18,40 +18,40 @@ func l(t *testing.T, v int) *openapi3.Swagger {
 
 func TestDiff_Same(t *testing.T) {
 	s := l(t, 1)
-	require.Empty(t, diff.Run(s, s, "", "").Diff.PathsDiff)
+	require.Empty(t, diff.Get(s, s, "", "").SpecDiff.PathsDiff)
 }
 
 func TestDiff_DeletedPathsEmpty(t *testing.T) {
-	require.Empty(t, diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathsDiff.Deleted)
+	require.Empty(t, diff.Get(l(t, 2), l(t, 1), "", "").SpecDiff.PathsDiff.Deleted)
 }
 
 func TestDiff_DeletedPathsNotEmpty(t *testing.T) {
 	require.EqualValues(t,
 		[]string{"/api/{domain}/{project}/install-command"},
-		diff.Run(l(t, 1), l(t, 2), "", "").Diff.PathsDiff.Deleted)
+		diff.Get(l(t, 1), l(t, 2), "", "").SpecDiff.PathsDiff.Deleted)
 }
 
 func TestDiff_AddedOperation(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 1), l(t, 2), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Added,
+		diff.Get(l(t, 1), l(t, 2), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Added,
 		"POST")
 }
 
 func TestDiff_DeletedOperation(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Deleted,
+		diff.Get(l(t, 2), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Deleted,
 		"POST")
 }
 
 func TestDiff_AddedParam(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Added["header"],
+		diff.Get(l(t, 2), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Added["header"],
 		"X-Auth-Name")
 }
 
 func TestDiff_DeletedParam(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 1), l(t, 2), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Deleted["header"],
+		diff.Get(l(t, 1), l(t, 2), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Deleted["header"],
 		"X-Auth-Name")
 }
 
@@ -61,7 +61,7 @@ func TestDiff_ModifiedParam(t *testing.T) {
 			From: true,
 			To:   (interface{})(nil),
 		},
-		diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["image"].ExplodeDiff)
+		diff.Get(l(t, 2), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["image"].ExplodeDiff)
 }
 
 func TestSchemaDiff_TypeDiff(t *testing.T) {
@@ -70,7 +70,7 @@ func TestSchemaDiff_TypeDiff(t *testing.T) {
 			From: "string",
 			To:   "integer",
 		},
-		diff.Run(l(t, 1), l(t, 2), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["path"]["domain"].SchemaDiff.TypeDiff)
+		diff.Get(l(t, 1), l(t, 2), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["path"]["domain"].SchemaDiff.TypeDiff)
 }
 
 func TestSchemaDiff_EnumDiff(t *testing.T) {
@@ -79,13 +79,13 @@ func TestSchemaDiff_EnumDiff(t *testing.T) {
 			Added:   diff.EnumValues{"test1"},
 			Deleted: diff.EnumValues{},
 		},
-		diff.Run(l(t, 1), l(t, 3), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ParamDiff.Modified["path"]["project"].SchemaDiff.EnumDiff)
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ParamDiff.Modified["path"]["project"].SchemaDiff.EnumDiff)
 }
 
 func TestSchemaDiff_NotDiff(t *testing.T) {
 	require.Equal(t,
 		true,
-		diff.Run(l(t, 1), l(t, 3), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["query"]["image"].SchemaDiff.NotDiff)
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["query"]["image"].SchemaDiff.NotDiff)
 }
 
 func TestSchemaDiff_ContentDiff(t *testing.T) {
@@ -94,31 +94,31 @@ func TestSchemaDiff_ContentDiff(t *testing.T) {
 			From: "number",
 			To:   "string",
 		},
-		diff.Run(l(t, 2), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff)
+		diff.Get(l(t, 2), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["filter"].ContentDiff.SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff)
 }
 
 func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
 	require.Equal(t,
 		true,
-		diff.Run(l(t, 5), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["header"]["user"].ContentDiff.MediaTypeAdded)
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["header"]["user"].ContentDiff.MediaTypeAdded)
 }
 
 func TestSchemaDiff_MediaTypeDeleted(t *testing.T) {
 	require.Equal(t,
 		false,
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["header"]["user"].ContentDiff.MediaTypeAdded)
+		diff.Get(l(t, 1), l(t, 5), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["header"]["user"].ContentDiff.MediaTypeAdded)
 }
 
 func TestSchemaDiff_MediaTypeModified(t *testing.T) {
 	require.Equal(t,
 		true,
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["cookie"]["test"].ContentDiff.MediaTypeDiff)
+		diff.Get(l(t, 1), l(t, 5), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["cookie"]["test"].ContentDiff.MediaTypeDiff)
 }
 
 func TestSchemaDiff_AnyOfDiff(t *testing.T) {
 	require.Equal(t,
 		true,
-		diff.Run(l(t, 4), l(t, 2), "/prefix", "").Diff.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["token"].SchemaDiff.AnyOfDiff)
+		diff.Get(l(t, 4), l(t, 2), "/prefix", "").SpecDiff.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["query"]["token"].SchemaDiff.AnyOfDiff)
 }
 
 func TestSchemaDiff_MinDiff(t *testing.T) {
@@ -127,18 +127,18 @@ func TestSchemaDiff_MinDiff(t *testing.T) {
 			From: nil,
 			To:   float64(7),
 		},
-		diff.Run(l(t, 4), l(t, 2), "/prefix", "").Diff.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["path"]["domain"].SchemaDiff.MinDiff)
+		diff.Get(l(t, 4), l(t, 2), "/prefix", "").SpecDiff.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Modified["path"]["domain"].SchemaDiff.MinDiff)
 }
 
 func TestResponseAdded(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 1), l(t, 3), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Added,
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Added,
 		"default")
 }
 
 func TestResponseDeleted(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 3), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Deleted,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ResponseDiff.Deleted,
 		"default")
 }
 
@@ -148,7 +148,7 @@ func TestResponseModified(t *testing.T) {
 			From: "Tufin",
 			To:   "Tufin1",
 		},
-		diff.Run(l(t, 3), l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestResponseDespcriptionNil(t *testing.T) {
@@ -161,18 +161,18 @@ func TestResponseDespcriptionNil(t *testing.T) {
 			From: interface{}(nil),
 			To:   "Tufin1",
 		},
-		diff.Run(s3, l(t, 1), "", "").Diff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
+		diff.Get(s3, l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestSchemaDiff_AddedSchemas(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Added,
+		diff.Get(l(t, 1), l(t, 5), "", "").SpecDiff.SchemasDiff.Added,
 		"requests")
 }
 
 func TestSchemaDiff_DeletedSchemas(t *testing.T) {
 	require.Contains(t,
-		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemasDiff.Deleted,
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.SchemasDiff.Deleted,
 		"requests")
 }
 
@@ -182,7 +182,7 @@ func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
 			From: true,
 			To:   false,
 		},
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff)
+		diff.Get(l(t, 1), l(t, 5), "", "").SpecDiff.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff)
 }
 
 func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
@@ -191,7 +191,7 @@ func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
 			From: nil,
 			To:   false,
 		},
-		diff.Run(l(t, 1), l(t, 5), "", "").Diff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
+		diff.Get(l(t, 1), l(t, 5), "", "").SpecDiff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
 }
 
 func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
@@ -200,7 +200,7 @@ func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
 			From: false,
 			To:   nil,
 		},
-		diff.Run(l(t, 5), l(t, 1), "", "").Diff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
 }
 
 func TestSchemaDiff_ModifiedSchemasValueDeleted(t *testing.T) {
@@ -209,7 +209,7 @@ func TestSchemaDiff_ModifiedSchemasValueDeleted(t *testing.T) {
 
 	require.Equal(t,
 		true,
-		diff.Run(l(t, 1), s5, "", "").Diff.SchemasDiff.Modified["network-policies"].ValueDeleted)
+		diff.Get(l(t, 1), s5, "", "").SpecDiff.SchemasDiff.Modified["network-policies"].ValueDeleted)
 }
 
 func TestSchemaDiff_ModifiedSchemasValueAdded(t *testing.T) {
@@ -218,14 +218,14 @@ func TestSchemaDiff_ModifiedSchemasValueAdded(t *testing.T) {
 
 	require.Equal(t,
 		true,
-		diff.Run(s5, l(t, 1), "", "").Diff.SchemasDiff.Modified["network-policies"].ValueAdded)
+		diff.Get(s5, l(t, 1), "", "").SpecDiff.SchemasDiff.Modified["network-policies"].ValueAdded)
 }
 
 func TestSchemaDiff_ModifiedSchemasBothValuesNil(t *testing.T) {
 	s5 := l(t, 5)
 	s5.Components.Schemas["network-policies"].Value = nil
 
-	require.False(t, diff.Run(s5, s5, "", "").Summary.Diff)
+	require.False(t, diff.Get(s5, s5, "", "").Summary.Diff)
 }
 
 func TestSummary(t *testing.T) {
@@ -244,7 +244,7 @@ func TestSummary(t *testing.T) {
 				Deleted: 1,
 			},
 		},
-		diff.Run(l(t, 1), l(t, 2), "", "").Summary)
+		diff.Get(l(t, 1), l(t, 2), "", "").Summary)
 }
 
 func TestSummary_NoDiff(t *testing.T) {
@@ -254,7 +254,7 @@ func TestSummary_NoDiff(t *testing.T) {
 		&diff.Summary{
 			Diff: false,
 		},
-		diff.Run(s, s, "", "").Summary)
+		diff.Get(s, s, "", "").Summary)
 }
 
 func TestPrefix(t *testing.T) {
@@ -266,13 +266,13 @@ func TestPrefix(t *testing.T) {
 				Modified: 1,
 			},
 		},
-		diff.Run(l(t, 4), l(t, 2), "/prefix", "").Summary)
+		diff.Get(l(t, 4), l(t, 2), "/prefix", "").Summary)
 }
 
 func TestFilterByRegex(t *testing.T) {
-	require.Nil(t, diff.Run(l(t, 1), l(t, 2), "", "x").Summary.PathSummary)
+	require.Nil(t, diff.Get(l(t, 1), l(t, 2), "", "x").Summary.PathSummary)
 }
 
 func TestFilterByRegex_Invalid(t *testing.T) {
-	require.Equal(t, true, diff.Run(l(t, 1), l(t, 2), "", "[").Summary.Diff)
+	require.Equal(t, true, diff.Get(l(t, 1), l(t, 2), "", "[").Summary.Diff)
 }

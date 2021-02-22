@@ -51,7 +51,7 @@ func main() {
 		return
 	}
 
-	bytes, err := json.MarshalIndent(diff.Run(base, revision, "", ""), "", " ")
+	bytes, err := json.MarshalIndent(diff.Get(base, revision, "", ""), "", " ")
 	if err != nil {
 		log.Errorf("failed to marshal result with '%v'", err)
 		return
