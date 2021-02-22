@@ -26,7 +26,7 @@ func (contentDiff ContentDiff) empty() bool {
 	return contentDiff == newContentDiff()
 }
 
-func getContentDiff(content1 openapi3.Content, content2 openapi3.Content) ContentDiff {
+func getContentDiff(content1, content2 openapi3.Content) ContentDiff {
 
 	result := newContentDiff()
 
