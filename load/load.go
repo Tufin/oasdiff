@@ -12,59 +12,59 @@ type Loader interface {
 	LoadSwaggerFromFile(string) (*openapi3.Swagger, error)
 }
 
-type SwaggerLoader struct {
+type OASLoader struct {
 	Loader Loader
 }
 
-// NewSwaggerLoader returns a loader object that can be used to load swagger specs
-func NewSwaggerLoader() *SwaggerLoader {
+// NewOASLoader returns a loader object that can be used to load OpenAPI specs
+func NewOASLoader() *OASLoader {
 	loader := openapi3.NewSwaggerLoader()
 	loader.IsExternalRefsAllowed = true
-	return &SwaggerLoader{
+	return &OASLoader{
 		Loader: loader,
 	}
 }
 
-// From is a convenience function that opens a swagger spec from a URL or a local path based on the format of the path parameter
-func (swaggerLoader *SwaggerLoader) From(path string) (*openapi3.Swagger, error) {
+// From is a convenience function that opens an OpenAPI spec from a URL or a local path based on the format of the path parameter
+func (oasLoader *OASLoader) From(path string) (*openapi3.Swagger, error) {
 
 	uri, err := url.ParseRequestURI(path)
 	if err == nil {
-		swagger, err := swaggerLoader.FromURI(uri)
+		oas, err := oasLoader.FromURI(uri)
 		if err != nil {
 			return nil, err
 		}
-		return swagger, nil
+		return oas, nil
 	}
 
-	swagger, err := swaggerLoader.FromPath(path)
+	oas, err := oasLoader.FromPath(path)
 	if err != nil {
 		return nil, err
 	}
 
-	return swagger, nil
+	return oas, nil
 }
 
-// FromPath opens a swagger spec from a local path
-func (swaggerLoader *SwaggerLoader) FromPath(path string) (*openapi3.Swagger, error) {
+// FromPath opens an OpenAPI spec from a local path
+func (oasLoader *OASLoader) FromPath(path string) (*openapi3.Swagger, error) {
 
-	swagger, err := swaggerLoader.Loader.LoadSwaggerFromFile(path)
+	oas, err := oasLoader.Loader.LoadSwaggerFromFile(path)
 	if err != nil {
-		log.Errorf("failed to open swagger from '%s' with '%v'", path, err)
+		log.Errorf("failed to open spec from '%s' with '%v'", path, err)
 		return nil, err
 	}
 
-	return swagger, nil
+	return oas, nil
 }
 
-// FromURI opens a swagger spec from a URL
-func (swaggerLoader *SwaggerLoader) FromURI(path *url.URL) (*openapi3.Swagger, error) {
+// FromURI opens an OpenAPI spec from a URL
+func (oasLoader *OASLoader) FromURI(path *url.URL) (*openapi3.Swagger, error) {
 
-	swagger, err := swaggerLoader.Loader.LoadSwaggerFromURI(path)
+	oas, err := oasLoader.Loader.LoadSwaggerFromURI(path)
 	if err != nil {
-		log.Errorf("failed to open swagger from '%s' with '%v'", path, err)
+		log.Errorf("failed to open spec from '%s' with '%v'", path, err)
 		return nil, err
 	}
 
-	return swagger, nil
+	return oas, nil
 }

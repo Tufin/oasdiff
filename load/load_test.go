@@ -11,40 +11,38 @@ import (
 
 const RelativeDataPath = "../data/"
 
-type MockLoader struct{}
-
-func (swaggerMockLoader SwaggerMockLoader) LoadSwaggerFromFile(path string) (*openapi3.Swagger, error) {
+func (mockLoader MockLoader) LoadSwaggerFromFile(path string) (*openapi3.Swagger, error) {
 	return openapi3.NewSwaggerLoader().LoadSwaggerFromFile(RelativeDataPath + path)
 }
 
-func (swaggerMockLoader SwaggerMockLoader) LoadSwaggerFromURI(location *url.URL) (*openapi3.Swagger, error) {
+func (mockLoader MockLoader) LoadSwaggerFromURI(location *url.URL) (*openapi3.Swagger, error) {
 	return openapi3.NewSwaggerLoader().LoadSwaggerFromFile(RelativeDataPath + location.Path)
 }
 
-type SwaggerMockLoader struct{}
+type MockLoader struct{}
 
-func NewSwaggerMockLoader() *load.SwaggerLoader {
-	return &load.SwaggerLoader{
-		Loader: SwaggerMockLoader{},
+func newMockLoader() *load.OASLoader {
+	return &load.OASLoader{
+		Loader: MockLoader{},
 	}
 }
 
 func TestLoad_FileError(t *testing.T) {
-	_, err := load.NewSwaggerLoader().From("null")
+	_, err := load.NewOASLoader().From("null")
 	require.Error(t, err)
 }
 
 func TestLoad_File(t *testing.T) {
-	_, err := NewSwaggerMockLoader().From("openapi-test1.yaml")
+	_, err := newMockLoader().From("openapi-test1.yaml")
 	require.NoError(t, err)
 }
 
 func TestLoad_URI(t *testing.T) {
-	_, err := NewSwaggerMockLoader().From("http://localhost/openapi-test1.yaml")
+	_, err := newMockLoader().From("http://localhost/openapi-test1.yaml")
 	require.NoError(t, err)
 }
 
 func TestLoad_URIError(t *testing.T) {
-	_, err := NewSwaggerMockLoader().From("http://localhost/null")
+	_, err := newMockLoader().From("http://localhost/null")
 	require.Error(t, err)
 }

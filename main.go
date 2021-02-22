@@ -13,16 +13,16 @@ import (
 var base, revision, prefix, filter string
 
 func init() {
-	flag.StringVar(&base, "base", "", "base swagger file")
-	flag.StringVar(&revision, "revision", "", "revised swagger file")
-	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base swagger but not in revision swagger")
+	flag.StringVar(&base, "base", "", "original OpenAPI spec")
+	flag.StringVar(&revision, "revision", "", "revised OpenAPI spec")
+	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision")
 	flag.StringVar(&filter, "filter", "", "regex to filter result paths")
 }
 
 func main() {
 	flag.Parse()
 
-	loader := load.NewSwaggerLoader()
+	loader := load.NewOASLoader()
 
 	base, err := loader.From(base)
 	if err != nil {

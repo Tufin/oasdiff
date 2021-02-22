@@ -11,7 +11,7 @@ import (
 )
 
 func l(t *testing.T, v int) *openapi3.Swagger {
-	s, err := load.NewSwaggerLoader().FromPath(fmt.Sprintf("../data/openapi-test%d.yaml", v))
+	s, err := load.NewOASLoader().FromPath(fmt.Sprintf("../data/openapi-test%d.yaml", v))
 	require.NoError(t, err)
 	return s
 }

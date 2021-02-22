@@ -39,7 +39,7 @@ import (
 )
 
 func main() {
-	loader := load.NewSwaggerLoader()
+	loader := load.NewOASLoader()
 
 	base, err := loader.From("v1.yaml")
 	if err != nil {
