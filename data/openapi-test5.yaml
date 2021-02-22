@@ -131,3 +131,6 @@ components:
         netpols:
           type: string
       type: object      
+  responses:
+    default:
+      description: Tufin

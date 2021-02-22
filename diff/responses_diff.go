@@ -58,3 +58,11 @@ func getResponsesDiff(responses1, responses2 openapi3.Responses) *ResponsesDiff 
 	return result
 
 }
+
+func (responsesDiff *ResponsesDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
+		Added:    len(responsesDiff.Added),
+		Deleted:  len(responsesDiff.Deleted),
+		Modified: len(responsesDiff.Modified),
+	}
+}

@@ -9,7 +9,7 @@ type PathDiff struct {
 	Operations `json:"operations,omitempty"`
 }
 
-// Operations is the diff in operations (methods) of two paths
+// Operations is the diff between two sets of operations (methods)
 type Operations struct {
 	Added    OperationList      `json:"added,omitempty"`
 	Deleted  OperationList      `json:"deleted,omitempty"`

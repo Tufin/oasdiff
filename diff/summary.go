@@ -6,6 +6,7 @@ type Summary struct {
 	PathSummary      *SummaryDetails `json:"paths,omitempty"`
 	SchemaSummary    *SummaryDetails `json:"schemas,omitempty"`
 	ParameterSummary *SummaryDetails `json:"parameters,omitempty"`
+	ResponsesSummary *SummaryDetails `json:"responses,omitempty"`
 }
 
 // SummaryDetails summarizes the path changes between two specs

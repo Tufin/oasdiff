@@ -7,6 +7,7 @@ type SpecDiff struct {
 	PathsDiff      *PathsDiff      `json:"paths,omitempty"`
 	SchemasDiff    *SchemasDiff    `json:"schemas,omitempty"`
 	ParametersDiff *ParametersDiff `json:"parameters,omitempty"`
+	ResponsesDiff  *ResponsesDiff  `json:"responses,omitempty"`
 }
 
 func newSpecDiff() *SpecDiff {
@@ -24,6 +25,7 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 	diff.setPathsDiff(getPathsDiff(s1.Paths, s2.Paths, prefix))
 	diff.setSchemasDiff(getSchemasDiff(s1.Components.Schemas, s2.Components.Schemas))
 	diff.setParametersDiff(getParametersDiff(toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
+	diff.setResponsesDiff(getResponsesDiff(s1.Components.Responses, s2.Components.Responses))
 
 	return diff
 }
@@ -52,6 +54,14 @@ func (specDiff *SpecDiff) setParametersDiff(parametersDiff *ParametersDiff) {
 	}
 }
 
+func (specDiff *SpecDiff) setResponsesDiff(responsesDiff *ResponsesDiff) {
+	specDiff.ResponsesDiff = nil
+
+	if !responsesDiff.empty() {
+		specDiff.ResponsesDiff = responsesDiff
+	}
+}
+
 func (specDiff *SpecDiff) getSummary() *Summary {
 
 	result := Summary{
@@ -68,6 +78,10 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	if specDiff.ParametersDiff != nil {
 		result.ParameterSummary = specDiff.ParametersDiff.getSummary()
+	}
+
+	if specDiff.ResponsesDiff != nil {
+		result.ResponsesSummary = specDiff.ResponsesDiff.getSummary()
 	}
 
 	return &result
