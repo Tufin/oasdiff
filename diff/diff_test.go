@@ -115,6 +115,19 @@ func TestSchemaDiff_MediaTypeModified(t *testing.T) {
 		diff.Get(l(t, 1), l(t, 5), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["cookie"]["test"].ContentDiff.MediaTypeDiff)
 }
 
+func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
+	s5 := l(t, 5)
+	s5.Paths["/api/{domain}/{project}/badges/security-score"].Get.Parameters.GetByInAndName("cookie", "test").Content["second/invalid"] = openapi3.NewMediaType()
+
+	s1 := l(t, 1)
+
+	require.Nil(t,
+		diff.Get(s1, s5, "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["cookie"]["test"].ContentDiff)
+
+	require.Nil(t,
+		diff.Get(s5,s1, "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].ParamDiff.Modified["cookie"]["test"].ContentDiff)
+}
+
 func TestSchemaDiff_AnyOfDiff(t *testing.T) {
 	require.Equal(t,
 		true,
