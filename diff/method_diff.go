@@ -28,7 +28,9 @@ func newMethodDiff() *MethodDiff {
 
 func (methodDiff *MethodDiff) empty() bool {
 	return methodDiff.ParamDiff == nil &&
-		methodDiff.ResponseDiff == nil
+		methodDiff.ResponseDiff == nil &&
+		methodDiff.CallbacksDiff == nil &&
+		methodDiff.DeprecatedDiff == nil
 }
 
 func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
@@ -46,6 +48,11 @@ func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 	if diff := getResponsesDiff(pathItem1.Responses, pathItem2.Responses); !diff.empty() {
 		result.ResponseDiff = diff
 	}
+
+	if diff := getCallbacksDiff(pathItem1.Callbacks, pathItem2.Callbacks); !diff.empty() {
+		result.CallbacksDiff = diff
+	}
+
 	result.DeprecatedDiff = getValueDiff(pathItem1.Deprecated, pathItem2.Deprecated)
 
 	return result

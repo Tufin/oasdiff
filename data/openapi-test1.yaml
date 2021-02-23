@@ -127,6 +127,12 @@ paths:
                 type: integer
               description: Request limit per hour.
       servers: []
+  /subscribe:
+    post:
+      summary: Subscribe to a webhook
+      responses:
+        default:
+          description: Tufin
 components:
   schemas:
     network-policies:
