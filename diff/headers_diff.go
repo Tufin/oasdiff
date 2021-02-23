@@ -53,7 +53,6 @@ func getHeadersDiff(headers1, headers2 openapi3.Headers) *HeadersDiff {
 	}
 
 	return result
-
 }
 
 func (headersDiff *HeadersDiff) getSummary() *SummaryDetails {
