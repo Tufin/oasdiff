@@ -84,35 +84,17 @@ func (specDiff *SpecDiff) setCallbacksDiff(callbacksDiff *CallbacksDiff) {
 
 func (specDiff *SpecDiff) getSummary() *Summary {
 
-	result := Summary{
-		Diff: !specDiff.empty(),
-	}
+	summary := newSummary()
 
-	if specDiff.PathsDiff != nil {
-		result.PathSummary = specDiff.PathsDiff.getSummary()
-	}
+	summary.Diff = !specDiff.empty()
+	summary.add(specDiff.PathsDiff, "paths")
+	summary.add(specDiff.SchemasDiff, "schemas")
+	summary.add(specDiff.ParametersDiff, "parameters")
+	summary.add(specDiff.HeadersDiff, "headers")
+	summary.add(specDiff.ResponsesDiff, "responses")
+	summary.add(specDiff.CallbacksDiff, "callbacks")
 
-	if specDiff.SchemasDiff != nil {
-		result.SchemaSummary = specDiff.SchemasDiff.getSummary()
-	}
-
-	if specDiff.ParametersDiff != nil {
-		result.ParameterSummary = specDiff.ParametersDiff.getSummary()
-	}
-
-	if specDiff.HeadersDiff != nil {
-		result.HeaderSummary = specDiff.HeadersDiff.getSummary()
-	}
-
-	if specDiff.ResponsesDiff != nil {
-		result.ResponsesSummary = specDiff.ResponsesDiff.getSummary()
-	}
-
-	if specDiff.CallbacksDiff != nil {
-		result.CallbacksSummary = specDiff.CallbacksDiff.getSummary()
-	}
-
-	return &result
+	return summary
 }
 
 func (specDiff *SpecDiff) filterByRegex(filter string) {

@@ -313,19 +313,21 @@ func TestSummary(t *testing.T) {
 	require.Equal(t,
 		&diff.Summary{
 			Diff: true,
-			PathSummary: &diff.SummaryDetails{
-				Added:    0,
-				Deleted:  3,
-				Modified: 1,
-			},
-			SchemaSummary: &diff.SummaryDetails{
-				Deleted: 2,
-			},
-			ParameterSummary: &diff.SummaryDetails{
-				Deleted: 1,
-			},
-			HeaderSummary: &diff.SummaryDetails{
-				Deleted: 3,
+			Components: map[string]*diff.SummaryDetails{
+				"paths": {
+					Added:    0,
+					Deleted:  3,
+					Modified: 1,
+				},
+				"schemas": {
+					Deleted: 2,
+				},
+				"parameters": {
+					Deleted: 1,
+				},
+				"headers": {
+					Deleted: 3,
+				},
 			},
 		},
 		diff.Get(l(t, 1), l(t, 2), "", "").Summary)
@@ -336,25 +338,14 @@ func TestSummary_NoDiff(t *testing.T) {
 
 	require.Equal(t,
 		&diff.Summary{
-			Diff: false,
+			Diff:       false,
+			Components: map[string]*diff.SummaryDetails{},
 		},
 		diff.Get(s, s, "", "").Summary)
 }
 
-func TestPrefix(t *testing.T) {
-	require.Equal(t,
-		&diff.Summary{
-			Diff: true,
-			PathSummary: &diff.SummaryDetails{
-				Deleted:  0,
-				Modified: 1,
-			},
-		},
-		diff.Get(l(t, 4), l(t, 2), "/prefix", "").Summary)
-}
-
 func TestFilterByRegex(t *testing.T) {
-	require.Nil(t, diff.Get(l(t, 1), l(t, 2), "", "x").Summary.PathSummary)
+	require.Nil(t, diff.Get(l(t, 1), l(t, 2), "", "x").Summary.Components["paths"])
 }
 
 func TestFilterByRegex_Invalid(t *testing.T) {
