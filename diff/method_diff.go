@@ -8,7 +8,7 @@ import (
 type MethodDiff struct {
 
 	// ExtensionProps
-	// Tags
+	TagsDiff        *StringsDiff    `json:"tags,omitempty"`        // diff of 'tags' property
 	SummaryDiff     *ValueDiff      `json:"summary,omitempty"`     // diff of 'summary' property
 	DescriptionDiff *ValueDiff      `json:"description,omitempty"` // diff of 'description' property
 	OperationIDDiff *ValueDiff      `json:"operationID,omitempty"` // diff of 'operationID' property
@@ -27,16 +27,14 @@ func newMethodDiff() *MethodDiff {
 }
 
 func (methodDiff *MethodDiff) empty() bool {
-	return methodDiff.ParamDiff == nil &&
-		methodDiff.ResponseDiff == nil &&
-		methodDiff.CallbacksDiff == nil &&
-		methodDiff.DeprecatedDiff == nil
+	return *methodDiff == MethodDiff{}
 }
 
 func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 
 	result := newMethodDiff()
 
+	result.TagsDiff = getStringsDiff(pathItem1.Tags, pathItem2.Tags)
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
 	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)

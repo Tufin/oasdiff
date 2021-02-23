@@ -2,9 +2,14 @@ info:
   title: Tufin
   version: 1.0.0
 openapi: 3.0.3
+tags:
+- name: security
+  description: control security
 paths:
   /api/{domain}/{project}/badges/security-score:
     get:
+      tags:
+        - security
       parameters:
       - in: query
         name: filter

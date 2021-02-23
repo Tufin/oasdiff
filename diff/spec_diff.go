@@ -5,6 +5,7 @@ import "github.com/getkin/kin-openapi/openapi3"
 // SpecDiff describes the changes between two OAS specs
 type SpecDiff struct {
 	PathsDiff      *PathsDiff      `json:"paths,omitempty"`      // deep diff of paths including their schemas, parameters, responses etc.
+	TagsDiff       *TagsDiff       `json:"tags,omitempty"`       // diff of tags
 	SchemasDiff    *SchemasDiff    `json:"schemas,omitempty"`    // diff of top-level schemas (under components)
 	ParametersDiff *ParametersDiff `json:"parameters,omitempty"` // diff of top-level parameters (under components)
 	HeadersDiff    *HeadersDiff    `json:"headers,omitempty"`    // diff of top-level headers (under components)
@@ -25,6 +26,9 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 	diff := newSpecDiff()
 
 	diff.setPathsDiff(getPathsDiff(s1.Paths, s2.Paths, prefix))
+	diff.setTagsDiff(getTagsDiff(s1.Tags, s2.Tags))
+
+	// components
 	diff.setSchemasDiff(getSchemasDiff(s1.Components.Schemas, s2.Components.Schemas))
 	diff.setParametersDiff(getParametersDiff(toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
 	diff.setHeadersDiff(getHeadersDiff(s1.Components.Headers, s2.Components.Headers))
@@ -39,6 +43,14 @@ func (specDiff *SpecDiff) setPathsDiff(pathsDiff *PathsDiff) {
 
 	if !pathsDiff.empty() {
 		specDiff.PathsDiff = pathsDiff
+	}
+}
+
+func (specDiff *SpecDiff) setTagsDiff(tagsDiff *TagsDiff) {
+	specDiff.TagsDiff = nil
+
+	if !tagsDiff.empty() {
+		specDiff.TagsDiff = tagsDiff
 	}
 }
 
@@ -88,6 +100,7 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	summary.Diff = !specDiff.empty()
 	summary.add(specDiff.PathsDiff, "paths")
+	summary.add(specDiff.TagsDiff, "tags")
 	summary.add(specDiff.SchemasDiff, "schemas")
 	summary.add(specDiff.ParametersDiff, "parameters")
 	summary.add(specDiff.HeadersDiff, "headers")

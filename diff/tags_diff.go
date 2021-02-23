@@ -1,0 +1,57 @@
+package diff
+
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
+
+// TagsDiff is a diff between two sets of global OAS tags
+type TagsDiff struct {
+	Added   StringList `json:"added,omitempty"`
+	Deleted StringList `json:"deleted,omitempty"`
+	// Modified ModifiedTags `json:"modified,omitempty"`
+}
+
+func newTagsDiff() *TagsDiff {
+	return &TagsDiff{
+		Added:   StringList{},
+		Deleted: StringList{},
+		// Modified: ModifiedTags{},
+	}
+}
+
+func (tagsDiff *TagsDiff) empty() bool {
+	return len(tagsDiff.Added) == 0 &&
+		len(tagsDiff.Deleted) == 0 // && len(tagsDiff.Modified) == 0
+}
+
+func getTagsDiff(tags1, tags2 openapi3.Tags) *TagsDiff {
+
+	result := newTagsDiff()
+
+	for _, tag1 := range tags1 {
+		if tag2 := tags2.Get(tag1.Name); tag2 != nil {
+			// other[endpoint1] = &pathItemPair{
+			// 	PathItem1: pathItem1,
+			// 	PathItem2: pathItem2,
+			// }
+		} else {
+			result.Deleted = append(result.Deleted, tag1.Name)
+		}
+	}
+
+	for _, tag2 := range tags2 {
+		if tag1 := tags1.Get(tag2.Name); tag1 == nil {
+			result.Added = append(result.Added, tag2.Name)
+		}
+	}
+
+	return result
+}
+
+func (tagsDiff *TagsDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
+		Added:   len(tagsDiff.Added),
+		Deleted: len(tagsDiff.Deleted),
+		// Modified: len(tagsDiff.Modified),
+	}
+}

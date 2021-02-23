@@ -39,6 +39,18 @@ func TestDiff_DeletedOperation(t *testing.T) {
 		"POST")
 }
 
+func TestDiff_AddedGlobalTag(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.TagsDiff.Added,
+		"security")
+}
+
+func TestDiff_AddedTag(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].TagsDiff.Added,
+		"security")
+}
+
 func TestDiff_AddedParam(t *testing.T) {
 	require.Contains(t,
 		diff.Get(l(t, 2), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Added["header"],
@@ -327,6 +339,9 @@ func TestSummary(t *testing.T) {
 				},
 				"headers": {
 					Deleted: 3,
+				},
+				"tags": {
+					Deleted: 1,
 				},
 			},
 		},
