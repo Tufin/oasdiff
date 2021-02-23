@@ -9,10 +9,10 @@ type CallbacksDiff struct {
 	Modified ModifiedCallbacks `json:"modified,omitempty"`
 }
 
-func (callbackDiff *CallbacksDiff) empty() bool {
-	return len(callbackDiff.Added) == 0 &&
-		len(callbackDiff.Deleted) == 0 &&
-		len(callbackDiff.Modified) == 0
+func (callbacksDiff *CallbacksDiff) empty() bool {
+	return len(callbacksDiff.Added) == 0 &&
+		len(callbacksDiff.Deleted) == 0 &&
+		len(callbacksDiff.Modified) == 0
 }
 
 // ModifiedCallbacks is map of callback names to their respective diffs
@@ -55,7 +55,7 @@ func getCallbacksDiff(callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff 
 }
 
 func diffCallbackValues(callback1, callback2 *openapi3.Callback) *PathsDiff {
-
+	// TODO: check if we need to pass prefix here
 	return getPathsDiff(openapi3.Paths(*callback1), openapi3.Paths(*callback2), "")
 }
 
