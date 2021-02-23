@@ -9,6 +9,7 @@ type HeaderDiff struct {
 	DescriptionDiff *ValueDiff   `json:"description,omitempty"` // diff of 'description' property
 	DeprecatedDiff  *ValueDiff   `json:"deprecated,omitempty"`  // diff of 'deprecated' property
 	RequiredDiff    *ValueDiff   `json:"required,omitempty"`    // diff of 'required' property
+	ExampleDiff     *ValueDiff   `json:"example,omitempty"`     // diff of 'example' property
 	SchemaDiff      *SchemaDiff  `json:"schema,omitempty"`      // diff of 'schema' property
 	ContentDiff     *ContentDiff `json:"content,omitempty"`     // diff of 'content' property
 }
@@ -27,6 +28,8 @@ func diffHeaderValues(header1, header2 *openapi3.Header) HeaderDiff {
 	if schemaDiff := getSchemaDiff(header1.Schema, header2.Schema); !schemaDiff.empty() {
 		result.SchemaDiff = &schemaDiff
 	}
+
+	result.ExampleDiff = getValueDiff(header1.Example, header2.Example)
 
 	if contentDiff := getContentDiff(header1.Content, header2.Content); !contentDiff.empty() {
 		result.ContentDiff = &contentDiff

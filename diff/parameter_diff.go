@@ -14,6 +14,7 @@ type ParameterDiff struct {
 	DeprecatedDiff      *ValueDiff   `json:"deprecated,omitempty"`      // diff of 'deprecated' property
 	RequiredDiff        *ValueDiff   `json:"required,omitempty"`        // diff of 'required' property
 	SchemaDiff          *SchemaDiff  `json:"schema,omitempty"`          // diff of 'schema' property
+	ExampleDiff         *ValueDiff   `json:"example,omitempty"`         // diff of 'example' property
 	ContentDiff         *ContentDiff `json:"content,omitempty"`         // diff of 'content' property
 }
 
@@ -38,6 +39,8 @@ func getParameterDiff(param1, param2 *openapi3.Parameter) ParameterDiff {
 	if schemaDiff := getSchemaDiff(param1.Schema, param2.Schema); !schemaDiff.empty() {
 		result.SchemaDiff = &schemaDiff
 	}
+
+	result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
 
 	if contentDiff := getContentDiff(param1.Content, param2.Content); !contentDiff.empty() {
 		result.ContentDiff = &contentDiff

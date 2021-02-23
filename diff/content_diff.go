@@ -14,7 +14,8 @@ type ContentDiff struct {
 
 	// TODO: ExtensionProps
 
-	SchemaDiff *SchemaDiff `json:"schema,omitempty"`
+	SchemaDiff  *SchemaDiff `json:"schema,omitempty"`  // diff of 'schema' property
+	ExampleDiff *ValueDiff  `json:"example,omitempty"` // diff of 'example' property
 	//Encoding   map[string]*Encoding `json:"encoding,omitempty" yaml:"encoding,omitempty"`
 }
 
@@ -62,6 +63,8 @@ func getContentDiff(content1, content2 openapi3.Content) ContentDiff {
 	if schemaDiff := getSchemaDiff(mediaTypeValue1.Schema, mediaTypeValue2.Schema); !schemaDiff.empty() {
 		result.SchemaDiff = &schemaDiff
 	}
+
+	result.ExampleDiff = getValueDiff(mediaTypeValue1.Example, mediaTypeValue1.Example)
 
 	return result
 }
