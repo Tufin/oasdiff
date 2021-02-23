@@ -19,6 +19,8 @@ type SchemaDiff struct {
 	FormatDiff                      *ValueDiff   `json:"format,omitempty"`                      // diff of 'format' property
 	DescriptionDiff                 *ValueDiff   `json:"description,omitempty"`                 // diff of 'description' property
 	EnumDiff                        *EnumDiff    `json:"enum,omitempty"`                        // diff of 'enum' property
+	DefaultDiff                     *ValueDiff   `json:"default,omitempty"`                     // diff of 'default' property
+	ExampleDiff                     *ValueDiff   `json:"example,omitempty"`                     // diff of 'example' property
 	AdditionalPropertiesAllowedDiff *ValueDiff   `json:"additionalPropertiesAllowed,omitempty"` // diff of 'additionalPropertiesAllowed' property
 	UniqueItemsDiff                 *ValueDiff   `json:"uniqueItems,omitempty"`                 // diff of 'uniqueItems' property
 	ExclusiveMinDiff                *ValueDiff   `json:"exclusiveMin,omitempty"`                // diff of 'exclusiveMin' property
@@ -27,6 +29,7 @@ type SchemaDiff struct {
 	ReadOnlyDiff                    *ValueDiff   `json:"readOnly,omitempty"`                    // diff of 'readOnly' property
 	WriteOnlyDiff                   *ValueDiff   `json:"writeOnly,omitempty"`                   // diff of 'writeOnly' property
 	AllowEmptyValueDiff             *ValueDiff   `json:"allowEmptyValue,omitempty"`             // diff of 'allowEmptyValue' property
+	XMLDiff                         *ValueDiff   `json:"XML,omitempty"`                         // diff of 'XML' property
 	DeprecatedDiff                  *ValueDiff   `json:"deprecated,omitempty"`                  // diff of 'deprecated' property
 	MinDiff                         *ValueDiff   `json:"min,omitempty"`                         // diff of 'min' property
 	MaxDiff                         *ValueDiff   `json:"max,omitempty"`                         // diff of 'max' property
@@ -68,8 +71,8 @@ func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
 	result.DescriptionDiff = getValueDiff(value1.Description, value2.Description)
 	result.EnumDiff = getEnumDiff(value1.Enum, value2.Enum)
-	// Default
-	// Example
+	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
+	result.ExampleDiff = getValueDiff(value1.Example, value2.Example)
 	// ExternalDocs
 	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(value1.AdditionalPropertiesAllowed, value2.AdditionalPropertiesAllowed)
 	result.UniqueItemsDiff = getValueDiff(value1.UniqueItems, value2.UniqueItems)
@@ -79,7 +82,7 @@ func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 	result.ReadOnlyDiff = getValueDiff(value1.ReadOnly, value2.ReadOnly)
 	result.WriteOnlyDiff = getValueDiff(value1.WriteOnly, value2.WriteOnly)
 	result.AllowEmptyValueDiff = getValueDiff(value1.AllowEmptyValue, value2.AllowEmptyValue)
-	// XML
+	result.XMLDiff = getValueDiff(value1.XML, value2.XML)
 	result.DeprecatedDiff = getValueDiff(value1.Deprecated, value2.Deprecated)
 	result.MinDiff = getFloat64RefDiff(value1.Min, value2.Min)
 	result.MaxDiff = getFloat64RefDiff(value1.Max, value2.Max)

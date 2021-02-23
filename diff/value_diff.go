@@ -1,5 +1,7 @@
 package diff
 
+import "reflect"
+
 // ValueDiff describes the diff between two values
 type ValueDiff struct {
 	From interface{} `json:"from"`
@@ -7,7 +9,8 @@ type ValueDiff struct {
 }
 
 func getValueDiff(value1, value2 interface{}) *ValueDiff {
-	if value1 == value2 {
+	
+	if reflect.DeepEqual(value1, value2) {
 		return nil
 	}
 
