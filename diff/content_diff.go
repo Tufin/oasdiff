@@ -10,11 +10,11 @@ import (
 type ContentDiff struct {
 	MediaTypeAdded   bool `json:"mediaTypeAdded,omitempty"`
 	MediaTypeDeleted bool `json:"mediaTypeDeleted,omitempty"`
-	MediaTypeDiff    bool `json:"mediaTypeDiff,omitempty"`
+	MediaTypeDiff    bool `json:"mediaType,omitempty"`
 
 	// TODO: ExtensionProps
 
-	SchemaDiff *SchemaDiff `json:"schemaDiff,omitempty"`
+	SchemaDiff *SchemaDiff `json:"schema,omitempty"`
 	//Encoding   map[string]*Encoding `json:"encoding,omitempty" yaml:"encoding,omitempty"`
 }
 

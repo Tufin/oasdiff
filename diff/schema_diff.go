@@ -24,8 +24,8 @@ type SchemaDiff struct {
 	ExclusiveMinDiff                *ValueDiff   `json:"exclusiveMin,omitempty"`                // diff of 'exclusiveMin' property
 	ExclusiveMaxDiff                *ValueDiff   `json:"exclusiveMax,omitempty"`                // diff of 'exclusiveMax' property
 	NullableDiff                    *ValueDiff   `json:"nullable,omitempty"`                    // diff of 'nullable' property
-	ReadOnlyDiff                    *ValueDiff   `json:"readOnlyDiff,omitempty"`                // diff of 'readOnlyDiff' property
-	WriteOnlyDiff                   *ValueDiff   `json:"writeOnlyDiff,omitempty"`               // diff of 'writeOnlyDiff' property
+	ReadOnlyDiff                    *ValueDiff   `json:"readOnly,omitempty"`                    // diff of 'readOnly' property
+	WriteOnlyDiff                   *ValueDiff   `json:"writeOnly,omitempty"`                   // diff of 'writeOnly' property
 	AllowEmptyValueDiff             *ValueDiff   `json:"allowEmptyValue,omitempty"`             // diff of 'allowEmptyValue' property
 	DeprecatedDiff                  *ValueDiff   `json:"deprecated,omitempty"`                  // diff of 'deprecated' property
 	MinDiff                         *ValueDiff   `json:"min,omitempty"`                         // diff of 'min' property
