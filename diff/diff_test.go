@@ -23,7 +23,7 @@ func TestDiff_Same(t *testing.T) {
 
 func TestDiff_DeletedPaths(t *testing.T) {
 	require.ElementsMatch(t,
-		[]string{"/api/{domain}/{project}/install-command", "/subscribe"},
+		[]string{"/api/{domain}/{project}/install-command", "/register", "/subscribe"},
 		diff.Get(l(t, 1), l(t, 2), "", "").SpecDiff.PathsDiff.Deleted)
 }
 
@@ -235,8 +235,14 @@ func TestResponseDespcriptionNil(t *testing.T) {
 
 func TestSchemaDiff_DeletedCallback(t *testing.T) {
 	require.Contains(t,
-		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/subscribe"].Modified["POST"].CallbacksDiff.Deleted,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/register"].Modified["POST"].CallbacksDiff.Deleted,
 		"myEvent")
+}
+
+func TestSchemaDiff_ModifiedCallback(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/subscribe"].Modified["POST"].CallbacksDiff.Modified["myEvent"].Deleted,
+		"{$request.body#/callbackUrl}")
 }
 
 func TestSchemaDiff_AddedSchemas(t *testing.T) {
@@ -309,7 +315,7 @@ func TestSummary(t *testing.T) {
 			Diff: true,
 			PathSummary: &diff.SummaryDetails{
 				Added:    0,
-				Deleted:  2,
+				Deleted:  3,
 				Modified: 1,
 			},
 			SchemaSummary: &diff.SummaryDetails{

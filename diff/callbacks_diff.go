@@ -4,24 +4,25 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // CallbacksDiff is a diff between two sets of callbacks
 type CallbacksDiff struct {
-	Added   StringList `json:"added,omitempty"`
-	Deleted StringList `json:"deleted,omitempty"`
-	// Modified ModifiedCallbacks `json:"modified,omitempty"`
+	Added    StringList        `json:"added,omitempty"`
+	Deleted  StringList        `json:"deleted,omitempty"`
+	Modified ModifiedCallbacks `json:"modified,omitempty"`
 }
 
 func (callbackDiff *CallbacksDiff) empty() bool {
 	return len(callbackDiff.Added) == 0 &&
-		len(callbackDiff.Deleted) == 0 //&& len(callbackDiff.Modified) == 0
+		len(callbackDiff.Deleted) == 0 &&
+		len(callbackDiff.Modified) == 0
 }
 
 // ModifiedCallbacks is map of callback names to their respective diffs
-type ModifiedCallbacks map[string]CallbackDiff
+type ModifiedCallbacks map[string]*PathsDiff
 
 func newCallbacksDiff() *CallbacksDiff {
 	return &CallbacksDiff{
-		Added:   StringList{},
-		Deleted: StringList{},
-		// Modified: ModifiedCallbacks{},
+		Added:    StringList{},
+		Deleted:  StringList{},
+		Modified: ModifiedCallbacks{},
 	}
 }
 
@@ -33,7 +34,7 @@ func getCallbacksDiff(callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff 
 		if callbackRef1 != nil && callbackRef1.Value != nil {
 			if callbackValue2, ok := callbacks2[callbackValue1]; ok {
 				if diff := diffCallbackValues(callbackRef1.Value, callbackValue2.Value); !diff.empty() {
-					// result.Modified[callbackValue1] = diff
+					result.Modified[callbackValue1] = diff
 				}
 			} else {
 				result.Deleted = append(result.Deleted, callbackValue1)
@@ -51,4 +52,9 @@ func getCallbacksDiff(callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff 
 
 	return result
 
+}
+
+func diffCallbackValues(callback1, callback2 *openapi3.Callback) *PathsDiff {
+
+	return getPathsDiff(openapi3.Paths(*callback1), openapi3.Paths(*callback2), "")
 }
