@@ -4,47 +4,51 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// SchemaDiff is a diff between two OAS schemas
+/*
+SchemaDiff is a diff between two OAS schemas.
+Boolean fields specify whether the property in question was changed between the two versions.
+Pointer fields specify not only the presence of a change but also the old and new values of the property.
+*/
 type SchemaDiff struct {
 	SchemaAdded                     bool         `json:"schemaAdded,omitempty"`
 	SchemaDeleted                   bool         `json:"schemaDeleted,omitempty"`
 	ValueAdded                      bool         `json:"valueAdded,omitempty"`
 	ValueDeleted                    bool         `json:"valueDeleted,omitempty"`
-	OneOfDiff                       bool         `json:"oneOf,omitempty"`                       // whether 'oneOf' property was modified or not
-	AnyOfDiff                       bool         `json:"anyOf,omitempty"`                       // whether 'anyOf' property was modified or not
-	AllOfDiff                       bool         `json:"allOf,omitempty"`                       // whether 'allOf' property was modified or not
-	NotDiff                         bool         `json:"not,omitempty"`                         // whether 'not' property was modified or not
-	TypeDiff                        *ValueDiff   `json:"type,omitempty"`                        // diff of 'type' property
-	TitleDiff                       *ValueDiff   `json:"title,omitempty"`                       // diff of 'title' property
-	FormatDiff                      *ValueDiff   `json:"format,omitempty"`                      // diff of 'format' property
-	DescriptionDiff                 *ValueDiff   `json:"description,omitempty"`                 // diff of 'description' property
-	EnumDiff                        *EnumDiff    `json:"enum,omitempty"`                        // diff of 'enum' property
-	DefaultDiff                     *ValueDiff   `json:"default,omitempty"`                     // diff of 'default' property
-	ExampleDiff                     *ValueDiff   `json:"example,omitempty"`                     // diff of 'example' property
-	AdditionalPropertiesAllowedDiff *ValueDiff   `json:"additionalPropertiesAllowed,omitempty"` // diff of 'additionalPropertiesAllowed' property
-	UniqueItemsDiff                 *ValueDiff   `json:"uniqueItems,omitempty"`                 // diff of 'uniqueItems' property
-	ExclusiveMinDiff                *ValueDiff   `json:"exclusiveMin,omitempty"`                // diff of 'exclusiveMin' property
-	ExclusiveMaxDiff                *ValueDiff   `json:"exclusiveMax,omitempty"`                // diff of 'exclusiveMax' property
-	NullableDiff                    *ValueDiff   `json:"nullable,omitempty"`                    // diff of 'nullable' property
-	ReadOnlyDiff                    *ValueDiff   `json:"readOnly,omitempty"`                    // diff of 'readOnly' property
-	WriteOnlyDiff                   *ValueDiff   `json:"writeOnly,omitempty"`                   // diff of 'writeOnly' property
-	AllowEmptyValueDiff             *ValueDiff   `json:"allowEmptyValue,omitempty"`             // diff of 'allowEmptyValue' property
-	XMLDiff                         *ValueDiff   `json:"XML,omitempty"`                         // diff of 'XML' property
-	DeprecatedDiff                  *ValueDiff   `json:"deprecated,omitempty"`                  // diff of 'deprecated' property
-	MinDiff                         *ValueDiff   `json:"min,omitempty"`                         // diff of 'min' property
-	MaxDiff                         *ValueDiff   `json:"max,omitempty"`                         // diff of 'max' property
-	MultipleOf                      *ValueDiff   `json:"multipleOf,omitempty"`                  // diff of 'multipleOf' property
-	MinLength                       *ValueDiff   `json:"minLength,omitempty"`                   // diff of 'minLength' property
-	MaxLength                       *ValueDiff   `json:"maxLength,omitempty"`                   // diff of 'maxLength' property
-	Pattern                         *ValueDiff   `json:"pattern,omitempty"`                     // diff of 'pattern' property
-	MinItems                        *ValueDiff   `json:"minItems,omitempty"`                    // diff of 'minItems' property
-	MaxItems                        *ValueDiff   `json:"maxItems,omitempty"`                    // diff of 'maxItems' property
-	Items                           bool         `json:"items,omitempty"`                       // whether 'items' property was modified or not
-	Required                        *StringsDiff `json:"required,omitempty"`                    // diff of 'required' property
-	PropertiesDiff                  *SchemasDiff `json:"properties,omitempty"`                  // diff of 'properties' property
-	MinProps                        *ValueDiff   `json:"minProps,omitempty"`                    // diff of 'minProps' property
-	MaxProps                        *ValueDiff   `json:"maxProps,omitempty"`                    // diff of 'maxProps' property
-	AdditionalProperties            bool         `json:"additionalProperties,omitempty"`        // whether 'additionalProperties' property was modified or not
+	OneOfDiff                       bool         `json:"oneOf,omitempty"`
+	AnyOfDiff                       bool         `json:"anyOf,omitempty"`
+	AllOfDiff                       bool         `json:"allOf,omitempty"`
+	NotDiff                         bool         `json:"not,omitempty"`
+	TypeDiff                        *ValueDiff   `json:"type,omitempty"`
+	TitleDiff                       *ValueDiff   `json:"title,omitempty"`
+	FormatDiff                      *ValueDiff   `json:"format,omitempty"`
+	DescriptionDiff                 *ValueDiff   `json:"description,omitempty"`
+	EnumDiff                        *EnumDiff    `json:"enum,omitempty"`
+	DefaultDiff                     *ValueDiff   `json:"default,omitempty"`
+	ExampleDiff                     *ValueDiff   `json:"example,omitempty"`
+	AdditionalPropertiesAllowedDiff *ValueDiff   `json:"additionalPropertiesAllowed,omitempty"`
+	UniqueItemsDiff                 *ValueDiff   `json:"uniqueItems,omitempty"`
+	ExclusiveMinDiff                *ValueDiff   `json:"exclusiveMin,omitempty"`
+	ExclusiveMaxDiff                *ValueDiff   `json:"exclusiveMax,omitempty"`
+	NullableDiff                    *ValueDiff   `json:"nullable,omitempty"`
+	ReadOnlyDiff                    *ValueDiff   `json:"readOnly,omitempty"`
+	WriteOnlyDiff                   *ValueDiff   `json:"writeOnly,omitempty"`
+	AllowEmptyValueDiff             *ValueDiff   `json:"allowEmptyValue,omitempty"`
+	XMLDiff                         *ValueDiff   `json:"XML,omitempty"`
+	DeprecatedDiff                  *ValueDiff   `json:"deprecated,omitempty"`
+	MinDiff                         *ValueDiff   `json:"min,omitempty"`
+	MaxDiff                         *ValueDiff   `json:"max,omitempty"`
+	MultipleOf                      *ValueDiff   `json:"multipleOf,omitempty"`
+	MinLength                       *ValueDiff   `json:"minLength,omitempty"`
+	MaxLength                       *ValueDiff   `json:"maxLength,omitempty"`
+	Pattern                         *ValueDiff   `json:"pattern,omitempty"`
+	MinItems                        *ValueDiff   `json:"minItems,omitempty"`
+	MaxItems                        *ValueDiff   `json:"maxItems,omitempty"`
+	Items                           bool         `json:"items,omitempty"`
+	Required                        *StringsDiff `json:"required,omitempty"`
+	PropertiesDiff                  *SchemasDiff `json:"properties,omitempty"`
+	MinProps                        *ValueDiff   `json:"minProps,omitempty"`
+	MaxProps                        *ValueDiff   `json:"maxProps,omitempty"`
+	AdditionalProperties            bool         `json:"additionalProperties,omitempty"`
 }
 
 func (schemaDiff SchemaDiff) empty() bool {

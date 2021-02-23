@@ -2,15 +2,19 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// SpecDiff describes the changes between two OAS specs
+/*
+SpecDiff describes the changes between two OAS specs
+Boolean fields specify whether the property in question was changed between the two versions.
+Pointer fields specify not only the presence of a change but also the old and new values of the property.
+*/
 type SpecDiff struct {
-	PathsDiff      *PathsDiff      `json:"paths,omitempty"`      // deep diff of paths including their schemas, parameters, responses etc.
+	PathsDiff      *PathsDiff      `json:"paths,omitempty"`      // diff of paths
 	TagsDiff       *TagsDiff       `json:"tags,omitempty"`       // diff of tags
-	SchemasDiff    *SchemasDiff    `json:"schemas,omitempty"`    // diff of top-level schemas (under components)
-	ParametersDiff *ParametersDiff `json:"parameters,omitempty"` // diff of top-level parameters (under components)
-	HeadersDiff    *HeadersDiff    `json:"headers,omitempty"`    // diff of top-level headers (under components)
-	ResponsesDiff  *ResponsesDiff  `json:"responses,omitempty"`  // diff of top-level responses (under components)
-	CallbacksDiff  *CallbacksDiff  `json:"callbacks,omitempty"`  // diff of top-level callbacks (under components)
+	SchemasDiff    *SchemasDiff    `json:"schemas,omitempty"`    // diff of components/schemas
+	ParametersDiff *ParametersDiff `json:"parameters,omitempty"` // diff of components/parameters
+	HeadersDiff    *HeadersDiff    `json:"headers,omitempty"`    // diff of components/headers
+	ResponsesDiff  *ResponsesDiff  `json:"responses,omitempty"`  // diff of components/responses
+	CallbacksDiff  *CallbacksDiff  `json:"callbacks,omitempty"`  // diff of components/callbacks
 }
 
 func newSpecDiff() *SpecDiff {
