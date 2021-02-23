@@ -58,3 +58,11 @@ func diffCallbackValues(callback1, callback2 *openapi3.Callback) *PathsDiff {
 
 	return getPathsDiff(openapi3.Paths(*callback1), openapi3.Paths(*callback2), "")
 }
+
+func (callbacksDiff *CallbacksDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
+		Added:    len(callbacksDiff.Added),
+		Deleted:  len(callbacksDiff.Deleted),
+		Modified: len(callbacksDiff.Modified),
+	}
+}

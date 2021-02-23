@@ -155,3 +155,17 @@ paths:
       responses:
         default:
           description: Tufin
+components:
+  callbacks:
+    test:  
+      'reuven':
+        post:
+          requestBody:   
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+          responses:   
+            '200':
+              description: Your server returns this code if it accepts the callback

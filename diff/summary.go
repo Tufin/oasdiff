@@ -8,6 +8,7 @@ type Summary struct {
 	ParameterSummary *SummaryDetails `json:"parameters,omitempty"`
 	HeaderSummary    *SummaryDetails `json:"headers,omitempty"`
 	ResponsesSummary *SummaryDetails `json:"responses,omitempty"`
+	CallbacksSummary *SummaryDetails `json:"callbacks,omitempty"`
 }
 
 // SummaryDetails summarizes the changes between equivalent parts of the two OAS spec: paths, schemas, parameters, headers, responses etc.

@@ -9,6 +9,7 @@ type SpecDiff struct {
 	ParametersDiff *ParametersDiff `json:"parameters,omitempty"` // diff of top-level parameters (under components)
 	HeadersDiff    *HeadersDiff    `json:"headers,omitempty"`    // diff of top-level headers (under components)
 	ResponsesDiff  *ResponsesDiff  `json:"responses,omitempty"`  // diff of top-level responses (under components)
+	CallbacksDiff  *CallbacksDiff  `json:"callbacks,omitempty"`  // diff of top-level callbacks (under components)
 }
 
 func newSpecDiff() *SpecDiff {
@@ -28,6 +29,7 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 	diff.setParametersDiff(getParametersDiff(toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
 	diff.setHeadersDiff(getHeadersDiff(s1.Components.Headers, s2.Components.Headers))
 	diff.setResponsesDiff(getResponsesDiff(s1.Components.Responses, s2.Components.Responses))
+	diff.setCallbacksDiff(getCallbacksDiff(s1.Components.Callbacks, s2.Components.Callbacks))
 
 	return diff
 }
@@ -72,6 +74,14 @@ func (specDiff *SpecDiff) setResponsesDiff(responsesDiff *ResponsesDiff) {
 	}
 }
 
+func (specDiff *SpecDiff) setCallbacksDiff(callbacksDiff *CallbacksDiff) {
+	specDiff.CallbacksDiff = nil
+
+	if !callbacksDiff.empty() {
+		specDiff.CallbacksDiff = callbacksDiff
+	}
+}
+
 func (specDiff *SpecDiff) getSummary() *Summary {
 
 	result := Summary{
@@ -96,6 +106,10 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	if specDiff.ResponsesDiff != nil {
 		result.ResponsesSummary = specDiff.ResponsesDiff.getSummary()
+	}
+
+	if specDiff.CallbacksDiff != nil {
+		result.CallbacksSummary = specDiff.CallbacksDiff.getSummary()
 	}
 
 	return &result
