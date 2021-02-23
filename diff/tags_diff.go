@@ -6,18 +6,21 @@ import (
 
 // TagsDiff is a diff between two sets of global OAS tags
 type TagsDiff struct {
-	Added   StringList `json:"added,omitempty"`
-	Deleted StringList `json:"deleted,omitempty"`
-	// Modified ModifiedTags `json:"modified,omitempty"`
+	Added    StringList   `json:"added,omitempty"`
+	Deleted  StringList   `json:"deleted,omitempty"`
+	Modified ModifiedTags `json:"modified,omitempty"`
 }
 
 func newTagsDiff() *TagsDiff {
 	return &TagsDiff{
-		Added:   StringList{},
-		Deleted: StringList{},
-		// Modified: ModifiedTags{},
+		Added:    StringList{},
+		Deleted:  StringList{},
+		Modified: ModifiedTags{},
 	}
 }
+
+// ModifiedTags is map of tag names to their respective diffs
+type ModifiedTags map[string]TagDiff
 
 func (tagsDiff *TagsDiff) empty() bool {
 	return len(tagsDiff.Added) == 0 &&
@@ -30,10 +33,9 @@ func getTagsDiff(tags1, tags2 openapi3.Tags) *TagsDiff {
 
 	for _, tag1 := range tags1 {
 		if tag2 := tags2.Get(tag1.Name); tag2 != nil {
-			// other[endpoint1] = &pathItemPair{
-			// 	PathItem1: pathItem1,
-			// 	PathItem2: pathItem2,
-			// }
+			if diff := getTagDiff(tag1, tag2); !diff.empty() {
+				result.Modified[tag1.Name] = diff
+			}
 		} else {
 			result.Deleted = append(result.Deleted, tag1.Name)
 		}
@@ -52,6 +54,6 @@ func (tagsDiff *TagsDiff) getSummary() *SummaryDetails {
 	return &SummaryDetails{
 		Added:   len(tagsDiff.Added),
 		Deleted: len(tagsDiff.Deleted),
-		// Modified: len(tagsDiff.Modified),
+		Modified: len(tagsDiff.Modified),
 	}
 }

@@ -45,6 +45,15 @@ func TestDiff_AddedGlobalTag(t *testing.T) {
 		"security")
 }
 
+func TestDiff_ModifiedGlobalTag(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: "Harrison",
+			To:   "harrison",
+		},
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.TagsDiff.Modified["reuven"].DescriptionDiff)
+}
+
 func TestDiff_AddedTag(t *testing.T) {
 	require.Contains(t,
 		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].Modified["GET"].TagsDiff.Added,
@@ -341,7 +350,7 @@ func TestSummary(t *testing.T) {
 					Deleted: 3,
 				},
 				"tags": {
-					Deleted: 1,
+					Deleted: 2,
 				},
 			},
 		},

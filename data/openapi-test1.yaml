@@ -5,6 +5,8 @@ openapi: 3.0.3
 tags:
 - name: security
   description: control security
+- name: reuven
+  description: Harrison
 paths:
   /api/{domain}/{project}/badges/security-score:
     get:
