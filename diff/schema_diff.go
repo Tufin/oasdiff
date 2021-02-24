@@ -5,7 +5,7 @@ import (
 )
 
 /*
-SchemaDiff is a diff between schema objects: https://swagger.io/specification/#schema-object
+SchemaDiff is a diff between schema objects: https://swagger.io/specification/#schema-object.
 Boolean fields specify whether the property in question was changed between the two versions.
 Pointer fields specify not only the presence of a change but also the old and new values of the property.
 */
