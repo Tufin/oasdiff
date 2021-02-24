@@ -8,7 +8,7 @@ import (
 type RequestBodiesDiff struct {
 	Added    StringList            `json:"added,omitempty"`
 	Deleted  StringList            `json:"deleted,omitempty"`
-	Modified ModifiedrequestBodies `json:"modified,omitempty"`
+	Modified ModifiedRequestBodies `json:"modified,omitempty"`
 }
 
 func (requestBodiesDiff *RequestBodiesDiff) empty() bool {
@@ -17,14 +17,14 @@ func (requestBodiesDiff *RequestBodiesDiff) empty() bool {
 		len(requestBodiesDiff.Modified) == 0
 }
 
-// ModifiedrequestBodies is map of requestBody values to their respective diffs
-type ModifiedrequestBodies map[string]*RequestBodyDiff
+// ModifiedRequestBodies is map of requestBody names to their respective diffs
+type ModifiedRequestBodies map[string]*RequestBodyDiff
 
 func newRequestBodiesDiff() *RequestBodiesDiff {
 	return &RequestBodiesDiff{
 		Added:    StringList{},
 		Deleted:  StringList{},
-		Modified: ModifiedrequestBodies{},
+		Modified: ModifiedRequestBodies{},
 	}
 }
 
