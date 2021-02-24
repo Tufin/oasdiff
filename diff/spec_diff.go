@@ -99,13 +99,13 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 	summary := newSummary()
 
 	summary.Diff = !specDiff.empty()
-	summary.add(specDiff.PathsDiff, "paths")
-	summary.add(specDiff.TagsDiff, "tags")
-	summary.add(specDiff.SchemasDiff, "schemas")
-	summary.add(specDiff.ParametersDiff, "parameters")
-	summary.add(specDiff.HeadersDiff, "headers")
-	summary.add(specDiff.ResponsesDiff, "responses")
-	summary.add(specDiff.CallbacksDiff, "callbacks")
+	summary.add(specDiff.PathsDiff, PathsComponent)
+	summary.add(specDiff.TagsDiff, TagsComponent)
+	summary.add(specDiff.SchemasDiff, SchemasComponent)
+	summary.add(specDiff.ParametersDiff, ParametersComponent)
+	summary.add(specDiff.HeadersDiff, HeadersComponent)
+	summary.add(specDiff.ResponsesDiff, ResponsesComponent)
+	summary.add(specDiff.CallbacksDiff, CallbacksComponent)
 
 	return summary
 }

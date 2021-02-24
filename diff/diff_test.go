@@ -331,25 +331,26 @@ func TestSchemaDiff_ModifiedSchemasBothValuesNil(t *testing.T) {
 }
 
 func TestSummary(t *testing.T) {
+
 	require.Equal(t,
 		&diff.Summary{
 			Diff: true,
 			Components: map[string]*diff.SummaryDetails{
-				"paths": {
+				diff.PathsComponent: {
 					Added:    0,
 					Deleted:  3,
 					Modified: 1,
 				},
-				"schemas": {
+				diff.SchemasComponent: {
 					Deleted: 2,
 				},
-				"parameters": {
+				diff.ParametersComponent: {
 					Deleted: 1,
 				},
-				"headers": {
+				diff.HeadersComponent: {
 					Deleted: 3,
 				},
-				"tags": {
+				diff.TagsComponent: {
 					Deleted: 2,
 				},
 			},
@@ -369,7 +370,7 @@ func TestSummary_NoDiff(t *testing.T) {
 }
 
 func TestFilterByRegex(t *testing.T) {
-	require.Nil(t, diff.Get(l(t, 1), l(t, 2), "", "x").Summary.Components["paths"])
+	require.Nil(t, diff.Get(l(t, 1), l(t, 2), "", "x").Summary.Components[diff.PathsComponent])
 }
 
 func TestFilterByRegex_Invalid(t *testing.T) {
