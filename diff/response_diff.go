@@ -5,9 +5,9 @@ import "github.com/getkin/kin-openapi/openapi3"
 // ResponseDiff is a diff between response objects: https://swagger.io/specification/#response-object
 type ResponseDiff struct {
 	// ExtensionProps
-	DescriptionDiff *ValueDiff   `json:"description,omitempty"` // diff of 'description' property
-	HeadersDiff     *HeadersDiff `json:"headers,omitempty"`     // diff of 'headers' property
-	ContentDiff     *ContentDiff `json:"content,omitempty"`     // diff of 'content' property
+	DescriptionDiff *ValueDiff   `json:"description,omitempty"`
+	HeadersDiff     *HeadersDiff `json:"headers,omitempty"`
+	ContentDiff     *ContentDiff `json:"content,omitempty"`
 	// Links
 }
 

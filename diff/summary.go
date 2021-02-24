@@ -16,9 +16,9 @@ func newSummary() *Summary {
 
 // SummaryDetails summarizes the changes between equivalent parts of the two OpenAPI specifications: paths, schemas, parameters, headers, responses etc.
 type SummaryDetails struct {
-	Added    int `json:"added,omitempty"`    // how many items were added
-	Deleted  int `json:"deleted,omitempty"`  // how many items were deleted
-	Modified int `json:"modified,omitempty"` // how many items were modified
+	Added    int `json:"added,omitempty"`    // number of added items
+	Deleted  int `json:"deleted,omitempty"`  // number of deleted items
+	Modified int `json:"modified,omitempty"` // number of modified items
 }
 
 type componentWithSummary interface {

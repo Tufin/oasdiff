@@ -6,12 +6,12 @@ import "github.com/getkin/kin-openapi/openapi3"
 type HeaderDiff struct {
 
 	// ExtensionProps
-	DescriptionDiff *ValueDiff   `json:"description,omitempty"` // diff of 'description' property
-	DeprecatedDiff  *ValueDiff   `json:"deprecated,omitempty"`  // diff of 'deprecated' property
-	RequiredDiff    *ValueDiff   `json:"required,omitempty"`    // diff of 'required' property
-	ExampleDiff     *ValueDiff   `json:"example,omitempty"`     // diff of 'example' property
-	SchemaDiff      *SchemaDiff  `json:"schema,omitempty"`      // diff of 'schema' property
-	ContentDiff     *ContentDiff `json:"content,omitempty"`     // diff of 'content' property
+	DescriptionDiff *ValueDiff   `json:"description,omitempty"`
+	DeprecatedDiff  *ValueDiff   `json:"deprecated,omitempty"`
+	RequiredDiff    *ValueDiff   `json:"required,omitempty"`
+	ExampleDiff     *ValueDiff   `json:"example,omitempty"`
+	SchemaDiff      *SchemaDiff  `json:"schema,omitempty"`
+	ContentDiff     *ContentDiff `json:"content,omitempty"`
 }
 
 func (headerDiff HeaderDiff) empty() bool {

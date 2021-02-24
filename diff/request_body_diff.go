@@ -4,8 +4,8 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // RequestBodyDiff is a diff between request body objects: https://swagger.io/specification/#request-body-object
 type RequestBodyDiff struct {
-	DescriptionDiff *ValueDiff   `json:"description,omitempty"` // diff of 'description' property
-	ContentDiff     *ContentDiff `json:"content,omitempty"`     // diff of 'content' property
+	DescriptionDiff *ValueDiff   `json:"description,omitempty"`
+	ContentDiff     *ContentDiff `json:"content,omitempty"`
 }
 
 func (requestBodyDiff RequestBodyDiff) empty() bool {

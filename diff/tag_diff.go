@@ -4,8 +4,8 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // TagDiff is a diff between tag objects: https://swagger.io/specification/#tag-object
 type TagDiff struct {
-	NameDiff        *ValueDiff `json:"name,omitempty"`        // diff of 'name' property
-	DescriptionDiff *ValueDiff `json:"description,omitempty"` // diff of 'description' property
+	NameDiff        *ValueDiff `json:"name,omitempty"`
+	DescriptionDiff *ValueDiff `json:"description,omitempty"`
 }
 
 func (tagDiff TagDiff) empty() bool {

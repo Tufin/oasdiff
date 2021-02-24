@@ -4,16 +4,16 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#specification
 type SpecDiff struct {
-	PathsDiff *PathsDiff `json:"paths,omitempty"` // diff of paths
-	TagsDiff  *TagsDiff  `json:"tags,omitempty"`  // diff of tags
+	PathsDiff *PathsDiff `json:"paths,omitempty"`
+	TagsDiff  *TagsDiff  `json:"tags,omitempty"`
 
 	// Components
-	SchemasDiff       *SchemasDiff       `json:"schemas,omitempty"`       // diff of Schemas
-	ParametersDiff    *ParametersDiff    `json:"parameters,omitempty"`    // diff of Parameters
-	HeadersDiff       *HeadersDiff       `json:"headers,omitempty"`       // diff of Headers
-	RequestBodiesDiff *RequestBodiesDiff `json:"requestBodies,omitempty"` // diff of RequestBodies
-	ResponsesDiff     *ResponsesDiff     `json:"responses,omitempty"`     // diff of Responses
-	CallbacksDiff     *CallbacksDiff     `json:"callbacks,omitempty"`     // diff of Callbacks
+	SchemasDiff       *SchemasDiff       `json:"schemas,omitempty"`
+	ParametersDiff    *ParametersDiff    `json:"parameters,omitempty"`
+	HeadersDiff       *HeadersDiff       `json:"headers,omitempty"`
+	RequestBodiesDiff *RequestBodiesDiff `json:"requestBodies,omitempty"`
+	ResponsesDiff     *ResponsesDiff     `json:"responses,omitempty"`
+	CallbacksDiff     *CallbacksDiff     `json:"callbacks,omitempty"`
 }
 
 func newSpecDiff() *SpecDiff {

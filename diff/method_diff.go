@@ -8,15 +8,15 @@ import (
 type MethodDiff struct {
 
 	// ExtensionProps
-	TagsDiff        *StringsDiff     `json:"tags,omitempty"`        // diff of 'Tags' property
-	SummaryDiff     *ValueDiff       `json:"summary,omitempty"`     // diff of 'Summary' property
-	DescriptionDiff *ValueDiff       `json:"description,omitempty"` // diff of 'Description' property
-	OperationIDDiff *ValueDiff       `json:"operationID,omitempty"` // diff of 'OperationID' property
-	ParamDiff       *ParametersDiff  `json:"parameters,omitempty"`  // diff of 'Parameters' property
-	RequestBodyDiff *RequestBodyDiff `json:"requestBody,omitempty"` // diff of 'RequestBody' property
-	ResponseDiff    *ResponsesDiff   `json:"responses,omitempty"`   // diff of 'Responses' property
-	CallbacksDiff   *CallbacksDiff   `json:"callbacks,omitempty"`   // diff of 'Callbacks' property
-	DeprecatedDiff  *ValueDiff       `json:"deprecated,omitempty"`  // diff of 'Deprecated' property
+	TagsDiff        *StringsDiff     `json:"tags,omitempty"`
+	SummaryDiff     *ValueDiff       `json:"summary,omitempty"`
+	DescriptionDiff *ValueDiff       `json:"description,omitempty"`
+	OperationIDDiff *ValueDiff       `json:"operationID,omitempty"`
+	ParamDiff       *ParametersDiff  `json:"parameters,omitempty"`
+	RequestBodyDiff *RequestBodyDiff `json:"requestBody,omitempty"`
+	ResponseDiff    *ResponsesDiff   `json:"responses,omitempty"`
+	CallbacksDiff   *CallbacksDiff   `json:"callbacks,omitempty"`
+	DeprecatedDiff  *ValueDiff       `json:"deprecated,omitempty"`
 	// Security
 	// Servers
 	// ExternalDocs
