@@ -357,6 +357,15 @@ func TestSummary(t *testing.T) {
 	require.Equal(t, 1, d.GetSummaryDetails(diff.RequestBodiesComponent).Deleted)
 }
 
+func TestSummaryInvalidComponent(t *testing.T) {
+
+	require.Equal(t, diff.SummaryDetails{
+		Added:    0,
+		Deleted:  0,
+		Modified: 0,
+	}, diff.Get(l(t, 1), l(t, 2), "", "").Summary.GetSummaryDetails("invalid"))
+}
+
 func TestFilterByRegex(t *testing.T) {
 	require.Nil(t, diff.Get(l(t, 1), l(t, 2), "", "x").Summary.Components[diff.PathsComponent])
 }
