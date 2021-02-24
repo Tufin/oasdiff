@@ -4,13 +4,13 @@ import "reflect"
 
 // Summary summarizes the changes between two OpenAPI specifications
 type Summary struct {
-	Diff       bool                       `json:"diff"`
-	Components map[string]*SummaryDetails `json:"components,omitempty"`
+	Diff       bool                              `json:"diff"`
+	Components map[ComponentName]*SummaryDetails `json:"components,omitempty"`
 }
 
 func newSummary() *Summary {
 	return &Summary{
-		Components: map[string]*SummaryDetails{},
+		Components: map[ComponentName]*SummaryDetails{},
 	}
 }
 
@@ -25,20 +25,23 @@ type componentWithSummary interface {
 	getSummary() *SummaryDetails
 }
 
-// Component names
+// ComponentName is the key of the Summary.Components map
+type ComponentName string
+
+// Possible components in Summary.Components
 const (
-	PathsComponent         = "paths"
-	TagsComponent          = "tags"
-	SchemasComponent       = "schemas"
-	ParametersComponent    = "parameters"
-	HeadersComponent       = "headers"
-	RequestBodiesComponent = "requestBodies"
-	ResponsesComponent     = "responses"
-	CallbacksComponent     = "callbacks"
+	PathsComponent         ComponentName = "paths"
+	TagsComponent          ComponentName = "tags"
+	SchemasComponent       ComponentName = "schemas"
+	ParametersComponent    ComponentName = "parameters"
+	HeadersComponent       ComponentName = "headers"
+	RequestBodiesComponent ComponentName = "requestBodies"
+	ResponsesComponent     ComponentName = "responses"
+	CallbacksComponent     ComponentName = "callbacks"
 )
 
 // GetSummaryDetails returns the summary for a specific component
-func (summary *Summary) GetSummaryDetails(component string) SummaryDetails {
+func (summary *Summary) GetSummaryDetails(component ComponentName) SummaryDetails {
 	if details, ok := summary.Components[component]; ok {
 		if details != nil {
 			return *details
@@ -48,7 +51,7 @@ func (summary *Summary) GetSummaryDetails(component string) SummaryDetails {
 	return SummaryDetails{}
 }
 
-func (summary *Summary) add(component componentWithSummary, name string) {
+func (summary *Summary) add(component componentWithSummary, name ComponentName) {
 	if !isNilPointer(component) {
 		summary.Components[name] = component.getSummary()
 	}
