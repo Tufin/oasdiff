@@ -27,13 +27,14 @@ type componentWithSummary interface {
 
 // Component names
 const (
-	PathsComponent      = "paths"
-	TagsComponent       = "tags"
-	SchemasComponent    = "schemas"
-	ParametersComponent = "parameters"
-	HeadersComponent    = "headers"
-	ResponsesComponent  = "responses"
-	CallbacksComponent  = "callbacks"
+	PathsComponent         = "paths"
+	TagsComponent          = "tags"
+	SchemasComponent       = "schemas"
+	ParametersComponent    = "parameters"
+	HeadersComponent       = "headers"
+	RequestBodiesComponent = "requestBodies"
+	ResponsesComponent     = "responses"
+	CallbacksComponent     = "callbacks"
 )
 
 // GetSummaryDetails returns the summary for a specific component

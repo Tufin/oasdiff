@@ -4,13 +4,16 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#specification
 type SpecDiff struct {
-	PathsDiff      *PathsDiff      `json:"paths,omitempty"`      // diff of paths
-	TagsDiff       *TagsDiff       `json:"tags,omitempty"`       // diff of tags
-	SchemasDiff    *SchemasDiff    `json:"schemas,omitempty"`    // diff of components/schemas
-	ParametersDiff *ParametersDiff `json:"parameters,omitempty"` // diff of components/parameters
-	HeadersDiff    *HeadersDiff    `json:"headers,omitempty"`    // diff of components/headers
-	ResponsesDiff  *ResponsesDiff  `json:"responses,omitempty"`  // diff of components/responses
-	CallbacksDiff  *CallbacksDiff  `json:"callbacks,omitempty"`  // diff of components/callbacks
+	PathsDiff *PathsDiff `json:"paths,omitempty"` // diff of paths
+	TagsDiff  *TagsDiff  `json:"tags,omitempty"`  // diff of tags
+
+	// Components
+	SchemasDiff       *SchemasDiff       `json:"schemas,omitempty"`       // diff of Schemas
+	ParametersDiff    *ParametersDiff    `json:"parameters,omitempty"`    // diff of Parameters
+	HeadersDiff       *HeadersDiff       `json:"headers,omitempty"`       // diff of Headers
+	RequestBodiesDiff *RequestBodiesDiff `json:"requestBodies,omitempty"` // diff of RequestBodies
+	ResponsesDiff     *ResponsesDiff     `json:"responses,omitempty"`     // diff of Responses
+	CallbacksDiff     *CallbacksDiff     `json:"callbacks,omitempty"`     // diff of Callbacks
 }
 
 func newSpecDiff() *SpecDiff {
@@ -32,65 +35,74 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 	diff.setSchemasDiff(getSchemasDiff(s1.Components.Schemas, s2.Components.Schemas))
 	diff.setParametersDiff(getParametersDiff(toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
 	diff.setHeadersDiff(getHeadersDiff(s1.Components.Headers, s2.Components.Headers))
+	diff.setRequestBodiesDiff(getRequestBodiesDiff(s1.Components.RequestBodies, s2.Components.RequestBodies))
 	diff.setResponsesDiff(getResponsesDiff(s1.Components.Responses, s2.Components.Responses))
 	diff.setCallbacksDiff(getCallbacksDiff(s1.Components.Callbacks, s2.Components.Callbacks))
 
 	return diff
 }
 
-func (specDiff *SpecDiff) setPathsDiff(pathsDiff *PathsDiff) {
+func (specDiff *SpecDiff) setPathsDiff(diff *PathsDiff) {
 	specDiff.PathsDiff = nil
 
-	if !pathsDiff.empty() {
-		specDiff.PathsDiff = pathsDiff
+	if !diff.empty() {
+		specDiff.PathsDiff = diff
 	}
 }
 
-func (specDiff *SpecDiff) setTagsDiff(tagsDiff *TagsDiff) {
+func (specDiff *SpecDiff) setTagsDiff(diff *TagsDiff) {
 	specDiff.TagsDiff = nil
 
-	if !tagsDiff.empty() {
-		specDiff.TagsDiff = tagsDiff
+	if !diff.empty() {
+		specDiff.TagsDiff = diff
 	}
 }
 
-func (specDiff *SpecDiff) setSchemasDiff(schemasDiff *SchemasDiff) {
+func (specDiff *SpecDiff) setSchemasDiff(diff *SchemasDiff) {
 	specDiff.SchemasDiff = nil
 
-	if !schemasDiff.empty() {
-		specDiff.SchemasDiff = schemasDiff
+	if !diff.empty() {
+		specDiff.SchemasDiff = diff
 	}
 }
 
-func (specDiff *SpecDiff) setParametersDiff(parametersDiff *ParametersDiff) {
+func (specDiff *SpecDiff) setParametersDiff(diff *ParametersDiff) {
 	specDiff.ParametersDiff = nil
 
-	if !parametersDiff.empty() {
-		specDiff.ParametersDiff = parametersDiff
+	if !diff.empty() {
+		specDiff.ParametersDiff = diff
 	}
 }
 
-func (specDiff *SpecDiff) setHeadersDiff(headersDiff *HeadersDiff) {
+func (specDiff *SpecDiff) setHeadersDiff(diff *HeadersDiff) {
 	specDiff.HeadersDiff = nil
 
-	if !headersDiff.empty() {
-		specDiff.HeadersDiff = headersDiff
+	if !diff.empty() {
+		specDiff.HeadersDiff = diff
 	}
 }
 
-func (specDiff *SpecDiff) setResponsesDiff(responsesDiff *ResponsesDiff) {
+func (specDiff *SpecDiff) setRequestBodiesDiff(diff *RequestBodiesDiff) {
+	specDiff.RequestBodiesDiff = nil
+
+	if !diff.empty() {
+		specDiff.RequestBodiesDiff = diff
+	}
+}
+
+func (specDiff *SpecDiff) setResponsesDiff(diff *ResponsesDiff) {
 	specDiff.ResponsesDiff = nil
 
-	if !responsesDiff.empty() {
-		specDiff.ResponsesDiff = responsesDiff
+	if !diff.empty() {
+		specDiff.ResponsesDiff = diff
 	}
 }
 
-func (specDiff *SpecDiff) setCallbacksDiff(callbacksDiff *CallbacksDiff) {
+func (specDiff *SpecDiff) setCallbacksDiff(diff *CallbacksDiff) {
 	specDiff.CallbacksDiff = nil
 
-	if !callbacksDiff.empty() {
-		specDiff.CallbacksDiff = callbacksDiff
+	if !diff.empty() {
+		specDiff.CallbacksDiff = diff
 	}
 }
 
@@ -104,6 +116,7 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 	summary.add(specDiff.SchemasDiff, SchemasComponent)
 	summary.add(specDiff.ParametersDiff, ParametersComponent)
 	summary.add(specDiff.HeadersDiff, HeadersComponent)
+	summary.add(specDiff.RequestBodiesDiff, RequestBodiesComponent)
 	summary.add(specDiff.ResponsesDiff, ResponsesComponent)
 	summary.add(specDiff.CallbacksDiff, CallbacksComponent)
 

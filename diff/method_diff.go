@@ -8,15 +8,15 @@ import (
 type MethodDiff struct {
 
 	// ExtensionProps
-	TagsDiff        *StringsDiff    `json:"tags,omitempty"`        // diff of 'tags' property
-	SummaryDiff     *ValueDiff      `json:"summary,omitempty"`     // diff of 'summary' property
-	DescriptionDiff *ValueDiff      `json:"description,omitempty"` // diff of 'description' property
-	OperationIDDiff *ValueDiff      `json:"operationID,omitempty"` // diff of 'operationID' property
-	ParamDiff       *ParametersDiff `json:"parameters,omitempty"`  // diff of 'parameters' property
-	// RequestBody
-	ResponseDiff   *ResponsesDiff `json:"responses,omitempty"`  // diff of 'responses' property
-	CallbacksDiff  *CallbacksDiff `json:"callbacks,omitempty"`  // diff of 'callbacks' property
-	DeprecatedDiff *ValueDiff     `json:"deprecated,omitempty"` // diff of 'deprecated' property
+	TagsDiff        *StringsDiff     `json:"tags,omitempty"`        // diff of 'Tags' property
+	SummaryDiff     *ValueDiff       `json:"summary,omitempty"`     // diff of 'Summary' property
+	DescriptionDiff *ValueDiff       `json:"description,omitempty"` // diff of 'Description' property
+	OperationIDDiff *ValueDiff       `json:"operationID,omitempty"` // diff of 'OperationID' property
+	ParamDiff       *ParametersDiff  `json:"parameters,omitempty"`  // diff of 'Parameters' property
+	RequestBodyDiff *RequestBodyDiff `json:"requestBody,omitempty"` // diff of 'RequestBody' property
+	ResponseDiff    *ResponsesDiff   `json:"responses,omitempty"`   // diff of 'Responses' property
+	CallbacksDiff   *CallbacksDiff   `json:"callbacks,omitempty"`   // diff of 'Callbacks' property
+	DeprecatedDiff  *ValueDiff       `json:"deprecated,omitempty"`  // diff of 'Deprecated' property
 	// Security
 	// Servers
 	// ExternalDocs
@@ -43,9 +43,9 @@ func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 		result.ParamDiff = diff
 	}
 
-	// if diff := getRequestBodyDiff(pathItem1.RequestBody, pathItem2.RequestBody); !diff.empty() {
-	// 	result.RequestBodyDiff = diff
-	// }
+	if diff := getRequestBodyDiff(pathItem1.RequestBody, pathItem2.RequestBody); !diff.empty() {
+		result.RequestBodyDiff = diff
+	}
 
 	if diff := getResponsesDiff(pathItem1.Responses, pathItem2.Responses); !diff.empty() {
 		result.ResponseDiff = diff
