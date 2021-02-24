@@ -43,12 +43,12 @@ func getContentDiff(content1, content2 openapi3.Content) ContentDiff {
 		return result
 	}
 
-	mediaType1, mediaTypeValue1, err := getSingleEntry(content1)
+	mediaType1, mediaTypeValue1, err := getMediaType(content1)
 	if err != nil {
 		return result
 	}
 
-	mediaType2, mediaTypeValue2, err := getSingleEntry(content2)
+	mediaType2, mediaTypeValue2, err := getMediaType(content2)
 	if err != nil {
 		return result
 	}
@@ -67,8 +67,8 @@ func getContentDiff(content1, content2 openapi3.Content) ContentDiff {
 	return result
 }
 
-// getSingleEntry returns the single entry in the Content map
-func getSingleEntry(content openapi3.Content) (string, *openapi3.MediaType, error) {
+// getMediaType returns the single MediaType entry in the content map
+func getMediaType(content openapi3.Content) (string, *openapi3.MediaType, error) {
 
 	var mediaType string
 	var mediaTypeValue *openapi3.MediaType
