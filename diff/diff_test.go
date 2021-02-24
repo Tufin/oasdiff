@@ -342,44 +342,19 @@ func TestSchemaDiff_ModifiedSchemasBothValuesNil(t *testing.T) {
 
 func TestSummary(t *testing.T) {
 
-	require.Equal(t,
-		&diff.Summary{
-			Diff: true,
-			Components: map[string]*diff.SummaryDetails{
-				diff.PathsComponent: {
-					Added:    0,
-					Deleted:  3,
-					Modified: 1,
-				},
-				diff.SchemasComponent: {
-					Deleted: 2,
-				},
-				diff.ParametersComponent: {
-					Deleted: 1,
-				},
-				diff.HeadersComponent: {
-					Deleted: 3,
-				},
-				diff.TagsComponent: {
-					Deleted: 2,
-				},
-				diff.RequestBodiesComponent: {
-					Deleted: 1,
-				},
-			},
-		},
-		diff.Get(l(t, 1), l(t, 2), "", "").Summary)
-}
+	d := diff.Get(l(t, 1), l(t, 2), "", "").Summary
 
-func TestSummary_NoDiff(t *testing.T) {
-	s := l(t, 1)
+	require.Equal(t, diff.SummaryDetails{
+		Added:    0,
+		Deleted:  3,
+		Modified: 1,
+	}, d.GetSummaryDetails(diff.PathsComponent))
 
-	require.Equal(t,
-		&diff.Summary{
-			Diff:       false,
-			Components: map[string]*diff.SummaryDetails{},
-		},
-		diff.Get(s, s, "", "").Summary)
+	require.Equal(t, 2, d.GetSummaryDetails(diff.SchemasComponent).Deleted)
+	require.Equal(t, 1, d.GetSummaryDetails(diff.ParametersComponent).Deleted)
+	require.Equal(t, 3, d.GetSummaryDetails(diff.HeadersComponent).Deleted)
+	require.Equal(t, 2, d.GetSummaryDetails(diff.TagsComponent).Deleted)
+	require.Equal(t, 1, d.GetSummaryDetails(diff.RequestBodiesComponent).Deleted)
 }
 
 func TestFilterByRegex(t *testing.T) {
