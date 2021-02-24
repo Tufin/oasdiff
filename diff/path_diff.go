@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// PathDiff is the diff between two OAS paths
+// PathDiff is a diff between two path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
 	Operations `json:"operations,omitempty"`
 }

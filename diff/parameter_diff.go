@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ParameterDiff is a diff between two OAS parameters
+// ParameterDiff is a diff between parameter objects: https://swagger.io/specification/#parameter-object
 type ParameterDiff struct {
 	DescriptionDiff     *ValueDiff   `json:"description,omitempty"`     // diff of 'description' property
 	StyleDiff           *ValueDiff   `json:"style,omitempty"`           // diff of 'style' property

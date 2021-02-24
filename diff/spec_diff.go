@@ -2,11 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-/*
-SpecDiff describes the changes between two OAS specs
-Boolean fields specify whether the property in question was changed between the two versions.
-Pointer fields specify not only the presence of a change but also the old and new values of the property.
-*/
+// SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#specification
 type SpecDiff struct {
 	PathsDiff      *PathsDiff      `json:"paths,omitempty"`      // diff of paths
 	TagsDiff       *TagsDiff       `json:"tags,omitempty"`       // diff of tags

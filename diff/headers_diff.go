@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// HeadersDiff is a diff between two sets of headers
+// HeadersDiff is a diff between two sets of header objects: https://swagger.io/specification/#header-object
 type HeadersDiff struct {
 	Added    StringList      `json:"added,omitempty"`
 	Deleted  StringList      `json:"deleted,omitempty"`

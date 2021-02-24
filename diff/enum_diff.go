@@ -2,7 +2,7 @@ package diff
 
 import "reflect"
 
-// EnumDiff is the diff between two OAS enums
+// EnumDiff is the diff between two enums
 type EnumDiff struct {
 	Added   EnumValues `json:"added,omitempty"`
 	Deleted EnumValues `json:"deleted,omitempty"`

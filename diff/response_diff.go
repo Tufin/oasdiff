@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// ResponseDiff is a diff between two OAS responses
+// ResponseDiff is a diff between response objects: https://swagger.io/specification/#response-object
 type ResponseDiff struct {
 	// ExtensionProps
 	DescriptionDiff *ValueDiff   `json:"description,omitempty"` // diff of 'description' property

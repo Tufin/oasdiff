@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ContentDiff is the diff between two OAS contents
+// ContentDiff is the diff between two content objects each containing a media type object: https://swagger.io/specification/#media-type-object
 type ContentDiff struct {
 	MediaTypeAdded   bool `json:"mediaTypeAdded,omitempty"`
 	MediaTypeDeleted bool `json:"mediaTypeDeleted,omitempty"`

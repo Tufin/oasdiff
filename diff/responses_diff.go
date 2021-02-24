@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ResponsesDiff is a diff between two sets of responses
+// ResponsesDiff is a diff between two sets of response objects: https://swagger.io/specification/#responses-object
 type ResponsesDiff struct {
 	Added    StringList        `json:"added,omitempty"`
 	Deleted  StringList        `json:"deleted,omitempty"`

@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// HeaderDiff is a diff between two OAS headers
+// HeaderDiff is a diff between header objects: https://swagger.io/specification/#header-object
 type HeaderDiff struct {
 
 	// ExtensionProps

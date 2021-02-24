@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// TagDiff is a diff between two top-level OAS tags
+// TagDiff is a diff between tag objects: https://swagger.io/specification/#tag-object
 type TagDiff struct {
 	NameDiff        *ValueDiff `json:"name,omitempty"`        // diff of 'name' property
 	DescriptionDiff *ValueDiff `json:"description,omitempty"` // diff of 'description' property

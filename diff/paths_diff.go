@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// PathsDiff is a diff between two sets of paths
+// PathsDiff is a diff between two sets of path item objects: https://swagger.io/specification/#path-item-object
 type PathsDiff struct {
 	Added    StringList    `json:"added,omitempty"`
 	Deleted  StringList    `json:"deleted,omitempty"`

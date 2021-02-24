@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// MethodDiff is the diff between two OAS operations (methods)
+// MethodDiff is the diff between two operation objects: https://swagger.io/specification/#operation-object
 type MethodDiff struct {
 
 	// ExtensionProps
@@ -42,6 +42,10 @@ func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 	if diff := getParametersDiff(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
 		result.ParamDiff = diff
 	}
+
+	// if diff := getRequestBodyDiff(pathItem1.RequestBody, pathItem2.RequestBody); !diff.empty() {
+	// 	result.RequestBodyDiff = diff
+	// }
 
 	if diff := getResponsesDiff(pathItem1.Responses, pathItem2.Responses); !diff.empty() {
 		result.ResponseDiff = diff

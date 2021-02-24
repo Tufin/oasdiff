@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// CallbacksDiff is a diff between two sets of callbacks
+// CallbacksDiff is a diff between callback objects: https://swagger.io/specification/#callback-object
 type CallbacksDiff struct {
 	Added    StringList        `json:"added,omitempty"`
 	Deleted  StringList        `json:"deleted,omitempty"`
