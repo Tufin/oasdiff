@@ -25,6 +25,28 @@ type componentWithSummary interface {
 	getSummary() *SummaryDetails
 }
 
+// Component names
+const (
+	PathsComponent      = "paths"
+	TagsComponent       = "tags"
+	SchemasComponent    = "schemas"
+	ParametersComponent = "parameters"
+	HeadersComponent    = "headers"
+	ResponsesComponent  = "responses"
+	CallbacksComponent  = "callbacks"
+)
+
+// GetSummaryDetails returns the summary for a specific component
+func (summary *Summary) GetSummaryDetails(component string) SummaryDetails {
+	if details, ok := summary.Components[component]; ok {
+		if details != nil {
+			return *details
+		}
+	}
+
+	return SummaryDetails{}
+}
+
 func (summary *Summary) add(component componentWithSummary, name string) {
 	if !isNilPointer(component) {
 		summary.Components[name] = component.getSummary()
