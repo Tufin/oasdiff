@@ -196,3 +196,20 @@ components:
         application/json:
           schema:
             type: object
+  requestBodies:
+      reuven:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                meter_name:
+                    type: string
+                tenant:
+                  type: string
+                meter_value:
+                  type: number
+                time:
+                  type: integer
+                dimensions:
+                  type: object

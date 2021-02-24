@@ -214,6 +214,16 @@ func TestHeaderDeleted(t *testing.T) {
 		"new")
 }
 
+func TestRequestBodyModified(t *testing.T) {
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: "number",
+			To:   "integer",
+		},
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.RequestBodiesDiff.Modified["reuven"].ContentDiff.SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff,
+	)
+}
+
 func TestHeaderModifiedSchema(t *testing.T) {
 	require.Equal(t,
 		&diff.ValueDiff{
@@ -352,6 +362,9 @@ func TestSummary(t *testing.T) {
 				},
 				diff.TagsComponent: {
 					Deleted: 2,
+				},
+				diff.RequestBodiesComponent: {
+					Deleted: 1,
 				},
 			},
 		},

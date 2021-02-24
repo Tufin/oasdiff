@@ -172,3 +172,20 @@ components:
           responses:   
             '200':
               description: Your server returns this code if it accepts the callback
+  requestBodies:
+      reuven:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                meter_name:
+                    type: string
+                tenant:
+                  type: string
+                meter_value:
+                  type: integer
+                time:
+                  type: integer
+                dimensions:
+                  type: object
