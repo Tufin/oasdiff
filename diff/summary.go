@@ -2,7 +2,7 @@ package diff
 
 import "reflect"
 
-// Summary summarizes the changes between two OAS specs
+// Summary summarizes the changes between two OpenAPI specifications
 type Summary struct {
 	Diff       bool                       `json:"diff"`
 	Components map[string]*SummaryDetails `json:"components,omitempty"`
@@ -14,7 +14,7 @@ func newSummary() *Summary {
 	}
 }
 
-// SummaryDetails summarizes the changes between equivalent parts of the two OAS spec: paths, schemas, parameters, headers, responses etc.
+// SummaryDetails summarizes the changes between equivalent parts of the two OpenAPI specifications: paths, schemas, parameters, headers, responses etc.
 type SummaryDetails struct {
 	Added    int `json:"added,omitempty"`    // how many items were added
 	Deleted  int `json:"deleted,omitempty"`  // how many items were deleted

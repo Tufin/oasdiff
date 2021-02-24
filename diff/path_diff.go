@@ -4,12 +4,12 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// PathDiff is a diff between two path item objects: https://swagger.io/specification/#path-item-object
+// PathDiff is a diff between path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
 	Operations `json:"operations,omitempty"`
 }
 
-// Operations is the diff between two sets of operations (methods)
+// Operations is a diff between two sets of operation objects: https://swagger.io/specification/#operation-object
 type Operations struct {
 	Added    StringList         `json:"added,omitempty"`
 	Deleted  StringList         `json:"deleted,omitempty"`

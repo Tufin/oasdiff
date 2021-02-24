@@ -17,7 +17,7 @@ func (headersDiff *HeadersDiff) empty() bool {
 		len(headersDiff.Modified) == 0
 }
 
-// ModifiedHeaders is map of header values to their respective diffs
+// ModifiedHeaders is map of header names to their respective diffs
 type ModifiedHeaders map[string]HeaderDiff
 
 func newHeadersDiff() *HeadersDiff {
