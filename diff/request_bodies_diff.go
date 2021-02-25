@@ -53,7 +53,6 @@ func getRequestBodiesDiff(requestBodies1, requestBodies2 openapi3.RequestBodies)
 	}
 
 	return result
-
 }
 
 func (requestBodiesDiff *RequestBodiesDiff) getSummary() *SummaryDetails {
