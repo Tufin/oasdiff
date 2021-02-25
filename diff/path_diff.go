@@ -6,11 +6,11 @@ import (
 
 // PathDiff is a diff between path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
-	Operations `json:"operations,omitempty"`
+	OperationsDiff `json:"operations,omitempty"`
 }
 
-// Operations is a diff between two sets of operation objects: https://swagger.io/specification/#operation-object
-type Operations struct {
+// OperationsDiff is a diff between two sets of operation objects: https://swagger.io/specification/#operation-object
+type OperationsDiff struct {
 	Added    StringList         `json:"added,omitempty"`
 	Deleted  StringList         `json:"deleted,omitempty"`
 	Modified ModifiedOperations `json:"modified,omitempty"`
@@ -18,7 +18,7 @@ type Operations struct {
 
 func newPathDiff() *PathDiff {
 	return &PathDiff{
-		Operations: Operations{
+		OperationsDiff: OperationsDiff{
 			Added:    StringList{},
 			Deleted:  StringList{},
 			Modified: ModifiedOperations{},
