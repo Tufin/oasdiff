@@ -87,7 +87,6 @@ func getParametersDiff(params1, params2 openapi3.Parameters) *ParametersDiff {
 	}
 
 	return result
-
 }
 
 func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openapi3.Parameter, bool) {
