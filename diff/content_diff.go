@@ -12,9 +12,9 @@ type ContentDiff struct {
 	MediaTypeDeleted bool `json:"mediaTypeDeleted,omitempty"`
 	MediaTypeDiff    bool `json:"mediaType,omitempty"`
 	// ExtensionProps
-	SchemaDiff  *SchemaDiff `json:"schema,omitempty"`
-	ExampleDiff *ValueDiff  `json:"example,omitempty"`
-	// Encoding
+	SchemaDiff    *SchemaDiff    `json:"schema,omitempty"`
+	ExampleDiff   *ValueDiff     `json:"example,omitempty"`
+	EncodingsDiff *EncodingsDiff `json:"encoding,omitempty"`
 }
 
 func newContentDiff() ContentDiff {
@@ -58,11 +58,15 @@ func getContentDiff(content1, content2 openapi3.Content) ContentDiff {
 		return result
 	}
 
-	if schemaDiff := getSchemaDiff(mediaTypeValue1.Schema, mediaTypeValue2.Schema); !schemaDiff.empty() {
-		result.SchemaDiff = &schemaDiff
+	if diff := getSchemaDiff(mediaTypeValue1.Schema, mediaTypeValue2.Schema); !diff.empty() {
+		result.SchemaDiff = &diff
 	}
 
 	result.ExampleDiff = getValueDiff(mediaTypeValue1.Example, mediaTypeValue1.Example)
+
+	if diff := getEncodingsDiff(mediaTypeValue1.Encoding, mediaTypeValue2.Encoding); !diff.empty() {
+		result.EncodingsDiff = diff
+	}
 
 	return result
 }

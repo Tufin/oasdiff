@@ -153,6 +153,13 @@ paths:
                           example: Some event happened
                       required:
                         - message
+                    encoding:
+                      historyMetadata:
+                        # require XML Content-Type in utf-8 encoding
+                        contentType: application/xml; charset=utf-8
+                      profileImage:
+                        # only accept png/jpeg
+                        contentType: image/png, image/jpeg
               responses:   # Expected responses to the callback message
                 '200':
                   description: Your server returns this code if it accepts the callback

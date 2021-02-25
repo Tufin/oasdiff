@@ -134,6 +134,10 @@ paths:
                           example: Some event happened
                       required:
                         - message
+                    encoding:
+                      profileImage:
+                        # only accept png
+                        contentType: image/png
               responses:   # Expected responses to the callback message
                 '200':
                   description: Your server returns this code if it accepts the callback

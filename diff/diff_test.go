@@ -60,6 +60,24 @@ func TestDiff_AddedTag(t *testing.T) {
 		"security")
 }
 
+func TestDiff_DeletedEncoding(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/subscribe"].Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].RequestBodyDiff.ContentDiff.EncodingsDiff.Deleted,
+		"historyMetadata")
+}
+
+func TestDiff_AddedEncoding(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/subscribe"].Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].RequestBodyDiff.ContentDiff.EncodingsDiff.Added,
+		"historyMetadata")
+}
+
+func TestDiff_ModifiedEncoding(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/subscribe"].Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].RequestBodyDiff.ContentDiff.EncodingsDiff.Modified,
+		"profileImage")
+}
+
 func TestDiff_AddedParam(t *testing.T) {
 	require.Contains(t,
 		diff.Get(l(t, 2), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].Modified["GET"].ParamDiff.Added["header"],
