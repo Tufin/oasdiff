@@ -6,8 +6,8 @@ import (
 
 // EncodingDiff is a diff between encoding objects: https://swagger.io/specification/#encoding-object
 type EncodingDiff struct {
-	// ExtensionProps
 
+	// TODO: diff ExtensionProps
 	ContentTypeDiff   *ValueDiff   `json:"contentType,omitempty"`
 	HeadersDiff       *HeadersDiff `json:"headers,omitempty"`
 	StyleDiff         *ValueDiff   `json:"styleDiff,omitempty"`

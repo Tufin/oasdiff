@@ -5,13 +5,14 @@ import "github.com/getkin/kin-openapi/openapi3"
 // HeaderDiff is a diff between header objects: https://swagger.io/specification/#header-object
 type HeaderDiff struct {
 
-	// ExtensionProps
-	DescriptionDiff *ValueDiff   `json:"description,omitempty"`
-	DeprecatedDiff  *ValueDiff   `json:"deprecated,omitempty"`
-	RequiredDiff    *ValueDiff   `json:"required,omitempty"`
-	ExampleDiff     *ValueDiff   `json:"example,omitempty"`
-	SchemaDiff      *SchemaDiff  `json:"schema,omitempty"`
-	ContentDiff     *ContentDiff `json:"content,omitempty"`
+	// TODO: diff ExtensionProps
+	DescriptionDiff *ValueDiff `json:"description,omitempty"`
+	DeprecatedDiff  *ValueDiff `json:"deprecated,omitempty"`
+	RequiredDiff    *ValueDiff `json:"required,omitempty"`
+	ExampleDiff     *ValueDiff `json:"example,omitempty"`
+	// TODO: diff Examples
+	SchemaDiff  *SchemaDiff  `json:"schema,omitempty"`
+	ContentDiff *ContentDiff `json:"content,omitempty"`
 }
 
 func (headerDiff HeaderDiff) empty() bool {

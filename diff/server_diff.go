@@ -6,10 +6,11 @@ import (
 
 // ServerDiff is a diff between server objects: https://swagger.io/specification/#server-object
 type ServerDiff struct {
-	// ExtensionProps
 
+	// TODO: diff ExtensionProps
 	URLDiff         *ValueDiff `json:"urlType,omitempty"`
 	DescriptionDiff *ValueDiff `json:"description,omitempty"`
+	// TODO: diff Variables
 }
 
 func (diff ServerDiff) empty() bool {

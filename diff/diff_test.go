@@ -192,13 +192,13 @@ func TestSchemaDiff_MinDiff(t *testing.T) {
 
 func TestResponseAdded(t *testing.T) {
 	require.Contains(t,
-		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ResponseDiff.Added,
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ResponsesDiff.Added,
 		"default")
 }
 
 func TestResponseDeleted(t *testing.T) {
 	require.Contains(t,
-		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ResponseDiff.Deleted,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ResponsesDiff.Deleted,
 		"default")
 }
 
@@ -208,7 +208,7 @@ func TestResponseDescriptionModified(t *testing.T) {
 			From: "Tufin",
 			To:   "Tufin1",
 		},
-		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestResponseHeadersModified(t *testing.T) {
@@ -217,7 +217,7 @@ func TestResponseHeadersModified(t *testing.T) {
 			From: "Request limit per min.",
 			To:   "Request limit per hour.",
 		},
-		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponseDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].DescriptionDiff)
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].DescriptionDiff)
 }
 
 func TestServerAdded(t *testing.T) {
@@ -296,7 +296,7 @@ func TestResponseContentModified(t *testing.T) {
 			From: "object",
 			To:   "string",
 		},
-		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ResponseDiff.Modified["201"].ContentDiff.SchemaDiff.TypeDiff)
+		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.SchemaDiff.TypeDiff)
 }
 
 func TestResponseDespcriptionNil(t *testing.T) {
@@ -309,7 +309,7 @@ func TestResponseDespcriptionNil(t *testing.T) {
 			From: interface{}(nil),
 			To:   "Tufin1",
 		},
-		diff.Get(s3, l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponseDiff.Modified["default"].DescriptionDiff)
+		diff.Get(s3, l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestSchemaDiff_DeletedCallback(t *testing.T) {

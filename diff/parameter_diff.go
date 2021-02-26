@@ -26,7 +26,7 @@ func getParameterDiff(param1, param2 *openapi3.Parameter) ParameterDiff {
 
 	result := ParameterDiff{}
 
-	// TODO: ExtensionProps
+	// TODO: diff ExtensionProps
 	result.DescriptionDiff = getValueDiff(param1.Description, param2.Description)
 	result.StyleDiff = getValueDiff(param1.Style, param2.Style)
 	result.ExplodeDiff = getBoolRefDiff(param1.Explode, param2.Explode)
@@ -40,6 +40,7 @@ func getParameterDiff(param1, param2 *openapi3.Parameter) ParameterDiff {
 	}
 
 	result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
+	// TODO: diff Examples
 
 	if contentDiff := getContentDiff(param1.Content, param2.Content); !contentDiff.empty() {
 		result.ContentDiff = &contentDiff

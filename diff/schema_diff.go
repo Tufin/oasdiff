@@ -65,7 +65,7 @@ func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 
 	result := SchemaDiff{}
 
-	// ExtensionProps
+	// TODO: diff ExtensionProps
 	result.OneOfDiff = getDiffSchemas(value1.OneOf, value2.OneOf)
 	result.AnyOfDiff = getDiffSchemas(value1.AnyOf, value2.AnyOf)
 	result.AllOfDiff = getDiffSchemas(value1.AllOf, value2.AllOf)
@@ -77,7 +77,7 @@ func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 	result.EnumDiff = getEnumDiff(value1.Enum, value2.Enum)
 	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
 	result.ExampleDiff = getValueDiff(value1.Example, value2.Example)
-	// ExternalDocs
+	// TODO: diff ExternalDocs
 	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(value1.AdditionalPropertiesAllowed, value2.AdditionalPropertiesAllowed)
 	result.UniqueItemsDiff = getValueDiff(value1.UniqueItems, value2.UniqueItems)
 	result.ExclusiveMinDiff = getValueDiff(value1.ExclusiveMin, value2.ExclusiveMin)
@@ -105,7 +105,7 @@ func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 	result.MinProps = getValueDiff(value1.MinProps, value2.MinProps)
 	result.MaxProps = getValueDiff(value1.MaxProps, value2.MaxProps)
 	result.AdditionalProperties = !getSchemaDiff(value1.AdditionalProperties, value2.AdditionalProperties).empty()
-	// Discriminator
+	// TODO: diff Discriminator
 
 	return result
 }

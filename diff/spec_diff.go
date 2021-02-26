@@ -4,6 +4,9 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#specification
 type SpecDiff struct {
+
+	// TODO: diff ExtensionProps
+	OpenAPIDiff *ValueDiff   `json:"openAPI,omitempty"`
 	PathsDiff   *PathsDiff   `json:"paths,omitempty"`
 	ServersDiff *ServersDiff `json:"servers,omitempty"`
 	TagsDiff    *TagsDiff    `json:"tags,omitempty"`
@@ -29,16 +32,23 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 
 	diff := newSpecDiff()
 
+	diff.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
+	// TODO: diff Info
 	diff.setPathsDiff(getPathsDiff(s1.Paths, s2.Paths, prefix))
+	// TODO: diff Security
 	diff.setServersDiff(getServersDiff(&s1.Servers, &s2.Servers))
 	diff.setTagsDiff(getTagsDiff(s1.Tags, s2.Tags))
+	// TODO: diff ExternalDocs
 
-	// components
+	// Components
 	diff.setSchemasDiff(getSchemasDiff(s1.Components.Schemas, s2.Components.Schemas))
 	diff.setParametersDiff(getParametersDiff(toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
 	diff.setHeadersDiff(getHeadersDiff(s1.Components.Headers, s2.Components.Headers))
 	diff.setRequestBodiesDiff(getRequestBodiesDiff(s1.Components.RequestBodies, s2.Components.RequestBodies))
 	diff.setResponsesDiff(getResponsesDiff(s1.Components.Responses, s2.Components.Responses))
+	// TODO: diff SecuritySchemes
+	// TODO: diff Examples
+	// TODO: diff Links
 	diff.setCallbacksDiff(getCallbacksDiff(s1.Components.Callbacks, s2.Components.Callbacks))
 
 	return diff

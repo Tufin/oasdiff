@@ -11,9 +11,10 @@ type ContentDiff struct {
 	MediaTypeAdded   bool `json:"mediaTypeAdded,omitempty"`
 	MediaTypeDeleted bool `json:"mediaTypeDeleted,omitempty"`
 	MediaTypeDiff    bool `json:"mediaType,omitempty"`
-	// ExtensionProps
-	SchemaDiff    *SchemaDiff    `json:"schema,omitempty"`
-	ExampleDiff   *ValueDiff     `json:"example,omitempty"`
+	// TODO: diff ExtensionProps
+	SchemaDiff  *SchemaDiff `json:"schema,omitempty"`
+	ExampleDiff *ValueDiff  `json:"example,omitempty"`
+	// TODO: diff Examples
 	EncodingsDiff *EncodingsDiff `json:"encoding,omitempty"`
 }
 
