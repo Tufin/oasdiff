@@ -14,7 +14,8 @@ type ModifiedEncodings map[string]EncodingDiff
 
 func (diff *EncodingsDiff) empty() bool {
 	return len(diff.Added) == 0 &&
-		len(diff.Deleted) == 0 //&& len(diff.Modified) == 0
+		len(diff.Deleted) == 0 &&
+		len(diff.Modified) == 0
 }
 
 func newEncodingsDiff() *EncodingsDiff {
