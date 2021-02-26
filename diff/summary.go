@@ -31,6 +31,7 @@ type ComponentName string
 // Components in the summary map
 const (
 	PathsComponent         ComponentName = "paths"
+	ServersComponent       ComponentName = "servers"
 	TagsComponent          ComponentName = "tags"
 	SchemasComponent       ComponentName = "schemas"
 	ParametersComponent    ComponentName = "parameters"

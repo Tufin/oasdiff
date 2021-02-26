@@ -70,3 +70,11 @@ func findServer(server1 *openapi3.Server, servers2 openapi3.Servers) *openapi3.S
 
 	return nil
 }
+
+func (diff *ServersDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
+		Added:    len(diff.Added),
+		Deleted:  len(diff.Deleted),
+		Modified: len(diff.Modified),
+	}
+}

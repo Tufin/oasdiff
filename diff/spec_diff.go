@@ -4,8 +4,9 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#specification
 type SpecDiff struct {
-	PathsDiff *PathsDiff `json:"paths,omitempty"`
-	TagsDiff  *TagsDiff  `json:"tags,omitempty"`
+	PathsDiff   *PathsDiff   `json:"paths,omitempty"`
+	ServersDiff *ServersDiff `json:"servers,omitempty"`
+	TagsDiff    *TagsDiff    `json:"tags,omitempty"`
 
 	// Components
 	SchemasDiff       *SchemasDiff       `json:"schemas,omitempty"`
@@ -29,6 +30,7 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 	diff := newSpecDiff()
 
 	diff.setPathsDiff(getPathsDiff(s1.Paths, s2.Paths, prefix))
+	diff.setServersDiff(getServersDiff(&s1.Servers, &s2.Servers))
 	diff.setTagsDiff(getTagsDiff(s1.Tags, s2.Tags))
 
 	// components
@@ -47,6 +49,14 @@ func (specDiff *SpecDiff) setPathsDiff(diff *PathsDiff) {
 
 	if !diff.empty() {
 		specDiff.PathsDiff = diff
+	}
+}
+
+func (specDiff *SpecDiff) setServersDiff(diff *ServersDiff) {
+	specDiff.ServersDiff = nil
+
+	if !diff.empty() {
+		specDiff.ServersDiff = diff
 	}
 }
 
@@ -112,6 +122,7 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	summary.Diff = !specDiff.empty()
 	summary.add(specDiff.PathsDiff, PathsComponent)
+	summary.add(specDiff.ServersDiff, ServersComponent)
 	summary.add(specDiff.TagsDiff, TagsComponent)
 	summary.add(specDiff.SchemasDiff, SchemasComponent)
 	summary.add(specDiff.ParametersDiff, ParametersComponent)

@@ -392,17 +392,15 @@ func TestSummary(t *testing.T) {
 
 	d := diff.Get(l(t, 1), l(t, 2), "", "").Summary
 
-	require.Equal(t, diff.SummaryDetails{
-		Added:    0,
-		Deleted:  3,
-		Modified: 1,
-	}, d.GetSummaryDetails(diff.PathsComponent))
-
-	require.Equal(t, 2, d.GetSummaryDetails(diff.SchemasComponent).Deleted)
-	require.Equal(t, 1, d.GetSummaryDetails(diff.ParametersComponent).Deleted)
-	require.Equal(t, 3, d.GetSummaryDetails(diff.HeadersComponent).Deleted)
-	require.Equal(t, 2, d.GetSummaryDetails(diff.TagsComponent).Deleted)
-	require.Equal(t, 1, d.GetSummaryDetails(diff.RequestBodiesComponent).Deleted)
+	require.Equal(t, diff.SummaryDetails{0, 3, 1}, d.GetSummaryDetails(diff.PathsComponent))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ServersComponent))
+	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.TagsComponent))
+	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SchemasComponent))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ParametersComponent))
+	require.Equal(t, diff.SummaryDetails{0, 3, 0}, d.GetSummaryDetails(diff.HeadersComponent))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.RequestBodiesComponent))
+	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.ResponsesComponent))
+	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.CallbacksComponent))
 }
 
 func TestSummaryInvalidComponent(t *testing.T) {
