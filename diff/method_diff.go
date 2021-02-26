@@ -18,7 +18,7 @@ type MethodDiff struct {
 	CallbacksDiff   *CallbacksDiff   `json:"callbacks,omitempty"`
 	DeprecatedDiff  *ValueDiff       `json:"deprecated,omitempty"`
 	// Security
-	// Servers
+	ServersDiff *ServersDiff `json:"servers,omitempty"`
 	// ExternalDocs
 }
 
@@ -56,6 +56,10 @@ func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 	}
 
 	result.DeprecatedDiff = getValueDiff(pathItem1.Deprecated, pathItem2.Deprecated)
+
+	if diff := getServersDiff(pathItem1.Servers, pathItem2.Servers); !diff.empty() {
+		result.ServersDiff = diff
+	}
 
 	return result
 }

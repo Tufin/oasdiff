@@ -114,7 +114,9 @@ paths:
       responses:
         default:
           description: Tufin
-      servers: []
+      servers:
+        - url: 'https://www.tufin.io/securecloud'
+          description: "2"
 components:
   schemas:
     requests:

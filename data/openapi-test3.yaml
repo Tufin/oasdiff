@@ -95,7 +95,12 @@ paths:
               schema:
                 type: integer
               description: Request limit per min.
-      servers: []
+      servers:
+        - url: 'https://tufin.io/securecloud'
+        - url: 'https://www.tufin.io/securecloud'
+          description: "1"
+    servers:
+      - url: 'https://tufin.io/securecloud'
   /register:
     post:
       summary: Subscribe to a webhook

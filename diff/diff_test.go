@@ -220,6 +220,24 @@ func TestResponseHeadersModified(t *testing.T) {
 		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ResponseDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].DescriptionDiff)
 }
 
+func TestServerAdded(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 5), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ServersDiff.Added,
+		"https://tufin.io/securecloud")
+}
+
+func TestServerDeleted(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 3), l(t, 5), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ServersDiff.Deleted,
+		"https://tufin.io/securecloud")
+}
+
+func TestServerModified(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 5), l(t, 3), "", "").SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].Modified["GET"].ServersDiff.Modified,
+		"https://www.tufin.io/securecloud")
+}
+
 func TestHeaderAdded(t *testing.T) {
 	require.Contains(t,
 		diff.Get(l(t, 5), l(t, 1), "", "").SpecDiff.HeadersDiff.Added,
