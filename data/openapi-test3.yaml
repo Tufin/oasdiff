@@ -101,6 +101,12 @@ paths:
           description: "1"
     servers:
       - url: 'https://tufin.io/securecloud'
+    parameters:
+    - in: header
+      name: name
+      schema:
+        enum:
+        - tufin
   /register:
     post:
       summary: Subscribe to a webhook
