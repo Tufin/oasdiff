@@ -149,6 +149,11 @@ paths:
                       profileImage:
                         # only accept png
                         contentType: image/png
+                        headers:
+                          i:
+                            schema:
+                              type: integer
+                            description: number
               responses:   # Expected responses to the callback message
                 '200':
                   description: Your server returns this code if it accepts the callback

@@ -66,15 +66,9 @@ func TestDiff_DeletedEncoding(t *testing.T) {
 		"historyMetadata")
 }
 
-func TestDiff_AddedEncoding(t *testing.T) {
-	require.Contains(t,
-		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].RequestBodyDiff.ContentDiff.EncodingsDiff.Added,
-		"historyMetadata")
-}
-
-func TestDiff_ModifiedEncoding(t *testing.T) {
-	require.Contains(t,
-		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].RequestBodyDiff.ContentDiff.EncodingsDiff.Modified,
+func TestDiff_ModifiedEncodingHeaders(t *testing.T) {
+	require.NotNil(t,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].RequestBodyDiff.ContentDiff.EncodingsDiff.Modified["profileImage"].HeadersDiff,
 		"profileImage")
 }
 
