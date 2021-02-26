@@ -12,7 +12,7 @@ type MethodDiff struct {
 	SummaryDiff     *ValueDiff       `json:"summary,omitempty"`
 	DescriptionDiff *ValueDiff       `json:"description,omitempty"`
 	OperationIDDiff *ValueDiff       `json:"operationID,omitempty"`
-	ParamDiff       *ParametersDiff  `json:"parameters,omitempty"`
+	ParametersDiff  *ParametersDiff  `json:"parameters,omitempty"`
 	RequestBodyDiff *RequestBodyDiff `json:"requestBody,omitempty"`
 	ResponseDiff    *ResponsesDiff   `json:"responses,omitempty"`
 	CallbacksDiff   *CallbacksDiff   `json:"callbacks,omitempty"`
@@ -40,7 +40,7 @@ func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)
 
 	if diff := getParametersDiff(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
-		result.ParamDiff = diff
+		result.ParametersDiff = diff
 	}
 
 	if diff := getRequestBodyDiff(pathItem1.RequestBody, pathItem2.RequestBody); !diff.empty() {

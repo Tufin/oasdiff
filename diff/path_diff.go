@@ -6,65 +6,35 @@ import (
 
 // PathDiff is a diff between path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
-	OperationsDiff `json:"operations,omitempty"`
-}
-
-// OperationsDiff is a diff between two sets of operation objects: https://swagger.io/specification/#operation-object
-type OperationsDiff struct {
-	Added    StringList         `json:"added,omitempty"`
-	Deleted  StringList         `json:"deleted,omitempty"`
-	Modified ModifiedOperations `json:"modified,omitempty"`
+	SummaryDiff     *ValueDiff      `json:"summary,omitempty"`
+	DescriptionDiff *ValueDiff      `json:"description,omitempty"`
+	OperationsDiff  *OperationsDiff `json:"operations,omitempty"`
+	ServersDiff     *ServersDiff    `json:"servers,omitempty"`
+	ParametersDiff  *ParametersDiff `json:"parameters,omitempty"`
 }
 
 func newPathDiff() *PathDiff {
-	return &PathDiff{
-		OperationsDiff: OperationsDiff{
-			Added:    StringList{},
-			Deleted:  StringList{},
-			Modified: ModifiedOperations{},
-		},
-	}
+	return &PathDiff{}
 }
 
 func (pathDiff *PathDiff) empty() bool {
-	return len(pathDiff.Added) == 0 &&
-		len(pathDiff.Deleted) == 0 &&
-		pathDiff.Modified.empty()
-}
-
-func (pathDiff *PathDiff) diffOperation(pathItem1, pathItem2 *openapi3.Operation, method string) {
-
-	if pathItem1 == nil && pathItem2 == nil {
-		return
-	}
-
-	if pathItem1 == nil && pathItem2 != nil {
-		pathDiff.Added = append(pathDiff.Added, method)
-		return
-	}
-
-	if pathItem1 != nil && pathItem2 == nil {
-		pathDiff.Deleted = append(pathDiff.Added, method)
-		return
-	}
-
-	if diff := getMethodDiff(pathItem1, pathItem2); !diff.empty() {
-		pathDiff.Modified[method] = diff
-	}
+	return pathDiff == nil || *pathDiff == *newPathDiff()
 }
 
 func getPathDiff(pathItem1, pathItem2 *openapi3.PathItem) *PathDiff {
-	pathDiff := newPathDiff()
+	result := newPathDiff()
 
-	pathDiff.diffOperation(pathItem1.Connect, pathItem2.Connect, "CONNECT")
-	pathDiff.diffOperation(pathItem1.Delete, pathItem2.Delete, "DELETE")
-	pathDiff.diffOperation(pathItem1.Get, pathItem2.Get, "GET")
-	pathDiff.diffOperation(pathItem1.Head, pathItem2.Head, "HEAD")
-	pathDiff.diffOperation(pathItem1.Options, pathItem2.Options, "OPTIONS")
-	pathDiff.diffOperation(pathItem1.Patch, pathItem2.Patch, "PATCH")
-	pathDiff.diffOperation(pathItem1.Post, pathItem2.Post, "POST")
-	pathDiff.diffOperation(pathItem1.Put, pathItem2.Put, "PUT")
-	pathDiff.diffOperation(pathItem1.Trace, pathItem2.Trace, "TRACE")
+	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
+	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
+	result.OperationsDiff = getOperationsDiff(pathItem1, pathItem2)
 
-	return pathDiff
+	if diff := getServersDiff(&pathItem1.Servers, &pathItem2.Servers); !diff.empty() {
+		result.ServersDiff = diff
+	}
+
+	if diff := getParametersDiff(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
+		result.ParametersDiff = diff
+	}
+
+	return result
 }
