@@ -51,6 +51,7 @@ paths:
       - in: query
         name: image
         schema:
+          x-extension-test:
           description: alphanumeric 
           example: tufinim/generic-bank:cia-latest
           format: general string
@@ -166,6 +167,7 @@ paths:
                       historyMetadata:
                         # require XML Content-Type in utf-8 encoding
                         contentType: application/xml; charset=utf-8
+                        style: spaceDelimited
                       profileImage:
                         # only accept png/jpeg
                         contentType: image/png, image/jpeg
