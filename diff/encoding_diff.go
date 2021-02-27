@@ -6,13 +6,12 @@ import (
 
 // EncodingDiff is a diff between encoding objects: https://swagger.io/specification/#encoding-object
 type EncodingDiff struct {
-
-	// TODO: diff ExtensionProps
-	ContentTypeDiff   *ValueDiff   `json:"contentType,omitempty"`
-	HeadersDiff       *HeadersDiff `json:"headers,omitempty"`
-	StyleDiff         *ValueDiff   `json:"styleDiff,omitempty"`
-	ExplodeDiff       *ValueDiff   `json:"explode,omitempty"`
-	AllowReservedDiff *ValueDiff   `json:"allowReservedDiff,omitempty"`
+	ExtensionProps    *ExtensionsDiff `json:"extensions,omitempty"`
+	ContentTypeDiff   *ValueDiff      `json:"contentType,omitempty"`
+	HeadersDiff       *HeadersDiff    `json:"headers,omitempty"`
+	StyleDiff         *ValueDiff      `json:"styleDiff,omitempty"`
+	ExplodeDiff       *ValueDiff      `json:"explode,omitempty"`
+	AllowReservedDiff *ValueDiff      `json:"allowReservedDiff,omitempty"`
 }
 
 func (diff EncodingDiff) empty() bool {
@@ -21,6 +20,10 @@ func (diff EncodingDiff) empty() bool {
 
 func getEncodingDiff(value1, value2 *openapi3.Encoding) EncodingDiff {
 	result := EncodingDiff{}
+
+	if diff := getExtensionsDiff(value1.ExtensionProps, value2.ExtensionProps); !diff.empty() {
+		result.ExtensionProps = diff
+	}
 
 	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
 

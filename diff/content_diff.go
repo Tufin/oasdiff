@@ -8,13 +8,13 @@ import (
 
 // ContentDiff is the diff between two content objects each containing a media type object: https://swagger.io/specification/#media-type-object
 type ContentDiff struct {
-	MediaTypeAdded   bool `json:"mediaTypeAdded,omitempty"`
-	MediaTypeDeleted bool `json:"mediaTypeDeleted,omitempty"`
-	MediaTypeDiff    bool `json:"mediaType,omitempty"`
-	// TODO: diff ExtensionProps
-	SchemaDiff  *SchemaDiff `json:"schema,omitempty"`
-	ExampleDiff *ValueDiff  `json:"example,omitempty"`
-	// TODO: diff Examples
+	MediaTypeAdded   bool            `json:"mediaTypeAdded,omitempty"`
+	MediaTypeDeleted bool            `json:"mediaTypeDeleted,omitempty"`
+	MediaTypeDiff    bool            `json:"mediaType,omitempty"`
+	ExtensionProps   *ExtensionsDiff `json:"extensions,omitempty"`
+	SchemaDiff       *SchemaDiff     `json:"schema,omitempty"`
+	ExampleDiff      *ValueDiff      `json:"example,omitempty"`
+	// Examples
 	EncodingsDiff *EncodingsDiff `json:"encoding,omitempty"`
 }
 
@@ -57,6 +57,10 @@ func getContentDiff(content1, content2 openapi3.Content) ContentDiff {
 	if mediaType1 != mediaType2 {
 		result.MediaTypeDiff = true
 		return result
+	}
+
+	if diff := getExtensionsDiff(mediaTypeValue1.ExtensionProps, mediaTypeValue2.ExtensionProps); !diff.empty() {
+		result.ExtensionProps = diff
 	}
 
 	if diff := getSchemaDiff(mediaTypeValue1.Schema, mediaTypeValue2.Schema); !diff.empty() {
