@@ -2,6 +2,7 @@ info:
   title: Tufin
   version: 1.0.0
 openapi: 3.0.3
+x-extension-test2: nogo 
 tags:
 - name: reuven
   description: harrison
