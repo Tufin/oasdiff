@@ -95,6 +95,7 @@ paths:
               schema:
                 type: integer
               description: Request limit per min.
+              x-test:
       servers:
         - url: 'https://tufin.io/securecloud'
         - url: 'https://www.tufin.io/securecloud'

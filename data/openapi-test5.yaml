@@ -117,6 +117,7 @@ paths:
       servers:
         - url: 'https://www.tufin.io/securecloud'
           description: "2"
+          x-test:
 components:
   schemas:
     requests:
