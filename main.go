@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	log "github.com/sirupsen/logrus"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
@@ -22,7 +23,10 @@ func init() {
 func main() {
 	flag.Parse()
 
-	loader := load.NewOASLoader()
+	swaggerLoader := openapi3.NewSwaggerLoader()
+	swaggerLoader.IsExternalRefsAllowed = true
+
+	loader := load.NewOASLoader(swaggerLoader)
 
 	base, err := loader.From(base)
 	if err != nil {

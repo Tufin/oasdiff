@@ -7,13 +7,13 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 func l(t *testing.T, v int) *openapi3.Swagger {
-	s, err := load.NewOASLoader().FromPath(fmt.Sprintf("../data/openapi-test%d.yaml", v))
+	loader := openapi3.NewSwaggerLoader()
+	oas, err := loader.LoadSwaggerFromFile(fmt.Sprintf("../data/openapi-test%d.yaml", v))
 	require.NoError(t, err)
-	return s
+	return oas
 }
 
 func TestDiff_Same(t *testing.T) {

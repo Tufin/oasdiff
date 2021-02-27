@@ -21,28 +21,17 @@ func (mockLoader MockLoader) LoadSwaggerFromURI(location *url.URL) (*openapi3.Sw
 
 type MockLoader struct{}
 
-func newMockLoader() *load.OASLoader {
-	return &load.OASLoader{
-		Loader: MockLoader{},
-	}
-}
-
-func TestLoad_FileError(t *testing.T) {
-	_, err := load.NewOASLoader().From("null")
-	require.Error(t, err)
-}
-
 func TestLoad_File(t *testing.T) {
-	_, err := newMockLoader().From("openapi-test1.yaml")
+	_, err := load.NewOASLoader(MockLoader{}).From("openapi-test1.yaml")
 	require.NoError(t, err)
 }
 
 func TestLoad_URI(t *testing.T) {
-	_, err := newMockLoader().From("http://localhost/openapi-test1.yaml")
+	_, err := load.NewOASLoader(MockLoader{}).From("http://localhost/openapi-test1.yaml")
 	require.NoError(t, err)
 }
 
 func TestLoad_URIError(t *testing.T) {
-	_, err := newMockLoader().From("http://localhost/null")
+	_, err := load.NewOASLoader(MockLoader{}).From("http://localhost/null")
 	require.Error(t, err)
 }

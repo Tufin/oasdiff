@@ -1,10 +1,10 @@
+// Package load provides a function to load an OpenAPI spec from a URL or a Path
 package load
 
 import (
 	"net/url"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	log "github.com/sirupsen/logrus"
 )
 
 type Loader interface {
@@ -17,9 +17,7 @@ type OASLoader struct {
 }
 
 // NewOASLoader returns a loader object that can be used to load OpenAPI specs
-func NewOASLoader() *OASLoader {
-	loader := openapi3.NewSwaggerLoader()
-	loader.IsExternalRefsAllowed = true
+func NewOASLoader(loader Loader) *OASLoader {
 	return &OASLoader{
 		Loader: loader,
 	}
@@ -30,41 +28,12 @@ func (oasLoader *OASLoader) From(path string) (*openapi3.Swagger, error) {
 
 	uri, err := url.ParseRequestURI(path)
 	if err == nil {
-		oas, err := oasLoader.FromURI(uri)
+		oas, err := oasLoader.Loader.LoadSwaggerFromURI(uri)
 		if err != nil {
 			return nil, err
 		}
 		return oas, nil
 	}
 
-	oas, err := oasLoader.FromPath(path)
-	if err != nil {
-		return nil, err
-	}
-
-	return oas, nil
-}
-
-// FromPath opens an OpenAPI spec from a local path
-func (oasLoader *OASLoader) FromPath(path string) (*openapi3.Swagger, error) {
-
-	oas, err := oasLoader.Loader.LoadSwaggerFromFile(path)
-	if err != nil {
-		log.Errorf("failed to open spec from '%s' with '%v'", path, err)
-		return nil, err
-	}
-
-	return oas, nil
-}
-
-// FromURI opens an OpenAPI spec from a URL
-func (oasLoader *OASLoader) FromURI(path *url.URL) (*openapi3.Swagger, error) {
-
-	oas, err := oasLoader.Loader.LoadSwaggerFromURI(path)
-	if err != nil {
-		log.Errorf("failed to open spec from '%s' with '%v'", path, err)
-		return nil, err
-	}
-
-	return oas, nil
+	return oasLoader.Loader.LoadSwaggerFromFile(path)
 }
