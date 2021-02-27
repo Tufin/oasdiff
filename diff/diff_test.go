@@ -52,9 +52,8 @@ func TestDeletedExtension(t *testing.T) {
 }
 
 func TestModifiedExtension(t *testing.T) {
-	require.Contains(t,
-		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.ExtensionProps.Modified,
-		"x-extension-test2")
+	require.NotNil(t,
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.ExtensionProps.Modified["x-extension-test2"])
 }
 
 func TestDiff_AddedGlobalTag(t *testing.T) {
