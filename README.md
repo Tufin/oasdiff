@@ -33,14 +33,17 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	log "github.com/sirupsen/logrus"
-
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
 
 func main() {
-	loader := load.NewOASLoader()
+	swaggerLoader := openapi3.NewSwaggerLoader()
+	swaggerLoader.IsExternalRefsAllowed = true
+
+	loader := load.NewOASLoader(swaggerLoader)
 
 	base, err := loader.From("https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test1.yaml")
 	if err != nil {
