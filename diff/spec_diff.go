@@ -31,7 +31,7 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 
 	result := newSpecDiff()
 
-	if diff := getExtensionsDiff(s1.ExtensionProps, s2.ExtensionProps); !result.empty() {
+	if diff := getExtensionsDiff(s1.ExtensionProps, s2.ExtensionProps); !diff.empty() {
 		result.ExtensionProps = diff
 	}
 
