@@ -2,23 +2,30 @@ info:
   title: Tufin
   version: 1.0.0
 openapi: 3.0.3
+x-extension-test: 
 tags:
 - name: security
   description: control security
+  x-extension-test: 
 - name: reuven
   description: Harrison
 servers: 
 - url: tufin.com
+  x-extension-test: 
 paths:
   /api/{domain}/{project}/badges/security-score:
+    x-extension-test: 
     get:
+      x-extension-test: 
       tags:
         - security
       parameters:
       - in: query
         name: filter
+        x-extension-test: 
         content:
           application/json:
+            x-extension-test: 
             schema:
               type: object
               properties:
