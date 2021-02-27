@@ -39,6 +39,18 @@ func TestDiff_DeletedOperation(t *testing.T) {
 		"POST")
 }
 
+func TestAddedExtension(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.ExtensionProps.Added,
+		"x-extension-test")
+}
+
+func TestDeletedExtension(t *testing.T) {
+	require.Contains(t,
+		diff.Get(l(t, 1), l(t, 3), "", "").SpecDiff.ExtensionProps.Deleted,
+		"x-extension-test")
+}
+
 func TestDiff_AddedGlobalTag(t *testing.T) {
 	require.Contains(t,
 		diff.Get(l(t, 3), l(t, 1), "", "").SpecDiff.TagsDiff.Added,
