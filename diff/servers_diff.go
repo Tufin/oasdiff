@@ -26,7 +26,7 @@ func newServersDiff() *ServersDiff {
 	}
 }
 
-func getServersDiff(pServers1, pServers2 *openapi3.Servers) *ServersDiff {
+func getServersDiff(config *Config, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
 
 	result := newServersDiff()
 
@@ -35,7 +35,7 @@ func getServersDiff(pServers1, pServers2 *openapi3.Servers) *ServersDiff {
 
 	for _, server1 := range servers1 {
 		if server2 := findServer(server1, servers2); server2 != nil {
-			if diff := getServerDiff(server1, server2); !diff.empty() {
+			if diff := getServerDiff(config, server1, server2); !diff.empty() {
 				result.Modified[server1.URL] = diff
 			}
 		} else {

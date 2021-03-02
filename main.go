@@ -42,9 +42,9 @@ func main() {
 	}
 
 	config := diff.Config{
-		Examples: examples,
-		Filter:   filter,
-		Prefix:   prefix,
+		IncludeExamples: examples,
+		Filter:          filter,
+		Prefix:          prefix,
 	}
 
 	bytes, err := json.MarshalIndent(diff.Get(&config, s1, s2), "", " ")

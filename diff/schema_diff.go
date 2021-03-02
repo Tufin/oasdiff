@@ -66,7 +66,7 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) SchemaD
 
 	result := SchemaDiff{}
 
-	if diff := getExtensionsDiff(value1.ExtensionProps, value2.ExtensionProps); !diff.empty() {
+	if diff := getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps); !diff.empty() {
 		result.ExtensionProps = diff
 	}
 
@@ -81,7 +81,7 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) SchemaD
 	result.EnumDiff = getEnumDiff(value1.Enum, value2.Enum)
 	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
 
-	if config.Examples {
+	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(value1.Example, value2.Example)
 	}
 

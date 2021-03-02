@@ -40,20 +40,36 @@ func TestDiff_DeletedOperation(t *testing.T) {
 }
 
 func TestAddedExtension(t *testing.T) {
+	config := diff.Config{
+		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},
+	}
+
 	require.Contains(t,
-		diff.Get(diff.NewConfig(), l(t, 3), l(t, 1)).SpecDiff.ExtensionProps.Added,
+		diff.Get(&config, l(t, 3), l(t, 1)).SpecDiff.ExtensionProps.Added,
 		"x-extension-test")
 }
 
 func TestDeletedExtension(t *testing.T) {
+	config := diff.Config{
+		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},
+	}
+
 	require.Contains(t,
-		diff.Get(diff.NewConfig(), l(t, 1), l(t, 3)).SpecDiff.ExtensionProps.Deleted,
+		diff.Get(&config, l(t, 1), l(t, 3)).SpecDiff.ExtensionProps.Deleted,
 		"x-extension-test")
 }
 
 func TestModifiedExtension(t *testing.T) {
+	config := diff.Config{
+		IncludeExtensions: diff.StringSet{"x-extension-test2": struct{}{}},
+	}
 	require.NotNil(t,
-		diff.Get(diff.NewConfig(), l(t, 1), l(t, 3)).SpecDiff.ExtensionProps.Modified["x-extension-test2"])
+		diff.Get(&config, l(t, 1), l(t, 3)).SpecDiff.ExtensionProps.Modified["x-extension-test2"])
+}
+
+func TestExcludedExtension(t *testing.T) {
+	require.Nil(t,
+		diff.Get(diff.NewConfig(), l(t, 1), l(t, 3)).SpecDiff.ExtensionProps)
 }
 
 func TestDiff_AddedGlobalTag(t *testing.T) {
@@ -199,7 +215,7 @@ func TestSchemaDiff_WithExamples(t *testing.T) {
 			From: "26734565-dbcc-449a-a370-0beaaf04b0e8",
 			To:   "26734565-dbcc-449a-a370-0beaaf04b0e7",
 		},
-		diff.Get(&diff.Config{Examples: true}, l(t, 1), l(t, 3)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["query"]["token"].SchemaDiff.ExampleDiff)
+		diff.Get(&diff.Config{IncludeExamples: true}, l(t, 1), l(t, 3)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["query"]["token"].SchemaDiff.ExampleDiff)
 }
 
 func TestSchemaDiff_MinDiff(t *testing.T) {

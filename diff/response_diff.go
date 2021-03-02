@@ -18,7 +18,7 @@ func (responseDiff ResponseDiff) empty() bool {
 func diffResponseValues(config *Config, response1, response2 *openapi3.Response) ResponseDiff {
 	result := ResponseDiff{}
 
-	if diff := getExtensionsDiff(response1.ExtensionProps, response2.ExtensionProps); !diff.empty() {
+	if diff := getExtensionsDiff(config, response1.ExtensionProps, response2.ExtensionProps); !diff.empty() {
 		result.ExtensionProps = diff
 	}
 

@@ -11,6 +11,7 @@ type ExtensionsDiff struct {
 	Modified ModifiedExtensions `json:"modified,omitempty"`
 }
 
+// ModifiedExtensions is map of extensions names to their respective diffs
 type ModifiedExtensions map[string]*ValueDiff
 
 func (diff *ExtensionsDiff) empty() bool {
@@ -27,23 +28,27 @@ func newExtensionsDiff() *ExtensionsDiff {
 	}
 }
 
-func getExtensionsDiff(extensions1, extensions2 openapi3.ExtensionProps) *ExtensionsDiff {
+func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.ExtensionProps) *ExtensionsDiff {
 
 	result := newExtensionsDiff()
 
 	for name1, extension1 := range extensions1.Extensions {
-		if extension2, ok := extensions2.Extensions[name1]; ok {
-			if diff := getValueDiff(extension1, extension2); diff != nil {
-				result.Modified[name1] = diff
+		if _, ok := config.IncludeExtensions[name1]; ok {
+			if extension2, ok := extensions2.Extensions[name1]; ok {
+				if diff := getValueDiff(extension1, extension2); diff != nil {
+					result.Modified[name1] = diff
+				}
+			} else {
+				result.Deleted = append(result.Deleted, name1)
 			}
-		} else {
-			result.Deleted = append(result.Deleted, name1)
 		}
 	}
 
 	for name2 := range extensions2.Extensions {
-		if _, ok := extensions1.Extensions[name2]; !ok {
-			result.Added = append(result.Deleted, name2)
+		if _, ok := config.IncludeExtensions[name2]; ok {
+			if _, ok := extensions1.Extensions[name2]; !ok {
+				result.Added = append(result.Deleted, name2)
+			}
 		}
 	}
 

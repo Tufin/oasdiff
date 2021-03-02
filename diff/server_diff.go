@@ -16,10 +16,10 @@ func (diff ServerDiff) empty() bool {
 	return diff == ServerDiff{}
 }
 
-func getServerDiff(value1, value2 *openapi3.Server) ServerDiff {
+func getServerDiff(config *Config, value1, value2 *openapi3.Server) ServerDiff {
 	result := ServerDiff{}
 
-	if diff := getExtensionsDiff(value1.ExtensionProps, value2.ExtensionProps); !diff.empty() {
+	if diff := getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps); !diff.empty() {
 		result.ExtensionProps = diff
 	}
 

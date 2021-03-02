@@ -28,7 +28,7 @@ func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) Parame
 
 	result := ParameterDiff{}
 
-	if diff := getExtensionsDiff(param1.ExtensionProps, param2.ExtensionProps); !diff.empty() {
+	if diff := getExtensionsDiff(config, param1.ExtensionProps, param2.ExtensionProps); !diff.empty() {
 		result.ExtensionProps = diff
 	}
 
@@ -44,7 +44,7 @@ func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) Parame
 		result.SchemaDiff = &schemaDiff
 	}
 
-	if config.Examples {
+	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
 	}
 

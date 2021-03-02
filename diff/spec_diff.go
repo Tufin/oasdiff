@@ -31,7 +31,7 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 
 	result := newSpecDiff()
 
-	if diff := getExtensionsDiff(s1.ExtensionProps, s2.ExtensionProps); !diff.empty() {
+	if diff := getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps); !diff.empty() {
 		result.ExtensionProps = diff
 	}
 
@@ -39,7 +39,7 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 	// Info
 	result.setPathsDiff(getPathsDiff(config, s1.Paths, s2.Paths, config.Prefix))
 	// Security
-	result.setServersDiff(getServersDiff(&s1.Servers, &s2.Servers))
+	result.setServersDiff(getServersDiff(config, &s1.Servers, &s2.Servers))
 	result.setTagsDiff(getTagsDiff(s1.Tags, s2.Tags))
 	// ExternalDocs
 

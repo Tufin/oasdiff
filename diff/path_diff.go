@@ -28,7 +28,7 @@ func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *PathD
 	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
 	result.OperationsDiff = getOperationsDiff(config, pathItem1, pathItem2)
 
-	if diff := getServersDiff(&pathItem1.Servers, &pathItem2.Servers); !diff.empty() {
+	if diff := getServersDiff(config, &pathItem1.Servers, &pathItem2.Servers); !diff.empty() {
 		result.ServersDiff = diff
 	}
 

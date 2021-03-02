@@ -12,6 +12,7 @@ paths:
       parameters:
       - in: query
         name: image
+        x-extension-test:
         schema:
           not:
             description: alphanumeric with underscore, dash, period, slash and colon
@@ -140,6 +141,7 @@ paths:
                 required: true
                 content:
                   application/json:
+                    x-extension-test:
                     schema:
                       type: object
                       properties:
@@ -154,6 +156,7 @@ paths:
                         contentType: image/png
                         headers:
                           i:
+                            x-extension-test:
                             schema:
                               type: integer
                             description: number

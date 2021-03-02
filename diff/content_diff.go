@@ -59,7 +59,7 @@ func getContentDiff(config *Config, content1, content2 openapi3.Content) Content
 		return result
 	}
 
-	if diff := getExtensionsDiff(mediaTypeValue1.ExtensionProps, mediaTypeValue2.ExtensionProps); !diff.empty() {
+	if diff := getExtensionsDiff(config, mediaTypeValue1.ExtensionProps, mediaTypeValue2.ExtensionProps); !diff.empty() {
 		result.ExtensionProps = diff
 	}
 
@@ -67,7 +67,7 @@ func getContentDiff(config *Config, content1, content2 openapi3.Content) Content
 		result.SchemaDiff = &diff
 	}
 
-	if config.Examples {
+	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(mediaTypeValue1.Example, mediaTypeValue1.Example)
 	}
 

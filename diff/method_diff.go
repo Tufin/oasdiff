@@ -33,7 +33,7 @@ func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) *Me
 
 	result := newMethodDiff()
 
-	if diff := getExtensionsDiff(pathItem1.ExtensionProps, pathItem2.ExtensionProps); !diff.empty() {
+	if diff := getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps); !diff.empty() {
 		result.ExtensionProps = diff
 	}
 
@@ -60,7 +60,7 @@ func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) *Me
 
 	result.DeprecatedDiff = getValueDiff(pathItem1.Deprecated, pathItem2.Deprecated)
 
-	if diff := getServersDiff(pathItem1.Servers, pathItem2.Servers); !diff.empty() {
+	if diff := getServersDiff(config, pathItem1.Servers, pathItem2.Servers); !diff.empty() {
 		result.ServersDiff = diff
 	}
 
