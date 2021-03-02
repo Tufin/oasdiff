@@ -27,7 +27,7 @@ func (specDiff SpecDiff) empty() bool {
 	return specDiff == SpecDiff{}
 }
 
-func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
+func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 
 	result := newSpecDiff()
 
@@ -37,22 +37,22 @@ func getDiff(s1, s2 *openapi3.Swagger, prefix string) *SpecDiff {
 
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 	// Info
-	result.setPathsDiff(getPathsDiff(s1.Paths, s2.Paths, prefix))
+	result.setPathsDiff(getPathsDiff(config, s1.Paths, s2.Paths, config.Prefix))
 	// Security
 	result.setServersDiff(getServersDiff(&s1.Servers, &s2.Servers))
 	result.setTagsDiff(getTagsDiff(s1.Tags, s2.Tags))
 	// ExternalDocs
 
 	// Components
-	result.setSchemasDiff(getSchemasDiff(s1.Components.Schemas, s2.Components.Schemas))
-	result.setParametersDiff(getParametersDiff(toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
-	result.setHeadersDiff(getHeadersDiff(s1.Components.Headers, s2.Components.Headers))
-	result.setRequestBodiesDiff(getRequestBodiesDiff(s1.Components.RequestBodies, s2.Components.RequestBodies))
-	result.setResponsesDiff(getResponsesDiff(s1.Components.Responses, s2.Components.Responses))
+	result.setSchemasDiff(getSchemasDiff(config, s1.Components.Schemas, s2.Components.Schemas))
+	result.setParametersDiff(getParametersDiff(config, toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
+	result.setHeadersDiff(getHeadersDiff(config, s1.Components.Headers, s2.Components.Headers))
+	result.setRequestBodiesDiff(getRequestBodiesDiff(config, s1.Components.RequestBodies, s2.Components.RequestBodies))
+	result.setResponsesDiff(getResponsesDiff(config, s1.Components.Responses, s2.Components.Responses))
 	// SecuritySchemes
 	// Examples
 	// Links
-	result.setCallbacksDiff(getCallbacksDiff(s1.Components.Callbacks, s2.Components.Callbacks))
+	result.setCallbacksDiff(getCallbacksDiff(config, s1.Components.Callbacks, s2.Components.Callbacks))
 
 	return result
 }

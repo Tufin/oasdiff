@@ -28,14 +28,14 @@ func newRequestBodiesDiff() *RequestBodiesDiff {
 	}
 }
 
-func getRequestBodiesDiff(requestBodies1, requestBodies2 openapi3.RequestBodies) *RequestBodiesDiff {
+func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) *RequestBodiesDiff {
 
 	result := newRequestBodiesDiff()
 
 	for requestBodyValue1, requestBodyRef1 := range requestBodies1 {
 		if requestBodyRef1 != nil && requestBodyRef1.Value != nil {
 			if requestBodyValue2, ok := requestBodies2[requestBodyValue1]; ok {
-				if diff := getRequestBodyDiff(requestBodyRef1, requestBodyValue2); !diff.empty() {
+				if diff := getRequestBodyDiff(config, requestBodyRef1, requestBodyValue2); !diff.empty() {
 					result.Modified[requestBodyValue1] = diff
 				}
 			} else {

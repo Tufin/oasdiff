@@ -26,14 +26,14 @@ func newCallbacksDiff() *CallbacksDiff {
 	}
 }
 
-func getCallbacksDiff(callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff {
+func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff {
 
 	result := newCallbacksDiff()
 
 	for callbackValue1, callbackRef1 := range callbacks1 {
 		if callbackRef1 != nil && callbackRef1.Value != nil {
 			if callbackValue2, ok := callbacks2[callbackValue1]; ok {
-				if diff := diffCallbackValues(callbackRef1.Value, callbackValue2.Value); !diff.empty() {
+				if diff := diffCallbackValues(config, callbackRef1.Value, callbackValue2.Value); !diff.empty() {
 					result.Modified[callbackValue1] = diff
 				}
 			} else {
@@ -54,9 +54,9 @@ func getCallbacksDiff(callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff 
 
 }
 
-func diffCallbackValues(callback1, callback2 *openapi3.Callback) *PathsDiff {
+func diffCallbackValues(config *Config, callback1, callback2 *openapi3.Callback) *PathsDiff {
 	// TODO: check if we need to pass prefix here
-	return getPathsDiff(openapi3.Paths(*callback1), openapi3.Paths(*callback2), "")
+	return getPathsDiff(config, openapi3.Paths(*callback1), openapi3.Paths(*callback2), "")
 }
 
 func (callbacksDiff *CallbacksDiff) getSummary() *SummaryDetails {

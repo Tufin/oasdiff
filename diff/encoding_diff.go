@@ -17,12 +17,12 @@ func (diff EncodingDiff) empty() bool {
 	return diff == EncodingDiff{}
 }
 
-func getEncodingDiff(value1, value2 *openapi3.Encoding) EncodingDiff {
+func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) EncodingDiff {
 	result := EncodingDiff{}
 
 	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
 
-	if headersDiff := getHeadersDiff(value1.Headers, value2.Headers); !headersDiff.empty() {
+	if headersDiff := getHeadersDiff(config, value1.Headers, value2.Headers); !headersDiff.empty() {
 		result.HeadersDiff = headersDiff
 	}
 

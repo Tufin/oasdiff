@@ -26,7 +26,7 @@ func (contentDiff ContentDiff) empty() bool {
 	return contentDiff == newContentDiff()
 }
 
-func getContentDiff(content1, content2 openapi3.Content) ContentDiff {
+func getContentDiff(config *Config, content1, content2 openapi3.Content) ContentDiff {
 
 	result := newContentDiff()
 
@@ -63,13 +63,15 @@ func getContentDiff(content1, content2 openapi3.Content) ContentDiff {
 		result.ExtensionProps = diff
 	}
 
-	if diff := getSchemaDiff(mediaTypeValue1.Schema, mediaTypeValue2.Schema); !diff.empty() {
+	if diff := getSchemaDiff(config, mediaTypeValue1.Schema, mediaTypeValue2.Schema); !diff.empty() {
 		result.SchemaDiff = &diff
 	}
 
-	result.ExampleDiff = getValueDiff(mediaTypeValue1.Example, mediaTypeValue1.Example)
+	if config.Examples {
+		result.ExampleDiff = getValueDiff(mediaTypeValue1.Example, mediaTypeValue1.Example)
+	}
 
-	if diff := getEncodingsDiff(mediaTypeValue1.Encoding, mediaTypeValue2.Encoding); !diff.empty() {
+	if diff := getEncodingsDiff(config, mediaTypeValue1.Encoding, mediaTypeValue2.Encoding); !diff.empty() {
 		result.EncodingsDiff = diff
 	}
 

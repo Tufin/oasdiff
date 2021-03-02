@@ -26,41 +26,4 @@ go build
 ```
 
 ## Embedding into your Go program
-```
-package main
-
-import (
-	"encoding/json"
-	"fmt"
-
-	"github.com/getkin/kin-openapi/openapi3"
-	log "github.com/sirupsen/logrus"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
-)
-
-func main() {
-	swaggerLoader := openapi3.NewSwaggerLoader()
-	swaggerLoader.IsExternalRefsAllowed = true
-
-	loader := load.NewOASLoader(swaggerLoader)
-
-	base, err := loader.From("https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test1.yaml")
-	if err != nil {
-		return
-	}
-
-	revision, err := loader.From("https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test2.yaml")
-	if err != nil {
-		return
-	}
-
-	bytes, err := json.MarshalIndent(diff.Get(base, revision, "", ""), "", " ")
-	if err != nil {
-		log.Errorf("failed to marshal result with '%v'", err)
-		return
-	}
-
-	fmt.Printf("%s\n", bytes)
-}
-```
+See main.go

@@ -6,18 +6,19 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	log "github.com/sirupsen/logrus"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
 
 var base, revision, prefix, filter string
+var examples bool
 
 func init() {
 	flag.StringVar(&base, "base", "", "original OpenAPI spec")
 	flag.StringVar(&revision, "revision", "", "revised OpenAPI spec")
 	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision")
 	flag.StringVar(&filter, "filter", "", "regex to filter result paths")
+	flag.BoolVar(&examples, "examples", false, "whether to include examples in the diff")
 }
 
 func main() {
@@ -28,19 +29,27 @@ func main() {
 
 	loader := load.NewOASLoader(swaggerLoader)
 
-	base, err := loader.From(base)
+	s1, err := loader.From(base)
 	if err != nil {
+		fmt.Printf("Failed to load base spec from '%s' with '%v'", base, err)
 		return
 	}
 
-	revision, err := loader.From(revision)
+	s2, err := loader.From(revision)
 	if err != nil {
+		fmt.Printf("Failed to load revision spec from '%s' with '%v'", revision, err)
 		return
 	}
 
-	bytes, err := json.MarshalIndent(diff.Get(base, revision, prefix, filter), "", " ")
+	config := diff.Config{
+		Examples: examples,
+		Filter:   filter,
+		Prefix:   prefix,
+	}
+
+	bytes, err := json.MarshalIndent(diff.Get(&config, s1, s2), "", " ")
 	if err != nil {
-		log.Errorf("failed to marshal result with '%v'", err)
+		fmt.Printf("Failed to marshal result with '%v'", err)
 		return
 	}
 

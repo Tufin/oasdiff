@@ -56,7 +56,7 @@ func (schemaDiff SchemaDiff) empty() bool {
 	return schemaDiff == SchemaDiff{}
 }
 
-func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
+func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 
 	value1, value2, status := getSchemaValues(schema1, schema2)
 
@@ -70,17 +70,21 @@ func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 		result.ExtensionProps = diff
 	}
 
-	result.OneOfDiff = getDiffSchemas(value1.OneOf, value2.OneOf)
-	result.AnyOfDiff = getDiffSchemas(value1.AnyOf, value2.AnyOf)
-	result.AllOfDiff = getDiffSchemas(value1.AllOf, value2.AllOf)
-	result.NotDiff = !getSchemaDiff(value1.Not, value2.Not).empty()
+	result.OneOfDiff = getDiffSchemas(config, value1.OneOf, value2.OneOf)
+	result.AnyOfDiff = getDiffSchemas(config, value1.AnyOf, value2.AnyOf)
+	result.AllOfDiff = getDiffSchemas(config, value1.AllOf, value2.AllOf)
+	result.NotDiff = !getSchemaDiff(config, value1.Not, value2.Not).empty()
 	result.TypeDiff = getValueDiff(value1.Type, value2.Type)
 	result.TitleDiff = getValueDiff(value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
 	result.DescriptionDiff = getValueDiff(value1.Description, value2.Description)
 	result.EnumDiff = getEnumDiff(value1.Enum, value2.Enum)
 	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
-	result.ExampleDiff = getValueDiff(value1.Example, value2.Example)
+
+	if config.Examples {
+		result.ExampleDiff = getValueDiff(value1.Example, value2.Example)
+	}
+
 	// ExternalDocs
 	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(value1.AdditionalPropertiesAllowed, value2.AdditionalPropertiesAllowed)
 	result.UniqueItemsDiff = getValueDiff(value1.UniqueItems, value2.UniqueItems)
@@ -101,14 +105,14 @@ func getSchemaDiff(schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
 	// compiledPattern is derived from pattern -> no need to diff
 	result.MinItems = getValueDiff(value1.MinItems, value2.MinItems)
 	result.MaxItems = getValueDiff(value1.MaxItems, value2.MaxItems)
-	result.Items = !getSchemaDiff(value1.Items, value2.Items).empty()
+	result.Items = !getSchemaDiff(config, value1.Items, value2.Items).empty()
 	result.Required = getStringsDiff(value1.Required, value2.Required)
-	if diff := getSchemasDiff(value1.Properties, value2.Properties); !diff.empty() {
+	if diff := getSchemasDiff(config, value1.Properties, value2.Properties); !diff.empty() {
 		result.PropertiesDiff = diff
 	}
 	result.MinProps = getValueDiff(value1.MinProps, value2.MinProps)
 	result.MaxProps = getValueDiff(value1.MaxProps, value2.MaxProps)
-	result.AdditionalProperties = !getSchemaDiff(value1.AdditionalProperties, value2.AdditionalProperties).empty()
+	result.AdditionalProperties = !getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties).empty()
 	// Discriminator
 
 	return result
@@ -174,15 +178,15 @@ func toSchemaDiff(status schemaStatus) SchemaDiff {
 	return SchemaDiff{}
 }
 
-func getDiffSchemas(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
+func getDiffSchemas(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
 
-	return !schemaRefsContained(schemaRefs1, schemaRefs2) || !schemaRefsContained(schemaRefs2, schemaRefs1)
+	return !schemaRefsContained(config, schemaRefs1, schemaRefs2) || !schemaRefsContained(config, schemaRefs2, schemaRefs1)
 }
 
-func schemaRefsContained(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
+func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
 	for _, schemaRef1 := range schemaRefs1 {
 		if schemaRef1 != nil && schemaRef1.Value != nil {
-			if !findSchema(schemaRef1, schemaRefs2) {
+			if !findSchema(config, schemaRef1, schemaRefs2) {
 				return false
 			}
 		}
@@ -190,14 +194,14 @@ func schemaRefsContained(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
 	return true
 }
 
-func findSchema(schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) bool {
+func findSchema(config *Config, schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) bool {
 	// TODO: optimize with a map
 	for _, schemaRef2 := range schemaRefs2 {
 		if schemaRef2 == nil || schemaRef2.Value == nil {
 			continue
 		}
 
-		if diff := getSchemaDiff(schemaRef1, schemaRef2); diff.empty() {
+		if diff := getSchemaDiff(config, schemaRef1, schemaRef2); diff.empty() {
 			return true
 		}
 	}

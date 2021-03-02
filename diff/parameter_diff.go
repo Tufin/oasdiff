@@ -16,14 +16,15 @@ type ParameterDiff struct {
 	RequiredDiff        *ValueDiff      `json:"required,omitempty"`
 	SchemaDiff          *SchemaDiff     `json:"schema,omitempty"`
 	ExampleDiff         *ValueDiff      `json:"example,omitempty"`
-	ContentDiff         *ContentDiff    `json:"content,omitempty"`
+	// Examples
+	ContentDiff *ContentDiff `json:"content,omitempty"`
 }
 
 func (parameterDiff ParameterDiff) empty() bool {
 	return parameterDiff == ParameterDiff{}
 }
 
-func getParameterDiff(param1, param2 *openapi3.Parameter) ParameterDiff {
+func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) ParameterDiff {
 
 	result := ParameterDiff{}
 
@@ -39,14 +40,15 @@ func getParameterDiff(param1, param2 *openapi3.Parameter) ParameterDiff {
 	result.DeprecatedDiff = getValueDiff(param1.Deprecated, param2.Deprecated)
 	result.RequiredDiff = getValueDiff(param1.Required, param2.Required)
 
-	if schemaDiff := getSchemaDiff(param1.Schema, param2.Schema); !schemaDiff.empty() {
+	if schemaDiff := getSchemaDiff(config, param1.Schema, param2.Schema); !schemaDiff.empty() {
 		result.SchemaDiff = &schemaDiff
 	}
 
-	result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
-	// Examples
+	if config.Examples {
+		result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
+	}
 
-	if contentDiff := getContentDiff(param1.Content, param2.Content); !contentDiff.empty() {
+	if contentDiff := getContentDiff(config, param1.Content, param2.Content); !contentDiff.empty() {
 		result.ContentDiff = &contentDiff
 	}
 

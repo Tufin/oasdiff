@@ -29,7 +29,7 @@ func (methodDiff *MethodDiff) empty() bool {
 	return *methodDiff == MethodDiff{}
 }
 
-func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
+func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 
 	result := newMethodDiff()
 
@@ -42,19 +42,19 @@ func getMethodDiff(pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
 	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)
 
-	if diff := getParametersDiff(pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
+	if diff := getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
 		result.ParametersDiff = diff
 	}
 
-	if diff := getRequestBodyDiff(pathItem1.RequestBody, pathItem2.RequestBody); !diff.empty() {
+	if diff := getRequestBodyDiff(config, pathItem1.RequestBody, pathItem2.RequestBody); !diff.empty() {
 		result.RequestBodyDiff = diff
 	}
 
-	if diff := getResponsesDiff(pathItem1.Responses, pathItem2.Responses); !diff.empty() {
+	if diff := getResponsesDiff(config, pathItem1.Responses, pathItem2.Responses); !diff.empty() {
 		result.ResponsesDiff = diff
 	}
 
-	if diff := getCallbacksDiff(pathItem1.Callbacks, pathItem2.Callbacks); !diff.empty() {
+	if diff := getCallbacksDiff(config, pathItem1.Callbacks, pathItem2.Callbacks); !diff.empty() {
 		result.CallbacksDiff = diff
 	}
 

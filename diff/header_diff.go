@@ -18,7 +18,7 @@ func (headerDiff HeaderDiff) empty() bool {
 	return headerDiff == HeaderDiff{}
 }
 
-func diffHeaderValues(header1, header2 *openapi3.Header) HeaderDiff {
+func diffHeaderValues(config *Config, header1, header2 *openapi3.Header) HeaderDiff {
 	result := HeaderDiff{}
 
 	if diff := getExtensionsDiff(header1.ExtensionProps, header2.ExtensionProps); !diff.empty() {
@@ -29,13 +29,15 @@ func diffHeaderValues(header1, header2 *openapi3.Header) HeaderDiff {
 	result.DeprecatedDiff = getValueDiff(header1.Deprecated, header2.Deprecated)
 	result.RequiredDiff = getValueDiff(header1.Required, header2.Required)
 
-	if schemaDiff := getSchemaDiff(header1.Schema, header2.Schema); !schemaDiff.empty() {
+	if schemaDiff := getSchemaDiff(config, header1.Schema, header2.Schema); !schemaDiff.empty() {
 		result.SchemaDiff = &schemaDiff
 	}
 
-	result.ExampleDiff = getValueDiff(header1.Example, header2.Example)
+	if config.Examples {
+		result.ExampleDiff = getValueDiff(header1.Example, header2.Example)
+	}
 
-	if contentDiff := getContentDiff(header1.Content, header2.Content); !contentDiff.empty() {
+	if contentDiff := getContentDiff(config, header1.Content, header2.Content); !contentDiff.empty() {
 		result.ContentDiff = &contentDiff
 	}
 

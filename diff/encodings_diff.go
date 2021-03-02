@@ -26,13 +26,13 @@ func newEncodingsDiff() *EncodingsDiff {
 	}
 }
 
-func getEncodingsDiff(encodings1, encodings2 map[string]*openapi3.Encoding) *EncodingsDiff {
+func getEncodingsDiff(config *Config, encodings1, encodings2 map[string]*openapi3.Encoding) *EncodingsDiff {
 
 	result := newEncodingsDiff()
 
 	for name1, encoding1 := range encodings1 {
 		if encoding2, ok := encodings2[name1]; ok {
-			if diff := getEncodingDiff(encoding1, encoding2); !diff.empty() {
+			if diff := getEncodingDiff(config, encoding1, encoding2); !diff.empty() {
 				result.Modified[name1] = diff
 			}
 		} else {

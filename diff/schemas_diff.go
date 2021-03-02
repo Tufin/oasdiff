@@ -32,7 +32,7 @@ type schemaRefPair struct {
 
 type schemaRefPairs map[string]*schemaRefPair
 
-func getSchemasDiff(schemas1, schemas2 openapi3.Schemas) *SchemasDiff {
+func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) *SchemasDiff {
 
 	result := newSchemasDiff()
 
@@ -47,7 +47,7 @@ func getSchemasDiff(schemas1, schemas2 openapi3.Schemas) *SchemasDiff {
 	}
 
 	for schema, schemaRefPair := range otherSchemas {
-		result.addModifiedSchema(schema, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
+		result.addModifiedSchema(config, schema, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
 	}
 
 	return result
@@ -90,8 +90,8 @@ func (schemasDiff *SchemasDiff) addDeletedSchema(schema string) {
 	schemasDiff.Deleted = append(schemasDiff.Deleted, schema)
 }
 
-func (schemasDiff *SchemasDiff) addModifiedSchema(schema1 string, schemaRef1, schemaRef2 *openapi3.SchemaRef) {
-	schemasDiff.Modified.addSchemaDiff(schema1, schemaRef1, schemaRef2)
+func (schemasDiff *SchemasDiff) addModifiedSchema(config *Config, schema1 string, schemaRef1, schemaRef2 *openapi3.SchemaRef) {
+	schemasDiff.Modified.addSchemaDiff(config, schema1, schemaRef1, schemaRef2)
 }
 
 func (schemasDiff *SchemasDiff) getSummary() *SummaryDetails {

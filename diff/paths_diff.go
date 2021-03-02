@@ -28,7 +28,7 @@ func newPathsDiff() *PathsDiff {
 	}
 }
 
-func getPathsDiff(paths1, paths2 openapi3.Paths, prefix string) *PathsDiff {
+func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths, prefix string) *PathsDiff {
 
 	result := newPathsDiff()
 
@@ -43,7 +43,7 @@ func getPathsDiff(paths1, paths2 openapi3.Paths, prefix string) *PathsDiff {
 	}
 
 	for endpoint, pathItemPair := range otherEndpoints {
-		result.addModifiedPath(endpoint, pathItemPair.PathItem1, pathItemPair.PathItem2)
+		result.addModifiedPath(config, endpoint, pathItemPair.PathItem1, pathItemPair.PathItem2)
 	}
 
 	return result
@@ -65,8 +65,8 @@ func (pathsDiff *PathsDiff) addDeletedPath(path string) {
 	pathsDiff.Deleted = append(pathsDiff.Deleted, path)
 }
 
-func (pathsDiff *PathsDiff) addModifiedPath(path1 string, pathItem1, pathItem2 *openapi3.PathItem) {
-	pathsDiff.Modified.addPathDiff(path1, pathItem1, pathItem2)
+func (pathsDiff *PathsDiff) addModifiedPath(config *Config, path1 string, pathItem1, pathItem2 *openapi3.PathItem) {
+	pathsDiff.Modified.addPathDiff(config, path1, pathItem1, pathItem2)
 }
 
 func (pathsDiff PathsDiff) filterByRegex(filter string) *PathsDiff {

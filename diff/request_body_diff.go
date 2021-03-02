@@ -16,7 +16,7 @@ func newRequestBodyDiff() *RequestBodyDiff {
 	return &RequestBodyDiff{}
 }
 
-func getRequestBodyDiff(requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) *RequestBodyDiff {
+func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) *RequestBodyDiff {
 	result := newRequestBodyDiff()
 
 	if requestBodyRef1 == nil || requestBodyRef1.Value == nil {
@@ -29,7 +29,7 @@ func getRequestBodyDiff(requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRe
 
 	result.DescriptionDiff = getValueDiff(requestBody1.Description, requestBody2.Description)
 
-	if contentDiff := getContentDiff(requestBody1.Content, requestBody2.Content); !contentDiff.empty() {
+	if contentDiff := getContentDiff(config, requestBody1.Content, requestBody2.Content); !contentDiff.empty() {
 		result.ContentDiff = &contentDiff
 	}
 

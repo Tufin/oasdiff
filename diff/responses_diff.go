@@ -28,14 +28,14 @@ func newResponsesDiff() *ResponsesDiff {
 	}
 }
 
-func getResponsesDiff(responses1, responses2 openapi3.Responses) *ResponsesDiff {
+func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses) *ResponsesDiff {
 
 	result := newResponsesDiff()
 
 	for responseValue1, responseRef1 := range responses1 {
 		if responseRef1 != nil && responseRef1.Value != nil {
 			if responseValue2, ok := responses2[responseValue1]; ok {
-				if diff := diffResponseValues(responseRef1.Value, responseValue2.Value); !diff.empty() {
+				if diff := diffResponseValues(config, responseRef1.Value, responseValue2.Value); !diff.empty() {
 					result.Modified[responseValue1] = diff
 				}
 			} else {
