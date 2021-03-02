@@ -240,12 +240,16 @@ func TestResponseDeleted(t *testing.T) {
 }
 
 func TestResponseDescriptionModified(t *testing.T) {
+	config := diff.Config{
+		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},
+	}
+
 	require.Equal(t,
 		&diff.ValueDiff{
 			From: "Tufin",
 			To:   "Tufin1",
 		},
-		diff.Get(diff.NewConfig(), l(t, 3), l(t, 1)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
+		diff.Get(&config, l(t, 3), l(t, 1)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestResponseHeadersModified(t *testing.T) {
@@ -270,8 +274,12 @@ func TestServerDeleted(t *testing.T) {
 }
 
 func TestServerModified(t *testing.T) {
+	config := diff.Config{
+		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},
+	}
+
 	require.Contains(t,
-		diff.Get(diff.NewConfig(), l(t, 5), l(t, 3)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Modified,
+		diff.Get(&config, l(t, 5), l(t, 3)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Modified,
 		"https://www.tufin.io/securecloud")
 }
 
