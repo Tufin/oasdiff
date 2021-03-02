@@ -37,7 +37,7 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 	// Info
-	result.setPathsDiff(getPathsDiff(config, s1.Paths, s2.Paths, config.Prefix))
+	result.setPathsDiff(getPathsDiff(config, s1.Paths, s2.Paths))
 	// Security
 	result.setServersDiff(getServersDiff(config, &s1.Servers, &s2.Servers))
 	result.setTagsDiff(getTagsDiff(s1.Tags, s2.Tags))

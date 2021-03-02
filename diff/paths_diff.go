@@ -28,11 +28,11 @@ func newPathsDiff() *PathsDiff {
 	}
 }
 
-func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths, prefix string) *PathsDiff {
+func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) *PathsDiff {
 
 	result := newPathsDiff()
 
-	addedEndpoints, deletedEndpoints, otherEndpoints := getEndpointsDiff(paths1, paths2, prefix)
+	addedEndpoints, deletedEndpoints, otherEndpoints := getEndpointsDiff(paths1, paths2, config.Prefix)
 
 	for endpoint := range addedEndpoints {
 		result.addAddedPath(endpoint)

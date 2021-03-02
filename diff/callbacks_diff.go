@@ -55,8 +55,7 @@ func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks)
 }
 
 func diffCallbackValues(config *Config, callback1, callback2 *openapi3.Callback) *PathsDiff {
-	// TODO: check if we need to pass prefix here
-	return getPathsDiff(config, openapi3.Paths(*callback1), openapi3.Paths(*callback2), "")
+	return getPathsDiff(config, openapi3.Paths(*callback1), openapi3.Paths(*callback2))
 }
 
 func (callbacksDiff *CallbacksDiff) getSummary() *SummaryDetails {
