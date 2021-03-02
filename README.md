@@ -26,4 +26,8 @@ go build
 ```
 
 ## Embedding into your Go program
-See main.go
+See [main.go](main.go)
+
+### Note
+oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
+You can resolve refs using [this function](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn) from the openapi3 package.
