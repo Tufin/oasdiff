@@ -1,7 +1,7 @@
-[![codecov](https://codecov.io/gh/Tufin/oasdiff/branch/master/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/Tufin/oasdiff)
-[![CircleCI](https://circleci.com/gh/Tufin/oasdiff.svg?style=svg)](https://circleci.com/gh/Tufin/oasdiff)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Tufin/oasdiff)](https://goreportcard.com/report/github.com/Tufin/oasdiff)
-[![GoDoc](https://godoc.org/github.com/Tufin/oasdiff?status.svg)](https://godoc.org/github.com/Tufin/oasdiff)
+[![codecov](https://codecov.io/gh/tufin/oasdiff/branch/master/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/tufin/oasdiff)
+[![CircleCI](https://circleci.com/gh/Tufin/oasdiff.svg?style=svg)](https://circleci.com/gh/tufin/oasdiff)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tufin/oasdiff)](https://goreportcard.com/report/github.com/tufin/oasdiff)
+[![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
 
 # OpenAPI Spec Diff
 A diff tool for OpenAPI Spec 3 written in [Go](https://golang.org).
