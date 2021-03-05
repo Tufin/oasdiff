@@ -10,9 +10,9 @@ type Diff struct {
 
 /*
 Get calculates the diff between two OpenAPI specifications.
-Prefix is an optional path prefix that exists in s1 paths but not in s2.
-If filter isn't empty, the diff will only include paths that match this regex.
-The diff is "deep" in the sense that it compares the contents of properties recursivly.
+References should be resolved before calling this function.
+This is normally done automatically by loaders.
+See https://swagger.io/docs/specification/using-ref/ and https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn.
 */
 func Get(config *Config, s1, s2 *openapi3.Swagger) Diff {
 	diff := getDiff(config, s1, s2)
