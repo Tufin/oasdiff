@@ -4,7 +4,7 @@
 [![GoDoc](https://godoc.org/github.com/Tufin/oasdiff?status.svg)](https://godoc.org/github.com/Tufin/oasdiff)
 
 # OpenAPI Spec Diff
-A diff tool for OpenAPI Spec 3.  
+A diff tool for OpenAPI Spec 3 written in [Go](https://golang.org).
 
 ## Unique features vs. other OAS3 diff tools
 - go module
