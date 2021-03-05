@@ -9,7 +9,7 @@ type ValueDiff struct {
 }
 
 func getValueDiff(value1, value2 interface{}) *ValueDiff {
-	
+
 	if reflect.DeepEqual(value1, value2) {
 		return nil
 	}

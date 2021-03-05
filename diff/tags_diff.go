@@ -52,8 +52,8 @@ func getTagsDiff(tags1, tags2 openapi3.Tags) *TagsDiff {
 
 func (tagsDiff *TagsDiff) getSummary() *SummaryDetails {
 	return &SummaryDetails{
-		Added:   len(tagsDiff.Added),
-		Deleted: len(tagsDiff.Deleted),
+		Added:    len(tagsDiff.Added),
+		Deleted:  len(tagsDiff.Deleted),
 		Modified: len(tagsDiff.Modified),
 	}
 }
