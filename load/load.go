@@ -7,13 +7,15 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
+// Loader interface is used to make openapi3 loaders testable
 type Loader interface {
 	LoadSwaggerFromURI(*url.URL) (*openapi3.Swagger, error)
 	LoadSwaggerFromFile(string) (*openapi3.Swagger, error)
 }
 
+// OASLoader implements Loader interface
 type OASLoader struct {
-	Loader Loader
+	Loader
 }
 
 // NewOASLoader returns a loader object that can be used to load OpenAPI specs
@@ -28,12 +30,16 @@ func (oasLoader *OASLoader) From(path string) (*openapi3.Swagger, error) {
 
 	uri, err := url.ParseRequestURI(path)
 	if err == nil {
-		oas, err := oasLoader.Loader.LoadSwaggerFromURI(uri)
-		if err != nil {
-			return nil, err
-		}
-		return oas, nil
+		return oasLoader.loadFromURI(uri)
 	}
 
-	return oasLoader.Loader.LoadSwaggerFromFile(path)
+	return oasLoader.LoadSwaggerFromFile(path)
+}
+
+func (oasLoader *OASLoader) loadFromURI(uri *url.URL) (*openapi3.Swagger, error) {
+	oas, err := oasLoader.LoadSwaggerFromURI(uri)
+	if err != nil {
+		return nil, err
+	}
+	return oas, nil
 }
