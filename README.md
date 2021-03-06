@@ -29,7 +29,7 @@ go build
 
 ## Embedding into your Go program
 ```
-json.MarshalIndent(diff.Get(&diff.Config{}, spec1, spec2), "", " ")
+diff.Get(&diff.Config{}, spec1, spec2)
 ```
 See full example: [main.go](main.go)
 
