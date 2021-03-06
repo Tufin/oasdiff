@@ -38,7 +38,3 @@ See full example: [main.go](main.go)
 You can resolve refs using [this function](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn) from the openapi3 package.
 
 2. oasdiff ignores changes to [Examples](https://swagger.io/specification/#example-object) and [Extensions](https://swagger.io/specification/#specification-extensions) by default. You can change this behavior through [configuration](diff/config.go).
-
-## Documentation
-https://pkg.go.dev/github.com/tufin/oasdiff/diff
-
