@@ -27,15 +27,13 @@ func main() {
 	swaggerLoader := openapi3.NewSwaggerLoader()
 	swaggerLoader.IsExternalRefsAllowed = true
 
-	loader := load.NewOASLoader(swaggerLoader)
-
-	s1, err := loader.From(base)
+	s1, err := load.From(swaggerLoader, base)
 	if err != nil {
 		fmt.Printf("Failed to load base spec from '%s' with '%v'", base, err)
 		return
 	}
 
-	s2, err := loader.From(revision)
+	s2, err := load.From(swaggerLoader, revision)
 	if err != nil {
 		fmt.Printf("Failed to load revision spec from '%s' with '%v'", revision, err)
 		return
