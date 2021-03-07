@@ -19,7 +19,7 @@ func (diff SecuritySchemeDiff) empty() bool {
 	return diff == SecuritySchemeDiff{}
 }
 
-func gtSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecurityScheme) SecuritySchemeDiff {
+func getSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecurityScheme) SecuritySchemeDiff {
 	result := SecuritySchemeDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, scheme1.ExtensionProps, scheme2.ExtensionProps)
