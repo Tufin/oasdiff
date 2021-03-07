@@ -11,7 +11,7 @@ type ContentDiff struct {
 	MediaTypeAdded   bool            `json:"mediaTypeAdded,omitempty"`
 	MediaTypeDeleted bool            `json:"mediaTypeDeleted,omitempty"`
 	MediaTypeDiff    bool            `json:"mediaType,omitempty"`
-	ExtensionProps   *ExtensionsDiff `json:"extensions,omitempty"`
+	ExtensionsDiff   *ExtensionsDiff `json:"extensions,omitempty"`
 	SchemaDiff       *SchemaDiff     `json:"schema,omitempty"`
 	ExampleDiff      *ValueDiff      `json:"example,omitempty"`
 	// Examples
@@ -60,7 +60,7 @@ func getContentDiff(config *Config, content1, content2 openapi3.Content) Content
 	}
 
 	if diff := getExtensionsDiff(config, mediaTypeValue1.ExtensionProps, mediaTypeValue2.ExtensionProps); !diff.empty() {
-		result.ExtensionProps = diff
+		result.ExtensionsDiff = diff
 	}
 
 	if diff := getSchemaDiff(config, mediaTypeValue1.Schema, mediaTypeValue2.Schema); !diff.empty() {

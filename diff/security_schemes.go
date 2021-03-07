@@ -35,7 +35,7 @@ func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 o
 	for value1, ref1 := range securitySchemes1 {
 		if ref1 != nil && ref1.Value != nil {
 			if value2, ok := securitySchemes2[value1]; ok {
-				if diff := diffSecuritySchemes(config, ref1.Value, value2.Value); !diff.empty() {
+				if diff := gtSecuritySchemeDiff(config, ref1.Value, value2.Value); !diff.empty() {
 					result.Modified[value1] = diff
 				}
 			} else {

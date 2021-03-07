@@ -6,7 +6,7 @@ import (
 
 // ServerDiff is a diff between server objects: https://swagger.io/specification/#server-object
 type ServerDiff struct {
-	ExtensionProps  *ExtensionsDiff `json:"extensions,omitempty"`
+	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty"`
 	URLDiff         *ValueDiff      `json:"urlType,omitempty"`
 	DescriptionDiff *ValueDiff      `json:"description,omitempty"`
 	// Variables
@@ -20,7 +20,7 @@ func getServerDiff(config *Config, value1, value2 *openapi3.Server) ServerDiff {
 	result := ServerDiff{}
 
 	if diff := getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps); !diff.empty() {
-		result.ExtensionProps = diff
+		result.ExtensionsDiff = diff
 	}
 
 	result.URLDiff = getValueDiff(value1.URL, value2.URL)

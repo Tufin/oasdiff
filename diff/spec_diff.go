@@ -4,7 +4,7 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#specification
 type SpecDiff struct {
-	ExtensionProps *ExtensionsDiff `json:"extensions,omitempty"`
+	ExtensionsDiff *ExtensionsDiff `json:"extensions,omitempty"`
 	OpenAPIDiff    *ValueDiff      `json:"openAPI,omitempty"`
 	PathsDiff      *PathsDiff      `json:"paths,omitempty"`
 	ServersDiff    *ServersDiff    `json:"servers,omitempty"`
@@ -33,7 +33,7 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 	result := newSpecDiff()
 
 	if diff := getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps); !diff.empty() {
-		result.ExtensionProps = diff
+		result.ExtensionsDiff = diff
 	}
 
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)

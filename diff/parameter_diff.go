@@ -6,7 +6,7 @@ import (
 
 // ParameterDiff is a diff between parameter objects: https://swagger.io/specification/#parameter-object
 type ParameterDiff struct {
-	ExtensionProps      *ExtensionsDiff `json:"extensions,omitempty"`
+	ExtensionsDiff      *ExtensionsDiff `json:"extensions,omitempty"`
 	DescriptionDiff     *ValueDiff      `json:"description,omitempty"`
 	StyleDiff           *ValueDiff      `json:"style,omitempty"`
 	ExplodeDiff         *ValueDiff      `json:"explode,omitempty"`
@@ -29,7 +29,7 @@ func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) Parame
 	result := ParameterDiff{}
 
 	if diff := getExtensionsDiff(config, param1.ExtensionProps, param2.ExtensionProps); !diff.empty() {
-		result.ExtensionProps = diff
+		result.ExtensionsDiff = diff
 	}
 
 	result.DescriptionDiff = getValueDiff(param1.Description, param2.Description)

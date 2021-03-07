@@ -10,7 +10,7 @@ Boolean fields specify whether the property in question was changed between the 
 Pointer fields specify not only the presence of a change but also the old and new values of the property.
 */
 type SchemaDiff struct {
-	ExtensionProps                  *ExtensionsDiff `json:"extensions,omitempty"`
+	ExtensionsDiff                  *ExtensionsDiff `json:"extensions,omitempty"`
 	SchemaAdded                     bool            `json:"schemaAdded,omitempty"`
 	SchemaDeleted                   bool            `json:"schemaDeleted,omitempty"`
 	ValueAdded                      bool            `json:"valueAdded,omitempty"`
@@ -67,7 +67,7 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) SchemaD
 	result := SchemaDiff{}
 
 	if diff := getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps); !diff.empty() {
-		result.ExtensionProps = diff
+		result.ExtensionsDiff = diff
 	}
 
 	result.OneOfDiff = getDiffSchemas(config, value1.OneOf, value2.OneOf)

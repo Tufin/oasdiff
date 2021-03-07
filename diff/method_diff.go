@@ -6,7 +6,7 @@ import (
 
 // MethodDiff is the diff between two operation objects: https://swagger.io/specification/#operation-object
 type MethodDiff struct {
-	ExtensionProps  *ExtensionsDiff  `json:"extensions,omitempty"`
+	ExtensionsDiff  *ExtensionsDiff  `json:"extensions,omitempty"`
 	TagsDiff        *StringsDiff     `json:"tags,omitempty"`
 	SummaryDiff     *ValueDiff       `json:"summary,omitempty"`
 	DescriptionDiff *ValueDiff       `json:"description,omitempty"`
@@ -34,7 +34,7 @@ func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) *Me
 	result := newMethodDiff()
 
 	if diff := getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps); !diff.empty() {
-		result.ExtensionProps = diff
+		result.ExtensionsDiff = diff
 	}
 
 	result.TagsDiff = getStringsDiff(pathItem1.Tags, pathItem2.Tags)

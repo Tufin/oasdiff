@@ -45,7 +45,7 @@ func TestAddedExtension(t *testing.T) {
 	}
 
 	require.Contains(t,
-		diff.Get(&config, l(t, 3), l(t, 1)).SpecDiff.ExtensionProps.Added,
+		diff.Get(&config, l(t, 3), l(t, 1)).SpecDiff.ExtensionsDiff.Added,
 		"x-extension-test")
 }
 
@@ -55,7 +55,7 @@ func TestDeletedExtension(t *testing.T) {
 	}
 
 	require.Contains(t,
-		diff.Get(&config, l(t, 1), l(t, 3)).SpecDiff.ExtensionProps.Deleted,
+		diff.Get(&config, l(t, 1), l(t, 3)).SpecDiff.ExtensionsDiff.Deleted,
 		"x-extension-test")
 }
 
@@ -64,12 +64,12 @@ func TestModifiedExtension(t *testing.T) {
 		IncludeExtensions: diff.StringSet{"x-extension-test2": struct{}{}},
 	}
 	require.NotNil(t,
-		diff.Get(&config, l(t, 1), l(t, 3)).SpecDiff.ExtensionProps.Modified["x-extension-test2"])
+		diff.Get(&config, l(t, 1), l(t, 3)).SpecDiff.ExtensionsDiff.Modified["x-extension-test2"])
 }
 
 func TestExcludedExtension(t *testing.T) {
 	require.Nil(t,
-		diff.Get(diff.NewConfig(), l(t, 1), l(t, 3)).SpecDiff.ExtensionProps)
+		diff.Get(diff.NewConfig(), l(t, 1), l(t, 3)).SpecDiff.ExtensionsDiff)
 }
 
 func TestDiff_AddedGlobalTag(t *testing.T) {
