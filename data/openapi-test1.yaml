@@ -237,3 +237,9 @@ components:
                   type: integer
                 dimensions:
                   type: object
+  securitySchemes:
+    bearerAuth:      
+      x-extension-test: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 

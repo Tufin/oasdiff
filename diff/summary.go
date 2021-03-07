@@ -30,15 +30,16 @@ type ComponentName string
 
 // Components in the summary map
 const (
-	PathsComponent         ComponentName = "paths"
-	ServersComponent       ComponentName = "servers"
-	TagsComponent          ComponentName = "tags"
-	SchemasComponent       ComponentName = "schemas"
-	ParametersComponent    ComponentName = "parameters"
-	HeadersComponent       ComponentName = "headers"
-	RequestBodiesComponent ComponentName = "requestBodies"
-	ResponsesComponent     ComponentName = "responses"
-	CallbacksComponent     ComponentName = "callbacks"
+	PathsComponent           ComponentName = "paths"
+	ServersComponent         ComponentName = "servers"
+	TagsComponent            ComponentName = "tags"
+	SchemasComponent         ComponentName = "schemas"
+	ParametersComponent      ComponentName = "parameters"
+	HeadersComponent         ComponentName = "headers"
+	RequestBodiesComponent   ComponentName = "requestBodies"
+	ResponsesComponent       ComponentName = "responses"
+	SecuritySchemesComponent ComponentName = "securitySchemes"
+	CallbacksComponent       ComponentName = "callbacks"
 )
 
 // GetSummaryDetails returns the summary for a specific component

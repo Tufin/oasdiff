@@ -11,12 +11,13 @@ type SpecDiff struct {
 	TagsDiff       *TagsDiff       `json:"tags,omitempty"`
 
 	// Components
-	SchemasDiff       *SchemasDiff       `json:"schemas,omitempty"`
-	ParametersDiff    *ParametersDiff    `json:"parameters,omitempty"`
-	HeadersDiff       *HeadersDiff       `json:"headers,omitempty"`
-	RequestBodiesDiff *RequestBodiesDiff `json:"requestBodies,omitempty"`
-	ResponsesDiff     *ResponsesDiff     `json:"responses,omitempty"`
-	CallbacksDiff     *CallbacksDiff     `json:"callbacks,omitempty"`
+	SchemasDiff         *SchemasDiff         `json:"schemas,omitempty"`
+	ParametersDiff      *ParametersDiff      `json:"parameters,omitempty"`
+	HeadersDiff         *HeadersDiff         `json:"headers,omitempty"`
+	RequestBodiesDiff   *RequestBodiesDiff   `json:"requestBodies,omitempty"`
+	ResponsesDiff       *ResponsesDiff       `json:"responses,omitempty"`
+	SecuritySchemesDiff *SecuritySchemesDiff `json:"securitySchemes,omitempty"`
+	CallbacksDiff       *CallbacksDiff       `json:"callbacks,omitempty"`
 }
 
 func newSpecDiff() *SpecDiff {
@@ -49,7 +50,7 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 	result.setHeadersDiff(getHeadersDiff(config, s1.Components.Headers, s2.Components.Headers))
 	result.setRequestBodiesDiff(getRequestBodiesDiff(config, s1.Components.RequestBodies, s2.Components.RequestBodies))
 	result.setResponsesDiff(getResponsesDiff(config, s1.Components.Responses, s2.Components.Responses))
-	// SecuritySchemes
+	result.setSecuritySchemesDiff(getSecuritySchemesDiff(config, s1.Components.SecuritySchemes, s2.Components.SecuritySchemes))
 	// Examples
 	// Links
 	result.setCallbacksDiff(getCallbacksDiff(config, s1.Components.Callbacks, s2.Components.Callbacks))
@@ -121,6 +122,14 @@ func (specDiff *SpecDiff) setResponsesDiff(diff *ResponsesDiff) {
 	}
 }
 
+func (specDiff *SpecDiff) setSecuritySchemesDiff(diff *SecuritySchemesDiff) {
+	specDiff.ResponsesDiff = nil
+
+	if !diff.empty() {
+		specDiff.SecuritySchemesDiff = diff
+	}
+}
+
 func (specDiff *SpecDiff) setCallbacksDiff(diff *CallbacksDiff) {
 	specDiff.CallbacksDiff = nil
 
@@ -142,6 +151,7 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 	summary.add(specDiff.HeadersDiff, HeadersComponent)
 	summary.add(specDiff.RequestBodiesDiff, RequestBodiesComponent)
 	summary.add(specDiff.ResponsesDiff, ResponsesComponent)
+	summary.add(specDiff.SecuritySchemesDiff, SecuritySchemesComponent)
 	summary.add(specDiff.CallbacksDiff, CallbacksComponent)
 
 	return summary

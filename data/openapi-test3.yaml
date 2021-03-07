@@ -217,3 +217,8 @@ components:
                   type: integer
                 dimensions:
                   type: object
+  securitySchemes:
+    bearerAuth:       
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
