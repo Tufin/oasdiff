@@ -10,7 +10,7 @@ type OAuthFlowDiff struct {
 	AuthorizationURLDiff *ValueDiff      `json:"authorizationURL,omitempty"`
 	TokenURLDiff         *ValueDiff      `json:"tokenURL,omitempty"`
 	RefreshURLDiff       *ValueDiff      `json:"refresh,omitempty"`
-	// ScopesDiff           *ValueDiff      `json:"authorizationURL,omitempty"`
+	ScopesDiff           *StringMapDiff  `json:"scopes,omitempty"`
 }
 
 func (diff OAuthFlowDiff) empty() bool {
@@ -39,6 +39,7 @@ func getOAuthFlowDiff(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFl
 	result.AuthorizationURLDiff = getValueDiff(flow1.AuthorizationURL, flow2.AuthorizationURL)
 	result.TokenURLDiff = getValueDiff(flow1.TokenURL, flow2.TokenURL)
 	result.RefreshURLDiff = getValueDiff(flow1.RefreshURL, flow2.RefreshURL)
+	result.ScopesDiff = getStringMapDiff(flow1.Scopes, flow2.Scopes)
 
 	if result.empty() {
 		return nil

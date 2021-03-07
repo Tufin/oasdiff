@@ -226,5 +226,6 @@ components:
           tokenUrl: https://example.org/token
           scopes:
             accountRead: Allows account data to be read
-            accountWrite: Allows account data to be written
+            accountWrite: Allows accounts data to be written
+            admin: read
         
