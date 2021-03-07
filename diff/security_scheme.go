@@ -32,7 +32,7 @@ func gtSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecuritySch
 	result.InDiff = getValueDiff(scheme1.In, scheme2.In)
 	result.SchemeDiff = getValueDiff(scheme1.Scheme, scheme2.Scheme)
 	result.BearerFormatDiff = getValueDiff(scheme1.BearerFormat, scheme2.BearerFormat)
-	// result.OAuthFlowsDiff = getOAuthFlowsDiff(config, scheme1.Flows, scheme2.Flows)
+	result.OAuthFlowsDiff = getOAuthFlowsDiff(config, scheme1.Flows, scheme2.Flows)
 	result.OpenIDConnectURLDiff = getValueDiff(scheme1.OpenIdConnectUrl, scheme2.OpenIdConnectUrl)
 
 	return result
