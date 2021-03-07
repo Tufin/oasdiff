@@ -228,4 +228,5 @@ components:
             accountRead: Allows account data to be read
             accountWrite: Allows accounts data to be written
             admin: read
-        
+        clientCredentials:
+          tokenUrl: tufin.io/token        

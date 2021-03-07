@@ -17,8 +17,7 @@ func (diff OAuthFlowsDiff) empty() bool {
 
 func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
 
-	if flows1 == nil || flows2 == nil {
-		// invalid property OAuth - must have flows
+	if flows1 == nil && flows2 == nil {
 		return nil
 	}
 

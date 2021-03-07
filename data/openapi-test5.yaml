@@ -159,10 +159,4 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT 
-    OAuth:
-      type: oauth2
-      flows:
-        clientCredentials:
-          tokenUrl: tufin.io/token
 
-        
