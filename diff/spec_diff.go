@@ -123,7 +123,7 @@ func (specDiff *SpecDiff) setResponsesDiff(diff *ResponsesDiff) {
 }
 
 func (specDiff *SpecDiff) setSecuritySchemesDiff(diff *SecuritySchemesDiff) {
-	specDiff.ResponsesDiff = nil
+	specDiff.SecuritySchemesDiff = nil
 
 	if !diff.empty() {
 		specDiff.SecuritySchemesDiff = diff

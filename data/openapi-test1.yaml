@@ -243,3 +243,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT 
+  responses:
+    OK:
+      description: 200 OK
