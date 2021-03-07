@@ -16,6 +16,12 @@ func (diff OAuthFlowsDiff) empty() bool {
 }
 
 func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
+
+	if flows1 == nil || flows2 == nil {
+		// TODO: handle added/deleted
+		return nil
+	}
+
 	result := OAuthFlowsDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, flows1.ExtensionProps, flows2.ExtensionProps)
