@@ -218,10 +218,6 @@ components:
                 dimensions:
                   type: object
   securitySchemes:
-    bearerAuth:       
-      type: http
-      scheme: bearer
-      bearerFormat: JWT 
     OAuth:
       type: oauth2
       flows:
@@ -231,3 +227,4 @@ components:
           scopes:
             accountRead: Allows account data to be read
             accountWrite: Allows account data to be written
+        

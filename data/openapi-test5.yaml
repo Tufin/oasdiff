@@ -154,3 +154,14 @@ components:
         application/json:
           schema:
             type: string
+  securitySchemes:
+    bearerAuth:      
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+    OAuth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: tufin.io/token
+        

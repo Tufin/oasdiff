@@ -239,11 +239,11 @@ components:
                   type: object
   securitySchemes:
     bearerAuth:      
-      x-extension-test: 
       type: http
       scheme: bearer
       bearerFormat: JWT 
     OAuth:
+      x-extension-test: 
       type: oauth2
       flows:
         authorizationCode:
