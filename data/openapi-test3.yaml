@@ -222,3 +222,12 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT 
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.org/auth
+          tokenUrl: https://example.org/token
+          scopes:
+            accountRead: Allows account data to be read
+            accountWrite: Allows account data to be written

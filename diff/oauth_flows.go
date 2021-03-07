@@ -25,12 +25,12 @@ func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAu
 
 	result := OAuthFlowsDiff{}
 
-	if flows1 == nil || flows2 != nil {
+	if flows1 == nil && flows2 != nil {
 		result.Added = true
 		return &result
 	}
 
-	if flows1 != nil || flows2 == nil {
+	if flows1 != nil && flows2 == nil {
 		result.Deleted = true
 		return &result
 	}

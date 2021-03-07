@@ -243,6 +243,15 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT 
+    OAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://tufin.io/auth
+          tokenUrl: https://tufin.io/token
+          scopes:
+            accountRead: Allows account data to be read
+            accountWrite: Allows account data to be written      
   responses:
     OK:
       description: 200 OK
