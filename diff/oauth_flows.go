@@ -4,6 +4,8 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // OAuthFlowsDiff is a diff between oauth flows objects: https://swagger.io/specification/#oauth-flows-object
 type OAuthFlowsDiff struct {
+	Added                 bool            `json:"added,omitempty"`
+	Deleted               bool            `json:"deleted,omitempty"`
 	ExtensionsDiff        *ExtensionsDiff `json:"extensions,omitempty"`
 	ImplicitDiff          *OAuthFlowDiff  `json:"implicit,omitempty"`
 	PasswordDiff          *OAuthFlowDiff  `json:"password,omitempty"`
@@ -17,12 +19,21 @@ func (diff OAuthFlowsDiff) empty() bool {
 
 func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
 
-	if flows1 == nil || flows2 == nil {
-		// TODO: handle added/deleted
+	if flows1 == nil && flows2 == nil {
 		return nil
 	}
 
 	result := OAuthFlowsDiff{}
+
+	if flows1 == nil || flows2 != nil {
+		result.Added = true
+		return &result
+	}
+
+	if flows1 != nil || flows2 == nil {
+		result.Deleted = true
+		return &result
+	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, flows1.ExtensionProps, flows2.ExtensionProps)
 	result.ImplicitDiff = getOAuthFlowDiff(config, flows1.Implicit, flows2.Implicit)
