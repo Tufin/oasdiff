@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#specification
+// SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#schema
 type SpecDiff struct {
 	ExtensionsDiff *ExtensionsDiff `json:"extensions,omitempty"`
 	OpenAPIDiff    *ValueDiff      `json:"openAPI,omitempty"`
@@ -10,14 +10,7 @@ type SpecDiff struct {
 	ServersDiff    *ServersDiff    `json:"servers,omitempty"`
 	TagsDiff       *TagsDiff       `json:"tags,omitempty"`
 
-	// Components
-	SchemasDiff         *SchemasDiff         `json:"schemas,omitempty"`
-	ParametersDiff      *ParametersDiff      `json:"parameters,omitempty"`
-	HeadersDiff         *HeadersDiff         `json:"headers,omitempty"`
-	RequestBodiesDiff   *RequestBodiesDiff   `json:"requestBodies,omitempty"`
-	ResponsesDiff       *ResponsesDiff       `json:"responses,omitempty"`
-	SecuritySchemesDiff *SecuritySchemesDiff `json:"securitySchemes,omitempty"`
-	CallbacksDiff       *CallbacksDiff       `json:"callbacks,omitempty"`
+	ComponentsDiff
 }
 
 func newSpecDiff() *SpecDiff {
@@ -41,16 +34,7 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 	result.setTagsDiff(getTagsDiff(s1.Tags, s2.Tags))
 	// ExternalDocs
 
-	// Components
-	result.setSchemasDiff(getSchemasDiff(config, s1.Components.Schemas, s2.Components.Schemas))
-	result.setParametersDiff(getParametersDiff(config, toParameters(s1.Components.Parameters), toParameters(s2.Components.Parameters)))
-	result.setHeadersDiff(getHeadersDiff(config, s1.Components.Headers, s2.Components.Headers))
-	result.setRequestBodiesDiff(getRequestBodiesDiff(config, s1.Components.RequestBodies, s2.Components.RequestBodies))
-	result.setResponsesDiff(getResponsesDiff(config, s1.Components.Responses, s2.Components.Responses))
-	result.setSecuritySchemesDiff(getSecuritySchemesDiff(config, s1.Components.SecuritySchemes, s2.Components.SecuritySchemes))
-	// Examples
-	// Links
-	result.setCallbacksDiff(getCallbacksDiff(config, s1.Components.Callbacks, s2.Components.Callbacks))
+	result.ComponentsDiff = getComponentsDiff(config, s1.Components, s2.Components)
 
 	return result
 }
@@ -76,62 +60,6 @@ func (specDiff *SpecDiff) setTagsDiff(diff *TagsDiff) {
 
 	if !diff.empty() {
 		specDiff.TagsDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setSchemasDiff(diff *SchemasDiff) {
-	specDiff.SchemasDiff = nil
-
-	if !diff.empty() {
-		specDiff.SchemasDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setParametersDiff(diff *ParametersDiff) {
-	specDiff.ParametersDiff = nil
-
-	if !diff.empty() {
-		specDiff.ParametersDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setHeadersDiff(diff *HeadersDiff) {
-	specDiff.HeadersDiff = nil
-
-	if !diff.empty() {
-		specDiff.HeadersDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setRequestBodiesDiff(diff *RequestBodiesDiff) {
-	specDiff.RequestBodiesDiff = nil
-
-	if !diff.empty() {
-		specDiff.RequestBodiesDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setResponsesDiff(diff *ResponsesDiff) {
-	specDiff.ResponsesDiff = nil
-
-	if !diff.empty() {
-		specDiff.ResponsesDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setSecuritySchemesDiff(diff *SecuritySchemesDiff) {
-	specDiff.SecuritySchemesDiff = nil
-
-	if !diff.empty() {
-		specDiff.SecuritySchemesDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setCallbacksDiff(diff *CallbacksDiff) {
-	specDiff.CallbacksDiff = nil
-
-	if !diff.empty() {
-		specDiff.CallbacksDiff = diff
 	}
 }
 
