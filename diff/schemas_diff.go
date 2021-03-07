@@ -12,6 +12,10 @@ type SchemasDiff struct {
 }
 
 func (schemasDiff *SchemasDiff) empty() bool {
+	if schemasDiff == nil {
+		return true
+	}
+
 	return len(schemasDiff.Added) == 0 &&
 		len(schemasDiff.Deleted) == 0 &&
 		len(schemasDiff.Modified) == 0
@@ -48,6 +52,10 @@ func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) *Schema
 
 	for schema, schemaRefPair := range otherSchemas {
 		result.addModifiedSchema(config, schema, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

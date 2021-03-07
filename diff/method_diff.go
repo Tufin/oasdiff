@@ -26,6 +26,10 @@ func newMethodDiff() *MethodDiff {
 }
 
 func (methodDiff *MethodDiff) empty() bool {
+	if methodDiff == nil {
+		return true
+	}
+
 	return *methodDiff == MethodDiff{}
 }
 
@@ -38,28 +42,12 @@ func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) *Me
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
 	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)
-
-	if diff := getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
-		result.ParametersDiff = diff
-	}
-
-	if diff := getRequestBodyDiff(config, pathItem1.RequestBody, pathItem2.RequestBody); !diff.empty() {
-		result.RequestBodyDiff = diff
-	}
-
-	if diff := getResponsesDiff(config, pathItem1.Responses, pathItem2.Responses); !diff.empty() {
-		result.ResponsesDiff = diff
-	}
-
-	if diff := getCallbacksDiff(config, pathItem1.Callbacks, pathItem2.Callbacks); !diff.empty() {
-		result.CallbacksDiff = diff
-	}
-
+	result.ParametersDiff = getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters)
+	result.RequestBodyDiff = getRequestBodyDiff(config, pathItem1.RequestBody, pathItem2.RequestBody)
+	result.ResponsesDiff = getResponsesDiff(config, pathItem1.Responses, pathItem2.Responses)
+	result.CallbacksDiff = getCallbacksDiff(config, pathItem1.Callbacks, pathItem2.Callbacks)
 	result.DeprecatedDiff = getValueDiff(pathItem1.Deprecated, pathItem2.Deprecated)
-
-	if diff := getServersDiff(config, pathItem1.Servers, pathItem2.Servers); !diff.empty() {
-		result.ServersDiff = diff
-	}
+	result.ServersDiff = getServersDiff(config, pathItem1.Servers, pathItem2.Servers)
 
 	return result
 }

@@ -15,6 +15,10 @@ type PathsDiff struct {
 }
 
 func (pathsDiff *PathsDiff) empty() bool {
+	if pathsDiff == nil {
+		return true
+	}
+
 	return len(pathsDiff.Added) == 0 &&
 		len(pathsDiff.Deleted) == 0 &&
 		len(pathsDiff.Modified) == 0
@@ -44,6 +48,10 @@ func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) *PathsDiff {
 
 	for endpoint, pathItemPair := range otherEndpoints {
 		result.addModifiedPath(config, endpoint, pathItemPair.PathItem1, pathItemPair.PathItem2)
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

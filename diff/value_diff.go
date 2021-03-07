@@ -8,6 +8,10 @@ type ValueDiff struct {
 	To   interface{} `json:"to"`
 }
 
+func (diff *ValueDiff) empty() bool {
+	return diff == nil
+}
+
 func getValueDiff(value1, value2 interface{}) *ValueDiff {
 
 	if reflect.DeepEqual(value1, value2) {

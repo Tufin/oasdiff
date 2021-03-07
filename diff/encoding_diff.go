@@ -21,11 +21,7 @@ func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) Encoding
 	result := EncodingDiff{}
 
 	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
-
-	if headersDiff := getHeadersDiff(config, value1.Headers, value2.Headers); !headersDiff.empty() {
-		result.HeadersDiff = headersDiff
-	}
-
+	result.HeadersDiff = getHeadersDiff(config, value1.Headers, value2.Headers)
 	result.StyleDiff = getValueDiff(value1.Style, value2.Style)
 	result.ExplodeDiff = getBoolRefDiff(value1.Explode, value2.Explode)
 	result.AllowReservedDiff = getValueDiff(value1.AllowReserved, value2.AllowReserved)

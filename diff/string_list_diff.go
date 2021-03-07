@@ -14,6 +14,10 @@ func newStringsDiff() *StringsDiff {
 }
 
 func (stringsDiff *StringsDiff) empty() bool {
+	if stringsDiff == nil {
+		return true
+	}
+
 	return len(stringsDiff.Added) == 0 &&
 		len(stringsDiff.Deleted) == 0
 }

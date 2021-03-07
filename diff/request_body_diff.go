@@ -8,8 +8,11 @@ type RequestBodyDiff struct {
 	ContentDiff     *ContentDiff `json:"content,omitempty"`
 }
 
-func (requestBodyDiff RequestBodyDiff) empty() bool {
-	return requestBodyDiff == RequestBodyDiff{}
+func (requestBodyDiff *RequestBodyDiff) empty() bool {
+	if requestBodyDiff == nil {
+		return true
+	}
+	return *requestBodyDiff == RequestBodyDiff{}
 }
 
 func newRequestBodyDiff() *RequestBodyDiff {
@@ -21,7 +24,7 @@ func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openap
 
 	if requestBodyRef1 == nil || requestBodyRef1.Value == nil {
 		// TODO: handle added, deleted etc.
-		return result
+		return nil
 	}
 
 	requestBody1 := requestBodyRef1.Value
@@ -31,6 +34,10 @@ func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openap
 
 	if contentDiff := getContentDiff(config, requestBody1.Content, requestBody2.Content); !contentDiff.empty() {
 		result.ContentDiff = &contentDiff
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

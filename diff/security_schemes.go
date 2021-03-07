@@ -12,6 +12,10 @@ type SecuritySchemesDiff struct {
 }
 
 func (diff *SecuritySchemesDiff) empty() bool {
+	if diff == nil {
+		return true
+	}
+
 	return len(diff.Added) == 0 &&
 		len(diff.Deleted) == 0 &&
 		len(diff.Modified) == 0
@@ -52,8 +56,11 @@ func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 o
 		}
 	}
 
-	return result
+	if result.empty() {
+		return nil
+	}
 
+	return result
 }
 
 func (diff *SecuritySchemesDiff) getSummary() *SummaryDetails {

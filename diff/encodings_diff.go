@@ -13,6 +13,10 @@ type EncodingsDiff struct {
 type ModifiedEncodings map[string]EncodingDiff
 
 func (diff *EncodingsDiff) empty() bool {
+	if diff == nil {
+		return true
+	}
+
 	return len(diff.Added) == 0 &&
 		len(diff.Deleted) == 0 &&
 		len(diff.Modified) == 0

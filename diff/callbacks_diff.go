@@ -10,6 +10,11 @@ type CallbacksDiff struct {
 }
 
 func (callbacksDiff *CallbacksDiff) empty() bool {
+
+	if callbacksDiff == nil {
+		return true
+	}
+
 	return len(callbacksDiff.Added) == 0 &&
 		len(callbacksDiff.Deleted) == 0 &&
 		len(callbacksDiff.Modified) == 0
@@ -48,6 +53,10 @@ func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks)
 				result.Added = append(result.Added, callbackValue2)
 			}
 		}
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

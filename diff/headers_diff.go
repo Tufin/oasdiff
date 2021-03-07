@@ -12,6 +12,10 @@ type HeadersDiff struct {
 }
 
 func (headersDiff *HeadersDiff) empty() bool {
+	if headersDiff == nil {
+		return true
+	}
+
 	return len(headersDiff.Added) == 0 &&
 		len(headersDiff.Deleted) == 0 &&
 		len(headersDiff.Modified) == 0
@@ -50,6 +54,10 @@ func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) *Header
 				result.Added = append(result.Added, headerValue2)
 			}
 		}
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

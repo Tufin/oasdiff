@@ -10,6 +10,10 @@ type OperationsDiff struct {
 }
 
 func (operationsDiff *OperationsDiff) empty() bool {
+	if operationsDiff == nil {
+		return true
+	}
+
 	return len(operationsDiff.Added) == 0 &&
 		len(operationsDiff.Deleted) == 0 &&
 		len(operationsDiff.Modified) == 0

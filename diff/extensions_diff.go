@@ -15,6 +15,10 @@ type ExtensionsDiff struct {
 type ModifiedExtensions map[string]*ValueDiff
 
 func (diff *ExtensionsDiff) empty() bool {
+	if diff == nil {
+		return true
+	}
+
 	return len(diff.Added) == 0 &&
 		len(diff.Deleted) == 0 &&
 		len(diff.Modified) == 0
@@ -35,7 +39,7 @@ func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.Extensi
 	for name1, extension1 := range extensions1.Extensions {
 		if _, ok := config.IncludeExtensions[name1]; ok {
 			if extension2, ok := extensions2.Extensions[name1]; ok {
-				if diff := getValueDiff(extension1, extension2); diff != nil {
+				if diff := getValueDiff(extension1, extension2); !diff.empty() {
 					result.Modified[name1] = diff
 				}
 			} else {

@@ -12,6 +12,10 @@ type ResponsesDiff struct {
 }
 
 func (responsesDiff *ResponsesDiff) empty() bool {
+	if responsesDiff == nil {
+		return true
+	}
+
 	return len(responsesDiff.Added) == 0 &&
 		len(responsesDiff.Deleted) == 0 &&
 		len(responsesDiff.Modified) == 0
@@ -50,6 +54,10 @@ func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses)
 				result.Added = append(result.Added, responseValue2)
 			}
 		}
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

@@ -13,6 +13,10 @@ type ServersDiff struct {
 type ModifiedServers map[string]ServerDiff
 
 func (diff *ServersDiff) empty() bool {
+	if diff == nil {
+		return true
+	}
+
 	return len(diff.Added) == 0 &&
 		len(diff.Deleted) == 0 &&
 		len(diff.Modified) == 0
@@ -47,6 +51,10 @@ func getServersDiff(config *Config, pServers1, pServers2 *openapi3.Servers) *Ser
 		if server1 := findServer(server2, servers1); server1 == nil {
 			result.Added = append(result.Added, server2.URL)
 		}
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

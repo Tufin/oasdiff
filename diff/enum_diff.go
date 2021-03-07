@@ -19,6 +19,10 @@ func newEnumDiff() *EnumDiff {
 }
 
 func (enumDiff *EnumDiff) empty() bool {
+	if enumDiff == nil {
+		return true
+	}
+	
 	return len(enumDiff.Added) == 0 &&
 		len(enumDiff.Deleted) == 0
 }

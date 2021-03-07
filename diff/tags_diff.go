@@ -23,8 +23,13 @@ func newTagsDiff() *TagsDiff {
 type ModifiedTags map[string]TagDiff
 
 func (tagsDiff *TagsDiff) empty() bool {
+	if tagsDiff == nil {
+		return true
+	}
+
 	return len(tagsDiff.Added) == 0 &&
-		len(tagsDiff.Deleted) == 0 // && len(tagsDiff.Modified) == 0
+		len(tagsDiff.Deleted) == 0 &&
+		len(tagsDiff.Modified) == 0
 }
 
 func getTagsDiff(tags1, tags2 openapi3.Tags) *TagsDiff {
@@ -45,6 +50,10 @@ func getTagsDiff(tags1, tags2 openapi3.Tags) *TagsDiff {
 		if tag1 := tags1.Get(tag2.Name); tag1 == nil {
 			result.Added = append(result.Added, tag2.Name)
 		}
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

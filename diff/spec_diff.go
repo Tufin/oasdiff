@@ -28,10 +28,10 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 	result.ExtensionsDiff = getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps)
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 	// Info
-	result.setPathsDiff(getPathsDiff(config, s1.Paths, s2.Paths))
+	result.PathsDiff = getPathsDiff(config, s1.Paths, s2.Paths)
 	// Security
-	result.setServersDiff(getServersDiff(config, &s1.Servers, &s2.Servers))
-	result.setTagsDiff(getTagsDiff(s1.Tags, s2.Tags))
+	result.ServersDiff = getServersDiff(config, &s1.Servers, &s2.Servers)
+	result.TagsDiff = getTagsDiff(s1.Tags, s2.Tags)
 	// ExternalDocs
 
 	result.ComponentsDiff = getComponentsDiff(config, s1.Components, s2.Components)
@@ -44,22 +44,6 @@ func (specDiff *SpecDiff) setPathsDiff(diff *PathsDiff) {
 
 	if !diff.empty() {
 		specDiff.PathsDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setServersDiff(diff *ServersDiff) {
-	specDiff.ServersDiff = nil
-
-	if !diff.empty() {
-		specDiff.ServersDiff = diff
-	}
-}
-
-func (specDiff *SpecDiff) setTagsDiff(diff *TagsDiff) {
-	specDiff.TagsDiff = nil
-
-	if !diff.empty() {
-		specDiff.TagsDiff = diff
 	}
 }
 
@@ -83,8 +67,7 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 }
 
 func (specDiff *SpecDiff) filterByRegex(filter string) {
-	if specDiff.PathsDiff != nil {
-
+	if !specDiff.PathsDiff.empty() {
 		specDiff.setPathsDiff(specDiff.PathsDiff.filterByRegex(filter))
 	}
 }

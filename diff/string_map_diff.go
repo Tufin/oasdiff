@@ -19,6 +19,10 @@ func newStringMapDiffDiff() *StringMapDiff {
 }
 
 func (diff *StringMapDiff) empty() bool {
+	if diff == nil {
+		return true
+	}
+
 	return len(diff.Added) == 0 &&
 		len(diff.Deleted) == 0 &&
 		len(diff.Modified) == 0

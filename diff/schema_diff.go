@@ -104,9 +104,7 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) SchemaD
 	result.MaxItems = getValueDiff(value1.MaxItems, value2.MaxItems)
 	result.Items = !getSchemaDiff(config, value1.Items, value2.Items).empty()
 	result.Required = getStringsDiff(value1.Required, value2.Required)
-	if diff := getSchemasDiff(config, value1.Properties, value2.Properties); !diff.empty() {
-		result.PropertiesDiff = diff
-	}
+	result.PropertiesDiff = getSchemasDiff(config, value1.Properties, value2.Properties)
 	result.MinProps = getValueDiff(value1.MinProps, value2.MinProps)
 	result.MaxProps = getValueDiff(value1.MaxProps, value2.MaxProps)
 	result.AdditionalProperties = !getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties).empty()

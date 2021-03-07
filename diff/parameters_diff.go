@@ -10,6 +10,10 @@ type ParametersDiff struct {
 }
 
 func (parametersDiff *ParametersDiff) empty() bool {
+	if parametersDiff == nil {
+		return true
+	}
+
 	return len(parametersDiff.Added) == 0 &&
 		len(parametersDiff.Deleted) == 0 &&
 		len(parametersDiff.Modified) == 0
@@ -84,6 +88,10 @@ func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) *Pa
 				result.addAddedParam(paramRef2.Value)
 			}
 		}
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result

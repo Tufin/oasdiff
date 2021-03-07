@@ -18,6 +18,10 @@ func newPathDiff() *PathDiff {
 }
 
 func (pathDiff *PathDiff) empty() bool {
+	if pathDiff == nil {
+		return true
+	}
+
 	return pathDiff == nil || *pathDiff == *newPathDiff()
 }
 
@@ -27,14 +31,8 @@ func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *PathD
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
 	result.OperationsDiff = getOperationsDiff(config, pathItem1, pathItem2)
-
-	if diff := getServersDiff(config, &pathItem1.Servers, &pathItem2.Servers); !diff.empty() {
-		result.ServersDiff = diff
-	}
-
-	if diff := getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters); !diff.empty() {
-		result.ParametersDiff = diff
-	}
+	result.ServersDiff = getServersDiff(config, &pathItem1.Servers, &pathItem2.Servers)
+	result.ParametersDiff = getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters)
 
 	return result
 }

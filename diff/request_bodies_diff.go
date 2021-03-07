@@ -12,6 +12,10 @@ type RequestBodiesDiff struct {
 }
 
 func (requestBodiesDiff *RequestBodiesDiff) empty() bool {
+	if requestBodiesDiff == nil {
+		return true
+	}
+
 	return len(requestBodiesDiff.Added) == 0 &&
 		len(requestBodiesDiff.Deleted) == 0 &&
 		len(requestBodiesDiff.Modified) == 0
@@ -50,6 +54,10 @@ func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi
 				result.Added = append(result.Added, requestBodyValue2)
 			}
 		}
+	}
+
+	if result.empty() {
+		return nil
 	}
 
 	return result
