@@ -4,11 +4,11 @@
 [![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
 
 # OpenAPI Spec Diff
-A diff tool for OpenAPI Spec 3 written in [Go](https://golang.org).
+A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/) written in [Go](https://golang.org).
 
 ## Unique features vs. other OAS3 diff tools
 - go module
-- deep diff into paths, parameters, responses, schemas, enums etc.
+- deep diff into paths, parameters, requests, responses, schemas, enums etc.
 
 ## Build
 ```
