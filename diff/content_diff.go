@@ -18,21 +18,29 @@ type ContentDiff struct {
 	EncodingsDiff *EncodingsDiff `json:"encoding,omitempty"`
 }
 
-func newContentDiff() ContentDiff {
-	return ContentDiff{}
+func newContentDiff() *ContentDiff {
+	return &ContentDiff{}
 }
 
-func (contentDiff ContentDiff) empty() bool {
-	return contentDiff == newContentDiff()
+func (contentDiff *ContentDiff) empty() bool {
+	return contentDiff == nil || *contentDiff == ContentDiff{}
 }
 
-func getContentDiff(config *Config, content1, content2 openapi3.Content) ContentDiff {
+func getContentDiff(config *Config, content1, content2 openapi3.Content) *ContentDiff {
+	diff := getContentDiffInternal(config, content1, content2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
 
-	result := newContentDiff()
+func getContentDiffInternal(config *Config, content1, content2 openapi3.Content) *ContentDiff {
 
 	if len(content1) == 0 && len(content2) == 0 {
-		return result
+		return nil
 	}
+
+	result := newContentDiff()
 
 	if len(content1) == 0 && len(content2) != 0 {
 		result.MediaTypeAdded = true
@@ -46,12 +54,12 @@ func getContentDiff(config *Config, content1, content2 openapi3.Content) Content
 
 	mediaType1, mediaTypeValue1, err := getMediaType(content1)
 	if err != nil {
-		return result
+		return nil
 	}
 
 	mediaType2, mediaTypeValue2, err := getMediaType(content2)
 	if err != nil {
-		return result
+		return nil
 	}
 
 	if mediaType1 != mediaType2 {
@@ -60,10 +68,7 @@ func getContentDiff(config *Config, content1, content2 openapi3.Content) Content
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, mediaTypeValue1.ExtensionProps, mediaTypeValue2.ExtensionProps)
-
-	if diff := getSchemaDiff(config, mediaTypeValue1.Schema, mediaTypeValue2.Schema); !diff.empty() {
-		result.SchemaDiff = &diff
-	}
+	result.SchemaDiff = getSchemaDiff(config, mediaTypeValue1.Schema, mediaTypeValue2.Schema)
 
 	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(mediaTypeValue1.Example, mediaTypeValue1.Example)

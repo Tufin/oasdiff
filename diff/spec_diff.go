@@ -17,11 +17,19 @@ func newSpecDiff() *SpecDiff {
 	return &SpecDiff{}
 }
 
-func (specDiff SpecDiff) empty() bool {
-	return specDiff == SpecDiff{}
+func (specDiff *SpecDiff) empty() bool {
+	return specDiff == nil || *specDiff == SpecDiff{}
 }
 
 func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
+	diff := getDiffInternal(config, s1, s2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getDiffInternal(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 
 	result := newSpecDiff()
 
@@ -51,7 +59,11 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	summary := newSummary()
 
-	summary.Diff = !specDiff.empty()
+	if specDiff.empty() {
+		return summary
+	}
+
+	summary.Diff = true
 	summary.add(specDiff.PathsDiff, PathsComponent)
 	summary.add(specDiff.ServersDiff, ServersComponent)
 	summary.add(specDiff.TagsDiff, TagsComponent)
@@ -64,10 +76,4 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 	summary.add(specDiff.CallbacksDiff, CallbacksComponent)
 
 	return summary
-}
-
-func (specDiff *SpecDiff) filterByRegex(filter string) {
-	if !specDiff.PathsDiff.empty() {
-		specDiff.setPathsDiff(specDiff.PathsDiff.filterByRegex(filter))
-	}
 }

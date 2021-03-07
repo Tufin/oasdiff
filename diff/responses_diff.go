@@ -22,7 +22,7 @@ func (responsesDiff *ResponsesDiff) empty() bool {
 }
 
 // ModifiedResponses is map of response values to their respective diffs
-type ModifiedResponses map[string]ResponseDiff
+type ModifiedResponses map[string]*ResponseDiff
 
 func newResponsesDiff() *ResponsesDiff {
 	return &ResponsesDiff{
@@ -33,6 +33,14 @@ func newResponsesDiff() *ResponsesDiff {
 }
 
 func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses) *ResponsesDiff {
+	diff := getResponsesDiffInternal(config, responses1, responses2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getResponsesDiffInternal(config *Config, responses1, responses2 openapi3.Responses) *ResponsesDiff {
 
 	result := newResponsesDiff()
 
@@ -56,12 +64,7 @@ func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses)
 		}
 	}
 
-	if result.empty() {
-		return nil
-	}
-
 	return result
-
 }
 
 func (responsesDiff *ResponsesDiff) getSummary() *SummaryDetails {

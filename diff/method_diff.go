@@ -34,6 +34,14 @@ func (methodDiff *MethodDiff) empty() bool {
 }
 
 func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
+	diff := getMethodDiffInternal(config, pathItem1, pathItem2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 
 	result := newMethodDiff()
 

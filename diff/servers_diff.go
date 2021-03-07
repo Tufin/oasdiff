@@ -10,7 +10,7 @@ type ServersDiff struct {
 }
 
 // ModifiedServers is map of server names to their respective diffs
-type ModifiedServers map[string]ServerDiff
+type ModifiedServers map[string]*ServerDiff
 
 func (diff *ServersDiff) empty() bool {
 	if diff == nil {
@@ -31,6 +31,14 @@ func newServersDiff() *ServersDiff {
 }
 
 func getServersDiff(config *Config, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
+	diff := getServersDiffInternal(config, pServers1, pServers2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getServersDiffInternal(config *Config, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
 
 	result := newServersDiff()
 
@@ -51,10 +59,6 @@ func getServersDiff(config *Config, pServers1, pServers2 *openapi3.Servers) *Ser
 		if server1 := findServer(server2, servers1); server1 == nil {
 			result.Added = append(result.Added, server2.URL)
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

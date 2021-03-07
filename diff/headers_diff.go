@@ -22,7 +22,7 @@ func (headersDiff *HeadersDiff) empty() bool {
 }
 
 // ModifiedHeaders is map of header names to their respective diffs
-type ModifiedHeaders map[string]HeaderDiff
+type ModifiedHeaders map[string]*HeaderDiff
 
 func newHeadersDiff() *HeadersDiff {
 	return &HeadersDiff{
@@ -33,6 +33,14 @@ func newHeadersDiff() *HeadersDiff {
 }
 
 func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) *HeadersDiff {
+	diff := getHeadersDiffInternal(config, headers1, headers2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getHeadersDiffInternal(config *Config, headers1, headers2 openapi3.Headers) *HeadersDiff {
 
 	result := newHeadersDiff()
 
@@ -54,10 +62,6 @@ func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) *Header
 				result.Added = append(result.Added, headerValue2)
 			}
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

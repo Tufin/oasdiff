@@ -26,6 +26,14 @@ func (pathDiff *PathDiff) empty() bool {
 }
 
 func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *PathDiff {
+	diff := getPathDiffInternal(config, pathItem1, pathItem2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *PathDiff {
 	result := newPathDiff()
 
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)

@@ -22,7 +22,7 @@ func (diff *SecuritySchemesDiff) empty() bool {
 }
 
 // ModifiedSecuritySchemes is map of security schemes to their respective diffs
-type ModifiedSecuritySchemes map[string]SecuritySchemeDiff
+type ModifiedSecuritySchemes map[string]*SecuritySchemeDiff
 
 func newSecuritySchemesDiff() *SecuritySchemesDiff {
 	return &SecuritySchemesDiff{
@@ -33,6 +33,14 @@ func newSecuritySchemesDiff() *SecuritySchemesDiff {
 }
 
 func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) *SecuritySchemesDiff {
+	diff := getSecuritySchemesDiffInternal(config, securitySchemes1, securitySchemes2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getSecuritySchemesDiffInternal(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) *SecuritySchemesDiff {
 
 	result := newSecuritySchemesDiff()
 
@@ -54,10 +62,6 @@ func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 o
 				result.Added = append(result.Added, value2)
 			}
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

@@ -33,6 +33,14 @@ func newRequestBodiesDiff() *RequestBodiesDiff {
 }
 
 func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) *RequestBodiesDiff {
+	diff := getRequestBodiesDiffInternal(config, requestBodies1, requestBodies2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getRequestBodiesDiffInternal(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) *RequestBodiesDiff {
 
 	result := newRequestBodiesDiff()
 
@@ -54,10 +62,6 @@ func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi
 				result.Added = append(result.Added, requestBodyValue2)
 			}
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

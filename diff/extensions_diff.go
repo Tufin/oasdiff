@@ -33,6 +33,14 @@ func newExtensionsDiff() *ExtensionsDiff {
 }
 
 func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.ExtensionProps) *ExtensionsDiff {
+	diff := getExtensionsDiffInternal(config, extensions1, extensions2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getExtensionsDiffInternal(config *Config, extensions1, extensions2 openapi3.ExtensionProps) *ExtensionsDiff {
 
 	result := newExtensionsDiff()
 
@@ -54,10 +62,6 @@ func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.Extensi
 				result.Added = append(result.Deleted, name2)
 			}
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

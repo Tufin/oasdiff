@@ -18,7 +18,7 @@ func l(t *testing.T, v int) *openapi3.Swagger {
 
 func TestDiff_Same(t *testing.T) {
 	s := l(t, 1)
-	require.Empty(t, diff.Get(diff.NewConfig(), s, s).SpecDiff.PathsDiff)
+	require.Nil(t, diff.Get(diff.NewConfig(), s, s).SpecDiff)
 }
 
 func TestDiff_DeletedPaths(t *testing.T) {
@@ -196,10 +196,10 @@ func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
 	s1 := l(t, 1)
 
 	require.Nil(t,
-		diff.Get(diff.NewConfig(), s1, s5).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff)
+		diff.Get(diff.NewConfig(), s1, s5).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie])
 
 	require.Nil(t,
-		diff.Get(diff.NewConfig(), s5, s1).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff)
+		diff.Get(diff.NewConfig(), s5, s1).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie])
 }
 
 func TestSchemaDiff_AnyOfDiff(t *testing.T) {

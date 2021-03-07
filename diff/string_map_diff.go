@@ -29,6 +29,14 @@ func (diff *StringMapDiff) empty() bool {
 }
 
 func getStringMapDiff(strings1, strings2 StringMap) *StringMapDiff {
+	diff := getStringMapDiffInternal(strings1, strings2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getStringMapDiffInternal(strings1, strings2 StringMap) *StringMapDiff {
 	result := newStringMapDiffDiff()
 
 	for k1, v1 := range strings1 {
@@ -45,10 +53,6 @@ func getStringMapDiff(strings1, strings2 StringMap) *StringMapDiff {
 		if _, ok := strings1[k2]; !ok {
 			result.Added = append(result.Added, k2)
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

@@ -52,11 +52,19 @@ type SchemaDiff struct {
 	AdditionalProperties            bool            `json:"additionalProperties,omitempty"`
 }
 
-func (schemaDiff SchemaDiff) empty() bool {
-	return schemaDiff == SchemaDiff{}
+func (diff *SchemaDiff) empty() bool {
+	return diff == nil || *diff == SchemaDiff{}
 }
 
-func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) SchemaDiff {
+func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) *SchemaDiff {
+	diff := getSchemaDiffInternal(config, schema1, schema2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef) *SchemaDiff {
 
 	value1, value2, status := getSchemaValues(schema1, schema2)
 
@@ -110,7 +118,7 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) SchemaD
 	result.AdditionalProperties = !getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties).empty()
 	// Discriminator
 
-	return result
+	return &result
 }
 
 type schemaStatus int
@@ -157,20 +165,20 @@ func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *o
 	return value1, value2, schemaStatusOK
 }
 
-func toSchemaDiff(status schemaStatus) SchemaDiff {
+func toSchemaDiff(status schemaStatus) *SchemaDiff {
 	switch status {
 	case schemaStatusSchemaAdded:
-		return SchemaDiff{SchemaAdded: true}
+		return &SchemaDiff{SchemaAdded: true}
 	case schemaStatusSchemaDeleted:
-		return SchemaDiff{SchemaDeleted: true}
+		return &SchemaDiff{SchemaDeleted: true}
 	case schemaStatusValueAdded:
-		return SchemaDiff{ValueAdded: true}
+		return &SchemaDiff{ValueAdded: true}
 	case schemaStatusValueDeleted:
-		return SchemaDiff{ValueDeleted: true}
+		return &SchemaDiff{ValueDeleted: true}
 	}
 
 	// all other cases -> empty diff
-	return SchemaDiff{}
+	return nil
 }
 
 func getDiffSchemas(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {

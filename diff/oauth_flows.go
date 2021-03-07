@@ -11,11 +11,19 @@ type OAuthFlowsDiff struct {
 	AuthorizationCodeDiff *OAuthFlowDiff  `json:"authorizationCode,omitempty"`
 }
 
-func (diff OAuthFlowsDiff) empty() bool {
-	return diff == OAuthFlowsDiff{}
+func (diff *OAuthFlowsDiff) empty() bool {
+	return diff == nil || *diff == OAuthFlowsDiff{}
 }
 
 func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
+	diff := getOAuthFlowsDiffInternal(config, flows1, flows2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getOAuthFlowsDiffInternal(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
 
 	if flows1 == nil && flows2 == nil {
 		return nil
@@ -28,10 +36,6 @@ func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAu
 	result.PasswordDiff = getOAuthFlowDiff(config, flows1.Password, flows2.Password)
 	result.ClientCredentialsDiff = getOAuthFlowDiff(config, flows1.ClientCredentials, flows2.ClientCredentials)
 	result.AuthorizationCodeDiff = getOAuthFlowDiff(config, flows1.AuthorizationCode, flows2.AuthorizationCode)
-
-	if result.empty() {
-		return nil
-	}
 
 	return &result
 }

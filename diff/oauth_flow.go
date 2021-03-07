@@ -13,11 +13,19 @@ type OAuthFlowDiff struct {
 	ScopesDiff           *StringMapDiff  `json:"scopes,omitempty"`
 }
 
-func (diff OAuthFlowDiff) empty() bool {
-	return diff == OAuthFlowDiff{}
+func (diff *OAuthFlowDiff) empty() bool {
+	return diff == nil || *diff == OAuthFlowDiff{}
 }
 
 func getOAuthFlowDiff(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
+	diff := getOAuthFlowDiffInternal(config, flow1, flow2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getOAuthFlowDiffInternal(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
 
 	if flow1 == nil && flow2 == nil {
 		return nil
@@ -40,10 +48,6 @@ func getOAuthFlowDiff(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFl
 	result.TokenURLDiff = getValueDiff(flow1.TokenURL, flow2.TokenURL)
 	result.RefreshURLDiff = getValueDiff(flow1.RefreshURL, flow2.RefreshURL)
 	result.ScopesDiff = getStringMapDiff(flow1.Scopes, flow2.Scopes)
-
-	if result.empty() {
-		return nil
-	}
 
 	return &result
 }

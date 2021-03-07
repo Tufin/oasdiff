@@ -22,12 +22,21 @@ func (enumDiff *EnumDiff) empty() bool {
 	if enumDiff == nil {
 		return true
 	}
-	
+
 	return len(enumDiff.Added) == 0 &&
 		len(enumDiff.Deleted) == 0
 }
 
 func getEnumDiff(enum1, enum2 EnumValues) *EnumDiff {
+
+	diff := getEnumDiffInternal(enum1, enum2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getEnumDiffInternal(enum1, enum2 EnumValues) *EnumDiff {
 
 	if enum1 == nil && enum2 == nil {
 		return nil
@@ -45,10 +54,6 @@ func getEnumDiff(enum1, enum2 EnumValues) *EnumDiff {
 		if !findValue(v2, enum1) {
 			diff.Added = append(diff.Added, v2)
 		}
-	}
-
-	if diff.empty() {
-		return nil
 	}
 
 	return diff

@@ -34,6 +34,19 @@ func newPathsDiff() *PathsDiff {
 
 func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) *PathsDiff {
 
+	filterPaths2(config.Filter, paths1, paths2)
+
+	diff := getPathsDiffInternal(config, paths1, paths2)
+
+	if diff.empty() {
+		return nil
+	}
+
+	return diff
+}
+
+func getPathsDiffInternal(config *Config, paths1, paths2 openapi3.Paths) *PathsDiff {
+
 	result := newPathsDiff()
 
 	addedEndpoints, deletedEndpoints, otherEndpoints := getEndpointsDiff(paths1, paths2, config.Prefix)
@@ -48,10 +61,6 @@ func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) *PathsDiff {
 
 	for endpoint, pathItemPair := range otherEndpoints {
 		result.addModifiedPath(config, endpoint, pathItemPair.PathItem1, pathItemPair.PathItem2)
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result
@@ -77,40 +86,26 @@ func (pathsDiff *PathsDiff) addModifiedPath(config *Config, path1 string, pathIt
 	pathsDiff.Modified.addPathDiff(config, path1, pathItem1, pathItem2)
 }
 
-func (pathsDiff PathsDiff) filterByRegex(filter string) *PathsDiff {
+func filterPaths2(filter string, paths1, paths2 openapi3.Paths) {
+
+	if filter == "" {
+		return
+	}
 
 	r, err := regexp.Compile(filter)
 	if err != nil {
 		log.Errorf("Failed to compile filter regex '%s' with '%v'", filter, err)
-		return &pathsDiff
+		return
 	}
 
-	pathsDiff.Added = filterPaths(pathsDiff.Added, r)
-	pathsDiff.Deleted = filterPaths(pathsDiff.Deleted, r)
-	pathsDiff.Modified = filterModifiedPaths(pathsDiff.Modified, r)
-
-	return &pathsDiff
+	filterPaths1(paths1, r)
+	filterPaths1(paths2, r)
 }
 
-func filterPaths(paths StringList, r *regexp.Regexp) []string {
-	result := []string{}
-	for _, path := range paths {
-		if r.MatchString(path) {
-			result = append(result, path)
+func filterPaths1(paths openapi3.Paths, r *regexp.Regexp) {
+	for path := range paths {
+		if !r.MatchString(path) {
+			delete(paths, path)
 		}
 	}
-
-	return result
-}
-
-func filterModifiedPaths(modifiedPaths ModifiedPaths, r *regexp.Regexp) ModifiedPaths {
-	result := ModifiedPaths{}
-
-	for endpoint, endpointDiff := range modifiedPaths {
-		if r.MatchString(endpoint) {
-			result[endpoint] = endpointDiff
-		}
-	}
-
-	return result
 }

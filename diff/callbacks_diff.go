@@ -32,6 +32,14 @@ func newCallbacksDiff() *CallbacksDiff {
 }
 
 func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff {
+	diff := getCallbacksDiffInternal(config, callbacks1, callbacks2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getCallbacksDiffInternal(config *Config, callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff {
 
 	result := newCallbacksDiff()
 
@@ -53,10 +61,6 @@ func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks)
 				result.Added = append(result.Added, callbackValue2)
 			}
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

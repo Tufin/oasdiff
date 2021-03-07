@@ -37,7 +37,7 @@ func newParametersDiff() *ParametersDiff {
 type ParamNames map[string]struct{}
 
 // ParamDiffs is map of parameter names to their respective diffs
-type ParamDiffs map[string]ParameterDiff
+type ParamDiffs map[string]*ParameterDiff
 
 func (parametersDiff *ParametersDiff) addAddedParam(param *openapi3.Parameter) {
 
@@ -57,7 +57,7 @@ func (parametersDiff *ParametersDiff) addDeletedParam(param *openapi3.Parameter)
 	}
 }
 
-func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter, diff ParameterDiff) {
+func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter, diff *ParameterDiff) {
 
 	if paramDiffs, ok := parametersDiff.Modified[param.In]; ok {
 		paramDiffs[param.Name] = diff
@@ -67,6 +67,14 @@ func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter
 }
 
 func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) *ParametersDiff {
+	diff := getParametersDiffInternal(config, params1, params2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getParametersDiffInternal(config *Config, params1, params2 openapi3.Parameters) *ParametersDiff {
 
 	result := newParametersDiff()
 
@@ -88,10 +96,6 @@ func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) *Pa
 				result.addAddedParam(paramRef2.Value)
 			}
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

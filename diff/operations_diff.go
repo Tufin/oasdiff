@@ -31,6 +31,14 @@ func newOperationsDiff() *OperationsDiff {
 type ModifiedOperations map[string]*MethodDiff
 
 func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *OperationsDiff {
+	diff := getOperationsDiffInternal(config, pathItem1, pathItem2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getOperationsDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *OperationsDiff {
 
 	result := newOperationsDiff()
 
@@ -43,10 +51,6 @@ func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) 
 	result.diffOperation(config, pathItem1.Post, pathItem2.Post, "POST")
 	result.diffOperation(config, pathItem1.Put, pathItem2.Put, "PUT")
 	result.diffOperation(config, pathItem1.Trace, pathItem2.Trace, "TRACE")
-
-	if result.empty() {
-		return nil
-	}
 
 	return result
 }

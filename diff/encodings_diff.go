@@ -10,7 +10,7 @@ type EncodingsDiff struct {
 }
 
 // ModifiedEncodings is map of enconding names to their respective diffs
-type ModifiedEncodings map[string]EncodingDiff
+type ModifiedEncodings map[string]*EncodingDiff
 
 func (diff *EncodingsDiff) empty() bool {
 	if diff == nil {
@@ -31,6 +31,14 @@ func newEncodingsDiff() *EncodingsDiff {
 }
 
 func getEncodingsDiff(config *Config, encodings1, encodings2 map[string]*openapi3.Encoding) *EncodingsDiff {
+	diff := getEncodingsDiffInternal(config, encodings1, encodings2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getEncodingsDiffInternal(config *Config, encodings1, encodings2 map[string]*openapi3.Encoding) *EncodingsDiff {
 
 	result := newEncodingsDiff()
 
@@ -48,10 +56,6 @@ func getEncodingsDiff(config *Config, encodings1, encodings2 map[string]*openapi
 		if _, ok := encodings1[name2]; !ok {
 			result.Added = append(result.Added, name2)
 		}
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

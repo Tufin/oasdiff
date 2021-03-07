@@ -15,11 +15,19 @@ type SecuritySchemeDiff struct {
 	OpenIDConnectURLDiff *ValueDiff      `json:"openIDConnectURL,omitempty"`
 }
 
-func (diff SecuritySchemeDiff) empty() bool {
-	return diff == SecuritySchemeDiff{}
+func (diff *SecuritySchemeDiff) empty() bool {
+	return diff == nil || *diff == SecuritySchemeDiff{}
 }
 
-func getSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecurityScheme) SecuritySchemeDiff {
+func getSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecurityScheme) *SecuritySchemeDiff {
+	diff := getSecuritySchemeDiffInternal(config, scheme1, scheme2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getSecuritySchemeDiffInternal(config *Config, scheme1, scheme2 *openapi3.SecurityScheme) *SecuritySchemeDiff {
 	result := SecuritySchemeDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, scheme1.ExtensionProps, scheme2.ExtensionProps)
@@ -32,5 +40,5 @@ func getSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecuritySc
 	result.OAuthFlowsDiff = getOAuthFlowsDiff(config, scheme1.Flows, scheme2.Flows)
 	result.OpenIDConnectURLDiff = getValueDiff(scheme1.OpenIdConnectUrl, scheme2.OpenIdConnectUrl)
 
-	return result
+	return &result
 }

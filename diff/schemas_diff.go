@@ -37,6 +37,14 @@ type schemaRefPair struct {
 type schemaRefPairs map[string]*schemaRefPair
 
 func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) *SchemasDiff {
+	diff := getSchemasDiffInternal(config, schemas1, schemas2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getSchemasDiffInternal(config *Config, schemas1, schemas2 openapi3.Schemas) *SchemasDiff {
 
 	result := newSchemasDiff()
 
@@ -52,10 +60,6 @@ func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) *Schema
 
 	for schema, schemaRefPair := range otherSchemas {
 		result.addModifiedSchema(config, schema, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
-	}
-
-	if result.empty() {
-		return nil
 	}
 
 	return result

@@ -23,6 +23,14 @@ func (stringsDiff *StringsDiff) empty() bool {
 }
 
 func getStringsDiff(strings1, strings2 StringList) *StringsDiff {
+	diff := getStringsDiffInternal(strings1, strings2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getStringsDiffInternal(strings1, strings2 StringList) *StringsDiff {
 	result := newStringsDiff()
 
 	s1 := stringListToSet(strings1)
@@ -30,10 +38,6 @@ func getStringsDiff(strings1, strings2 StringList) *StringsDiff {
 
 	result.Added = s2.minus(s1).toStringList()
 	result.Deleted = s1.minus(s2).toStringList()
-
-	if result.empty() {
-		return nil
-	}
 
 	return result
 }

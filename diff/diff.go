@@ -16,7 +16,6 @@ See https://swagger.io/docs/specification/using-ref/ and https://pkg.go.dev/gith
 */
 func Get(config *Config, s1, s2 *openapi3.Swagger) Diff {
 	diff := getDiff(config, s1, s2)
-	diff.filterByRegex(config.Filter)
 
 	return Diff{
 		SpecDiff: diff,

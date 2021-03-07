@@ -20,11 +20,19 @@ type ParameterDiff struct {
 	ContentDiff *ContentDiff `json:"content,omitempty"`
 }
 
-func (parameterDiff ParameterDiff) empty() bool {
-	return parameterDiff == ParameterDiff{}
+func (diff *ParameterDiff) empty() bool {
+	return diff == nil || *diff == ParameterDiff{}
 }
 
-func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) ParameterDiff {
+func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) *ParameterDiff {
+	diff := getParameterDiffInternal(config, param1, param2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter) *ParameterDiff {
 
 	result := ParameterDiff{}
 
@@ -36,18 +44,13 @@ func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) Parame
 	result.AllowReservedDiff = getValueDiff(param1.AllowReserved, param2.AllowReserved)
 	result.DeprecatedDiff = getValueDiff(param1.Deprecated, param2.Deprecated)
 	result.RequiredDiff = getValueDiff(param1.Required, param2.Required)
-
-	if schemaDiff := getSchemaDiff(config, param1.Schema, param2.Schema); !schemaDiff.empty() {
-		result.SchemaDiff = &schemaDiff
-	}
+	result.SchemaDiff = getSchemaDiff(config, param1.Schema, param2.Schema)
 
 	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
 	}
 
-	if contentDiff := getContentDiff(config, param1.Content, param2.Content); !contentDiff.empty() {
-		result.ContentDiff = &contentDiff
-	}
+	result.ContentDiff = getContentDiff(config, param1.Content, param2.Content)
 
-	return result
+	return &result
 }

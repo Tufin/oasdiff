@@ -13,11 +13,19 @@ type EncodingDiff struct {
 	AllowReservedDiff *ValueDiff   `json:"allowReservedDiff,omitempty"`
 }
 
-func (diff EncodingDiff) empty() bool {
-	return diff == EncodingDiff{}
+func (diff *EncodingDiff) empty() bool {
+	return diff == nil || *diff == EncodingDiff{}
 }
 
-func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) EncodingDiff {
+func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) *EncodingDiff {
+	diff := getEncodingDiffInternal(config, value1, value2)
+	if diff.empty() {
+		return nil
+	}
+	return diff
+}
+
+func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) *EncodingDiff {
 	result := EncodingDiff{}
 
 	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
@@ -26,5 +34,5 @@ func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) Encoding
 	result.ExplodeDiff = getBoolRefDiff(value1.Explode, value2.Explode)
 	result.AllowReservedDiff = getValueDiff(value1.AllowReserved, value2.AllowReserved)
 
-	return result
+	return &result
 }
