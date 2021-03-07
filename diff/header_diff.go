@@ -18,7 +18,7 @@ func (headerDiff HeaderDiff) empty() bool {
 	return headerDiff == HeaderDiff{}
 }
 
-func diffHeaderValues(config *Config, header1, header2 *openapi3.Header) HeaderDiff {
+func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) HeaderDiff {
 	result := HeaderDiff{}
 
 	if diff := getExtensionsDiff(config, header1.ExtensionProps, header2.ExtensionProps); !diff.empty() {
