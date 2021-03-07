@@ -52,5 +52,9 @@ func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.Extensi
 		}
 	}
 
+	if result.empty() {
+		return nil
+	}
+
 	return result
 }

@@ -18,10 +18,7 @@ func (diff OAuthFlowsDiff) empty() bool {
 func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
 	result := OAuthFlowsDiff{}
 
-	if diff := getExtensionsDiff(config, flows1.ExtensionProps, flows2.ExtensionProps); !diff.empty() {
-		result.ExtensionsDiff = diff
-	}
-
+	result.ExtensionsDiff = getExtensionsDiff(config, flows1.ExtensionProps, flows2.ExtensionProps)
 	result.ImplicitDiff = getOAuthFlowDiff(config, flows1.Implicit, flows2.Implicit)
 	result.PasswordDiff = getOAuthFlowDiff(config, flows1.Password, flows2.Password)
 	result.ClientCredentialsDiff = getOAuthFlowDiff(config, flows1.ClientCredentials, flows2.ClientCredentials)

@@ -33,10 +33,7 @@ func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) *Me
 
 	result := newMethodDiff()
 
-	if diff := getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps); !diff.empty() {
-		result.ExtensionsDiff = diff
-	}
-
+	result.ExtensionsDiff = getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
 	result.TagsDiff = getStringsDiff(pathItem1.Tags, pathItem2.Tags)
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)

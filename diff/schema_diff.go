@@ -66,10 +66,7 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) SchemaD
 
 	result := SchemaDiff{}
 
-	if diff := getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps); !diff.empty() {
-		result.ExtensionsDiff = diff
-	}
-
+	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
 	result.OneOfDiff = getDiffSchemas(config, value1.OneOf, value2.OneOf)
 	result.AnyOfDiff = getDiffSchemas(config, value1.AnyOf, value2.AnyOf)
 	result.AllOfDiff = getDiffSchemas(config, value1.AllOf, value2.AllOf)

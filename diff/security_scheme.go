@@ -22,10 +22,7 @@ func (diff SecuritySchemeDiff) empty() bool {
 func gtSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecurityScheme) SecuritySchemeDiff {
 	result := SecuritySchemeDiff{}
 
-	if diff := getExtensionsDiff(config, scheme1.ExtensionProps, scheme2.ExtensionProps); !diff.empty() {
-		result.ExtensionsDiff = diff
-	}
-
+	result.ExtensionsDiff = getExtensionsDiff(config, scheme1.ExtensionProps, scheme2.ExtensionProps)
 	result.TypeDiff = getValueDiff(scheme1.Type, scheme2.Type)
 	result.DescriptionDiff = getValueDiff(scheme1.Description, scheme2.Description)
 	result.NameDiff = getValueDiff(scheme1.Name, scheme2.Name)

@@ -32,10 +32,7 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 
 	result := newSpecDiff()
 
-	if diff := getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps); !diff.empty() {
-		result.ExtensionsDiff = diff
-	}
-
+	result.ExtensionsDiff = getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps)
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 	// Info
 	result.setPathsDiff(getPathsDiff(config, s1.Paths, s2.Paths))
