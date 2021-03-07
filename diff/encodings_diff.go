@@ -46,6 +46,9 @@ func getEncodingsDiff(config *Config, encodings1, encodings2 map[string]*openapi
 		}
 	}
 
-	return result
+	if result.empty() {
+		return nil
+	}
 
+	return result
 }

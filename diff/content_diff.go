@@ -69,9 +69,7 @@ func getContentDiff(config *Config, content1, content2 openapi3.Content) Content
 		result.ExampleDiff = getValueDiff(mediaTypeValue1.Example, mediaTypeValue1.Example)
 	}
 
-	if diff := getEncodingsDiff(config, mediaTypeValue1.Encoding, mediaTypeValue2.Encoding); !diff.empty() {
-		result.EncodingsDiff = diff
-	}
+	result.EncodingsDiff = getEncodingsDiff(config, mediaTypeValue1.Encoding, mediaTypeValue2.Encoding)
 
 	return result
 }
