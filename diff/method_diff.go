@@ -6,18 +6,18 @@ import (
 
 // MethodDiff is the diff between two operation objects: https://swagger.io/specification/#operation-object
 type MethodDiff struct {
-	ExtensionsDiff  *ExtensionsDiff  `json:"extensions,omitempty"`
-	TagsDiff        *StringsDiff     `json:"tags,omitempty"`
-	SummaryDiff     *ValueDiff       `json:"summary,omitempty"`
-	DescriptionDiff *ValueDiff       `json:"description,omitempty"`
-	OperationIDDiff *ValueDiff       `json:"operationID,omitempty"`
-	ParametersDiff  *ParametersDiff  `json:"parameters,omitempty"`
-	RequestBodyDiff *RequestBodyDiff `json:"requestBody,omitempty"`
-	ResponsesDiff   *ResponsesDiff   `json:"responses,omitempty"`
-	CallbacksDiff   *CallbacksDiff   `json:"callbacks,omitempty"`
-	DeprecatedDiff  *ValueDiff       `json:"deprecated,omitempty"`
-	// Security
-	ServersDiff *ServersDiff `json:"servers,omitempty"`
+	ExtensionsDiff  *ExtensionsDiff           `json:"extensions,omitempty"`
+	TagsDiff        *StringsDiff              `json:"tags,omitempty"`
+	SummaryDiff     *ValueDiff                `json:"summary,omitempty"`
+	DescriptionDiff *ValueDiff                `json:"description,omitempty"`
+	OperationIDDiff *ValueDiff                `json:"operationID,omitempty"`
+	ParametersDiff  *ParametersDiff           `json:"parameters,omitempty"`
+	RequestBodyDiff *RequestBodyDiff          `json:"requestBody,omitempty"`
+	ResponsesDiff   *ResponsesDiff            `json:"responses,omitempty"`
+	CallbacksDiff   *CallbacksDiff            `json:"callbacks,omitempty"`
+	DeprecatedDiff  *ValueDiff                `json:"deprecated,omitempty"`
+	SecurityDiff    *SecurityRequirementsDiff `json:"securityRequirements,omitempty"`
+	ServersDiff     *ServersDiff              `json:"servers,omitempty"`
 	// ExternalDocs
 }
 
@@ -55,6 +55,7 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 	result.ResponsesDiff = getResponsesDiff(config, pathItem1.Responses, pathItem2.Responses)
 	result.CallbacksDiff = getCallbacksDiff(config, pathItem1.Callbacks, pathItem2.Callbacks)
 	result.DeprecatedDiff = getValueDiff(pathItem1.Deprecated, pathItem2.Deprecated)
+	result.SecurityDiff = getSecurityRequirementsDiff(config, pathItem1.Security, pathItem2.Security)
 	result.ServersDiff = getServersDiff(config, pathItem1.Servers, pathItem2.Servers)
 
 	return result

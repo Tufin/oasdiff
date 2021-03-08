@@ -465,3 +465,9 @@ func TestFilterByRegex(t *testing.T) {
 func TestFilterByRegex_Invalid(t *testing.T) {
 	require.Equal(t, true, diff.Get(&diff.Config{Filter: "["}, l(t, 1), l(t, 2)).Summary.Diff)
 }
+
+func TestAddedSecurityRequireent(t *testing.T) {
+	require.Contains(t,
+		diff.Get(&diff.Config{}, l(t, 3), l(t, 1)).SpecDiff.PathsDiff.Modified["/register"].OperationsDiff.Modified["POST"].SecurityDiff.Added,
+		"bearerAuth")
+}

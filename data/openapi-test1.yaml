@@ -185,6 +185,9 @@ paths:
           description: Tufin
   /register:
     post:
+      security:
+      - bearerAuth: []
+      - OAuth: []
       summary: Subscribe to a webhook
       responses:
         default:

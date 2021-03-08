@@ -43,3 +43,12 @@ func (stringSet StringSet) minus(other StringSet) StringSet {
 
 	return result
 }
+
+func (stringSet StringSet) equals(other StringSet) bool {
+	return stringSet.minus(other).empty() &&
+		other.minus(stringSet).empty()
+}
+
+func (stringSet StringSet) empty() bool {
+	return len(stringSet) == 0
+}
