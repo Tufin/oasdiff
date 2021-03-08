@@ -438,6 +438,7 @@ func TestSummary(t *testing.T) {
 	d := diff.Get(diff.NewConfig(), l(t, 1), l(t, 2)).Summary
 
 	require.Equal(t, diff.SummaryDetails{0, 3, 1}, d.GetSummaryDetails(diff.PathsComponent))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.SecurityComponent))
 	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ServersComponent))
 	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.TagsComponent))
 	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SchemasComponent))

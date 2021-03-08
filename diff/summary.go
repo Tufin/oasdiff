@@ -31,6 +31,7 @@ type ComponentName string
 // Component constants are the keys in the summary map
 const (
 	PathsComponent           ComponentName = "paths"
+	SecurityComponent        ComponentName = "security"
 	ServersComponent         ComponentName = "servers"
 	TagsComponent            ComponentName = "tags"
 	SchemasComponent         ComponentName = "schemas"

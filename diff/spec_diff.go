@@ -4,11 +4,12 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#schema
 type SpecDiff struct {
-	ExtensionsDiff *ExtensionsDiff `json:"extensions,omitempty"`
-	OpenAPIDiff    *ValueDiff      `json:"openAPI,omitempty"`
-	PathsDiff      *PathsDiff      `json:"paths,omitempty"`
-	ServersDiff    *ServersDiff    `json:"servers,omitempty"`
-	TagsDiff       *TagsDiff       `json:"tags,omitempty"`
+	ExtensionsDiff *ExtensionsDiff           `json:"extensions,omitempty"`
+	OpenAPIDiff    *ValueDiff                `json:"openAPI,omitempty"`
+	PathsDiff      *PathsDiff                `json:"paths,omitempty"`
+	SecurityDiff   *SecurityRequirementsDiff `json:"security,omitempty"`
+	ServersDiff    *ServersDiff              `json:"servers,omitempty"`
+	TagsDiff       *TagsDiff                 `json:"tags,omitempty"`
 
 	ComponentsDiff
 }
@@ -37,7 +38,7 @@ func getDiffInternal(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 	// Info
 	result.PathsDiff = getPathsDiff(config, s1.Paths, s2.Paths)
-	// Security
+	result.SecurityDiff = getSecurityRequirementsDiff(config, &s1.Security, &s2.Security)
 	result.ServersDiff = getServersDiff(config, &s1.Servers, &s2.Servers)
 	result.TagsDiff = getTagsDiff(s1.Tags, s2.Tags)
 	// ExternalDocs
@@ -45,14 +46,6 @@ func getDiffInternal(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 	result.ComponentsDiff = getComponentsDiff(config, s1.Components, s2.Components)
 
 	return result
-}
-
-func (specDiff *SpecDiff) setPathsDiff(diff *PathsDiff) {
-	specDiff.PathsDiff = nil
-
-	if !diff.empty() {
-		specDiff.PathsDiff = diff
-	}
 }
 
 func (specDiff *SpecDiff) getSummary() *Summary {
@@ -65,6 +58,7 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	summary.Diff = true
 	summary.add(specDiff.PathsDiff, PathsComponent)
+	summary.add(specDiff.SecurityDiff, SecurityComponent)
 	summary.add(specDiff.ServersDiff, ServersComponent)
 	summary.add(specDiff.TagsDiff, TagsComponent)
 	summary.add(specDiff.SchemasDiff, SchemasComponent)

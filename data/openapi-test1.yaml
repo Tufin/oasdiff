@@ -13,6 +13,8 @@ tags:
 servers: 
 - url: tufin.com
   x-extension-test: 
+security:
+- bearerAuth: []
 paths:
   /api/{domain}/{project}/badges/security-score:
     x-extension-test: 

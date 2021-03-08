@@ -94,3 +94,10 @@ func getSecurityRequirementID(securityRequirement openapi3.SecurityRequirement) 
 	}
 	return strings.Join(results, " AND ")
 }
+
+func (diff *SecurityRequirementsDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
+		Added:   len(diff.Added),
+		Deleted: len(diff.Deleted),
+	}
+}
