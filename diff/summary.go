@@ -25,10 +25,10 @@ type componentWithSummary interface {
 	getSummary() *SummaryDetails
 }
 
-// ComponentName is used as a key in the summary map
+// ComponentName is the key type of the summary map
 type ComponentName string
 
-// Components in the summary map
+// Component constants are the keys in the summary map
 const (
 	PathsComponent           ComponentName = "paths"
 	ServersComponent         ComponentName = "servers"
