@@ -8,14 +8,16 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 var base, revision, prefix, filter, format string
 var examples bool
 
-const formatJSON = "json"
-const formatYAML = "json"
+const (
+	formatJSON = "json"
+	formatYAML = "yaml"
+)
 
 func init() {
 	flag.StringVar(&base, "base", "", "original OpenAPI spec")
@@ -44,21 +46,17 @@ func main() {
 		return
 	}
 
-	config := diff.Config{
-		IncludeExamples: examples,
-		Filter:          filter,
-		Prefix:          prefix,
-	}
+	diffReport := diff.Get(&diff.Config{}, s1, s2)
 
 	if format == formatJSON {
-		bytes, err := json.MarshalIndent(diff.Get(&config, s1, s2), "", " ")
+		bytes, err := json.MarshalIndent(diffReport, "", " ")
 		if err != nil {
 			fmt.Printf("Failed to marshal result as %s with '%v'", format, err)
 			return
 		}
 		fmt.Printf("%s\n", bytes)
 	} else if format == formatYAML {
-		bytes, err := yaml.Marshal(diff.Get(&config, s1, s2))
+		bytes, err := yaml.Marshal(diffReport)
 		if err != nil {
 			fmt.Printf("Failed to marshal result as %s with '%v'", format, err)
 			return

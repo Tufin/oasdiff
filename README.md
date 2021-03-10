@@ -27,6 +27,154 @@ go build
 ./oasdiff --help
 ```
 
+## Output example
+
+```yaml
+spec:
+  paths:
+    deleted:
+      - /api/{domain}/{project}/install-command
+      - /register
+      - /subscribe
+    modified:
+      /api/{domain}/{project}/badges/security-score:
+        operations:
+          added:
+            - POST
+          modified:
+            GET:
+              tags:
+                deleted:
+                  - security
+              parameters:
+                deleted:
+                  cookie:
+                    - test
+                  header:
+                    - user
+                    - X-Auth-Name
+                modified:
+                  path:
+                    domain:
+                      schema:
+                        type:
+                          from: string
+                          to: integer
+                        format:
+                          from: hyphen-separated list
+                          to: non-negative integer
+                        description:
+                          from: Hyphen-separated list of lowercase string
+                          to: Non-negative integers (including zero)
+                        min:
+                          from: null
+                          to: 7
+                        pattern:
+                          from: ^(?:([a-z]+-)*([a-z]+)?)$
+                          to: ^(?:\d+)$
+                  query:
+                    filter:
+                      content:
+                        schema:
+                          properties:
+                            modified:
+                              color:
+                                type:
+                                  from: string
+                                  to: number
+                    image:
+                      explode:
+                        from: null
+                        to: true
+                      schema:
+                        description:
+                          from: alphanumeric
+                          to: alphanumeric with underscore, dash, period, slash and colon
+                    token:
+                      schema:
+                        anyOf: true
+                        type:
+                          from: string
+                          to: ""
+                        format:
+                          from: uuid
+                          to: ""
+                        description:
+                          from: RFC 4122 UUID
+                          to: ""
+                        pattern:
+                          from: ^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12})$
+                          to: ""
+              responses:
+                added:
+                  - default
+                deleted:
+                  - "200"
+                  - "201"
+        parameters:
+          deleted:
+            path:
+              - domain
+  security:
+    deleted:
+      - bearerAuth
+  servers:
+    deleted:
+      - tufin.com
+  tags:
+    deleted:
+      - security
+      - reuven
+  componentsdiff:
+    schemas:
+      deleted:
+        - network-policies
+        - rules
+    parameters:
+      deleted:
+        header:
+          - network-policies
+    headers:
+      deleted:
+        - new
+        - test
+        - testc
+    requestBodies:
+      deleted:
+        - reuven
+    responses:
+      deleted:
+        - OK
+    securitySchemes:
+      deleted:
+        - OAuth
+        - bearerAuth
+summary:
+  diff: true
+  components:
+    headers:
+      deleted: 3
+    parameters:
+      deleted: 1
+    paths:
+      deleted: 3
+      modified: 1
+    requestBodies:
+      deleted: 1
+    responses:
+      deleted: 1
+    schemas:
+      deleted: 2
+    security:
+      deleted: 1
+    securitySchemes:
+      deleted: 2
+    servers:
+      deleted: 1
+    tags:
+      deleted: 2
+```
+
 ## Embedding into your Go program
 ```
 diff.Get(&diff.Config{}, spec1, spec2)
@@ -42,5 +190,4 @@ You can resolve refs using [this function](https://pkg.go.dev/github.com/getkin/
 ## Work in progress
 While most objects of OpenAPI Spec are already supported by this diff tool, some are still missing, notably: Examples, ExternalDocs, Links, Variables and a couple more.  
 Pull requests are welcome!
-
 
