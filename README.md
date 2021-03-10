@@ -7,8 +7,8 @@
 This [Go](https://golang.org) module provides a diff utility for [OpenAPI Spec 3](https://swagger.io/specification/).
 
 ## Unique features vs. other diff tools
-- go module
-- deep diff into paths, parameters, request bodies, responses, schemas, enums, callbacks etc.
+- [go module](https://blog.golang.org/using-go-modules)
+- deep diff including: paths, parameters, security, request bodies, responses, schemas, enums, callbacks etc.
 
 ## Build
 ```
