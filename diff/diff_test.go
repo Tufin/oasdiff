@@ -21,6 +21,22 @@ func TestDiff_Same(t *testing.T) {
 	require.Nil(t, diff.Get(diff.NewConfig(), s, s).SpecDiff)
 }
 
+func TestDiff_Empty(t *testing.T) {
+	require.True(t, (&diff.CallbacksDiff{}).Empty())
+	require.True(t, (&diff.EncodingsDiff{}).Empty())
+	require.True(t, (&diff.ExtensionsDiff{}).Empty())
+	require.True(t, (&diff.HeadersDiff{}).Empty())
+	require.True(t, (&diff.OperationsDiff{}).Empty())
+	require.True(t, (&diff.ParametersDiff{}).Empty())
+	require.True(t, (&diff.RequestBodiesDiff{}).Empty())
+	require.True(t, (&diff.ResponsesDiff{}).Empty())
+	require.True(t, (&diff.SchemasDiff{}).Empty())
+	require.True(t, (&diff.ServersDiff{}).Empty())
+	require.True(t, (&diff.StringsDiff{}).Empty())
+	require.True(t, (&diff.StringMapDiff{}).Empty())
+	require.True(t, (&diff.TagsDiff{}).Empty())
+}
+
 func TestDiff_DeletedPaths(t *testing.T) {
 	require.ElementsMatch(t,
 		[]string{"/api/{domain}/{project}/install-command", "/register", "/subscribe"},
