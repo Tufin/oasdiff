@@ -5,15 +5,17 @@ import (
 	"flag"
 	"fmt"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
+	"gopkg.in/yaml.v2"
 )
 
 var base, revision, prefix, filter, format string
 var examples bool
+
+const formatJSON = "json"
+const formatYAML = "json"
 
 func init() {
 	flag.StringVar(&base, "base", "", "original OpenAPI spec")
@@ -21,7 +23,7 @@ func init() {
 	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision")
 	flag.StringVar(&filter, "filter", "", "regex to filter result paths")
 	flag.BoolVar(&examples, "examples", false, "whether to include examples in the diff")
-	flag.StringVar(&format, "format", "yaml", "output format: yaml or json")
+	flag.StringVar(&format, "format", formatYAML, "output format: yaml or json")
 }
 
 func main() {
@@ -48,14 +50,14 @@ func main() {
 		Prefix:          prefix,
 	}
 
-	if format == "json" {
+	if format == formatJSON {
 		bytes, err := json.MarshalIndent(diff.Get(&config, s1, s2), "", " ")
 		if err != nil {
 			fmt.Printf("Failed to marshal result as %s with '%v'", format, err)
 			return
 		}
 		fmt.Printf("%s\n", bytes)
-	} else if format == "yaml" {
+	} else if format == formatYAML {
 		bytes, err := yaml.Marshal(diff.Get(&config, s1, s2))
 		if err != nil {
 			fmt.Printf("Failed to marshal result as %s with '%v'", format, err)
