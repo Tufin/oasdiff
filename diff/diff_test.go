@@ -311,6 +311,12 @@ func TestParamAddedToPathItem(t *testing.T) {
 		"name")
 }
 
+func TestParamDeletedFromPathItem(t *testing.T) {
+	require.Contains(t,
+		diff.Get(diff.NewConfig(), l(t, 1), l(t, 2)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].ParametersDiff.Deleted[openapi3.ParameterInPath],
+		"domain")
+}
+
 func TestHeaderAdded(t *testing.T) {
 	require.Contains(t,
 		diff.Get(diff.NewConfig(), l(t, 5), l(t, 1)).SpecDiff.HeadersDiff.Added,
