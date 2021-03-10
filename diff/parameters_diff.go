@@ -21,7 +21,7 @@ func (parametersDiff *ParametersDiff) Empty() bool {
 }
 
 // ParamNamesByLocation maps param location (path, query, header or cookie) to the params in this location
-type ParamNamesByLocation map[string]ParamNames
+type ParamNamesByLocation map[string]StringList
 
 // ParamDiffByLocation maps param location (path, query, header or cookie) to param diffs in this location
 type ParamDiffByLocation map[string]ParamDiffs
@@ -34,27 +34,24 @@ func newParametersDiff() *ParametersDiff {
 	}
 }
 
-// ParamNames is a set of parameter names
-type ParamNames map[string]struct{}
-
 // ParamDiffs is map of parameter names to their respective diffs
 type ParamDiffs map[string]*ParameterDiff
 
 func (parametersDiff *ParametersDiff) addAddedParam(param *openapi3.Parameter) {
 
 	if paramNames, ok := parametersDiff.Added[param.In]; ok {
-		paramNames[param.Name] = struct{}{}
+		parametersDiff.Added[param.In] = append(paramNames, param.Name)
 	} else {
-		parametersDiff.Added[param.In] = ParamNames{param.Name: struct{}{}}
+		parametersDiff.Added[param.In] = StringList{param.Name}
 	}
 }
 
 func (parametersDiff *ParametersDiff) addDeletedParam(param *openapi3.Parameter) {
 
 	if paramNames, ok := parametersDiff.Deleted[param.In]; ok {
-		paramNames[param.Name] = struct{}{}
+		parametersDiff.Deleted[param.In] = append(paramNames, param.Name)
 	} else {
-		parametersDiff.Deleted[param.In] = ParamNames{param.Name: struct{}{}}
+		parametersDiff.Deleted[param.In] = StringList{param.Name}
 	}
 }
 
