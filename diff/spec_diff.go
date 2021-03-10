@@ -10,8 +10,7 @@ type SpecDiff struct {
 	SecurityDiff   *SecurityRequirementsDiff `json:"security,omitempty" yaml:"security,omitempty"`
 	ServersDiff    *ServersDiff              `json:"servers,omitempty" yaml:"servers,omitempty"`
 	TagsDiff       *TagsDiff                 `json:"tags,omitempty" yaml:"tags,omitempty"`
-
-	ComponentsDiff
+	ComponentsDiff `json:"components,omitempty" yaml:"components,omitempty"`
 }
 
 func newSpecDiff() *SpecDiff {
