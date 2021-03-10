@@ -4,7 +4,7 @@ import "reflect"
 
 // Summary summarizes the changes between two OpenAPI specifications
 type Summary struct {
-	Diff    bool                           `json:"diff" yaml:"diff,omitempty"`
+	Diff    bool                           `json:"diff" yaml:"diff"`
 	Details map[DetailName]*SummaryDetails `json:"details,omitempty" yaml:"details,omitempty"`
 }
 
