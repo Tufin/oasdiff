@@ -18,6 +18,16 @@ security:
 paths:
   /api/{domain}/{project}/badges/security-score:
     x-extension-test: 
+    parameters:
+    - in: path
+      name: domain
+      required: true
+      schema:
+        description: Hyphen-separated list of lowercase string
+        example: generic-bank
+        format: hyphen-separated list
+        pattern: ^(?:([a-z]+-)*([a-z]+)?)$
+        type: string
     get:
       x-extension-test: 
       tags:
