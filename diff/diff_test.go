@@ -459,17 +459,17 @@ func TestSummary(t *testing.T) {
 
 	d := diff.Get(diff.NewConfig(), l(t, 1), l(t, 2)).Summary
 
-	require.Equal(t, diff.SummaryDetails{0, 3, 1}, d.GetSummaryDetails(diff.PathsComponent))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.SecurityComponent))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ServersComponent))
-	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.TagsComponent))
-	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SchemasComponent))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ParametersComponent))
-	require.Equal(t, diff.SummaryDetails{0, 3, 0}, d.GetSummaryDetails(diff.HeadersComponent))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.RequestBodiesComponent))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ResponsesComponent))
-	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SecuritySchemesComponent))
-	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.CallbacksComponent))
+	require.Equal(t, diff.SummaryDetails{0, 3, 1}, d.GetSummaryDetails(diff.PathsDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.SecurityDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ServersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.TagsDetail))
+	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SchemasDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ParametersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 3, 0}, d.GetSummaryDetails(diff.HeadersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.RequestBodiesDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ResponsesDetail))
+	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SecuritySchemesDetail))
+	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.CallbacksDetail))
 }
 
 func TestSummaryInvalidComponent(t *testing.T) {
@@ -482,7 +482,7 @@ func TestSummaryInvalidComponent(t *testing.T) {
 }
 
 func TestFilterByRegex(t *testing.T) {
-	require.Nil(t, diff.Get(&diff.Config{Filter: "x"}, l(t, 1), l(t, 2)).Summary.Components[diff.PathsComponent])
+	require.Nil(t, diff.Get(&diff.Config{Filter: "x"}, l(t, 1), l(t, 2)).Summary.Details[diff.PathsDetail])
 }
 
 func TestFilterByRegex_Invalid(t *testing.T) {

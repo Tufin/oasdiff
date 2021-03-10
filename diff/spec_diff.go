@@ -57,17 +57,17 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 	}
 
 	summary.Diff = true
-	summary.add(specDiff.PathsDiff, PathsComponent)
-	summary.add(specDiff.SecurityDiff, SecurityComponent)
-	summary.add(specDiff.ServersDiff, ServersComponent)
-	summary.add(specDiff.TagsDiff, TagsComponent)
-	summary.add(specDiff.SchemasDiff, SchemasComponent)
-	summary.add(specDiff.ParametersDiff, ParametersComponent)
-	summary.add(specDiff.HeadersDiff, HeadersComponent)
-	summary.add(specDiff.RequestBodiesDiff, RequestBodiesComponent)
-	summary.add(specDiff.ResponsesDiff, ResponsesComponent)
-	summary.add(specDiff.SecuritySchemesDiff, SecuritySchemesComponent)
-	summary.add(specDiff.CallbacksDiff, CallbacksComponent)
+	summary.add(specDiff.PathsDiff, PathsDetail)
+	summary.add(specDiff.SecurityDiff, SecurityDetail)
+	summary.add(specDiff.ServersDiff, ServersDetail)
+	summary.add(specDiff.TagsDiff, TagsDetail)
+	summary.add(specDiff.SchemasDiff, SchemasDetail)
+	summary.add(specDiff.ParametersDiff, ParametersDetail)
+	summary.add(specDiff.HeadersDiff, HeadersDetail)
+	summary.add(specDiff.RequestBodiesDiff, RequestBodiesDetail)
+	summary.add(specDiff.ResponsesDiff, ResponsesDetail)
+	summary.add(specDiff.SecuritySchemesDiff, SecuritySchemesDetail)
+	summary.add(specDiff.CallbacksDiff, CallbacksDetail)
 
 	return summary
 }

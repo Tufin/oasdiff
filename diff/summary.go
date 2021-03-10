@@ -4,13 +4,13 @@ import "reflect"
 
 // Summary summarizes the changes between two OpenAPI specifications
 type Summary struct {
-	Diff       bool                              `json:"diff" yaml:"diff,omitempty"`
-	Components map[ComponentName]*SummaryDetails `json:"components,omitempty" yaml:"components,omitempty"`
+	Diff    bool                           `json:"diff" yaml:"diff,omitempty"`
+	Details map[DetailName]*SummaryDetails `json:"details,omitempty" yaml:"details,omitempty"`
 }
 
 func newSummary() *Summary {
 	return &Summary{
-		Components: map[ComponentName]*SummaryDetails{},
+		Details: map[DetailName]*SummaryDetails{},
 	}
 }
 
@@ -21,31 +21,31 @@ type SummaryDetails struct {
 	Modified int `json:"modified,omitempty" yaml:"modified,omitempty"` // number of modified items
 }
 
-type componentWithSummary interface {
+type detailWithSummary interface {
 	getSummary() *SummaryDetails
 }
 
-// ComponentName is the key type of the summary map
-type ComponentName string
+// DetailName is the key type of the summary map
+type DetailName string
 
 // Component constants are the keys in the summary map
 const (
-	PathsComponent           ComponentName = "paths"
-	SecurityComponent        ComponentName = "security"
-	ServersComponent         ComponentName = "servers"
-	TagsComponent            ComponentName = "tags"
-	SchemasComponent         ComponentName = "schemas"
-	ParametersComponent      ComponentName = "parameters"
-	HeadersComponent         ComponentName = "headers"
-	RequestBodiesComponent   ComponentName = "requestBodies"
-	ResponsesComponent       ComponentName = "responses"
-	SecuritySchemesComponent ComponentName = "securitySchemes"
-	CallbacksComponent       ComponentName = "callbacks"
+	PathsDetail           DetailName = "paths"
+	SecurityDetail        DetailName = "security"
+	ServersDetail         DetailName = "servers"
+	TagsDetail            DetailName = "tags"
+	SchemasDetail         DetailName = "schemas"
+	ParametersDetail      DetailName = "parameters"
+	HeadersDetail         DetailName = "headers"
+	RequestBodiesDetail   DetailName = "requestBodies"
+	ResponsesDetail       DetailName = "responses"
+	SecuritySchemesDetail DetailName = "securitySchemes"
+	CallbacksDetail       DetailName = "callbacks"
 )
 
-// GetSummaryDetails returns the summary for a specific component
-func (summary *Summary) GetSummaryDetails(component ComponentName) SummaryDetails {
-	if details, ok := summary.Components[component]; ok {
+// GetSummaryDetails returns the summary for a specific part
+func (summary *Summary) GetSummaryDetails(name DetailName) SummaryDetails {
+	if details, ok := summary.Details[name]; ok {
 		if details != nil {
 			return *details
 		}
@@ -54,9 +54,9 @@ func (summary *Summary) GetSummaryDetails(component ComponentName) SummaryDetail
 	return SummaryDetails{}
 }
 
-func (summary *Summary) add(component componentWithSummary, name ComponentName) {
-	if !isNilPointer(component) {
-		summary.Components[name] = component.getSummary()
+func (summary *Summary) add(detail detailWithSummary, detailName DetailName) {
+	if !isNilPointer(detail) {
+		summary.Details[detailName] = detail.getSummary()
 	}
 }
 
