@@ -6,12 +6,13 @@ import (
 
 // RequestBodiesDiff is a diff between two sets of request body objects: https://swagger.io/specification/#request-body-object
 type RequestBodiesDiff struct {
-	Added    StringList            `json:"added,omitempty"`
-	Deleted  StringList            `json:"deleted,omitempty"`
-	Modified ModifiedRequestBodies `json:"modified,omitempty"`
+	Added    StringList            `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList            `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedRequestBodies `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (requestBodiesDiff *RequestBodiesDiff) empty() bool {
+// Empty return true if there is no diff
+func (requestBodiesDiff *RequestBodiesDiff) Empty() bool {
 	if requestBodiesDiff == nil {
 		return true
 	}
@@ -34,7 +35,7 @@ func newRequestBodiesDiff() *RequestBodiesDiff {
 
 func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) *RequestBodiesDiff {
 	diff := getRequestBodiesDiffInternal(config, requestBodies1, requestBodies2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -47,7 +48,7 @@ func getRequestBodiesDiffInternal(config *Config, requestBodies1, requestBodies2
 	for requestBodyValue1, requestBodyRef1 := range requestBodies1 {
 		if requestBodyRef1 != nil && requestBodyRef1.Value != nil {
 			if requestBodyValue2, ok := requestBodies2[requestBodyValue1]; ok {
-				if diff := getRequestBodyDiff(config, requestBodyRef1, requestBodyValue2); !diff.empty() {
+				if diff := getRequestBodyDiff(config, requestBodyRef1, requestBodyValue2); !diff.Empty() {
 					result.Modified[requestBodyValue1] = diff
 				}
 			} else {

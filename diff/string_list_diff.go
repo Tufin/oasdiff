@@ -2,8 +2,8 @@ package diff
 
 // StringsDiff is the diff between two lists of strings
 type StringsDiff struct {
-	Added   StringList `json:"added,omitempty"`
-	Deleted StringList `json:"deleted,omitempty"`
+	Added   StringList `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 }
 
 func newStringsDiff() *StringsDiff {
@@ -13,7 +13,8 @@ func newStringsDiff() *StringsDiff {
 	}
 }
 
-func (stringsDiff *StringsDiff) empty() bool {
+// Empty return true if there is no diff
+func (stringsDiff *StringsDiff) Empty() bool {
 	if stringsDiff == nil {
 		return true
 	}
@@ -24,7 +25,7 @@ func (stringsDiff *StringsDiff) empty() bool {
 
 func getStringsDiff(strings1, strings2 StringList) *StringsDiff {
 	diff := getStringsDiffInternal(strings1, strings2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

@@ -2,9 +2,9 @@ package diff
 
 // StringMapDiff is the diff between two string maps
 type StringMapDiff struct {
-	Added    StringList   `json:"added,omitempty"`
-	Deleted  StringList   `json:"deleted,omitempty"`
-	Modified ModifiedKeys `json:"modified,omitempty"`
+	Added    StringList   `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedKeys `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // ModifiedKeys maps keys to their respective diffs
@@ -18,7 +18,8 @@ func newStringMapDiffDiff() *StringMapDiff {
 	}
 }
 
-func (diff *StringMapDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *StringMapDiff) Empty() bool {
 	if diff == nil {
 		return true
 	}
@@ -30,7 +31,7 @@ func (diff *StringMapDiff) empty() bool {
 
 func getStringMapDiff(strings1, strings2 StringMap) *StringMapDiff {
 	diff := getStringMapDiffInternal(strings1, strings2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

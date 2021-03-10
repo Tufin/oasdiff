@@ -9,7 +9,7 @@ type ModifiedPaths map[string]*PathDiff
 
 func (modifiedPaths ModifiedPaths) addPathDiff(config *Config, path1 string, pathItem1, pathItem2 *openapi3.PathItem) {
 
-	if diff := getPathDiff(config, pathItem1, pathItem2); !diff.empty() {
+	if diff := getPathDiff(config, pathItem1, pathItem2); !diff.Empty() {
 		modifiedPaths[path1] = diff
 	}
 }

@@ -4,24 +4,25 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SecuritySchemeDiff is a diff between security scheme objects: https://swagger.io/specification/#security-scheme-object
 type SecuritySchemeDiff struct {
-	ExtensionsDiff       *ExtensionsDiff `json:"extensions,omitempty"`
-	TypeDiff             *ValueDiff      `json:"type,omitempty"`
-	DescriptionDiff      *ValueDiff      `json:"description,omitempty"`
-	NameDiff             *ValueDiff      `json:"name,omitempty"`
-	InDiff               *ValueDiff      `json:"in,omitempty"`
-	SchemeDiff           *ValueDiff      `json:"scheme,omitempty"`
-	BearerFormatDiff     *ValueDiff      `json:"bearerFormat,omitempty"`
-	OAuthFlowsDiff       *OAuthFlowsDiff `json:"OAuthFlows,omitempty"`
-	OpenIDConnectURLDiff *ValueDiff      `json:"openIDConnectURL,omitempty"`
+	ExtensionsDiff       *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	TypeDiff             *ValueDiff      `json:"type,omitempty" yaml:"type,omitempty"`
+	DescriptionDiff      *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
+	NameDiff             *ValueDiff      `json:"name,omitempty" yaml:"name,omitempty"`
+	InDiff               *ValueDiff      `json:"in,omitempty" yaml:"in,omitempty"`
+	SchemeDiff           *ValueDiff      `json:"scheme,omitempty" yaml:"scheme,omitempty"`
+	BearerFormatDiff     *ValueDiff      `json:"bearerFormat,omitempty" yaml:"bearerFormat,omitempty"`
+	OAuthFlowsDiff       *OAuthFlowsDiff `json:"OAuthFlows,omitempty" yaml:"OAuthFlows,omitempty"`
+	OpenIDConnectURLDiff *ValueDiff      `json:"openIDConnectURL,omitempty" yaml:"openIDConnectURL,omitempty"`
 }
 
-func (diff *SecuritySchemeDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *SecuritySchemeDiff) Empty() bool {
 	return diff == nil || *diff == SecuritySchemeDiff{}
 }
 
 func getSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecurityScheme) *SecuritySchemeDiff {
 	diff := getSecuritySchemeDiffInternal(config, scheme1, scheme2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

@@ -6,18 +6,18 @@ import (
 
 // MethodDiff is the diff between two operation objects: https://swagger.io/specification/#operation-object
 type MethodDiff struct {
-	ExtensionsDiff  *ExtensionsDiff           `json:"extensions,omitempty"`
-	TagsDiff        *StringsDiff              `json:"tags,omitempty"`
-	SummaryDiff     *ValueDiff                `json:"summary,omitempty"`
-	DescriptionDiff *ValueDiff                `json:"description,omitempty"`
-	OperationIDDiff *ValueDiff                `json:"operationID,omitempty"`
-	ParametersDiff  *ParametersDiff           `json:"parameters,omitempty"`
-	RequestBodyDiff *RequestBodyDiff          `json:"requestBody,omitempty"`
-	ResponsesDiff   *ResponsesDiff            `json:"responses,omitempty"`
-	CallbacksDiff   *CallbacksDiff            `json:"callbacks,omitempty"`
-	DeprecatedDiff  *ValueDiff                `json:"deprecated,omitempty"`
-	SecurityDiff    *SecurityRequirementsDiff `json:"securityRequirements,omitempty"`
-	ServersDiff     *ServersDiff              `json:"servers,omitempty"`
+	ExtensionsDiff  *ExtensionsDiff           `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	TagsDiff        *StringsDiff              `json:"tags,omitempty" yaml:"tags,omitempty"`
+	SummaryDiff     *ValueDiff                `json:"summary,omitempty" yaml:"summary,omitempty"`
+	DescriptionDiff *ValueDiff                `json:"description,omitempty" yaml:"description,omitempty"`
+	OperationIDDiff *ValueDiff                `json:"operationID,omitempty" yaml:"operationID,omitempty"`
+	ParametersDiff  *ParametersDiff           `json:"parameters,omitempty" yaml:"parameters,omitempty"`
+	RequestBodyDiff *RequestBodyDiff          `json:"requestBody,omitempty" yaml:"requestBody,omitempty"`
+	ResponsesDiff   *ResponsesDiff            `json:"responses,omitempty" yaml:"responses,omitempty"`
+	CallbacksDiff   *CallbacksDiff            `json:"callbacks,omitempty" yaml:"callbacks,omitempty"`
+	DeprecatedDiff  *ValueDiff                `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
+	SecurityDiff    *SecurityRequirementsDiff `json:"securityRequirements,omitempty" yaml:"securityRequirements,omitempty"`
+	ServersDiff     *ServersDiff              `json:"servers,omitempty" yaml:"servers,omitempty"`
 	// ExternalDocs
 }
 
@@ -25,7 +25,8 @@ func newMethodDiff() *MethodDiff {
 	return &MethodDiff{}
 }
 
-func (methodDiff *MethodDiff) empty() bool {
+// Empty return true if there is no diff
+func (methodDiff *MethodDiff) Empty() bool {
 	if methodDiff == nil {
 		return true
 	}
@@ -35,7 +36,7 @@ func (methodDiff *MethodDiff) empty() bool {
 
 func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) *MethodDiff {
 	diff := getMethodDiffInternal(config, pathItem1, pathItem2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

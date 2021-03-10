@@ -9,12 +9,13 @@ import (
 
 // PathsDiff is a diff between two sets of path item objects: https://swagger.io/specification/#path-item-object
 type PathsDiff struct {
-	Added    StringList    `json:"added,omitempty"`
-	Deleted  StringList    `json:"deleted,omitempty"`
-	Modified ModifiedPaths `json:"modified,omitempty"`
+	Added    StringList    `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList    `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedPaths `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (pathsDiff *PathsDiff) empty() bool {
+// Empty return true if there is no diff
+func (pathsDiff *PathsDiff) Empty() bool {
 	if pathsDiff == nil {
 		return true
 	}
@@ -38,7 +39,7 @@ func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) *PathsDiff {
 
 	diff := getPathsDiffInternal(config, paths1, paths2)
 
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 

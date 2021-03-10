@@ -6,27 +6,28 @@ import (
 
 // ParameterDiff is a diff between parameter objects: https://swagger.io/specification/#parameter-object
 type ParameterDiff struct {
-	ExtensionsDiff      *ExtensionsDiff `json:"extensions,omitempty"`
-	DescriptionDiff     *ValueDiff      `json:"description,omitempty"`
-	StyleDiff           *ValueDiff      `json:"style,omitempty"`
-	ExplodeDiff         *ValueDiff      `json:"explode,omitempty"`
-	AllowEmptyValueDiff *ValueDiff      `json:"allowEmptyValue,omitempty"`
-	AllowReservedDiff   *ValueDiff      `json:"allowReserved,omitempty"`
-	DeprecatedDiff      *ValueDiff      `json:"deprecated,omitempty"`
-	RequiredDiff        *ValueDiff      `json:"required,omitempty"`
-	SchemaDiff          *SchemaDiff     `json:"schema,omitempty"`
-	ExampleDiff         *ValueDiff      `json:"example,omitempty"`
+	ExtensionsDiff      *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	DescriptionDiff     *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
+	StyleDiff           *ValueDiff      `json:"style,omitempty" yaml:"style,omitempty"`
+	ExplodeDiff         *ValueDiff      `json:"explode,omitempty" yaml:"explode,omitempty"`
+	AllowEmptyValueDiff *ValueDiff      `json:"allowEmptyValue,omitempty" yaml:"allowEmptyValue,omitempty"`
+	AllowReservedDiff   *ValueDiff      `json:"allowReserved,omitempty" yaml:"allowReserved,omitempty"`
+	DeprecatedDiff      *ValueDiff      `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
+	RequiredDiff        *ValueDiff      `json:"required,omitempty" yaml:"required,omitempty"`
+	SchemaDiff          *SchemaDiff     `json:"schema,omitempty" yaml:"schema,omitempty"`
+	ExampleDiff         *ValueDiff      `json:"example,omitempty" yaml:"example,omitempty"`
 	// Examples
-	ContentDiff *ContentDiff `json:"content,omitempty"`
+	ContentDiff *ContentDiff `json:"content,omitempty" yaml:"content,omitempty"`
 }
 
-func (diff *ParameterDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *ParameterDiff) Empty() bool {
 	return diff == nil || *diff == ParameterDiff{}
 }
 
 func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) *ParameterDiff {
 	diff := getParameterDiffInternal(config, param1, param2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

@@ -8,12 +8,13 @@ import (
 
 // SecurityRequirementsDiff is a diff between two sets of security requirement objects: https://swagger.io/specification/#security-requirement-object
 type SecurityRequirementsDiff struct {
-	Added   StringList `json:"added,omitempty"`
-	Deleted StringList `json:"deleted,omitempty"`
+	Added   StringList `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	// TODO: handle Modified Security Requirements
 }
 
-func (diff *SecurityRequirementsDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *SecurityRequirementsDiff) Empty() bool {
 	if diff == nil {
 		return true
 	}
@@ -31,7 +32,7 @@ func newSecurityRequirementsDiff() *SecurityRequirementsDiff {
 
 func getSecurityRequirementsDiff(config *Config, securityRequirements1, securityRequirements2 *openapi3.SecurityRequirements) *SecurityRequirementsDiff {
 	diff := getSecurityRequirementsDiffInternal(config, securityRequirements1, securityRequirements2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

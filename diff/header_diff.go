@@ -4,23 +4,24 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // HeaderDiff is a diff between header objects: https://swagger.io/specification/#header-object
 type HeaderDiff struct {
-	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty"`
-	DescriptionDiff *ValueDiff      `json:"description,omitempty"`
-	DeprecatedDiff  *ValueDiff      `json:"deprecated,omitempty"`
-	RequiredDiff    *ValueDiff      `json:"required,omitempty"`
-	ExampleDiff     *ValueDiff      `json:"example,omitempty"`
+	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
+	DeprecatedDiff  *ValueDiff      `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
+	RequiredDiff    *ValueDiff      `json:"required,omitempty" yaml:"required,omitempty"`
+	ExampleDiff     *ValueDiff      `json:"example,omitempty" yaml:"example,omitempty"`
 	// Examples
-	SchemaDiff  *SchemaDiff  `json:"schema,omitempty"`
-	ContentDiff *ContentDiff `json:"content,omitempty"`
+	SchemaDiff  *SchemaDiff  `json:"schema,omitempty" yaml:"schema,omitempty"`
+	ContentDiff *ContentDiff `json:"content,omitempty" yaml:"content,omitempty"`
 }
 
-func (headerDiff *HeaderDiff) empty() bool {
+// Empty return true if there is no diff
+func (headerDiff *HeaderDiff) Empty() bool {
 	return headerDiff == nil || *headerDiff == HeaderDiff{}
 }
 
 func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) *HeaderDiff {
 	diff := getHeaderDiffInternal(config, header1, header2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

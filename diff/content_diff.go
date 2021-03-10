@@ -8,27 +8,28 @@ import (
 
 // ContentDiff is the diff between two content objects each containing a media type object: https://swagger.io/specification/#media-type-object
 type ContentDiff struct {
-	MediaTypeAdded   bool            `json:"mediaTypeAdded,omitempty"`
-	MediaTypeDeleted bool            `json:"mediaTypeDeleted,omitempty"`
-	MediaTypeDiff    bool            `json:"mediaType,omitempty"`
-	ExtensionsDiff   *ExtensionsDiff `json:"extensions,omitempty"`
-	SchemaDiff       *SchemaDiff     `json:"schema,omitempty"`
-	ExampleDiff      *ValueDiff      `json:"example,omitempty"`
+	MediaTypeAdded   bool            `json:"mediaTypeAdded,omitempty" yaml:"mediaTypeAdded,omitempty"`
+	MediaTypeDeleted bool            `json:"mediaTypeDeleted,omitempty" yaml:"mediaTypeDeleted,omitempty"`
+	MediaTypeDiff    bool            `json:"mediaType,omitempty" yaml:"mediaType,omitempty"`
+	ExtensionsDiff   *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	SchemaDiff       *SchemaDiff     `json:"schema,omitempty" yaml:"schema,omitempty"`
+	ExampleDiff      *ValueDiff      `json:"example,omitempty" yaml:"example,omitempty"`
 	// Examples
-	EncodingsDiff *EncodingsDiff `json:"encoding,omitempty"`
+	EncodingsDiff *EncodingsDiff `json:"encoding,omitempty" yaml:"encoding,omitempty"`
 }
 
 func newContentDiff() *ContentDiff {
 	return &ContentDiff{}
 }
 
-func (contentDiff *ContentDiff) empty() bool {
+// Empty return true if there is no diff
+func (contentDiff *ContentDiff) Empty() bool {
 	return contentDiff == nil || *contentDiff == ContentDiff{}
 }
 
 func getContentDiff(config *Config, content1, content2 openapi3.Content) *ContentDiff {
 	diff := getContentDiffInternal(config, content1, content2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

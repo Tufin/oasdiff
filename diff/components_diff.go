@@ -4,13 +4,13 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // ComponentsDiff is the diff between two component objects: https://swagger.io/specification/#components-object
 type ComponentsDiff struct {
-	SchemasDiff         *SchemasDiff         `json:"schemas,omitempty"`
-	ParametersDiff      *ParametersDiff      `json:"parameters,omitempty"`
-	HeadersDiff         *HeadersDiff         `json:"headers,omitempty"`
-	RequestBodiesDiff   *RequestBodiesDiff   `json:"requestBodies,omitempty"`
-	ResponsesDiff       *ResponsesDiff       `json:"responses,omitempty"`
-	SecuritySchemesDiff *SecuritySchemesDiff `json:"securitySchemes,omitempty"`
-	CallbacksDiff       *CallbacksDiff       `json:"callbacks,omitempty"`
+	SchemasDiff         *SchemasDiff         `json:"schemas,omitempty" yaml:"schemas,omitempty"`
+	ParametersDiff      *ParametersDiff      `json:"parameters,omitempty" yaml:"parameters,omitempty"`
+	HeadersDiff         *HeadersDiff         `json:"headers,omitempty" yaml:"headers,omitempty"`
+	RequestBodiesDiff   *RequestBodiesDiff   `json:"requestBodies,omitempty" yaml:"requestBodies,omitempty"`
+	ResponsesDiff       *ResponsesDiff       `json:"responses,omitempty" yaml:"responses,omitempty"`
+	SecuritySchemesDiff *SecuritySchemesDiff `json:"securitySchemes,omitempty" yaml:"securitySchemes,omitempty"`
+	CallbacksDiff       *CallbacksDiff       `json:"callbacks,omitempty" yaml:"callbacks,omitempty"`
 }
 
 func getComponentsDiff(config *Config, s1, s2 openapi3.Components) ComponentsDiff {

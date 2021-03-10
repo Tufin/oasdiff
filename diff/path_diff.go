@@ -6,18 +6,19 @@ import (
 
 // PathDiff is a diff between path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
-	SummaryDiff     *ValueDiff      `json:"summary,omitempty"`
-	DescriptionDiff *ValueDiff      `json:"description,omitempty"`
-	OperationsDiff  *OperationsDiff `json:"operations,omitempty"`
-	ServersDiff     *ServersDiff    `json:"servers,omitempty"`
-	ParametersDiff  *ParametersDiff `json:"parameters,omitempty"`
+	SummaryDiff     *ValueDiff      `json:"summary,omitempty" yaml:"summary,omitempty"`
+	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
+	OperationsDiff  *OperationsDiff `json:"operations,omitempty" yaml:"operations,omitempty"`
+	ServersDiff     *ServersDiff    `json:"servers,omitempty" yaml:"servers,omitempty"`
+	ParametersDiff  *ParametersDiff `json:"parameters,omitempty" yaml:"parameters,omitempty"`
 }
 
 func newPathDiff() *PathDiff {
 	return &PathDiff{}
 }
 
-func (pathDiff *PathDiff) empty() bool {
+// Empty return true if there is no diff
+func (pathDiff *PathDiff) Empty() bool {
 	if pathDiff == nil {
 		return true
 	}
@@ -27,7 +28,7 @@ func (pathDiff *PathDiff) empty() bool {
 
 func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *PathDiff {
 	diff := getPathDiffInternal(config, pathItem1, pathItem2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

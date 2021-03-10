@@ -6,9 +6,9 @@ import (
 
 // TagsDiff is a diff between two lists of tag objects: https://swagger.io/specification/#tag-object
 type TagsDiff struct {
-	Added    StringList   `json:"added,omitempty"`
-	Deleted  StringList   `json:"deleted,omitempty"`
-	Modified ModifiedTags `json:"modified,omitempty"`
+	Added    StringList   `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedTags `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 func newTagsDiff() *TagsDiff {
@@ -22,7 +22,8 @@ func newTagsDiff() *TagsDiff {
 // ModifiedTags is map of tag names to their respective diffs
 type ModifiedTags map[string]*TagDiff
 
-func (tagsDiff *TagsDiff) empty() bool {
+// Empty return true if there is no diff
+func (tagsDiff *TagsDiff) Empty() bool {
 	if tagsDiff == nil {
 		return true
 	}
@@ -34,7 +35,7 @@ func (tagsDiff *TagsDiff) empty() bool {
 
 func getTagsDiff(tags1, tags2 openapi3.Tags) *TagsDiff {
 	diff := getTagsDiffInternal(tags1, tags2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -46,7 +47,7 @@ func getTagsDiffInternal(tags1, tags2 openapi3.Tags) *TagsDiff {
 
 	for _, tag1 := range tags1 {
 		if tag2 := tags2.Get(tag1.Name); tag2 != nil {
-			if diff := getTagDiff(tag1, tag2); !diff.empty() {
+			if diff := getTagDiff(tag1, tag2); !diff.Empty() {
 				result.Modified[tag1.Name] = diff
 			}
 		} else {

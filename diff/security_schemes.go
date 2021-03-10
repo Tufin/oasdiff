@@ -6,12 +6,13 @@ import (
 
 // SecuritySchemesDiff is a diff between two sets of security scheme objects: https://swagger.io/specification/#security-scheme-object
 type SecuritySchemesDiff struct {
-	Added    StringList              `json:"added,omitempty"`
-	Deleted  StringList              `json:"deleted,omitempty"`
-	Modified ModifiedSecuritySchemes `json:"modified,omitempty"`
+	Added    StringList              `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList              `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedSecuritySchemes `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (diff *SecuritySchemesDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *SecuritySchemesDiff) Empty() bool {
 	if diff == nil {
 		return true
 	}
@@ -34,7 +35,7 @@ func newSecuritySchemesDiff() *SecuritySchemesDiff {
 
 func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) *SecuritySchemesDiff {
 	diff := getSecuritySchemesDiffInternal(config, securitySchemes1, securitySchemes2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -47,7 +48,7 @@ func getSecuritySchemesDiffInternal(config *Config, securitySchemes1, securitySc
 	for value1, ref1 := range securitySchemes1 {
 		if ref1 != nil && ref1.Value != nil {
 			if value2, ok := securitySchemes2[value1]; ok {
-				if diff := getSecuritySchemeDiff(config, ref1.Value, value2.Value); !diff.empty() {
+				if diff := getSecuritySchemeDiff(config, ref1.Value, value2.Value); !diff.Empty() {
 					result.Modified[value1] = diff
 				}
 			} else {

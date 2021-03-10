@@ -45,10 +45,11 @@ func (stringSet StringSet) minus(other StringSet) StringSet {
 }
 
 func (stringSet StringSet) equals(other StringSet) bool {
-	return stringSet.minus(other).empty() &&
-		other.minus(stringSet).empty()
+	return stringSet.minus(other).Empty() &&
+		other.minus(stringSet).Empty()
 }
 
-func (stringSet StringSet) empty() bool {
+// Empty return true if there is no diff
+func (stringSet StringSet) Empty() bool {
 	return len(stringSet) == 0
 }

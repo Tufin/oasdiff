@@ -4,22 +4,23 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // OAuthFlowDiff is a diff between oauth flow objects: https://swagger.io/specification/#oauth-flow-object
 type OAuthFlowDiff struct {
-	Added                bool            `json:"added,omitempty"`
-	Deleted              bool            `json:"deleted,omitempty"`
-	ExtensionsDiff       *ExtensionsDiff `json:"extensions,omitempty"`
-	AuthorizationURLDiff *ValueDiff      `json:"authorizationURL,omitempty"`
-	TokenURLDiff         *ValueDiff      `json:"tokenURL,omitempty"`
-	RefreshURLDiff       *ValueDiff      `json:"refresh,omitempty"`
-	ScopesDiff           *StringMapDiff  `json:"scopes,omitempty"`
+	Added                bool            `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted              bool            `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	ExtensionsDiff       *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	AuthorizationURLDiff *ValueDiff      `json:"authorizationURL,omitempty" yaml:"authorizationURL,omitempty"`
+	TokenURLDiff         *ValueDiff      `json:"tokenURL,omitempty" yaml:"tokenURL,omitempty"`
+	RefreshURLDiff       *ValueDiff      `json:"refresh,omitempty" yaml:"refresh,omitempty"`
+	ScopesDiff           *StringMapDiff  `json:"scopes,omitempty" yaml:"scopes,omitempty"`
 }
 
-func (diff *OAuthFlowDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *OAuthFlowDiff) Empty() bool {
 	return diff == nil || *diff == OAuthFlowDiff{}
 }
 
 func getOAuthFlowDiff(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
 	diff := getOAuthFlowDiffInternal(config, flow1, flow2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

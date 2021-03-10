@@ -4,11 +4,12 @@ import "reflect"
 
 // ValueDiff describes the diff between two values
 type ValueDiff struct {
-	From interface{} `json:"from"`
-	To   interface{} `json:"to"`
+	From interface{} `json:"from" yaml:"from"`
+	To   interface{} `json:"to" yaml:"to"`
 }
 
-func (diff *ValueDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *ValueDiff) Empty() bool {
 	return diff == nil
 }
 

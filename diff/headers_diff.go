@@ -6,12 +6,13 @@ import (
 
 // HeadersDiff is a diff between two sets of header objects: https://swagger.io/specification/#header-object
 type HeadersDiff struct {
-	Added    StringList      `json:"added,omitempty"`
-	Deleted  StringList      `json:"deleted,omitempty"`
-	Modified ModifiedHeaders `json:"modified,omitempty"`
+	Added    StringList      `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList      `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedHeaders `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (headersDiff *HeadersDiff) empty() bool {
+// Empty return true if there is no diff
+func (headersDiff *HeadersDiff) Empty() bool {
 	if headersDiff == nil {
 		return true
 	}
@@ -34,7 +35,7 @@ func newHeadersDiff() *HeadersDiff {
 
 func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) *HeadersDiff {
 	diff := getHeadersDiffInternal(config, headers1, headers2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -47,7 +48,7 @@ func getHeadersDiffInternal(config *Config, headers1, headers2 openapi3.Headers)
 	for headerValue1, headerRef1 := range headers1 {
 		if headerRef1 != nil && headerRef1.Value != nil {
 			if headerValue2, ok := headers2[headerValue1]; ok {
-				if diff := getHeaderDiff(config, headerRef1.Value, headerValue2.Value); !diff.empty() {
+				if diff := getHeaderDiff(config, headerRef1.Value, headerValue2.Value); !diff.Empty() {
 					result.Modified[headerValue1] = diff
 				}
 			} else {

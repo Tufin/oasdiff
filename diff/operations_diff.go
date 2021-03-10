@@ -4,12 +4,13 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // OperationsDiff is a diff between the operation objects (https://swagger.io/specification/#operation-object) of two path item objects
 type OperationsDiff struct {
-	Added    StringList         `json:"added,omitempty"`
-	Deleted  StringList         `json:"deleted,omitempty"`
-	Modified ModifiedOperations `json:"modified,omitempty"`
+	Added    StringList         `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedOperations `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (operationsDiff *OperationsDiff) empty() bool {
+// Empty return true if there is no diff
+func (operationsDiff *OperationsDiff) Empty() bool {
 	if operationsDiff == nil {
 		return true
 	}
@@ -32,7 +33,7 @@ type ModifiedOperations map[string]*MethodDiff
 
 func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *OperationsDiff {
 	diff := getOperationsDiffInternal(config, pathItem1, pathItem2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -70,7 +71,7 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, operation1, 
 		return
 	}
 
-	if diff := getMethodDiff(config, operation1, operation2); !diff.empty() {
+	if diff := getMethodDiff(config, operation1, operation2); !diff.Empty() {
 		operationsDiff.Modified[method] = diff
 	}
 }

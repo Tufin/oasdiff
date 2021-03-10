@@ -4,12 +4,13 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // ParametersDiff is a diff between two lists of parameter objects: https://swagger.io/specification/#parameter-object
 type ParametersDiff struct {
-	Added    ParamNamesByLocation `json:"added,omitempty"`
-	Deleted  ParamNamesByLocation `json:"deleted,omitempty"`
-	Modified ParamDiffByLocation  `json:"modified,omitempty"`
+	Added    ParamNamesByLocation `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  ParamNamesByLocation `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ParamDiffByLocation  `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (parametersDiff *ParametersDiff) empty() bool {
+// Empty return true if there is no diff
+func (parametersDiff *ParametersDiff) Empty() bool {
 	if parametersDiff == nil {
 		return true
 	}
@@ -68,7 +69,7 @@ func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter
 
 func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) *ParametersDiff {
 	diff := getParametersDiffInternal(config, params1, params2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -81,7 +82,7 @@ func getParametersDiffInternal(config *Config, params1, params2 openapi3.Paramet
 	for _, paramRef1 := range params1 {
 		if paramRef1 != nil && paramRef1.Value != nil {
 			if paramValue2, ok := findParam(paramRef1.Value, params2); ok {
-				if diff := getParameterDiff(config, paramRef1.Value, paramValue2); !diff.empty() {
+				if diff := getParameterDiff(config, paramRef1.Value, paramValue2); !diff.Empty() {
 					result.addModifiedParam(paramRef1.Value, diff)
 				}
 			} else {

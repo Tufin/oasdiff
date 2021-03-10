@@ -4,8 +4,8 @@ import "reflect"
 
 // EnumDiff is the diff between two enums
 type EnumDiff struct {
-	Added   EnumValues `json:"added,omitempty"`
-	Deleted EnumValues `json:"deleted,omitempty"`
+	Added   EnumValues `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted EnumValues `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 }
 
 // EnumValues is a list of enum values
@@ -18,7 +18,8 @@ func newEnumDiff() *EnumDiff {
 	}
 }
 
-func (enumDiff *EnumDiff) empty() bool {
+// Empty return true if there is no diff
+func (enumDiff *EnumDiff) Empty() bool {
 	if enumDiff == nil {
 		return true
 	}
@@ -30,7 +31,7 @@ func (enumDiff *EnumDiff) empty() bool {
 func getEnumDiff(enum1, enum2 EnumValues) *EnumDiff {
 
 	diff := getEnumDiffInternal(enum1, enum2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

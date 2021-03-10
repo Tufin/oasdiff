@@ -4,8 +4,8 @@ import "reflect"
 
 // Summary summarizes the changes between two OpenAPI specifications
 type Summary struct {
-	Diff       bool                              `json:"diff"`
-	Components map[ComponentName]*SummaryDetails `json:"components,omitempty"`
+	Diff       bool                              `json:"diff" yaml:"diff,omitempty"`
+	Components map[ComponentName]*SummaryDetails `json:"components,omitempty" yaml:"components,omitempty"`
 }
 
 func newSummary() *Summary {
@@ -16,9 +16,9 @@ func newSummary() *Summary {
 
 // SummaryDetails summarizes the changes between equivalent parts of the two OpenAPI specifications: paths, schemas, parameters, headers, responses etc.
 type SummaryDetails struct {
-	Added    int `json:"added,omitempty"`    // number of added items
-	Deleted  int `json:"deleted,omitempty"`  // number of deleted items
-	Modified int `json:"modified,omitempty"` // number of modified items
+	Added    int `json:"added,omitempty" yaml:"added,omitempty"`    // number of added items
+	Deleted  int `json:"deleted,omitempty" yaml:"deleted,omitempty"`  // number of deleted items
+	Modified int `json:"modified,omitempty" yaml:"modified,omitempty"` // number of modified items
 }
 
 type componentWithSummary interface {

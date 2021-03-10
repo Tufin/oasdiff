@@ -6,12 +6,13 @@ import (
 
 // SchemasDiff is a diff between two sets of schema objects: https://swagger.io/specification/#schema-object
 type SchemasDiff struct {
-	Added    StringList      `json:"added,omitempty"`
-	Deleted  StringList      `json:"deleted,omitempty"`
-	Modified ModifiedSchemas `json:"modified,omitempty"`
+	Added    StringList      `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList      `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedSchemas `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (schemasDiff *SchemasDiff) empty() bool {
+// Empty return true if there is no diff
+func (schemasDiff *SchemasDiff) Empty() bool {
 	if schemasDiff == nil {
 		return true
 	}
@@ -38,7 +39,7 @@ type schemaRefPairs map[string]*schemaRefPair
 
 func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) *SchemasDiff {
 	diff := getSchemasDiffInternal(config, schemas1, schemas2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

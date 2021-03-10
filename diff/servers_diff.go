@@ -4,15 +4,16 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // ServersDiff is a diff between two sets of encoding objects: https://swagger.io/specification/#server-object
 type ServersDiff struct {
-	Added    StringList      `json:"added,omitempty"`
-	Deleted  StringList      `json:"deleted,omitempty"`
-	Modified ModifiedServers `json:"modified,omitempty"`
+	Added    StringList      `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList      `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedServers `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // ModifiedServers is map of server names to their respective diffs
 type ModifiedServers map[string]*ServerDiff
 
-func (diff *ServersDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *ServersDiff) Empty() bool {
 	if diff == nil {
 		return true
 	}
@@ -32,7 +33,7 @@ func newServersDiff() *ServersDiff {
 
 func getServersDiff(config *Config, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
 	diff := getServersDiffInternal(config, pServers1, pServers2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -47,7 +48,7 @@ func getServersDiffInternal(config *Config, pServers1, pServers2 *openapi3.Serve
 
 	for _, server1 := range servers1 {
 		if server2 := findServer(server1, servers2); server2 != nil {
-			if diff := getServerDiff(config, server1, server2); !diff.empty() {
+			if diff := getServerDiff(config, server1, server2); !diff.Empty() {
 				result.Modified[server1.URL] = diff
 			}
 		} else {

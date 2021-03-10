@@ -4,20 +4,21 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // ResponseDiff is a diff between response objects: https://swagger.io/specification/#response-object
 type ResponseDiff struct {
-	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty"`
-	DescriptionDiff *ValueDiff      `json:"description,omitempty"`
-	HeadersDiff     *HeadersDiff    `json:"headers,omitempty"`
-	ContentDiff     *ContentDiff    `json:"content,omitempty"`
+	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
+	HeadersDiff     *HeadersDiff    `json:"headers,omitempty" yaml:"headers,omitempty"`
+	ContentDiff     *ContentDiff    `json:"content,omitempty" yaml:"content,omitempty"`
 	// Links
 }
 
-func (diff *ResponseDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *ResponseDiff) Empty() bool {
 	return diff == nil || *diff == ResponseDiff{}
 }
 
 func diffResponseValues(config *Config, response1, response2 *openapi3.Response) *ResponseDiff {
 	diff := diffResponseValuesInternal(config, response1, response2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff

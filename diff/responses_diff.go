@@ -6,12 +6,13 @@ import (
 
 // ResponsesDiff is a diff between two sets of response objects: https://swagger.io/specification/#responses-object
 type ResponsesDiff struct {
-	Added    StringList        `json:"added,omitempty"`
-	Deleted  StringList        `json:"deleted,omitempty"`
-	Modified ModifiedResponses `json:"modified,omitempty"`
+	Added    StringList        `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList        `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedResponses `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (responsesDiff *ResponsesDiff) empty() bool {
+// Empty return true if there is no diff
+func (responsesDiff *ResponsesDiff) Empty() bool {
 	if responsesDiff == nil {
 		return true
 	}
@@ -34,7 +35,7 @@ func newResponsesDiff() *ResponsesDiff {
 
 func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses) *ResponsesDiff {
 	diff := getResponsesDiffInternal(config, responses1, responses2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -47,7 +48,7 @@ func getResponsesDiffInternal(config *Config, responses1, responses2 openapi3.Re
 	for responseValue1, responseRef1 := range responses1 {
 		if responseRef1 != nil && responseRef1.Value != nil {
 			if responseValue2, ok := responses2[responseValue1]; ok {
-				if diff := diffResponseValues(config, responseRef1.Value, responseValue2.Value); !diff.empty() {
+				if diff := diffResponseValues(config, responseRef1.Value, responseValue2.Value); !diff.Empty() {
 					result.Modified[responseValue1] = diff
 				}
 			} else {

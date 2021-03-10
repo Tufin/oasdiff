@@ -9,7 +9,7 @@ type ModifiedSchemas map[string]*SchemaDiff
 
 func (modifiedSchemas ModifiedSchemas) addSchemaDiff(config *Config, schema1 string, schemaRef1, schemaRef2 *openapi3.SchemaRef) {
 
-	if diff := getSchemaDiff(config, schemaRef1, schemaRef2); !diff.empty() {
+	if diff := getSchemaDiff(config, schemaRef1, schemaRef2); !diff.Empty() {
 		modifiedSchemas[schema1] = diff
 	}
 }

@@ -4,12 +4,13 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // CallbacksDiff is a diff between callback objects: https://swagger.io/specification/#callback-object
 type CallbacksDiff struct {
-	Added    StringList        `json:"added,omitempty"`
-	Deleted  StringList        `json:"deleted,omitempty"`
-	Modified ModifiedCallbacks `json:"modified,omitempty"`
+	Added    StringList        `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList        `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedCallbacks `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func (callbacksDiff *CallbacksDiff) empty() bool {
+// Empty return true if there is no diff
+func (callbacksDiff *CallbacksDiff) Empty() bool {
 
 	if callbacksDiff == nil {
 		return true
@@ -33,7 +34,7 @@ func newCallbacksDiff() *CallbacksDiff {
 
 func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks) *CallbacksDiff {
 	diff := getCallbacksDiffInternal(config, callbacks1, callbacks2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -46,7 +47,7 @@ func getCallbacksDiffInternal(config *Config, callbacks1, callbacks2 openapi3.Ca
 	for callbackValue1, callbackRef1 := range callbacks1 {
 		if callbackRef1 != nil && callbackRef1.Value != nil {
 			if callbackValue2, ok := callbacks2[callbackValue1]; ok {
-				if diff := diffCallbackValues(config, callbackRef1.Value, callbackValue2.Value); !diff.empty() {
+				if diff := diffCallbackValues(config, callbackRef1.Value, callbackValue2.Value); !diff.Empty() {
 					result.Modified[callbackValue1] = diff
 				}
 			} else {

@@ -4,12 +4,12 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#schema
 type SpecDiff struct {
-	ExtensionsDiff *ExtensionsDiff           `json:"extensions,omitempty"`
-	OpenAPIDiff    *ValueDiff                `json:"openAPI,omitempty"`
-	PathsDiff      *PathsDiff                `json:"paths,omitempty"`
-	SecurityDiff   *SecurityRequirementsDiff `json:"security,omitempty"`
-	ServersDiff    *ServersDiff              `json:"servers,omitempty"`
-	TagsDiff       *TagsDiff                 `json:"tags,omitempty"`
+	ExtensionsDiff *ExtensionsDiff           `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	OpenAPIDiff    *ValueDiff                `json:"openAPI,omitempty" yaml:"openAPI,omitempty"`
+	PathsDiff      *PathsDiff                `json:"paths,omitempty" yaml:"paths,omitempty"`
+	SecurityDiff   *SecurityRequirementsDiff `json:"security,omitempty" yaml:"security,omitempty"`
+	ServersDiff    *ServersDiff              `json:"servers,omitempty" yaml:"servers,omitempty"`
+	TagsDiff       *TagsDiff                 `json:"tags,omitempty" yaml:"tags,omitempty"`
 
 	ComponentsDiff
 }
@@ -18,13 +18,14 @@ func newSpecDiff() *SpecDiff {
 	return &SpecDiff{}
 }
 
-func (specDiff *SpecDiff) empty() bool {
+// Empty return true if there is no diff
+func (specDiff *SpecDiff) Empty() bool {
 	return specDiff == nil || *specDiff == SpecDiff{}
 }
 
 func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
 	diff := getDiffInternal(config, s1, s2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -52,7 +53,7 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	summary := newSummary()
 
-	if specDiff.empty() {
+	if specDiff.Empty() {
 		return summary
 	}
 

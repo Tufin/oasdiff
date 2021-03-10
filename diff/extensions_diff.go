@@ -6,15 +6,16 @@ import (
 
 // ExtensionsDiff is a diff between two sets of specification extensions: https://swagger.io/specification/#specification-extensions
 type ExtensionsDiff struct {
-	Added    StringList         `json:"added,omitempty"`
-	Deleted  StringList         `json:"deleted,omitempty"`
-	Modified ModifiedExtensions `json:"modified,omitempty"`
+	Added    StringList         `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedExtensions `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // ModifiedExtensions is map of extensions names to their respective diffs
 type ModifiedExtensions map[string]*ValueDiff
 
-func (diff *ExtensionsDiff) empty() bool {
+// Empty return true if there is no diff
+func (diff *ExtensionsDiff) Empty() bool {
 	if diff == nil {
 		return true
 	}
@@ -34,7 +35,7 @@ func newExtensionsDiff() *ExtensionsDiff {
 
 func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.ExtensionProps) *ExtensionsDiff {
 	diff := getExtensionsDiffInternal(config, extensions1, extensions2)
-	if diff.empty() {
+	if diff.Empty() {
 		return nil
 	}
 	return diff
@@ -47,7 +48,7 @@ func getExtensionsDiffInternal(config *Config, extensions1, extensions2 openapi3
 	for name1, extension1 := range extensions1.Extensions {
 		if _, ok := config.IncludeExtensions[name1]; ok {
 			if extension2, ok := extensions2.Extensions[name1]; ok {
-				if diff := getValueDiff(extension1, extension2); !diff.empty() {
+				if diff := getValueDiff(extension1, extension2); !diff.Empty() {
 					result.Modified[name1] = diff
 				}
 			} else {

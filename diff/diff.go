@@ -4,8 +4,8 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 // Diff describes changes between two OpenAPI specifications including a summary of the changes
 type Diff struct {
-	SpecDiff *SpecDiff `json:"spec,omitempty"`
-	Summary  *Summary  `json:"summary,omitempty"`
+	SpecDiff *SpecDiff `json:"spec,omitempty" yaml:"spec,omitempty"`
+	Summary  *Summary  `json:"summary,omitempty" yaml:"summary,omitempty"`
 }
 
 /*
