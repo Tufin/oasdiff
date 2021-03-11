@@ -129,9 +129,6 @@ const (
 	schemaStatusNoSchemas
 	schemaStatusSchemaAdded
 	schemaStatusSchemaDeleted
-	schemaStatusNoValues
-	schemaStatusValueAdded
-	schemaStatusValueDeleted
 )
 
 func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *openapi3.Schema, schemaStatus) {
@@ -148,22 +145,12 @@ func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *o
 		return nil, nil, schemaStatusSchemaDeleted
 	}
 
-	value1 := schema1.Value
-	value2 := schema2.Value
+	return derefSchema(schema1), derefSchema(schema2), schemaStatusOK
+}
 
-	if value1 == nil && value2 == nil {
-		return nil, nil, schemaStatusNoValues
-	}
-
-	if value1 == nil && value2 != nil {
-		return nil, nil, schemaStatusValueAdded
-	}
-
-	if value1 != nil && value2 == nil {
-		return nil, nil, schemaStatusValueDeleted
-	}
-
-	return value1, value2, schemaStatusOK
+func derefSchema(ref *openapi3.SchemaRef) *openapi3.Schema {
+	// TODO: check if ref is nil
+	return ref.Value
 }
 
 func toSchemaDiff(status schemaStatus) *SchemaDiff {
@@ -172,10 +159,6 @@ func toSchemaDiff(status schemaStatus) *SchemaDiff {
 		return &SchemaDiff{SchemaAdded: true}
 	case schemaStatusSchemaDeleted:
 		return &SchemaDiff{SchemaDeleted: true}
-	case schemaStatusValueAdded:
-		return &SchemaDiff{ValueAdded: true}
-	case schemaStatusValueDeleted:
-		return &SchemaDiff{ValueDeleted: true}
 	}
 
 	// all other cases -> empty diff
