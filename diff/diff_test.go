@@ -175,7 +175,7 @@ func TestSchemaDiff_RequiredDeleted(t *testing.T) {
 func TestSchemaDiff_NotDiff(t *testing.T) {
 	require.Equal(t,
 		true,
-		diff.Get(diff.NewConfig(), l(t, 1), l(t, 3)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].SchemaDiff.NotDiff)
+		diff.Get(diff.NewConfig(), l(t, 1), l(t, 3)).SpecDiff.PathsDiff.Modified["/api/{domain}/{project}/badges/security-score"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].SchemaDiff.NotDiff.SchemaAdded)
 }
 
 func TestSchemaDiff_ContentDiff(t *testing.T) {

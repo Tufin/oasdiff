@@ -18,7 +18,7 @@ type SchemaDiff struct {
 	OneOfDiff                       bool            `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
 	AnyOfDiff                       bool            `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
 	AllOfDiff                       bool            `json:"allOf,omitempty" yaml:"allOf,omitempty"`
-	NotDiff                         bool            `json:"not,omitempty" yaml:"not,omitempty"`
+	NotDiff                         *SchemaDiff     `json:"not,omitempty" yaml:"not,omitempty"`
 	TypeDiff                        *ValueDiff      `json:"type,omitempty" yaml:"type,omitempty"`
 	TitleDiff                       *ValueDiff      `json:"title,omitempty" yaml:"title,omitempty"`
 	FormatDiff                      *ValueDiff      `json:"format,omitempty" yaml:"format,omitempty"`
@@ -44,12 +44,12 @@ type SchemaDiff struct {
 	Pattern                         *ValueDiff      `json:"pattern,omitempty" yaml:"pattern,omitempty"`
 	MinItems                        *ValueDiff      `json:"minItems,omitempty" yaml:"minItems,omitempty"`
 	MaxItems                        *ValueDiff      `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
-	Items                           bool            `json:"items,omitempty" yaml:"items,omitempty"`
+	Items                           *SchemaDiff     `json:"items,omitempty" yaml:"items,omitempty"`
 	Required                        *StringsDiff    `json:"required,omitempty" yaml:"required,omitempty"`
 	PropertiesDiff                  *SchemasDiff    `json:"properties,omitempty" yaml:"properties,omitempty"`
 	MinProps                        *ValueDiff      `json:"minProps,omitempty" yaml:"minProps,omitempty"`
 	MaxProps                        *ValueDiff      `json:"maxProps,omitempty" yaml:"maxProps,omitempty"`
-	AdditionalProperties            bool            `json:"additionalProperties,omitempty" yaml:"additionalProperties,omitempty"`
+	AdditionalProperties            *SchemaDiff     `json:"additionalProperties,omitempty" yaml:"additionalProperties,omitempty"`
 }
 
 // Empty return true if there is no diff
@@ -79,7 +79,7 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	result.OneOfDiff = getDiffSchemas(config, value1.OneOf, value2.OneOf)
 	result.AnyOfDiff = getDiffSchemas(config, value1.AnyOf, value2.AnyOf)
 	result.AllOfDiff = getDiffSchemas(config, value1.AllOf, value2.AllOf)
-	result.NotDiff = !getSchemaDiff(config, value1.Not, value2.Not).Empty()
+	result.NotDiff = getSchemaDiff(config, value1.Not, value2.Not)
 	result.TypeDiff = getValueDiff(value1.Type, value2.Type)
 	result.TitleDiff = getValueDiff(value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
@@ -111,12 +111,12 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	// compiledPattern is derived from pattern -> no need to diff
 	result.MinItems = getValueDiff(value1.MinItems, value2.MinItems)
 	result.MaxItems = getValueDiff(value1.MaxItems, value2.MaxItems)
-	result.Items = !getSchemaDiff(config, value1.Items, value2.Items).Empty()
+	result.Items = getSchemaDiff(config, value1.Items, value2.Items)
 	result.Required = getStringsDiff(value1.Required, value2.Required)
 	result.PropertiesDiff = getSchemasDiff(config, value1.Properties, value2.Properties)
 	result.MinProps = getValueDiff(value1.MinProps, value2.MinProps)
 	result.MaxProps = getValueDiff(value1.MaxProps, value2.MaxProps)
-	result.AdditionalProperties = !getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties).Empty()
+	result.AdditionalProperties = getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties)
 	// Discriminator
 
 	return &result
