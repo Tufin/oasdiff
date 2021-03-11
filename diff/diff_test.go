@@ -24,19 +24,21 @@ func TestDiff_Same(t *testing.T) {
 }
 
 func TestDiff_Empty(t *testing.T) {
-	require.True(t, (&diff.CallbacksDiff{}).Empty())
-	require.True(t, (&diff.EncodingsDiff{}).Empty())
-	require.True(t, (&diff.ExtensionsDiff{}).Empty())
-	require.True(t, (&diff.HeadersDiff{}).Empty())
-	require.True(t, (&diff.OperationsDiff{}).Empty())
-	require.True(t, (&diff.ParametersDiff{}).Empty())
-	require.True(t, (&diff.RequestBodiesDiff{}).Empty())
-	require.True(t, (&diff.ResponsesDiff{}).Empty())
-	require.True(t, (&diff.SchemasDiff{}).Empty())
-	require.True(t, (&diff.ServersDiff{}).Empty())
-	require.True(t, (&diff.StringsDiff{}).Empty())
-	require.True(t, (&diff.StringMapDiff{}).Empty())
-	require.True(t, (&diff.TagsDiff{}).Empty())
+	require.True(t, (*diff.CallbacksDiff)(nil).Empty())
+	require.True(t, (*diff.EncodingsDiff)(nil).Empty())
+	require.True(t, (*diff.ExtensionsDiff)(nil).Empty())
+	require.True(t, (*diff.HeadersDiff)(nil).Empty())
+	require.True(t, (*diff.OperationsDiff)(nil).Empty())
+	require.True(t, (*diff.ParametersDiff)(nil).Empty())
+	require.True(t, (*diff.RequestBodiesDiff)(nil).Empty())
+	require.True(t, (*diff.ResponsesDiff)(nil).Empty())
+	require.True(t, (*diff.SchemasDiff)(nil).Empty())
+	require.True(t, (*diff.ServersDiff)(nil).Empty())
+	require.True(t, (*diff.StringsDiff)(nil).Empty())
+	require.True(t, (*diff.StringMapDiff)(nil).Empty())
+	require.True(t, (*diff.TagsDiff)(nil).Empty())
+	require.True(t, (*diff.SecurityRequirementsDiff)(nil).Empty())
+	require.True(t, (*diff.SecuritySchemesDiff)(nil).Empty())
 }
 
 func TestDiff_DeletedPaths(t *testing.T) {
