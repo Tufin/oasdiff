@@ -12,11 +12,8 @@ jobs:
           covermode: atomic
           failfast: true
           race: true
-      - codecov/upload:
-          file: cover-source.out
 orbs:
   go: circleci/go@1.5.0
-  # codecov: codecov/codecov@1.1.3
 version: 2.1
 workflows:
   main:
