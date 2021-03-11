@@ -201,10 +201,6 @@ func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.Schem
 func findSchema(config *Config, schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) bool {
 	// TODO: optimize with a map
 	for _, schemaRef2 := range schemaRefs2 {
-		if schemaRef2 == nil || schemaRef2.Value == nil {
-			continue
-		}
-
 		if diff := getSchemaDiff(config, schemaRef1, schemaRef2); diff.Empty() {
 			return true
 		}

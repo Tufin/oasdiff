@@ -1,6 +1,8 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // ParametersDiff is a diff between two lists of parameter objects: https://swagger.io/specification/#parameter-object
 type ParametersDiff struct {
@@ -77,37 +79,40 @@ func getParametersDiffInternal(config *Config, params1, params2 openapi3.Paramet
 	result := newParametersDiff()
 
 	for _, paramRef1 := range params1 {
-		if paramRef1 != nil && paramRef1.Value != nil {
-			if paramValue2, ok := findParam(paramRef1.Value, params2); ok {
-				if diff := getParameterDiff(config, paramRef1.Value, paramValue2); !diff.Empty() {
-					result.addModifiedParam(paramRef1.Value, diff)
-				}
-			} else {
-				result.addDeletedParam(paramRef1.Value)
+		value1 := deref(paramRef1)
+
+		if paramValue2, ok := findParam(value1, params2); ok {
+			if diff := getParameterDiff(config, value1, paramValue2); !diff.Empty() {
+				result.addModifiedParam(value1, diff)
 			}
+		} else {
+			result.addDeletedParam(value1)
 		}
 	}
 
 	for _, paramRef2 := range params2 {
-		if paramRef2 != nil && paramRef2.Value != nil {
-			if _, ok := findParam(paramRef2.Value, params1); !ok {
-				result.addAddedParam(paramRef2.Value)
-			}
+		value2 := deref(paramRef2)
+
+		if _, ok := findParam(value2, params1); !ok {
+			result.addAddedParam(value2)
 		}
 	}
 
 	return result
 }
 
+func deref(ref *openapi3.ParameterRef) *openapi3.Parameter {
+	// TODO: check if ref == nil
+	return ref.Value
+}
+
 func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openapi3.Parameter, bool) {
 	// TODO: optimize with a map
 	for _, paramRef2 := range params2 {
-		if paramRef2 == nil || paramRef2.Value == nil {
-			continue
-		}
+		value2 := deref(paramRef2)
 
-		if equalParams(param1, paramRef2.Value) {
-			return paramRef2.Value, true
+		if equalParams(param1, value2) {
+			return value2, true
 		}
 	}
 
