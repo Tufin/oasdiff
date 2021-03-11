@@ -435,31 +435,6 @@ func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
 		diff.Get(diff.NewConfig(), l(t, 5), l(t, 1)).SpecDiff.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
 }
 
-func TestSchemaDiff_ModifiedSchemasValueDeleted(t *testing.T) {
-	s5 := l(t, 5)
-	s5.Components.Schemas["network-policies"].Value = nil
-
-	require.Equal(t,
-		true,
-		diff.Get(diff.NewConfig(), l(t, 1), s5).SpecDiff.SchemasDiff.Modified["network-policies"].ValueDeleted)
-}
-
-func TestSchemaDiff_ModifiedSchemasValueAdded(t *testing.T) {
-	s5 := l(t, 5)
-	s5.Components.Schemas["network-policies"].Value = nil
-
-	require.Equal(t,
-		true,
-		diff.Get(diff.NewConfig(), s5, l(t, 1)).SpecDiff.SchemasDiff.Modified["network-policies"].ValueAdded)
-}
-
-func TestSchemaDiff_ModifiedSchemasBothValuesNil(t *testing.T) {
-	s5 := l(t, 5)
-	s5.Components.Schemas["network-policies"].Value = nil
-
-	require.False(t, diff.Get(diff.NewConfig(), s5, s5).Summary.Diff)
-}
-
 func TestSummary(t *testing.T) {
 
 	d := diff.Get(diff.NewConfig(), l(t, 1), l(t, 2)).Summary
