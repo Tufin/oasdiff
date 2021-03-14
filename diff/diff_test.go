@@ -215,28 +215,6 @@ func TestSchemaDiff_MediaTypeModified(t *testing.T) {
 		d(t, diff.NewConfig(), 1, 5).SpecDiff.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeDiff)
 }
 
-func TestSchemaDiff_MediaInvalidMultiEntries1(t *testing.T) {
-
-	s5 := l(t, 5)
-	s5.Paths[securityScorePath].Get.Parameters.GetByInAndName(openapi3.ParameterInCookie, "test").Content["second/invalid"] = openapi3.NewMediaType()
-
-	s1 := l(t, 1)
-
-	_, err := diff.Get(diff.NewConfig(), s1, s5)
-	require.Error(t, err)
-}
-
-func TestSchemaDiff_MediaInvalidMultiEntries2(t *testing.T) {
-
-	s5 := l(t, 5)
-	s5.Paths[securityScorePath].Get.Parameters.GetByInAndName(openapi3.ParameterInCookie, "test").Content["second/invalid"] = openapi3.NewMediaType()
-
-	s1 := l(t, 1)
-
-	_, err := diff.Get(diff.NewConfig(), s5, s1)
-	require.Error(t, err)
-}
-
 func TestSchemaDiff_AnyOfDiff(t *testing.T) {
 	require.Equal(t,
 		true,
@@ -485,11 +463,6 @@ func TestFilterByRegex(t *testing.T) {
 	d, err := diff.Get(&diff.Config{Filter: "x"}, l(t, 1), l(t, 2))
 	require.NoError(t, err)
 	require.Nil(t, d.Summary.Details[diff.PathsDetail])
-}
-
-func TestFilterByRegex_Invalid(t *testing.T) {
-	_, err := diff.Get(&diff.Config{Filter: "["}, l(t, 1), l(t, 2))
-	require.Error(t, err)
 }
 
 func TestAddedSecurityRequireent(t *testing.T) {

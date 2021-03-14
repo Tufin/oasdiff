@@ -1,6 +1,8 @@
 package diff
 
 import (
+	"fmt"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -27,6 +29,7 @@ func (pathDiff *PathDiff) Empty() bool {
 }
 
 func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
+
 	diff, err := getPathDiffInternal(config, pathItem1, pathItem2)
 	if err != nil {
 		return nil, err
@@ -38,6 +41,11 @@ func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*Path
 }
 
 func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
+
+	if pathItem1 == nil || pathItem2 == nil {
+		return nil, fmt.Errorf("PathItem is nil")
+	}
+
 	result := newPathDiff()
 	var err error
 
