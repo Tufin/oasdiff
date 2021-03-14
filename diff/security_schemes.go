@@ -80,7 +80,7 @@ func getSecuritySchemesDiffInternal(config *Config, securitySchemes1, securitySc
 func derefSecurityScheme(ref *openapi3.SecuritySchemeRef) (*openapi3.SecurityScheme, error) {
 
 	if ref == nil || ref.Value == nil {
-		return nil, fmt.Errorf("Security scheme reference is nil")
+		return nil, fmt.Errorf("security scheme reference is nil")
 	}
 
 	return ref.Value, nil

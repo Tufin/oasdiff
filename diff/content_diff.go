@@ -68,7 +68,7 @@ func getContentDiffInternal(config *Config, content1, content2 openapi3.Content)
 	}
 
 	if mediaTypeValue1 == nil || mediaTypeValue2 == nil {
-		return nil, fmt.Errorf("MediaType is nil")
+		return nil, fmt.Errorf("media type is nil")
 	}
 
 	if mediaType1 != mediaType2 {

@@ -86,7 +86,7 @@ func getResponsesDiffInternal(config *Config, responses1, responses2 openapi3.Re
 func derefResponse(ref *openapi3.ResponseRef) (*openapi3.Response, error) {
 
 	if ref == nil || ref.Value == nil {
-		return nil, fmt.Errorf("Response reference is nil")
+		return nil, fmt.Errorf("response reference is nil")
 	}
 
 	return ref.Value, nil

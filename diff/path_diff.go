@@ -43,7 +43,7 @@ func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*Path
 func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
 
 	if pathItem1 == nil || pathItem2 == nil {
-		return nil, fmt.Errorf("PathItem is nil")
+		return nil, fmt.Errorf("path item is nil")
 	}
 
 	result := newPathDiff()

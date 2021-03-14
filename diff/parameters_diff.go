@@ -130,7 +130,7 @@ func getParametersDiffInternal(config *Config, params1, params2 openapi3.Paramet
 func derefParam(ref *openapi3.ParameterRef) (*openapi3.Parameter, error) {
 
 	if ref == nil || ref.Value == nil {
-		return nil, fmt.Errorf("Parameter reference is nil")
+		return nil, fmt.Errorf("parameter reference is nil")
 	}
 
 	return ref.Value, nil
@@ -144,7 +144,12 @@ func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openap
 			return nil, err
 		}
 
-		if equalParams(param1, value2) {
+		equal, err := equalParams(param1, value2)
+		if err != nil {
+			return nil, err
+		}
+
+		if equal {
 			return value2, nil
 		}
 	}
@@ -152,9 +157,11 @@ func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openap
 	return nil, nil
 }
 
-func equalParams(param1 *openapi3.Parameter, param2 *openapi3.Parameter) bool {
-	// TODO: check if param1 or param2 are nil (it shouldn't happen)
-	return param1.Name == param2.Name && param1.In == param2.In
+func equalParams(param1 *openapi3.Parameter, param2 *openapi3.Parameter) (bool, error) {
+	if param1 == nil || param2 == nil {
+		return false, fmt.Errorf("param is nil")
+	}
+	return param1.Name == param2.Name && param1.In == param2.In, nil
 }
 
 func (parametersDiff *ParametersDiff) getSummary() *SummaryDetails {

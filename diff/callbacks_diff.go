@@ -92,7 +92,7 @@ func getCallbacksDiffInternal(config *Config, callbacks1, callbacks2 openapi3.Ca
 func derefCallback(ref *openapi3.CallbackRef) (*openapi3.Callback, error) {
 
 	if ref == nil || ref.Value == nil {
-		return nil, fmt.Errorf("Callback reference is nil")
+		return nil, fmt.Errorf("callback reference is nil")
 	}
 
 	return ref.Value, nil

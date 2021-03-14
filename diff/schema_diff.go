@@ -190,7 +190,7 @@ func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *o
 func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
 
 	if ref == nil || ref.Value == nil {
-		return nil, fmt.Errorf("Schema reference is nil")
+		return nil, fmt.Errorf("schema reference is nil")
 	}
 
 	return ref.Value, nil

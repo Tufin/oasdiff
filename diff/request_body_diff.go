@@ -77,7 +77,7 @@ func getRequestBodyDiffInternal(config *Config, requestBodyRef1, requestBodyRef2
 func derefRequestBody(ref *openapi3.RequestBodyRef) (*openapi3.RequestBody, error) {
 
 	if ref == nil || ref.Value == nil {
-		return nil, fmt.Errorf("Request body reference is nil")
+		return nil, fmt.Errorf("request body reference is nil")
 	}
 
 	return ref.Value, nil

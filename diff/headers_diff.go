@@ -87,7 +87,7 @@ func getHeadersDiffInternal(config *Config, headers1, headers2 openapi3.Headers)
 func derefHeader(ref *openapi3.HeaderRef) (*openapi3.Header, error) {
 
 	if ref == nil || ref.Value == nil {
-		return nil, fmt.Errorf("Header reference is nil")
+		return nil, fmt.Errorf("header reference is nil")
 	}
 
 	return ref.Value, nil
