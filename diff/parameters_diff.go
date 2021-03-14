@@ -73,6 +73,7 @@ func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) (*P
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
@@ -93,6 +94,7 @@ func getParametersDiffInternal(config *Config, params1, params2 openapi3.Paramet
 		if err != nil {
 			return nil, err
 		}
+		
 		if paramValue2 != nil {
 			diff, err := getParameterDiff(config, value1, paramValue2)
 			if err != nil {
