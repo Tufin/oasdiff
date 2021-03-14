@@ -13,7 +13,7 @@ type OAuthFlowDiff struct {
 	ScopesDiff           *StringMapDiff  `json:"scopes,omitempty" yaml:"scopes,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *OAuthFlowDiff) Empty() bool {
 	return diff == nil || *diff == OAuthFlowDiff{}
 }

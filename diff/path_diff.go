@@ -19,7 +19,7 @@ func newPathDiff() *PathDiff {
 	return &PathDiff{}
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (pathDiff *PathDiff) Empty() bool {
 	if pathDiff == nil {
 		return true

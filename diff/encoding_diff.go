@@ -13,7 +13,7 @@ type EncodingDiff struct {
 	AllowReservedDiff *ValueDiff   `json:"allowReservedDiff,omitempty" yaml:"allowReservedDiff,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *EncodingDiff) Empty() bool {
 	return diff == nil || *diff == EncodingDiff{}
 }

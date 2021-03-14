@@ -12,7 +12,7 @@ type ServersDiff struct {
 // ModifiedServers is map of server names to their respective diffs
 type ModifiedServers map[string]*ServerDiff
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *ServersDiff) Empty() bool {
 	if diff == nil {
 		return true

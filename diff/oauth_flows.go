@@ -11,7 +11,7 @@ type OAuthFlowsDiff struct {
 	AuthorizationCodeDiff *OAuthFlowDiff  `json:"authorizationCode,omitempty" yaml:"authorizationCode,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *OAuthFlowsDiff) Empty() bool {
 	return diff == nil || *diff == OAuthFlowsDiff{}
 }

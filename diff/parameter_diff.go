@@ -20,7 +20,7 @@ type ParameterDiff struct {
 	ContentDiff *ContentDiff `json:"content,omitempty" yaml:"content,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *ParameterDiff) Empty() bool {
 	return diff == nil || *diff == ParameterDiff{}
 }

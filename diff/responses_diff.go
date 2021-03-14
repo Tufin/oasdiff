@@ -13,7 +13,7 @@ type ResponsesDiff struct {
 	Modified ModifiedResponses `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (responsesDiff *ResponsesDiff) Empty() bool {
 	if responsesDiff == nil {
 		return true

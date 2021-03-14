@@ -14,7 +14,7 @@ type PathsDiff struct {
 	Modified ModifiedPaths `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (pathsDiff *PathsDiff) Empty() bool {
 	if pathsDiff == nil {
 		return true

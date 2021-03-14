@@ -49,7 +49,7 @@ func (stringSet StringSet) equals(other StringSet) bool {
 		other.minus(stringSet).Empty()
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (stringSet StringSet) Empty() bool {
 	return len(stringSet) == 0
 }

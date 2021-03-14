@@ -12,7 +12,7 @@ type EncodingsDiff struct {
 // ModifiedEncodings is map of enconding names to their respective diffs
 type ModifiedEncodings map[string]*EncodingDiff
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *EncodingsDiff) Empty() bool {
 	if diff == nil {
 		return true

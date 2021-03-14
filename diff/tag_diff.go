@@ -8,7 +8,7 @@ type TagDiff struct {
 	DescriptionDiff *ValueDiff `json:"description,omitempty" yaml:"description,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *TagDiff) Empty() bool {
 	return diff == nil || *diff == TagDiff{}
 }

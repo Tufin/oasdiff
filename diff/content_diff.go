@@ -22,7 +22,7 @@ func newContentDiff() *ContentDiff {
 	return &ContentDiff{}
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (contentDiff *ContentDiff) Empty() bool {
 	return contentDiff == nil || *contentDiff == ContentDiff{}
 }

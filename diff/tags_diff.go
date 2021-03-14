@@ -22,7 +22,7 @@ func newTagsDiff() *TagsDiff {
 // ModifiedTags is map of tag names to their respective diffs
 type ModifiedTags map[string]*TagDiff
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (tagsDiff *TagsDiff) Empty() bool {
 	if tagsDiff == nil {
 		return true

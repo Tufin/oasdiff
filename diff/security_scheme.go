@@ -15,7 +15,7 @@ type SecuritySchemeDiff struct {
 	OpenIDConnectURLDiff *ValueDiff      `json:"openIDConnectURL,omitempty" yaml:"openIDConnectURL,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *SecuritySchemeDiff) Empty() bool {
 	return diff == nil || *diff == SecuritySchemeDiff{}
 }

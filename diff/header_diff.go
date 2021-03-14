@@ -14,7 +14,7 @@ type HeaderDiff struct {
 	ContentDiff *ContentDiff `json:"content,omitempty" yaml:"content,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (headerDiff *HeaderDiff) Empty() bool {
 	return headerDiff == nil || *headerDiff == HeaderDiff{}
 }

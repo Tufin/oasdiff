@@ -13,7 +13,7 @@ type SecurityRequirementsDiff struct {
 	// TODO: handle Modified Security Requirements
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *SecurityRequirementsDiff) Empty() bool {
 	if diff == nil {
 		return true

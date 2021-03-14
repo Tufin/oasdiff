@@ -8,7 +8,7 @@ type ValueDiff struct {
 	To   interface{} `json:"to" yaml:"to"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *ValueDiff) Empty() bool {
 	return diff == nil
 }

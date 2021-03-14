@@ -18,7 +18,7 @@ func newEnumDiff() *EnumDiff {
 	}
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (enumDiff *EnumDiff) Empty() bool {
 	if enumDiff == nil {
 		return true

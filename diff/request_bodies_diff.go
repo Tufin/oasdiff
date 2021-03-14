@@ -11,7 +11,7 @@ type RequestBodiesDiff struct {
 	Modified ModifiedRequestBodies `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (requestBodiesDiff *RequestBodiesDiff) Empty() bool {
 	if requestBodiesDiff == nil {
 		return true

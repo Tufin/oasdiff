@@ -13,7 +13,7 @@ type CallbacksDiff struct {
 	Modified ModifiedCallbacks `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (callbacksDiff *CallbacksDiff) Empty() bool {
 
 	if callbacksDiff == nil {

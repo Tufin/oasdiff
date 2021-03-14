@@ -13,7 +13,7 @@ type ParametersDiff struct {
 	Modified ParamDiffByLocation  `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (parametersDiff *ParametersDiff) Empty() bool {
 	if parametersDiff == nil {
 		return true
@@ -94,7 +94,7 @@ func getParametersDiffInternal(config *Config, params1, params2 openapi3.Paramet
 		if err != nil {
 			return nil, err
 		}
-		
+
 		if paramValue2 != nil {
 			diff, err := getParameterDiff(config, value1, paramValue2)
 			if err != nil {

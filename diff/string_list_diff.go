@@ -13,7 +13,7 @@ func newStringsDiff() *StringsDiff {
 	}
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (stringsDiff *StringsDiff) Empty() bool {
 	if stringsDiff == nil {
 		return true

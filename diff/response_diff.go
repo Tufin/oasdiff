@@ -11,7 +11,7 @@ type ResponseDiff struct {
 	// Links
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *ResponseDiff) Empty() bool {
 	return diff == nil || *diff == ResponseDiff{}
 }

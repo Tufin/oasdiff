@@ -21,7 +21,7 @@ func newSpecDiff() *SpecDiff {
 	return &SpecDiff{}
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (specDiff *SpecDiff) Empty() bool {
 	return specDiff == nil || *specDiff == SpecDiff{}
 }

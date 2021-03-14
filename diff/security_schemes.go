@@ -13,7 +13,7 @@ type SecuritySchemesDiff struct {
 	Modified ModifiedSecuritySchemes `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *SecuritySchemesDiff) Empty() bool {
 	if diff == nil {
 		return true

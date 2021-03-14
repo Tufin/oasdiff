@@ -14,7 +14,7 @@ type ExtensionsDiff struct {
 // ModifiedExtensions is map of extensions names to their respective diffs
 type ModifiedExtensions map[string]*ValueDiff
 
-// Empty return true if there is no diff
+// Empty indicates whether a change was found in this element
 func (diff *ExtensionsDiff) Empty() bool {
 	if diff == nil {
 		return true
