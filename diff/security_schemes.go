@@ -1,6 +1,8 @@
 package diff
 
 import (
+	"fmt"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -33,39 +35,55 @@ func newSecuritySchemesDiff() *SecuritySchemesDiff {
 	}
 }
 
-func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) *SecuritySchemesDiff {
-	diff := getSecuritySchemesDiffInternal(config, securitySchemes1, securitySchemes2)
-	if diff.Empty() {
-		return nil
+func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) (*SecuritySchemesDiff, error) {
+	diff, err := getSecuritySchemesDiffInternal(config, securitySchemes1, securitySchemes2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getSecuritySchemesDiffInternal(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) *SecuritySchemesDiff {
+func getSecuritySchemesDiffInternal(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) (*SecuritySchemesDiff, error) {
 
 	result := newSecuritySchemesDiff()
 
-	for value1, ref1 := range securitySchemes1 {
-		if ref1 != nil && ref1.Value != nil {
-			if value2, ok := securitySchemes2[value1]; ok {
-				if diff := getSecuritySchemeDiff(config, ref1.Value, value2.Value); !diff.Empty() {
-					result.Modified[value1] = diff
-				}
-			} else {
-				result.Deleted = append(result.Deleted, value1)
+	for name1, ref1 := range securitySchemes1 {
+		if ref2, ok := securitySchemes2[name1]; ok {
+			value1, err := derefSecurityScheme(ref1)
+			if err != nil {
+				return nil, err
 			}
+			value2, err := derefSecurityScheme(ref2)
+			if err != nil {
+				return nil, err
+			}
+			if diff := getSecuritySchemeDiff(config, value1, value2); !diff.Empty() {
+				result.Modified[name1] = diff
+			}
+		} else {
+			result.Deleted = append(result.Deleted, name1)
 		}
 	}
 
-	for value2, ref2 := range securitySchemes2 {
-		if ref2 != nil && ref2.Value != nil {
-			if _, ok := securitySchemes1[value2]; !ok {
-				result.Added = append(result.Added, value2)
-			}
+	for value2 := range securitySchemes2 {
+		if _, ok := securitySchemes1[value2]; !ok {
+			result.Added = append(result.Added, value2)
 		}
 	}
 
-	return result
+	return result, nil
+}
+
+func derefSecurityScheme(ref *openapi3.SecuritySchemeRef) (*openapi3.SecurityScheme, error) {
+
+	if ref == nil || ref.Value == nil {
+		return nil, fmt.Errorf("Security scheme reference is nil")
+	}
+
+	return ref.Value, nil
 }
 
 func (diff *SecuritySchemesDiff) getSummary() *SummaryDetails {

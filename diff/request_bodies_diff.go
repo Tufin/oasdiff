@@ -33,39 +33,42 @@ func newRequestBodiesDiff() *RequestBodiesDiff {
 	}
 }
 
-func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) *RequestBodiesDiff {
-	diff := getRequestBodiesDiffInternal(config, requestBodies1, requestBodies2)
-	if diff.Empty() {
-		return nil
+func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) (*RequestBodiesDiff, error) {
+	diff, err := getRequestBodiesDiffInternal(config, requestBodies1, requestBodies2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getRequestBodiesDiffInternal(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) *RequestBodiesDiff {
+func getRequestBodiesDiffInternal(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) (*RequestBodiesDiff, error) {
 
 	result := newRequestBodiesDiff()
 
 	for requestBodyValue1, requestBodyRef1 := range requestBodies1 {
-		if requestBodyRef1 != nil && requestBodyRef1.Value != nil {
-			if requestBodyValue2, ok := requestBodies2[requestBodyValue1]; ok {
-				if diff := getRequestBodyDiff(config, requestBodyRef1, requestBodyValue2); !diff.Empty() {
-					result.Modified[requestBodyValue1] = diff
-				}
-			} else {
-				result.Deleted = append(result.Deleted, requestBodyValue1)
+		if requestBodyValue2, ok := requestBodies2[requestBodyValue1]; ok {
+			diff, err := getRequestBodyDiff(config, requestBodyRef1, requestBodyValue2)
+			if err != nil {
+				return nil, err
 			}
+			if !diff.Empty() {
+				result.Modified[requestBodyValue1] = diff
+			}
+		} else {
+			result.Deleted = append(result.Deleted, requestBodyValue1)
 		}
 	}
 
-	for requestBodyValue2, requestBodyRef2 := range requestBodies2 {
-		if requestBodyRef2 != nil && requestBodyRef2.Value != nil {
-			if _, ok := requestBodies1[requestBodyValue2]; !ok {
-				result.Added = append(result.Added, requestBodyValue2)
-			}
+	for requestBodyValue2 := range requestBodies2 {
+		if _, ok := requestBodies1[requestBodyValue2]; !ok {
+			result.Added = append(result.Added, requestBodyValue2)
 		}
 	}
 
-	return result
+	return result, nil
 }
 
 func (requestBodiesDiff *RequestBodiesDiff) getSummary() *SummaryDetails {

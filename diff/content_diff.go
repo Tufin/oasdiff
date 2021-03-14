@@ -27,57 +27,71 @@ func (contentDiff *ContentDiff) Empty() bool {
 	return contentDiff == nil || *contentDiff == ContentDiff{}
 }
 
-func getContentDiff(config *Config, content1, content2 openapi3.Content) *ContentDiff {
-	diff := getContentDiffInternal(config, content1, content2)
-	if diff.Empty() {
-		return nil
+func getContentDiff(config *Config, content1, content2 openapi3.Content) (*ContentDiff, error) {
+	diff, err := getContentDiffInternal(config, content1, content2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getContentDiffInternal(config *Config, content1, content2 openapi3.Content) *ContentDiff {
+func getContentDiffInternal(config *Config, content1, content2 openapi3.Content) (*ContentDiff, error) {
 
 	if len(content1) == 0 && len(content2) == 0 {
-		return nil
+		return nil, nil
 	}
 
 	result := newContentDiff()
 
 	if len(content1) == 0 && len(content2) != 0 {
 		result.MediaTypeAdded = true
-		return result
+		return result, nil
 	}
 
 	if len(content1) != 0 && len(content2) == 0 {
 		result.MediaTypeDeleted = true
-		return result
+		return result, nil
 	}
 
 	mediaType1, mediaTypeValue1, err := getMediaType(content1)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	mediaType2, mediaTypeValue2, err := getMediaType(content2)
 	if err != nil {
-		return nil
+		return nil, err
+	}
+
+	if mediaTypeValue1 == nil || mediaTypeValue2 == nil {
+		return nil, fmt.Errorf("MediaType is nil")
 	}
 
 	if mediaType1 != mediaType2 {
 		result.MediaTypeDiff = true
-		return result
+		return result, nil
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, mediaTypeValue1.ExtensionProps, mediaTypeValue2.ExtensionProps)
-	result.SchemaDiff = getSchemaDiff(config, mediaTypeValue1.Schema, mediaTypeValue2.Schema)
+	result.SchemaDiff, err = getSchemaDiff(config, mediaTypeValue1.Schema, mediaTypeValue2.Schema)
+	if err != nil {
+		return nil, err
+	}
 
 	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(mediaTypeValue1.Example, mediaTypeValue1.Example)
 	}
 
-	result.EncodingsDiff = getEncodingsDiff(config, mediaTypeValue1.Encoding, mediaTypeValue2.Encoding)
+	result.EncodingsDiff, err = getEncodingsDiff(config, mediaTypeValue1.Encoding, mediaTypeValue2.Encoding)
+	if err != nil {
+		return nil, err
+	}
 
-	return result
+	return result, nil
 }
 
 // getMediaType returns the single MediaType entry in the content map
@@ -87,7 +101,7 @@ func getMediaType(content openapi3.Content) (string, *openapi3.MediaType, error)
 	var mediaTypeValue *openapi3.MediaType
 
 	if len(content) != 1 {
-		return "", nil, fmt.Errorf("content map has more than one value - this shouldn't happen. %+v", content)
+		return "", nil, fmt.Errorf("content map has more than one value: %+v", content)
 	}
 
 	for k, v := range content {

@@ -31,21 +31,28 @@ func newEncodingsDiff() *EncodingsDiff {
 	}
 }
 
-func getEncodingsDiff(config *Config, encodings1, encodings2 map[string]*openapi3.Encoding) *EncodingsDiff {
-	diff := getEncodingsDiffInternal(config, encodings1, encodings2)
-	if diff.Empty() {
-		return nil
+func getEncodingsDiff(config *Config, encodings1, encodings2 map[string]*openapi3.Encoding) (*EncodingsDiff, error) {
+	diff, err := getEncodingsDiffInternal(config, encodings1, encodings2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getEncodingsDiffInternal(config *Config, encodings1, encodings2 map[string]*openapi3.Encoding) *EncodingsDiff {
+func getEncodingsDiffInternal(config *Config, encodings1, encodings2 map[string]*openapi3.Encoding) (*EncodingsDiff, error) {
 
 	result := newEncodingsDiff()
 
 	for name1, encoding1 := range encodings1 {
 		if encoding2, ok := encodings2[name1]; ok {
-			if diff := getEncodingDiff(config, encoding1, encoding2); !diff.Empty() {
+			diff, err := getEncodingDiff(config, encoding1, encoding2)
+			if err != nil {
+				return nil, err
+			}
+			if !diff.Empty() {
 				result.Modified[name1] = diff
 			}
 		} else {
@@ -59,5 +66,5 @@ func getEncodingsDiffInternal(config *Config, encodings1, encodings2 map[string]
 		}
 	}
 
-	return result
+	return result, nil
 }

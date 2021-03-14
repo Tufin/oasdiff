@@ -185,6 +185,11 @@ paths:
               responses:   # Expected responses to the callback message
                 '200':
                   description: Your server returns this code if it accepts the callback
+          'bye':
+            post:
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
       responses:
         default:
           description: Tufin

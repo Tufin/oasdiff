@@ -1,6 +1,8 @@
 package diff
 
 import (
+	"fmt"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -57,29 +59,47 @@ func (diff *SchemaDiff) Empty() bool {
 	return diff == nil || *diff == SchemaDiff{}
 }
 
-func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) *SchemaDiff {
-	diff := getSchemaDiffInternal(config, schema1, schema2)
-	if diff.Empty() {
-		return nil
+func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
+	diff, err := getSchemaDiffInternal(config, schema1, schema2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef) *SchemaDiff {
+func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
 
-	value1, value2, status := getSchemaValues(schema1, schema2)
+	value1, value2, status, err := getSchemaValues(schema1, schema2)
+	if err != nil {
+		return nil, err
+	}
 
 	if status != schemaStatusOK {
-		return toSchemaDiff(status)
+		return toSchemaDiff(status), nil
 	}
 
 	result := SchemaDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
-	result.OneOfDiff = getDiffSchemas(config, value1.OneOf, value2.OneOf)
-	result.AnyOfDiff = getDiffSchemas(config, value1.AnyOf, value2.AnyOf)
-	result.AllOfDiff = getDiffSchemas(config, value1.AllOf, value2.AllOf)
-	result.NotDiff = getSchemaDiff(config, value1.Not, value2.Not)
+	result.OneOfDiff, err = getDiffSchemas(config, value1.OneOf, value2.OneOf)
+	if err != nil {
+		return nil, err
+	}
+	result.AnyOfDiff, err = getDiffSchemas(config, value1.AnyOf, value2.AnyOf)
+	if err != nil {
+		return nil, err
+	}
+	result.AllOfDiff, err = getDiffSchemas(config, value1.AllOf, value2.AllOf)
+	if err != nil {
+		return nil, err
+	}
+	result.NotDiff, err = getSchemaDiff(config, value1.Not, value2.Not)
+	if err != nil {
+		return nil, err
+	}
 	result.TypeDiff = getValueDiff(value1.Type, value2.Type)
 	result.TitleDiff = getValueDiff(value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
@@ -111,15 +131,26 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	// compiledPattern is derived from pattern -> no need to diff
 	result.MinItems = getValueDiff(value1.MinItems, value2.MinItems)
 	result.MaxItems = getValueDiff(value1.MaxItems, value2.MaxItems)
-	result.Items = getSchemaDiff(config, value1.Items, value2.Items)
+	result.Items, err = getSchemaDiff(config, value1.Items, value2.Items)
+	if err != nil {
+		return nil, err
+	}
+
 	result.Required = getStringsDiff(value1.Required, value2.Required)
-	result.PropertiesDiff = getSchemasDiff(config, value1.Properties, value2.Properties)
+	result.PropertiesDiff, err = getSchemasDiff(config, value1.Properties, value2.Properties)
+	if err != nil {
+		return nil, err
+	}
+
 	result.MinProps = getValueDiff(value1.MinProps, value2.MinProps)
 	result.MaxProps = getValueDiff(value1.MaxProps, value2.MaxProps)
-	result.AdditionalProperties = getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties)
+	result.AdditionalProperties, err = getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties)
+	if err != nil {
+		return nil, err
+	}
 	// Discriminator
 
-	return &result
+	return &result, nil
 }
 
 type schemaStatus int
@@ -131,26 +162,38 @@ const (
 	schemaStatusSchemaDeleted
 )
 
-func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *openapi3.Schema, schemaStatus) {
+func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *openapi3.Schema, schemaStatus, error) {
 
 	if schema1 == nil && schema2 == nil {
-		return nil, nil, schemaStatusNoSchemas
+		return nil, nil, schemaStatusNoSchemas, nil
 	}
 
 	if schema1 == nil && schema2 != nil {
-		return nil, nil, schemaStatusSchemaAdded
+		return nil, nil, schemaStatusSchemaAdded, nil
 	}
 
 	if schema1 != nil && schema2 == nil {
-		return nil, nil, schemaStatusSchemaDeleted
+		return nil, nil, schemaStatusSchemaDeleted, nil
 	}
 
-	return derefSchema(schema1), derefSchema(schema2), schemaStatusOK
+	value1, err := derefSchema(schema1)
+	if err != nil {
+		return nil, nil, schemaStatusOK, err
+	}
+	value2, err := derefSchema(schema2)
+	if err != nil {
+		return nil, nil, schemaStatusOK, err
+	}
+	return value1, value2, schemaStatusOK, nil
 }
 
-func derefSchema(ref *openapi3.SchemaRef) *openapi3.Schema {
-	// TODO: check if ref is nil
-	return ref.Value
+func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
+
+	if ref == nil || ref.Value == nil {
+		return nil, fmt.Errorf("Schema reference is nil")
+	}
+
+	return ref.Value, nil
 }
 
 func toSchemaDiff(status schemaStatus) *SchemaDiff {
@@ -165,29 +208,44 @@ func toSchemaDiff(status schemaStatus) *SchemaDiff {
 	return nil
 }
 
-func getDiffSchemas(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
+func getDiffSchemas(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
 
-	return !schemaRefsContained(config, schemaRefs1, schemaRefs2) || !schemaRefsContained(config, schemaRefs2, schemaRefs1)
+	contained1, err := schemaRefsContained(config, schemaRefs1, schemaRefs2)
+	if err != nil {
+		return false, err
+	}
+	contained2, err := schemaRefsContained(config, schemaRefs2, schemaRefs1)
+	if err != nil {
+		return false, err
+	}
+
+	return !contained1 || !contained2, nil
 }
 
-func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) bool {
+func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
 	for _, schemaRef1 := range schemaRefs1 {
-		if schemaRef1 != nil && schemaRef1.Value != nil {
-			if !findSchema(config, schemaRef1, schemaRefs2) {
-				return false
-			}
+		found, err := findSchema(config, schemaRef1, schemaRefs2)
+		if err != nil {
+			return false, err
+		}
+		if !found {
+			return false, nil
 		}
 	}
-	return true
+	return true, nil
 }
 
-func findSchema(config *Config, schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) bool {
+func findSchema(config *Config, schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
 	// TODO: optimize with a map
 	for _, schemaRef2 := range schemaRefs2 {
-		if diff := getSchemaDiff(config, schemaRef1, schemaRef2); diff.Empty() {
-			return true
+		diff, err := getSchemaDiff(config, schemaRef1, schemaRef2)
+		if err != nil {
+			return false, err
+		}
+		if diff.Empty() {
+			return true, nil
 		}
 	}
 
-	return false
+	return false, nil
 }

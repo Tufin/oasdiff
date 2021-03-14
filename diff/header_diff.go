@@ -19,28 +19,38 @@ func (headerDiff *HeaderDiff) Empty() bool {
 	return headerDiff == nil || *headerDiff == HeaderDiff{}
 }
 
-func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) *HeaderDiff {
-	diff := getHeaderDiffInternal(config, header1, header2)
-	if diff.Empty() {
-		return nil
+func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
+	diff, err := getHeaderDiffInternal(config, header1, header2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getHeaderDiffInternal(config *Config, header1, header2 *openapi3.Header) *HeaderDiff {
+func getHeaderDiffInternal(config *Config, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
 	result := HeaderDiff{}
+	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, header1.ExtensionProps, header2.ExtensionProps)
 	result.DescriptionDiff = getValueDiff(header1.Description, header2.Description)
 	result.DeprecatedDiff = getValueDiff(header1.Deprecated, header2.Deprecated)
 	result.RequiredDiff = getValueDiff(header1.Required, header2.Required)
-	result.SchemaDiff = getSchemaDiff(config, header1.Schema, header2.Schema)
+	result.SchemaDiff, err = getSchemaDiff(config, header1.Schema, header2.Schema)
+	if err != nil {
+		return nil, err
+	}
 
 	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(header1.Example, header2.Example)
 	}
 
-	result.ContentDiff = getContentDiff(config, header1.Content, header2.Content)
+	result.ContentDiff, err = getContentDiff(config, header1.Content, header2.Content)
+	if err != nil {
+		return nil, err
+	}
 
-	return &result
+	return &result, nil
 }

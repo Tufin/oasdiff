@@ -1,6 +1,8 @@
 package diff
 
 import (
+	"fmt"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -33,39 +35,61 @@ func newResponsesDiff() *ResponsesDiff {
 	}
 }
 
-func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses) *ResponsesDiff {
-	diff := getResponsesDiffInternal(config, responses1, responses2)
-	if diff.Empty() {
-		return nil
+func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses) (*ResponsesDiff, error) {
+	diff, err := getResponsesDiffInternal(config, responses1, responses2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getResponsesDiffInternal(config *Config, responses1, responses2 openapi3.Responses) *ResponsesDiff {
+func getResponsesDiffInternal(config *Config, responses1, responses2 openapi3.Responses) (*ResponsesDiff, error) {
 
 	result := newResponsesDiff()
 
 	for responseValue1, responseRef1 := range responses1 {
-		if responseRef1 != nil && responseRef1.Value != nil {
-			if responseValue2, ok := responses2[responseValue1]; ok {
-				if diff := diffResponseValues(config, responseRef1.Value, responseValue2.Value); !diff.Empty() {
-					result.Modified[responseValue1] = diff
-				}
-			} else {
-				result.Deleted = append(result.Deleted, responseValue1)
+		if responseRef2, ok := responses2[responseValue1]; ok {
+			value1, err := derefResponse(responseRef1)
+			if err != nil {
+				return nil, err
 			}
+
+			value2, err := derefResponse(responseRef2)
+			if err != nil {
+				return nil, err
+			}
+
+			diff, err := diffResponseValues(config, value1, value2)
+			if err != nil {
+				return nil, err
+			}
+			if !diff.Empty() {
+				result.Modified[responseValue1] = diff
+			}
+		} else {
+			result.Deleted = append(result.Deleted, responseValue1)
 		}
 	}
 
-	for responseValue2, responseRef2 := range responses2 {
-		if responseRef2 != nil && responseRef2.Value != nil {
-			if _, ok := responses1[responseValue2]; !ok {
-				result.Added = append(result.Added, responseValue2)
-			}
+	for responseValue2 := range responses2 {
+		if _, ok := responses1[responseValue2]; !ok {
+			result.Added = append(result.Added, responseValue2)
 		}
 	}
 
-	return result
+	return result, nil
+}
+
+func derefResponse(ref *openapi3.ResponseRef) (*openapi3.Response, error) {
+
+	if ref == nil || ref.Value == nil {
+		return nil, fmt.Errorf("Response reference is nil")
+	}
+
+	return ref.Value, nil
 }
 
 func (responsesDiff *ResponsesDiff) getSummary() *SummaryDetails {

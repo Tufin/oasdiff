@@ -31,47 +31,85 @@ func newOperationsDiff() *OperationsDiff {
 // ModifiedOperations is a map of HTTP methods to their respective diffs
 type ModifiedOperations map[string]*MethodDiff
 
-func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *OperationsDiff {
-	diff := getOperationsDiffInternal(config, pathItem1, pathItem2)
-	if diff.Empty() {
-		return nil
+func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
+	diff, err := getOperationsDiffInternal(config, pathItem1, pathItem2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getOperationsDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *OperationsDiff {
+func getOperationsDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
 
 	result := newOperationsDiff()
+	var err error
 
-	result.diffOperation(config, pathItem1.Connect, pathItem2.Connect, "CONNECT")
-	result.diffOperation(config, pathItem1.Delete, pathItem2.Delete, "DELETE")
-	result.diffOperation(config, pathItem1.Get, pathItem2.Get, "GET")
-	result.diffOperation(config, pathItem1.Head, pathItem2.Head, "HEAD")
-	result.diffOperation(config, pathItem1.Options, pathItem2.Options, "OPTIONS")
-	result.diffOperation(config, pathItem1.Patch, pathItem2.Patch, "PATCH")
-	result.diffOperation(config, pathItem1.Post, pathItem2.Post, "POST")
-	result.diffOperation(config, pathItem1.Put, pathItem2.Put, "PUT")
-	result.diffOperation(config, pathItem1.Trace, pathItem2.Trace, "TRACE")
+	err = result.diffOperation(config, pathItem1.Connect, pathItem2.Connect, "CONNECT")
+	if err != nil {
+		return nil, err
+	}
+	err = result.diffOperation(config, pathItem1.Delete, pathItem2.Delete, "DELETE")
+	if err != nil {
+		return nil, err
+	}
+	err = result.diffOperation(config, pathItem1.Get, pathItem2.Get, "GET")
+	if err != nil {
+		return nil, err
+	}
+	err = result.diffOperation(config, pathItem1.Head, pathItem2.Head, "HEAD")
+	if err != nil {
+		return nil, err
+	}
+	err = result.diffOperation(config, pathItem1.Options, pathItem2.Options, "OPTIONS")
+	if err != nil {
+		return nil, err
+	}
+	err = result.diffOperation(config, pathItem1.Patch, pathItem2.Patch, "PATCH")
+	if err != nil {
+		return nil, err
+	}
+	err = result.diffOperation(config, pathItem1.Post, pathItem2.Post, "POST")
+	if err != nil {
+		return nil, err
+	}
+	err = result.diffOperation(config, pathItem1.Put, pathItem2.Put, "PUT")
+	if err != nil {
+		return nil, err
+	}
+	err = result.diffOperation(config, pathItem1.Trace, pathItem2.Trace, "TRACE")
+	if err != nil {
+		return nil, err
+	}
 
-	return result
+	return result, nil
 }
 
-func (operationsDiff *OperationsDiff) diffOperation(config *Config, operation1, operation2 *openapi3.Operation, method string) {
+func (operationsDiff *OperationsDiff) diffOperation(config *Config, operation1, operation2 *openapi3.Operation, method string) error {
 	if operation1 == nil && operation2 == nil {
-		return
+		return nil
 	}
 
 	if operation1 == nil && operation2 != nil {
 		operationsDiff.Added = append(operationsDiff.Added, method)
-		return
+		return nil
 	}
 
 	if operation1 != nil && operation2 == nil {
 		operationsDiff.Deleted = append(operationsDiff.Added, method)
-		return
+		return nil
 	}
 
-	if diff := getMethodDiff(config, operation1, operation2); !diff.Empty() {
+	diff, err := getMethodDiff(config, operation1, operation2)
+	if err != nil {
+		return err
+	}
+
+	if !diff.Empty() {
 		operationsDiff.Modified[method] = diff
 	}
+
+	return nil
 }

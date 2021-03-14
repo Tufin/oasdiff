@@ -26,22 +26,34 @@ func (pathDiff *PathDiff) Empty() bool {
 	return pathDiff == nil || *pathDiff == *newPathDiff()
 }
 
-func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *PathDiff {
-	diff := getPathDiffInternal(config, pathItem1, pathItem2)
-	if diff.Empty() {
-		return nil
+func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
+	diff, err := getPathDiffInternal(config, pathItem1, pathItem2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) *PathDiff {
+func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
 	result := newPathDiff()
+	var err error
 
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
-	result.OperationsDiff = getOperationsDiff(config, pathItem1, pathItem2)
-	result.ServersDiff = getServersDiff(config, &pathItem1.Servers, &pathItem2.Servers)
-	result.ParametersDiff = getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters)
 
-	return result
+	result.OperationsDiff, err = getOperationsDiff(config, pathItem1, pathItem2)
+	if err != nil {
+		return nil, err
+	}
+
+	result.ServersDiff = getServersDiff(config, &pathItem1.Servers, &pathItem2.Servers)
+	result.ParametersDiff, err = getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }

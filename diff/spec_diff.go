@@ -1,6 +1,10 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"errors"
+
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#schema
 type SpecDiff struct {
@@ -22,30 +26,47 @@ func (specDiff *SpecDiff) Empty() bool {
 	return specDiff == nil || *specDiff == SpecDiff{}
 }
 
-func getDiff(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
-	diff := getDiffInternal(config, s1, s2)
-	if diff.Empty() {
-		return nil
+func getDiff(config *Config, s1, s2 *openapi3.Swagger) (*SpecDiff, error) {
+
+	if s1 == nil || s2 == nil {
+		return nil, errors.New("spec is nil")
 	}
-	return diff
+
+	diff, err := getDiffInternal(config, s1, s2)
+	if err != nil {
+		return nil, err
+	}
+
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getDiffInternal(config *Config, s1, s2 *openapi3.Swagger) *SpecDiff {
+func getDiffInternal(config *Config, s1, s2 *openapi3.Swagger) (*SpecDiff, error) {
 
 	result := newSpecDiff()
+	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps)
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 	// Info
-	result.PathsDiff = getPathsDiff(config, s1.Paths, s2.Paths)
+	result.PathsDiff, err = getPathsDiff(config, s1.Paths, s2.Paths)
+	if err != nil {
+		return nil, err
+	}
 	result.SecurityDiff = getSecurityRequirementsDiff(config, &s1.Security, &s2.Security)
 	result.ServersDiff = getServersDiff(config, &s1.Servers, &s2.Servers)
 	result.TagsDiff = getTagsDiff(s1.Tags, s2.Tags)
 	// ExternalDocs
 
-	result.ComponentsDiff = getComponentsDiff(config, s1.Components, s2.Components)
+	result.ComponentsDiff, err = getComponentsDiff(config, s1.Components, s2.Components)
+	if err != nil {
+		return nil, err
+	}
 
-	return result
+	return result, nil
 }
 
 func (specDiff *SpecDiff) getSummary() *Summary {

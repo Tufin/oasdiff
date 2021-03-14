@@ -1,9 +1,15 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"fmt"
+
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // RequestBodyDiff is a diff between request body objects: https://swagger.io/specification/#request-body-object
 type RequestBodyDiff struct {
+	Added           bool         `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted         bool         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	DescriptionDiff *ValueDiff   `json:"description,omitempty" yaml:"description,omitempty"`
 	ContentDiff     *ContentDiff `json:"content,omitempty" yaml:"content,omitempty"`
 }
@@ -20,27 +26,59 @@ func newRequestBodyDiff() *RequestBodyDiff {
 	return &RequestBodyDiff{}
 }
 
-func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) *RequestBodyDiff {
-	diff := getRequestBodyDiffInternal(config, requestBodyRef1, requestBodyRef2)
-	if diff.Empty() {
-		return nil
+func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) (*RequestBodyDiff, error) {
+	diff, err := getRequestBodyDiffInternal(config, requestBodyRef1, requestBodyRef2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getRequestBodyDiffInternal(config *Config, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) *RequestBodyDiff {
-	result := newRequestBodyDiff()
+func getRequestBodyDiffInternal(config *Config, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) (*RequestBodyDiff, error) {
 
-	if requestBodyRef1 == nil || requestBodyRef1.Value == nil {
-		// TODO: handle added, deleted etc.
-		return nil
+	if requestBodyRef1 == nil && requestBodyRef2 == nil {
+		return nil, nil
 	}
 
-	requestBody1 := requestBodyRef1.Value
-	requestBody2 := requestBodyRef2.Value
+	result := newRequestBodyDiff()
+
+	if requestBodyRef1 == nil && requestBodyRef2 != nil {
+		result.Added = true
+		return result, nil
+	}
+
+	if requestBodyRef1 != nil && requestBodyRef2 == nil {
+		result.Deleted = true
+		return result, nil
+	}
+
+	requestBody1, err := derefRequestBody(requestBodyRef1)
+	if err != nil {
+		return nil, err
+	}
+	requestBody2, err := derefRequestBody(requestBodyRef2)
+	if err != nil {
+		return nil, err
+	}
 
 	result.DescriptionDiff = getValueDiff(requestBody1.Description, requestBody2.Description)
-	result.ContentDiff = getContentDiff(config, requestBody1.Content, requestBody2.Content)
+	result.ContentDiff, err = getContentDiff(config, requestBody1.Content, requestBody2.Content)
+	if err != nil {
+		return nil, err
+	}
 
-	return result
+	return result, nil
+}
+
+func derefRequestBody(ref *openapi3.RequestBodyRef) (*openapi3.RequestBody, error) {
+
+	if ref == nil || ref.Value == nil {
+		return nil, fmt.Errorf("Request body reference is nil")
+	}
+
+	return ref.Value, nil
 }

@@ -25,17 +25,21 @@ func (diff *ParameterDiff) Empty() bool {
 	return diff == nil || *diff == ParameterDiff{}
 }
 
-func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) *ParameterDiff {
-	diff := getParameterDiffInternal(config, param1, param2)
-	if diff.Empty() {
-		return nil
+func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
+	diff, err := getParameterDiffInternal(config, param1, param2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter) *ParameterDiff {
+func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
 
 	result := ParameterDiff{}
+	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, param1.ExtensionProps, param2.ExtensionProps)
 	result.DescriptionDiff = getValueDiff(param1.Description, param2.Description)
@@ -45,13 +49,19 @@ func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter
 	result.AllowReservedDiff = getValueDiff(param1.AllowReserved, param2.AllowReserved)
 	result.DeprecatedDiff = getValueDiff(param1.Deprecated, param2.Deprecated)
 	result.RequiredDiff = getValueDiff(param1.Required, param2.Required)
-	result.SchemaDiff = getSchemaDiff(config, param1.Schema, param2.Schema)
+	result.SchemaDiff, err = getSchemaDiff(config, param1.Schema, param2.Schema)
+	if err != nil {
+		return nil, err
+	}
 
 	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
 	}
 
-	result.ContentDiff = getContentDiff(config, param1.Content, param2.Content)
+	result.ContentDiff, err = getContentDiff(config, param1.Content, param2.Content)
+	if err != nil {
+		return nil, err
+	}
 
-	return &result
+	return &result, nil
 }

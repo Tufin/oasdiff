@@ -7,9 +7,16 @@ import (
 // ModifiedPaths is a map of paths to their respective diffs
 type ModifiedPaths map[string]*PathDiff
 
-func (modifiedPaths ModifiedPaths) addPathDiff(config *Config, path1 string, pathItem1, pathItem2 *openapi3.PathItem) {
+func (modifiedPaths ModifiedPaths) addPathDiff(config *Config, path1 string, pathItem1, pathItem2 *openapi3.PathItem) error {
 
-	if diff := getPathDiff(config, pathItem1, pathItem2); !diff.Empty() {
+	diff, err := getPathDiff(config, pathItem1, pathItem2)
+	if err != nil {
+		return err
+	}
+
+	if !diff.Empty() {
 		modifiedPaths[path1] = diff
 	}
+
+	return nil
 }

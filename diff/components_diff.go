@@ -13,19 +13,46 @@ type ComponentsDiff struct {
 	CallbacksDiff       *CallbacksDiff       `json:"callbacks,omitempty" yaml:"callbacks,omitempty"`
 }
 
-func getComponentsDiff(config *Config, s1, s2 openapi3.Components) ComponentsDiff {
+func getComponentsDiff(config *Config, s1, s2 openapi3.Components) (ComponentsDiff, error) {
 
 	result := ComponentsDiff{}
+	var err error
 
-	result.SchemasDiff = getSchemasDiff(config, s1.Schemas, s2.Schemas)
-	result.ParametersDiff = getParametersDiff(config, toParameters(s1.Parameters), toParameters(s2.Parameters))
-	result.HeadersDiff = getHeadersDiff(config, s1.Headers, s2.Headers)
-	result.RequestBodiesDiff = getRequestBodiesDiff(config, s1.RequestBodies, s2.RequestBodies)
-	result.ResponsesDiff = getResponsesDiff(config, s1.Responses, s2.Responses)
-	result.SecuritySchemesDiff = getSecuritySchemesDiff(config, s1.SecuritySchemes, s2.SecuritySchemes)
+	result.SchemasDiff, err = getSchemasDiff(config, s1.Schemas, s2.Schemas)
+	if err != nil {
+		return result, err
+	}
+
+	result.ParametersDiff, err = getParametersDiff(config, toParameters(s1.Parameters), toParameters(s2.Parameters))
+	if err != nil {
+		return result, err
+	}
+
+	result.HeadersDiff, err = getHeadersDiff(config, s1.Headers, s2.Headers)
+	if err != nil {
+		return result, err
+	}
+
+	result.RequestBodiesDiff, err = getRequestBodiesDiff(config, s1.RequestBodies, s2.RequestBodies)
+	if err != nil {
+		return result, err
+	}
+
+	result.ResponsesDiff, err = getResponsesDiff(config, s1.Responses, s2.Responses)
+	if err != nil {
+		return result, err
+	}
+
+	result.SecuritySchemesDiff, err = getSecuritySchemesDiff(config, s1.SecuritySchemes, s2.SecuritySchemes)
+	if err != nil {
+		return result, err
+	}
 	// Examples
 	// Links
-	result.CallbacksDiff = getCallbacksDiff(config, s1.Callbacks, s2.Callbacks)
+	result.CallbacksDiff, err = getCallbacksDiff(config, s1.Callbacks, s2.Callbacks)
+	if err != nil {
+		return result, err
+	}
 
-	return result
+	return result, nil
 }

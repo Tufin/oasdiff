@@ -18,22 +18,30 @@ func (diff *EncodingDiff) Empty() bool {
 	return diff == nil || *diff == EncodingDiff{}
 }
 
-func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) *EncodingDiff {
-	diff := getEncodingDiffInternal(config, value1, value2)
-	if diff.Empty() {
-		return nil
+func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
+	diff, err := getEncodingDiffInternal(config, value1, value2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) *EncodingDiff {
+func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
 	result := EncodingDiff{}
+	var err error
 
 	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
-	result.HeadersDiff = getHeadersDiff(config, value1.Headers, value2.Headers)
+	result.HeadersDiff, err = getHeadersDiff(config, value1.Headers, value2.Headers)
+	if err != nil {
+		return nil, err
+	}
 	result.StyleDiff = getValueDiff(value1.Style, value2.Style)
 	result.ExplodeDiff = getBoolRefDiff(value1.Explode, value2.Explode)
 	result.AllowReservedDiff = getValueDiff(value1.AllowReserved, value2.AllowReserved)
 
-	return &result
+	return &result, nil
 }

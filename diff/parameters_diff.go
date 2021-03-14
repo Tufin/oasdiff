@@ -1,6 +1,8 @@
 package diff
 
 import (
+	"fmt"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -66,23 +68,38 @@ func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter
 	}
 }
 
-func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) *ParametersDiff {
-	diff := getParametersDiffInternal(config, params1, params2)
-	if diff.Empty() {
-		return nil
+func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) (*ParametersDiff, error) {
+	diff, err := getParametersDiffInternal(config, params1, params2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getParametersDiffInternal(config *Config, params1, params2 openapi3.Parameters) *ParametersDiff {
+func getParametersDiffInternal(config *Config, params1, params2 openapi3.Parameters) (*ParametersDiff, error) {
 
 	result := newParametersDiff()
 
 	for _, paramRef1 := range params1 {
-		value1 := derefParam(paramRef1)
+		value1, err := derefParam(paramRef1)
+		if err != nil {
+			return nil, err
+		}
 
-		if paramValue2, ok := findParam(value1, params2); ok {
-			if diff := getParameterDiff(config, value1, paramValue2); !diff.Empty() {
+		paramValue2, err := findParam(value1, params2)
+		if err != nil {
+			return nil, err
+		}
+		if paramValue2 != nil {
+			diff, err := getParameterDiff(config, value1, paramValue2)
+			if err != nil {
+				return nil, err
+			}
+
+			if !diff.Empty() {
 				result.addModifiedParam(value1, diff)
 			}
 		} else {
@@ -91,35 +108,50 @@ func getParametersDiffInternal(config *Config, params1, params2 openapi3.Paramet
 	}
 
 	for _, paramRef2 := range params2 {
-		value2 := derefParam(paramRef2)
+		value2, err := derefParam(paramRef2)
+		if err != nil {
+			return nil, err
+		}
 
-		if _, ok := findParam(value2, params1); !ok {
+		param, err := findParam(value2, params1)
+		if err != nil {
+			return nil, err
+		}
+		if param == nil {
 			result.addAddedParam(value2)
 		}
 	}
 
-	return result
+	return result, nil
 }
 
-func derefParam(ref *openapi3.ParameterRef) *openapi3.Parameter {
-	// TODO: check if ref == nil
-	return ref.Value
+func derefParam(ref *openapi3.ParameterRef) (*openapi3.Parameter, error) {
+
+	if ref == nil || ref.Value == nil {
+		return nil, fmt.Errorf("Parameter reference is nil")
+	}
+
+	return ref.Value, nil
 }
 
-func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openapi3.Parameter, bool) {
+func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openapi3.Parameter, error) {
 	// TODO: optimize with a map
 	for _, paramRef2 := range params2 {
-		value2 := derefParam(paramRef2)
+		value2, err := derefParam(paramRef2)
+		if err != nil {
+			return nil, err
+		}
 
 		if equalParams(param1, value2) {
-			return value2, true
+			return value2, nil
 		}
 	}
 
-	return nil, false
+	return nil, nil
 }
 
 func equalParams(param1 *openapi3.Parameter, param2 *openapi3.Parameter) bool {
+	// TODO: check if param1 or param2 are nil (it shouldn't happen)
 	return param1.Name == param2.Name && param1.In == param2.In
 }
 

@@ -1,10 +1,10 @@
 package diff
 
 import (
+	"fmt"
 	"regexp"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	log "github.com/sirupsen/logrus"
 )
 
 // PathsDiff is a diff between two sets of path item objects: https://swagger.io/specification/#path-item-object
@@ -33,20 +33,26 @@ func newPathsDiff() *PathsDiff {
 	}
 }
 
-func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) *PathsDiff {
+func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) (*PathsDiff, error) {
 
-	filterPaths2(config.Filter, paths1, paths2)
-
-	diff := getPathsDiffInternal(config, paths1, paths2)
-
-	if diff.Empty() {
-		return nil
+	err := filterPaths2(config.Filter, paths1, paths2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	diff, err := getPathsDiffInternal(config, paths1, paths2)
+	if err != nil {
+		return nil, err
+	}
+
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getPathsDiffInternal(config *Config, paths1, paths2 openapi3.Paths) *PathsDiff {
+func getPathsDiffInternal(config *Config, paths1, paths2 openapi3.Paths) (*PathsDiff, error) {
 
 	result := newPathsDiff()
 
@@ -61,10 +67,13 @@ func getPathsDiffInternal(config *Config, paths1, paths2 openapi3.Paths) *PathsD
 	}
 
 	for endpoint, pathItemPair := range otherEndpoints {
-		result.addModifiedPath(config, endpoint, pathItemPair.PathItem1, pathItemPair.PathItem2)
+		err := result.addModifiedPath(config, endpoint, pathItemPair.PathItem1, pathItemPair.PathItem2)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	return result
+	return result, nil
 }
 
 func (pathsDiff *PathsDiff) getSummary() *SummaryDetails {
@@ -83,24 +92,25 @@ func (pathsDiff *PathsDiff) addDeletedPath(path string) {
 	pathsDiff.Deleted = append(pathsDiff.Deleted, path)
 }
 
-func (pathsDiff *PathsDiff) addModifiedPath(config *Config, path1 string, pathItem1, pathItem2 *openapi3.PathItem) {
-	pathsDiff.Modified.addPathDiff(config, path1, pathItem1, pathItem2)
+func (pathsDiff *PathsDiff) addModifiedPath(config *Config, path1 string, pathItem1, pathItem2 *openapi3.PathItem) error {
+	return pathsDiff.Modified.addPathDiff(config, path1, pathItem1, pathItem2)
 }
 
-func filterPaths2(filter string, paths1, paths2 openapi3.Paths) {
+func filterPaths2(filter string, paths1, paths2 openapi3.Paths) error {
 
 	if filter == "" {
-		return
+		return nil
 	}
 
 	r, err := regexp.Compile(filter)
 	if err != nil {
-		log.Errorf("Failed to compile filter regex '%s' with '%v'", filter, err)
-		return
+		return fmt.Errorf("failed to compile filter regex '%s' with %w", filter, err)
 	}
 
 	filterPaths1(paths1, r)
 	filterPaths1(paths2, r)
+
+	return nil
 }
 
 func filterPaths1(paths openapi3.Paths, r *regexp.Regexp) {

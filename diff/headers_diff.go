@@ -1,6 +1,8 @@
 package diff
 
 import (
+	"fmt"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -33,39 +35,62 @@ func newHeadersDiff() *HeadersDiff {
 	}
 }
 
-func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) *HeadersDiff {
-	diff := getHeadersDiffInternal(config, headers1, headers2)
-	if diff.Empty() {
-		return nil
+func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) (*HeadersDiff, error) {
+	diff, err := getHeadersDiffInternal(config, headers1, headers2)
+	if err != nil {
+		return nil, err
 	}
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+	return diff, nil
 }
 
-func getHeadersDiffInternal(config *Config, headers1, headers2 openapi3.Headers) *HeadersDiff {
+func getHeadersDiffInternal(config *Config, headers1, headers2 openapi3.Headers) (*HeadersDiff, error) {
 
 	result := newHeadersDiff()
 
-	for headerValue1, headerRef1 := range headers1 {
-		if headerRef1 != nil && headerRef1.Value != nil {
-			if headerValue2, ok := headers2[headerValue1]; ok {
-				if diff := getHeaderDiff(config, headerRef1.Value, headerValue2.Value); !diff.Empty() {
-					result.Modified[headerValue1] = diff
-				}
-			} else {
-				result.Deleted = append(result.Deleted, headerValue1)
+	for headerName1, headerRef1 := range headers1 {
+		if headerValue2, ok := headers2[headerName1]; ok {
+			value1, err := derefHeader(headerRef1)
+			if err != nil {
+				return nil, err
 			}
+
+			value2, err := derefHeader(headerValue2)
+			if err != nil {
+				return nil, err
+			}
+
+			diff, err := getHeaderDiff(config, value1, value2)
+			if err != nil {
+				return nil, err
+			}
+
+			if !diff.Empty() {
+				result.Modified[headerName1] = diff
+			}
+		} else {
+			result.Deleted = append(result.Deleted, headerName1)
 		}
 	}
 
-	for headerValue2, headerRef2 := range headers2 {
-		if headerRef2 != nil && headerRef2.Value != nil {
-			if _, ok := headers1[headerValue2]; !ok {
-				result.Added = append(result.Added, headerValue2)
-			}
+	for headerValue2 := range headers2 {
+		if _, ok := headers1[headerValue2]; !ok {
+			result.Added = append(result.Added, headerValue2)
 		}
 	}
 
-	return result
+	return result, nil
+}
+
+func derefHeader(ref *openapi3.HeaderRef) (*openapi3.Header, error) {
+
+	if ref == nil || ref.Value == nil {
+		return nil, fmt.Errorf("Header reference is nil")
+	}
+
+	return ref.Value, nil
 }
 
 func (headersDiff *HeadersDiff) getSummary() *SummaryDetails {
