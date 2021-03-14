@@ -46,7 +46,10 @@ func main() {
 		return
 	}
 
-	diffReport := diff.Get(&diff.Config{}, s1, s2)
+	diffReport, err := diff.Get(&diff.Config{}, s1, s2)
+	if err != nil {
+		fmt.Printf("Diff failed with '%v'", err)
+	}
 
 	if format == formatJSON {
 		bytes, err := json.MarshalIndent(diffReport, "", " ")
