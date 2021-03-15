@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func TestDiff_SchemaNil(t *testing.T) {
+func TestDiff_SchemaRefNil(t *testing.T) {
 	loader := openapi3.NewSwaggerLoader()
 	s1, err := loader.LoadSwaggerFromFile("../data/home-iot-api-1.yaml")
 	require.NoError(t, err)
