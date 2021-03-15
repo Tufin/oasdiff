@@ -1,6 +1,10 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"net/http"
+
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // OperationsDiff is a diff between the operation objects (https://swagger.io/specification/#operation-object) of two path item objects
 type OperationsDiff struct {
@@ -42,46 +46,28 @@ func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) 
 	return diff, nil
 }
 
+var operations = []string{
+	http.MethodGet,
+	http.MethodHead,
+	http.MethodPost,
+	http.MethodPut,
+	http.MethodPatch,
+	http.MethodDelete,
+	http.MethodConnect,
+	http.MethodOptions,
+	http.MethodTrace,
+}
+
 func getOperationsDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
 
 	result := newOperationsDiff()
 	var err error
 
-	err = result.diffOperation(config, pathItem1.Connect, pathItem2.Connect, "CONNECT")
-	if err != nil {
-		return nil, err
-	}
-	err = result.diffOperation(config, pathItem1.Delete, pathItem2.Delete, "DELETE")
-	if err != nil {
-		return nil, err
-	}
-	err = result.diffOperation(config, pathItem1.Get, pathItem2.Get, "GET")
-	if err != nil {
-		return nil, err
-	}
-	err = result.diffOperation(config, pathItem1.Head, pathItem2.Head, "HEAD")
-	if err != nil {
-		return nil, err
-	}
-	err = result.diffOperation(config, pathItem1.Options, pathItem2.Options, "OPTIONS")
-	if err != nil {
-		return nil, err
-	}
-	err = result.diffOperation(config, pathItem1.Patch, pathItem2.Patch, "PATCH")
-	if err != nil {
-		return nil, err
-	}
-	err = result.diffOperation(config, pathItem1.Post, pathItem2.Post, "POST")
-	if err != nil {
-		return nil, err
-	}
-	err = result.diffOperation(config, pathItem1.Put, pathItem2.Put, "PUT")
-	if err != nil {
-		return nil, err
-	}
-	err = result.diffOperation(config, pathItem1.Trace, pathItem2.Trace, "TRACE")
-	if err != nil {
-		return nil, err
+	for _, op := range operations {
+		err = result.diffOperation(config, pathItem1.GetOperation(op), pathItem2.GetOperation(op), op)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return result, nil
