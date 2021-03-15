@@ -10,6 +10,7 @@ type ComponentsDiff struct {
 	RequestBodiesDiff   *RequestBodiesDiff   `json:"requestBodies,omitempty" yaml:"requestBodies,omitempty"`
 	ResponsesDiff       *ResponsesDiff       `json:"responses,omitempty" yaml:"responses,omitempty"`
 	SecuritySchemesDiff *SecuritySchemesDiff `json:"securitySchemes,omitempty" yaml:"securitySchemes,omitempty"`
+	ExamplesDiff        *ExamplesDiff        `json:"examples,omitempty" yaml:"examples,omitempty"`
 	CallbacksDiff       *CallbacksDiff       `json:"callbacks,omitempty" yaml:"callbacks,omitempty"`
 }
 
@@ -47,8 +48,14 @@ func getComponentsDiff(config *Config, s1, s2 openapi3.Components) (ComponentsDi
 	if err != nil {
 		return result, err
 	}
-	// Examples
+
+	result.ExamplesDiff, err = getExamplesDiff(config, s1.Examples, s2.Examples)
+	if err != nil {
+		return result, err
+	}
+
 	// Links
+
 	result.CallbacksDiff, err = getCallbacksDiff(config, s1.Callbacks, s2.Callbacks)
 	if err != nil {
 		return result, err

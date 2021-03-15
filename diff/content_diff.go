@@ -14,8 +14,8 @@ type ContentDiff struct {
 	ExtensionsDiff   *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	SchemaDiff       *SchemaDiff     `json:"schema,omitempty" yaml:"schema,omitempty"`
 	ExampleDiff      *ValueDiff      `json:"example,omitempty" yaml:"example,omitempty"`
-	// Examples
-	EncodingsDiff *EncodingsDiff `json:"encoding,omitempty" yaml:"encoding,omitempty"`
+	ExamplesDiff     *ExamplesDiff   `json:"examples,omitempty" yaml:"examples,omitempty"`
+	EncodingsDiff    *EncodingsDiff  `json:"encoding,omitempty" yaml:"encoding,omitempty"`
 }
 
 func newContentDiff() *ContentDiff {
@@ -87,6 +87,11 @@ func getContentDiffInternal(config *Config, content1, content2 openapi3.Content)
 	}
 
 	result.EncodingsDiff, err = getEncodingsDiff(config, mediaTypeValue1.Encoding, mediaTypeValue2.Encoding)
+	if err != nil {
+		return nil, err
+	}
+
+	result.ExamplesDiff, err = getExamplesDiff(config, mediaTypeValue1.Examples, mediaTypeValue2.Examples)
 	if err != nil {
 		return nil, err
 	}

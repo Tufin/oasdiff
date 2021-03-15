@@ -16,8 +16,8 @@ type ParameterDiff struct {
 	RequiredDiff        *ValueDiff      `json:"required,omitempty" yaml:"required,omitempty"`
 	SchemaDiff          *SchemaDiff     `json:"schema,omitempty" yaml:"schema,omitempty"`
 	ExampleDiff         *ValueDiff      `json:"example,omitempty" yaml:"example,omitempty"`
-	// Examples
-	ContentDiff *ContentDiff `json:"content,omitempty" yaml:"content,omitempty"`
+	ExamplesDiff        *ExamplesDiff   `json:"examples,omitempty" yaml:"examples,omitempty"`
+	ContentDiff         *ContentDiff    `json:"content,omitempty" yaml:"content,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -56,6 +56,11 @@ func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter
 
 	if config.IncludeExamples {
 		result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
+	}
+
+	result.ExamplesDiff, err = getExamplesDiff(config, param1.Examples, param2.Examples)
+	if err != nil {
+		return nil, err
 	}
 
 	result.ContentDiff, err = getContentDiff(config, param1.Content, param2.Content)

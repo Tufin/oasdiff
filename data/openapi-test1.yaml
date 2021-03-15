@@ -65,6 +65,9 @@ paths:
               type: object
       - in: query
         name: image
+        examples:
+          0:
+            value: 'reuven'
         schema:
           x-extension-test:
           description: alphanumeric 

@@ -19,6 +19,11 @@ paths:
       parameters:
       - in: query
         name: image
+        examples:
+          0:
+            value: 'reuven1'
+          1:
+            value: 'test'
         x-extension-test:
         schema:
           not:
