@@ -36,6 +36,7 @@ func newExamplessDiff() *ExamplesDiff {
 }
 
 func getExamplesDiff(config *Config, examples1, examples2 openapi3.Examples) (*ExamplesDiff, error) {
+
 	diff, err := getExamplesDiffInternal(config, examples1, examples2)
 	if err != nil {
 		return nil, err
@@ -47,6 +48,10 @@ func getExamplesDiff(config *Config, examples1, examples2 openapi3.Examples) (*E
 }
 
 func getExamplesDiffInternal(config *Config, examples1, examples2 openapi3.Examples) (*ExamplesDiff, error) {
+
+	if !config.IncludeExamples {
+		return nil, nil
+	}
 
 	result := newExamplessDiff()
 
