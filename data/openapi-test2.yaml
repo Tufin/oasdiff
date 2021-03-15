@@ -1,6 +1,8 @@
 info:
   title: Tufin
-  version: 1.0.0
+  version: 1.0.1
+  contact:
+    email: support@tufin.com
 openapi: 3.0.3
 paths:
   /api/{domain}/{project}/badges/security-score/:

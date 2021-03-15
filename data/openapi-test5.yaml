@@ -1,6 +1,11 @@
 info:
-  title: Tufin
-  version: 1.0.0
+  title: Tufin1
+  version: 1.0.1
+  contact:
+    email: support@tufin.com
+    url: www.tufin.com
+  license:
+    name: apache
 openapi: 3.0.3
 paths:
   /api/{domain}/{project}/badges/security-score:
