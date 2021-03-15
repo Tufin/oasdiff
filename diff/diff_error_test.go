@@ -13,7 +13,7 @@ func TestDiff_SchemaNil(t *testing.T) {
 	s1, err := loader.LoadSwaggerFromFile("../data/home-iot-api-1.yaml")
 	require.NoError(t, err)
 
-	s1.Paths["/devices"].Post.RequestBody.Value.Content["application/json"].Schema.Value = nil
+	s1.Components.Schemas["LightingSummary"].Value.Properties["zones"].Value.Items.Value.Properties["deviceId"].Value = nil
 	_, err = diff.Get(diff.NewConfig(), s1, s1)
 	require.Equal(t, "schema reference is nil", err.Error())
 }
