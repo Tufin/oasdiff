@@ -8,6 +8,8 @@ info:
     name: apache
 openapi: 3.0.3
 x-extension-test2: nogo
+externalDocs:
+  url: https://tufin.io
 tags:
 - name: reuven
   description: harrison

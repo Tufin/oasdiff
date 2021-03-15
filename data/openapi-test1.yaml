@@ -4,6 +4,8 @@ info:
 openapi: 3.0.3
 x-extension-test: 
 x-extension-test2: go 
+externalDocs:
+  url: https://tufin.com
 tags:
 - name: security
   description: control security

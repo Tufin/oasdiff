@@ -189,5 +189,5 @@ References are normally resolved automatically when you load the spec. In other 
 2. oasdiff ignores changes to [Examples](https://swagger.io/specification/#example-object) and [Extensions](https://swagger.io/specification/#specification-extensions) by default. You can change this behavior by [configuration](diff/config.go).
 
 3. Work in progress  
-While most aspects of OpenAPI Spec are already supported by this diff tool, some are still missing, notably: Examples, ExternalDocs, Links, Variables and a couple more.  
+While most aspects of OpenAPI Spec are already supported by this diff tool, some are still missing, notably: Examples, Links, and Variables.  
 Pull requests are welcome!
