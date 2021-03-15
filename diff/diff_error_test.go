@@ -63,6 +63,43 @@ func TestDiff_ComponentSchemaNil(t *testing.T) {
 	require.Equal(t, "schema reference is nil", err.Error())
 }
 
+func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Schemas: openapi3.Schemas{
+				"test": &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						OneOf: []*openapi3.SchemaRef{
+							{
+								Value: &openapi3.Schema{
+									AnyOf: []*openapi3.SchemaRef{
+										{
+											Value: &openapi3.Schema{
+												AllOf: []*openapi3.SchemaRef{
+													{
+														Value: &openapi3.Schema{
+															Not: &openapi3.SchemaRef{
+																Value: nil,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	_, err := diff.Get(diff.NewConfig(), &s1, &s1)
+	require.Equal(t, "schema reference is nil", err.Error())
+}
+
 func TestDiff_ComponentParameterNil(t *testing.T) {
 	s1 := openapi3.Swagger{
 		Components: openapi3.Components{
