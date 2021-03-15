@@ -85,42 +85,42 @@ func getParametersDiffInternal(config *Config, params1, params2 openapi3.Paramet
 	result := newParametersDiff()
 
 	for _, paramRef1 := range params1 {
-		value1, err := derefParam(paramRef1)
+		param1, err := derefParam(paramRef1)
 		if err != nil {
 			return nil, err
 		}
 
-		paramValue2, err := findParam(value1, params2)
+		param2, err := findParam(param1, params2)
 		if err != nil {
 			return nil, err
 		}
 
-		if paramValue2 != nil {
-			diff, err := getParameterDiff(config, value1, paramValue2)
+		if param2 != nil {
+			diff, err := getParameterDiff(config, param1, param2)
 			if err != nil {
 				return nil, err
 			}
 
 			if !diff.Empty() {
-				result.addModifiedParam(value1, diff)
+				result.addModifiedParam(param1, diff)
 			}
 		} else {
-			result.addDeletedParam(value1)
+			result.addDeletedParam(param1)
 		}
 	}
 
 	for _, paramRef2 := range params2 {
-		value2, err := derefParam(paramRef2)
+		param2, err := derefParam(paramRef2)
 		if err != nil {
 			return nil, err
 		}
 
-		param, err := findParam(value2, params1)
+		param, err := findParam(param2, params1)
 		if err != nil {
 			return nil, err
 		}
 		if param == nil {
-			result.addAddedParam(value2)
+			result.addAddedParam(param2)
 		}
 	}
 
@@ -139,18 +139,18 @@ func derefParam(ref *openapi3.ParameterRef) (*openapi3.Parameter, error) {
 func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openapi3.Parameter, error) {
 	// TODO: optimize with a map
 	for _, paramRef2 := range params2 {
-		value2, err := derefParam(paramRef2)
+		param2, err := derefParam(paramRef2)
 		if err != nil {
 			return nil, err
 		}
 
-		equal, err := equalParams(param1, value2)
+		equal, err := equalParams(param1, param2)
 		if err != nil {
 			return nil, err
 		}
 
 		if equal {
-			return value2, nil
+			return param2, nil
 		}
 	}
 
