@@ -51,13 +51,13 @@ func getHeadersDiffInternal(config *Config, headers1, headers2 openapi3.Headers)
 	result := newHeadersDiff()
 
 	for headerName1, headerRef1 := range headers1 {
-		if headerValue2, ok := headers2[headerName1]; ok {
+		if headerRef2, ok := headers2[headerName1]; ok {
 			value1, err := derefHeader(headerRef1)
 			if err != nil {
 				return nil, err
 			}
 
-			value2, err := derefHeader(headerValue2)
+			value2, err := derefHeader(headerRef2)
 			if err != nil {
 				return nil, err
 			}
