@@ -72,13 +72,18 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*Schem
 
 func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
 
-	value1, value2, status, err := getSchemaValues(schema1, schema2)
+	status := getSchemaStatus(schema1, schema2)
+	if status != schemaStatusOK {
+		return toSchemaDiff(status), nil
+	}
+
+	value1, err := derefSchema(schema1)
 	if err != nil {
 		return nil, err
 	}
-
-	if status != schemaStatusOK {
-		return toSchemaDiff(status), nil
+	value2, err := derefSchema(schema2)
+	if err != nil {
+		return nil, err
 	}
 
 	result := SchemaDiff{}
@@ -162,29 +167,21 @@ const (
 	schemaStatusSchemaDeleted
 )
 
-func getSchemaValues(schema1, schema2 *openapi3.SchemaRef) (*openapi3.Schema, *openapi3.Schema, schemaStatus, error) {
+func getSchemaStatus(schema1, schema2 *openapi3.SchemaRef) schemaStatus {
 
 	if schema1 == nil && schema2 == nil {
-		return nil, nil, schemaStatusNoSchemas, nil
+		return schemaStatusNoSchemas
 	}
 
 	if schema1 == nil && schema2 != nil {
-		return nil, nil, schemaStatusSchemaAdded, nil
+		return schemaStatusSchemaAdded
 	}
 
 	if schema1 != nil && schema2 == nil {
-		return nil, nil, schemaStatusSchemaDeleted, nil
+		return schemaStatusSchemaDeleted
 	}
 
-	value1, err := derefSchema(schema1)
-	if err != nil {
-		return nil, nil, schemaStatusOK, err
-	}
-	value2, err := derefSchema(schema2)
-	if err != nil {
-		return nil, nil, schemaStatusOK, err
-	}
-	return value1, value2, schemaStatusOK, nil
+	return schemaStatusOK
 }
 
 func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
