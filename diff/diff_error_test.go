@@ -45,6 +45,132 @@ func TestDiff_SpecNil(t *testing.T) {
 	require.Equal(t, "spec is nil", err.Error())
 }
 
+func TestDiff_ComponentSchemaNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Schemas: openapi3.Schemas{"test": &openapi3.SchemaRef{Value: &openapi3.Schema{}}},
+		},
+	}
+	s2 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Schemas: openapi3.Schemas{"test": &openapi3.SchemaRef{}},
+		},
+	}
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	require.Equal(t, "schema reference is nil", err.Error())
+
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
+	require.Equal(t, "schema reference is nil", err.Error())
+}
+
+func TestDiff_ComponentParameterNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Parameters: openapi3.ParametersMap{"test": &openapi3.ParameterRef{Value: &openapi3.Parameter{}}},
+		},
+	}
+	s2 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Parameters: openapi3.ParametersMap{"test": &openapi3.ParameterRef{}},
+		},
+	}
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	require.Equal(t, "parameter reference is nil", err.Error())
+
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
+	require.Equal(t, "parameter reference is nil", err.Error())
+}
+
+func TestDiff_ComponentHeadersNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Headers: openapi3.Headers{"test": &openapi3.HeaderRef{Value: &openapi3.Header{}}},
+		},
+	}
+	s2 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Headers: openapi3.Headers{"test": &openapi3.HeaderRef{}},
+		},
+	}
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	require.Equal(t, "header reference is nil", err.Error())
+
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
+	require.Equal(t, "header reference is nil", err.Error())
+}
+
+func TestDiff_ComponentRequestBodiesNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Components: openapi3.Components{
+			RequestBodies: openapi3.RequestBodies{"test": &openapi3.RequestBodyRef{Value: &openapi3.RequestBody{}}},
+		},
+	}
+	s2 := openapi3.Swagger{
+		Components: openapi3.Components{
+			RequestBodies: openapi3.RequestBodies{"test": &openapi3.RequestBodyRef{}},
+		},
+	}
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	require.Equal(t, "request body reference is nil", err.Error())
+
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
+	require.Equal(t, "request body reference is nil", err.Error())
+}
+
+func TestDiff_ComponentResponsesNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Responses: openapi3.Responses{"test": &openapi3.ResponseRef{Value: &openapi3.Response{}}},
+		},
+	}
+	s2 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Responses: openapi3.Responses{"test": &openapi3.ResponseRef{}},
+		},
+	}
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	require.Equal(t, "response reference is nil", err.Error())
+
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
+	require.Equal(t, "response reference is nil", err.Error())
+}
+
+func TestDiff_ComponentSecuritySchemesNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Components: openapi3.Components{
+			SecuritySchemes: openapi3.SecuritySchemes{"test": &openapi3.SecuritySchemeRef{Value: &openapi3.SecurityScheme{}}},
+		},
+	}
+
+	s2 := openapi3.Swagger{
+		Components: openapi3.Components{
+			SecuritySchemes: openapi3.SecuritySchemes{"test": &openapi3.SecuritySchemeRef{}},
+		},
+	}
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	require.Equal(t, "security scheme reference is nil", err.Error())
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
+	require.Equal(t, "security scheme reference is nil", err.Error())
+}
+
+func TestDiff_ComponentCallbacksNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Callbacks: openapi3.Callbacks{"test": &openapi3.CallbackRef{Value: &openapi3.Callback{}}},
+		},
+	}
+	s2 := openapi3.Swagger{
+		Components: openapi3.Components{
+			Callbacks: openapi3.Callbacks{"test": &openapi3.CallbackRef{}},
+		},
+	}
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	require.Equal(t, "callback reference is nil", err.Error())
+
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
+	require.Equal(t, "callback reference is nil", err.Error())
+}
+
 func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
 
 	s5 := l(t, 5)
