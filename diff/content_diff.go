@@ -101,7 +101,7 @@ func getMediaType(content openapi3.Content) (string, *openapi3.MediaType, error)
 	var mediaTypeValue *openapi3.MediaType
 
 	if len(content) != 1 {
-		return "", nil, fmt.Errorf("content map has more than one value: %+v", content)
+		return "", nil, fmt.Errorf("content map has more than one value")
 	}
 
 	for k, v := range content {
