@@ -15,8 +15,6 @@ type SchemaDiff struct {
 	ExtensionsDiff                  *ExtensionsDiff   `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	SchemaAdded                     bool              `json:"schemaAdded,omitempty" yaml:"schemaAdded,omitempty"`
 	SchemaDeleted                   bool              `json:"schemaDeleted,omitempty" yaml:"schemaDeleted,omitempty"`
-	ValueAdded                      bool              `json:"valueAdded,omitempty" yaml:"valueAdded,omitempty"`
-	ValueDeleted                    bool              `json:"valueDeleted,omitempty" yaml:"valueDeleted,omitempty"`
 	OneOfDiff                       bool              `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
 	AnyOfDiff                       bool              `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
 	AllOfDiff                       bool              `json:"allOf,omitempty" yaml:"allOf,omitempty"`
