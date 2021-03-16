@@ -4,15 +4,13 @@ import "github.com/getkin/kin-openapi/openapi3"
 
 /*
 SchemaListDiff is a diff between two lists of schema objects: https://swagger.io/specification/#schema-object
-Unlike other diff structs, this one doesn't indicate the exact change but only tells us how many schema objects where added and/or deleted
+Unlike other diff structs, this one doesn't indicate the exact change but only tells us how many schema objects where added and/or deleted.
+As a special case, when one schema was added and one deleted, the Modified field will show a diff between them.
 */
 type SchemaListDiff struct {
-	Added   int `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted int `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-}
-
-func newSchemaListDiff() *SchemaListDiff {
-	return &SchemaListDiff{}
+	Added    int         `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  int         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified *SchemaDiff `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -33,33 +31,43 @@ func getSchemaListsDiff(config *Config, schemaRefs1, schemaRefs2 openapi3.Schema
 
 func getSchemaListsDiffInternal(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
 
-	result := newSchemaListDiff()
-	var err error
-
-	result.Added, err = schemaRefsContained(config, schemaRefs1, schemaRefs2)
+	added, err := schemaRefsContained(config, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
 	}
 
-	result.Deleted, err = schemaRefsContained(config, schemaRefs2, schemaRefs1)
+	deleted, err := schemaRefsContained(config, schemaRefs2, schemaRefs1)
 	if err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	if len(added) == 1 && len(deleted) == 1 {
+		d, err := getSchemaDiff(config, added[0], deleted[0])
+		if err != nil {
+			return nil, err
+		}
+		return &SchemaListDiff{
+			Modified: d,
+		}, nil
+	}
+
+	return &SchemaListDiff{
+		Added:   len(added),
+		Deleted: len(deleted),
+	}, nil
 }
 
-func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (int, error) {
+func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]*openapi3.SchemaRef, error) {
 
-	result := 0
+	result := []*openapi3.SchemaRef{}
 
 	for _, schemaRef1 := range schemaRefs1 {
 		found, err := findSchema(config, schemaRef1, schemaRefs2)
 		if err != nil {
-			return 0, err
+			return nil, err
 		}
 		if !found {
-			result++
+			result = append(result, schemaRef1)
 		}
 	}
 	return result, nil
