@@ -6,18 +6,14 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-/*
-SchemaDiff is a diff between schema objects: https://swagger.io/specification/#schema-object.
-Boolean fields specify whether the property in question was changed between the two versions.
-Pointer fields specify not only the presence of a change but also the old and new values of the property.
-*/
+// SchemaDiff is a diff between schema objects: https://swagger.io/specification/#schema-object
 type SchemaDiff struct {
 	ExtensionsDiff                  *ExtensionsDiff   `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	SchemaAdded                     bool              `json:"schemaAdded,omitempty" yaml:"schemaAdded,omitempty"`
 	SchemaDeleted                   bool              `json:"schemaDeleted,omitempty" yaml:"schemaDeleted,omitempty"`
-	OneOfDiff                       bool              `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
-	AnyOfDiff                       bool              `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
-	AllOfDiff                       bool              `json:"allOf,omitempty" yaml:"allOf,omitempty"`
+	OneOfDiff                       *SchemaListDiff   `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
+	AnyOfDiff                       *SchemaListDiff   `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
+	AllOfDiff                       *SchemaListDiff   `json:"allOf,omitempty" yaml:"allOf,omitempty"`
 	NotDiff                         *SchemaDiff       `json:"not,omitempty" yaml:"not,omitempty"`
 	TypeDiff                        *ValueDiff        `json:"type,omitempty" yaml:"type,omitempty"`
 	TitleDiff                       *ValueDiff        `json:"title,omitempty" yaml:"title,omitempty"`
@@ -88,15 +84,15 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	result := SchemaDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
-	result.OneOfDiff, err = getDiffSchemas(config, value1.OneOf, value2.OneOf)
+	result.OneOfDiff, err = getSchemaListsDiff(config, value1.OneOf, value2.OneOf)
 	if err != nil {
 		return nil, err
 	}
-	result.AnyOfDiff, err = getDiffSchemas(config, value1.AnyOf, value2.AnyOf)
+	result.AnyOfDiff, err = getSchemaListsDiff(config, value1.AnyOf, value2.AnyOf)
 	if err != nil {
 		return nil, err
 	}
-	result.AllOfDiff, err = getDiffSchemas(config, value1.AllOf, value2.AllOf)
+	result.AllOfDiff, err = getSchemaListsDiff(config, value1.AllOf, value2.AllOf)
 	if err != nil {
 		return nil, err
 	}
@@ -202,46 +198,4 @@ func toSchemaDiff(status schemaStatus) *SchemaDiff {
 
 	// all other cases -> empty diff
 	return nil
-}
-
-func getDiffSchemas(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
-
-	contained1, err := schemaRefsContained(config, schemaRefs1, schemaRefs2)
-	if err != nil {
-		return false, err
-	}
-	contained2, err := schemaRefsContained(config, schemaRefs2, schemaRefs1)
-	if err != nil {
-		return false, err
-	}
-
-	return !contained1 || !contained2, nil
-}
-
-func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
-	for _, schemaRef1 := range schemaRefs1 {
-		found, err := findSchema(config, schemaRef1, schemaRefs2)
-		if err != nil {
-			return false, err
-		}
-		if !found {
-			return false, nil
-		}
-	}
-	return true, nil
-}
-
-func findSchema(config *Config, schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
-	// TODO: optimize with a map
-	for _, schemaRef2 := range schemaRefs2 {
-		diff, err := getSchemaDiff(config, schemaRef1, schemaRef2)
-		if err != nil {
-			return false, err
-		}
-		if diff.Empty() {
-			return true, nil
-		}
-	}
-
-	return false, nil
 }

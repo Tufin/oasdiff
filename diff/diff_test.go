@@ -216,9 +216,12 @@ func TestSchemaDiff_MediaTypeModified(t *testing.T) {
 		d(t, diff.NewConfig(), 1, 5).SpecDiff.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeDiff)
 }
 
-func TestSchemaDiff_AnyOfDiff(t *testing.T) {
+func TestSchemaDiff_AnyOfDeleted(t *testing.T) {
 	require.Equal(t,
-		true,
+		&diff.SchemaListDiff{
+			Added:   1,
+			Deleted: 1,
+		},
 		d(t, &diff.Config{Prefix: "/prefix"}, 4, 2).SpecDiff.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["token"].SchemaDiff.AnyOfDiff)
 }
 
