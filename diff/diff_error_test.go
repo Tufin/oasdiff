@@ -51,6 +51,27 @@ func TestDiff_InfoNil(t *testing.T) {
 	require.Equal(t, "info is nil", err.Error())
 }
 
+func TestDiff_ExampleNil(t *testing.T) {
+	s1 := openapi3.Swagger{
+		Info: &openapi3.Info{},
+		Components: openapi3.Components{
+			Examples: openapi3.Examples{"test": &openapi3.ExampleRef{Value: &openapi3.Example{}}},
+		},
+	}
+	s2 := openapi3.Swagger{
+		Info: &openapi3.Info{},
+		Components: openapi3.Components{
+			Examples: openapi3.Examples{"test": &openapi3.ExampleRef{}},
+		},
+	}
+	config := &diff.Config{IncludeExamples: true}
+	_, err := diff.Get(config, &s1, &s2)
+	require.Equal(t, "example reference is nil", err.Error())
+
+	_, err = diff.Get(config, &s2, &s1)
+	require.Equal(t, "example reference is nil", err.Error())
+}
+
 func TestDiff_ComponentSchemaNil(t *testing.T) {
 	s1 := openapi3.Swagger{
 		Info: &openapi3.Info{},

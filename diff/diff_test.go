@@ -44,6 +44,7 @@ func TestDiff_Empty(t *testing.T) {
 	require.True(t, (*diff.TagsDiff)(nil).Empty())
 	require.True(t, (*diff.SecurityRequirementsDiff)(nil).Empty())
 	require.True(t, (*diff.SecuritySchemesDiff)(nil).Empty())
+	require.True(t, (*diff.ExamplesDiff)(nil).Empty())
 }
 
 func TestDiff_DeletedPaths(t *testing.T) {
