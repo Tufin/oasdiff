@@ -23,6 +23,10 @@ paths:
               format: uuid
               pattern: ^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12})$
               type: string
+            - description: RFC 4122 UUID
+              example: 26734565-dbcc-449a-a370-0beaaf04b0e8
+              format: uuid
+              type: string
       - in: path
         name: domain
         required: true
