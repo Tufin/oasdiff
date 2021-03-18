@@ -25,11 +25,15 @@ go build
 ## Running from Docker
 Comparing public files:
 
-`docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test3.yaml`
+```
+docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/master/data/openapi-test3.yaml
+```
 
 Comparing local files:
 
-`docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml`
+```
+docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
+```
 
 Replace "$(pwd)/data" by the path that contains your files.
 
