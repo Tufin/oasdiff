@@ -22,6 +22,7 @@ jobs:
       - docker/check
       - docker/build:
           image: tufin/oasdiff
+          tag: latest
       - docker/push:
           digest-path: /tmp/digest.txt
           image: tufin/oasdiff
