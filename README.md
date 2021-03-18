@@ -9,8 +9,9 @@ This [Go](https://golang.org) module provides a diff utility for [OpenAPI Spec 3
 
 ## Unique features vs. other diff tools
 - This is a [go module](https://blog.golang.org/using-go-modules) - it can be embedded into other Go programs
-- Comprehensive diff: covers just about every aspect of OpenAPI Spec see [work in progress](#Notes) for some limitations
+- Comprehensive diff: covers just about every aspect of OpenAPI Spec see [work in progress](#Work-in-progress) for some limitations
 - Deep diff into paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
+- Patch support is currently being added - see [work in progress](#Work-in-progress)
 
 ## Build
 ```
@@ -200,8 +201,8 @@ References are normally resolved automatically when you load the spec. In other 
 
 2. oasdiff ignores changes to [Examples](https://swagger.io/specification/#example-object) and [Extensions](https://swagger.io/specification/#specification-extensions) by default. You can change this behavior by [configuration](diff/config.go).
 
-3. Work in progress:  
-   - While most aspects of OpenAPI Spec are already supported by this diff tool, a couple are still missing: links, and server variables.
-   - Patch support is currently being added, it allows a diff result to be applied to an OpenAPI spec
+## Work in progress
+1. While most aspects of OpenAPI Spec are already supported by this diff tool, a couple are still missing: links, and server variables.
+2. Patch support: currently supports Descriptions and a few fields in Schema 
 
 ## Pull requests are welcome.
