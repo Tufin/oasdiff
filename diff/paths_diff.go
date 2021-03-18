@@ -121,7 +121,7 @@ func filterPaths1(paths openapi3.Paths, r *regexp.Regexp) {
 	}
 }
 
-// Apply applies the diff
+// Apply applies the patch
 func (pathsDiff *PathsDiff) Patch(paths openapi3.Paths) error {
 
 	if pathsDiff.Empty() {

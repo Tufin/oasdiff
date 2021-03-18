@@ -1,6 +1,8 @@
 package diff
 
-import "reflect"
+import (
+	"reflect"
+)
 
 // EnumDiff is the diff between two enums
 type EnumDiff struct {
@@ -39,10 +41,6 @@ func getEnumDiff(enum1, enum2 EnumValues) *EnumDiff {
 
 func getEnumDiffInternal(enum1, enum2 EnumValues) *EnumDiff {
 
-	if enum1 == nil && enum2 == nil {
-		return nil
-	}
-
 	diff := newEnumDiff()
 
 	for _, v1 := range enum1 {
@@ -67,4 +65,25 @@ func findValue(value interface{}, enum EnumValues) bool {
 		}
 	}
 	return false
+}
+
+func (enumDiff *EnumDiff) Patch(enum *[]interface{}) {
+
+	if enumDiff.Empty() {
+		return
+	}
+
+	result := []interface{}{}
+
+	for _, value := range *enum {
+		if !findValue(value, enumDiff.Deleted) {
+			result = append(result, value)
+		}
+	}
+
+	for _, value := range enumDiff.Added {
+		result = append(result, value)
+	}
+
+	*enum = result
 }

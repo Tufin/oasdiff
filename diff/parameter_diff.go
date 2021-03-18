@@ -71,9 +71,9 @@ func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter
 	return &result, nil
 }
 
-// Apply applies the diff to a spec
+// Apply applies the patch to a spec
 func (diff *ParameterDiff) Patch(parameter *openapi3.Parameter) error {
-	diff.DescriptionDiff.Apply(&parameter.Description)
+	diff.DescriptionDiff.Patch(&parameter.Description)
 
 	schema, err := derefSchema(parameter.Schema)
 	if err != nil {

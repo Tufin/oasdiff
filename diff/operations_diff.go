@@ -100,7 +100,7 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, operation1, 
 	return nil
 }
 
-// Apply applies the diff to a spec
+// Apply applies the patch to a spec
 func (operationsDiff *OperationsDiff) Patch(operations map[string]*openapi3.Operation) error {
 
 	if operationsDiff.Empty() {

@@ -63,11 +63,14 @@ func derefFloat64(ref *float64) interface{} {
 	return *ref
 }
 
-func (diff *ValueDiff) Apply(value *string) {
+func (diff *ValueDiff) Patch(value *string) {
 
 	if diff.Empty() {
 		return
 	}
 
-	*value = diff.To.(string)
+	switch diff.To.(type) {
+	case string:
+		*value = diff.To.(string)
+	}
 }

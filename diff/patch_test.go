@@ -39,12 +39,29 @@ func TestPatch_ParameterDescription(t *testing.T) {
 	require.False(t, d2.Summary.Diff)
 }
 
-func TestPatch_ParameterSchemaDescription(t *testing.T) {
+func TestPatch_ParameterSchemaFormat(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	param := s2.Paths["/api/{domain}/{project}/badges/security-score"].Get.Parameters.GetByInAndName("query", "image")
-	param.Schema.Value.Description = "reuven"
+	schema := s2.Paths["/api/{domain}/{project}/badges/security-score"].Get.Parameters.GetByInAndName("query", "image").Schema.Value
+	schema.Format = "reuven"
+
+	d1, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	d1.SpecDiff.Patch(s1)
+
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	require.False(t, d2.Summary.Diff)
+}
+
+func TestPatch_ParameterSchemaEnum(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	schema := s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value
+	schema.Enum = []interface{}{"reuven", "tufin"}
 
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)

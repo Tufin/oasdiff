@@ -200,12 +200,16 @@ func toSchemaDiff(status schemaStatus) *SchemaDiff {
 	return nil
 }
 
-// Apply applies the diff
+// Apply applies the patch
 func (diff *SchemaDiff) Patch(schema *openapi3.Schema) {
 
 	if diff.Empty() {
 		return
 	}
 
-	diff.DescriptionDiff.Apply(&schema.Description)
+	diff.TypeDiff.Patch(&schema.Type)
+	diff.TitleDiff.Patch(&schema.Title)
+	diff.FormatDiff.Patch(&schema.Format)
+	diff.DescriptionDiff.Patch(&schema.Description)
+	diff.EnumDiff.Patch(&schema.Enum)
 }

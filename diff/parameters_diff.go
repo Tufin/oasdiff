@@ -172,7 +172,7 @@ func (parametersDiff *ParametersDiff) getSummary() *SummaryDetails {
 	}
 }
 
-// Apply applies the diff to a spec
+// Apply applies the patch to a spec
 func (parametersDiff *ParametersDiff) Patch(parameters openapi3.Parameters) error {
 
 	if parametersDiff.Empty() {
