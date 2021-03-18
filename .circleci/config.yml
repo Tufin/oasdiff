@@ -25,6 +25,7 @@ jobs:
       - docker/push:
           digest-path: /tmp/digest.txt
           image: tufin/oasdiff
+          tag: latest
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"          
