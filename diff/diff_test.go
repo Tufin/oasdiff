@@ -173,13 +173,13 @@ func TestSchemaDiff_EnumDiff(t *testing.T) {
 
 func TestSchemaDiff_RequiredAdded(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 1, 5).SpecDiff.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.SchemaDiff.Required.Added,
+		d(t, diff.NewConfig(), 1, 5).SpecDiff.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.SchemaDiff.RequiredDiff.Added,
 		"type")
 }
 
 func TestSchemaDiff_RequiredDeleted(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 5, 1).SpecDiff.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.SchemaDiff.Required.Deleted,
+		d(t, diff.NewConfig(), 5, 1).SpecDiff.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.SchemaDiff.RequiredDiff.Deleted,
 		"type")
 }
 

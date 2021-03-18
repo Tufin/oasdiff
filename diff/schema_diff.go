@@ -8,9 +8,9 @@ import (
 
 // SchemaDiff is a diff between schema objects: https://swagger.io/specification/#schema-object
 type SchemaDiff struct {
-	ExtensionsDiff                  *ExtensionsDiff   `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	SchemaAdded                     bool              `json:"schemaAdded,omitempty" yaml:"schemaAdded,omitempty"`
 	SchemaDeleted                   bool              `json:"schemaDeleted,omitempty" yaml:"schemaDeleted,omitempty"`
+	ExtensionsDiff                  *ExtensionsDiff   `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	OneOfDiff                       *SchemaListDiff   `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
 	AnyOfDiff                       *SchemaListDiff   `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
 	AllOfDiff                       *SchemaListDiff   `json:"allOf,omitempty" yaml:"allOf,omitempty"`
@@ -35,18 +35,18 @@ type SchemaDiff struct {
 	DeprecatedDiff                  *ValueDiff        `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
 	MinDiff                         *ValueDiff        `json:"min,omitempty" yaml:"min,omitempty"`
 	MaxDiff                         *ValueDiff        `json:"max,omitempty" yaml:"max,omitempty"`
-	MultipleOf                      *ValueDiff        `json:"multipleOf,omitempty" yaml:"multipleOf,omitempty"`
-	MinLength                       *ValueDiff        `json:"minLength,omitempty" yaml:"minLength,omitempty"`
-	MaxLength                       *ValueDiff        `json:"maxLength,omitempty" yaml:"maxLength,omitempty"`
-	Pattern                         *ValueDiff        `json:"pattern,omitempty" yaml:"pattern,omitempty"`
-	MinItems                        *ValueDiff        `json:"minItems,omitempty" yaml:"minItems,omitempty"`
-	MaxItems                        *ValueDiff        `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
-	Items                           *SchemaDiff       `json:"items,omitempty" yaml:"items,omitempty"`
-	Required                        *StringsDiff      `json:"required,omitempty" yaml:"required,omitempty"`
+	MultipleOfDiff                  *ValueDiff        `json:"multipleOf,omitempty" yaml:"multipleOf,omitempty"`
+	MinLengthDiff                   *ValueDiff        `json:"minLength,omitempty" yaml:"minLength,omitempty"`
+	MaxLengthDiff                   *ValueDiff        `json:"maxLength,omitempty" yaml:"maxLength,omitempty"`
+	PatternDiff                     *ValueDiff        `json:"pattern,omitempty" yaml:"pattern,omitempty"`
+	MinItemsDiff                    *ValueDiff        `json:"minItems,omitempty" yaml:"minItems,omitempty"`
+	MaxItemsDiff                    *ValueDiff        `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
+	ItemsDiff                       *SchemaDiff       `json:"items,omitempty" yaml:"items,omitempty"`
+	RequiredDiff                    *StringsDiff      `json:"required,omitempty" yaml:"required,omitempty"`
 	PropertiesDiff                  *SchemasDiff      `json:"properties,omitempty" yaml:"properties,omitempty"`
-	MinProps                        *ValueDiff        `json:"minProps,omitempty" yaml:"minProps,omitempty"`
-	MaxProps                        *ValueDiff        `json:"maxProps,omitempty" yaml:"maxProps,omitempty"`
-	AdditionalProperties            *SchemaDiff       `json:"additionalProperties,omitempty" yaml:"additionalProperties,omitempty"`
+	MinPropsDiff                    *ValueDiff        `json:"minProps,omitempty" yaml:"minProps,omitempty"`
+	MaxPropsDiff                    *ValueDiff        `json:"maxProps,omitempty" yaml:"maxProps,omitempty"`
+	AdditionalPropertiesDiff        *SchemaDiff       `json:"additionalProperties,omitempty" yaml:"additionalProperties,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -124,27 +124,27 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	result.DeprecatedDiff = getValueDiff(value1.Deprecated, value2.Deprecated)
 	result.MinDiff = getFloat64RefDiff(value1.Min, value2.Min)
 	result.MaxDiff = getFloat64RefDiff(value1.Max, value2.Max)
-	result.MultipleOf = getFloat64RefDiff(value1.MultipleOf, value2.MultipleOf)
-	result.MinLength = getValueDiff(value1.MinLength, value2.MinLength)
-	result.MaxLength = getValueDiff(value1.MaxLength, value2.MaxLength)
-	result.Pattern = getValueDiff(value1.Pattern, value2.Pattern)
+	result.MultipleOfDiff = getFloat64RefDiff(value1.MultipleOf, value2.MultipleOf)
+	result.MinLengthDiff = getValueDiff(value1.MinLength, value2.MinLength)
+	result.MaxLengthDiff = getValueDiff(value1.MaxLength, value2.MaxLength)
+	result.PatternDiff = getValueDiff(value1.Pattern, value2.Pattern)
 	// compiledPattern is derived from pattern -> no need to diff
-	result.MinItems = getValueDiff(value1.MinItems, value2.MinItems)
-	result.MaxItems = getValueDiff(value1.MaxItems, value2.MaxItems)
-	result.Items, err = getSchemaDiff(config, value1.Items, value2.Items)
+	result.MinItemsDiff = getValueDiff(value1.MinItems, value2.MinItems)
+	result.MaxItemsDiff = getValueDiff(value1.MaxItems, value2.MaxItems)
+	result.ItemsDiff, err = getSchemaDiff(config, value1.Items, value2.Items)
 	if err != nil {
 		return nil, err
 	}
 
-	result.Required = getStringsDiff(value1.Required, value2.Required)
+	result.RequiredDiff = getStringsDiff(value1.Required, value2.Required)
 	result.PropertiesDiff, err = getSchemasDiff(config, value1.Properties, value2.Properties)
 	if err != nil {
 		return nil, err
 	}
 
-	result.MinProps = getValueDiff(value1.MinProps, value2.MinProps)
-	result.MaxProps = getValueDiff(value1.MaxProps, value2.MaxProps)
-	result.AdditionalProperties, err = getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties)
+	result.MinPropsDiff = getValueDiff(value1.MinProps, value2.MinProps)
+	result.MaxPropsDiff = getValueDiff(value1.MaxProps, value2.MaxProps)
+	result.AdditionalPropertiesDiff, err = getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties)
 	if err != nil {
 		return nil, err
 	}
@@ -207,9 +207,11 @@ func (diff *SchemaDiff) Patch(schema *openapi3.Schema) {
 		return
 	}
 
-	diff.TypeDiff.Patch(&schema.Type)
-	diff.TitleDiff.Patch(&schema.Title)
-	diff.FormatDiff.Patch(&schema.Format)
-	diff.DescriptionDiff.Patch(&schema.Description)
+	diff.TypeDiff.PatchString(&schema.Type)
+	diff.TitleDiff.PatchString(&schema.Title)
+	diff.FormatDiff.PatchString(&schema.Format)
+	diff.DescriptionDiff.PatchString(&schema.Description)
 	diff.EnumDiff.Patch(&schema.Enum)
+	diff.MaxLengthDiff.PatchUInt64Ref(&schema.MaxLength)
+	diff.PatternDiff.PatchString(&schema.Pattern)
 }

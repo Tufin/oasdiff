@@ -60,8 +60,7 @@ func TestPatch_ParameterSchemaEnum(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	schema := s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value
-	schema.Enum = []interface{}{"reuven", "tufin"}
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.Enum = []interface{}{"reuven", "tufin"}
 
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -71,4 +70,74 @@ func TestPatch_ParameterSchemaEnum(t *testing.T) {
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.False(t, d2.Summary.Diff)
+}
+
+func TestPatch_ParameterSchemaMaxLengthNil(t *testing.T) {
+	s1 := l(t, 1)
+	maxLength := uint64(13)
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = nil
+
+	s2 := l(t, 1)
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLength
+
+	d1, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	d1.SpecDiff.Patch(s1)
+
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	require.False(t, d2.Summary.Diff)
+}
+
+func TestPatch_ParameterSchemaMaxLength(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	maxLength := uint64(13)
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLength
+
+	d1, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	d1.SpecDiff.Patch(s1)
+
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	require.False(t, d2.Summary.Diff)
+}
+
+func TestPatch_ValueDiffNil(t *testing.T) {
+	valueDiff := &diff.ValueDiff{}
+	value := "reuven"
+	require.Equal(t, "diff value type mismatch: string vs. '%!s(<nil>)'", valueDiff.PatchString(&value).Error())
+}
+
+func TestPatch_ValueDiffMismatch(t *testing.T) {
+	valueDiff := &diff.ValueDiff{
+		To: 4,
+	}
+	value := "reuven"
+	require.Equal(t, "diff value type mismatch: string vs. 'int'", valueDiff.PatchString(&value).Error())
+}
+
+func TestPatch_ValueDiffInt(t *testing.T) {
+	valueDiff := &diff.ValueDiff{
+		To: 4,
+	}
+	value := uint64(3)
+	pValue := &value
+	require.Equal(t, "diff value type mismatch: string vs. 'int')'", valueDiff.PatchUInt64Ref(&pValue).Error())
+}
+
+func TestPatch_ValueDiff(t *testing.T) {
+	v1 := uint64(3)
+
+	valueDiff := &diff.ValueDiff{
+		To: &v1,
+	}
+
+	v2 := uint64(3)
+	pV2 := &v2
+	require.NoError(t, valueDiff.PatchUInt64Ref(&pV2))
 }

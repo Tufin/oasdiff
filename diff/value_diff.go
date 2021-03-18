@@ -1,6 +1,7 @@
 package diff
 
 import (
+	"fmt"
 	"reflect"
 )
 
@@ -63,14 +64,32 @@ func derefFloat64(ref *float64) interface{} {
 	return *ref
 }
 
-func (diff *ValueDiff) Patch(value *string) {
-
+func (diff *ValueDiff) PatchString(value *string) error {
 	if diff.Empty() {
-		return
+		return nil
 	}
 
 	switch diff.To.(type) {
 	case string:
 		*value = diff.To.(string)
+	default:
+		return fmt.Errorf("diff value type mismatch: string vs. '%s'", reflect.TypeOf(diff.To))
 	}
+
+	return nil
+}
+
+func (diff *ValueDiff) PatchUInt64Ref(value **uint64) error {
+	if diff.Empty() {
+		return nil
+	}
+
+	switch diff.To.(type) {
+	case *uint64:
+		*value = diff.To.(*uint64)
+	default:
+		return fmt.Errorf("diff value type mismatch: *uint64 vs. '%s'", reflect.TypeOf(diff.To))
+	}
+
+	return nil
 }
