@@ -14,11 +14,27 @@ jobs:
           race: true
       - codecov/upload:
           file: cover-source.out
+  build-container:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build:
+          image: tufin/oasdiff
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: tufin/oasdiff
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"          
 orbs:
   go: circleci/go@1.5.0
   codecov: codecov/codecov@1.1.3
+  docker: circleci/docker@1.5.0
 version: 2.1
 workflows:
   main:
     jobs:
       - build
+      - build-container
