@@ -99,3 +99,20 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, operation1, 
 
 	return nil
 }
+
+// Apply applies the diff to a spec
+func (operationsDiff *OperationsDiff) Patch(operations map[string]*openapi3.Operation) error {
+
+	if operationsDiff.Empty() {
+		return nil
+	}
+
+	for method, methodDiff := range operationsDiff.Modified {
+		err := methodDiff.Patch(operations[method])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

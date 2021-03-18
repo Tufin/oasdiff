@@ -100,3 +100,18 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 
 	return summary
 }
+
+// Apply applies the diff
+func (specDiff *SpecDiff) Patch(s *openapi3.Swagger) error {
+
+	if specDiff.Empty() {
+		return nil
+	}
+
+	err := specDiff.PathsDiff.Patch(s.Paths)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

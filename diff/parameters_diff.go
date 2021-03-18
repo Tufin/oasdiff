@@ -171,3 +171,22 @@ func (parametersDiff *ParametersDiff) getSummary() *SummaryDetails {
 		Modified: len(parametersDiff.Modified),
 	}
 }
+
+// Apply applies the diff to a spec
+func (parametersDiff *ParametersDiff) Patch(parameters openapi3.Parameters) error {
+
+	if parametersDiff.Empty() {
+		return nil
+	}
+
+	for location, paramDiffs := range parametersDiff.Modified {
+		for name, parameterDiff := range paramDiffs {
+			err := parameterDiff.Patch(parameters.GetByInAndName(location, name))
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}

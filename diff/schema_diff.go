@@ -199,3 +199,13 @@ func toSchemaDiff(status schemaStatus) *SchemaDiff {
 	// all other cases -> empty diff
 	return nil
 }
+
+// Apply applies the diff
+func (diff *SchemaDiff) Patch(schema *openapi3.Schema) {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.DescriptionDiff.Apply(&schema.Description)
+}

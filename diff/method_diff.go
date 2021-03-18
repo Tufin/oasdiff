@@ -84,3 +84,18 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 
 	return result, nil
 }
+
+// Apply applies the diff to a spec
+func (methodDiff *MethodDiff) Patch(operation *openapi3.Operation) error {
+
+	if methodDiff.Empty() {
+		return nil
+	}
+
+	methodDiff.DescriptionDiff.Apply(&operation.Description)
+	err := methodDiff.ParametersDiff.Patch(operation.Parameters)
+	if err != nil {
+		return err
+	}
+	return nil
+}

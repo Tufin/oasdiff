@@ -1,6 +1,8 @@
 package diff
 
-import "reflect"
+import (
+	"reflect"
+)
 
 // ValueDiff describes the diff between two values
 type ValueDiff struct {
@@ -59,4 +61,13 @@ func derefFloat64(ref *float64) interface{} {
 	}
 
 	return *ref
+}
+
+func (diff *ValueDiff) Apply(value *string) {
+
+	if diff.Empty() {
+		return
+	}
+
+	*value = diff.To.(string)
 }

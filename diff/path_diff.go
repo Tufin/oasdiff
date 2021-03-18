@@ -65,3 +65,18 @@ func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem
 
 	return result, nil
 }
+
+// Apply applies the diff
+func (pathDiff *PathDiff) Patch(pathItem *openapi3.PathItem) error {
+
+	if pathDiff.Empty() {
+		return nil
+	}
+
+	err := pathDiff.OperationsDiff.Patch(pathItem.Operations())
+	if err != nil {
+		return err
+	}
+
+	return err
+}
