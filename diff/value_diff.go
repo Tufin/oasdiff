@@ -69,6 +69,10 @@ func (diff *ValueDiff) PatchString(value *string) error {
 		return nil
 	}
 
+	if diff.To == nil {
+		return fmt.Errorf("diff value type is nil")
+	}
+
 	switch diff.To.(type) {
 	case string:
 		*value = diff.To.(string)
@@ -82,6 +86,10 @@ func (diff *ValueDiff) PatchString(value *string) error {
 func (diff *ValueDiff) PatchUInt64Ref(value **uint64) error {
 	if diff.Empty() {
 		return nil
+	}
+
+	if diff.To == nil {
+		return fmt.Errorf("diff value type is nil")
 	}
 
 	switch diff.To.(type) {

@@ -75,10 +75,10 @@ func TestPatch_ParameterSchemaEnum(t *testing.T) {
 func TestPatch_ParameterSchemaMaxLengthNil(t *testing.T) {
 	s1 := l(t, 1)
 	maxLength := uint64(13)
-	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = nil
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLength
 
 	s2 := l(t, 1)
-	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLength
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = nil
 
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -110,7 +110,7 @@ func TestPatch_ParameterSchemaMaxLength(t *testing.T) {
 func TestPatch_ValueDiffNil(t *testing.T) {
 	valueDiff := &diff.ValueDiff{}
 	value := "reuven"
-	require.Equal(t, "diff value type mismatch: string vs. '%!s(<nil>)'", valueDiff.PatchString(&value).Error())
+	require.Equal(t, "diff value type is nil", valueDiff.PatchString(&value).Error())
 }
 
 func TestPatch_ValueDiffMismatch(t *testing.T) {
