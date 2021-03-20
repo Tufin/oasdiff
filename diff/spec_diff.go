@@ -101,7 +101,7 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 	return summary
 }
 
-// Apply applies the patch
+// Patch applies the patch to a spec
 func (specDiff *SpecDiff) Patch(s *openapi3.Swagger) error {
 
 	if specDiff.Empty() {

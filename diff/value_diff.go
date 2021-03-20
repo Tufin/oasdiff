@@ -64,7 +64,8 @@ func derefFloat64(ref *float64) interface{} {
 	return *ref
 }
 
-func (diff *ValueDiff) PatchString(value *string) error {
+ // PatchString applies the patch to a string value
+ func (diff *ValueDiff) PatchString(value *string) error {
 	if diff.Empty() {
 		return nil
 	}
@@ -83,6 +84,7 @@ func (diff *ValueDiff) PatchString(value *string) error {
 	return nil
 }
 
+// PatchUInt64Ref applies the patch to a *unit64 value
 func (diff *ValueDiff) PatchUInt64Ref(value **uint64) error {
 	if diff.Empty() {
 		return nil

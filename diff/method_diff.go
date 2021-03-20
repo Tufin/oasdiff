@@ -85,7 +85,7 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 	return result, nil
 }
 
-// Apply applies the patch to a spec
+// Patch applies the patch to a method
 func (methodDiff *MethodDiff) Patch(operation *openapi3.Operation) error {
 
 	if methodDiff.Empty() {

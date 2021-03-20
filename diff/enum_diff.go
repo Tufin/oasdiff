@@ -67,6 +67,7 @@ func findValue(value interface{}, enum EnumValues) bool {
 	return false
 }
 
+// Patch applies the patch to an enum
 func (enumDiff *EnumDiff) Patch(enum *[]interface{}) {
 
 	if enumDiff.Empty() {

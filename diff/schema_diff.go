@@ -200,7 +200,7 @@ func toSchemaDiff(status schemaStatus) *SchemaDiff {
 	return nil
 }
 
-// Apply applies the patch
+// Patch applies the patch to a schema
 func (diff *SchemaDiff) Patch(schema *openapi3.Schema) {
 
 	if diff.Empty() {
@@ -213,5 +213,6 @@ func (diff *SchemaDiff) Patch(schema *openapi3.Schema) {
 	diff.DescriptionDiff.PatchString(&schema.Description)
 	diff.EnumDiff.Patch(&schema.Enum)
 	diff.MaxLengthDiff.PatchUInt64Ref(&schema.MaxLength)
+	// TODO: make sure schema.compiledPattern is updated too
 	diff.PatternDiff.PatchString(&schema.Pattern)
 }
