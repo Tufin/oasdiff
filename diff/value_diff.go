@@ -78,7 +78,7 @@ func (diff *ValueDiff) PatchString(value *string) error {
 	case string:
 		*value = diff.To.(string)
 	default:
-		return fmt.Errorf("diff value type mismatch: string vs. '%s'", reflect.TypeOf(diff.To))
+		return fmt.Errorf("diff value type mismatch: string vs. %q", reflect.TypeOf(diff.To))
 	}
 
 	return nil
@@ -98,7 +98,7 @@ func (diff *ValueDiff) PatchUInt64Ref(value **uint64) error {
 	case *uint64:
 		*value = diff.To.(*uint64)
 	default:
-		return fmt.Errorf("diff value type mismatch: *uint64 vs. '%s'", reflect.TypeOf(diff.To))
+		return fmt.Errorf("diff value type mismatch: *uint64 vs. %q", reflect.TypeOf(diff.To))
 	}
 
 	return nil
