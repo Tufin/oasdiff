@@ -58,7 +58,7 @@ jobs:
     - if: runner.os == 'Linux'
       run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
 
-    - run: go test ./...
+    - run: go test -coverprofile=coverage.txt -covermode=atomic
     - if: runner.os == 'Linux'
       run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
 
@@ -71,3 +71,8 @@ jobs:
       name: Did you mean %q
       run: |
         ! git grep -E "'[%].'"
+
+    - uses: codecov/codecov-action@v1
+      with:
+        files: ./coverage.txt
+        flags: unittests 
