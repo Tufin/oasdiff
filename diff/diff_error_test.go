@@ -263,5 +263,5 @@ func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
 
 func TestFilterByRegex_Invalid(t *testing.T) {
 	_, err := diff.Get(&diff.Config{Filter: "["}, l(t, 1), l(t, 2))
-	require.Equal(t, "failed to compile filter regex '[' with error parsing regexp: missing closing ]: `[`", err.Error())
+	require.Equal(t, "failed to compile filter regex \"[\" with error parsing regexp: missing closing ]: `[`", err.Error())
 }

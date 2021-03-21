@@ -118,7 +118,7 @@ func TestPatch_ValueDiffMismatch(t *testing.T) {
 		To: 4,
 	}
 	value := "reuven"
-	require.Equal(t, "diff value type mismatch: string vs. 'int'", valueDiff.PatchString(&value).Error())
+	require.Equal(t, "diff value type mismatch: string vs. \"int\"", valueDiff.PatchString(&value).Error())
 }
 
 func TestPatch_ValueDiffInt(t *testing.T) {
@@ -127,7 +127,7 @@ func TestPatch_ValueDiffInt(t *testing.T) {
 	}
 	value := uint64(3)
 	pValue := &value
-	require.Equal(t, `diff value type mismatch: *uint64 vs. "int"`, valueDiff.PatchUInt64Ref(&pValue).Error())
+	require.Equal(t, "diff value type mismatch: *uint64 vs. \"int\"", valueDiff.PatchUInt64Ref(&pValue).Error())
 }
 
 func TestPatch_ValueDiff(t *testing.T) {
