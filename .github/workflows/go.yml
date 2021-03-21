@@ -1,0 +1,73 @@
+name: go
+on:
+  pull_request:
+  push:
+
+jobs:
+  build-and-test:
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GO111MODULE: 'on'
+      CGO_ENABLED: '0'
+    strategy:
+      fail-fast: true
+      matrix:
+        # Locked at https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+        os:
+        - ubuntu-20.04
+        - windows-2019
+        - macos-10.15
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+
+    - uses: actions/setup-go@v2
+      with:
+        go-version: 1.x
+
+    - id: go-cache-paths
+      run: |
+        echo "::set-output name=go-build::$(go env GOCACHE)"
+        echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+    - name: Go Build Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.go-cache-paths.outputs.go-build }}
+        key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+
+    - name: Go Mod Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.go-cache-paths.outputs.go-mod }}
+        key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+
+
+    - uses: actions/checkout@v2
+
+    - run: go mod download && go mod tidy && go mod verify
+    - if: runner.os == 'Linux'
+      run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
+
+    - run: go vet ./...
+    - if: runner.os == 'Linux'
+      run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
+
+    - run: go fmt ./...
+    - if: runner.os == 'Linux'
+      run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
+
+    - run: go test ./...
+    - if: runner.os == 'Linux'
+      run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
+
+
+    - if: runner.os == 'Linux'
+      name: Errors must not be capitalized https://github.com/golang/go/wiki/CodeReviewComments#error-strings
+      run: |
+        ! git grep -E '(fmt|errors)[^(]+\(.[A-Z]'
+    - if: runner.os == 'Linux'
+      name: Did you mean %q
+      run: |
+        ! git grep -E "'[%].'"
