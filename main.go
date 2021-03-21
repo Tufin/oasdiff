@@ -36,13 +36,13 @@ func main() {
 
 	s1, err := load.From(swaggerLoader, base)
 	if err != nil {
-		fmt.Printf("failed to load base spec from '%s' with '%v'", base, err)
+		fmt.Printf("failed to load base spec from %q with %v", base, err)
 		return
 	}
 
 	s2, err := load.From(swaggerLoader, revision)
 	if err != nil {
-		fmt.Printf("failed to load revision spec from '%s' with '%v'", revision, err)
+		fmt.Printf("failed to load revision spec from %q with %v", revision, err)
 		return
 	}
 
@@ -53,24 +53,24 @@ func main() {
 	}, s1, s2)
 
 	if err != nil {
-		fmt.Printf("diff failed with '%v'", err)
+		fmt.Printf("diff failed with %v", err)
 	}
 
 	if format == formatJSON {
 		bytes, err := json.MarshalIndent(diffReport, "", " ")
 		if err != nil {
-			fmt.Printf("failed to marshal result as %s with '%v'", format, err)
+			fmt.Printf("failed to marshal result as %q with %v", format, err)
 			return
 		}
-		fmt.Printf("%s\n", bytes)
+		fmt.Printf("%q\n", bytes)
 	} else if format == formatYAML {
 		bytes, err := yaml.Marshal(diffReport)
 		if err != nil {
-			fmt.Printf("failed to marshal result as %s with '%v'", format, err)
+			fmt.Printf("failed to marshal result as %q with %v", format, err)
 			return
 		}
-		fmt.Printf("%s\n", bytes)
+		fmt.Printf("%q\n", bytes)
 	} else {
-		fmt.Printf("unknown format %s\n", format)
+		fmt.Printf("unknown format %q\n", format)
 	}
 }
