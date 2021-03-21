@@ -104,7 +104,7 @@ func filterPaths2(filter string, paths1, paths2 openapi3.Paths) error {
 
 	r, err := regexp.Compile(filter)
 	if err != nil {
-		return fmt.Errorf("failed to compile filter regex '%s' with %w", filter, err)
+		return fmt.Errorf("failed to compile filter regex %q with %w", filter, err)
 	}
 
 	filterPaths1(paths1, r)
