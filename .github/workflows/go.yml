@@ -62,6 +62,8 @@ jobs:
     - if: runner.os == 'Linux'
       run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
 
+    - run: cat coverage.txt
+
     - if: runner.os == 'Linux'
       name: Errors must not be capitalized https://github.com/golang/go/wiki/CodeReviewComments#error-strings
       run: |
