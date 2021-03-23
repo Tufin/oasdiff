@@ -58,10 +58,9 @@ jobs:
     - if: runner.os == 'Linux'
       run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
 
-    - run: go test -coverprofile=coverage.txt -covermode=atomic
+    - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
     - if: runner.os == 'Linux'
       run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
-
 
     - if: runner.os == 'Linux'
       name: Errors must not be capitalized https://github.com/golang/go/wiki/CodeReviewComments#error-strings
