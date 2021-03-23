@@ -7,7 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// PathsDiff is a diff between two sets of path item objects: https://swagger.io/specification/#path-item-object
+// PathsDiff describes the changes between a pair of sets of path item objects: https://swagger.io/specification/#path-item-object
 type PathsDiff struct {
 	Added    StringList    `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList    `json:"deleted,omitempty" yaml:"deleted,omitempty"`

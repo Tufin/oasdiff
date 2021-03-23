@@ -3,7 +3,7 @@ package diff
 import "github.com/getkin/kin-openapi/openapi3"
 
 /*
-SchemaListDiff is a diff between two lists of schema objects: https://swagger.io/specification/#schema-object
+SchemaListDiff describes the changes between a pair of lists of schema objects: https://swagger.io/specification/#schema-object
 Unlike other diff structs, this one doesn't indicate the exact change but only tells us how many schema objects where added and/or deleted.
 As a special case, when exactly one schema was added and one deleted, the Modified field will show a diff between them.
 */

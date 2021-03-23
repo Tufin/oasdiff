@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// EncodingDiff is a diff between encoding objects: https://swagger.io/specification/#encoding-object
+// EncodingDiff describes the changes betweena pair of encoding objects: https://swagger.io/specification/#encoding-object
 type EncodingDiff struct {
 	ContentTypeDiff   *ValueDiff   `json:"contentType,omitempty" yaml:"contentType,omitempty"`
 	HeadersDiff       *HeadersDiff `json:"headers,omitempty" yaml:"headers,omitempty"`

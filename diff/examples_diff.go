@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ExamplesDiff is a diff between two sets of example objects: https://swagger.io/specification/#example-object
+// ExamplesDiff describes the changes between a pair of sets of example objects: https://swagger.io/specification/#example-object
 type ExamplesDiff struct {
 	Added    StringList       `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList       `json:"deleted,omitempty" yaml:"deleted,omitempty"`

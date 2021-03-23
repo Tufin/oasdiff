@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// TagsDiff is a diff between two lists of tag objects: https://swagger.io/specification/#tag-object
+// TagsDiff describes the changes between a pair of lists of tag objects: https://swagger.io/specification/#tag-object
 type TagsDiff struct {
 	Added    StringList   `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`

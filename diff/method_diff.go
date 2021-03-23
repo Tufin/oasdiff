@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// MethodDiff is the diff between two operation objects: https://swagger.io/specification/#operation-object
+// MethodDiff describes the changes between a pair of operation objects: https://swagger.io/specification/#operation-object
 type MethodDiff struct {
 	ExtensionsDiff   *ExtensionsDiff           `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	TagsDiff         *StringsDiff              `json:"tags,omitempty" yaml:"tags,omitempty"`

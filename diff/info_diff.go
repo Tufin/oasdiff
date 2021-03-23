@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// InfoDiff is the diff between two info objects: https://swagger.io/specification/#info-object
+// InfoDiff describes the changes between a pair of info objects: https://swagger.io/specification/#info-object
 type InfoDiff struct {
 	ExtensionsDiff     *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	TitleDiff          *ValueDiff      `json:"title,omitempty" yaml:"title,omitempty"`

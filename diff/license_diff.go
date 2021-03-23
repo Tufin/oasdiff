@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// LicenseDiff is the diff between two license objects: https://swagger.io/specification/#license-object
+// LicenseDiff describes the changes between a pair of license objects: https://swagger.io/specification/#license-object
 type LicenseDiff struct {
 	Added          bool            `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted        bool            `json:"deleted,omitempty" yaml:"deleted,omitempty"`

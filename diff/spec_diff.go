@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// SpecDiff describes the changes between two OpenAPI specifications: https://swagger.io/specification/#schema
+// SpecDiff describes the changes between a pair of OpenAPI specifications: https://swagger.io/specification/#schema
 type SpecDiff struct {
 	ExtensionsDiff   *ExtensionsDiff           `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	OpenAPIDiff      *ValueDiff                `json:"openAPI,omitempty" yaml:"openAPI,omitempty"`

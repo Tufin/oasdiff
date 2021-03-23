@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ExampleDiff is a diff between example objects: https://swagger.io/specification/#example-object
+// ExampleDiff describes the changes between a pair of example objects: https://swagger.io/specification/#example-object
 type ExampleDiff struct {
 	ExtensionsDiff    *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	SummaryDiff       *ValueDiff      `json:"summary,omitempty" yaml:"summary,omitempty"`

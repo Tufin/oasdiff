@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ServerDiff is a diff between server objects: https://swagger.io/specification/#server-object
+// ServerDiff describes the changes between a pair of server objects: https://swagger.io/specification/#server-object
 type ServerDiff struct {
 	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	URLDiff         *ValueDiff      `json:"urlType,omitempty" yaml:"urlType,omitempty"`

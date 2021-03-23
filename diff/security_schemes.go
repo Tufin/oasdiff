@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// SecuritySchemesDiff is a diff between two sets of security scheme objects: https://swagger.io/specification/#security-scheme-object
+// SecuritySchemesDiff describes the changes between a pair of sets of security scheme objects: https://swagger.io/specification/#security-scheme-object
 type SecuritySchemesDiff struct {
 	Added    StringList              `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList              `json:"deleted,omitempty" yaml:"deleted,omitempty"`

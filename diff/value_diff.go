@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-// ValueDiff describes the diff between two values
+// ValueDiff describes the changes between a pair of values
 type ValueDiff struct {
 	From interface{} `json:"from" yaml:"from"`
 	To   interface{} `json:"to" yaml:"to"`

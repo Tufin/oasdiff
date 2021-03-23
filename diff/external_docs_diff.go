@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// ExternalDocsDiff is the diff between two external documentation objects: https://swagger.io/specification/#external-documentation-object
+// ExternalDocsDiff describes the changes between a pair of external documentation objects: https://swagger.io/specification/#external-documentation-object
 type ExternalDocsDiff struct {
 	Added           bool            `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted         bool            `json:"deleted,omitempty" yaml:"deleted,omitempty"`

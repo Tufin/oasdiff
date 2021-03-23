@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// RequestBodiesDiff is a diff between two sets of request body objects: https://swagger.io/specification/#request-body-object
+// RequestBodiesDiff describes the changes between a pair of sets of request body objects: https://swagger.io/specification/#request-body-object
 type RequestBodiesDiff struct {
 	Added    StringList            `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList            `json:"deleted,omitempty" yaml:"deleted,omitempty"`

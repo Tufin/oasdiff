@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ParametersDiff is a diff between two lists of parameter objects: https://swagger.io/specification/#parameter-object
+// ParametersDiff describes the changes between a pair of lists of parameter objects: https://swagger.io/specification/#parameter-object
 type ParametersDiff struct {
 	Added    ParamNamesByLocation `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  ParamNamesByLocation `json:"deleted,omitempty" yaml:"deleted,omitempty"`

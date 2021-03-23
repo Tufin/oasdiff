@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// EncodingsDiff is a diff between two sets of encoding objects: https://swagger.io/specification/#encoding-object
+// EncodingsDiff describes the changes between a pair of sets of encoding objects: https://swagger.io/specification/#encoding-object
 type EncodingsDiff struct {
 	Added    StringList        `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList        `json:"deleted,omitempty" yaml:"deleted,omitempty"`

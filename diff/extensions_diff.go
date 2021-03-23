@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ExtensionsDiff is a diff between two sets of specification extensions: https://swagger.io/specification/#specification-extensions
+// ExtensionsDiff describes the changes between a pair of sets of specification extensions: https://swagger.io/specification/#specification-extensions
 type ExtensionsDiff struct {
 	Added    StringList         `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList         `json:"deleted,omitempty" yaml:"deleted,omitempty"`

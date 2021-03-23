@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// PathDiff is a diff between path item objects: https://swagger.io/specification/#path-item-object
+// PathDiff describes the changes between a pair of path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
 	SummaryDiff     *ValueDiff      `json:"summary,omitempty" yaml:"summary,omitempty"`
 	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`

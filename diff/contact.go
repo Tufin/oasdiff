@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// ContactDiff is the diff between two contact objects: https://swagger.io/specification/#contact-object
+// ContactDiff describes the changes between a pair of contact objects: https://swagger.io/specification/#contact-object
 type ContactDiff struct {
 	Added          bool            `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted        bool            `json:"deleted,omitempty" yaml:"deleted,omitempty"`

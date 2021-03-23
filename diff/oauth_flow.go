@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// OAuthFlowDiff is a diff between oauth flow objects: https://swagger.io/specification/#oauth-flow-object
+// OAuthFlowDiff describes the changes between a pair of oauth flow objects: https://swagger.io/specification/#oauth-flow-object
 type OAuthFlowDiff struct {
 	Added                bool            `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted              bool            `json:"deleted,omitempty" yaml:"deleted,omitempty"`

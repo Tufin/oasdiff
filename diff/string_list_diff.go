@@ -1,6 +1,6 @@
 package diff
 
-// StringsDiff is the diff between two lists of strings
+// StringsDiff describes the changes between a pair of lists of strings
 type StringsDiff struct {
 	Added   StringList `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`

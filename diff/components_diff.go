@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// ComponentsDiff is the diff between two component objects: https://swagger.io/specification/#components-object
+// ComponentsDiff describes the changes between a pair of component objects: https://swagger.io/specification/#components-object
 type ComponentsDiff struct {
 	SchemasDiff         *SchemasDiff         `json:"schemas,omitempty" yaml:"schemas,omitempty"`
 	ParametersDiff      *ParametersDiff      `json:"parameters,omitempty" yaml:"parameters,omitempty"`

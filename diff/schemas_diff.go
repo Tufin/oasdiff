@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// SchemasDiff is a diff between two sets of schema objects: https://swagger.io/specification/#schema-object
+// SchemasDiff describes the changes between a pair of sets of schema objects: https://swagger.io/specification/#schema-object
 type SchemasDiff struct {
 	Added    StringList      `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList      `json:"deleted,omitempty" yaml:"deleted,omitempty"`

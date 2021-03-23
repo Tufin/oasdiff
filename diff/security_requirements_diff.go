@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// SecurityRequirementsDiff is a diff between two sets of security requirement objects: https://swagger.io/specification/#security-requirement-object
+// SecurityRequirementsDiff describes the changes between a pair of sets of security requirement objects: https://swagger.io/specification/#security-requirement-object
 type SecurityRequirementsDiff struct {
 	Added   StringList `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`

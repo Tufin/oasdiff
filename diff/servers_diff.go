@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// ServersDiff is a diff between two sets of encoding objects: https://swagger.io/specification/#server-object
+// ServersDiff describes the changes between a pair of sets of encoding objects: https://swagger.io/specification/#server-object
 type ServersDiff struct {
 	Added    StringList      `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList      `json:"deleted,omitempty" yaml:"deleted,omitempty"`

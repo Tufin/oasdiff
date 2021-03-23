@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// OperationsDiff is a diff between the operation objects (https://swagger.io/specification/#operation-object) of two path item objects
+// OperationsDiff describes the changes between a pair of operation objects (https://swagger.io/specification/#operation-object) of two path item objects
 type OperationsDiff struct {
 	Added    StringList         `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList         `json:"deleted,omitempty" yaml:"deleted,omitempty"`

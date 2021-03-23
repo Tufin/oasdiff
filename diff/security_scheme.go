@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// SecuritySchemeDiff is a diff between security scheme objects: https://swagger.io/specification/#security-scheme-object
+// SecuritySchemeDiff describes the changes between a pair of security scheme objects: https://swagger.io/specification/#security-scheme-object
 type SecuritySchemeDiff struct {
 	ExtensionsDiff       *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	TypeDiff             *ValueDiff      `json:"type,omitempty" yaml:"type,omitempty"`

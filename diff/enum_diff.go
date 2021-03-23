@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-// EnumDiff is the diff between two enums
+// EnumDiff describes the changes between a pair of enums
 type EnumDiff struct {
 	Added   EnumValues `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted EnumValues `json:"deleted,omitempty" yaml:"deleted,omitempty"`
