@@ -257,6 +257,8 @@ components:
           application/json:
             schema:
               type: object
+              discriminator:
+                propertyName: meter_name
               properties: 
                 meter_name:
                     type: string
