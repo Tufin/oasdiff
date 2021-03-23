@@ -62,14 +62,14 @@ func main() {
 			fmt.Printf("failed to marshal result as %q with %v", format, err)
 			return
 		}
-		fmt.Printf("%q\n", bytes)
+		fmt.Printf("%s\n", bytes)
 	} else if format == formatYAML {
 		bytes, err := yaml.Marshal(diffReport)
 		if err != nil {
 			fmt.Printf("failed to marshal result as %q with %v", format, err)
 			return
 		}
-		fmt.Printf("%q\n", bytes)
+		fmt.Printf("%s\n", bytes)
 	} else {
 		fmt.Printf("unknown format %q\n", format)
 	}
