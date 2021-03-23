@@ -1,2 +1,2 @@
 fixes:
-  - "::github.com/tufin/oasdiff/"
+  - "github.com/tufin/oasdiff/::"        # reduce root e.g., "before/path/" => "path/"
