@@ -110,7 +110,7 @@ func TestPatch_ParameterSchemaMaxLength(t *testing.T) {
 func TestPatch_ValueDiffNil(t *testing.T) {
 	valueDiff := &diff.ValueDiff{}
 	value := "reuven"
-	require.Equal(t, "diff value type is nil", valueDiff.PatchString(&value).Error())
+	require.Equal(t, "diff value is nil instead of string", valueDiff.PatchString(&value).Error())
 }
 
 func TestPatch_ValueDiffMismatch(t *testing.T) {

@@ -64,24 +64,28 @@ func derefFloat64(ref *float64) interface{} {
 	return *ref
 }
 
-// PatchString applies the patch to a string value
-func (diff *ValueDiff) PatchString(value *string) error {
+func (diff *ValueDiff) patchStringCB(cb func(string)) error {
 	if diff.Empty() {
 		return nil
 	}
 
 	if diff.To == nil {
-		return fmt.Errorf("diff value type is nil")
+		return fmt.Errorf("diff value is nil instead of string")
 	}
 
 	switch diff.To.(type) {
 	case string:
-		*value = diff.To.(string)
+		cb(diff.To.(string))
 	default:
 		return fmt.Errorf("diff value type mismatch: string vs. %q", reflect.TypeOf(diff.To))
 	}
 
 	return nil
+}
+
+// PatchString applies the patch to a string value
+func (diff *ValueDiff) PatchString(value *string) error {
+	return diff.patchStringCB(func(s string) { *value = s })
 }
 
 // PatchUInt64Ref applies the patch to a *unit64 value
@@ -91,7 +95,7 @@ func (diff *ValueDiff) PatchUInt64Ref(value **uint64) error {
 	}
 
 	if diff.To == nil {
-		return fmt.Errorf("diff value type is nil")
+		return fmt.Errorf("diff value is nil instead of *uint64")
 	}
 
 	switch diff.To.(type) {

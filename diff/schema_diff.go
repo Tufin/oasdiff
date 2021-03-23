@@ -201,18 +201,42 @@ func toSchemaDiff(status schemaStatus) *SchemaDiff {
 }
 
 // Patch applies the patch to a schema
-func (diff *SchemaDiff) Patch(schema *openapi3.Schema) {
+func (diff *SchemaDiff) Patch(schema *openapi3.Schema) error {
 
 	if diff.Empty() {
-		return
+		return nil
 	}
 
-	diff.TypeDiff.PatchString(&schema.Type)
-	diff.TitleDiff.PatchString(&schema.Title)
-	diff.FormatDiff.PatchString(&schema.Format)
-	diff.DescriptionDiff.PatchString(&schema.Description)
+	if err := diff.TypeDiff.PatchString(&schema.Type); err != nil {
+		return err
+	}
+
+	if err := diff.TitleDiff.PatchString(&schema.Title); err != nil {
+		return err
+	}
+
+	if err := diff.FormatDiff.PatchString(&schema.Format); err != nil {
+		return err
+	}
+
+	if err := diff.DescriptionDiff.PatchString(&schema.Description); err != nil {
+		return err
+	}
+
 	diff.EnumDiff.Patch(&schema.Enum)
-	diff.MaxLengthDiff.PatchUInt64Ref(&schema.MaxLength)
-	// TODO: make sure schema.compiledPattern is updated too
-	diff.PatternDiff.PatchString(&schema.Pattern)
+
+	if err := diff.MaxLengthDiff.PatchUInt64Ref(&schema.MaxLength); err != nil {
+		return err
+	}
+
+	if err := patchPattern(diff.PatternDiff, schema); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// patchPattern uses "Schema.WithPattern" to ensure that schema.compiledPattern is updated too
+func patchPattern(valueDiff *ValueDiff, schema *openapi3.Schema) error {
+	return valueDiff.PatchStringCB(func(s string) { schema.WithPattern(valueDiff.To.(string)) })
 }
