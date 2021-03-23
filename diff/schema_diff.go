@@ -238,5 +238,5 @@ func (diff *SchemaDiff) Patch(schema *openapi3.Schema) error {
 
 // patchPattern uses "Schema.WithPattern" to ensure that schema.compiledPattern is updated too
 func patchPattern(valueDiff *ValueDiff, schema *openapi3.Schema) error {
-	return valueDiff.PatchStringCB(func(s string) { schema.WithPattern(valueDiff.To.(string)) })
+	return valueDiff.patchStringCB(func(s string) { schema.WithPattern(valueDiff.To.(string)) })
 }
