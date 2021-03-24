@@ -8,10 +8,12 @@ import (
 
 // RequestBodyDiff describes the changes between a pair of request body objects: https://swagger.io/specification/#request-body-object
 type RequestBodyDiff struct {
-	Added           bool         `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted         bool         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	DescriptionDiff *ValueDiff   `json:"description,omitempty" yaml:"description,omitempty"`
-	ContentDiff     *ContentDiff `json:"content,omitempty" yaml:"content,omitempty"`
+	Added           bool            `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted         bool            `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
+	RequiredDiff    *ValueDiff      `json:"required,omitempty" yaml:"required,omitempty"`
+	ContentDiff     *ContentDiff    `json:"content,omitempty" yaml:"content,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -65,7 +67,9 @@ func getRequestBodyDiffInternal(config *Config, requestBodyRef1, requestBodyRef2
 		return nil, err
 	}
 
+	result.ExtensionsDiff = getExtensionsDiff(config, requestBody1.ExtensionProps, requestBody2.ExtensionProps)
 	result.DescriptionDiff = getValueDiff(requestBody1.Description, requestBody2.Description)
+	result.RequiredDiff = getValueDiff(requestBody1.Required, requestBody2.Required)
 	result.ContentDiff, err = getContentDiff(config, requestBody1.Content, requestBody2.Content)
 	if err != nil {
 		return nil, err

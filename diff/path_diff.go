@@ -8,6 +8,8 @@ import (
 
 // PathDiff describes the changes between a pair of path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
+	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	RefDiff         *ValueDiff      `json:"ref,omitempty" yaml:"ref,omitempty"`
 	SummaryDiff     *ValueDiff      `json:"summary,omitempty" yaml:"summary,omitempty"`
 	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
 	OperationsDiff  *OperationsDiff `json:"operations,omitempty" yaml:"operations,omitempty"`
@@ -49,6 +51,8 @@ func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem
 	result := newPathDiff()
 	var err error
 
+	result.ExtensionsDiff = getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
+	result.RefDiff = getValueDiff(pathItem1.Ref, pathItem2.Ref)
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
 
