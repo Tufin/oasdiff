@@ -1,6 +1,8 @@
 package diff
 
 import (
+	"fmt"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -35,7 +37,9 @@ func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) 
 	result := EncodingDiff{}
 	var err error
 
-	// TODO: check nil values
+	if value1 == nil || value2 == nil {
+		return nil, fmt.Errorf("encoding is nil")
+	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
 	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)

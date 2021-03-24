@@ -28,6 +28,21 @@ func TestDiff_MediaTypeNil(t *testing.T) {
 	require.Equal(t, "media type is nil", err.Error())
 }
 
+func TestDiff_EncodingNil(t *testing.T) {
+	s1 := l(t, 1)
+
+	callback := s1.Paths["/subscribe"].Post.Callbacks["myEvent"].Value
+	require.NotNil(t, callback)
+
+	mediaType := (*callback)["hi"].Post.RequestBody.Value.Content["application/json"]
+	require.NotNil(t, mediaType)
+
+	mediaType.Encoding["historyMetadata"] = nil
+
+	_, err := diff.Get(diff.NewConfig(), s1, s1)
+	require.Equal(t, "encoding is nil", err.Error())
+}
+
 func TestDiff_PathItemNil(t *testing.T) {
 	loader := openapi3.NewSwaggerLoader()
 	s1, err := loader.LoadSwaggerFromFile("../data/home-iot-api-1.yaml")
