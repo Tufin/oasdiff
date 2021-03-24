@@ -197,6 +197,13 @@ paths:
               responses:   # Expected responses to the callback message
                 '200':
                   description: Your server returns this code if it accepts the callback
+                  links:
+                    "test":
+                      operationId: "reuven"
+                      description: "test"
+                    "test1":
+                      operationId: "reuven"
+                      description: "test"
           'bye':
             post:
               requestBody:   # Contents of the callback message

@@ -8,7 +8,7 @@ type ResponseDiff struct {
 	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
 	HeadersDiff     *HeadersDiff    `json:"headers,omitempty" yaml:"headers,omitempty"`
 	ContentDiff     *ContentDiff    `json:"content,omitempty" yaml:"content,omitempty"`
-	// Links
+	LinksDiff       *LinksDiff      `json:"links,omitempty" yaml:"links,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -37,7 +37,13 @@ func diffResponseValuesInternal(config *Config, response1, response2 *openapi3.R
 	if err != nil {
 		return nil, err
 	}
+
 	result.ContentDiff, err = getContentDiff(config, response1.Content, response2.Content)
+	if err != nil {
+		return nil, err
+	}
+
+	result.LinksDiff, err = getLinksDiff(config, response1.Links, response2.Links)
 	if err != nil {
 		return nil, err
 	}

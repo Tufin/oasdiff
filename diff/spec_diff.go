@@ -90,12 +90,16 @@ func (specDiff *SpecDiff) getSummary() *Summary {
 	summary.add(specDiff.SecurityDiff, SecurityDetail)
 	summary.add(specDiff.ServersDiff, ServersDetail)
 	summary.add(specDiff.TagsDiff, TagsDetail)
+
+	// components
 	summary.add(specDiff.SchemasDiff, SchemasDetail)
 	summary.add(specDiff.ParametersDiff, ParametersDetail)
 	summary.add(specDiff.HeadersDiff, HeadersDetail)
 	summary.add(specDiff.RequestBodiesDiff, RequestBodiesDetail)
 	summary.add(specDiff.ResponsesDiff, ResponsesDetail)
 	summary.add(specDiff.SecuritySchemesDiff, SecuritySchemesDetail)
+	summary.add(specDiff.ExamplesDiff, ExamplesDetail)
+	summary.add(specDiff.LinksDiff, LinksDetail)
 	summary.add(specDiff.CallbacksDiff, CallbacksDetail)
 
 	return summary
@@ -115,3 +119,4 @@ func (specDiff *SpecDiff) Patch(s *openapi3.Swagger) error {
 
 	return nil
 }
+

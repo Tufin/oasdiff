@@ -179,6 +179,9 @@ paths:
               responses:   # Expected responses to the callback message
                 '200':
                   description: Your server returns this code if it accepts the callback
+                  links:
+                    "test":
+                      operationId: "reuven"
           '{$request.body#/callbackUrl}':   # The callback URL,
                                             # Refers to the passed URL
             post:
@@ -249,3 +252,9 @@ components:
             admin: read
         clientCredentials:
           tokenUrl: tufin.io/token        
+  examples:
+    a:
+      description: reuven
+  links:
+    b:
+      description: reuven

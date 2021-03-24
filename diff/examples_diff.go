@@ -95,3 +95,11 @@ func derefExample(ref *openapi3.ExampleRef) (*openapi3.Example, error) {
 
 	return ref.Value, nil
 }
+
+func (diff *ExamplesDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
+		Added:    len(diff.Added),
+		Deleted:  len(diff.Deleted),
+		Modified: len(diff.Modified),
+	}
+}

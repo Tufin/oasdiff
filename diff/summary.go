@@ -28,18 +28,23 @@ type detailWithSummary interface {
 // DetailName is the key type of the summary map
 type DetailName string
 
-// Component constants are the keys in the summary map
+// Detail constants are the keys in the summary map
 const (
-	PathsDetail           DetailName = "paths"
-	SecurityDetail        DetailName = "security"
-	ServersDetail         DetailName = "servers"
-	TagsDetail            DetailName = "tags"
+	PathsDetail        DetailName = "paths"
+	SecurityDetail     DetailName = "security"
+	ServersDetail      DetailName = "servers"
+	TagsDetail         DetailName = "tags"
+	ExternalDocsDetail DetailName = "externalDocs"
+
+	// Components
 	SchemasDetail         DetailName = "schemas"
 	ParametersDetail      DetailName = "parameters"
 	HeadersDetail         DetailName = "headers"
 	RequestBodiesDetail   DetailName = "requestBodies"
 	ResponsesDetail       DetailName = "responses"
 	SecuritySchemesDetail DetailName = "securitySchemes"
+	ExamplesDetail        DetailName = "examples"
+	LinksDetail           DetailName = "links"
 	CallbacksDetail       DetailName = "callbacks"
 )
 

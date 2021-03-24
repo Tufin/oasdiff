@@ -448,6 +448,8 @@ func TestSummary(t *testing.T) {
 	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.RequestBodiesDetail))
 	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ResponsesDetail))
 	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SecuritySchemesDetail))
+	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.ExamplesDetail))
+	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.LinksDetail))
 	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.CallbacksDetail))
 }
 
