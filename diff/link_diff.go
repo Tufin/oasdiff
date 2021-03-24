@@ -10,7 +10,7 @@ type LinkDiff struct {
 	DescriptionDiff  *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
 	ParametersDiff   *ParametersDiff `json:"parameters,omitempty" yaml:"parameters,omitempty"`
 	ServerDiff       *ServerDiff     `json:"server,omitempty" yaml:"server,omitempty"`
-	RequestBodyDiff  RequestBodyDiff `json:"requestBody,omitempty" yaml:"requestBody,omitempty"`
+	RequestBodyDiff  *ValueDiff      `json:"requestBody,omitempty" yaml:"requestBody,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -41,8 +41,7 @@ func getLinkDiffInternal(config *Config, link1, link2 *openapi3.Link) (*LinkDiff
 	// 	return nil, err
 	// }
 	result.ServerDiff = getServerDiff(config, link1.Server, link2.Server)
-
-	// result.RequestBodyDiff = getRequestBodyDiff(config, link1.RequestBody, link2.RequestBody)
+	result.RequestBodyDiff = getValueDiff(link1.RequestBody, link2.RequestBody)
 
 	return &result, nil
 }
