@@ -7,6 +7,7 @@ import (
 // ExtensionsDiff describes the changes between a pair of sets of specification extensions: https://swagger.io/specification/#specification-extensions
 type ExtensionsDiff InterfaceMapDiff
 
+// Empty indicates whether a change was found in this element
 func (diff *ExtensionsDiff) Empty() bool {
 	return (*InterfaceMapDiff)(diff).Empty()
 }

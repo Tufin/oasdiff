@@ -1,5 +1,6 @@
 package diff
 
+// InterfaceMap is a map of string to interface 
 type InterfaceMap map[string]interface{}
 
 // InterfaceMapDiff describes the changes between a pair of InterfaceMap
