@@ -10,9 +10,10 @@ type Diff struct {
 
 /*
 Get calculates the diff between a pair of OpenAPI specifications.
-References should be resolved before calling this function.
-This is normally done automatically by loaders.
-See https://swagger.io/docs/specification/using-ref/ and https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn.
+
+Note that Get expects OpenAPI References (https://swagger.io/docs/specification/using-ref/) to be resolved.  
+References are normally resolved automatically when you load the spec.  
+In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn.
 */
 func Get(config *Config, s1, s2 *openapi3.Swagger) (Diff, error) {
 	diff, err := getDiff(config, s1, s2)

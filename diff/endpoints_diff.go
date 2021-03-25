@@ -5,9 +5,11 @@ import (
 )
 
 /*
-EndpointsDiff is an altrnate simplified view of <a href="#PathsDiff">PathsDiff</a>.
-It describes the changes between "Endpoints" which are a flattened combination of OpenAPI Paths and Operations.
-For example, if there's a new path "/test" with method POST then EndpointsDiff will describe this as a new endpoint: POST /test.
+EndpointsDiff is an altrnate, simplified view of PathsDiff.
+It describes the changes between Endpoints which are a flattened combination of OpenAPI Paths and Operations.  
+
+For example, if there's a new path "/test" with method POST then EndpointsDiff will describe this as a new endpoint: POST /test.  
+
 Or, if path "/test" was modified to include a new methdod, PUT, then EndpointsDiff will describe this as a new endpoint: PUT /test.
 */
 type EndpointsDiff struct {
