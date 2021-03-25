@@ -201,6 +201,38 @@ References are normally resolved automatically when you load the spec. In other 
 
 2. oasdiff ignores changes to [Examples](https://swagger.io/specification/#example-object) and [Extensions](https://swagger.io/specification/#specification-extensions) by default. You can change this behavior by [configuration](diff/config.go).
 
+3. Paths vs. Endpoints  
+OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object).  
+oasdiff respects this heirarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the later "modified" section, another set of operation changes: added, deleted and modified.  
+For example:
+```yaml
+    paths:
+        deleted:
+            - /register
+            - /subscribe
+        modified:
+            /api/{domain}/{project}/badges/security-score:
+                operations:
+                    modified:
+                        GET:
+```
+oasdiff also outputs an altrnate simplified view of "endpoints" which are a flattened combination of OpenAPI Paths and Operations, for example:
+```yaml
+   endpoints:
+        deleted:
+            - method: POST
+              path: /subscribe
+            - method: POST
+              path: /register
+        modified:
+            ?   method: GET
+                path: /api/{domain}/{project}/badges/security-score
+            :   tags:
+                    deleted:
+                        - security
+```
+
+
 ## Work in progress
 1. While most aspects of OpenAPI Spec are already supported by this diff tool, one is still missing: server variables. 
 2. Patch support: currently supports Descriptions and a few fields in Schema 
