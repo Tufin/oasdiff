@@ -44,149 +44,200 @@ Replace "$(pwd)/data" by the path that contains your files.
 ## Output example
 
 ```yaml
-spec:
-  paths:
-      deleted:
-          - /subscribe
-          - /api/{domain}/{project}/install-command
-          - /register
-      modified:
-          /api/{domain}/{project}/badges/security-score:
-              operations:
-                  added:
-                      - POST
-                  modified:
-                      GET:
-                          tags:
-                              deleted:
-                                  - security
-                          parameters:
-                              deleted:
-                                  cookie:
-                                      - test
-                                  header:
-                                      - user
-                                      - X-Auth-Name
-                              modified:
-                                  path:
-                                      domain:
-                                          schema:
-                                              type:
-                                                  from: string
-                                                  to: integer
-                                              format:
-                                                  from: hyphen-separated list
-                                                  to: non-negative integer
-                                              description:
-                                                  from: Hyphen-separated list of lowercase string
-                                                  to: Non-negative integers (including zero)
-                                              min:
-                                                  from: null
-                                                  to: 7
-                                              pattern:
-                                                  from: ^(?:([a-z]+-)*([a-z]+)?)$
-                                                  to: ^(?:\d+)$
-                                  query:
-                                      filter:
-                                          content:
-                                              schema:
-                                                  properties:
-                                                      modified:
-                                                          color:
-                                                              type:
-                                                                  from: string
-                                                                  to: number
-                                      image:
-                                          explode:
-                                              from: null
-                                              to: true
-                                          schema:
-                                              description:
-                                                  from: alphanumeric
-                                                  to: alphanumeric with underscore, dash, period, slash and colon
-                                      token:
-                                          schema:
-                                              anyOf: true
-                                              type:
-                                                  from: string
-                                                  to: ""
-                                              format:
-                                                  from: uuid
-                                                  to: ""
-                                              description:
-                                                  from: RFC 4122 UUID
-                                                  to: ""
-                                              pattern:
-                                                  from: ^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12})$
-                                                  to: ""
-                          responses:
-                              added:
-                                  - default
-                              deleted:
-                                  - "200"
-                                  - "201"
-              parameters:
-                  deleted:
-                      path:
-                          - domain
-  security:
-      deleted:
-          - bearerAuth
-  servers:
-      deleted:
-          - tufin.com
-  tags:
-      deleted:
-          - security
-          - reuven
-  components:
-      schemas:
-          deleted:
-              - rules
-              - network-policies
+info:
+  title:
+    from: Tufin
+    to: Tufin1
+  contact:
+    added: true
+  license:
+    added: true
+  version:
+    from: 1.0.0
+    to: 1.0.1
+paths:
+  deleted:
+    - /register
+    - /subscribe
+  modified:
+    /api/{domain}/{project}/badges/security-score:
+      operations:
+        modified:
+          GET:
+            tags:
+              deleted:
+                - security
+            parameters:
+              modified:
+                cookie:
+                  test:
+                    content:
+                      mediaType: true
+                header:
+                  user:
+                    schema:
+                      schemaAdded: true
+                    content:
+                      mediaTypeDeleted: true
+                query:
+                  filter:
+                    content:
+                      schema:
+                        required:
+                          added:
+                            - type
+            responses:
+              added:
+                - default
+              deleted:
+                - "200"
+              modified:
+                "201":
+                  content:
+                    schema:
+                      type:
+                        from: string
+                        to: object
       parameters:
-          deleted:
-              header:
+        deleted:
+          path:
+            - domain
+    /api/{domain}/{project}/install-command:
+      operations:
+        modified:
+          GET:
+            parameters:
+              deleted:
+                header:
                   - network-policies
-      headers:
-          deleted:
-              - testc
-              - new
-              - test
-      requestBodies:
-          deleted:
-              - reuven
-      responses:
-          deleted:
-              - OK
-      securitySchemes:
-          deleted:
-              - OAuth
-              - bearerAuth
-summary:
-  diff: true
-  details:
-      headers:
-          deleted: 3
+            responses:
+              modified:
+                default:
+                  description:
+                    from: Tufin1
+                    to: Tufin
+                  headers:
+                    deleted:
+                      - X-RateLimit-Limit
+            servers:
+              added:
+                - https://www.tufin.io/securecloud
+endpoints:
+  deleted:
+    - method: POST
+      path: /subscribe
+    - method: POST
+      path: /register
+  modified:
+    ? method: GET
+      path: /api/{domain}/{project}/badges/security-score
+    : tags:
+        deleted:
+          - security
       parameters:
-          deleted: 1
-      paths:
-          deleted: 3
-          modified: 1
-      requestBodies:
-          deleted: 1
+        modified:
+          cookie:
+            test:
+              content:
+                mediaType: true
+          header:
+            user:
+              schema:
+                schemaAdded: true
+              content:
+                mediaTypeDeleted: true
+          query:
+            filter:
+              content:
+                schema:
+                  required:
+                    added:
+                      - type
       responses:
-          deleted: 1
-      schemas:
-          deleted: 2
-      security:
-          deleted: 1
-      securitySchemes:
-          deleted: 2
+        added:
+          - default
+        deleted:
+          - "200"
+        modified:
+          "201":
+            content:
+              schema:
+                type:
+                  from: string
+                  to: object
+    ? method: GET
+      path: /api/{domain}/{project}/install-command
+    : parameters:
+        deleted:
+          header:
+            - network-policies
+      responses:
+        modified:
+          default:
+            description:
+              from: Tufin1
+              to: Tufin
+            headers:
+              deleted:
+                - X-RateLimit-Limit
       servers:
-          deleted: 1
-      tags:
-          deleted: 2
+        added:
+          - https://www.tufin.io/securecloud
+security:
+  deleted:
+    - bearerAuth
+servers:
+  deleted:
+    - tufin.com
+tags:
+  deleted:
+    - security
+    - reuven
+externalDocs:
+  deleted: true
+components:
+  schemas:
+    added:
+      - requests
+    modified:
+      network-policies:
+        additionalPropertiesAllowed:
+          from: true
+          to: false
+      rules:
+        additionalPropertiesAllowed:
+          from: null
+          to: false
+  parameters:
+    deleted:
+      header:
+        - network-policies
+  headers:
+    deleted:
+      - new
+    modified:
+      test:
+        schema:
+          additionalPropertiesAllowed:
+            from: true
+            to: false
+      testc:
+        content:
+          schema:
+            type:
+              from: object
+              to: string
+  requestBodies:
+    deleted:
+      - reuven
+  responses:
+    added:
+      - default
+    deleted:
+      - OK
+  securitySchemes:
+    deleted:
+      - OAuth
 ```
 
 ## Embedding into your Go program
