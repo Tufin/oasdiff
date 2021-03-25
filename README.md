@@ -205,4 +205,7 @@ References are normally resolved automatically when you load the spec. In other 
 1. While most aspects of OpenAPI Spec are already supported by this diff tool, one is still missing: server variables. 
 2. Patch support: currently supports Descriptions and a few fields in Schema 
 
+## Credits
+This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi) 
+
 ## Pull requests are welcome.
