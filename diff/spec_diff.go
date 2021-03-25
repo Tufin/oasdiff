@@ -119,4 +119,3 @@ func (specDiff *SpecDiff) Patch(s *openapi3.Swagger) error {
 
 	return nil
 }
-
