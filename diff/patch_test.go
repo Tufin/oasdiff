@@ -16,11 +16,11 @@ func TestPatch_MethodDescription(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.SpecDiff.Patch(s1)
+	d1.Patch(s1)
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	require.False(t, d2.Summary.Diff)
+	require.False(t, d2.GetSummary().Diff)
 }
 
 func TestPatch_ParameterDescription(t *testing.T) {
@@ -32,11 +32,11 @@ func TestPatch_ParameterDescription(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.SpecDiff.Patch(s1)
+	d1.Patch(s1)
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	require.False(t, d2.Summary.Diff)
+	require.False(t, d2.GetSummary().Diff)
 }
 
 func TestPatch_ParameterSchemaFormat(t *testing.T) {
@@ -49,11 +49,11 @@ func TestPatch_ParameterSchemaFormat(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.SpecDiff.Patch(s1)
+	d1.Patch(s1)
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	require.False(t, d2.Summary.Diff)
+	require.False(t, d2.GetSummary().Diff)
 }
 
 func TestPatch_ParameterSchemaEnum(t *testing.T) {
@@ -65,11 +65,11 @@ func TestPatch_ParameterSchemaEnum(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.SpecDiff.Patch(s1)
+	d1.Patch(s1)
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	require.False(t, d2.Summary.Diff)
+	require.False(t, d2.GetSummary().Diff)
 }
 
 func TestPatch_ParameterSchemaMaxLengthNil(t *testing.T) {
@@ -83,11 +83,11 @@ func TestPatch_ParameterSchemaMaxLengthNil(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.SpecDiff.Patch(s1)
+	d1.Patch(s1)
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	require.False(t, d2.Summary.Diff)
+	require.False(t, d2.GetSummary().Diff)
 }
 
 func TestPatch_ParameterSchemaMaxLength(t *testing.T) {
@@ -100,11 +100,11 @@ func TestPatch_ParameterSchemaMaxLength(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.SpecDiff.Patch(s1)
+	d1.Patch(s1)
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	require.False(t, d2.Summary.Diff)
+	require.False(t, d2.GetSummary().Diff)
 }
 
 func TestPatch_ValueDiffNil(t *testing.T) {
