@@ -7,7 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// PathsDiff describes the changes between a pair of sets of path item objects: https://swagger.io/specification/#path-item-object
+// PathsDiff describes the changes between a pair of Paths objects: https://swagger.io/specification/#paths-object
 type PathsDiff struct {
 	Added    StringList    `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList    `json:"deleted,omitempty" yaml:"deleted,omitempty"`
@@ -56,17 +56,17 @@ func getPathsDiffInternal(config *Config, paths1, paths2 openapi3.Paths) (*Paths
 
 	result := newPathsDiff()
 
-	addedEndpoints, deletedEndpoints, otherEndpoints := getEndpointsDiff(paths1, paths2, config.Prefix)
+	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1, paths2, config.Prefix)
 
-	for endpoint := range addedEndpoints {
+	for endpoint := range addedPaths {
 		result.addAddedPath(endpoint)
 	}
 
-	for endpoint := range deletedEndpoints {
+	for endpoint := range deletedPaths {
 		result.addDeletedPath(endpoint)
 	}
 
-	for endpoint, pathItemPair := range otherEndpoints {
+	for endpoint, pathItemPair := range otherPaths {
 		err := result.addModifiedPath(config, endpoint, pathItemPair.PathItem1, pathItemPair.PathItem2)
 		if err != nil {
 			return nil, err

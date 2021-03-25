@@ -12,6 +12,7 @@ type SpecDiff struct {
 	OpenAPIDiff      *ValueDiff                `json:"openAPI,omitempty" yaml:"openAPI,omitempty"`
 	InfoDiff         *InfoDiff                 `json:"info,omitempty" yaml:"info,omitempty"`
 	PathsDiff        *PathsDiff                `json:"paths,omitempty" yaml:"paths,omitempty"`
+	EndpointsDiff    *EndpointsDiff            `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
 	SecurityDiff     *SecurityRequirementsDiff `json:"security,omitempty" yaml:"security,omitempty"`
 	ServersDiff      *ServersDiff              `json:"servers,omitempty" yaml:"servers,omitempty"`
 	TagsDiff         *TagsDiff                 `json:"tags,omitempty" yaml:"tags,omitempty"`
@@ -64,6 +65,12 @@ func getDiffInternal(config *Config, s1, s2 *openapi3.Swagger) (*SpecDiff, error
 	if err != nil {
 		return nil, err
 	}
+
+	result.EndpointsDiff, err = getEndpointsDiff(config, s1.Paths, s2.Paths)
+	if err != nil {
+		return nil, err
+	}
+
 	result.SecurityDiff = getSecurityRequirementsDiff(config, &s1.Security, &s2.Security)
 	result.ServersDiff = getServersDiff(config, &s1.Servers, &s2.Servers)
 	result.TagsDiff = getTagsDiff(s1.Tags, s2.Tags)

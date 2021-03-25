@@ -13,7 +13,7 @@ type pathItemPair struct {
 
 type pathItemPairs map[string]*pathItemPair
 
-func getEndpointsDiff(paths1, paths2 openapi3.Paths, prefix string) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
+func getPathItemsDiff(paths1, paths2 openapi3.Paths, prefix string) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
 
 	added := openapi3.Paths{}
 	deleted := openapi3.Paths{}
