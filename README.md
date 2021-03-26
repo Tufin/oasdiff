@@ -4,7 +4,7 @@
 [![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
-# OpenAPI Diff Go Module
+# OpenAPI Diff
 This [Go](https://golang.org) module provides a diff utility for [OpenAPI Spec 3](https://swagger.io/specification/).
 
 ## Unique features vs. other diff tools
