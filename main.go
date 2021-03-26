@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"os"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
+	"github.com/tufin/oasdiff/text"
 	"gopkg.in/yaml.v3"
 )
 
@@ -17,15 +19,16 @@ var examples bool
 const (
 	formatJSON = "json"
 	formatYAML = "yaml"
+	formatText = "text"
 )
 
 func init() {
-	flag.StringVar(&base, "base", "", "original OpenAPI spec")
-	flag.StringVar(&revision, "revision", "", "revised OpenAPI spec")
-	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision")
-	flag.StringVar(&filter, "filter", "", "regex to filter result paths")
+	flag.StringVar(&base, "base", "", "path of original OpenAPI spec")
+	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec")
+	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision (optional)")
+	flag.StringVar(&filter, "filter", "", "regex to filter result paths (optional)")
 	flag.BoolVar(&examples, "examples", false, "whether to include examples in the diff")
-	flag.StringVar(&format, "format", formatYAML, "output format: yaml or json")
+	flag.StringVar(&format, "format", formatYAML, "output format: yaml, json or text")
 }
 
 func main() {
@@ -70,6 +73,8 @@ func main() {
 			return
 		}
 		fmt.Printf("%s\n", bytes)
+	} else if format == formatText {
+		text.Print(diffReport, os.Stdout)
 	} else {
 		fmt.Printf("unknown format %q\n", format)
 	}
