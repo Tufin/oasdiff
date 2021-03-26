@@ -7,7 +7,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// Print outputs a simple diff report as text
+// Print outputs a textual diff report
 func Print(d *diff.Diff, writer io.Writer) {
 
 	if d.Empty() {

@@ -24,7 +24,7 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) *diff.Diff {
 	return d
 }
 
-func Test(t *testing.T) {
+func TestDiff1(t *testing.T) {
 	var buf bytes.Buffer
 	text.Print(d(t, &diff.Config{}, 3, 5), &buf)
 
@@ -32,4 +32,23 @@ func Test(t *testing.T) {
 
 	require.Contains(t, out,
 		"GET /api/{domain}/{project}/install-command")
+}
+
+func TestDiff2(t *testing.T) {
+	var buf bytes.Buffer
+	text.Print(d(t, &diff.Config{}, 5, 3), &buf)
+
+	out := buf.String()
+
+	require.Contains(t, out,
+		"GET /api/{domain}/{project}/install-command")
+}
+
+func TestNoDiff(t *testing.T) {
+	var buf bytes.Buffer
+	text.Print(d(t, &diff.Config{}, 3, 3), &buf)
+
+	out := buf.String()
+
+	require.Equal(t, out, "No changes\n")
 }
