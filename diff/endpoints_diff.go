@@ -135,3 +135,11 @@ func (diff *EndpointsDiff) addModifiedPaths(config *Config, path string, pathIte
 
 	return nil
 }
+
+func (diff *EndpointsDiff) getSummary() *SummaryDetails {
+	return &SummaryDetails{
+		Added:    len(diff.Added),
+		Deleted:  len(diff.Deleted),
+		Modified: len(diff.Modified),
+	}
+}

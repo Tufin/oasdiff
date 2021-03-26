@@ -30,6 +30,7 @@ type DetailName string
 
 // Detail constants are the keys in the summary map
 const (
+	// Swagger
 	PathsDetail        DetailName = "paths"
 	SecurityDetail     DetailName = "security"
 	ServersDetail      DetailName = "servers"
@@ -46,6 +47,9 @@ const (
 	ExamplesDetail        DetailName = "examples"
 	LinksDetail           DetailName = "links"
 	CallbacksDetail       DetailName = "callbacks"
+
+	// Special
+	EndpointsDetail DetailName = "endpoints"
 )
 
 // GetSummaryDetails returns the summary for a specific part

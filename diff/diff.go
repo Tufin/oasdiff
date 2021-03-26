@@ -110,6 +110,8 @@ func (diff *Diff) GetSummary() *Summary {
 	}
 
 	summary.Diff = true
+
+	// swagger
 	summary.add(diff.PathsDiff, PathsDetail)
 	summary.add(diff.SecurityDiff, SecurityDetail)
 	summary.add(diff.ServersDiff, ServersDetail)
@@ -126,6 +128,8 @@ func (diff *Diff) GetSummary() *Summary {
 	summary.add(diff.LinksDiff, LinksDetail)
 	summary.add(diff.CallbacksDiff, CallbacksDetail)
 
+	// special
+	summary.add(diff.EndpointsDiff, EndpointsDetail)
 	return summary
 }
 
