@@ -39,6 +39,7 @@ func Print(d *diff.Diff, writer io.Writer) {
 	for endpoint, methodDiff := range d.EndpointsDiff.Modified {
 		fmt.Fprintln(writer, endpoint.Method, endpoint.Path)
 		printMethod(methodDiff, writer)
+		fmt.Fprintln(writer, "")
 	}
 }
 
@@ -48,11 +49,22 @@ func printMethod(d *diff.MethodDiff, writer io.Writer) {
 	}
 
 	if !d.DescriptionDiff.Empty() {
-		fmt.Fprintln(writer, "Description changed from: ", d.DescriptionDiff.From)
-		fmt.Fprintln(writer, "To: ", d.DescriptionDiff.From)
+		fmt.Fprintln(writer, "* Description changed from: ", d.DescriptionDiff.From, "To:", d.DescriptionDiff.To)
 	}
 
 	printParams(d.ParametersDiff, writer)
+
+	if !d.RequestBodyDiff.Empty() {
+		fmt.Fprintln(writer, "* Request body changed")
+	}
+
+	if !d.ResponsesDiff.Empty() {
+		fmt.Fprintln(writer, "* Response changed")
+	}
+
+	if !d.SecurityDiff.Empty() {
+		fmt.Fprintln(writer, "* Security changed")
+	}
 }
 
 func printParams(d *diff.ParametersDiff, writer io.Writer) {
@@ -77,6 +89,4 @@ func printParams(d *diff.ParametersDiff, writer io.Writer) {
 			fmt.Fprintln(writer, "* Modified", location, "param:", param)
 		}
 	}
-
-	fmt.Fprintln(writer, "")
 }
