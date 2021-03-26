@@ -13,7 +13,7 @@ import (
 )
 
 var base, revision, prefix, filter, format string
-var examples bool
+var examples, summary bool
 
 const (
 	formatYAML = "yaml"
@@ -26,6 +26,7 @@ func init() {
 	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision (optional)")
 	flag.StringVar(&filter, "filter", "", "regex to filter result paths (optional)")
 	flag.BoolVar(&examples, "examples", false, "whether to include examples in the diff")
+	flag.BoolVar(&summary, "summary", false, "whether to output full diff (default) or just summary")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml or text")
 }
 
@@ -57,16 +58,26 @@ func main() {
 		fmt.Printf("diff failed with %v", err)
 	}
 
+	if summary {
+		summary := diffReport.GetSummary()
+		printYAML(summary)
+		return
+	}
+
 	if format == formatYAML {
-		bytes, err := yaml.Marshal(diffReport)
-		if err != nil {
-			fmt.Printf("failed to marshal result as %q with %v", format, err)
-			return
-		}
-		fmt.Printf("%s\n", bytes)
+		printYAML(diffReport)
 	} else if format == formatText {
 		text.Print(diffReport, os.Stdout)
 	} else {
 		fmt.Printf("unknown format %q\n", format)
 	}
+}
+
+func printYAML(output interface{}) {
+	bytes, err := yaml.Marshal(output)
+	if err != nil {
+		fmt.Printf("failed to marshal result as %q with %v", format, err)
+		return
+	}
+	fmt.Printf("%s\n", bytes)
 }

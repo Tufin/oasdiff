@@ -23,7 +23,7 @@ go build
 ## Running from the command-line
 `./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml`
 
-## Running from Docker
+## Running with Docker
 Comparing public files (yaml output):
 
 ```
@@ -36,6 +36,12 @@ Comparing public files (text output):
 docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -format text
 ```
 
+Comparing public files (summary):
+
+```
+docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -summary true
+```
+
 Comparing local files (yaml output):
 
 ```
@@ -45,7 +51,9 @@ docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-tes
 Replace "$(pwd)/data" by the path that contains your files.
 
 ## Help
-`./oasdiff --help`
+```
+docker run --rm -t tufin/oasdiff --help
+```
 
 ## Output example
 
