@@ -55,6 +55,29 @@ Replace "$(pwd)/data" by the path that contains your files.
 docker run --rm -t tufin/oasdiff --help
 ```
 
+## Output example - Text
+
+### What's New
+--------------
+
+### What's Deprecated
+---------------------
+POST /register
+POST /subscribe
+
+### What's Changed
+------------------
+GET /api/{domain}/{project}/install-command
+* Modified path param: project
+* Response changed
+
+GET /api/{domain}/{project}/badges/security-score
+* New query param: filter
+* New header param: user
+* New cookie param: test
+* Modified query param: image
+* Response changed
+
 ## Output example - YAML
 
 ```yaml
@@ -296,27 +319,6 @@ oasdiff also outputs an altrnate simplified view of "endpoints" which are a flat
                     deleted:
                         - security
 ```
-
-## Output example - Text
-
-### What's New
---------------
-GET /api/{domain}/{project}/install-command
-
-### What's Deprecated
----------------------
-POST /api/{domain}/{project}/badges/security-score/
-
-### What's Changed
-------------------
-GET /api/{domain}/{project}/badges/security-score/
-* New header param: user
-* New header param: X-Auth-Name
-* New cookie param: test
-* Modified query param: filter
-* Modified query param: image
-* Modified query param: token
-* Modified path param: domain
 
 ## Work in progress
 1. While most aspects of OpenAPI Spec are already supported by this diff tool, one is still missing: server variables. 
