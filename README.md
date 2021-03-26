@@ -24,13 +24,19 @@ go build
 `./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml`
 
 ## Running from Docker
-Comparing public files:
+Comparing public files (yaml output):
 
 ```
 docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-Comparing local files:
+Comparing public files (text output):
+
+```
+docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -format text
+```
+
+Comparing local files (yaml output):
 
 ```
 docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml

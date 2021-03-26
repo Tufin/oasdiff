@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -17,7 +16,6 @@ var base, revision, prefix, filter, format string
 var examples bool
 
 const (
-	formatJSON = "json"
 	formatYAML = "yaml"
 	formatText = "text"
 )
@@ -28,7 +26,7 @@ func init() {
 	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision (optional)")
 	flag.StringVar(&filter, "filter", "", "regex to filter result paths (optional)")
 	flag.BoolVar(&examples, "examples", false, "whether to include examples in the diff")
-	flag.StringVar(&format, "format", formatYAML, "output format: yaml, json or text")
+	flag.StringVar(&format, "format", formatYAML, "output format: yaml or text")
 }
 
 func main() {
@@ -59,14 +57,7 @@ func main() {
 		fmt.Printf("diff failed with %v", err)
 	}
 
-	if format == formatJSON {
-		bytes, err := json.MarshalIndent(diffReport, "", " ")
-		if err != nil {
-			fmt.Printf("failed to marshal result as %q with %v", format, err)
-			return
-		}
-		fmt.Printf("%s\n", bytes)
-	} else if format == formatYAML {
+	if format == formatYAML {
 		bytes, err := yaml.Marshal(diffReport)
 		if err != nil {
 			fmt.Printf("failed to marshal result as %q with %v", format, err)
