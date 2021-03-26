@@ -60,6 +60,7 @@ func printMethod(d *diff.MethodDiff, writer io.Writer) {
 
 	if !d.ResponsesDiff.Empty() {
 		fmt.Fprintln(writer, "* Response changed")
+		printResponses(d.ResponsesDiff, writer)
 	}
 
 	if !d.SecurityDiff.Empty() {
@@ -85,8 +86,33 @@ func printParams(d *diff.ParametersDiff, writer io.Writer) {
 	}
 
 	for location, paramDiffs := range d.Modified {
-		for param := range paramDiffs {
+		for param, paramDiff := range paramDiffs {
 			fmt.Fprintln(writer, "* Modified", location, "param:", param)
+			printParam(paramDiff, writer)
 		}
+	}
+}
+
+func printParam(d *diff.ParameterDiff, writer io.Writer) {
+	if !d.SchemaDiff.Empty() {
+		fmt.Fprintln(writer, "  - Schema changed")
+	}
+}
+
+func printResponses(d *diff.ResponsesDiff, writer io.Writer) {
+	if d.Empty() {
+		return
+	}
+
+	for _, added := range d.Added {
+		fmt.Fprintln(writer, "  - New response:", added)
+	}
+
+	for _, deleted := range d.Deleted {
+		fmt.Fprintln(writer, "  - Deprecated response:", deleted)
+	}
+
+	for response := range d.Modified {
+		fmt.Fprintln(writer, "  - Modified response:", response)
 	}
 }
