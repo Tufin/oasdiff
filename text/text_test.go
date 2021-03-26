@@ -1,8 +1,8 @@
 package text_test
 
 import (
+	"bytes"
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -25,5 +25,11 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) *diff.Diff {
 }
 
 func Test(t *testing.T) {
-	text.Print(d(t, &diff.Config{}, 3, 5), os.Stdout)
+	var buf bytes.Buffer
+	text.Print(d(t, &diff.Config{}, 3, 5), &buf)
+
+	out := buf.String()
+
+	require.Contains(t, out,
+		"GET /api/{domain}/{project}/install-command")
 }
