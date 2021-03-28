@@ -70,7 +70,7 @@ func main() {
 		report := text.Report{
 			Writer: os.Stdout,
 		}
-		report.Print(diffReport)
+		report.Output(diffReport)
 	} else {
 		fmt.Printf("unknown format %q\n", format)
 	}

@@ -29,7 +29,7 @@ func TestDiff1(t *testing.T) {
 	report := text.Report{
 		Writer: &buf,
 	}
-	report.Print(d(t, &diff.Config{}, 3, 5))
+	report.Output(d(t, &diff.Config{}, 3, 5))
 
 	require.Contains(t, buf.String(), "GET /api/{domain}/{project}/install-command")
 }
@@ -39,7 +39,7 @@ func TestDiff2(t *testing.T) {
 	report := text.Report{
 		Writer: &buf,
 	}
-	report.Print(d(t, &diff.Config{}, 5, 3))
+	report.Output(d(t, &diff.Config{}, 5, 3))
 
 	require.Contains(t, buf.String(), "GET /api/{domain}/{project}/install-command")
 }
@@ -49,7 +49,7 @@ func TestDiff3(t *testing.T) {
 	report := text.Report{
 		Writer: &buf,
 	}
-	report.Print(d(t, &diff.Config{}, 1, 3))
+	report.Output(d(t, &diff.Config{}, 1, 3))
 
 	require.Contains(t, buf.String(), "GET /api/{domain}/{project}/install-command")
 }
@@ -59,7 +59,7 @@ func TestNoDiff(t *testing.T) {
 	report := text.Report{
 		Writer: &buf,
 	}
-	report.Print(d(t, &diff.Config{}, 3, 3))
+	report.Output(d(t, &diff.Config{}, 3, 3))
 
 	require.Equal(t, buf.String(), "No changes\n")
 }
