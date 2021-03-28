@@ -139,6 +139,7 @@ func (report *Report) printParam(d *diff.ParameterDiff) {
 
 	if !d.ContentDiff.Empty() {
 		report.print("Content changed")
+		report.indent().printContent(d.ContentDiff)
 	}
 }
 
@@ -175,6 +176,15 @@ func (report *Report) printSchema(d *diff.SchemaDiff) {
 	if !d.AdditionalPropertiesAllowedDiff.Empty() {
 		report.print("Additional properties changed from", d.AdditionalPropertiesAllowedDiff.From, "to", d.AdditionalPropertiesAllowedDiff.To)
 	}
+
+	if !d.ItemsDiff.Empty() {
+		report.print("Items changed")
+		report.indent().printSchema(d.ItemsDiff)
+	}
+
+	if !d.PropertiesDiff.Empty() {
+		report.print("Properties changed")
+	}
 }
 
 func quote(s interface{}) string {
@@ -207,5 +217,25 @@ func (report *Report) printResponse(d *diff.ResponseDiff) {
 
 	if !d.DescriptionDiff.Empty() {
 		report.print("Description changed from", quote(d.DescriptionDiff.From), "to", quote(d.DescriptionDiff.To))
+	}
+
+	if !d.ContentDiff.Empty() {
+		report.print("Content changed")
+		report.indent().printContent(d.ContentDiff)
+	}
+}
+
+func (report *Report) printContent(d *diff.ContentDiff) {
+	if d.Empty() {
+		return
+	}
+
+	if !d.SchemaDiff.Empty() {
+		report.print("Schema changed")
+		report.indent().printSchema(d.SchemaDiff)
+	}
+
+	if !d.EncodingsDiff.Empty() {
+		report.print("Encodings changed")
 	}
 }
