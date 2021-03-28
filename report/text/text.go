@@ -253,5 +253,5 @@ func (report *Report) printValue(d *diff.ValueDiff, title string) {
 		return
 	}
 
-	report.print(title, "changed from", quote(d.From), "to", (d.To))
+	report.print(title, "changed from", quote(d.From), "to", quote(d.To))
 }
