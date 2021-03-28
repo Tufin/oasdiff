@@ -21,24 +21,28 @@ go build
 ```
 
 ## Running from the command-line
-`./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml`
-
-## Help
 ```
-docker run --rm -t tufin/oasdiff --help
+./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 
 ## Running with Docker
-Comparing public files (yaml output):
+
+Help
 
 ```
-docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+docker run --rm -t tufin/oasdiff -help
 ```
 
 Comparing public files (text output):
 
 ```
 docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -format text
+```
+
+Comparing public files (yaml output):
+
+```
+docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 Comparing public files (summary):
