@@ -9,7 +9,7 @@ This [Go](https://golang.org) module provides a diff utility for [OpenAPI Spec 3
 
 ## Unique features vs. other diff tools
 - This is a [go module](https://blog.golang.org/using-go-modules) - it can be embedded into other Go programs
-- Comprehensive diff: covers just about every aspect of OpenAPI Spec. see [work in progress](#Work-in-progress) for some limitations.
+- Comprehensive diff: covers just about every aspect of OpenAPI Spec. See [work in progress](#Work-in-progress) for some limitations.
 - Deep diff into paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Patch support is currently being added - see [work in progress](#Work-in-progress)
 
