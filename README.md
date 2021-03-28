@@ -23,6 +23,11 @@ go build
 ## Running from the command-line
 `./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml`
 
+## Help
+```
+docker run --rm -t tufin/oasdiff --help
+```
+
 ## Running with Docker
 Comparing public files (yaml output):
 
@@ -39,7 +44,7 @@ docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/o
 Comparing public files (summary):
 
 ```
-docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -summary true
+docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -summary
 ```
 
 Comparing local files (yaml output):
@@ -50,33 +55,37 @@ docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-tes
 
 Replace "$(pwd)/data" by the path that contains your files.
 
-## Help
-```
-docker run --rm -t tufin/oasdiff --help
-```
-
 ## Output example - Text
 
-### What's New
---------------
+### New Endpoints
+-----------------
 
-### What's Deprecated
+### Deleted Endpoints
 ---------------------
 POST /register
 POST /subscribe
 
-### What's Changed
-------------------
-GET /api/{domain}/{project}/install-command
-* Modified path param: project
-* Response changed
-
+### Modified Endpoints
+----------------------
 GET /api/{domain}/{project}/badges/security-score
 * New query param: filter
 * New header param: user
 * New cookie param: test
 * Modified query param: image
+  - Schema changed
+    - Type changed from '' to 'string'
+    - Format changed from '' to 'general string'
+* Modified query param: token
+  - Schema changed
 * Response changed
+  - New response: 201
+
+GET /api/{domain}/{project}/install-command
+* Modified path param: project
+  - Schema changed
+    - Deleted enum values: [test1]
+* Response changed
+  - Modified response: default
 
 ## Output example - YAML
 
@@ -287,9 +296,13 @@ See full example: [main.go](main.go)
 1. oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
 References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [this function](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn).
 
-2. oasdiff ignores changes to [Examples](https://swagger.io/specification/#example-object) and [Extensions](https://swagger.io/specification/#specification-extensions) by default. You can change this behavior by [configuration](diff/config.go).
+2. Use [configuration](diff/config.go) to exclude certain types of changes:
+   - [Examples](https://swagger.io/specification/#example-object) 
+   - Descriptions
+  
+3. [Extensions](https://swagger.io/specification/#specification-extensions) are excluded by default. Use [configuration](diff/config.go) to specify which ones to include.
 
-3. Paths vs. Endpoints  
+4. Paths vs. Endpoints  
 OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object).  
 oasdiff respects this heirarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the later "modified" section, another set of operation changes: added, deleted and modified.  
 For example:

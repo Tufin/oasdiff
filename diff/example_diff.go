@@ -32,7 +32,7 @@ func getExampleDiffInternal(config *Config, value1, value2 *openapi3.Example) *E
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
 	result.SummaryDiff = getValueDiff(value1.Summary, value2.Summary)
-	result.DescriptionDiff = getValueDiff(value1.Description, value2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
 	result.ValueDiff = getValueDiff(value1.Value, value2.Value)
 	result.ExternalValueDiff = getValueDiff(value1.ExternalValue, value2.ExternalValue)
 

@@ -54,7 +54,7 @@ func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem
 	result.ExtensionsDiff = getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
 	result.RefDiff = getValueDiff(pathItem1.Ref, pathItem2.Ref)
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
-	result.DescriptionDiff = getValueDiff(pathItem1.Description, pathItem2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
 
 	result.OperationsDiff, err = getOperationsDiff(config, pathItem1, pathItem2)
 	if err != nil {

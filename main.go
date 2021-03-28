@@ -13,7 +13,7 @@ import (
 )
 
 var base, revision, prefix, filter, format string
-var examples, summary bool
+var excludeExamples, excludeDescription, summary bool
 
 const (
 	formatYAML = "yaml"
@@ -25,8 +25,9 @@ func init() {
 	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec")
 	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision (optional)")
 	flag.StringVar(&filter, "filter", "", "regex to filter result paths (optional)")
-	flag.BoolVar(&examples, "examples", false, "whether to include examples in the diff")
-	flag.BoolVar(&summary, "summary", false, "whether to output full diff (default) or just summary")
+	flag.BoolVar(&excludeExamples, "exclude-examples", false, "exclude changes to examples")
+	flag.BoolVar(&excludeDescription, "exclude-description", false, "exclude changes to descriptions")
+	flag.BoolVar(&summary, "summary", false, "output a summary of the changes instead of the full diff")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml or text")
 }
 
@@ -49,9 +50,10 @@ func main() {
 	}
 
 	diffReport, err := diff.Get(&diff.Config{
-		IncludeExamples: examples,
-		Filter:          filter,
-		Prefix:          prefix,
+		ExcludeExamples:    excludeExamples,
+		ExcludeDescription: excludeDescription,
+		PathFilter:         filter,
+		PathPrefix:         prefix,
 	}, s1, s2)
 
 	if err != nil {

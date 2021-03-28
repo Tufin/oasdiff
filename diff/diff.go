@@ -89,7 +89,7 @@ func getDiffInternal(config *Config, s1, s2 *openapi3.Swagger) (*Diff, error) {
 
 	result.SecurityDiff = getSecurityRequirementsDiff(config, &s1.Security, &s2.Security)
 	result.ServersDiff = getServersDiff(config, &s1.Servers, &s2.Servers)
-	result.TagsDiff = getTagsDiff(s1.Tags, s2.Tags)
+	result.TagsDiff = getTagsDiff(config, s1.Tags, s2.Tags)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, s1.ExternalDocs, s2.ExternalDocs)
 
 	result.ComponentsDiff, err = getComponentsDiff(config, s1.Components, s2.Components)

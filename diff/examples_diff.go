@@ -49,7 +49,7 @@ func getExamplesDiff(config *Config, examples1, examples2 openapi3.Examples) (*E
 
 func getExamplesDiffInternal(config *Config, examples1, examples2 openapi3.Examples) (*ExamplesDiff, error) {
 
-	if !config.IncludeExamples {
+	if config.ExcludeExamples {
 		return nil, nil
 	}
 

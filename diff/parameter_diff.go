@@ -42,7 +42,7 @@ func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, param1.ExtensionProps, param2.ExtensionProps)
-	result.DescriptionDiff = getValueDiff(param1.Description, param2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, param1.Description, param2.Description)
 	result.StyleDiff = getValueDiff(param1.Style, param2.Style)
 	result.ExplodeDiff = getBoolRefDiff(param1.Explode, param2.Explode)
 	result.AllowEmptyValueDiff = getValueDiff(param1.AllowEmptyValue, param2.AllowEmptyValue)
@@ -54,9 +54,7 @@ func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter
 		return nil, err
 	}
 
-	if config.IncludeExamples {
-		result.ExampleDiff = getValueDiff(param1.Example, param2.Example)
-	}
+	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, param1.Example, param2.Example)
 
 	result.ExamplesDiff, err = getExamplesDiff(config, param1.Examples, param2.Examples)
 	if err != nil {

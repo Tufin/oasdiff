@@ -3,6 +3,7 @@ package text
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/tufin/oasdiff/diff"
 )
@@ -29,11 +30,12 @@ func addPrefix(level int, output []interface{}) []interface{} {
 }
 
 func getPrefix(level int) []interface{} {
-	switch level {
-	case 1:
+	if level == 1 {
 		return []interface{}{"*"}
-	case 2:
-		return []interface{}{"  -"}
+	}
+
+	if level > 1 {
+		return []interface{}{strings.Repeat("  ", level-1) + "-"}
 	}
 
 	return []interface{}{}
@@ -81,7 +83,7 @@ func (report *Report) printMethod(d *diff.MethodDiff) {
 	}
 
 	if !d.DescriptionDiff.Empty() {
-		report.print("Description changed from: ", d.DescriptionDiff.From, "To:", d.DescriptionDiff.To)
+		report.print("Description changed from: ", quote(d.DescriptionDiff.From), "To:", quote(d.DescriptionDiff.To))
 	}
 
 	report.printParams(d.ParametersDiff)
@@ -132,7 +134,7 @@ func (report *Report) printParams(d *diff.ParametersDiff) {
 func (report *Report) printParam(d *diff.ParameterDiff) {
 	if !d.SchemaDiff.Empty() {
 		report.print("Schema changed")
-		report.printSchema(d.SchemaDiff)
+		report.indent().printSchema(d.SchemaDiff)
 	}
 
 	if !d.ContentDiff.Empty() {
@@ -144,6 +146,39 @@ func (report *Report) printSchema(d *diff.SchemaDiff) {
 	if d.Empty() {
 		return
 	}
+
+	if d.SchemaAdded {
+		report.print("Schema added")
+	}
+
+	if d.SchemaDeleted {
+		report.print("Schema deleted")
+	}
+
+	if !d.TypeDiff.Empty() {
+		report.print("Type changed from", quote(d.TypeDiff.From), "to", quote(d.TypeDiff.To))
+	}
+
+	if !d.FormatDiff.Empty() {
+		report.print("Format changed from", quote(d.FormatDiff.From), "to", quote(d.FormatDiff.To))
+	}
+
+	if !d.EnumDiff.Empty() {
+		if len(d.EnumDiff.Added) > 0 {
+			report.print("New enum values:", d.EnumDiff.Added)
+		}
+		if len(d.EnumDiff.Deleted) > 0 {
+			report.print("Deleted enum values:", d.EnumDiff.Deleted)
+		}
+	}
+
+	if !d.AdditionalPropertiesAllowedDiff.Empty() {
+		report.print("Additional properties changed from", d.AdditionalPropertiesAllowedDiff.From, "to", d.AdditionalPropertiesAllowedDiff.To)
+	}
+}
+
+func quote(s interface{}) string {
+	return "'" + s.(string) + "'"
 }
 
 func (report *Report) printResponses(d *diff.ResponsesDiff) {
@@ -159,7 +194,18 @@ func (report *Report) printResponses(d *diff.ResponsesDiff) {
 		report.print("Deleted response:", deleted)
 	}
 
-	for response := range d.Modified {
+	for response, responseDiff := range d.Modified {
 		report.print("Modified response:", response)
+		report.indent().printResponse(responseDiff)
+	}
+}
+
+func (report *Report) printResponse(d *diff.ResponseDiff) {
+	if d.Empty() {
+		return
+	}
+
+	if !d.DescriptionDiff.Empty() {
+		report.print("Description changed from", quote(d.DescriptionDiff.From), "to", quote(d.DescriptionDiff.To))
 	}
 }

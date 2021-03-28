@@ -32,7 +32,7 @@ func diffResponseValuesInternal(config *Config, response1, response2 *openapi3.R
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, response1.ExtensionProps, response2.ExtensionProps)
-	result.DescriptionDiff = getStringRefDiff(response1.Description, response2.Description)
+	result.DescriptionDiff = getStringRefDiffConditional(config.ExcludeDescription, response1.Description, response2.Description)
 	result.HeadersDiff, err = getHeadersDiff(config, response1.Headers, response2.Headers)
 	if err != nil {
 		return nil, err

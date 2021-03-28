@@ -33,21 +33,21 @@ func (tagsDiff *TagsDiff) Empty() bool {
 		len(tagsDiff.Modified) == 0
 }
 
-func getTagsDiff(tags1, tags2 openapi3.Tags) *TagsDiff {
-	diff := getTagsDiffInternal(tags1, tags2)
+func getTagsDiff(config *Config, tags1, tags2 openapi3.Tags) *TagsDiff {
+	diff := getTagsDiffInternal(config, tags1, tags2)
 	if diff.Empty() {
 		return nil
 	}
 	return diff
 }
 
-func getTagsDiffInternal(tags1, tags2 openapi3.Tags) *TagsDiff {
+func getTagsDiffInternal(config *Config, tags1, tags2 openapi3.Tags) *TagsDiff {
 
 	result := newTagsDiff()
 
 	for _, tag1 := range tags1 {
 		if tag2 := tags2.Get(tag1.Name); tag2 != nil {
-			if diff := getTagDiff(tag1, tag2); !diff.Empty() {
+			if diff := getTagDiff(config, tag1, tag2); !diff.Empty() {
 				result.Modified[tag1.Name] = diff
 			}
 		} else {

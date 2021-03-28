@@ -79,11 +79,10 @@ func TestDiff_ExampleNil(t *testing.T) {
 			Examples: openapi3.Examples{"test": &openapi3.ExampleRef{}},
 		},
 	}
-	config := &diff.Config{IncludeExamples: true}
-	_, err := diff.Get(config, &s1, &s2)
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
 	require.Equal(t, "example reference is nil", err.Error())
 
-	_, err = diff.Get(config, &s2, &s1)
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
 	require.Equal(t, "example reference is nil", err.Error())
 }
 
@@ -277,6 +276,6 @@ func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
 }
 
 func TestFilterByRegex_Invalid(t *testing.T) {
-	_, err := diff.Get(&diff.Config{Filter: "["}, l(t, 1), l(t, 2))
+	_, err := diff.Get(&diff.Config{PathFilter: "["}, l(t, 1), l(t, 2))
 	require.Equal(t, "failed to compile filter regex \"[\" with error parsing regexp: missing closing ]: `[`", err.Error())
 }

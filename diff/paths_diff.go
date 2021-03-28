@@ -35,7 +35,7 @@ func newPathsDiff() *PathsDiff {
 
 func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) (*PathsDiff, error) {
 
-	err := filterPaths2(config.Filter, paths1, paths2)
+	err := filterPaths2(config.PathFilter, paths1, paths2)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func getPathsDiffInternal(config *Config, paths1, paths2 openapi3.Paths) (*Paths
 
 	result := newPathsDiff()
 
-	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1, paths2, config.Prefix)
+	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1, paths2, config.PathPrefix)
 
 	for endpoint := range addedPaths {
 		result.addAddedPath(endpoint)

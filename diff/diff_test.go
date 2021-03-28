@@ -218,7 +218,7 @@ func TestSchemaDiff_MediaTypeModified(t *testing.T) {
 
 func TestSchemaDiff_AnyOfModified(t *testing.T) {
 	require.False(t,
-		d(t, &diff.Config{Prefix: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["token"].SchemaDiff.AnyOfDiff.Empty())
+		d(t, &diff.Config{PathPrefix: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["token"].SchemaDiff.AnyOfDiff.Empty())
 }
 
 func TestSchemaDiff_WithExamples(t *testing.T) {
@@ -228,7 +228,7 @@ func TestSchemaDiff_WithExamples(t *testing.T) {
 			From: "26734565-dbcc-449a-a370-0beaaf04b0e8",
 			To:   "26734565-dbcc-449a-a370-0beaaf04b0e7",
 		},
-		d(t, &diff.Config{IncludeExamples: true}, 1, 3).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified["query"]["token"].SchemaDiff.ExampleDiff)
+		d(t, diff.NewConfig(), 1, 3).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified["query"]["token"].SchemaDiff.ExampleDiff)
 }
 
 func TestSchemaDiff_MinDiff(t *testing.T) {
@@ -237,7 +237,7 @@ func TestSchemaDiff_MinDiff(t *testing.T) {
 			From: nil,
 			To:   float64(7),
 		},
-		d(t, &diff.Config{Prefix: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff)
+		d(t, &diff.Config{PathPrefix: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff)
 }
 
 func TestResponseAdded(t *testing.T) {
@@ -462,7 +462,7 @@ func TestSummaryInvalidComponent(t *testing.T) {
 }
 
 func TestFilterByRegex(t *testing.T) {
-	d, err := diff.Get(&diff.Config{Filter: "x"}, l(t, 1), l(t, 2))
+	d, err := diff.Get(&diff.Config{PathFilter: "x"}, l(t, 1), l(t, 2))
 	require.NoError(t, err)
 	require.Nil(t, d.GetSummary().Details[diff.PathsDetail])
 }
