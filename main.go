@@ -8,7 +8,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
-	"github.com/tufin/oasdiff/text"
+	"github.com/tufin/oasdiff/report/text"
 	"gopkg.in/yaml.v3"
 )
 
@@ -67,7 +67,10 @@ func main() {
 	if format == formatYAML {
 		printYAML(diffReport)
 	} else if format == formatText {
-		text.Print(diffReport, os.Stdout)
+		report := text.Report{
+			Writer: os.Stdout,
+		}
+		report.Print(diffReport)
 	} else {
 		fmt.Printf("unknown format %q\n", format)
 	}
