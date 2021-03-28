@@ -3,6 +3,7 @@ package text
 import (
 	"fmt"
 	"io"
+	"reflect"
 	"strings"
 
 	"github.com/tufin/oasdiff/diff"
@@ -82,9 +83,7 @@ func (report *Report) printMethod(d *diff.MethodDiff) {
 		return
 	}
 
-	if !d.DescriptionDiff.Empty() {
-		report.print("Description changed from: ", quote(d.DescriptionDiff.From), "To:", quote(d.DescriptionDiff.To))
-	}
+	report.printValue(d.DescriptionDiff, "Description")
 
 	report.printParams(d.ParametersDiff)
 
@@ -156,13 +155,11 @@ func (report *Report) printSchema(d *diff.SchemaDiff) {
 		report.print("Schema deleted")
 	}
 
-	if !d.TypeDiff.Empty() {
-		report.print("Type changed from", quote(d.TypeDiff.From), "to", quote(d.TypeDiff.To))
-	}
-
-	if !d.FormatDiff.Empty() {
-		report.print("Format changed from", quote(d.FormatDiff.From), "to", quote(d.FormatDiff.To))
-	}
+	report.printValue(d.TypeDiff, "Type")
+	report.printValue(d.TitleDiff, "Title")
+	report.printValue(d.FormatDiff, "Format")
+	report.printValue(d.DescriptionDiff, "Description")
+	report.printValue(d.DefaultDiff, "Default")
 
 	if !d.EnumDiff.Empty() {
 		if len(d.EnumDiff.Added) > 0 {
@@ -177,6 +174,16 @@ func (report *Report) printSchema(d *diff.SchemaDiff) {
 		report.print("Additional properties changed from", d.AdditionalPropertiesAllowedDiff.From, "to", d.AdditionalPropertiesAllowedDiff.To)
 	}
 
+	report.printValue(d.DeprecatedDiff, "Deprecated")
+	report.printValue(d.MinDiff, "Min")
+	report.printValue(d.MaxDiff, "Max")
+	report.printValue(d.MultipleOfDiff, "MultipleOf")
+	report.printValue(d.MinLengthDiff, "MinLength")
+	report.printValue(d.MaxLengthDiff, "MaxLength")
+	report.printValue(d.PatternDiff, "Pattern")
+	report.printValue(d.MinItemsDiff, "MinItems")
+	report.printValue(d.MaxItemsDiff, "MaxItems")
+
 	if !d.ItemsDiff.Empty() {
 		report.print("Items changed")
 		report.indent().printSchema(d.ItemsDiff)
@@ -187,8 +194,11 @@ func (report *Report) printSchema(d *diff.SchemaDiff) {
 	}
 }
 
-func quote(s interface{}) string {
-	return "'" + s.(string) + "'"
+func quote(value interface{}) interface{} {
+	if reflect.ValueOf(value).Kind() == reflect.String {
+		return "'" + value.(string) + "'"
+	}
+	return value
 }
 
 func (report *Report) printResponses(d *diff.ResponsesDiff) {
@@ -215,9 +225,7 @@ func (report *Report) printResponse(d *diff.ResponseDiff) {
 		return
 	}
 
-	if !d.DescriptionDiff.Empty() {
-		report.print("Description changed from", quote(d.DescriptionDiff.From), "to", quote(d.DescriptionDiff.To))
-	}
+	report.printValue(d.DescriptionDiff, "Description")
 
 	if !d.ContentDiff.Empty() {
 		report.print("Content changed")
@@ -238,4 +246,12 @@ func (report *Report) printContent(d *diff.ContentDiff) {
 	if !d.EncodingsDiff.Empty() {
 		report.print("Encodings changed")
 	}
+}
+
+func (report *Report) printValue(d *diff.ValueDiff, title string) {
+	if d.Empty() {
+		return
+	}
+
+	report.print(title, "changed from", quote(d.From), "to", (d.To))
 }
