@@ -102,6 +102,7 @@ func (report *Report) printMethod(d *diff.MethodDiff) {
 
 	if !d.SecurityDiff.Empty() {
 		report.print("Security changed")
+		report.indent().printSecurityRequirements(d.SecurityDiff)
 	}
 }
 
@@ -276,5 +277,19 @@ func (report *Report) printHeaders(d *diff.HeadersDiff) {
 
 	for header := range d.Modified {
 		report.print("Modified header:", header)
+	}
+}
+
+func (report *Report) printSecurityRequirements(d *diff.SecurityRequirementsDiff) {
+	if d.Empty() {
+		return
+	}
+
+	for _, added := range d.Added {
+		report.print("New security requirements:", added)
+	}
+
+	for _, deleted := range d.Deleted {
+		report.print("Deleted security requirements:", deleted)
 	}
 }
