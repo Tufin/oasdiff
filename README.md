@@ -5,7 +5,10 @@
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
 # OpenAPI Diff
-This [Go](https://golang.org) module provides a diff utility for [OpenAPI Spec 3](https://swagger.io/specification/).
+This is a diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
+It can be used in two ways:
+1. Generate a diff report in [YAML](##Output-example---YAML) or [Text/Markdown](##Output-example---TEXT) from the cmd-line.  
+2. Embed into a [Go](https://golang.org) program as a go module
 
 ## Unique features vs. other diff tools
 - This is a [go module](https://blog.golang.org/using-go-modules) - it can be embedded into other Go programs
@@ -27,37 +30,37 @@ go build
 
 ## Running with Docker
 
-Help
-
-```
-docker run --rm -t tufin/oasdiff -help
-```
-
-Comparing public files (text output):
+### Comparing public files (text output):
 
 ```
 docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -format text
 ```
 
-Comparing public files (yaml output):
+### Comparing public files (yaml output):
 
 ```
 docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-Comparing public files (summary):
+### Comparing public files (summary):
 
 ```
 docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -summary
 ```
 
-Comparing local files (yaml output):
+### Comparing local files (yaml output):
 
 ```
 docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
 ```
 
 Replace "$(pwd)/data" by the path that contains your files.
+
+### Help
+
+```
+docker run --rm -t tufin/oasdiff -help
+```
 
 ## Output example - Text
 
