@@ -63,3 +63,13 @@ func TestNoDiff(t *testing.T) {
 
 	require.Equal(t, buf.String(), "No changes\n")
 }
+
+func TestDiff4(t *testing.T) {
+	var buf bytes.Buffer
+	report := text.Report{
+		Writer: &buf,
+	}
+	report.Output(d(t, &diff.Config{}, 2, 1))
+
+	require.Contains(t, buf.String(), "GET /api/{domain}/{project}/install-command")
+}
