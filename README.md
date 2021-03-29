@@ -7,7 +7,7 @@
 # OpenAPI Diff
 This is a diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 It can be used in two ways:
-1. Generate a diff report in [YAML](##Output-example---YAML) or [Text/Markdown](##Output-example---TEXT) from the cmd-line.  
+1. Generate a diff report in [YAML](#Output-example---YAML) or [Text/Markdown](#Output-example---TEXT) from the cmd-line.  
 2. Embed into a [Go](https://golang.org) program as a go module
 
 ## Unique features vs. other diff tools
