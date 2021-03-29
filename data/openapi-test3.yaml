@@ -128,7 +128,8 @@ paths:
   /register:
     post:
       security:
-      - OAuth: []
+      - OAuth: 
+        - write:pets
       summary: Subscribe to a webhook
       callbacks:   # Callback definition
         myEvent:   # Event name

@@ -467,8 +467,14 @@ func TestFilterByRegex(t *testing.T) {
 	require.Nil(t, d.GetSummary().Details[diff.PathsDetail])
 }
 
-func TestAddedSecurityRequireent(t *testing.T) {
+func TestAddedSecurityRequirement(t *testing.T) {
 	require.Contains(t,
 		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified["/register"].OperationsDiff.Modified["POST"].SecurityDiff.Added,
 		"bearerAuth")
+}
+
+func TestModifiedSecurityRequirement(t *testing.T) {
+	require.Contains(t,
+		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified["/register"].OperationsDiff.Modified["POST"].SecurityDiff.Modified,
+		"OAuth")
 }

@@ -8,9 +8,9 @@ import (
 
 // SecurityRequirementsDiff describes the changes between a pair of sets of security requirement objects: https://swagger.io/specification/#security-requirement-object
 type SecurityRequirementsDiff struct {
-	Added   StringList `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	// TODO: handle Modified Security Requirements
+	Added    StringList `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified StringList `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -25,8 +25,9 @@ func (diff *SecurityRequirementsDiff) Empty() bool {
 
 func newSecurityRequirementsDiff() *SecurityRequirementsDiff {
 	return &SecurityRequirementsDiff{
-		Added:   StringList{},
-		Deleted: StringList{},
+		Added:    StringList{},
+		Deleted:  StringList{},
+		Modified: StringList{},
 	}
 }
 
@@ -45,7 +46,8 @@ func getSecurityRequirementsDiffInternal(config *Config, securityRequirements1, 
 	if securityRequirements1 != nil {
 		for _, securityRequirement1 := range *securityRequirements1 {
 			if findSecurityRequirement(securityRequirement1, securityRequirements2) {
-				// TODO: handle modification
+				// TODO: diff scope names
+				result.Modified = append(result.Modified, getSecurityRequirementID(securityRequirement1))
 			} else {
 				result.Deleted = append(result.Deleted, getSecurityRequirementID(securityRequirement1))
 			}
@@ -98,7 +100,8 @@ func getSecurityRequirementID(securityRequirement openapi3.SecurityRequirement) 
 
 func (diff *SecurityRequirementsDiff) getSummary() *SummaryDetails {
 	return &SummaryDetails{
-		Added:   len(diff.Added),
-		Deleted: len(diff.Deleted),
+		Added:    len(diff.Added),
+		Deleted:  len(diff.Deleted),
+		Modified: len(diff.Modified),
 	}
 }
