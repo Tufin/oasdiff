@@ -292,4 +292,8 @@ func (report *Report) printSecurityRequirements(d *diff.SecurityRequirementsDiff
 	for _, deleted := range d.Deleted {
 		report.print("Deleted security requirements:", deleted)
 	}
+
+	for _, modified := range d.Modified {
+		report.print("Modified security requirements:", modified)
+	}
 }
