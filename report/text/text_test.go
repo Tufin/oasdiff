@@ -72,7 +72,7 @@ func TestDiff2(t *testing.T) {
 	}
 	report.Output(d(t, &diff.Config{}, 5, 3))
 
-	require.Contains(t, buf.String(), "GET /api/{domain}/{project}/install-command")
+	require.Contains(t, buf.String(), "Deleted response: 201")
 }
 
 func TestDiff3(t *testing.T) {
@@ -82,7 +82,7 @@ func TestDiff3(t *testing.T) {
 	}
 	report.Output(d(t, &diff.Config{}, 1, 3))
 
-	require.Contains(t, buf.String(), "GET /api/{domain}/{project}/install-command")
+	require.Contains(t, buf.String(), "New enum values: [test1]")
 }
 
 func TestDiff4(t *testing.T) {
@@ -90,7 +90,17 @@ func TestDiff4(t *testing.T) {
 	report := text.Report{
 		Writer: &buf,
 	}
+	report.Output(d(t, &diff.Config{}, 3, 1))
+
+	require.Contains(t, buf.String(), "New security requirements: bearerAuth")
+}
+
+func TestDiff5(t *testing.T) {
+	var buf bytes.Buffer
+	report := text.Report{
+		Writer: &buf,
+	}
 	report.Output(d(t, &diff.Config{}, 2, 1))
 
-	require.Contains(t, buf.String(), "GET /api/{domain}/{project}/install-command")
+	require.Contains(t, buf.String(), "Type changed from 'integer' to 'string'")
 }
