@@ -231,6 +231,11 @@ func (report *Report) printResponse(d *diff.ResponseDiff) {
 		report.print("Content changed")
 		report.indent().printContent(d.ContentDiff)
 	}
+
+	if !d.HeadersDiff.Empty() {
+		report.print("Headers changed")
+		report.indent().printHeaders(d.HeadersDiff)
+	}
 }
 
 func (report *Report) printContent(d *diff.ContentDiff) {
@@ -254,4 +259,22 @@ func (report *Report) printValue(d *diff.ValueDiff, title string) {
 	}
 
 	report.print(title, "changed from", quote(d.From), "to", quote(d.To))
+}
+
+func (report *Report) printHeaders(d *diff.HeadersDiff) {
+	if d.Empty() {
+		return
+	}
+
+	for _, added := range d.Added {
+		report.print("New header:", added)
+	}
+
+	for _, deleted := range d.Deleted {
+		report.print("Deleted header:", deleted)
+	}
+
+	for header := range d.Modified {
+		report.print("Modified header:", header)
+	}
 }
