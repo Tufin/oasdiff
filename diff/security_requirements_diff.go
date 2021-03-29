@@ -8,9 +8,9 @@ import (
 
 // SecurityRequirementsDiff describes the changes between a pair of sets of security requirement objects: https://swagger.io/specification/#security-requirement-object
 type SecurityRequirementsDiff struct {
-	Added    StringList `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified StringList `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added    StringList                   `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList                   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedSecurityRequirements `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -23,11 +23,14 @@ func (diff *SecurityRequirementsDiff) Empty() bool {
 		len(diff.Deleted) == 0
 }
 
+// ModifiedSecurityRequirements is map of security requirement IDs to their respective diffs
+type ModifiedSecurityRequirements map[string]SecurityScopesDiff
+
 func newSecurityRequirementsDiff() *SecurityRequirementsDiff {
 	return &SecurityRequirementsDiff{
 		Added:    StringList{},
 		Deleted:  StringList{},
-		Modified: StringList{},
+		Modified: ModifiedSecurityRequirements{},
 	}
 }
 
@@ -45,9 +48,8 @@ func getSecurityRequirementsDiffInternal(config *Config, securityRequirements1, 
 
 	if securityRequirements1 != nil {
 		for _, securityRequirement1 := range *securityRequirements1 {
-			if findSecurityRequirement(securityRequirement1, securityRequirements2) {
-				// TODO: diff scope names
-				result.Modified = append(result.Modified, getSecurityRequirementID(securityRequirement1))
+			if securityRequirement2 := findSecurityRequirement(securityRequirement1, securityRequirements2); securityRequirement2 != nil {
+				result.Modified[getSecurityRequirementID(securityRequirement1)] = getSecurityScopesDiff(securityRequirement1, securityRequirement2)
 			} else {
 				result.Deleted = append(result.Deleted, getSecurityRequirementID(securityRequirement1))
 			}
@@ -56,7 +58,7 @@ func getSecurityRequirementsDiffInternal(config *Config, securityRequirements1, 
 
 	if securityRequirements2 != nil {
 		for _, securityRequirement2 := range *securityRequirements2 {
-			if !findSecurityRequirement(securityRequirement2, securityRequirements1) {
+			if securityRequirements1 := findSecurityRequirement(securityRequirement2, securityRequirements1); securityRequirements1 == nil {
 				result.Added = append(result.Added, getSecurityRequirementID(securityRequirement2))
 			}
 		}
@@ -65,19 +67,19 @@ func getSecurityRequirementsDiffInternal(config *Config, securityRequirements1, 
 	return result
 }
 
-func findSecurityRequirement(securityRequirement1 openapi3.SecurityRequirement, securityRequirements2 *openapi3.SecurityRequirements) bool {
+func findSecurityRequirement(securityRequirement1 openapi3.SecurityRequirement, securityRequirements2 *openapi3.SecurityRequirements) openapi3.SecurityRequirement {
 	if securityRequirements2 == nil {
-		return false
+		return nil
 	}
 
 	securitySchemes1 := getSecuritySchemes(securityRequirement1)
 	for _, securityRequirement2 := range *securityRequirements2 {
 		securitySchemes2 := getSecuritySchemes(securityRequirement2)
 		if securitySchemes1.equals(securitySchemes2) {
-			return true
+			return securityRequirement2
 		}
 	}
-	return false
+	return nil
 }
 
 func getSecuritySchemes(securityRequirement openapi3.SecurityRequirement) StringSet {

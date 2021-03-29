@@ -83,6 +83,7 @@ func TestDiff3(t *testing.T) {
 	report.Output(d(t, &diff.Config{}, 1, 3))
 
 	require.Contains(t, buf.String(), "New enum values: [test1]")
+	require.Contains(t, buf.String(), "Scheme OAuth Added scopes: [write:pets]")
 }
 
 func TestDiff4(t *testing.T) {
@@ -93,6 +94,7 @@ func TestDiff4(t *testing.T) {
 	report.Output(d(t, &diff.Config{}, 3, 1))
 
 	require.Contains(t, buf.String(), "New security requirements: bearerAuth")
+	require.Contains(t, buf.String(), "Scheme OAuth Deleted scopes: [write:pets]")
 }
 
 func TestDiff5(t *testing.T) {

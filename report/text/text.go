@@ -293,7 +293,19 @@ func (report *Report) printSecurityRequirements(d *diff.SecurityRequirementsDiff
 		report.print("Deleted security requirements:", deleted)
 	}
 
-	for _, modified := range d.Modified {
-		report.print("Modified security requirements:", modified)
+	for securityRequirementID, securityScopesDiff := range d.Modified {
+		report.print("Modified security requirements:", securityRequirementID)
+		report.indent().printSecurityScopes(securityScopesDiff)
+	}
+}
+
+func (report *Report) printSecurityScopes(d diff.SecurityScopesDiff) {
+	for scheme, scopeDiff := range d {
+		if len(scopeDiff.Added) > 0 {
+			report.print("Scheme", scheme, "Added scopes:", scopeDiff.Added)
+		}
+		if len(scopeDiff.Deleted) > 0 {
+			report.print("Scheme", scheme, "Deleted scopes:", scopeDiff.Deleted)
+		}
 	}
 }

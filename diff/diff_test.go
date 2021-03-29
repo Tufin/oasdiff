@@ -474,7 +474,10 @@ func TestAddedSecurityRequirement(t *testing.T) {
 }
 
 func TestModifiedSecurityRequirement(t *testing.T) {
+	securityScopesDiff := d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified["/register"].OperationsDiff.Modified["POST"].SecurityDiff.Modified["OAuth"]
+	require.NotEmpty(t, securityScopesDiff)
+
 	require.Contains(t,
-		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified["/register"].OperationsDiff.Modified["POST"].SecurityDiff.Modified,
-		"OAuth")
+		securityScopesDiff["OAuth"].Deleted,
+		"write:pets")
 }
