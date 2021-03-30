@@ -69,31 +69,38 @@ docker run --rm -t tufin/oasdiff -help
 
 ### Deleted Endpoints
 ---------------------
-POST /register
-POST /subscribe
+POST /subscribe  
+POST /register  
 
 ### Modified Endpoints
 ----------------------
-GET /api/{domain}/{project}/badges/security-score
-* New query param: filter
-* New header param: user
-* New cookie param: test
+GET /api/{domain}/{project}/badges/security-score  
+* Modified query param: filter
+  - Content changed
+    - Schema changed
 * Modified query param: image
+* Modified header param: user
   - Schema changed
-    - Type changed from '' to 'string'
-    - Format changed from '' to 'general string'
-* Modified query param: token
-  - Schema changed
+    - Schema added
+  - Content changed
+* Modified cookie param: test
+  - Content changed
 * Response changed
-  - New response: 201
+  - New response: default
+  - Deleted response: 200
+  - Modified response: 201
+    - Content changed
+      - Schema changed
+        - Type changed from 'string' to 'object'
 
 GET /api/{domain}/{project}/install-command
-* Modified path param: project
-  - Schema changed
-    - Deleted enum values: [test1]
+* Deleted header param: network-policies
 * Response changed
   - Modified response: default
-
+    - Description changed from 'Tufin1' to 'Tufin'
+    - Headers changed
+      - Deleted header: X-RateLimit-Limit
+        
 ## Output example - YAML
 
 ```yaml

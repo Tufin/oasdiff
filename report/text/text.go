@@ -58,21 +58,21 @@ func (report *Report) Output(d *diff.Diff) {
 	report.print("### New Endpoints")
 	report.print("-----------------")
 	for _, added := range d.EndpointsDiff.Added {
-		report.print(added.Method, added.Path, "  ")
+		report.print(added.Method, added.Path, " ")
 	}
 	report.print("")
 
 	report.print("### Deleted Endpoints")
 	report.print("---------------------")
 	for _, deleted := range d.EndpointsDiff.Deleted {
-		report.print(deleted.Method, deleted.Path, "  ")
+		report.print(deleted.Method, deleted.Path, " ")
 	}
 	report.print("")
 
 	report.print("### Modified Endpoints")
 	report.print("----------------------")
 	for endpoint, methodDiff := range d.EndpointsDiff.Modified {
-		report.print(endpoint.Method, endpoint.Path, "  ")
+		report.print(endpoint.Method, endpoint.Path)
 		report.indent().printMethod(methodDiff)
 		report.print("")
 	}
