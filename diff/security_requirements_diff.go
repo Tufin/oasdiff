@@ -23,7 +23,7 @@ func (diff *SecurityRequirementsDiff) Empty() bool {
 		len(diff.Deleted) == 0
 }
 
-// ModifiedSecurityRequirements is map of security requirement IDs to their respective diffs
+// ModifiedSecurityRequirements is map of security requirements to their respective diffs
 type ModifiedSecurityRequirements map[string]SecurityScopesDiff
 
 func newSecurityRequirementsDiff() *SecurityRequirementsDiff {
