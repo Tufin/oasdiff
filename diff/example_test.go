@@ -28,6 +28,7 @@ func ExampleGet() {
 
 	if err != nil {
 		fmt.Printf("diff failed with %v", err)
+		return
 	}
 
 	bytes, err := yaml.Marshal(diffReport)
