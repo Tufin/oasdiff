@@ -3,12 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
-	"github.com/tufin/oasdiff/report/text"
+	"github.com/tufin/oasdiff/report"
 	"gopkg.in/yaml.v3"
 )
 
@@ -18,6 +17,7 @@ var excludeExamples, excludeDescription, summary bool
 const (
 	formatYAML = "yaml"
 	formatText = "text"
+	formatHTML = "html"
 )
 
 func init() {
@@ -28,7 +28,7 @@ func init() {
 	flag.BoolVar(&excludeExamples, "exclude-examples", false, "exclude changes to examples")
 	flag.BoolVar(&excludeDescription, "exclude-description", false, "exclude changes to descriptions")
 	flag.BoolVar(&summary, "summary", false, "output a summary of the changes instead of the full diff")
-	flag.StringVar(&format, "format", formatYAML, "output format: yaml or text")
+	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 }
 
 func main() {
@@ -58,6 +58,7 @@ func main() {
 
 	if err != nil {
 		fmt.Printf("diff failed with %v", err)
+		return
 	}
 
 	if summary {
@@ -69,10 +70,14 @@ func main() {
 	if format == formatYAML {
 		printYAML(diffReport)
 	} else if format == formatText {
-		report := text.Report{
-			Writer: os.Stdout,
+		fmt.Printf("%s\n", report.GetTextReportAsString(diffReport))
+	} else if format == formatHTML {
+		html, err := report.GetHTMLReportAsString(diffReport)
+		if err != nil {
+			fmt.Printf("failed to generate HTML with %v", err)
+			return
 		}
-		report.Output(diffReport)
+		fmt.Printf("%s\n", html)
 	} else {
 		fmt.Printf("unknown format %q\n", format)
 	}
