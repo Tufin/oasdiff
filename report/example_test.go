@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/report"
 )
 
-func ExampleText() {
+func ExampleGetTextReportAsString() {
 	swaggerLoader := openapi3.NewSwaggerLoader()
 	swaggerLoader.IsExternalRefsAllowed = true
 
@@ -33,7 +33,7 @@ func ExampleText() {
 	fmt.Print(report.GetTextReportAsString(diffReport))
 }
 
-func ExampleHTML() {
+func ExampleGetHTMLReportAsString() {
 	swaggerLoader := openapi3.NewSwaggerLoader()
 	swaggerLoader.IsExternalRefsAllowed = true
 
