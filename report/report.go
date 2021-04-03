@@ -154,11 +154,25 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		r.print("Schema deleted")
 	}
 
+	if !d.OneOfDiff.Empty() {
+		r.print("Property 'OneOf' changed")
+	}
+	if !d.AnyOfDiff.Empty() {
+		r.print("Property 'AnyOf' changed")
+	}
+	if !d.AllOfDiff.Empty() {
+		r.print("Property 'AllOf' changed")
+	}
+
+	if !d.NotDiff.Empty() {
+		r.print("Property 'Not' changed")
+		r.indent().printSchema(d.NotDiff)
+	}
+
 	r.printValue(d.TypeDiff, "Type")
 	r.printValue(d.TitleDiff, "Title")
 	r.printValue(d.FormatDiff, "Format")
 	r.printValue(d.DescriptionDiff, "Description")
-	r.printValue(d.DefaultDiff, "Default")
 
 	if !d.EnumDiff.Empty() {
 		if len(d.EnumDiff.Added) > 0 {
@@ -169,10 +183,16 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		}
 	}
 
-	if !d.AdditionalPropertiesAllowedDiff.Empty() {
-		r.print("Additional properties changed from", d.AdditionalPropertiesAllowedDiff.From, "to", d.AdditionalPropertiesAllowedDiff.To)
-	}
-
+	r.printValue(d.DefaultDiff, "Default")
+	r.printValue(d.AdditionalPropertiesAllowedDiff, "AdditionalProperties")
+	r.printValue(d.UniqueItemsDiff, "UniqueItems")
+	r.printValue(d.ExclusiveMinDiff, "ExclusiveMin")
+	r.printValue(d.ExclusiveMaxDiff, "ExclusiveMax")
+	r.printValue(d.NullableDiff, "Nullable")
+	r.printValue(d.ReadOnlyDiff, "ReadOnly")
+	r.printValue(d.WriteOnlyDiff, "WriteOnly")
+	r.printValue(d.AllowEmptyValueDiff, "AllowEmptyValue")
+	r.printValue(d.XMLDiff, "XML")
 	r.printValue(d.DeprecatedDiff, "Deprecated")
 	r.printValue(d.MinDiff, "Min")
 	r.printValue(d.MaxDiff, "Max")
@@ -188,8 +208,24 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		r.indent().printSchema(d.ItemsDiff)
 	}
 
+	if !d.RequiredDiff.Empty() {
+		r.print("Required changed")
+	}
+
 	if !d.PropertiesDiff.Empty() {
 		r.print("Properties changed")
+	}
+
+	r.printValue(d.MinPropsDiff, "MinProps")
+	r.printValue(d.MaxPropsDiff, "MaxProps")
+
+	if !d.AdditionalPropertiesDiff.Empty() {
+		r.print("AdditionalProperties changed")
+		r.indent().printSchema(d.AdditionalPropertiesDiff)
+	}
+
+	if !d.DiscriminatorDiff.Empty() {
+		r.print("Discriminator changed")
 	}
 }
 
