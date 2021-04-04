@@ -358,5 +358,3 @@ oasdiff also outputs an altrnate simplified view of "endpoints" which are a flat
 
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi) 
-
-## Pull requests are welcome.
