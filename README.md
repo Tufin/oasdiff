@@ -5,16 +5,15 @@
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
 # OpenAPI Diff
-This is a diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
-It can be used in two ways:
-1. Generate a diff report in [YAML](#Output-example---YAML), [Text/Markdown](#Output-example---TEXT) or HTML from the cmd-line.  
-2. Embed into a [Go](https://golang.org) program as a go module
+A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 
-## Unique features vs. other diff tools
-- This is a [go module](https://blog.golang.org/using-go-modules) - it can be embedded into other Go programs
-- Comprehensive diff: covers all aspects of OpenAPI Specification
-- Deep diff into paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Patch support is currently being added - see [work in progress](#Work-in-progress)
+## Features 
+- Generate a diff report in [YAML](#comparing-local-files-yaml-output), [Text/Markdown](#comparing-public-files-textmarkdown-output) or [HTML](#comparing-public-files-html-output) from the cmd-line
+- [Run from Docker](#running-with-docker)
+- [Embed in your go program](#embedding-into-your-go-program)
+- Compare [local files](#comparing-local-files-yaml-output) or [public files](#comparing-public-files-yaml-output) over http
+- Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/) including paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
+- Patch support is currently being added - see [work in progress](#work-in-progress)
 
 ## Build
 ```
@@ -30,7 +29,7 @@ go build
 
 ## Running with Docker
 
-### Comparing public files (text output):
+### Comparing public files (Text/Markdown output):
 
 ```
 docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
@@ -45,7 +44,7 @@ docker run --rm -t tufin/oasdiff -format html -base https://raw.githubuserconten
 ### Comparing public files (yaml output):
 
 ```
-docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Comparing public files (change summary):
