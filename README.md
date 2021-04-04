@@ -12,7 +12,7 @@ It can be used in two ways:
 
 ## Unique features vs. other diff tools
 - This is a [go module](https://blog.golang.org/using-go-modules) - it can be embedded into other Go programs
-- Comprehensive diff: covers just about every aspect of OpenAPI Spec. See [work in progress](#Work-in-progress) for some limitations.
+- Comprehensive diff: covers all aspects of OpenAPI Specification
 - Deep diff into paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Patch support is currently being added - see [work in progress](#Work-in-progress)
 
@@ -354,8 +354,7 @@ oasdiff also outputs an altrnate simplified view of "endpoints" which are a flat
 ```
 
 ## Work in progress
-1. While most aspects of OpenAPI Spec are already supported by this diff tool, one is still missing: server variables. 
-2. Patch support: currently supports Descriptions and a few fields in Schema 
+1. Patch support: currently supports Descriptions and a few fields in Schema 
 
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi) 

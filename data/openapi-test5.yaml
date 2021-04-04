@@ -124,8 +124,10 @@ paths:
           description: "2"
           variables:
             name: 
-              default: "a"
-              enum: ["a", "b"]
+              default: "joe"
+              enum: ["joe", "bill"]
+            title:
+              default: "developer"
           x-test:
 components:
   schemas:

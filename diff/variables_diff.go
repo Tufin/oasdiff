@@ -31,25 +31,27 @@ func newVariablesDiff() *VariablesDiff {
 	}
 }
 
-func getVariablesDiff(variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
-	diff := getVariablesDiffInternal(variables1, variables2)
+func getVariablesDiff(config *Config, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
+	diff := getVariablesDiffInternal(config, variables1, variables2)
 	if diff.Empty() {
 		return nil
 	}
 	return diff
 }
 
-func getVariablesDiffInternal(variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
+func getVariablesDiffInternal(config *Config, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
 	result := newVariablesDiff()
 
-	for name1 := range variables1 {
-		_, ok := variables2[name1]
+	for name1, var1 := range variables1 {
+		var2, ok := variables2[name1]
 		if !ok {
 			result.Deleted = append(result.Deleted, name1)
 			continue
 		}
 
-		// TODO: modified
+		if diff := getVariableDiff(config, var1, var2); !diff.Empty() {
+			result.Modified[name1] = diff
+		}
 	}
 
 	for name2 := range variables2 {

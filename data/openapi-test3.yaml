@@ -116,6 +116,9 @@ paths:
         - url: 'https://tufin.io/securecloud'
         - url: 'https://www.tufin.io/securecloud'
           description: "1"
+          variables:
+            title:
+              default: "CEO"
           x-extension-test:
     servers:
       - url: 'https://tufin.io/securecloud'
