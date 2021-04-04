@@ -8,7 +8,7 @@
 A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 
 ## Features 
-- Generate a diff report in [YAML](#comparing-local-files-yaml-output), [Text/Markdown](#comparing-public-files-textmarkdown-output) or [HTML](#comparing-public-files-html-output) from the cmd-line
+- Generate a diff report in [YAML](#comparing-public-files-yaml-output), [Text/Markdown](#comparing-public-files-textmarkdown-output) or [HTML](#comparing-public-files-html-output) from the cmd-line
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-into-your-go-program)
 - Compare [local files](#comparing-local-files-yaml-output) or [public files](#comparing-public-files-yaml-output) over http
@@ -59,7 +59,8 @@ docker run --rm -t tufin/oasdiff -summary -base https://raw.githubusercontent.co
 docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
 ```
 
-Replace "$(pwd)/data" by the path that contains your files.
+Replace `$(pwd)/data` by the path that contains your files.  
+Add the `-format` flag to generate other formats (text or html).
 
 ### Help
 
