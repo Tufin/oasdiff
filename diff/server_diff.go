@@ -11,7 +11,7 @@ type ServerDiff struct {
 	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	URLDiff         *ValueDiff      `json:"urlType,omitempty" yaml:"urlType,omitempty"`
 	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
-	// Variables
+	VariablesDiff   *VariablesDiff  `json:"variables,omitempty" yaml:"variables,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -48,6 +48,7 @@ func getServerDiffInternal(config *Config, value1, value2 *openapi3.Server) *Ser
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
 	result.URLDiff = getValueDiff(value1.URL, value2.URL)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
+	result.VariablesDiff = getVariablesDiff(value1.Variables, value2.Variables)
 
 	return &result
 }

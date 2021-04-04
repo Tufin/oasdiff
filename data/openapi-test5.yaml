@@ -122,6 +122,10 @@ paths:
       servers:
         - url: 'https://www.tufin.io/securecloud'
           description: "2"
+          variables:
+            name: 
+              default: "a"
+              enum: ["a", "b"]
           x-test:
 components:
   schemas:
