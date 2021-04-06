@@ -3,16 +3,6 @@ package diff
 // StringSet is a set of string values
 type StringSet map[string]struct{}
 
-func stringListToSet(list StringList) StringSet {
-	result := make(StringSet, len(list))
-
-	for _, s := range list {
-		result[s] = struct{}{}
-	}
-
-	return result
-}
-
 func (stringSet StringSet) toStringList() StringList {
 	result := make(StringList, len(stringSet))
 	i := 0
