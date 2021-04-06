@@ -24,12 +24,6 @@ type Endpoint struct {
 	Path   string `json:"path,omitempty" yaml:"path,omitempty"`
 }
 
-// Endpoints is a list of endpoints
-type Endpoints []Endpoint
-
-// ModifiedEndpoints is a map of endpoints to their respective diffs
-type ModifiedEndpoints map[Endpoint]*MethodDiff
-
 // Empty indicates whether a change was found in this element
 func (diff *EndpointsDiff) Empty() bool {
 	if diff == nil {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"sort"
 	"strings"
 
 	"github.com/tufin/oasdiff/diff"
@@ -54,21 +55,25 @@ func (r *report) output(d *diff.Diff) {
 	}
 
 	r.printTitle("New Endpoints", len(d.EndpointsDiff.Added))
+	sort.Sort(d.EndpointsDiff.Added)
 	for _, added := range d.EndpointsDiff.Added {
 		r.print(added.Method, added.Path, " ")
 	}
 	r.print("")
 
 	r.printTitle("Deleted Endpoints", len(d.EndpointsDiff.Deleted))
+	sort.Sort(d.EndpointsDiff.Deleted)
 	for _, deleted := range d.EndpointsDiff.Deleted {
 		r.print(deleted.Method, deleted.Path, " ")
 	}
 	r.print("")
 
 	r.printTitle("Modified Endpoints", len(d.EndpointsDiff.Modified))
-	for endpoint, methodDiff := range d.EndpointsDiff.Modified {
+	keys := d.EndpointsDiff.Modified.ToEndpoints()
+	sort.Sort(keys)
+	for _, endpoint := range keys {
 		r.print(endpoint.Method, endpoint.Path)
-		r.indent().printMethod(methodDiff)
+		r.indent().printMethod(d.EndpointsDiff.Modified[endpoint])
 		r.print("")
 	}
 }
