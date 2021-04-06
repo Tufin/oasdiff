@@ -53,22 +53,19 @@ func (r *report) output(d *diff.Diff) {
 		return
 	}
 
-	r.print("### New Endpoints")
-	r.print("-----------------")
+	r.printTitle("New Endpoints", len(d.EndpointsDiff.Added))
 	for _, added := range d.EndpointsDiff.Added {
 		r.print(added.Method, added.Path, " ")
 	}
 	r.print("")
 
-	r.print("### Deleted Endpoints")
-	r.print("---------------------")
+	r.printTitle("Deleted Endpoints", len(d.EndpointsDiff.Deleted))
 	for _, deleted := range d.EndpointsDiff.Deleted {
 		r.print(deleted.Method, deleted.Path, " ")
 	}
 	r.print("")
 
-	r.print("### Modified Endpoints")
-	r.print("----------------------")
+	r.printTitle("Modified Endpoints", len(d.EndpointsDiff.Modified))
 	for endpoint, methodDiff := range d.EndpointsDiff.Modified {
 		r.print(endpoint.Method, endpoint.Path)
 		r.indent().printMethod(methodDiff)
@@ -90,7 +87,7 @@ func (r *report) printMethod(d *diff.MethodDiff) {
 	}
 
 	if !d.ResponsesDiff.Empty() {
-		r.print("Response changed")
+		r.print("Responses changed")
 		r.indent().printResponses(d.ResponsesDiff)
 	}
 
@@ -342,4 +339,16 @@ func (r *report) printSecurityScopes(d diff.SecurityScopesDiff) {
 			r.print("Scheme", scheme, "Deleted scopes:", scopeDiff.Deleted)
 		}
 	}
+}
+
+func (r *report) printTitle(title string, count int) {
+	text := ""
+	if count == 0 {
+		text = fmt.Sprintf("### %s: None", title)
+	} else {
+		text = fmt.Sprintf("### %s: %d", title, count)
+	}
+
+	r.print(text)
+	r.print(strings.Repeat("-", len(text)))
 }
