@@ -2,7 +2,7 @@ package diff
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// VariablesDiff describes the changes between a pair of server variable objects: https://swagger.io/specification/#server-variable-object
+// VariableDiff describes the changes between a pair of server variable objects: https://swagger.io/specification/#server-variable-object
 type VariableDiff struct {
 	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	EnumDiff        *EnumDiff       `json:"enum,omitempty" yaml:"enum,omitempty"`

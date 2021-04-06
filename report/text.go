@@ -18,7 +18,7 @@ func GetTextReportAsString(d *diff.Diff) string {
 	return buf.String()
 }
 
-// GetTextReportAsString returns a textual diff report as bytes
+// GetTextReportAsBytes returns a textual diff report as bytes
 // The report is compatible with Github markdown
 func GetTextReportAsBytes(d *diff.Diff) []byte {
 	var buf bytes.Buffer
