@@ -56,6 +56,8 @@ func TestDiff_PathItemNil(t *testing.T) {
 func TestDiff_SpecNil(t *testing.T) {
 	loader := openapi3.NewSwaggerLoader()
 	s1, err := loader.LoadSwaggerFromFile("../data/home-iot-api-1.yaml")
+
+	require.NoError(t, err)
 	_, err = diff.Get(diff.NewConfig(), nil, s1)
 	require.Equal(t, "spec is nil", err.Error())
 }
