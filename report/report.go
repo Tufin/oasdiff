@@ -87,18 +87,14 @@ func (r *report) printMethod(d *diff.MethodDiff) {
 
 	r.printParams(d.ParametersDiff)
 
-	if !d.RequestBodyDiff.Empty() {
-		r.print("Request body changed")
-	}
+	r.printMessage(d.RequestBodyDiff, "Request body changed")
 
 	if !d.ResponsesDiff.Empty() {
 		r.print("Responses changed")
 		r.indent().printResponses(d.ResponsesDiff)
 	}
 
-	if !d.CallbacksDiff.Empty() {
-		r.print("Callbacks changed")
-	}
+	r.printMessage(d.CallbacksDiff, "Callbacks changed")
 
 	if !d.SecurityDiff.Empty() {
 		r.print("Security changed")
@@ -156,15 +152,9 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		r.print("Schema deleted")
 	}
 
-	if !d.OneOfDiff.Empty() {
-		r.print("Property 'OneOf' changed")
-	}
-	if !d.AnyOfDiff.Empty() {
-		r.print("Property 'AnyOf' changed")
-	}
-	if !d.AllOfDiff.Empty() {
-		r.print("Property 'AllOf' changed")
-	}
+	r.printMessage(d.OneOfDiff, "Property 'OneOf' changed")
+	r.printMessage(d.AnyOfDiff, "Property 'AnyOf' changed")
+	r.printMessage(d.AllOfDiff, "Property 'AllOf' changed")
 
 	if !d.NotDiff.Empty() {
 		r.print("Property 'Not' changed")
@@ -210,13 +200,8 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		r.indent().printSchema(d.ItemsDiff)
 	}
 
-	if !d.RequiredDiff.Empty() {
-		r.print("Required changed")
-	}
-
-	if !d.PropertiesDiff.Empty() {
-		r.print("Properties changed")
-	}
+	r.printMessage(d.RequiredDiff, "Required changed")
+	r.printMessage(d.PropertiesDiff, "Properties changed")
 
 	r.printValue(d.MinPropsDiff, "MinProps")
 	r.printValue(d.MaxPropsDiff, "MaxProps")
@@ -226,9 +211,7 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		r.indent().printSchema(d.AdditionalPropertiesDiff)
 	}
 
-	if !d.DiscriminatorDiff.Empty() {
-		r.print("Discriminator changed")
-	}
+	r.printMessage(d.DiscriminatorDiff, "Discriminator changed")
 }
 
 func quote(value interface{}) interface{} {
@@ -285,9 +268,7 @@ func (r *report) printContent(d *diff.ContentDiff) {
 		r.indent().printSchema(d.SchemaDiff)
 	}
 
-	if !d.EncodingsDiff.Empty() {
-		r.print("Encodings changed")
-	}
+	r.printMessage(d.EncodingsDiff, "Encodings changed")
 }
 
 func (r *report) printValue(d *diff.ValueDiff, title string) {
@@ -356,4 +337,10 @@ func (r *report) printTitle(title string, count int) {
 
 	r.print(text)
 	r.print(strings.Repeat("-", len(text)))
+}
+
+func (r *report) printMessage(d diff.DiffInterface, message string) {
+	if !d.Empty() {
+		r.print(message)
+	}
 }
