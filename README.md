@@ -12,7 +12,7 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-into-your-go-program)
 - Compare [local files](#comparing-local-files-yaml-output) or [public files](#comparing-public-files-yaml-output) over http
-- Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/) including paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
+- Comprehensive diff including **all** aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Patch support is currently being added - see [work in progress](#work-in-progress)
 
 ## Build
@@ -45,12 +45,6 @@ docker run --rm -t tufin/oasdiff -format html -base https://raw.githubuserconten
 
 ```
 docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-### Comparing public files (change summary):
-
-```
-docker run --rm -t tufin/oasdiff -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml 
 ```
 
 ### Comparing local files (yaml output):
