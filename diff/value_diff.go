@@ -43,10 +43,6 @@ func getBoolRefDiff(valueRef1, valueRef2 *bool) *ValueDiff {
 	return getValueDiff(derefBool(valueRef1), derefBool(valueRef2))
 }
 
-func getStringRefDiff(valueRef1, valueRef2 *string) *ValueDiff {
-	return getValueDiff(derefString(valueRef1), derefString(valueRef2))
-}
-
 func getStringRefDiffConditional(exclude bool, valueRef1, valueRef2 *string) *ValueDiff {
 	return getValueDiffConditional(exclude, derefString(valueRef1), derefString(valueRef2))
 }
