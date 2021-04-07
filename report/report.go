@@ -84,9 +84,7 @@ func (r *report) printMethod(d *diff.MethodDiff) {
 	}
 
 	r.printValue(d.DescriptionDiff, "Description")
-
 	r.printParams(d.ParametersDiff)
-
 	r.printMessage(d.RequestBodyDiff, "Request body changed")
 
 	if !d.ResponsesDiff.Empty() {
@@ -144,14 +142,8 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		return
 	}
 
-	if d.SchemaAdded {
-		r.print("Schema added")
-	}
-
-	if d.SchemaDeleted {
-		r.print("Schema deleted")
-	}
-
+	r.printConditional(d.SchemaAdded, "Schema added")
+	r.printConditional(d.SchemaDeleted, "Schema deleted")
 	r.printMessage(d.OneOfDiff, "Property 'OneOf' changed")
 	r.printMessage(d.AnyOfDiff, "Property 'AnyOf' changed")
 	r.printMessage(d.AllOfDiff, "Property 'AllOf' changed")
@@ -167,12 +159,8 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 	r.printValue(d.DescriptionDiff, "Description")
 
 	if !d.EnumDiff.Empty() {
-		if len(d.EnumDiff.Added) > 0 {
-			r.print("New enum values:", d.EnumDiff.Added)
-		}
-		if len(d.EnumDiff.Deleted) > 0 {
-			r.print("Deleted enum values:", d.EnumDiff.Deleted)
-		}
+		r.printConditional(len(d.EnumDiff.Added) > 0, "New enum values:", d.EnumDiff.Added)
+		r.printConditional(len(d.EnumDiff.Deleted) > 0, "Deleted enum values:", d.EnumDiff.Deleted)
 	}
 
 	r.printValue(d.DefaultDiff, "Default")
@@ -202,7 +190,6 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 
 	r.printMessage(d.RequiredDiff, "Required changed")
 	r.printMessage(d.PropertiesDiff, "Properties changed")
-
 	r.printValue(d.MinPropsDiff, "MinProps")
 	r.printValue(d.MaxPropsDiff, "MaxProps")
 
@@ -318,12 +305,8 @@ func (r *report) printSecurityRequirements(d *diff.SecurityRequirementsDiff) {
 
 func (r *report) printSecurityScopes(d diff.SecurityScopesDiff) {
 	for scheme, scopeDiff := range d {
-		if len(scopeDiff.Added) > 0 {
-			r.print("Scheme", scheme, "Added scopes:", scopeDiff.Added)
-		}
-		if len(scopeDiff.Deleted) > 0 {
-			r.print("Scheme", scheme, "Deleted scopes:", scopeDiff.Deleted)
-		}
+		r.printConditional(len(scopeDiff.Added) > 0, "Scheme", scheme, "Added scopes:", scopeDiff.Added)
+		r.printConditional(len(scopeDiff.Deleted) > 0, "Scheme", scheme, "Deleted scopes:", scopeDiff.Deleted)
 	}
 }
 
@@ -339,8 +322,12 @@ func (r *report) printTitle(title string, count int) {
 	r.print(strings.Repeat("-", len(text)))
 }
 
-func (r *report) printMessage(d diff.IDiff, message string) {
-	if !d.Empty() {
-		r.print(message)
+func (r *report) printMessage(d diff.IDiff, output ...interface{}) {
+	r.printConditional(!d.Empty(), output...)
+}
+
+func (r *report) printConditional(b bool, output ...interface{}) {
+	if b {
+		r.print(output...)
 	}
 }
