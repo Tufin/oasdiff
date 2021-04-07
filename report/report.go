@@ -339,7 +339,7 @@ func (r *report) printTitle(title string, count int) {
 	r.print(strings.Repeat("-", len(text)))
 }
 
-func (r *report) printMessage(d diff.DiffInterface, message string) {
+func (r *report) printMessage(d diff.IDiff, message string) {
 	if !d.Empty() {
 		r.print(message)
 	}
