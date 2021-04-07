@@ -69,3 +69,8 @@ func TestText5(t *testing.T) {
 	textReport := report.GetTextReportAsString(d(t, &diff.Config{}, 2, 1))
 	require.Contains(t, textReport, "Type changed from 'integer' to 'string'")
 }
+
+func TestText6(t *testing.T) {
+	textReport := report.GetTextReportAsString(d(t, &diff.Config{}, 1, 5))
+	require.Contains(t, textReport, "Type changed from 'string' to 'object'")
+}
