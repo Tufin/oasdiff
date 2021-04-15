@@ -317,8 +317,8 @@ References are normally resolved automatically when you load the spec. In other 
 3. [Extensions](https://swagger.io/specification/#specification-extensions) are excluded by default. Use [configuration](diff/config.go) to specify which ones to include.
 
 4. Paths vs. Endpoints  
-OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object).  
-oasdiff respects this heirarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the later "modified" section, another set of operation changes: added, deleted and modified.  
+OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
+oasdiff respects this heirarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified.  
 For example:
 ```yaml
     paths:
@@ -331,7 +331,7 @@ For example:
                     modified:
                         GET:
 ```
-oasdiff also outputs an altrnate simplified view of "endpoints" which are a flattened combination of OpenAPI Paths and Operations, for example:
+oasdiff also outputs an altrnate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
 ```yaml
    endpoints:
         deleted:
