@@ -5,7 +5,7 @@ import "github.com/getkin/kin-openapi/openapi3"
 // VariableDiff describes the changes between a pair of server variable objects: https://swagger.io/specification/#server-variable-object
 type VariableDiff struct {
 	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
-	EnumDiff        *EnumDiff       `json:"enum,omitempty" yaml:"enum,omitempty"`
+	EnumDiff        *StringsDiff    `json:"enum,omitempty" yaml:"enum,omitempty"`
 	DefaultDiff     *ValueDiff      `json:"default,omitempty" yaml:"default,omitempty"`
 	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
 }
@@ -28,7 +28,7 @@ func getVariableDiffInternal(config *Config, var1, var2 *openapi3.ServerVariable
 	result := VariableDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, var1.ExtensionProps, var2.ExtensionProps)
-	result.EnumDiff = getEnumDiff(var1.Enum, var2.Enum)
+	result.EnumDiff = getStringsDiff(var1.Enum, var2.Enum)
 	result.DefaultDiff = getValueDiff(var1.Default, var2.Default)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, var1.Description, var2.Description)
 
