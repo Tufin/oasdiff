@@ -30,7 +30,7 @@ func (enumDiff *EnumDiff) Empty() bool {
 		len(enumDiff.Deleted) == 0
 }
 
-func getEnumDiff(enum1, enum2 []interface{}) *EnumDiff {
+func getEnumDiff(enum1, enum2 EnumValues) *EnumDiff {
 
 	diff := getEnumDiffInternal(enum1, enum2)
 	if diff.Empty() {
@@ -39,7 +39,7 @@ func getEnumDiff(enum1, enum2 []interface{}) *EnumDiff {
 	return diff
 }
 
-func getEnumDiffInternal(enum1, enum2 []interface{}) *EnumDiff {
+func getEnumDiffInternal(enum1, enum2 EnumValues) *EnumDiff {
 
 	diff := newEnumDiff()
 
@@ -58,7 +58,7 @@ func getEnumDiffInternal(enum1, enum2 []interface{}) *EnumDiff {
 	return diff
 }
 
-func findValue(value interface{}, enum []interface{}) bool {
+func findValue(value interface{}, enum EnumValues) bool {
 	for _, other := range enum {
 		if reflect.DeepEqual(value, other) {
 			return true
