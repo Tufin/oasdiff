@@ -110,7 +110,7 @@ func TestPatch_ParameterSchemaMaxLength(t *testing.T) {
 func TestPatch_ValueDiffNil(t *testing.T) {
 	valueDiff := &diff.ValueDiff{}
 	value := "reuven"
-	require.Equal(t, "diff value is nil instead of string", valueDiff.PatchString(&value).Error())
+	require.EqualError(t, valueDiff.PatchString(&value), "diff value is nil instead of string")
 }
 
 func TestPatch_ValueDiffMismatch(t *testing.T) {
@@ -118,7 +118,7 @@ func TestPatch_ValueDiffMismatch(t *testing.T) {
 		To: 4,
 	}
 	value := "reuven"
-	require.Equal(t, "diff value type mismatch: string vs. \"int\"", valueDiff.PatchString(&value).Error())
+	require.EqualError(t, valueDiff.PatchString(&value), "diff value type mismatch: string vs. \"int\"")
 }
 
 func TestPatch_ValueDiffInt(t *testing.T) {
@@ -127,7 +127,7 @@ func TestPatch_ValueDiffInt(t *testing.T) {
 	}
 	value := uint64(3)
 	pValue := &value
-	require.Equal(t, "diff value type mismatch: *uint64 vs. \"int\"", valueDiff.PatchUInt64Ref(&pValue).Error())
+	require.EqualError(t, valueDiff.PatchUInt64Ref(&pValue), "diff value type mismatch: *uint64 vs. \"int\"")
 }
 
 func TestPatch_ValueDiff(t *testing.T) {

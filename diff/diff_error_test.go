@@ -15,7 +15,7 @@ func TestDiff_SchemaRefNil(t *testing.T) {
 
 	s1.Components.Schemas["LightingSummary"].Value.Properties["zones"].Value.Items.Value.Properties["deviceId"].Value = nil
 	_, err = diff.Get(diff.NewConfig(), s1, s1)
-	require.Equal(t, "schema reference is nil", err.Error())
+	require.EqualError(t, err, "schema reference is nil")
 }
 
 func TestDiff_MediaTypeNil(t *testing.T) {
@@ -25,7 +25,7 @@ func TestDiff_MediaTypeNil(t *testing.T) {
 
 	s1.Paths["/devices"].Post.RequestBody.Value.Content["application/json"] = nil
 	_, err = diff.Get(diff.NewConfig(), s1, s1)
-	require.Equal(t, "media type is nil", err.Error())
+	require.EqualError(t, err, "media type is nil")
 }
 
 func TestDiff_EncodingNil(t *testing.T) {
@@ -40,7 +40,7 @@ func TestDiff_EncodingNil(t *testing.T) {
 	mediaType.Encoding["historyMetadata"] = nil
 
 	_, err := diff.Get(diff.NewConfig(), s1, s1)
-	require.Equal(t, "encoding is nil", err.Error())
+	require.EqualError(t, err, "encoding is nil")
 }
 
 func TestDiff_PathItemNil(t *testing.T) {
@@ -50,7 +50,7 @@ func TestDiff_PathItemNil(t *testing.T) {
 
 	s1.Paths["/devices"] = nil
 	_, err = diff.Get(diff.NewConfig(), s1, s1)
-	require.Equal(t, "path item is nil", err.Error())
+	require.EqualError(t, err, "path item is nil")
 }
 
 func TestDiff_SpecNil(t *testing.T) {
@@ -59,13 +59,13 @@ func TestDiff_SpecNil(t *testing.T) {
 
 	require.NoError(t, err)
 	_, err = diff.Get(diff.NewConfig(), nil, s1)
-	require.Equal(t, "spec is nil", err.Error())
+	require.EqualError(t, err, "spec is nil")
 }
 
 func TestDiff_InfoNil(t *testing.T) {
 	s1 := &openapi3.Swagger{}
 	_, err := diff.Get(diff.NewConfig(), s1, s1)
-	require.Equal(t, "info is nil", err.Error())
+	require.EqualError(t, err, "info is nil")
 }
 
 func TestDiff_ExampleNil(t *testing.T) {
@@ -82,10 +82,10 @@ func TestDiff_ExampleNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.Equal(t, "example reference is nil", err.Error())
+	require.EqualError(t, err, "example reference is nil")
 
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.Equal(t, "example reference is nil", err.Error())
+	require.EqualError(t, err, "example reference is nil")
 }
 
 func TestDiff_ComponentSchemaNil(t *testing.T) {
@@ -102,10 +102,10 @@ func TestDiff_ComponentSchemaNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.Equal(t, "schema reference is nil", err.Error())
+	require.EqualError(t, err, "schema reference is nil")
 
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.Equal(t, "schema reference is nil", err.Error())
+	require.EqualError(t, err, "schema reference is nil")
 }
 
 func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
@@ -143,7 +143,7 @@ func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
 	}
 
 	_, err := diff.Get(diff.NewConfig(), &s1, &s1)
-	require.Equal(t, "schema reference is nil", err.Error())
+	require.EqualError(t, err, "schema reference is nil")
 }
 
 func TestDiff_ComponentParameterNil(t *testing.T) {
@@ -160,10 +160,10 @@ func TestDiff_ComponentParameterNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.Equal(t, "parameter reference is nil", err.Error())
+	require.EqualError(t, err, "parameter reference is nil")
 
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.Equal(t, "parameter reference is nil", err.Error())
+	require.EqualError(t, err, "parameter reference is nil")
 }
 
 func TestDiff_ComponentHeadersNil(t *testing.T) {
@@ -180,10 +180,10 @@ func TestDiff_ComponentHeadersNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.Equal(t, "header reference is nil", err.Error())
+	require.EqualError(t, err, "header reference is nil")
 
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.Equal(t, "header reference is nil", err.Error())
+	require.EqualError(t, err, "header reference is nil")
 }
 
 func TestDiff_ComponentRequestBodiesNil(t *testing.T) {
@@ -200,10 +200,10 @@ func TestDiff_ComponentRequestBodiesNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.Equal(t, "request body reference is nil", err.Error())
+	require.EqualError(t, err, "request body reference is nil")
 
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.Equal(t, "request body reference is nil", err.Error())
+	require.EqualError(t, err, "request body reference is nil")
 }
 
 func TestDiff_ComponentResponsesNil(t *testing.T) {
@@ -220,10 +220,10 @@ func TestDiff_ComponentResponsesNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.Equal(t, "response reference is nil", err.Error())
+	require.EqualError(t, err, "response reference is nil")
 
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.Equal(t, "response reference is nil", err.Error())
+	require.EqualError(t, err, "response reference is nil")
 }
 
 func TestDiff_ComponentSecuritySchemesNil(t *testing.T) {
@@ -241,9 +241,9 @@ func TestDiff_ComponentSecuritySchemesNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.Equal(t, "security scheme reference is nil", err.Error())
+	require.EqualError(t, err, "security scheme reference is nil")
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.Equal(t, "security scheme reference is nil", err.Error())
+	require.EqualError(t, err, "security scheme reference is nil")
 }
 
 func TestDiff_ComponentCallbacksNil(t *testing.T) {
@@ -260,10 +260,10 @@ func TestDiff_ComponentCallbacksNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.Equal(t, "callback reference is nil", err.Error())
+	require.EqualError(t, err, "callback reference is nil")
 
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.Equal(t, "callback reference is nil", err.Error())
+	require.EqualError(t, err, "callback reference is nil")
 }
 
 func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
@@ -274,10 +274,10 @@ func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
 	s1 := l(t, 1)
 
 	_, err := diff.Get(diff.NewConfig(), s5, s1)
-	require.Equal(t, "content map has more than one value", err.Error())
+	require.EqualError(t, err, "content map has more than one value")
 }
 
 func TestFilterByRegex_Invalid(t *testing.T) {
 	_, err := diff.Get(&diff.Config{PathFilter: "["}, l(t, 1), l(t, 2))
-	require.Equal(t, "failed to compile filter regex \"[\" with error parsing regexp: missing closing ]: `[`", err.Error())
+	require.EqualError(t, err, "failed to compile filter regex \"[\" with error parsing regexp: missing closing ]: `[`")
 }
