@@ -9,8 +9,8 @@ import (
 )
 
 func TestDiff_SchemaRefNil(t *testing.T) {
-	loader := openapi3.NewSwaggerLoader()
-	s1, err := loader.LoadSwaggerFromFile("../data/home-iot-api-1.yaml")
+	loader := openapi3.NewLoader()
+	s1, err := loader.LoadFromFile("../data/home-iot-api-1.yaml")
 	require.NoError(t, err)
 
 	s1.Components.Schemas["LightingSummary"].Value.Properties["zones"].Value.Items.Value.Properties["deviceId"].Value = nil
@@ -19,8 +19,8 @@ func TestDiff_SchemaRefNil(t *testing.T) {
 }
 
 func TestDiff_MediaTypeNil(t *testing.T) {
-	loader := openapi3.NewSwaggerLoader()
-	s1, err := loader.LoadSwaggerFromFile("../data/home-iot-api-1.yaml")
+	loader := openapi3.NewLoader()
+	s1, err := loader.LoadFromFile("../data/home-iot-api-1.yaml")
 	require.NoError(t, err)
 
 	s1.Paths["/devices"].Post.RequestBody.Value.Content["application/json"] = nil
@@ -44,8 +44,8 @@ func TestDiff_EncodingNil(t *testing.T) {
 }
 
 func TestDiff_PathItemNil(t *testing.T) {
-	loader := openapi3.NewSwaggerLoader()
-	s1, err := loader.LoadSwaggerFromFile("../data/home-iot-api-1.yaml")
+	loader := openapi3.NewLoader()
+	s1, err := loader.LoadFromFile("../data/home-iot-api-1.yaml")
 	require.NoError(t, err)
 
 	s1.Paths["/devices"] = nil
@@ -54,8 +54,8 @@ func TestDiff_PathItemNil(t *testing.T) {
 }
 
 func TestDiff_SpecNil(t *testing.T) {
-	loader := openapi3.NewSwaggerLoader()
-	s1, err := loader.LoadSwaggerFromFile("../data/home-iot-api-1.yaml")
+	loader := openapi3.NewLoader()
+	s1, err := loader.LoadFromFile("../data/home-iot-api-1.yaml")
 
 	require.NoError(t, err)
 	_, err = diff.Get(diff.NewConfig(), nil, s1)
@@ -63,19 +63,19 @@ func TestDiff_SpecNil(t *testing.T) {
 }
 
 func TestDiff_InfoNil(t *testing.T) {
-	s1 := &openapi3.Swagger{}
+	s1 := &openapi3.T{}
 	_, err := diff.Get(diff.NewConfig(), s1, s1)
 	require.EqualError(t, err, "info is nil")
 }
 
 func TestDiff_ExampleNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Examples: openapi3.Examples{"test": &openapi3.ExampleRef{Value: &openapi3.Example{}}},
 		},
 	}
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Examples: openapi3.Examples{"test": &openapi3.ExampleRef{}},
@@ -89,13 +89,13 @@ func TestDiff_ExampleNil(t *testing.T) {
 }
 
 func TestDiff_ComponentSchemaNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Schemas: openapi3.Schemas{"test": &openapi3.SchemaRef{Value: &openapi3.Schema{}}},
 		},
 	}
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Schemas: openapi3.Schemas{"test": &openapi3.SchemaRef{}},
@@ -109,7 +109,7 @@ func TestDiff_ComponentSchemaNil(t *testing.T) {
 }
 
 func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Schemas: openapi3.Schemas{
@@ -147,13 +147,13 @@ func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
 }
 
 func TestDiff_ComponentParameterNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Parameters: openapi3.ParametersMap{"test": &openapi3.ParameterRef{Value: &openapi3.Parameter{}}},
 		},
 	}
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Parameters: openapi3.ParametersMap{"test": &openapi3.ParameterRef{}},
@@ -167,13 +167,13 @@ func TestDiff_ComponentParameterNil(t *testing.T) {
 }
 
 func TestDiff_ComponentHeadersNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Headers: openapi3.Headers{"test": &openapi3.HeaderRef{Value: &openapi3.Header{}}},
 		},
 	}
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Headers: openapi3.Headers{"test": &openapi3.HeaderRef{}},
@@ -187,13 +187,13 @@ func TestDiff_ComponentHeadersNil(t *testing.T) {
 }
 
 func TestDiff_ComponentRequestBodiesNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			RequestBodies: openapi3.RequestBodies{"test": &openapi3.RequestBodyRef{Value: &openapi3.RequestBody{}}},
 		},
 	}
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			RequestBodies: openapi3.RequestBodies{"test": &openapi3.RequestBodyRef{}},
@@ -207,13 +207,13 @@ func TestDiff_ComponentRequestBodiesNil(t *testing.T) {
 }
 
 func TestDiff_ComponentResponsesNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Responses: openapi3.Responses{"test": &openapi3.ResponseRef{Value: &openapi3.Response{}}},
 		},
 	}
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Responses: openapi3.Responses{"test": &openapi3.ResponseRef{}},
@@ -227,14 +227,14 @@ func TestDiff_ComponentResponsesNil(t *testing.T) {
 }
 
 func TestDiff_ComponentSecuritySchemesNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			SecuritySchemes: openapi3.SecuritySchemes{"test": &openapi3.SecuritySchemeRef{Value: &openapi3.SecurityScheme{}}},
 		},
 	}
 
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			SecuritySchemes: openapi3.SecuritySchemes{"test": &openapi3.SecuritySchemeRef{}},
@@ -247,13 +247,13 @@ func TestDiff_ComponentSecuritySchemesNil(t *testing.T) {
 }
 
 func TestDiff_ComponentCallbacksNil(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Callbacks: openapi3.Callbacks{"test": &openapi3.CallbackRef{Value: &openapi3.Callback{}}},
 		},
 	}
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{},
 		Components: openapi3.Components{
 			Callbacks: openapi3.Callbacks{"test": &openapi3.CallbackRef{}},

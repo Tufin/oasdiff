@@ -37,7 +37,7 @@ Note that Get expects OpenAPI References (https://swagger.io/docs/specification/
 References are normally resolved automatically when you load the spec.
 In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn.
 */
-func Get(config *Config, s1, s2 *openapi3.Swagger) (*Diff, error) {
+func Get(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	diff, err := getDiff(config, s1, s2)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func Get(config *Config, s1, s2 *openapi3.Swagger) (*Diff, error) {
 	return diff, nil
 }
 
-func getDiff(config *Config, s1, s2 *openapi3.Swagger) (*Diff, error) {
+func getDiff(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 
 	if s1 == nil || s2 == nil {
 		return nil, errors.New("spec is nil")
@@ -64,7 +64,7 @@ func getDiff(config *Config, s1, s2 *openapi3.Swagger) (*Diff, error) {
 	return diff, nil
 }
 
-func getDiffInternal(config *Config, s1, s2 *openapi3.Swagger) (*Diff, error) {
+func getDiffInternal(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 
 	result := newDiff()
 	var err error
@@ -134,7 +134,7 @@ func (diff *Diff) GetSummary() *Summary {
 }
 
 // Patch applies the patch to a spec
-func (diff *Diff) Patch(s *openapi3.Swagger) error {
+func (diff *Diff) Patch(s *openapi3.T) error {
 
 	if diff.Empty() {
 		return nil

@@ -11,12 +11,12 @@ import (
 
 const RelativeDataPath = "../data/"
 
-func (mockLoader MockLoader) LoadSwaggerFromFile(path string) (*openapi3.Swagger, error) {
-	return openapi3.NewSwaggerLoader().LoadSwaggerFromFile(RelativeDataPath + path)
+func (mockLoader MockLoader) LoadFromFile(path string) (*openapi3.T, error) {
+	return openapi3.NewLoader().LoadFromFile(RelativeDataPath + path)
 }
 
-func (mockLoader MockLoader) LoadSwaggerFromURI(location *url.URL) (*openapi3.Swagger, error) {
-	return openapi3.NewSwaggerLoader().LoadSwaggerFromFile(RelativeDataPath + location.Path)
+func (mockLoader MockLoader) LoadFromURI(location *url.URL) (*openapi3.T, error) {
+	return openapi3.NewLoader().LoadFromFile(RelativeDataPath + location.Path)
 }
 
 type MockLoader struct{}

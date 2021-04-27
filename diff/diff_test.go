@@ -11,9 +11,9 @@ import (
 
 const securityScorePath = "/api/{domain}/{project}/badges/security-score"
 
-func l(t *testing.T, v int) *openapi3.Swagger {
-	loader := openapi3.NewSwaggerLoader()
-	oas, err := loader.LoadSwaggerFromFile(fmt.Sprintf("../data/openapi-test%d.yaml", v))
+func l(t *testing.T, v int) *openapi3.T {
+	loader := openapi3.NewLoader()
+	oas, err := loader.LoadFromFile(fmt.Sprintf("../data/openapi-test%d.yaml", v))
 	require.NoError(t, err)
 	return oas
 }

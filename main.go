@@ -34,16 +34,16 @@ func init() {
 func main() {
 	flag.Parse()
 
-	swaggerLoader := openapi3.NewSwaggerLoader()
-	swaggerLoader.IsExternalRefsAllowed = true
+	loader := openapi3.NewLoader()
+	loader.IsExternalRefsAllowed = true
 
-	s1, err := load.From(swaggerLoader, base)
+	s1, err := load.From(loader, base)
 	if err != nil {
 		fmt.Printf("failed to load base spec from %q with %v", base, err)
 		return
 	}
 
-	s2, err := load.From(swaggerLoader, revision)
+	s2, err := load.From(loader, revision)
 	if err != nil {
 		fmt.Printf("failed to load revision spec from %q with %v", revision, err)
 		return

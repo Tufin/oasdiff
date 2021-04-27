@@ -10,9 +10,9 @@ import (
 	"github.com/tufin/oasdiff/report"
 )
 
-func l(t *testing.T, v int) *openapi3.Swagger {
-	loader := openapi3.NewSwaggerLoader()
-	oas, err := loader.LoadSwaggerFromFile(fmt.Sprintf("../data/openapi-test%d.yaml", v))
+func l(t *testing.T, v int) *openapi3.T {
+	loader := openapi3.NewLoader()
+	oas, err := loader.LoadFromFile(fmt.Sprintf("../data/openapi-test%d.yaml", v))
 	require.NoError(t, err)
 	return oas
 }
@@ -28,10 +28,10 @@ func Test_NoChanges(t *testing.T) {
 }
 
 func Test_NoEndpointChanges(t *testing.T) {
-	s1 := openapi3.Swagger{
+	s1 := openapi3.T{
 		Info: &openapi3.Info{},
 	}
-	s2 := openapi3.Swagger{
+	s2 := openapi3.T{
 		Info: &openapi3.Info{
 			Title: "reuven",
 		},

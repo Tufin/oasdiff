@@ -9,16 +9,16 @@ import (
 )
 
 func ExampleGet() {
-	swaggerLoader := openapi3.NewSwaggerLoader()
-	swaggerLoader.IsExternalRefsAllowed = true
+	loader := openapi3.NewLoader()
+	loader.IsExternalRefsAllowed = true
 
-	s1, err := swaggerLoader.LoadSwaggerFromFile("../data/openapi-test1.yaml")
+	s1, err := loader.LoadFromFile("../data/openapi-test1.yaml")
 	if err != nil {
 		fmt.Printf("failed to load spec with %v", err)
 		return
 	}
 
-	s2, err := swaggerLoader.LoadSwaggerFromFile("../data/openapi-test3.yaml")
+	s2, err := loader.LoadFromFile("../data/openapi-test3.yaml")
 	if err != nil {
 		fmt.Printf("failed to load spec with %v", err)
 		return

@@ -8,23 +8,23 @@ import (
 
 // Loader interface includes the OAS load functions
 type Loader interface {
-	LoadSwaggerFromURI(*url.URL) (*openapi3.Swagger, error)
-	LoadSwaggerFromFile(string) (*openapi3.Swagger, error)
+	LoadFromURI(*url.URL) (*openapi3.T, error)
+	LoadFromFile(string) (*openapi3.T, error)
 }
 
 // From is a convenience function that opens an OpenAPI spec from a URL or a local path based on the format of the path parameter
-func From(loader Loader, path string) (*openapi3.Swagger, error) {
+func From(loader Loader, path string) (*openapi3.T, error) {
 
 	uri, err := url.ParseRequestURI(path)
 	if err == nil {
 		return loadFromURI(loader, uri)
 	}
 
-	return loader.LoadSwaggerFromFile(path)
+	return loader.LoadFromFile(path)
 }
 
-func loadFromURI(loader Loader, uri *url.URL) (*openapi3.Swagger, error) {
-	oas, err := loader.LoadSwaggerFromURI(uri)
+func loadFromURI(loader Loader, uri *url.URL) (*openapi3.T, error) {
+	oas, err := loader.LoadFromURI(uri)
 	if err != nil {
 		return nil, err
 	}
