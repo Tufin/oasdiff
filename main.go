@@ -21,8 +21,8 @@ const (
 )
 
 func init() {
-	flag.StringVar(&base, "base", "", "path of original OpenAPI spec")
-	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec")
+	flag.StringVar(&base, "base", "", "path of original OpenAPI spec in YAML or JSON format")
+	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec in YAML or JSON format")
 	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision (optional)")
 	flag.StringVar(&filter, "filter", "", "regex to filter result paths (optional)")
 	flag.BoolVar(&excludeExamples, "exclude-examples", false, "exclude changes to examples")

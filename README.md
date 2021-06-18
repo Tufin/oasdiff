@@ -12,6 +12,7 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-into-your-go-program)
 - Compare [local files](#comparing-local-files-yaml-output) or [public files](#comparing-public-files-yaml-output) over http
+- Compare specs in YAML or JSON format
 - Comprehensive diff including **all** aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Patch support is currently being added - see [work in progress](#work-in-progress)
 
