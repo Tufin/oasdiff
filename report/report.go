@@ -85,7 +85,11 @@ func (r *report) printMethod(d *diff.MethodDiff) {
 
 	r.printValue(d.DescriptionDiff, "Description")
 	r.printParams(d.ParametersDiff)
-	r.printMessage(d.RequestBodyDiff, "Request body changed")
+
+	if !d.RequestBodyDiff.Empty() {
+		r.print("Request body changed")
+		r.indent().printRequestBody(d.RequestBodyDiff)
+	}
 
 	if !d.ResponsesDiff.Empty() {
 		r.print("Responses changed")
@@ -189,9 +193,13 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 	}
 
 	r.printMessage(d.RequiredDiff, "Required changed")
-	r.printMessage(d.PropertiesDiff, "Properties changed")
 	r.printValue(d.MinPropsDiff, "MinProps")
 	r.printValue(d.MaxPropsDiff, "MaxProps")
+
+	if !d.PropertiesDiff.Empty() {
+		r.print("Properties changed")
+		r.indent().printProperties(d.PropertiesDiff)
+	}
 
 	if !d.AdditionalPropertiesDiff.Empty() {
 		r.print("AdditionalProperties changed")
@@ -199,6 +207,26 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 	}
 
 	r.printMessage(d.DiscriminatorDiff, "Discriminator changed")
+}
+
+func (r *report) printProperties(d *diff.SchemasDiff) {
+
+	if d.Empty() {
+		return
+	}
+
+	for _, property := range d.Added {
+		r.print("New property:", property)
+	}
+
+	for _, property := range d.Deleted {
+		r.print("Deleted  property:", property)
+	}
+
+	for property, schemaDiff := range d.Modified {
+		r.print("Modified property:", property)
+		r.indent().printSchema(schemaDiff)
+	}
 }
 
 func quote(value interface{}) interface{} {
@@ -242,6 +270,19 @@ func (r *report) printResponse(d *diff.ResponseDiff) {
 	if !d.HeadersDiff.Empty() {
 		r.print("Headers changed")
 		r.indent().printHeaders(d.HeadersDiff)
+	}
+}
+
+func (r *report) printRequestBody(d *diff.RequestBodyDiff) {
+	if d.Empty() {
+		return
+	}
+
+	r.printValue(d.DescriptionDiff, "Description")
+
+	if !d.ContentDiff.Empty() {
+		r.print("Content changed")
+		r.indent().printContent(d.ContentDiff)
 	}
 }
 
