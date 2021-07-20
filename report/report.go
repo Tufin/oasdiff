@@ -211,26 +211,21 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 
 func (r *report) printProperties(d *diff.SchemasDiff) {
 
-	if len(d.Added) > 0 {
-		r.print("Added")
-		for _, property := range d.Added {
-			r.indent().print(property)
-		}
+	if d.Empty() {
+		return
 	}
 
-	if len(d.Deleted) > 0 {
-		r.print("Deleted")
-		for _, property := range d.Deleted {
-			r.indent().print(property)
-		}
+	for _, property := range d.Added {
+		r.print("New property:", property)
 	}
 
-	if len(d.Modified) > 0 {
-		r.print("Modified")
-		for property, schemaDiff := range d.Modified {
-			r.indent().print(property)
-			r.indent().indent().printSchema(schemaDiff)
-		}
+	for _, property := range d.Deleted {
+		r.print("Deleted  property:", property)
+	}
+
+	for property, schemaDiff := range d.Modified {
+		r.print("Modified property:", property)
+		r.indent().printSchema(schemaDiff)
 	}
 }
 
