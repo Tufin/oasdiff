@@ -127,14 +127,14 @@ func TestPatch_ValueDiffInt(t *testing.T) {
 	}
 	value := uint64(3)
 	pValue := &value
-	require.EqualError(t, valueDiff.PatchUInt64Ref(&pValue), "diff value type mismatch: *uint64 vs. \"int\"")
+	require.EqualError(t, valueDiff.PatchUInt64Ref(&pValue), "diff value type mismatch: uint64 vs. \"int\"")
 }
 
 func TestPatch_ValueDiff(t *testing.T) {
 	v1 := uint64(3)
 
 	valueDiff := &diff.ValueDiff{
-		To: &v1,
+		To: v1,
 	}
 
 	v2 := uint64(3)
