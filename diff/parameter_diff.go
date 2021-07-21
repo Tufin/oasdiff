@@ -75,9 +75,9 @@ func (diff *ParameterDiff) Patch(parameter *openapi3.Parameter) error {
 
 	schema, err := derefSchema(parameter.Schema)
 	if err != nil {
-		return err
+		// no schema to patch, continue.
+		return nil
 	}
 
-	diff.SchemaDiff.Patch(schema)
-	return nil
+	return diff.SchemaDiff.Patch(schema)
 }
