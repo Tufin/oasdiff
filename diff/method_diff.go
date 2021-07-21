@@ -92,7 +92,7 @@ func (methodDiff *MethodDiff) Patch(operation *openapi3.Operation) error {
 		return nil
 	}
 
-	methodDiff.DescriptionDiff.PatchString(&operation.Description)
+	methodDiff.DescriptionDiff.patchString(&operation.Description)
 	err := methodDiff.ParametersDiff.Patch(operation.Parameters)
 	if err != nil {
 		return err

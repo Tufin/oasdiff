@@ -210,7 +210,6 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 }
 
 func (r *report) printProperties(d *diff.SchemasDiff) {
-
 	if d.Empty() {
 		return
 	}
@@ -220,7 +219,7 @@ func (r *report) printProperties(d *diff.SchemasDiff) {
 	}
 
 	for _, property := range d.Deleted {
-		r.print("Deleted  property:", property)
+		r.print("Deleted property:", property)
 	}
 
 	for property, schemaDiff := range d.Modified {

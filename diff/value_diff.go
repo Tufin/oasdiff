@@ -47,6 +47,10 @@ func getStringRefDiffConditional(exclude bool, valueRef1, valueRef2 *string) *Va
 	return getValueDiffConditional(exclude, derefString(valueRef1), derefString(valueRef2))
 }
 
+func getUInt64RefDiff(valueRef1, valueRef2 *uint64) *ValueDiff {
+	return getValueDiff(derefUInt64(valueRef1), derefUInt64(valueRef2))
+}
+
 func derefString(ref *string) interface{} {
 	if ref == nil {
 		return nil
@@ -64,6 +68,14 @@ func derefBool(ref *bool) interface{} {
 }
 
 func derefFloat64(ref *float64) interface{} {
+	if ref == nil {
+		return nil
+	}
+
+	return *ref
+}
+
+func derefUInt64(ref *uint64) interface{} {
 	if ref == nil {
 		return nil
 	}
@@ -90,26 +102,27 @@ func (diff *ValueDiff) patchStringCB(cb func(string)) error {
 	return nil
 }
 
-// PatchString applies the patch to a string value
-func (diff *ValueDiff) PatchString(value *string) error {
+// patchString applies the patch to a string value
+func (diff *ValueDiff) patchString(value *string) error {
 	return diff.patchStringCB(func(s string) { *value = s })
 }
 
-// PatchUInt64Ref applies the patch to a *unit64 value
-func (diff *ValueDiff) PatchUInt64Ref(value **uint64) error {
+// patchUInt64Ref applies the patch to a *unit64 value
+func (diff *ValueDiff) patchUInt64Ref(value **uint64) error {
 	if diff.Empty() {
 		return nil
 	}
 
 	if diff.To == nil {
-		return fmt.Errorf("diff value is nil instead of *uint64")
+		*value = nil
+		return nil
 	}
 
-	switch diff.To.(type) {
-	case *uint64:
-		*value = diff.To.(*uint64)
+	switch t := diff.To.(type) {
+	case uint64:
+		*value = &t
 	default:
-		return fmt.Errorf("diff value type mismatch: *uint64 vs. %q", reflect.TypeOf(diff.To))
+		return fmt.Errorf("diff value type mismatch: uint64 vs. %q", reflect.TypeOf(diff.To))
 	}
 
 	return nil

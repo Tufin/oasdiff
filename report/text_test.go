@@ -74,3 +74,8 @@ func TestText6(t *testing.T) {
 	textReport := report.GetTextReportAsString(d(t, &diff.Config{}, 1, 5))
 	require.Contains(t, textReport, "Type changed from 'string' to 'object'")
 }
+
+func TestText_DerefUint64(t *testing.T) {
+	textReport := report.GetTextReportAsString(d(t, &diff.Config{}, 1, 3))
+	require.Contains(t, textReport, "MaxLength changed from 29 to 30")
+}

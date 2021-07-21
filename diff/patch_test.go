@@ -16,7 +16,7 @@ func TestPatch_MethodDescription(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.Patch(s1)
+	require.NoError(t, d1.Patch(s1))
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -32,7 +32,7 @@ func TestPatch_ParameterDescription(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.Patch(s1)
+	require.NoError(t, d1.Patch(s1))
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -49,7 +49,7 @@ func TestPatch_ParameterSchemaFormat(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.Patch(s1)
+	require.NoError(t, d1.Patch(s1))
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -65,7 +65,7 @@ func TestPatch_ParameterSchemaEnum(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.Patch(s1)
+	require.NoError(t, d1.Patch(s1))
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -83,7 +83,7 @@ func TestPatch_ParameterSchemaMaxLengthNil(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.Patch(s1)
+	require.NoError(t, d1.Patch(s1))
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -100,44 +100,9 @@ func TestPatch_ParameterSchemaMaxLength(t *testing.T) {
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	d1.Patch(s1)
+	require.NoError(t, d1.Patch(s1))
 
 	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.False(t, d2.GetSummary().Diff)
-}
-
-func TestPatch_ValueDiffNil(t *testing.T) {
-	valueDiff := &diff.ValueDiff{}
-	value := "reuven"
-	require.EqualError(t, valueDiff.PatchString(&value), "diff value is nil instead of string")
-}
-
-func TestPatch_ValueDiffMismatch(t *testing.T) {
-	valueDiff := &diff.ValueDiff{
-		To: 4,
-	}
-	value := "reuven"
-	require.EqualError(t, valueDiff.PatchString(&value), "diff value type mismatch: string vs. \"int\"")
-}
-
-func TestPatch_ValueDiffInt(t *testing.T) {
-	valueDiff := &diff.ValueDiff{
-		To: 4,
-	}
-	value := uint64(3)
-	pValue := &value
-	require.EqualError(t, valueDiff.PatchUInt64Ref(&pValue), "diff value type mismatch: *uint64 vs. \"int\"")
-}
-
-func TestPatch_ValueDiff(t *testing.T) {
-	v1 := uint64(3)
-
-	valueDiff := &diff.ValueDiff{
-		To: &v1,
-	}
-
-	v2 := uint64(3)
-	pV2 := &v2
-	require.NoError(t, valueDiff.PatchUInt64Ref(&pV2))
 }

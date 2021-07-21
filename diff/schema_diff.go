@@ -123,11 +123,11 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	result.MaxDiff = getFloat64RefDiff(value1.Max, value2.Max)
 	result.MultipleOfDiff = getFloat64RefDiff(value1.MultipleOf, value2.MultipleOf)
 	result.MinLengthDiff = getValueDiff(value1.MinLength, value2.MinLength)
-	result.MaxLengthDiff = getValueDiff(value1.MaxLength, value2.MaxLength)
+	result.MaxLengthDiff = getUInt64RefDiff(value1.MaxLength, value2.MaxLength)
 	result.PatternDiff = getValueDiff(value1.Pattern, value2.Pattern)
 	// compiledPattern is derived from pattern -> no need to diff
 	result.MinItemsDiff = getValueDiff(value1.MinItems, value2.MinItems)
-	result.MaxItemsDiff = getValueDiff(value1.MaxItems, value2.MaxItems)
+	result.MaxItemsDiff = getUInt64RefDiff(value1.MaxItems, value2.MaxItems)
 	result.ItemsDiff, err = getSchemaDiff(config, value1.Items, value2.Items)
 	if err != nil {
 		return nil, err
@@ -140,7 +140,7 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	}
 
 	result.MinPropsDiff = getValueDiff(value1.MinProps, value2.MinProps)
-	result.MaxPropsDiff = getValueDiff(value1.MaxProps, value2.MaxProps)
+	result.MaxPropsDiff = getUInt64RefDiff(value1.MaxProps, value2.MaxProps)
 	result.AdditionalPropertiesDiff, err = getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties)
 	if err != nil {
 		return nil, err
@@ -205,25 +205,25 @@ func (diff *SchemaDiff) Patch(schema *openapi3.Schema) error {
 		return nil
 	}
 
-	if err := diff.TypeDiff.PatchString(&schema.Type); err != nil {
+	if err := diff.TypeDiff.patchString(&schema.Type); err != nil {
 		return err
 	}
 
-	if err := diff.TitleDiff.PatchString(&schema.Title); err != nil {
+	if err := diff.TitleDiff.patchString(&schema.Title); err != nil {
 		return err
 	}
 
-	if err := diff.FormatDiff.PatchString(&schema.Format); err != nil {
+	if err := diff.FormatDiff.patchString(&schema.Format); err != nil {
 		return err
 	}
 
-	if err := diff.DescriptionDiff.PatchString(&schema.Description); err != nil {
+	if err := diff.DescriptionDiff.patchString(&schema.Description); err != nil {
 		return err
 	}
 
 	diff.EnumDiff.Patch(&schema.Enum)
 
-	if err := diff.MaxLengthDiff.PatchUInt64Ref(&schema.MaxLength); err != nil {
+	if err := diff.MaxLengthDiff.patchUInt64Ref(&schema.MaxLength); err != nil {
 		return err
 	}
 
