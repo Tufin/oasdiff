@@ -205,25 +205,25 @@ func (diff *SchemaDiff) Patch(schema *openapi3.Schema) error {
 		return nil
 	}
 
-	if err := diff.TypeDiff.PatchString(&schema.Type); err != nil {
+	if err := diff.TypeDiff.patchString(&schema.Type); err != nil {
 		return err
 	}
 
-	if err := diff.TitleDiff.PatchString(&schema.Title); err != nil {
+	if err := diff.TitleDiff.patchString(&schema.Title); err != nil {
 		return err
 	}
 
-	if err := diff.FormatDiff.PatchString(&schema.Format); err != nil {
+	if err := diff.FormatDiff.patchString(&schema.Format); err != nil {
 		return err
 	}
 
-	if err := diff.DescriptionDiff.PatchString(&schema.Description); err != nil {
+	if err := diff.DescriptionDiff.patchString(&schema.Description); err != nil {
 		return err
 	}
 
 	diff.EnumDiff.Patch(&schema.Enum)
 
-	if err := diff.MaxLengthDiff.PatchUInt64Ref(&schema.MaxLength); err != nil {
+	if err := diff.MaxLengthDiff.patchUInt64Ref(&schema.MaxLength); err != nil {
 		return err
 	}
 

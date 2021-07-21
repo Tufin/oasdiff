@@ -102,13 +102,13 @@ func (diff *ValueDiff) patchStringCB(cb func(string)) error {
 	return nil
 }
 
-// PatchString applies the patch to a string value
-func (diff *ValueDiff) PatchString(value *string) error {
+// patchString applies the patch to a string value
+func (diff *ValueDiff) patchString(value *string) error {
 	return diff.patchStringCB(func(s string) { *value = s })
 }
 
-// PatchUInt64Ref applies the patch to a *unit64 value
-func (diff *ValueDiff) PatchUInt64Ref(value **uint64) error {
+// patchUInt64Ref applies the patch to a *unit64 value
+func (diff *ValueDiff) patchUInt64Ref(value **uint64) error {
 	if diff.Empty() {
 		return nil
 	}
