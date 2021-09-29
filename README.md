@@ -24,7 +24,7 @@ go build
 ```
 
 ## Running from the command-line
-```
+```bash
 ./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 
@@ -32,25 +32,25 @@ go build
 
 ### Comparing public files (Text/Markdown output):
 
-```
+```bash
 docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Comparing public files (HTML output):
 
-```
+```bash
 docker run --rm -t tufin/oasdiff -format html -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Comparing public files (yaml output):
 
-```
+```bash
 docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Comparing local files (yaml output):
 
-```
+```bash
 docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
 ```
 
@@ -302,7 +302,7 @@ components:
 ```
 
 ## Embedding into your Go program
-```
+```go
 diff.Get(&diff.Config{}, spec1, spec2)
 ```
 See full example: [main.go](main.go)
