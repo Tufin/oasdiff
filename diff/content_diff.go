@@ -4,7 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ContentDiff describes the changes between content objects each containing media type objects: https://swagger.io/specification/#media-type-object
+// ContentDiff describes the changes between content properties each containing media type objects: https://swagger.io/specification/#media-type-object
 type ContentDiff struct {
 	MediaTypeAdded    StringList         `json:"mediaTypeAdded,omitempty" yaml:"mediaTypeAdded,omitempty"`
 	MediaTypeDeleted  StringList         `json:"mediaTypeDeleted,omitempty" yaml:"mediaTypeDeleted,omitempty"`

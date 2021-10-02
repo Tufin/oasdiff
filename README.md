@@ -63,39 +63,40 @@ Add the `-format` flag to generate other formats (text or html).
 docker run --rm -t tufin/oasdiff -help
 ```
 
-## Output example - Text
+## Output example - Text/Markdown
+```./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml -format text```
 
-### New Endpoints
------------------
+### New Endpoints: None
+-----------------------
 
-### Deleted Endpoints
----------------------
-POST /subscribe  
-POST /register  
+### Deleted Endpoints: 2
+------------------------
+POST /register
+POST /subscribe
 
-### Modified Endpoints
-----------------------
+### Modified Endpoints: 2
+-------------------------
 GET /api/{domain}/{project}/badges/security-score
-* Modified query param: filter
+- Modified query param: filter
   - Content changed
     - Modified media type: application/json
       - Schema changed
         - Required changed
-* Modified query param: image
-* Modified query param: token
+- Modified query param: image
+- Modified query param: token
   - Schema changed
-    - MaxLength changed from 29 to 30
-* Modified header param: user
+    - MaxLength changed from 29 to <nil>
+- Modified header param: user
   - Schema changed
     - Schema added
   - Content changed
     - Deleted media type: application/json
-* Modified cookie param: test
+- Modified cookie param: test
   - Content changed
     - Modified media type: application/json
       - Schema changed
         - Type changed from 'object' to 'string'
-* Responses changed
+- Responses changed
   - New response: default
   - Deleted response: 200
   - Modified response: 201
@@ -105,14 +106,15 @@ GET /api/{domain}/{project}/badges/security-score
           - Type changed from 'string' to 'object'
 
 GET /api/{domain}/{project}/install-command
-* Deleted header param: network-policies
-* Responses changed
+- Deleted header param: network-policies
+- Responses changed
   - Modified response: default
     - Description changed from 'Tufin1' to 'Tufin'
     - Headers changed
       - Deleted header: X-RateLimit-Limit
 
 ## Output example - YAML
+```./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml -format yaml```
 
 ```yaml
 info:
@@ -215,9 +217,9 @@ paths:
 endpoints:
   deleted:
     - method: POST
-      path: /subscribe
-    - method: POST
       path: /register
+    - method: POST
+      path: /subscribe
   modified:
     ? method: GET
       path: /api/{domain}/{project}/badges/security-score
@@ -251,15 +253,15 @@ endpoints:
                       required:
                         added:
                           - type
-          image:
-            examples:
-              deleted:
-                - "0"
-          token:
-            schema:
-              maxLength:
-                from: 29
-                to: null
+            image:
+              examples:
+                deleted:
+                  - "0"
+            token:
+              schema:
+                maxLength:
+                  from: 29
+                  to: null
       responses:
         added:
           - default
