@@ -75,33 +75,43 @@ POST /register
 
 ### Modified Endpoints
 ----------------------
-GET /api/{domain}/{project}/badges/security-score  
+GET /api/{domain}/{project}/badges/security-score
 * Modified query param: filter
   - Content changed
-    - Schema changed
+    - Modified media type: application/json
+      - Schema changed
+        - Required changed
 * Modified query param: image
+* Modified query param: token
+  - Schema changed
+    - MaxLength changed from 29 to 30
 * Modified header param: user
   - Schema changed
     - Schema added
   - Content changed
+    - Deleted media type: application/json
 * Modified cookie param: test
   - Content changed
-* Response changed
+    - Modified media type: application/json
+      - Schema changed
+        - Type changed from 'object' to 'string'
+* Responses changed
   - New response: default
   - Deleted response: 200
   - Modified response: 201
     - Content changed
-      - Schema changed
-        - Type changed from 'string' to 'object'
+      - Modified media type: application/xml
+        - Schema changed
+          - Type changed from 'string' to 'object'
 
 GET /api/{domain}/{project}/install-command
 * Deleted header param: network-policies
-* Response changed
+* Responses changed
   - Modified response: default
     - Description changed from 'Tufin1' to 'Tufin'
     - Headers changed
       - Deleted header: X-RateLimit-Limit
-        
+
 ## Output example - YAML
 
 ```yaml
@@ -133,20 +143,37 @@ paths:
                 cookie:
                   test:
                     content:
-                      mediaType: true
+                      mediaTypeModified:
+                        application/json:
+                          schema:
+                            type:
+                              from: object
+                              to: string
                 header:
                   user:
                     schema:
                       schemaAdded: true
                     content:
-                      mediaTypeDeleted: true
+                      mediaTypeDeleted:
+                        - application/json
                 query:
                   filter:
                     content:
-                      schema:
-                        required:
-                          added:
-                            - type
+                      mediaTypeModified:
+                        application/json:
+                          schema:
+                            required:
+                              added:
+                                - type
+                  image:
+                    examples:
+                      deleted:
+                        - "0"
+                  token:
+                    schema:
+                      maxLength:
+                        from: 29
+                        to: null
             responses:
               added:
                 - default
@@ -155,10 +182,12 @@ paths:
               modified:
                 "201":
                   content:
-                    schema:
-                      type:
-                        from: string
-                        to: object
+                    mediaTypeModified:
+                      application/xml:
+                        schema:
+                          type:
+                            from: string
+                            to: object
       parameters:
         deleted:
           path:
@@ -200,20 +229,37 @@ endpoints:
           cookie:
             test:
               content:
-                mediaType: true
+                mediaTypeModified:
+                  application/json:
+                    schema:
+                      type:
+                        from: object
+                        to: string
           header:
             user:
               schema:
                 schemaAdded: true
               content:
-                mediaTypeDeleted: true
+                mediaTypeDeleted:
+                  - application/json
           query:
             filter:
               content:
-                schema:
-                  required:
-                    added:
-                      - type
+                mediaTypeModified:
+                  application/json:
+                    schema:
+                      required:
+                        added:
+                          - type
+          image:
+            examples:
+              deleted:
+                - "0"
+          token:
+            schema:
+              maxLength:
+                from: 29
+                to: null
       responses:
         added:
           - default
@@ -222,10 +268,12 @@ endpoints:
         modified:
           "201":
             content:
-              schema:
-                type:
-                  from: string
-                  to: object
+              mediaTypeModified:
+                application/xml:
+                  schema:
+                    type:
+                      from: string
+                      to: object
     ? method: GET
       path: /api/{domain}/{project}/install-command
     : parameters:
@@ -284,10 +332,12 @@ components:
             to: false
       testc:
         content:
-          schema:
-            type:
-              from: object
-              to: string
+          mediaTypeModified:
+            application/json:
+              schema:
+                type:
+                  from: object
+                  to: string
   requestBodies:
     deleted:
       - reuven

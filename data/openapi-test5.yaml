@@ -31,9 +31,9 @@ paths:
       - in: cookie
         name: test
         content:
-          application/xml:
+          application/json:
             schema:
-              type: object
+              type: string
       - in: query
         name: image
         schema:

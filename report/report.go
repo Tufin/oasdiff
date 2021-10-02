@@ -290,6 +290,25 @@ func (r *report) printContent(d *diff.ContentDiff) {
 		return
 	}
 
+	for _, name := range d.MediaTypeAdded {
+		r.print("New media type:", name)
+	}
+
+	for _, name := range d.MediaTypeDeleted {
+		r.print("Deleted media type:", name)
+	}
+
+	for name, d := range d.MediaTypeModified {
+		r.print("Modified media type:", name)
+		r.indent().printMediaType(d)
+	}
+}
+
+func (r *report) printMediaType(d *diff.MediaTypeDiff) {
+	if d.Empty() {
+		return
+	}
+
 	if !d.SchemaDiff.Empty() {
 		r.print("Schema changed")
 		r.indent().printSchema(d.SchemaDiff)

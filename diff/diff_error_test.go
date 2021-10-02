@@ -266,17 +266,6 @@ func TestDiff_ComponentCallbacksNil(t *testing.T) {
 	require.EqualError(t, err, "callback reference is nil")
 }
 
-func TestSchemaDiff_MediaInvalidMultiEntries(t *testing.T) {
-
-	s5 := l(t, 5)
-	s5.Paths[securityScorePath].Get.Parameters.GetByInAndName(openapi3.ParameterInCookie, "test").Content["second/invalid"] = openapi3.NewMediaType()
-
-	s1 := l(t, 1)
-
-	_, err := diff.Get(diff.NewConfig(), s5, s1)
-	require.EqualError(t, err, "content map has more than one value")
-}
-
 func TestFilterByRegex_Invalid(t *testing.T) {
 	_, err := diff.Get(&diff.Config{PathFilter: "["}, l(t, 1), l(t, 2))
 	require.EqualError(t, err, "failed to compile filter regex \"[\" with error parsing regexp: missing closing ]: `[`")
