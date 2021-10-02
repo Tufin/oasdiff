@@ -63,46 +63,58 @@ Add the `-format` flag to generate other formats (text or html).
 docker run --rm -t tufin/oasdiff -help
 ```
 
-## Output example - Text
+## Output example - Text/Markdown
+```./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml -format text```
 
-### New Endpoints
------------------
+### New Endpoints: None
+-----------------------
 
-### Deleted Endpoints
----------------------
-POST /subscribe  
-POST /register  
+### Deleted Endpoints: 2
+------------------------
+POST /register
+POST /subscribe
 
-### Modified Endpoints
-----------------------
-GET /api/{domain}/{project}/badges/security-score  
-* Modified query param: filter
+### Modified Endpoints: 2
+-------------------------
+GET /api/{domain}/{project}/badges/security-score
+- Modified query param: filter
   - Content changed
-    - Schema changed
-* Modified query param: image
-* Modified header param: user
+    - Modified media type: application/json
+      - Schema changed
+        - Required changed
+- Modified query param: image
+- Modified query param: token
+  - Schema changed
+    - MaxLength changed from 29 to <nil>
+- Modified header param: user
   - Schema changed
     - Schema added
   - Content changed
-* Modified cookie param: test
+    - Deleted media type: application/json
+- Modified cookie param: test
   - Content changed
-* Response changed
+    - Modified media type: application/json
+      - Schema changed
+        - Type changed from 'object' to 'string'
+- Responses changed
   - New response: default
   - Deleted response: 200
   - Modified response: 201
     - Content changed
-      - Schema changed
-        - Type changed from 'string' to 'object'
+      - Modified media type: application/xml
+        - Schema changed
+          - Type changed from 'string' to 'object'
 
 GET /api/{domain}/{project}/install-command
-* Deleted header param: network-policies
-* Response changed
+- Deleted header param: network-policies
+- Responses changed
   - Modified response: default
     - Description changed from 'Tufin1' to 'Tufin'
     - Headers changed
       - Deleted header: X-RateLimit-Limit
-        
+
 ## Output example - YAML
+```./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml -format yaml```
 
 ```yaml
 info:
@@ -133,20 +145,37 @@ paths:
                 cookie:
                   test:
                     content:
-                      mediaType: true
+                      mediaTypeModified:
+                        application/json:
+                          schema:
+                            type:
+                              from: object
+                              to: string
                 header:
                   user:
                     schema:
                       schemaAdded: true
                     content:
-                      mediaTypeDeleted: true
+                      mediaTypeDeleted:
+                        - application/json
                 query:
                   filter:
                     content:
-                      schema:
-                        required:
-                          added:
-                            - type
+                      mediaTypeModified:
+                        application/json:
+                          schema:
+                            required:
+                              added:
+                                - type
+                  image:
+                    examples:
+                      deleted:
+                        - "0"
+                  token:
+                    schema:
+                      maxLength:
+                        from: 29
+                        to: null
             responses:
               added:
                 - default
@@ -155,10 +184,12 @@ paths:
               modified:
                 "201":
                   content:
-                    schema:
-                      type:
-                        from: string
-                        to: object
+                    mediaTypeModified:
+                      application/xml:
+                        schema:
+                          type:
+                            from: string
+                            to: object
       parameters:
         deleted:
           path:
@@ -186,9 +217,9 @@ paths:
 endpoints:
   deleted:
     - method: POST
-      path: /subscribe
-    - method: POST
       path: /register
+    - method: POST
+      path: /subscribe
   modified:
     ? method: GET
       path: /api/{domain}/{project}/badges/security-score
@@ -200,20 +231,37 @@ endpoints:
           cookie:
             test:
               content:
-                mediaType: true
+                mediaTypeModified:
+                  application/json:
+                    schema:
+                      type:
+                        from: object
+                        to: string
           header:
             user:
               schema:
                 schemaAdded: true
               content:
-                mediaTypeDeleted: true
+                mediaTypeDeleted:
+                  - application/json
           query:
             filter:
               content:
-                schema:
-                  required:
-                    added:
-                      - type
+                mediaTypeModified:
+                  application/json:
+                    schema:
+                      required:
+                        added:
+                          - type
+            image:
+              examples:
+                deleted:
+                  - "0"
+            token:
+              schema:
+                maxLength:
+                  from: 29
+                  to: null
       responses:
         added:
           - default
@@ -222,10 +270,12 @@ endpoints:
         modified:
           "201":
             content:
-              schema:
-                type:
-                  from: string
-                  to: object
+              mediaTypeModified:
+                application/xml:
+                  schema:
+                    type:
+                      from: string
+                      to: object
     ? method: GET
       path: /api/{domain}/{project}/install-command
     : parameters:
@@ -284,10 +334,12 @@ components:
             to: false
       testc:
         content:
-          schema:
-            type:
-              from: object
-              to: string
+          mediaTypeModified:
+            application/json:
+              schema:
+                type:
+                  from: object
+                  to: string
   requestBodies:
     deleted:
       - reuven
