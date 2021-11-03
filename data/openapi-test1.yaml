@@ -283,6 +283,9 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT 
+    AccessToken:
+      type: http
+      scheme: bearer
     OAuth:
       x-extension-test: 
       type: oauth2

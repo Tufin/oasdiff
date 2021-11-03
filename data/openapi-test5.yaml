@@ -170,4 +170,12 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT 
+    AccessToken:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://example.com/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets": read your pets
 
