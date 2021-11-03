@@ -536,3 +536,21 @@ func TestModifiedSecurityRequirement(t *testing.T) {
 		securityScopesDiff["OAuth"].Deleted,
 		"write:pets")
 }
+
+func TestOAS31(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/openapi31-test1.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/openapi31-test2.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	// while specific 3.1 features, such as webhooks, are not yet supported by kin-openapi, the diff still works
+	require.Contains(t,
+		d.ComponentsDiff.SchemasDiff.Modified["Pet"].RequiredDiff.Added,
+		"nickname")
+}
