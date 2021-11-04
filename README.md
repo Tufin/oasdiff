@@ -14,7 +14,6 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 - Compare [local files](#comparing-local-files-yaml-output) or [public files](#comparing-public-files-yaml-output) over http
 - Compare specs in YAML or JSON format
 - Comprehensive diff including **all** aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Patch support is currently being added - see [work in progress](#work-in-progress)
 
 ## Build
 ```
@@ -400,8 +399,10 @@ oasdiff also outputs an altrnate simplified diff per "endpoint" which is a combi
                         - security
 ```
 
-## Work in progress
-1. Patch support: currently supports Descriptions and a few fields in Schema 
+## Work in progress and requests for enhancements
+1. OpenAPI 3.1 support: see https://github.com/Tufin/oasdiff/issues/52
+2. Patch support: currently supports Descriptions and a few fields in Schema 
+3. Breaking changes highlighting: see https://github.com/Tufin/oasdiff/discussions/45
 
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi) 
