@@ -34,6 +34,18 @@ func (methodDiff *MethodDiff) Empty() bool {
 	return *methodDiff == MethodDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (methodDiff *MethodDiff) Breaking() bool {
+	if methodDiff.Empty() {
+		return false
+	}
+
+	return methodDiff.ParametersDiff.Breaking()
+	// methodDiff.RequestBodyDiff.Breaking() ||
+	// methodDiff.ResponsesDiff.Breaking() ||
+	// methodDiff.CallbacksDiff.Breaking()
+}
+
 func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) (*MethodDiff, error) {
 	diff, err := getMethodDiffInternal(config, pathItem1, pathItem2)
 

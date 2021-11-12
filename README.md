@@ -399,10 +399,12 @@ oasdiff also outputs an altrnate simplified diff per "endpoint" which is a combi
                         - security
 ```
 
-## Work in progress and requests for enhancements
-1. OpenAPI 3.1 support: see https://github.com/Tufin/oasdiff/issues/52
+## Work in progress
+1. Breaking changes highlighting: in progress
 2. Patch support: currently supports Descriptions and a few fields in Schema 
-3. Breaking changes highlighting: see https://github.com/Tufin/oasdiff/discussions/45
+
+## Requests for enhancements
+1. OpenAPI 3.1 support: see https://github.com/Tufin/oasdiff/issues/52
 
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi) 

@@ -25,6 +25,21 @@ func (diff *ParameterDiff) Empty() bool {
 	return diff == nil || *diff == ParameterDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *ParameterDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	if diff.RequiredDiff != nil {
+		if diff.RequiredDiff.From == false && diff.RequiredDiff.To == true {
+			return true
+		}
+	}
+
+	return false
+}
+
 func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
 	diff, err := getParameterDiffInternal(config, param1, param2)
 	if err != nil {

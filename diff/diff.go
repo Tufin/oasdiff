@@ -30,6 +30,15 @@ func (diff *Diff) Empty() bool {
 	return diff == nil || *diff == Diff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *Diff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	return diff.PathsDiff.Breaking()
+}
+
 /*
 Get calculates the diff between a pair of OpenAPI specifications.
 

@@ -25,6 +25,17 @@ func (pathsDiff *PathsDiff) Empty() bool {
 		len(pathsDiff.Modified) == 0
 }
 
+// Breaking indicates whether a change was found in this element
+func (pathsDiff *PathsDiff) Breaking() bool {
+
+	if pathsDiff.Empty() {
+		return false
+	}
+
+	return len(pathsDiff.Deleted) > 0 ||
+		pathsDiff.Modified.Breaking()
+}
+
 func newPathsDiff() *PathsDiff {
 	return &PathsDiff{
 		Added:    []string{},

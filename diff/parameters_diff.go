@@ -24,11 +24,30 @@ func (parametersDiff *ParametersDiff) Empty() bool {
 		len(parametersDiff.Modified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (parametersDiff *ParametersDiff) Breaking() bool {
+	if parametersDiff.Empty() {
+		return false
+	}
+
+	return len(parametersDiff.Deleted) > 0 ||
+		parametersDiff.Modified.Breaking()
+}
+
 // ParamNamesByLocation maps param location (path, query, header or cookie) to the params in this location
 type ParamNamesByLocation map[string]StringList
 
 // ParamDiffByLocation maps param location (path, query, header or cookie) to param diffs in this location
 type ParamDiffByLocation map[string]ParamDiffs
+
+func (paramDiffByLocation ParamDiffByLocation) Breaking() bool {
+	for _, paramDiffs := range paramDiffByLocation {
+		if paramDiffs.Breaking() {
+			return true
+		}
+	}
+	return false
+}
 
 func newParametersDiff() *ParametersDiff {
 	return &ParametersDiff{
@@ -40,6 +59,15 @@ func newParametersDiff() *ParametersDiff {
 
 // ParamDiffs is map of parameter names to their respective diffs
 type ParamDiffs map[string]*ParameterDiff
+
+func (paramDiffs ParamDiffs) Breaking() bool {
+	for _, parameterDiff := range paramDiffs {
+		if parameterDiff.Breaking() {
+			return true
+		}
+	}
+	return false
+}
 
 func (parametersDiff *ParametersDiff) addAddedParam(param *openapi3.Parameter) {
 

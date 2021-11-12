@@ -23,11 +23,16 @@ func newPathDiff() *PathDiff {
 
 // Empty indicates whether a change was found in this element
 func (pathDiff *PathDiff) Empty() bool {
-	if pathDiff == nil {
-		return true
+	return pathDiff == nil || *pathDiff == *newPathDiff()
+}
+
+// Breaking indicates whether this element includes a breaking change
+func (pathDiff *PathDiff) Breaking() bool {
+	if pathDiff.Empty() {
+		return false
 	}
 
-	return pathDiff == nil || *pathDiff == *newPathDiff()
+	return pathDiff.OperationsDiff.Breaking()
 }
 
 func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
