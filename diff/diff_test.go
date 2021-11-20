@@ -329,12 +329,16 @@ func TestServerVariableAdded(t *testing.T) {
 }
 
 func TestServerVariableModified(t *testing.T) {
+
+	dd := d(t, diff.NewConfig(), 3, 5)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "CEO",
-			To:   "developer",
-		},
-		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff)
+		"CEO",
+		dd.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff.From)
+
+	require.Equal(t,
+		"developer",
+		dd.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff.To)
 }
 
 func TestServerAddedToPathItem(t *testing.T) {
