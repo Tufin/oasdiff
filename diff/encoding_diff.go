@@ -27,7 +27,11 @@ func (diff EncodingDiff) Breaking() bool {
 		return false
 	}
 
-	return diff.HeadersDiff.Breaking()
+	return diff.ContentTypeDiff.Breaking() ||
+		diff.HeadersDiff.Breaking() ||
+		diff.StyleDiff.Breaking() || // TODO: check only if request body media type is application/x-www-form-urlencoded
+		diff.ExplodeDiff.Breaking() || // TODO: be more specific
+		diff.AllowReservedDiff.Breaking() // TODO: be more specific
 }
 
 func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
