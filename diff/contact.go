@@ -17,12 +17,22 @@ func (diff *ContactDiff) Empty() bool {
 	return diff == nil || *diff == ContactDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *ContactDiff) Breaking() bool {
+	return false
+}
+
 func getContactDiff(config *Config, contact1, contact2 *openapi3.Contact) *ContactDiff {
 	diff := getContactDiffInternal(config, contact1, contact2)
 
 	if diff.Empty() {
 		return nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil
+	}
+
 	return diff
 }
 
@@ -45,9 +55,9 @@ func getContactDiffInternal(config *Config, contact1, contact2 *openapi3.Contact
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, contact1.ExtensionProps, contact2.ExtensionProps)
-	result.NameDiff = getValueDiff(contact1.Name, contact2.Name)
-	result.URLDiff = getValueDiff(contact1.URL, contact2.URL)
-	result.EmailDiff = getValueDiff(contact1.Email, contact2.Email)
+	result.NameDiff = getValueDiff(config, false, contact1.Name, contact2.Name)
+	result.URLDiff = getValueDiff(config, false, contact1.URL, contact2.URL)
+	result.EmailDiff = getValueDiff(config, false, contact1.Email, contact2.Email)
 
 	return &result
 }

@@ -25,8 +25,29 @@ func (callbacksDiff *CallbacksDiff) Empty() bool {
 		len(callbacksDiff.Modified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *CallbacksDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	return len(diff.Deleted) > 0 ||
+		diff.Modified.Breaking()
+}
+
 // ModifiedCallbacks is map of callback names to their respective diffs
 type ModifiedCallbacks map[string]*PathsDiff
+
+// Breaking indicates whether this element includes a breaking change
+func (diff ModifiedCallbacks) Breaking() bool {
+	for _, pathsDiff := range diff {
+		if pathsDiff.Breaking() {
+			return true
+		}
+	}
+
+	return false
+}
 
 func newCallbacksDiff() *CallbacksDiff {
 	return &CallbacksDiff{
@@ -44,6 +65,10 @@ func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks)
 	}
 
 	if diff.Empty() {
+		return nil, nil
+	}
+
+	if config.BreakingOnly && !diff.Breaking() {
 		return nil, nil
 	}
 

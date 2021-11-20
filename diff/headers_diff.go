@@ -24,8 +24,28 @@ func (headersDiff *HeadersDiff) Empty() bool {
 		len(headersDiff.Modified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (headersDiff *HeadersDiff) Breaking() bool {
+	if headersDiff.Empty() {
+		return false
+	}
+
+	return len(headersDiff.Deleted) > 0 ||
+		headersDiff.Modified.Breaking()
+}
+
 // ModifiedHeaders is map of header names to their respective diffs
 type ModifiedHeaders map[string]*HeaderDiff
+
+// Breaking indicates whether this element includes a breaking change
+func (diff ModifiedHeaders) Breaking() bool {
+	for _, headerDiff := range diff {
+		if headerDiff.Breaking() {
+			return true
+		}
+	}
+	return false
+}
 
 func newHeadersDiff() *HeadersDiff {
 	return &HeadersDiff{
@@ -40,9 +60,15 @@ func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) (*Heade
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 

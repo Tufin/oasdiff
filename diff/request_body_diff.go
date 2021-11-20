@@ -24,6 +24,17 @@ func (requestBodyDiff *RequestBodyDiff) Empty() bool {
 	return *requestBodyDiff == RequestBodyDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *RequestBodyDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	return diff.Deleted ||
+		diff.RequiredDiff.Breaking() ||
+		diff.ContentDiff.Breaking()
+}
+
 func newRequestBodyDiff() *RequestBodyDiff {
 	return &RequestBodyDiff{}
 }
@@ -37,6 +48,11 @@ func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openap
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 
@@ -68,8 +84,8 @@ func getRequestBodyDiffInternal(config *Config, requestBodyRef1, requestBodyRef2
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, requestBody1.ExtensionProps, requestBody2.ExtensionProps)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, requestBody1.Description, requestBody2.Description)
-	result.RequiredDiff = getValueDiff(requestBody1.Required, requestBody2.Required)
+	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, requestBody1.Description, requestBody2.Description)
+	result.RequiredDiff = getValueDiff(config, false, requestBody1.Required, requestBody2.Required)
 	result.ContentDiff, err = getContentDiff(config, requestBody1.Content, requestBody2.Content)
 	if err != nil {
 		return nil, err

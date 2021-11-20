@@ -59,9 +59,15 @@ func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) 
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 

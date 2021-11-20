@@ -9,7 +9,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const securityScorePath = "/api/{domain}/{project}/badges/security-score"
+const (
+	securityScorePath      = "/api/{domain}/{project}/badges/security-score"
+	securityScorePathSlash = securityScorePath + "/"
+	installCommandPath     = "/api/{domain}/{project}/install-command"
+)
 
 func l(t *testing.T, v int) *openapi3.T {
 	loader := openapi3.NewLoader()
@@ -49,7 +53,7 @@ func TestDiff_Empty(t *testing.T) {
 
 func TestDiff_DeletedPaths(t *testing.T) {
 	require.ElementsMatch(t,
-		[]string{"/api/{domain}/{project}/install-command", "/register", "/subscribe"},
+		[]string{installCommandPath, "/register", "/subscribe"},
 		d(t, diff.NewConfig(), 1, 2).PathsDiff.Deleted)
 }
 
@@ -61,7 +65,7 @@ func TestDiff_AddedOperation(t *testing.T) {
 
 func TestDiff_DeletedOperation(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Deleted,
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Deleted,
 		"POST")
 }
 
@@ -134,7 +138,7 @@ func TestDiff_ModifiedEncodingHeaders(t *testing.T) {
 
 func TestDiff_AddedParam(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
 		"X-Auth-Name")
 }
 
@@ -150,7 +154,7 @@ func TestDiff_ModifiedParam(t *testing.T) {
 			From: true,
 			To:   (interface{})(nil),
 		},
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].ExplodeDiff)
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].ExplodeDiff)
 }
 
 func TestSchemaDiff_TypeDiff(t *testing.T) {
@@ -168,7 +172,7 @@ func TestSchemaDiff_EnumDiff(t *testing.T) {
 			Added:   diff.EnumValues{"test1"},
 			Deleted: diff.EnumValues{},
 		},
-		d(t, diff.NewConfig(), 1, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["project"].SchemaDiff.EnumDiff)
+		d(t, diff.NewConfig(), 1, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["project"].SchemaDiff.EnumDiff)
 }
 
 func TestSchemaDiff_RequiredAdded(t *testing.T) {
@@ -195,7 +199,7 @@ func TestSchemaDiff_ContentDiff(t *testing.T) {
 			From: "number",
 			To:   "string",
 		},
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff)
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff)
 }
 
 func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
@@ -284,7 +288,7 @@ func TestResponseDescriptionModified(t *testing.T) {
 			From: "Tufin",
 			To:   "Tufin1",
 		},
-		d(t, &config, 3, 1).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
+		d(t, &config, 3, 1).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestResponseHeadersModified(t *testing.T) {
@@ -293,18 +297,18 @@ func TestResponseHeadersModified(t *testing.T) {
 			From: "Request limit per min.",
 			To:   "Request limit per hour.",
 		},
-		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].DescriptionDiff)
+		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].DescriptionDiff)
 }
 
 func TestServerAdded(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Added,
+		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Added,
 		"https://tufin.io/securecloud")
 }
 
 func TestServerDeleted(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Deleted,
+		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Deleted,
 		"https://tufin.io/securecloud")
 }
 
@@ -314,13 +318,13 @@ func TestServerModified(t *testing.T) {
 	}
 
 	require.Contains(t,
-		d(t, &config, 5, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Modified,
+		d(t, &config, 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified,
 		"https://www.tufin.io/securecloud")
 }
 
 func TestServerVariableAdded(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Added,
+		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Added,
 		"name")
 }
 
@@ -330,18 +334,18 @@ func TestServerVariableModified(t *testing.T) {
 			From: "CEO",
 			To:   "developer",
 		},
-		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff)
+		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff)
 }
 
 func TestServerAddedToPathItem(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].ServersDiff.Added,
+		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].ServersDiff.Added,
 		"https://tufin.io/securecloud")
 }
 
 func TestParamAddedToPathItem(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].ParametersDiff.Added[openapi3.ParameterInHeader],
+		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].ParametersDiff.Added[openapi3.ParameterInHeader],
 		"name")
 }
 
@@ -402,7 +406,7 @@ func TestResponseContentModified(t *testing.T) {
 
 func TestResponseDespcriptionNil(t *testing.T) {
 	s3 := l(t, 3)
-	s3.Paths["/api/{domain}/{project}/install-command"].Get.Responses["default"].Value.Description = nil
+	s3.Paths[installCommandPath].Get.Responses["default"].Value.Description = nil
 
 	d, err := diff.Get(diff.NewConfig(), s3, l(t, 1))
 	require.NoError(t, err)
@@ -412,7 +416,7 @@ func TestResponseDespcriptionNil(t *testing.T) {
 			From: interface{}(nil),
 			To:   "Tufin1",
 		},
-		d.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
+		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestSchemaDiff_DeletedCallback(t *testing.T) {

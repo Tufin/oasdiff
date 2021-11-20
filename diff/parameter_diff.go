@@ -31,13 +31,21 @@ func (diff *ParameterDiff) Breaking() bool {
 		return false
 	}
 
-	if diff.RequiredDiff != nil {
-		if diff.RequiredDiff.From == false && diff.RequiredDiff.To == true {
+	if !diff.AllowEmptyValueDiff.Empty() {
+		if diff.AllowEmptyValueDiff.To == true {
+			// TODO: return true only if this is a query param
 			return true
 		}
 	}
 
-	return false
+	if !diff.RequiredDiff.Empty() {
+		if diff.RequiredDiff.To == true {
+			return true
+		}
+	}
+
+	return diff.SchemaDiff.Breaking() ||
+		diff.ContentDiff.Breaking()
 }
 
 func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
@@ -45,9 +53,15 @@ func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*Para
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 
@@ -57,19 +71,19 @@ func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, param1.ExtensionProps, param2.ExtensionProps)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, param1.Description, param2.Description)
-	result.StyleDiff = getValueDiff(param1.Style, param2.Style)
-	result.ExplodeDiff = getBoolRefDiff(param1.Explode, param2.Explode)
-	result.AllowEmptyValueDiff = getValueDiff(param1.AllowEmptyValue, param2.AllowEmptyValue)
-	result.AllowReservedDiff = getValueDiff(param1.AllowReserved, param2.AllowReserved)
-	result.DeprecatedDiff = getValueDiff(param1.Deprecated, param2.Deprecated)
-	result.RequiredDiff = getValueDiff(param1.Required, param2.Required)
+	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, param1.Description, param2.Description)
+	result.StyleDiff = getValueDiff(config, false, param1.Style, param2.Style)
+	result.ExplodeDiff = getBoolRefDiff(config, false, param1.Explode, param2.Explode)
+	result.AllowEmptyValueDiff = getValueDiff(config, false, param1.AllowEmptyValue, param2.AllowEmptyValue)
+	result.AllowReservedDiff = getValueDiff(config, false, param1.AllowReserved, param2.AllowReserved)
+	result.DeprecatedDiff = getValueDiff(config, false, param1.Deprecated, param2.Deprecated)
+	result.RequiredDiff = getValueDiff(config, false, param1.Required, param2.Required)
 	result.SchemaDiff, err = getSchemaDiff(config, param1.Schema, param2.Schema)
 	if err != nil {
 		return nil, err
 	}
 
-	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, param1.Example, param2.Example)
+	result.ExampleDiff = getValueDiffConditional(config, false, config.ExcludeExamples, param1.Example, param2.Example)
 
 	result.ExamplesDiff, err = getExamplesDiff(config, param1.Examples, param2.Examples)
 	if err != nil {

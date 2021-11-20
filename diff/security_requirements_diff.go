@@ -23,6 +23,11 @@ func (diff *SecurityRequirementsDiff) Empty() bool {
 		len(diff.Deleted) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *SecurityRequirementsDiff) Breaking() bool {
+	return false
+}
+
 // ModifiedSecurityRequirements is map of security requirements to their respective diffs
 type ModifiedSecurityRequirements map[string]SecurityScopesDiff
 
@@ -36,9 +41,15 @@ func newSecurityRequirementsDiff() *SecurityRequirementsDiff {
 
 func getSecurityRequirementsDiff(config *Config, securityRequirements1, securityRequirements2 *openapi3.SecurityRequirements) *SecurityRequirementsDiff {
 	diff := getSecurityRequirementsDiffInternal(config, securityRequirements1, securityRequirements2)
+
 	if diff.Empty() {
 		return nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil
+	}
+
 	return diff
 }
 
@@ -49,7 +60,7 @@ func getSecurityRequirementsDiffInternal(config *Config, securityRequirements1, 
 	if securityRequirements1 != nil {
 		for _, securityRequirement1 := range *securityRequirements1 {
 			if securityRequirement2 := findSecurityRequirement(securityRequirement1, securityRequirements2); securityRequirement2 != nil {
-				result.Modified[getSecurityRequirementID(securityRequirement1)] = getSecurityScopesDiff(securityRequirement1, securityRequirement2)
+				result.Modified[getSecurityRequirementID(securityRequirement1)] = getSecurityScopesDiff(config, securityRequirement1, securityRequirement2)
 			} else {
 				result.Deleted = append(result.Deleted, getSecurityRequirementID(securityRequirement1))
 			}

@@ -70,6 +70,10 @@ func getDiff(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 		return nil, nil
 	}
 
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 
@@ -79,7 +83,7 @@ func getDiffInternal(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps)
-	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
+	result.OpenAPIDiff = getValueDiff(config, false, s1.OpenAPI, s2.OpenAPI)
 
 	result.InfoDiff, err = getInfoDiff(config, s1.Info, s2.Info)
 	if err != nil {

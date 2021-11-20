@@ -22,6 +22,11 @@ func (schemasDiff *SchemasDiff) Empty() bool {
 		len(schemasDiff.Modified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *SchemasDiff) Breaking() bool {
+	return false
+}
+
 func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
 		Added:    StringList{},
@@ -42,9 +47,15 @@ func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) (*Schem
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 

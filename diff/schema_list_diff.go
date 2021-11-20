@@ -18,14 +18,25 @@ func (diff *SchemaListDiff) Empty() bool {
 	return diff == nil || *diff == SchemaListDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *SchemaListDiff) Breaking() bool {
+	return !diff.Empty()
+}
+
 func getSchemaListsDiff(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
 	diff, err := getSchemaListsDiffInternal(config, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 

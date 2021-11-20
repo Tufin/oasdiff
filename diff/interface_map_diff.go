@@ -8,6 +8,8 @@ type InterfaceMapDiff struct {
 	Added    StringList         `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedInterfaces `json:"modified,omitempty" yaml:"modified,omitempty"`
+
+	breaking bool // whether this diff is considered breaking within its specific context
 }
 
 // ModifiedInterfaces is map of interface names to their respective diffs
@@ -24,6 +26,11 @@ func (diff *InterfaceMapDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *InterfaceMapDiff) Breaking() bool {
+	return diff.breaking
+}
+
 func newInterfaceMapDiff() *InterfaceMapDiff {
 	return &InterfaceMapDiff{
 		Added:    StringList{},
@@ -32,22 +39,29 @@ func newInterfaceMapDiff() *InterfaceMapDiff {
 	}
 }
 
-func getInterfaceMapDiff(map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
-	diff := getInterfaceMapDiffInternal(map1, map2, filter)
+func getInterfaceMapDiff(config *Config, breaking bool, map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
+	diff := getInterfaceMapDiffInternal(config, map1, map2, filter)
+
 	if diff.Empty() {
 		return nil
 	}
+
+	diff.breaking = breaking
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil
+	}
+
 	return diff
 }
 
-func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
+func getInterfaceMapDiffInternal(config *Config, map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
 
 	result := newInterfaceMapDiff()
 
 	for name1, interface1 := range map1 {
 		if _, ok := filter[name1]; ok {
 			if interface2, ok := map2[name1]; ok {
-				if diff := getValueDiff(interface1, interface2); !diff.Empty() {
+				if diff := getValueDiff(config, false, interface1, interface2); !diff.Empty() {
 					result.Modified[name1] = diff
 				}
 			} else {

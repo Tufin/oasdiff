@@ -24,6 +24,11 @@ func (diff *LinksDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *LinksDiff) Breaking() bool {
+	return false
+}
+
 // ModifiedLinks is map of link values to their respective diffs
 type ModifiedLinks map[string]*LinkDiff
 
@@ -40,9 +45,15 @@ func getLinksDiff(config *Config, links1, links2 openapi3.Links) (*LinksDiff, er
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 

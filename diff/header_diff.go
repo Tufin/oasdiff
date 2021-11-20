@@ -19,14 +19,31 @@ func (headerDiff *HeaderDiff) Empty() bool {
 	return headerDiff == nil || *headerDiff == HeaderDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (headerDiff *HeaderDiff) Breaking() bool {
+	if headerDiff.Empty() {
+		return false
+	}
+
+	// TODO: handle required
+	return headerDiff.SchemaDiff.Breaking() ||
+		headerDiff.ContentDiff.Breaking()
+}
+
 func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
 	diff, err := getHeaderDiffInternal(config, header1, header2)
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 
@@ -35,9 +52,9 @@ func getHeaderDiffInternal(config *Config, header1, header2 *openapi3.Header) (*
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, header1.ExtensionProps, header2.ExtensionProps)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, header1.Description, header2.Description)
-	result.DeprecatedDiff = getValueDiff(header1.Deprecated, header2.Deprecated)
-	result.RequiredDiff = getValueDiff(header1.Required, header2.Required)
+	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, header1.Description, header2.Description)
+	result.DeprecatedDiff = getValueDiff(config, false, header1.Deprecated, header2.Deprecated)
+	result.RequiredDiff = getValueDiff(config, false, header1.Required, header2.Required)
 
 	result.ExamplesDiff, err = getExamplesDiff(config, header1.Examples, header2.Examples)
 	if err != nil {
@@ -49,7 +66,7 @@ func getHeaderDiffInternal(config *Config, header1, header2 *openapi3.Header) (*
 		return nil, err
 	}
 
-	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, header1.Example, header2.Example)
+	result.ExampleDiff = getValueDiffConditional(config, false, config.ExcludeExamples, header1.Example, header2.Example)
 
 	result.ContentDiff, err = getContentDiff(config, header1.Content, header2.Content)
 	if err != nil {

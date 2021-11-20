@@ -14,6 +14,16 @@ type ContentDiff struct {
 // ModifiedMediaTypes is map of media type names to their respective diffs
 type ModifiedMediaTypes map[string]*MediaTypeDiff
 
+// Breaking indicates whether this element includes a breaking change
+func (diff ModifiedMediaTypes) Breaking() bool {
+	for _, mediaTypeDiff := range diff {
+		if mediaTypeDiff.Breaking() {
+			return true
+		}
+	}
+	return false
+}
+
 func newContentDiff() *ContentDiff {
 	return &ContentDiff{
 		MediaTypeAdded:    StringList{},
@@ -33,6 +43,16 @@ func (diff *ContentDiff) Empty() bool {
 		len(diff.MediaTypeModified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *ContentDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	return len(diff.MediaTypeDeleted) > 0 ||
+		diff.MediaTypeModified.Breaking()
+}
+
 func getContentDiff(config *Config, content1, content2 openapi3.Content) (*ContentDiff, error) {
 	diff, err := getContentDiffInternal(config, content1, content2)
 	if err != nil {
@@ -42,6 +62,11 @@ func getContentDiff(config *Config, content1, content2 openapi3.Content) (*Conte
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 

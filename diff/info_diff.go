@@ -22,6 +22,11 @@ func (diff *InfoDiff) Empty() bool {
 	return diff == nil || *diff == InfoDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *InfoDiff) Breaking() bool {
+	return false
+}
+
 func getInfoDiff(config *Config, info1, info2 *openapi3.Info) (*InfoDiff, error) {
 	diff, err := getInfoDiffInternal(config, info1, info2)
 	if err != nil {
@@ -31,6 +36,11 @@ func getInfoDiff(config *Config, info1, info2 *openapi3.Info) (*InfoDiff, error)
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 
@@ -43,12 +53,12 @@ func getInfoDiffInternal(config *Config, info1, info2 *openapi3.Info) (*InfoDiff
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, info1.ExtensionProps, info2.ExtensionProps)
-	result.TitleDiff = getValueDiff(info1.Title, info2.Title)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, info1.Description, info2.Description)
-	result.TermsOfServiceDiff = getValueDiff(info1.TermsOfService, info2.TermsOfService)
+	result.TitleDiff = getValueDiff(config, false, info1.Title, info2.Title)
+	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, info1.Description, info2.Description)
+	result.TermsOfServiceDiff = getValueDiff(config, false, info1.TermsOfService, info2.TermsOfService)
 	result.ContactDiff = getContactDiff(config, info1.Contact, info2.Contact)
 	result.LicenseDiff = getLicenseDiff(config, info1.License, info2.License)
-	result.VersionDiff = getValueDiff(info1.Version, info2.Version)
+	result.VersionDiff = getValueDiff(config, false, info1.Version, info2.Version)
 
 	return &result, nil
 }

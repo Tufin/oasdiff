@@ -40,10 +40,11 @@ func (methodDiff *MethodDiff) Breaking() bool {
 		return false
 	}
 
-	return methodDiff.ParametersDiff.Breaking()
-	// methodDiff.RequestBodyDiff.Breaking() ||
-	// methodDiff.ResponsesDiff.Breaking() ||
-	// methodDiff.CallbacksDiff.Breaking()
+	return methodDiff.ParametersDiff.Breaking() ||
+		methodDiff.RequestBodyDiff.Breaking() ||
+		methodDiff.ResponsesDiff.Breaking() ||
+		methodDiff.CallbacksDiff.Breaking() ||
+		methodDiff.SecurityDiff.Breaking()
 }
 
 func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) (*MethodDiff, error) {
@@ -57,6 +58,10 @@ func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) (*M
 		return nil, nil
 	}
 
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 
@@ -66,10 +71,10 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
-	result.TagsDiff = getStringsDiff(pathItem1.Tags, pathItem2.Tags)
-	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
-	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)
+	result.TagsDiff = getStringsDiff(config, false, pathItem1.Tags, pathItem2.Tags)
+	result.SummaryDiff = getValueDiff(config, false, pathItem1.Summary, pathItem2.Summary)
+	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
+	result.OperationIDDiff = getValueDiff(config, false, pathItem1.OperationID, pathItem2.OperationID)
 	result.ParametersDiff, err = getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters)
 	if err != nil {
 		return nil, err
@@ -89,7 +94,7 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 	if err != nil {
 		return nil, err
 	}
-	result.DeprecatedDiff = getValueDiff(pathItem1.Deprecated, pathItem2.Deprecated)
+	result.DeprecatedDiff = getValueDiff(config, false, pathItem1.Deprecated, pathItem2.Deprecated)
 	result.SecurityDiff = getSecurityRequirementsDiff(config, pathItem1.Security, pathItem2.Security)
 	result.ServersDiff = getServersDiff(config, pathItem1.Servers, pathItem2.Servers)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, pathItem1.ExternalDocs, pathItem2.ExternalDocs)

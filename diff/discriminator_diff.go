@@ -18,6 +18,18 @@ func (diff *DiscriminatorDiff) Empty() bool {
 	return diff == nil || *diff == DiscriminatorDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *DiscriminatorDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	return diff.Added ||
+		diff.Deleted ||
+		!diff.PropertyNameDiff.Breaking() ||
+		!diff.MappingDiff.Breaking()
+}
+
 func newDiscriminatorDiff() *DiscriminatorDiff {
 	return &DiscriminatorDiff{}
 
@@ -29,6 +41,11 @@ func getDiscriminatorDiff(config *Config, discriminator1, discriminator2 *openap
 	if diff.Empty() {
 		return nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil
+	}
+
 	return diff
 }
 
@@ -51,8 +68,8 @@ func getDiscriminatorDiffInternal(config *Config, discriminator1, discriminator2
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, discriminator1.ExtensionProps, discriminator2.ExtensionProps)
-	result.PropertyNameDiff = getValueDiff(discriminator1.PropertyName, discriminator2.PropertyName)
-	result.MappingDiff = getStringMapDiff(discriminator1.Mapping, discriminator2.Mapping)
+	result.PropertyNameDiff = getValueDiff(config, true, discriminator1.PropertyName, discriminator2.PropertyName)
+	result.MappingDiff = getStringMapDiff(config, true, discriminator1.Mapping, discriminator2.Mapping)
 
 	return result
 }

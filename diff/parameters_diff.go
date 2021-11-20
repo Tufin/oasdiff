@@ -40,6 +40,7 @@ type ParamNamesByLocation map[string]StringList
 // ParamDiffByLocation maps param location (path, query, header or cookie) to param diffs in this location
 type ParamDiffByLocation map[string]ParamDiffs
 
+// Breaking indicates whether this element includes a breaking change
 func (paramDiffByLocation ParamDiffByLocation) Breaking() bool {
 	for _, paramDiffs := range paramDiffByLocation {
 		if paramDiffs.Breaking() {
@@ -60,6 +61,7 @@ func newParametersDiff() *ParametersDiff {
 // ParamDiffs is map of parameter names to their respective diffs
 type ParamDiffs map[string]*ParameterDiff
 
+// Breaking indicates whether this element includes a breaking change
 func (paramDiffs ParamDiffs) Breaking() bool {
 	for _, parameterDiff := range paramDiffs {
 		if parameterDiff.Breaking() {
@@ -105,6 +107,11 @@ func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) (*P
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 

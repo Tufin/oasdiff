@@ -16,12 +16,22 @@ func (diff *LicenseDiff) Empty() bool {
 	return diff == nil || *diff == LicenseDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *LicenseDiff) Breaking() bool {
+	return false
+}
+
 func getLicenseDiff(config *Config, license1, license2 *openapi3.License) *LicenseDiff {
 	diff := getLicenseDiffInternal(config, license1, license2)
 
 	if diff.Empty() {
 		return nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil
+	}
+
 	return diff
 }
 
@@ -44,8 +54,8 @@ func getLicenseDiffInternal(config *Config, license1, license2 *openapi3.License
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, license1.ExtensionProps, license2.ExtensionProps)
-	result.NameDiff = getValueDiff(license1.Name, license2.Name)
-	result.URLDiff = getValueDiff(license1.URL, license2.URL)
+	result.NameDiff = getValueDiff(config, false, license1.Name, license2.Name)
+	result.URLDiff = getValueDiff(config, false, license1.URL, license2.URL)
 
 	return &result
 }

@@ -21,6 +21,15 @@ func (diff *EncodingDiff) Empty() bool {
 	return diff == nil || *diff == EncodingDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff EncodingDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	return diff.HeadersDiff.Breaking()
+}
+
 func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
 	diff, err := getEncodingDiffInternal(config, value1, value2)
 	if err != nil {
@@ -30,6 +39,11 @@ func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*Encodi
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 
@@ -42,14 +56,14 @@ func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) 
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
-	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
+	result.ContentTypeDiff = getValueDiff(config, true, value1.ContentType, value2.ContentType)
 	result.HeadersDiff, err = getHeadersDiff(config, value1.Headers, value2.Headers)
 	if err != nil {
 		return nil, err
 	}
-	result.StyleDiff = getValueDiff(value1.Style, value2.Style)
-	result.ExplodeDiff = getBoolRefDiff(value1.Explode, value2.Explode)
-	result.AllowReservedDiff = getValueDiff(value1.AllowReserved, value2.AllowReserved)
+	result.StyleDiff = getValueDiff(config, true, value1.Style, value2.Style)
+	result.ExplodeDiff = getBoolRefDiff(config, true, value1.Explode, value2.Explode)
+	result.AllowReservedDiff = getValueDiff(config, true, value1.AllowReserved, value2.AllowReserved)
 
 	return &result, nil
 }

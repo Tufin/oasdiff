@@ -24,6 +24,11 @@ func (diff *SecuritySchemesDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *SecuritySchemesDiff) Breaking() bool {
+	return false
+}
+
 // ModifiedSecuritySchemes is map of security schemes to their respective diffs
 type ModifiedSecuritySchemes map[string]*SecuritySchemeDiff
 
@@ -40,9 +45,15 @@ func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 o
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil, nil
+	}
+
 	return diff, nil
 }
 

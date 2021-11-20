@@ -13,19 +13,30 @@ func (diff *TagDiff) Empty() bool {
 	return diff == nil || *diff == TagDiff{}
 }
 
+// Breaking indicates whether this element includes a breaking change
+func (diff *TagDiff) Breaking() bool {
+	return false
+}
+
 func getTagDiff(config *Config, tag1, tag2 *openapi3.Tag) *TagDiff {
 	diff := getTagDiffInternal(config, tag1, tag2)
+
 	if diff.Empty() {
 		return nil
 	}
+
+	if config.BreakingOnly && !diff.Breaking() {
+		return nil
+	}
+
 	return diff
 }
 
 func getTagDiffInternal(config *Config, tag1, tag2 *openapi3.Tag) *TagDiff {
 	result := TagDiff{}
 
-	result.NameDiff = getValueDiff(tag1.Name, tag2.Name)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, tag1.Description, tag2.Description)
+	result.NameDiff = getValueDiff(config, false, tag1.Name, tag2.Name)
+	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, tag1.Description, tag2.Description)
 
 	return &result
 }
