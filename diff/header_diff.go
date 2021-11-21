@@ -25,8 +25,9 @@ func (headerDiff *HeaderDiff) Breaking() bool {
 		return false
 	}
 
-	// TODO: handle required
-	return headerDiff.SchemaDiff.Breaking() ||
+	return headerDiff.DeprecatedDiff.Breaking() ||
+		headerDiff.RequiredDiff.Breaking() ||
+		headerDiff.SchemaDiff.Breaking() ||
 		headerDiff.ContentDiff.Breaking()
 }
 
