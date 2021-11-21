@@ -9,7 +9,7 @@ type ExtensionsDiff InterfaceMapDiff
 
 // Breaking indicates whether this element includes a breaking change
 func (diff *ExtensionsDiff) Breaking() bool {
-	return (*InterfaceMapDiff)(diff).Breaking()
+	return false
 }
 
 // Empty indicates whether a change was found in this element

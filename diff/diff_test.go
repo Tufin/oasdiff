@@ -158,12 +158,15 @@ func TestDiff_ModifiedParam(t *testing.T) {
 }
 
 func TestSchemaDiff_TypeDiff(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 2)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "string",
-			To:   "integer",
-		},
-		d(t, diff.NewConfig(), 1, 2).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff)
+		"string",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff.From)
+
+	require.Equal(t,
+		"integer",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff.To)
 }
 
 func TestSchemaDiff_EnumDiff(t *testing.T) {
@@ -194,12 +197,15 @@ func TestSchemaDiff_NotDiff(t *testing.T) {
 }
 
 func TestSchemaDiff_ContentDiff(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 2, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "number",
-			To:   "string",
-		},
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff)
+		"number",
+		dd.PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.From)
+
+	require.Equal(t,
+		"string",
+		dd.PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.To)
 }
 
 func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
@@ -215,16 +221,15 @@ func TestSchemaDiff_MediaTypeDeleted(t *testing.T) {
 }
 
 func TestSchemaDiff_MediaTypeModified(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 5)
+
 	require.Equal(t,
-		&diff.MediaTypeDiff{
-			SchemaDiff: &diff.SchemaDiff{
-				TypeDiff: &diff.ValueDiff{
-					From: "object",
-					To:   "string",
-				},
-			},
-		},
-		d(t, diff.NewConfig(), 1, 5).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"])
+		"object",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.From)
+
+	require.Equal(t,
+		"string",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.To)
 }
 
 func TestSchemaDiff_MediaType_MultiEntries(t *testing.T) {
@@ -258,12 +263,15 @@ func TestSchemaDiff_WithExamples(t *testing.T) {
 }
 
 func TestSchemaDiff_MinDiff(t *testing.T) {
+
+	dd := d(t, &diff.Config{PathPrefix: "/prefix"}, 4, 2)
+
+	require.Nil(t,
+		dd.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.From)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: nil,
-			To:   float64(7),
-		},
-		d(t, &diff.Config{PathPrefix: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff)
+		float64(7),
+		dd.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.To)
 }
 
 func TestResponseAdded(t *testing.T) {
@@ -372,40 +380,53 @@ func TestHeaderDeleted(t *testing.T) {
 }
 
 func TestRequestBodyModified(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 3)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "number",
-			To:   "integer",
-		},
-		d(t, diff.NewConfig(), 1, 3).RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff,
+		"number",
+		dd.RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.From,
+	)
+
+	require.Equal(t,
+		"integer",
+		dd.RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.To,
 	)
 }
 
 func TestHeaderModifiedSchema(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 5, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: false,
-			To:   true,
-		},
-		d(t, diff.NewConfig(), 5, 1).HeadersDiff.Modified["test"].SchemaDiff.AdditionalPropertiesAllowedDiff)
+		false,
+		dd.HeadersDiff.Modified["test"].SchemaDiff.AdditionalPropertiesAllowedDiff.From)
+
+	require.Equal(t,
+		true,
+		dd.HeadersDiff.Modified["test"].SchemaDiff.AdditionalPropertiesAllowedDiff.To)
 }
 
 func TestHeaderModifiedContent(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 5, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "string",
-			To:   "object",
-		},
-		d(t, diff.NewConfig(), 5, 1).HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff)
+		"string",
+		dd.HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.From)
+
+	require.Equal(t,
+		"object",
+		dd.HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.To)
 }
 
 func TestResponseContentModified(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 5, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "object",
-			To:   "string",
-		},
-		d(t, diff.NewConfig(), 5, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff)
+		"object",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff.From)
+
+	require.Equal(t,
+		"string",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff.To)
 }
 
 func TestResponseDespcriptionNil(t *testing.T) {
@@ -453,30 +474,38 @@ func TestSchemaDiff_DeletedSchemas(t *testing.T) {
 }
 
 func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 5)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: true,
-			To:   false,
-		},
-		d(t, diff.NewConfig(), 1, 5).SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff)
+		true,
+		dd.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff.From)
+
+	require.Equal(t,
+		false,
+		dd.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff.To)
 }
 
 func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 5)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: nil,
-			To:   false,
-		},
-		d(t, diff.NewConfig(), 1, 5).SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
+		nil,
+		dd.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff.From)
+
+	require.Equal(t,
+		false,
+		dd.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff.To)
 }
 
 func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 5, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: false,
-			To:   nil,
-		},
-		d(t, diff.NewConfig(), 5, 1).SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
+		false,
+		dd.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff.From)
+
+	require.Nil(t,
+		dd.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff.To)
 }
 
 func TestSummary(t *testing.T) {

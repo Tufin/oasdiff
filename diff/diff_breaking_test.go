@@ -49,3 +49,9 @@ func TestBreaking_ModifiedExtension(t *testing.T) {
 
 	require.False(t, d(t, &config, 1, 3).ExtensionsDiff.Breaking())
 }
+
+func TestBreaking_Ref(t *testing.T) {
+	require.True(t,
+		d(t, diff.NewConfig(), 1, 3).RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.Breaking(),
+	)
+}

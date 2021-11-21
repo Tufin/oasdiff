@@ -36,7 +36,10 @@ func (diff *Diff) Breaking() bool {
 		return false
 	}
 
-	return diff.PathsDiff.Breaking()
+	return diff.PathsDiff.Breaking() ||
+		diff.EndpointsDiff.Breaking() ||
+		diff.SecurityDiff.Breaking() ||
+		diff.ServersDiff.Breaking()
 }
 
 /*
