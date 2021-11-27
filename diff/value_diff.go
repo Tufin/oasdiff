@@ -27,6 +27,26 @@ func (diff *ValueDiff) Breaking() bool {
 	return diff.breaking
 }
 
+// CompareWithDefault checks if value was changed from a specific value to another specific value
+// For example: was the value changed from 'true' to 'false'?
+// If the original value or the new value are not defined, the comparison uses the default value
+func (diff *ValueDiff) CompareWithDefault(from, to, defaultValue interface{}) bool {
+	if diff.Empty() {
+		return false
+	}
+
+	return getValueWithDefault(diff.From, defaultValue) == from &&
+		getValueWithDefault(diff.To, defaultValue) == to
+}
+
+func getValueWithDefault(value interface{}, defaultValue interface{}) interface{} {
+
+	if value == nil {
+		return defaultValue
+	}
+	return value
+}
+
 func getValueDiff(config *Config, breaking bool, value1, value2 interface{}) *ValueDiff {
 
 	diff := getValueDiffInternal(value1, value2)

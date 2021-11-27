@@ -25,7 +25,7 @@ func (headerDiff *HeaderDiff) Breaking() bool {
 		return false
 	}
 
-	return headerDiff.DeprecatedDiff.Breaking() ||
+	return headerDiff.DeprecatedDiff.CompareWithDefault(false, true, false) ||
 		headerDiff.RequiredDiff.Breaking() ||
 		headerDiff.SchemaDiff.Breaking() ||
 		headerDiff.ContentDiff.Breaking()

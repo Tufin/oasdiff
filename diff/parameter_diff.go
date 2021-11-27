@@ -31,20 +31,13 @@ func (diff *ParameterDiff) Breaking() bool {
 		return false
 	}
 
-	if !diff.AllowEmptyValueDiff.Empty() {
-		if diff.AllowEmptyValueDiff.To == true {
-			// TODO: return true only if this is a query param
-			return true
-		}
-	}
-
-	if !diff.RequiredDiff.Empty() {
-		if diff.RequiredDiff.To == true {
-			return true
-		}
-	}
-
-	return diff.SchemaDiff.Breaking() ||
+	return diff.StyleDiff.Breaking() ||
+		diff.ExplodeDiff.Breaking() || // TODO: only if type is array or object
+		diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) || // TODO: only if this is a query param
+		diff.AllowReservedDiff.CompareWithDefault(true, false, false) || // TODO: only if this id a query param
+		diff.DeprecatedDiff.CompareWithDefault(false, true, false) ||
+		diff.RequiredDiff.CompareWithDefault(false, true, false) ||
+		diff.SchemaDiff.Breaking() ||
 		diff.ContentDiff.Breaking()
 }
 

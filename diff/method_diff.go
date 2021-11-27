@@ -44,6 +44,7 @@ func (methodDiff *MethodDiff) Breaking() bool {
 		methodDiff.RequestBodyDiff.Breaking() ||
 		methodDiff.ResponsesDiff.Breaking() ||
 		methodDiff.CallbacksDiff.Breaking() ||
+		methodDiff.DeprecatedDiff.CompareWithDefault(false, true, false) ||
 		methodDiff.SecurityDiff.Breaking()
 }
 

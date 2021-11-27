@@ -55,3 +55,15 @@ func TestBreaking_Ref(t *testing.T) {
 		d(t, diff.NewConfig(), 1, 3).RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.Breaking(),
 	)
 }
+
+func TestCompareWithDefault(t *testing.T) {
+	require.True(t,
+		d(t, diff.NewConfig(), 1, 3).TagsDiff.Modified["reuven"].DescriptionDiff.CompareWithDefault("Harrison", "harrison", ""),
+	)
+}
+
+func TestCompareWithDefault_Nil(t *testing.T) {
+	require.True(t,
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].ExplodeDiff.CompareWithDefault(true, false, false),
+	)
+}
