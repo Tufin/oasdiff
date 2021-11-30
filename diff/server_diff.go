@@ -21,7 +21,13 @@ func (diff *ServerDiff) Empty() bool {
 
 // Breaking indicates whether this element includes a breaking change
 func (diff *ServerDiff) Breaking() bool {
-	return false
+	if diff.Empty() {
+		return false
+	}
+
+	return diff.Deleted ||
+		diff.URLDiff.Breaking() ||
+		diff.VariablesDiff.Breaking()
 }
 
 func getServerDiff(config *Config, value1, value2 *openapi3.Server) *ServerDiff {
