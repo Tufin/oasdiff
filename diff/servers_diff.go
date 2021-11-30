@@ -12,6 +12,16 @@ type ServersDiff struct {
 // ModifiedServers is map of server names to their respective diffs
 type ModifiedServers map[string]*ServerDiff
 
+// Breaking indicates whether this element includes a breaking change
+func (diff ModifiedServers) Breaking() bool {
+	for _, modifiedServer := range diff {
+		if modifiedServer.Breaking() {
+			return true
+		}
+	}
+	return false
+}
+
 // Empty indicates whether a change was found in this element
 func (diff *ServersDiff) Empty() bool {
 	if diff == nil {
@@ -23,8 +33,10 @@ func (diff *ServersDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
+// Breaking indicates whether this element includes a breaking change
 func (diff *ServersDiff) Breaking() bool {
-	return false
+	return len(diff.Deleted) > 0 ||
+		diff.Modified.Breaking()
 }
 
 func newServersDiff() *ServersDiff {
