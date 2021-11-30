@@ -28,6 +28,10 @@ func (diff *InterfaceMapDiff) Empty() bool {
 
 // Breaking indicates whether this element includes a breaking change
 func (diff *InterfaceMapDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
 	return diff.breaking
 }
 

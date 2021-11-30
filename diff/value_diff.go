@@ -39,6 +39,38 @@ func (diff *ValueDiff) CompareWithDefault(from, to, defaultValue interface{}) bo
 		getValueWithDefault(diff.To, defaultValue) == to
 }
 
+func (diff *ValueDiff) GreaterUInt64Ref() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	if diff.From != nil && diff.To != nil {
+		return diff.To.(uint64) > diff.From.(uint64)
+	}
+
+	if diff.From != nil && diff.To == nil {
+		return true
+	}
+
+	return false
+}
+
+func (diff *ValueDiff) SmallerUInt64() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	if diff.From != nil && diff.To != nil {
+		return diff.To.(uint64) < diff.From.(uint64)
+	}
+
+	if diff.From == nil && diff.To != nil {
+		return true
+	}
+
+	return false
+}
+
 func getValueWithDefault(value interface{}, defaultValue interface{}) interface{} {
 
 	if value == nil {

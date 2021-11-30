@@ -61,17 +61,40 @@ func (diff *SchemaDiff) Breaking() bool {
 		return false
 	}
 
-	if !diff.MaxItemsDiff.Empty() {
-		if diff.MaxItemsDiff.To.(int) < diff.MaxItemsDiff.From.(int) {
-			return true
-		}
-	}
-
-	return diff.OneOfDiff.Breaking() ||
+	return diff.SchemaAdded ||
+		diff.OneOfDiff.Breaking() ||
 		diff.AnyOfDiff.Breaking() ||
 		diff.AllOfDiff.Breaking() ||
 		diff.NotDiff.Breaking() ||
-		diff.EnumDiff.Breaking()
+		diff.TypeDiff.Breaking() ||
+		diff.FormatDiff.Breaking() ||
+		diff.EnumDiff.Breaking() ||
+		diff.DefaultDiff.Breaking() ||
+		diff.AdditionalPropertiesAllowedDiff.CompareWithDefault(true, false, true) ||
+		diff.UniqueItemsDiff.CompareWithDefault(false, true, false) || // TODO: check default value
+		diff.ExclusiveMinDiff.CompareWithDefault(false, true, false) || // TODO: check default value
+		diff.ExclusiveMaxDiff.CompareWithDefault(false, true, false) || // TODO: check default value
+		diff.NullableDiff.CompareWithDefault(true, false, false) || // TODO: check default value
+		diff.ReadOnlyDiff.CompareWithDefault(false, true, false) || // TODO: Relevant only for Schema "properties" definitions
+		diff.WriteOnlyDiff.CompareWithDefault(false, true, false) || // TODO: Relevant only for Schema "properties" definitions
+		diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) ||
+		diff.XMLDiff.Breaking() ||
+		diff.DeprecatedDiff.CompareWithDefault(false, true, false) ||
+		diff.MinDiff.GreaterUInt64Ref() ||
+		diff.MaxDiff.SmallerUInt64() ||
+		diff.MultipleOfDiff.Breaking() ||
+		diff.MinLengthDiff.GreaterUInt64Ref() ||
+		diff.MaxLengthDiff.SmallerUInt64() ||
+		diff.PatternDiff.Breaking() ||
+		diff.MinItemsDiff.GreaterUInt64Ref() ||
+		diff.MaxItemsDiff.SmallerUInt64() ||
+		diff.ItemsDiff.Breaking() ||
+		diff.RequiredDiff.Breaking() ||
+		diff.PropertiesDiff.Breaking() ||
+		diff.MinPropsDiff.GreaterUInt64Ref() ||
+		diff.MaxPropsDiff.SmallerUInt64() ||
+		diff.AdditionalPropertiesDiff.Breaking() ||
+		diff.DiscriminatorDiff.Breaking()
 }
 
 func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {

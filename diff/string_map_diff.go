@@ -33,6 +33,10 @@ func (diff *StringMapDiff) Empty() bool {
 
 // Breaking indicates whether this element includes a breaking change
 func (diff *StringMapDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
 	return diff.breaking
 }
 

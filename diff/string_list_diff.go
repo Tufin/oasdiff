@@ -27,6 +27,10 @@ func (stringsDiff *StringsDiff) Empty() bool {
 
 // Breaking indicates whether this element includes a breaking change
 func (diff *StringsDiff) Breaking() bool {
+	if diff.Empty() {
+		return false
+	}
+
 	return diff.breaking
 }
 

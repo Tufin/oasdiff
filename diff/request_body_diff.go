@@ -31,7 +31,7 @@ func (diff *RequestBodyDiff) Breaking() bool {
 	}
 
 	return diff.Deleted ||
-		diff.RequiredDiff.Breaking() ||
+		diff.RequiredDiff.CompareWithDefault(false, true, false) ||
 		diff.ContentDiff.Breaking()
 }
 

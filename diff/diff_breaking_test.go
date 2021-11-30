@@ -67,3 +67,111 @@ func TestCompareWithDefault_Nil(t *testing.T) {
 		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].ExplodeDiff.CompareWithDefault(true, false, false),
 	)
 }
+
+func TestBreaking_MaxLengthSmaller(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	maxLengthFrom := uint64(13)
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLengthFrom
+
+	maxLengthTo := uint64(11)
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLengthTo
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.True(t, d.Breaking())
+}
+
+func TestBreaking_MaxLengthGreater(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	maxLengthFrom := uint64(13)
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLengthFrom
+
+	maxLengthTo := uint64(14)
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLengthTo
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.False(t, d.Breaking())
+}
+
+func TestBreaking_MaxLengthFromNil(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = nil
+
+	maxLengthTo := uint64(14)
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLengthTo
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.True(t, d.Breaking())
+}
+
+func TestBreaking_MaxLengthToNil(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	maxLengthFrom := uint64(13)
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLengthFrom
+
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = nil
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.False(t, d.Breaking())
+}
+
+func TestBreaking_MaxLengthBothNil(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = nil
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = nil
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.False(t, d.Breaking())
+}
+
+func TestBreaking_MinItemsSmaller(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MinItems = 13
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MinItems = 11
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.False(t, d.Breaking())
+}
+
+func TestBreaking_MinItemsGreater(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MinItems = 13
+	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MinItems = 14
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.True(t, d.Breaking())
+}
