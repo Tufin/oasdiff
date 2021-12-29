@@ -9,8 +9,8 @@ func getSecurityScopesDiff(config *Config, securityRequirement1, securityRequire
 	result := SecurityScopesDiff{}
 	for scheme1, scopes1 := range securityRequirement1 {
 		if scopes2, ok := securityRequirements2[scheme1]; ok {
-			if scopeDiff := getStringsDiff(config, scopes1, scopes2); !scopeDiff.Empty() {
-				result[scheme1] = getStringsDiff(config, scopes1, scopes2)
+			if scopeDiff := getStringsDiff(scopes1, scopes2); !scopeDiff.Empty() {
+				result[scheme1] = getStringsDiff(scopes1, scopes2)
 			}
 		}
 	}

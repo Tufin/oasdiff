@@ -221,7 +221,7 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 		return nil, err
 	}
 
-	result.RequiredDiff = getStringsDiff(config, value1.Required, value2.Required)
+	result.RequiredDiff = getStringsDiff(value1.Required, value2.Required)
 	result.PropertiesDiff, err = getSchemasDiff(config, value1.Properties, value2.Properties)
 	if err != nil {
 		return nil, err

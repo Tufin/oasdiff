@@ -77,7 +77,7 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
-	result.TagsDiff = getStringsDiff(config, pathItem1.Tags, pathItem2.Tags)
+	result.TagsDiff = getStringsDiff(pathItem1.Tags, pathItem2.Tags)
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
 	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)

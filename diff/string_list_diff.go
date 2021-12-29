@@ -23,7 +23,7 @@ func (stringsDiff *StringsDiff) Empty() bool {
 		len(stringsDiff.Deleted) == 0
 }
 
-func getStringsDiff(config *Config, strings1, strings2 StringList) *StringsDiff {
+func getStringsDiff(strings1, strings2 StringList) *StringsDiff {
 	diff := getStringsDiffInternal(strings1, strings2)
 
 	if diff.Empty() {
