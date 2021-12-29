@@ -51,7 +51,7 @@ func getSecurityRequirementsDiffInternal(config *Config, securityRequirements1, 
 	if securityRequirements1 != nil {
 		for _, securityRequirement1 := range *securityRequirements1 {
 			if securityRequirement2 := findSecurityRequirement(securityRequirement1, securityRequirements2); securityRequirement2 != nil {
-				result.Modified[getSecurityRequirementID(securityRequirement1)] = getSecurityScopesDiff(config, securityRequirement1, securityRequirement2)
+				result.Modified[getSecurityRequirementID(securityRequirement1)] = getSecurityScopesDiff(securityRequirement1, securityRequirement2)
 			} else {
 				result.Deleted = append(result.Deleted, getSecurityRequirementID(securityRequirement1))
 			}
