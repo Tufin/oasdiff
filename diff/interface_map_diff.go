@@ -49,7 +49,7 @@ func getInterfaceMapDiffInternal(config *Config, map1, map2 InterfaceMap, filter
 	for name1, interface1 := range map1 {
 		if _, ok := filter[name1]; ok {
 			if interface2, ok := map2[name1]; ok {
-				if diff := getValueDiff(config, interface1, interface2); !diff.Empty() {
+				if diff := getValueDiff(interface1, interface2); !diff.Empty() {
 					result.Modified[name1] = diff
 				}
 			} else {

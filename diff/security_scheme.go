@@ -48,14 +48,14 @@ func getSecuritySchemeDiffInternal(config *Config, scheme1, scheme2 *openapi3.Se
 	result := SecuritySchemeDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, scheme1.ExtensionProps, scheme2.ExtensionProps)
-	result.TypeDiff = getValueDiff(config, scheme1.Type, scheme2.Type)
-	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, scheme1.Description, scheme2.Description)
-	result.NameDiff = getValueDiff(config, scheme1.Name, scheme2.Name)
-	result.InDiff = getValueDiff(config, scheme1.In, scheme2.In)
-	result.SchemeDiff = getValueDiff(config, scheme1.Scheme, scheme2.Scheme)
-	result.BearerFormatDiff = getValueDiff(config, scheme1.BearerFormat, scheme2.BearerFormat)
+	result.TypeDiff = getValueDiff(scheme1.Type, scheme2.Type)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, scheme1.Description, scheme2.Description)
+	result.NameDiff = getValueDiff(scheme1.Name, scheme2.Name)
+	result.InDiff = getValueDiff(scheme1.In, scheme2.In)
+	result.SchemeDiff = getValueDiff(scheme1.Scheme, scheme2.Scheme)
+	result.BearerFormatDiff = getValueDiff(scheme1.BearerFormat, scheme2.BearerFormat)
 	result.OAuthFlowsDiff = getOAuthFlowsDiff(config, scheme1.Flows, scheme2.Flows)
-	result.OpenIDConnectURLDiff = getValueDiff(config, scheme1.OpenIdConnectUrl, scheme2.OpenIdConnectUrl)
+	result.OpenIDConnectURLDiff = getValueDiff(scheme1.OpenIdConnectUrl, scheme2.OpenIdConnectUrl)
 
 	return &result
 }

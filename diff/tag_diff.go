@@ -26,8 +26,8 @@ func getTagDiff(config *Config, tag1, tag2 *openapi3.Tag) *TagDiff {
 func getTagDiffInternal(config *Config, tag1, tag2 *openapi3.Tag) *TagDiff {
 	result := TagDiff{}
 
-	result.NameDiff = getValueDiff(config, tag1.Name, tag2.Name)
-	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, tag1.Description, tag2.Description)
+	result.NameDiff = getValueDiff(tag1.Name, tag2.Name)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, tag1.Description, tag2.Description)
 
 	return &result
 }

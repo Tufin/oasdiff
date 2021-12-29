@@ -60,9 +60,9 @@ func getOAuthFlowDiffInternal(config *Config, flow1, flow2 *openapi3.OAuthFlow) 
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, flow1.ExtensionProps, flow2.ExtensionProps)
-	result.AuthorizationURLDiff = getValueDiff(config, flow1.AuthorizationURL, flow2.AuthorizationURL)
-	result.TokenURLDiff = getValueDiff(config, flow1.TokenURL, flow2.TokenURL)
-	result.RefreshURLDiff = getValueDiff(config, flow1.RefreshURL, flow2.RefreshURL)
+	result.AuthorizationURLDiff = getValueDiff(flow1.AuthorizationURL, flow2.AuthorizationURL)
+	result.TokenURLDiff = getValueDiff(flow1.TokenURL, flow2.TokenURL)
+	result.RefreshURLDiff = getValueDiff(flow1.RefreshURL, flow2.RefreshURL)
 	result.ScopesDiff = getStringMapDiff(config, flow1.Scopes, flow2.Scopes)
 
 	return &result

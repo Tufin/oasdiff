@@ -76,7 +76,7 @@ func getValueWithDefault(value interface{}, defaultValue interface{}) interface{
 	return value
 }
 
-func getValueDiff(config *Config, value1, value2 interface{}) *ValueDiff {
+func getValueDiff(value1, value2 interface{}) *ValueDiff {
 
 	diff := getValueDiffInternal(value1, value2)
 
@@ -98,28 +98,28 @@ func getValueDiffInternal(value1, value2 interface{}) *ValueDiff {
 	}
 }
 
-func getValueDiffConditional(config *Config, exclude bool, value1, value2 interface{}) *ValueDiff {
+func getValueDiffConditional(exclude bool, value1, value2 interface{}) *ValueDiff {
 	if exclude {
 		return nil
 	}
 
-	return getValueDiff(config, value1, value2)
+	return getValueDiff(value1, value2)
 }
 
-func getFloat64RefDiff(config *Config, valueRef1, valueRef2 *float64) *ValueDiff {
-	return getValueDiff(config, derefFloat64(valueRef1), derefFloat64(valueRef2))
+func getFloat64RefDiff(valueRef1, valueRef2 *float64) *ValueDiff {
+	return getValueDiff(derefFloat64(valueRef1), derefFloat64(valueRef2))
 }
 
-func getBoolRefDiff(config *Config, valueRef1, valueRef2 *bool) *ValueDiff {
-	return getValueDiff(config, derefBool(valueRef1), derefBool(valueRef2))
+func getBoolRefDiff(valueRef1, valueRef2 *bool) *ValueDiff {
+	return getValueDiff(derefBool(valueRef1), derefBool(valueRef2))
 }
 
-func getStringRefDiffConditional(config *Config, exclude bool, valueRef1, valueRef2 *string) *ValueDiff {
-	return getValueDiffConditional(config, exclude, derefString(valueRef1), derefString(valueRef2))
+func getStringRefDiffConditional(exclude bool, valueRef1, valueRef2 *string) *ValueDiff {
+	return getValueDiffConditional(exclude, derefString(valueRef1), derefString(valueRef2))
 }
 
-func getUInt64RefDiff(config *Config, valueRef1, valueRef2 *uint64) *ValueDiff {
-	return getValueDiff(config, derefUInt64(valueRef1), derefUInt64(valueRef2))
+func getUInt64RefDiff(valueRef1, valueRef2 *uint64) *ValueDiff {
+	return getValueDiff(derefUInt64(valueRef1), derefUInt64(valueRef2))
 }
 
 func derefString(ref *string) interface{} {

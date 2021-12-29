@@ -65,19 +65,19 @@ func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, param1.ExtensionProps, param2.ExtensionProps)
-	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, param1.Description, param2.Description)
-	result.StyleDiff = getValueDiff(config, param1.Style, param2.Style)
-	result.ExplodeDiff = getBoolRefDiff(config, param1.Explode, param2.Explode)
-	result.AllowEmptyValueDiff = getValueDiff(config, param1.AllowEmptyValue, param2.AllowEmptyValue)
-	result.AllowReservedDiff = getValueDiff(config, param1.AllowReserved, param2.AllowReserved)
-	result.DeprecatedDiff = getValueDiff(config, param1.Deprecated, param2.Deprecated)
-	result.RequiredDiff = getValueDiff(config, param1.Required, param2.Required)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, param1.Description, param2.Description)
+	result.StyleDiff = getValueDiff(param1.Style, param2.Style)
+	result.ExplodeDiff = getBoolRefDiff(param1.Explode, param2.Explode)
+	result.AllowEmptyValueDiff = getValueDiff(param1.AllowEmptyValue, param2.AllowEmptyValue)
+	result.AllowReservedDiff = getValueDiff(param1.AllowReserved, param2.AllowReserved)
+	result.DeprecatedDiff = getValueDiff(param1.Deprecated, param2.Deprecated)
+	result.RequiredDiff = getValueDiff(param1.Required, param2.Required)
 	result.SchemaDiff, err = getSchemaDiff(config, param1.Schema, param2.Schema)
 	if err != nil {
 		return nil, err
 	}
 
-	result.ExampleDiff = getValueDiffConditional(config, config.ExcludeExamples, param1.Example, param2.Example)
+	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, param1.Example, param2.Example)
 
 	result.ExamplesDiff, err = getExamplesDiff(config, param1.Examples, param2.Examples)
 	if err != nil {

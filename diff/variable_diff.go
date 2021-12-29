@@ -44,8 +44,8 @@ func getVariableDiffInternal(config *Config, var1, var2 *openapi3.ServerVariable
 
 	result.ExtensionsDiff = getExtensionsDiff(config, var1.ExtensionProps, var2.ExtensionProps)
 	result.EnumDiff = getStringsDiff(config, var1.Enum, var2.Enum)
-	result.DefaultDiff = getValueDiff(config, var1.Default, var2.Default)
-	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, var1.Description, var2.Description)
+	result.DefaultDiff = getValueDiff(var1.Default, var2.Default)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, var1.Description, var2.Description)
 
 	return &result
 }

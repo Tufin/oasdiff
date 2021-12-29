@@ -89,7 +89,7 @@ func getDiffInternal(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps)
-	result.OpenAPIDiff = getValueDiff(config, s1.OpenAPI, s2.OpenAPI)
+	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 
 	result.InfoDiff, err = getInfoDiff(config, s1.Info, s2.Info)
 	if err != nil {

@@ -45,7 +45,7 @@ func getStringMapDiffInternal(config *Config, strings1, strings2 StringMap) *Str
 	for k1, v1 := range strings1 {
 		if v2, ok := strings2[k1]; ok {
 			if v1 != v2 {
-				result.Modified[k1] = getValueDiff(config, v1, v2)
+				result.Modified[k1] = getValueDiff(v1, v2)
 			}
 		} else {
 			result.Deleted = append(result.Deleted, k1)

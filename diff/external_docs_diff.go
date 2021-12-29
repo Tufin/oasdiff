@@ -48,8 +48,8 @@ func getExternalDocsDiffInternal(config *Config, docs1, docs2 *openapi3.External
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, docs1.ExtensionProps, docs2.ExtensionProps)
-	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, docs1.Description, docs2.Description)
-	result.URLDiff = getValueDiff(config, docs1.URL, docs2.URL)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, docs1.Description, docs2.Description)
+	result.URLDiff = getValueDiff(docs1.URL, docs2.URL)
 
 	return result
 }

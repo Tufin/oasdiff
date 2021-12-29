@@ -60,14 +60,14 @@ func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) 
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
-	result.ContentTypeDiff = getValueDiff(config, value1.ContentType, value2.ContentType)
+	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
 	result.HeadersDiff, err = getHeadersDiff(config, value1.Headers, value2.Headers)
 	if err != nil {
 		return nil, err
 	}
-	result.StyleDiff = getValueDiff(config, value1.Style, value2.Style)
-	result.ExplodeDiff = getBoolRefDiff(config, value1.Explode, value2.Explode)
-	result.AllowReservedDiff = getValueDiff(config, value1.AllowReserved, value2.AllowReserved)
+	result.StyleDiff = getValueDiff(value1.Style, value2.Style)
+	result.ExplodeDiff = getBoolRefDiff(value1.Explode, value2.Explode)
+	result.AllowReservedDiff = getValueDiff(value1.AllowReserved, value2.AllowReserved)
 
 	return &result, nil
 }

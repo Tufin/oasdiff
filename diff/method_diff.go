@@ -78,9 +78,9 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 
 	result.ExtensionsDiff = getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
 	result.TagsDiff = getStringsDiff(config, pathItem1.Tags, pathItem2.Tags)
-	result.SummaryDiff = getValueDiff(config, pathItem1.Summary, pathItem2.Summary)
-	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
-	result.OperationIDDiff = getValueDiff(config, pathItem1.OperationID, pathItem2.OperationID)
+	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
+	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
+	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)
 	result.ParametersDiff, err = getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters)
 	if err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 	if err != nil {
 		return nil, err
 	}
-	result.DeprecatedDiff = getValueDiff(config, pathItem1.Deprecated, pathItem2.Deprecated)
+	result.DeprecatedDiff = getValueDiff(pathItem1.Deprecated, pathItem2.Deprecated)
 	result.SecurityDiff = getSecurityRequirementsDiff(config, pathItem1.Security, pathItem2.Security)
 	result.ServersDiff = getServersDiff(config, pathItem1.Servers, pathItem2.Servers)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, pathItem1.ExternalDocs, pathItem2.ExternalDocs)

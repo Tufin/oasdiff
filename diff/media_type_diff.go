@@ -61,7 +61,7 @@ func getMediaTypeDiffInternal(config *Config, mediaType1 *openapi3.MediaType, me
 	if err != nil {
 		return nil, err
 	}
-	result.ExampleDiff = getValueDiffConditional(config, config.ExcludeExamples, mediaType1.Example, mediaType2.Example)
+	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, mediaType1.Example, mediaType2.Example)
 	result.EncodingsDiff, err = getEncodingsDiff(config, mediaType1.Encoding, mediaType2.Encoding)
 	if err != nil {
 		return nil, err

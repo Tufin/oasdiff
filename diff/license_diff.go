@@ -45,8 +45,8 @@ func getLicenseDiffInternal(config *Config, license1, license2 *openapi3.License
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, license1.ExtensionProps, license2.ExtensionProps)
-	result.NameDiff = getValueDiff(config, license1.Name, license2.Name)
-	result.URLDiff = getValueDiff(config, license1.URL, license2.URL)
+	result.NameDiff = getValueDiff(license1.Name, license2.Name)
+	result.URLDiff = getValueDiff(license1.URL, license2.URL)
 
 	return &result
 }
