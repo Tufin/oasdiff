@@ -29,8 +29,8 @@ func (diff *StringMapDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-func getStringMapDiff(config *Config, strings1, strings2 StringMap) *StringMapDiff {
-	diff := getStringMapDiffInternal(config, strings1, strings2)
+func getStringMapDiff(strings1, strings2 StringMap) *StringMapDiff {
+	diff := getStringMapDiffInternal(strings1, strings2)
 
 	if diff.Empty() {
 		return nil
@@ -39,7 +39,7 @@ func getStringMapDiff(config *Config, strings1, strings2 StringMap) *StringMapDi
 	return diff
 }
 
-func getStringMapDiffInternal(config *Config, strings1, strings2 StringMap) *StringMapDiff {
+func getStringMapDiffInternal(strings1, strings2 StringMap) *StringMapDiff {
 	result := newStringMapDiffDiff()
 
 	for k1, v1 := range strings1 {

@@ -23,5 +23,5 @@ func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.Extensi
 }
 
 func getExtensionsDiffInternal(config *Config, extensions1, extensions2 openapi3.ExtensionProps) *InterfaceMapDiff {
-	return getInterfaceMapDiff(config, extensions1.Extensions, extensions2.Extensions, config.IncludeExtensions)
+	return getInterfaceMapDiff(extensions1.Extensions, extensions2.Extensions, config.IncludeExtensions)
 }

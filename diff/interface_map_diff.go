@@ -32,8 +32,8 @@ func newInterfaceMapDiff() *InterfaceMapDiff {
 	}
 }
 
-func getInterfaceMapDiff(config *Config, map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
-	diff := getInterfaceMapDiffInternal(config, map1, map2, filter)
+func getInterfaceMapDiff(map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
+	diff := getInterfaceMapDiffInternal(map1, map2, filter)
 
 	if diff.Empty() {
 		return nil
@@ -42,7 +42,7 @@ func getInterfaceMapDiff(config *Config, map1, map2 InterfaceMap, filter StringS
 	return diff
 }
 
-func getInterfaceMapDiffInternal(config *Config, map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
+func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
 
 	result := newInterfaceMapDiff()
 
