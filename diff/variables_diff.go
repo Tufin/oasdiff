@@ -12,16 +12,6 @@ type VariablesDiff struct {
 // ModifiedVariables is map of variable names to their respective diffs
 type ModifiedVariables map[string]*VariableDiff
 
-// Breaking indicates whether this element includes a breaking change
-func (diff ModifiedVariables) Breaking() bool {
-	for _, variableDiff := range diff {
-		if variableDiff.Breaking() {
-			return true
-		}
-	}
-	return false
-}
-
 // Empty indicates whether a change was found in this element
 func (diff *VariablesDiff) Empty() bool {
 	if diff == nil {
@@ -33,14 +23,13 @@ func (diff *VariablesDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *VariablesDiff) Breaking() bool {
+func (diff *VariablesDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return len(diff.Deleted) > 0 ||
-		diff.Modified.Breaking()
+	diff.Added = nil
 }
 
 func newVariablesDiff() *VariablesDiff {
@@ -54,11 +43,11 @@ func newVariablesDiff() *VariablesDiff {
 func getVariablesDiff(config *Config, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
 	diff := getVariablesDiffInternal(config, variables1, variables2)
 
-	if diff.Empty() {
-		return nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil
 	}
 

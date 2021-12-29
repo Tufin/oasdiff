@@ -18,27 +18,23 @@ func (diff *OAuthFlowDiff) Empty() bool {
 	return diff == nil || *diff == OAuthFlowDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *OAuthFlowDiff) Breaking() bool {
+func (diff *OAuthFlowDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.Added ||
-		!diff.AuthorizationURLDiff.Empty() ||
-		!diff.TokenURLDiff.Empty() ||
-		!diff.RefreshURLDiff.Empty() ||
-		!diff.ScopesDiff.Empty()
+	diff.ExtensionsDiff = nil
 }
 
 func getOAuthFlowDiff(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
 	diff := getOAuthFlowDiffInternal(config, flow1, flow2)
 
-	if diff.Empty() {
-		return nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil
 	}
 
@@ -64,10 +60,10 @@ func getOAuthFlowDiffInternal(config *Config, flow1, flow2 *openapi3.OAuthFlow) 
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, flow1.ExtensionProps, flow2.ExtensionProps)
-	result.AuthorizationURLDiff = getValueDiff(config, false, flow1.AuthorizationURL, flow2.AuthorizationURL)
-	result.TokenURLDiff = getValueDiff(config, false, flow1.TokenURL, flow2.TokenURL)
-	result.RefreshURLDiff = getValueDiff(config, false, flow1.RefreshURL, flow2.RefreshURL)
-	result.ScopesDiff = getStringMapDiff(config, true, flow1.Scopes, flow2.Scopes)
+	result.AuthorizationURLDiff = getValueDiff(config, flow1.AuthorizationURL, flow2.AuthorizationURL)
+	result.TokenURLDiff = getValueDiff(config, flow1.TokenURL, flow2.TokenURL)
+	result.RefreshURLDiff = getValueDiff(config, flow1.RefreshURL, flow2.RefreshURL)
+	result.ScopesDiff = getStringMapDiff(config, flow1.Scopes, flow2.Scopes)
 
 	return &result
 }

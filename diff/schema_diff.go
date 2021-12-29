@@ -55,46 +55,86 @@ func (diff *SchemaDiff) Empty() bool {
 	return diff == nil || *diff == SchemaDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *SchemaDiff) Breaking() bool {
+func (diff *SchemaDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.SchemaAdded ||
-		diff.OneOfDiff.Breaking() ||
-		diff.AnyOfDiff.Breaking() ||
-		diff.AllOfDiff.Breaking() ||
-		diff.NotDiff.Breaking() ||
-		diff.TypeDiff.Breaking() ||
-		diff.FormatDiff.Breaking() ||
-		diff.EnumDiff.Breaking() ||
-		diff.DefaultDiff.Breaking() ||
-		diff.AdditionalPropertiesAllowedDiff.CompareWithDefault(true, false, true) ||
-		diff.UniqueItemsDiff.CompareWithDefault(false, true, false) || // TODO: check default value
-		diff.ExclusiveMinDiff.CompareWithDefault(false, true, false) || // TODO: check default value
-		diff.ExclusiveMaxDiff.CompareWithDefault(false, true, false) || // TODO: check default value
-		diff.NullableDiff.CompareWithDefault(true, false, false) || // TODO: check default value
-		diff.ReadOnlyDiff.CompareWithDefault(false, true, false) || // TODO: Relevant only for Schema "properties" definitions
-		diff.WriteOnlyDiff.CompareWithDefault(false, true, false) || // TODO: Relevant only for Schema "properties" definitions
-		diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) ||
-		diff.XMLDiff.Breaking() ||
-		diff.DeprecatedDiff.CompareWithDefault(false, true, false) ||
-		diff.MinDiff.GreaterUInt64Ref() ||
-		diff.MaxDiff.SmallerUInt64() ||
-		diff.MultipleOfDiff.Breaking() ||
-		diff.MinLengthDiff.GreaterUInt64Ref() ||
-		diff.MaxLengthDiff.SmallerUInt64() ||
-		diff.PatternDiff.Breaking() ||
-		diff.MinItemsDiff.GreaterUInt64Ref() ||
-		diff.MaxItemsDiff.SmallerUInt64() ||
-		diff.ItemsDiff.Breaking() ||
-		diff.RequiredDiff.Breaking() ||
-		diff.PropertiesDiff.Breaking() ||
-		diff.MinPropsDiff.GreaterUInt64Ref() ||
-		diff.MaxPropsDiff.SmallerUInt64() ||
-		diff.AdditionalPropertiesDiff.Breaking() ||
-		diff.DiscriminatorDiff.Breaking()
+	diff.SchemaDeleted = false
+	diff.TitleDiff = nil
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
+	diff.ExampleDiff = nil
+	diff.ExternalDocsDiff = nil
+
+	if !diff.AdditionalPropertiesAllowedDiff.CompareWithDefault(true, false, true) {
+		diff.AdditionalPropertiesAllowedDiff = nil
+	}
+
+	if !diff.UniqueItemsDiff.CompareWithDefault(false, true, false) { // TODO: check default value
+		diff.UniqueItemsDiff = nil
+	}
+
+	if !diff.ExclusiveMinDiff.CompareWithDefault(false, true, false) { // TODO: check default value
+		diff.ExclusiveMinDiff = nil
+	}
+
+	if !diff.ExclusiveMaxDiff.CompareWithDefault(false, true, false) { // TODO: check default value
+		diff.ExclusiveMaxDiff = nil
+	}
+
+	if !diff.NullableDiff.CompareWithDefault(true, false, false) { // TODO: check default value
+		diff.NullableDiff = nil
+	}
+
+	if !diff.ReadOnlyDiff.CompareWithDefault(false, true, false) { // TODO: Relevant only for Schema "properties" definitions
+		diff.ReadOnlyDiff = nil
+	}
+
+	if !diff.WriteOnlyDiff.CompareWithDefault(false, true, false) { // TODO: Relevant only for Schema "properties" definitions
+		diff.WriteOnlyDiff = nil
+	}
+
+	if !diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) {
+		diff.AllowEmptyValueDiff = nil
+	}
+
+	if !diff.DeprecatedDiff.CompareWithDefault(false, true, false) {
+		diff.DeprecatedDiff = nil
+	}
+
+	if !diff.MinDiff.MinBreaking() {
+		diff.MinDiff = nil
+	}
+
+	if !diff.MaxDiff.MaxBreaking() {
+		diff.MaxDiff = nil
+	}
+
+	if !diff.MinLengthDiff.MinBreaking() {
+		diff.MinLengthDiff = nil
+	}
+
+	if !diff.MaxLengthDiff.MaxBreaking() {
+		diff.MaxLengthDiff = nil
+	}
+
+	if !diff.MinPropsDiff.MinBreaking() {
+		diff.MinPropsDiff = nil
+	}
+
+	if !diff.MaxPropsDiff.MaxBreaking() {
+		diff.MaxPropsDiff = nil
+	}
+
+	if !diff.MinItemsDiff.MinBreaking() {
+		diff.MinItemsDiff = nil
+	}
+
+	if !diff.MaxItemsDiff.MaxBreaking() {
+		diff.MaxItemsDiff = nil
+	}
 }
 
 func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
@@ -103,11 +143,11 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*Schem
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -149,46 +189,46 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	if err != nil {
 		return nil, err
 	}
-	result.TypeDiff = getValueDiff(config, true, value1.Type, value2.Type)
-	result.TitleDiff = getValueDiff(config, false, value1.Title, value2.Title)
-	result.FormatDiff = getValueDiff(config, true, value1.Format, value2.Format)
-	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, value1.Description, value2.Description)
+	result.TypeDiff = getValueDiff(config, value1.Type, value2.Type)
+	result.TitleDiff = getValueDiff(config, value1.Title, value2.Title)
+	result.FormatDiff = getValueDiff(config, value1.Format, value2.Format)
+	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, value1.Description, value2.Description)
 	result.EnumDiff = getEnumDiff(config, value1.Enum, value2.Enum)
-	result.DefaultDiff = getValueDiff(config, true, value1.Default, value2.Default)
-	result.ExampleDiff = getValueDiffConditional(config, false, config.ExcludeExamples, value1.Example, value2.Example)
+	result.DefaultDiff = getValueDiff(config, value1.Default, value2.Default)
+	result.ExampleDiff = getValueDiffConditional(config, config.ExcludeExamples, value1.Example, value2.Example)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, value1.ExternalDocs, value2.ExternalDocs)
-	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(config, true, value1.AdditionalPropertiesAllowed, value2.AdditionalPropertiesAllowed)
-	result.UniqueItemsDiff = getValueDiff(config, true, value1.UniqueItems, value2.UniqueItems)
-	result.ExclusiveMinDiff = getValueDiff(config, true, value1.ExclusiveMin, value2.ExclusiveMin)
-	result.ExclusiveMaxDiff = getValueDiff(config, true, value1.ExclusiveMax, value2.ExclusiveMax)
-	result.NullableDiff = getValueDiff(config, true, value1.Nullable, value2.Nullable)
-	result.ReadOnlyDiff = getValueDiff(config, true, value1.ReadOnly, value2.ReadOnly)
-	result.WriteOnlyDiff = getValueDiff(config, true, value1.WriteOnly, value2.WriteOnly)
-	result.AllowEmptyValueDiff = getValueDiff(config, true, value1.AllowEmptyValue, value2.AllowEmptyValue)
-	result.XMLDiff = getValueDiff(config, true, value1.XML, value2.XML)
-	result.DeprecatedDiff = getValueDiff(config, true, value1.Deprecated, value2.Deprecated)
-	result.MinDiff = getFloat64RefDiff(config, true, value1.Min, value2.Min)
-	result.MaxDiff = getFloat64RefDiff(config, true, value1.Max, value2.Max)
-	result.MultipleOfDiff = getFloat64RefDiff(config, true, value1.MultipleOf, value2.MultipleOf)
-	result.MinLengthDiff = getValueDiff(config, true, value1.MinLength, value2.MinLength)
-	result.MaxLengthDiff = getUInt64RefDiff(config, true, value1.MaxLength, value2.MaxLength)
-	result.PatternDiff = getValueDiff(config, true, value1.Pattern, value2.Pattern)
+	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(config, value1.AdditionalPropertiesAllowed, value2.AdditionalPropertiesAllowed)
+	result.UniqueItemsDiff = getValueDiff(config, value1.UniqueItems, value2.UniqueItems)
+	result.ExclusiveMinDiff = getValueDiff(config, value1.ExclusiveMin, value2.ExclusiveMin)
+	result.ExclusiveMaxDiff = getValueDiff(config, value1.ExclusiveMax, value2.ExclusiveMax)
+	result.NullableDiff = getValueDiff(config, value1.Nullable, value2.Nullable)
+	result.ReadOnlyDiff = getValueDiff(config, value1.ReadOnly, value2.ReadOnly)
+	result.WriteOnlyDiff = getValueDiff(config, value1.WriteOnly, value2.WriteOnly)
+	result.AllowEmptyValueDiff = getValueDiff(config, value1.AllowEmptyValue, value2.AllowEmptyValue)
+	result.XMLDiff = getValueDiff(config, value1.XML, value2.XML)
+	result.DeprecatedDiff = getValueDiff(config, value1.Deprecated, value2.Deprecated)
+	result.MinDiff = getFloat64RefDiff(config, value1.Min, value2.Min)
+	result.MaxDiff = getFloat64RefDiff(config, value1.Max, value2.Max)
+	result.MultipleOfDiff = getFloat64RefDiff(config, value1.MultipleOf, value2.MultipleOf)
+	result.MinLengthDiff = getValueDiff(config, value1.MinLength, value2.MinLength)
+	result.MaxLengthDiff = getUInt64RefDiff(config, value1.MaxLength, value2.MaxLength)
+	result.PatternDiff = getValueDiff(config, value1.Pattern, value2.Pattern)
 	// compiledPattern is derived from pattern -> no need to diff
-	result.MinItemsDiff = getValueDiff(config, true, value1.MinItems, value2.MinItems)
-	result.MaxItemsDiff = getUInt64RefDiff(config, true, value1.MaxItems, value2.MaxItems)
+	result.MinItemsDiff = getValueDiff(config, value1.MinItems, value2.MinItems)
+	result.MaxItemsDiff = getUInt64RefDiff(config, value1.MaxItems, value2.MaxItems)
 	result.ItemsDiff, err = getSchemaDiff(config, value1.Items, value2.Items)
 	if err != nil {
 		return nil, err
 	}
 
-	result.RequiredDiff = getStringsDiff(config, true, value1.Required, value2.Required)
+	result.RequiredDiff = getStringsDiff(config, value1.Required, value2.Required)
 	result.PropertiesDiff, err = getSchemasDiff(config, value1.Properties, value2.Properties)
 	if err != nil {
 		return nil, err
 	}
 
-	result.MinPropsDiff = getValueDiff(config, true, value1.MinProps, value2.MinProps)
-	result.MaxPropsDiff = getUInt64RefDiff(config, true, value1.MaxProps, value2.MaxProps)
+	result.MinPropsDiff = getValueDiff(config, value1.MinProps, value2.MinProps)
+	result.MaxPropsDiff = getUInt64RefDiff(config, value1.MaxProps, value2.MaxProps)
 	result.AdditionalPropertiesDiff, err = getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties)
 	if err != nil {
 		return nil, err

@@ -20,13 +20,3 @@ func (modifiedPaths ModifiedPaths) addPathDiff(config *Config, path1 string, pat
 
 	return nil
 }
-
-// Breaking indicates whether this element includes a breaking change
-func (modifiedPaths ModifiedPaths) Breaking() bool {
-	for _, modifiedPath := range modifiedPaths {
-		if modifiedPath.Breaking() {
-			return true
-		}
-	}
-	return false
-}

@@ -16,9 +16,14 @@ func (diff *ResponseDiff) Empty() bool {
 	return diff == nil || *diff == ResponseDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *ResponseDiff) Breaking() bool {
-	return false
+func (diff *ResponseDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
 }
 
 func diffResponseValues(config *Config, response1, response2 *openapi3.Response) (*ResponseDiff, error) {
@@ -27,11 +32,11 @@ func diffResponseValues(config *Config, response1, response2 *openapi3.Response)
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -43,7 +48,7 @@ func diffResponseValuesInternal(config *Config, response1, response2 *openapi3.R
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, response1.ExtensionProps, response2.ExtensionProps)
-	result.DescriptionDiff = getStringRefDiffConditional(config, false, config.ExcludeDescription, response1.Description, response2.Description)
+	result.DescriptionDiff = getStringRefDiffConditional(config, config.ExcludeDescription, response1.Description, response2.Description)
 	result.HeadersDiff, err = getHeadersDiff(config, response1.Headers, response2.Headers)
 	if err != nil {
 		return nil, err

@@ -9,22 +9,11 @@ import (
 type ValueDiff struct {
 	From interface{} `json:"from" yaml:"from"`
 	To   interface{} `json:"to" yaml:"to"`
-
-	breaking bool // whether this diff is considered breaking within its specific context
 }
 
 // Empty indicates whether a change was found in this element
 func (diff *ValueDiff) Empty() bool {
 	return diff == nil
-}
-
-// Breaking indicates whether this element includes a breaking change
-func (diff *ValueDiff) Breaking() bool {
-	if diff.Empty() {
-		return false
-	}
-
-	return diff.breaking
 }
 
 // CompareWithDefault checks if value was changed from a specific value to another specific value
@@ -39,32 +28,40 @@ func (diff *ValueDiff) CompareWithDefault(from, to, defaultValue interface{}) bo
 		getValueWithDefault(diff.To, defaultValue) == to
 }
 
-func (diff *ValueDiff) GreaterUInt64Ref() bool {
+func (diff *ValueDiff) MinBreaking() bool {
 	if diff.Empty() {
 		return false
 	}
 
-	if diff.From != nil && diff.To != nil {
-		return diff.To.(uint64) > diff.From.(uint64)
+	if diff.From == nil {
+		return true
 	}
 
-	if diff.From != nil && diff.To == nil {
+	if diff.To == nil {
+		return false
+	}
+
+	if diff.From.(uint64) < diff.To.(uint64) {
 		return true
 	}
 
 	return false
 }
 
-func (diff *ValueDiff) SmallerUInt64() bool {
+func (diff *ValueDiff) MaxBreaking() bool {
 	if diff.Empty() {
 		return false
 	}
 
-	if diff.From != nil && diff.To != nil {
-		return diff.To.(uint64) < diff.From.(uint64)
+	if diff.From == nil {
+		return true
 	}
 
-	if diff.From == nil && diff.To != nil {
+	if diff.To == nil {
+		return false
+	}
+
+	if diff.To.(uint64) < diff.From.(uint64) {
 		return true
 	}
 
@@ -79,16 +76,11 @@ func getValueWithDefault(value interface{}, defaultValue interface{}) interface{
 	return value
 }
 
-func getValueDiff(config *Config, breaking bool, value1, value2 interface{}) *ValueDiff {
+func getValueDiff(config *Config, value1, value2 interface{}) *ValueDiff {
 
 	diff := getValueDiffInternal(value1, value2)
 
 	if diff.Empty() {
-		return nil
-	}
-
-	diff.breaking = breaking
-	if config.BreakingOnly && !diff.Breaking() {
 		return nil
 	}
 
@@ -106,28 +98,28 @@ func getValueDiffInternal(value1, value2 interface{}) *ValueDiff {
 	}
 }
 
-func getValueDiffConditional(config *Config, breaking bool, exclude bool, value1, value2 interface{}) *ValueDiff {
+func getValueDiffConditional(config *Config, exclude bool, value1, value2 interface{}) *ValueDiff {
 	if exclude {
 		return nil
 	}
 
-	return getValueDiff(config, breaking, value1, value2)
+	return getValueDiff(config, value1, value2)
 }
 
-func getFloat64RefDiff(config *Config, breaking bool, valueRef1, valueRef2 *float64) *ValueDiff {
-	return getValueDiff(config, breaking, derefFloat64(valueRef1), derefFloat64(valueRef2))
+func getFloat64RefDiff(config *Config, valueRef1, valueRef2 *float64) *ValueDiff {
+	return getValueDiff(config, derefFloat64(valueRef1), derefFloat64(valueRef2))
 }
 
-func getBoolRefDiff(config *Config, breaking bool, valueRef1, valueRef2 *bool) *ValueDiff {
-	return getValueDiff(config, breaking, derefBool(valueRef1), derefBool(valueRef2))
+func getBoolRefDiff(config *Config, valueRef1, valueRef2 *bool) *ValueDiff {
+	return getValueDiff(config, derefBool(valueRef1), derefBool(valueRef2))
 }
 
-func getStringRefDiffConditional(config *Config, breaking bool, exclude bool, valueRef1, valueRef2 *string) *ValueDiff {
-	return getValueDiffConditional(config, breaking, exclude, derefString(valueRef1), derefString(valueRef2))
+func getStringRefDiffConditional(config *Config, exclude bool, valueRef1, valueRef2 *string) *ValueDiff {
+	return getValueDiffConditional(config, exclude, derefString(valueRef1), derefString(valueRef2))
 }
 
-func getUInt64RefDiff(config *Config, breaking bool, valueRef1, valueRef2 *uint64) *ValueDiff {
-	return getValueDiff(config, breaking, derefUInt64(valueRef1), derefUInt64(valueRef2))
+func getUInt64RefDiff(config *Config, valueRef1, valueRef2 *uint64) *ValueDiff {
+	return getValueDiff(config, derefUInt64(valueRef1), derefUInt64(valueRef2))
 }
 
 func derefString(ref *string) interface{} {

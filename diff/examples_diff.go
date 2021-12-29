@@ -27,11 +27,6 @@ func (diff *ExamplesDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *ExamplesDiff) Breaking() bool {
-	return false
-}
-
 func newExamplessDiff() *ExamplesDiff {
 	return &ExamplesDiff{
 		Added:    StringList{},
@@ -48,10 +43,6 @@ func getExamplesDiff(config *Config, examples1, examples2 openapi3.Examples) (*E
 	}
 
 	if diff.Empty() {
-		return nil, nil
-	}
-
-	if config.BreakingOnly && !diff.Breaking() {
 		return nil, nil
 	}
 

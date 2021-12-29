@@ -18,9 +18,14 @@ func (diff *LinkDiff) Empty() bool {
 	return diff == nil || *diff == LinkDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *LinkDiff) Breaking() bool {
-	return false
+func (diff *LinkDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
 }
 
 func getLinkDiff(config *Config, link1, link2 *openapi3.Link) (*LinkDiff, error) {
@@ -29,11 +34,11 @@ func getLinkDiff(config *Config, link1, link2 *openapi3.Link) (*LinkDiff, error)
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -44,12 +49,12 @@ func getLinkDiffInternal(config *Config, link1, link2 *openapi3.Link) (*LinkDiff
 	result := LinkDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, link1.ExtensionProps, link2.ExtensionProps)
-	result.OperationIDDiff = getValueDiff(config, false, link1.OperationID, link2.OperationID)
-	result.OperationRefDiff = getValueDiff(config, false, link1.OperationRef, link2.OperationRef)
-	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, link1.Description, link2.Description)
-	result.ParametersDiff = getInterfaceMapDiff(config, true, link1.Parameters, link2.Parameters, StringSet{})
+	result.OperationIDDiff = getValueDiff(config, link1.OperationID, link2.OperationID)
+	result.OperationRefDiff = getValueDiff(config, link1.OperationRef, link2.OperationRef)
+	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, link1.Description, link2.Description)
+	result.ParametersDiff = getInterfaceMapDiff(config, link1.Parameters, link2.Parameters, StringSet{})
 	result.ServerDiff = getServerDiff(config, link1.Server, link2.Server)
-	result.RequestBodyDiff = getValueDiff(config, false, link1.RequestBody, link2.RequestBody)
+	result.RequestBodyDiff = getValueDiff(config, link1.RequestBody, link2.RequestBody)
 
 	return &result, nil
 }

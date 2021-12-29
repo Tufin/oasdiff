@@ -9,11 +9,11 @@ import (
 )
 
 func TestBreaking_Same(t *testing.T) {
-	require.False(t, d(t, diff.NewConfig(), 1, 1).Breaking())
+	require.True(t, d(t, &diff.Config{BreakingOnly: true}, 1, 1).Empty())
 }
 
 func TestBreaking_DeletedPaths(t *testing.T) {
-	require.True(t, d(t, diff.NewConfig(), 1, 2).Breaking())
+	require.False(t, d(t, &diff.Config{BreakingOnly: true}, 1, 2).Empty())
 }
 
 func TestBreaking_DeletedTagAllChanges(t *testing.T) {
@@ -36,24 +36,35 @@ func TestBreaking_DeletedEnum(t *testing.T) {
 }
 
 func TestBreaking_AddedEnum(t *testing.T) {
-	require.False(t,
+	require.Nil(t,
 		d(t, &diff.Config{
 			BreakingOnly: true,
-		}, 1, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath].Breaking())
+		}, 1, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath])
 }
 
 func TestBreaking_ModifiedExtension(t *testing.T) {
 	config := diff.Config{
+		BreakingOnly:      true,
 		IncludeExtensions: diff.StringSet{"x-extension-test2": struct{}{}},
 	}
 
-	require.False(t, d(t, &config, 1, 3).ExtensionsDiff.Breaking())
+	require.True(t, d(t, &config, 1, 3).ExtensionsDiff.Empty())
 }
 
-func TestBreaking_Ref(t *testing.T) {
-	require.True(t,
-		d(t, diff.NewConfig(), 1, 3).RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.Breaking(),
-	)
+func TestBreaking_Components(t *testing.T) {
+
+	dd := d(t, &diff.Config{BreakingOnly: true},
+		1, 3)
+
+	require.Empty(t, dd.SchemasDiff)
+	require.Empty(t, dd.ParametersDiff)
+	require.Empty(t, dd.HeadersDiff)
+	require.Empty(t, dd.RequestBodiesDiff)
+	require.Empty(t, dd.ResponsesDiff)
+	require.Empty(t, dd.SecuritySchemesDiff)
+	require.Empty(t, dd.ExamplesDiff)
+	require.Empty(t, dd.LinksDiff)
+	require.Empty(t, dd.CallbacksDiff)
 }
 
 func TestCompareWithDefault(t *testing.T) {
@@ -82,7 +93,7 @@ func TestBreaking_MaxLengthSmaller(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-	require.True(t, d.Breaking())
+	require.False(t, d.Empty())
 }
 
 func TestBreaking_MaxLengthGreater(t *testing.T) {
@@ -99,7 +110,7 @@ func TestBreaking_MaxLengthGreater(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-	require.False(t, d.Breaking())
+	require.True(t, d.Empty())
 }
 
 func TestBreaking_MaxLengthFromNil(t *testing.T) {
@@ -115,7 +126,7 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-	require.True(t, d.Breaking())
+	require.False(t, d.Empty())
 }
 
 func TestBreaking_MaxLengthToNil(t *testing.T) {
@@ -131,7 +142,7 @@ func TestBreaking_MaxLengthToNil(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-	require.False(t, d.Breaking())
+	require.True(t, d.Empty())
 }
 
 func TestBreaking_MaxLengthBothNil(t *testing.T) {
@@ -145,7 +156,7 @@ func TestBreaking_MaxLengthBothNil(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-	require.False(t, d.Breaking())
+	require.True(t, d.Empty())
 }
 
 func TestBreaking_MinItemsSmaller(t *testing.T) {
@@ -159,7 +170,7 @@ func TestBreaking_MinItemsSmaller(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-	require.False(t, d.Breaking())
+	require.True(t, d.Empty())
 }
 
 func TestBreaking_MinItemsGreater(t *testing.T) {
@@ -173,5 +184,5 @@ func TestBreaking_MinItemsGreater(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-	require.True(t, d.Breaking())
+	require.False(t, d.Empty())
 }

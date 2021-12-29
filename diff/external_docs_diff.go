@@ -20,19 +20,10 @@ func (diff *ExternalDocsDiff) Empty() bool {
 	return diff == nil || *diff == ExternalDocsDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *ExternalDocsDiff) Breaking() bool {
-	return false
-}
-
 func getExternalDocsDiff(config *Config, docs1, docs2 *openapi3.ExternalDocs) *ExternalDocsDiff {
 	diff := getExternalDocsDiffInternal(config, docs1, docs2)
 
 	if diff.Empty() {
-		return nil
-	}
-
-	if config.BreakingOnly && !diff.Breaking() {
 		return nil
 	}
 
@@ -57,8 +48,8 @@ func getExternalDocsDiffInternal(config *Config, docs1, docs2 *openapi3.External
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, docs1.ExtensionProps, docs2.ExtensionProps)
-	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, docs1.Description, docs2.Description)
-	result.URLDiff = getValueDiff(config, false, docs1.URL, docs2.URL)
+	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, docs1.Description, docs2.Description)
+	result.URLDiff = getValueDiff(config, docs1.URL, docs2.URL)
 
 	return result
 }

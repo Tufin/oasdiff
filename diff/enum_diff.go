@@ -30,23 +30,24 @@ func (enumDiff *EnumDiff) Empty() bool {
 		len(enumDiff.Deleted) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *EnumDiff) Breaking() bool {
-	if diff.Empty() {
-		return false
+func (enumDiff *EnumDiff) removeNonBreaking() {
+
+	if enumDiff.Empty() {
+		return
 	}
 
-	return len(diff.Deleted) > 0
+	enumDiff.Added = nil
 }
 
 func getEnumDiff(config *Config, enum1, enum2 EnumValues) *EnumDiff {
 
 	diff := getEnumDiffInternal(enum1, enum2)
-	if diff.Empty() {
-		return nil
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil
 	}
 

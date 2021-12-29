@@ -5,8 +5,6 @@ type StringMapDiff struct {
 	Added    StringList   `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedKeys `json:"modified,omitempty" yaml:"modified,omitempty"`
-
-	breaking bool // whether this diff is considered breaking within its specific context
 }
 
 // ModifiedKeys maps keys to their respective diffs
@@ -31,37 +29,23 @@ func (diff *StringMapDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *StringMapDiff) Breaking() bool {
-	if diff.Empty() {
-		return false
-	}
-
-	return diff.breaking
-}
-
-func getStringMapDiff(config *Config, breaking bool, strings1, strings2 StringMap) *StringMapDiff {
-	diff := getStringMapDiffInternal(config, breaking, strings1, strings2)
+func getStringMapDiff(config *Config, strings1, strings2 StringMap) *StringMapDiff {
+	diff := getStringMapDiffInternal(config, strings1, strings2)
 
 	if diff.Empty() {
-		return nil
-	}
-
-	diff.breaking = true
-	if config.BreakingOnly && !diff.Breaking() {
 		return nil
 	}
 
 	return diff
 }
 
-func getStringMapDiffInternal(config *Config, breaking bool, strings1, strings2 StringMap) *StringMapDiff {
+func getStringMapDiffInternal(config *Config, strings1, strings2 StringMap) *StringMapDiff {
 	result := newStringMapDiffDiff()
 
 	for k1, v1 := range strings1 {
 		if v2, ok := strings2[k1]; ok {
 			if v1 != v2 {
-				result.Modified[k1] = getValueDiff(config, false, v1, v2)
+				result.Modified[k1] = getValueDiff(config, v1, v2)
 			}
 		} else {
 			result.Deleted = append(result.Deleted, k1)

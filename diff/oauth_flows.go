@@ -18,26 +18,23 @@ func (diff *OAuthFlowsDiff) Empty() bool {
 	return diff == nil || *diff == OAuthFlowsDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *OAuthFlowsDiff) Breaking() bool {
+func (diff *OAuthFlowsDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.ImplicitDiff.Breaking() ||
-		diff.PasswordDiff.Breaking() ||
-		diff.ClientCredentialsDiff.Breaking() ||
-		diff.AuthorizationCodeDiff.Breaking()
+	diff.ExtensionsDiff = nil
 }
 
 func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
 	diff := getOAuthFlowsDiffInternal(config, flows1, flows2)
 
-	if diff.Empty() {
-		return nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil
 	}
 

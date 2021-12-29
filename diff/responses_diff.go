@@ -24,9 +24,13 @@ func (responsesDiff *ResponsesDiff) Empty() bool {
 		len(responsesDiff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *ResponsesDiff) Breaking() bool {
-	return false
+func (responsesDiff *ResponsesDiff) removeNonBreaking() {
+
+	if responsesDiff.Empty() {
+		return
+	}
+
+	responsesDiff.Added = nil
 }
 
 // ModifiedResponses is map of response values to their respective diffs
@@ -46,11 +50,11 @@ func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses)
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 

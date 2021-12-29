@@ -15,24 +15,24 @@ func (diff *VariableDiff) Empty() bool {
 	return diff == nil || *diff == VariableDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *VariableDiff) Breaking() bool {
+func (diff *VariableDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.EnumDiff.Breaking() ||
-		diff.DefaultDiff.Breaking()
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
 }
 
 func getVariableDiff(config *Config, var1, var2 *openapi3.ServerVariable) *VariableDiff {
 	diff := getVariableDiffInternal(config, var1, var2)
 
-	if diff.Empty() {
-		return nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil
 	}
 
@@ -43,9 +43,9 @@ func getVariableDiffInternal(config *Config, var1, var2 *openapi3.ServerVariable
 	result := VariableDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, var1.ExtensionProps, var2.ExtensionProps)
-	result.EnumDiff = getStringsDiff(config, true, var1.Enum, var2.Enum)
-	result.DefaultDiff = getValueDiff(config, true, var1.Default, var2.Default)
-	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, var1.Description, var2.Description)
+	result.EnumDiff = getStringsDiff(config, var1.Enum, var2.Enum)
+	result.DefaultDiff = getValueDiff(config, var1.Default, var2.Default)
+	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, var1.Description, var2.Description)
 
 	return &result
 }

@@ -26,14 +26,16 @@ func (pathDiff *PathDiff) Empty() bool {
 	return pathDiff == nil || *pathDiff == *newPathDiff()
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (pathDiff *PathDiff) Breaking() bool {
+func (pathDiff *PathDiff) removeNonBreaking() {
+
 	if pathDiff.Empty() {
-		return false
+		return
 	}
 
-	return pathDiff.OperationsDiff.Breaking() ||
-		pathDiff.ParametersDiff.Breaking()
+	pathDiff.ExtensionsDiff = nil
+	pathDiff.RefDiff = nil
+	pathDiff.SummaryDiff = nil
+	pathDiff.DescriptionDiff = nil
 }
 
 func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
@@ -43,11 +45,11 @@ func getPathDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*Path
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -64,9 +66,9 @@ func getPathDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
-	result.RefDiff = getValueDiff(config, false, pathItem1.Ref, pathItem2.Ref)
-	result.SummaryDiff = getValueDiff(config, false, pathItem1.Summary, pathItem2.Summary)
-	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
+	result.RefDiff = getValueDiff(config, pathItem1.Ref, pathItem2.Ref)
+	result.SummaryDiff = getValueDiff(config, pathItem1.Summary, pathItem2.Summary)
+	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
 
 	result.OperationsDiff, err = getOperationsDiff(config, pathItem1, pathItem2)
 	if err != nil {

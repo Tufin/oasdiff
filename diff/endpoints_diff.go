@@ -35,14 +35,13 @@ func (diff *EndpointsDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *EndpointsDiff) Breaking() bool {
+func (diff *EndpointsDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return len(diff.Deleted) > 0 ||
-		diff.Modified.Breaking()
+	diff.Added = nil
 }
 
 func newEndpointsDiff() *EndpointsDiff {
@@ -65,11 +64,11 @@ func getEndpointsDiff(config *Config, paths1, paths2 openapi3.Paths) (*Endpoints
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 

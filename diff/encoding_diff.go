@@ -21,17 +21,17 @@ func (diff *EncodingDiff) Empty() bool {
 	return diff == nil || *diff == EncodingDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff EncodingDiff) Breaking() bool {
+func (diff *EncodingDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.ContentTypeDiff.Breaking() ||
-		diff.HeadersDiff.Breaking() ||
-		diff.StyleDiff.Breaking() || // TODO: check only if request body media type is application/x-www-form-urlencoded
-		diff.ExplodeDiff.Breaking() || // TODO: be more specific
-		diff.AllowReservedDiff.Breaking() // TODO: be more specific
+	diff.ExtensionsDiff = nil
+
+	// TODO: if request body media type isn't application/x-www-form-urlencoded => diff.StyleDiff = nil
+	// TODO: diff.ExplodeDiff is non breaking in specific cases
+	// TODO: diff.AllowReservedDiff is non breaking in specific cases
 }
 
 func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
@@ -40,11 +40,11 @@ func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*Encodi
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -60,14 +60,14 @@ func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) 
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
-	result.ContentTypeDiff = getValueDiff(config, true, value1.ContentType, value2.ContentType)
+	result.ContentTypeDiff = getValueDiff(config, value1.ContentType, value2.ContentType)
 	result.HeadersDiff, err = getHeadersDiff(config, value1.Headers, value2.Headers)
 	if err != nil {
 		return nil, err
 	}
-	result.StyleDiff = getValueDiff(config, true, value1.Style, value2.Style)
-	result.ExplodeDiff = getBoolRefDiff(config, true, value1.Explode, value2.Explode)
-	result.AllowReservedDiff = getValueDiff(config, true, value1.AllowReserved, value2.AllowReserved)
+	result.StyleDiff = getValueDiff(config, value1.Style, value2.Style)
+	result.ExplodeDiff = getBoolRefDiff(config, value1.Explode, value2.Explode)
+	result.AllowReservedDiff = getValueDiff(config, value1.AllowReserved, value2.AllowReserved)
 
 	return &result, nil
 }

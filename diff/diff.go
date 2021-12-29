@@ -30,16 +30,19 @@ func (diff *Diff) Empty() bool {
 	return diff == nil || *diff == Diff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *Diff) Breaking() bool {
+func (diff *Diff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.PathsDiff.Breaking() ||
-		diff.EndpointsDiff.Breaking() ||
-		diff.SecurityDiff.Breaking() ||
-		diff.ServersDiff.Breaking()
+	diff.ExtensionsDiff = nil
+	diff.OpenAPIDiff = nil
+	diff.InfoDiff = nil
+	diff.TagsDiff = nil
+	diff.ExternalDocsDiff = nil
+
+	diff.ComponentsDiff.removeNonBreaking()
 }
 
 /*
@@ -69,11 +72,11 @@ func getDiff(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -86,7 +89,7 @@ func getDiffInternal(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps)
-	result.OpenAPIDiff = getValueDiff(config, false, s1.OpenAPI, s2.OpenAPI)
+	result.OpenAPIDiff = getValueDiff(config, s1.OpenAPI, s2.OpenAPI)
 
 	result.InfoDiff, err = getInfoDiff(config, s1.Info, s2.Info)
 	if err != nil {

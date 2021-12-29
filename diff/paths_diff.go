@@ -25,15 +25,13 @@ func (pathsDiff *PathsDiff) Empty() bool {
 		len(pathsDiff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (pathsDiff *PathsDiff) Breaking() bool {
+func (pathsDiff *PathsDiff) removeNonBreaking() {
 
 	if pathsDiff.Empty() {
-		return false
+		return
 	}
 
-	return len(pathsDiff.Deleted) > 0 ||
-		pathsDiff.Modified.Breaking()
+	pathsDiff.Added = nil
 }
 
 func newPathsDiff() *PathsDiff {
@@ -56,11 +54,11 @@ func getPathsDiff(config *Config, paths1, paths2 openapi3.Paths) (*PathsDiff, er
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 

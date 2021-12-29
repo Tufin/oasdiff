@@ -12,7 +12,7 @@ import (
 )
 
 var base, revision, prefix, filter, format string
-var excludeExamples, excludeDescription, summary, breaking bool
+var excludeExamples, excludeDescription, summary, breakingOnly bool
 
 const (
 	formatYAML = "yaml"
@@ -28,7 +28,7 @@ func init() {
 	flag.BoolVar(&excludeExamples, "exclude-examples", false, "exclude changes to examples")
 	flag.BoolVar(&excludeDescription, "exclude-description", false, "exclude changes to descriptions")
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
-	flag.BoolVar(&breaking, "breaking", false, "display breaking changes only")
+	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 }
 
@@ -55,7 +55,7 @@ func main() {
 		ExcludeDescription: excludeDescription,
 		PathFilter:         filter,
 		PathPrefix:         prefix,
-		BreakingOnly:       breaking,
+		BreakingOnly:       breakingOnly,
 	}, s1, s2)
 
 	if err != nil {

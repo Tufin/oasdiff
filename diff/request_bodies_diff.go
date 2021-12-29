@@ -22,24 +22,17 @@ func (requestBodiesDiff *RequestBodiesDiff) Empty() bool {
 		len(requestBodiesDiff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *RequestBodiesDiff) Breaking() bool {
-	return len(diff.Deleted) > 0 ||
-		diff.Modified.Breaking()
+func (requestBodiesDiff *RequestBodiesDiff) removeNonBreaking() {
+
+	if requestBodiesDiff.Empty() {
+		return
+	}
+
+	requestBodiesDiff.Added = nil
 }
 
 // ModifiedRequestBodies is map of requestBody names to their respective diffs
 type ModifiedRequestBodies map[string]*RequestBodyDiff
-
-// Breaking indicates whether this element includes a breaking change
-func (diff ModifiedRequestBodies) Breaking() bool {
-	for _, modifiedRequestBody := range diff {
-		if modifiedRequestBody.Breaking() {
-			return true
-		}
-	}
-	return false
-}
 
 func newRequestBodiesDiff() *RequestBodiesDiff {
 	return &RequestBodiesDiff{
@@ -55,11 +48,11 @@ func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 

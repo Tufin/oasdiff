@@ -20,14 +20,15 @@ func (diff *MediaTypeDiff) Empty() bool {
 	return diff == nil || *diff == MediaTypeDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *MediaTypeDiff) Breaking() bool {
+func (diff *MediaTypeDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.SchemaDiff.Breaking() ||
-		diff.EncodingsDiff.Breaking()
+	diff.ExtensionsDiff = nil
+	diff.ExampleDiff = nil
+	diff.ExampleDiff = nil
 }
 
 func getMediaTypeDiff(config *Config, mediaType1 *openapi3.MediaType, mediaType2 *openapi3.MediaType) (*MediaTypeDiff, error) {
@@ -36,11 +37,11 @@ func getMediaTypeDiff(config *Config, mediaType1 *openapi3.MediaType, mediaType2
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -60,7 +61,7 @@ func getMediaTypeDiffInternal(config *Config, mediaType1 *openapi3.MediaType, me
 	if err != nil {
 		return nil, err
 	}
-	result.ExampleDiff = getValueDiffConditional(config, false, config.ExcludeExamples, mediaType1.Example, mediaType2.Example)
+	result.ExampleDiff = getValueDiffConditional(config, config.ExcludeExamples, mediaType1.Example, mediaType2.Example)
 	result.EncodingsDiff, err = getEncodingsDiff(config, mediaType1.Encoding, mediaType2.Encoding)
 	if err != nil {
 		return nil, err

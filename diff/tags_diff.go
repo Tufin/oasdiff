@@ -33,19 +33,10 @@ func (tagsDiff *TagsDiff) Empty() bool {
 		len(tagsDiff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (methodDiff *TagsDiff) Breaking() bool {
-	return false
-}
-
 func getTagsDiff(config *Config, tags1, tags2 openapi3.Tags) *TagsDiff {
 	diff := getTagsDiffInternal(config, tags1, tags2)
 
 	if diff.Empty() {
-		return nil
-	}
-
-	if config.BreakingOnly && !diff.Breaking() {
 		return nil
 	}
 

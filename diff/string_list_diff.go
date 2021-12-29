@@ -4,8 +4,6 @@ package diff
 type StringsDiff struct {
 	Added   StringList `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-
-	breaking bool // whether this diff is considered breaking within its specific context
 }
 
 func newStringsDiff() *StringsDiff {
@@ -25,24 +23,10 @@ func (stringsDiff *StringsDiff) Empty() bool {
 		len(stringsDiff.Deleted) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *StringsDiff) Breaking() bool {
-	if diff.Empty() {
-		return false
-	}
-
-	return diff.breaking
-}
-
-func getStringsDiff(config *Config, breaking bool, strings1, strings2 StringList) *StringsDiff {
+func getStringsDiff(config *Config, strings1, strings2 StringList) *StringsDiff {
 	diff := getStringsDiffInternal(strings1, strings2)
 
 	if diff.Empty() {
-		return nil
-	}
-
-	diff.breaking = breaking
-	if config.BreakingOnly && !diff.Breaking() {
 		return nil
 	}
 

@@ -19,16 +19,26 @@ func (headerDiff *HeaderDiff) Empty() bool {
 	return headerDiff == nil || *headerDiff == HeaderDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (headerDiff *HeaderDiff) Breaking() bool {
+func (headerDiff *HeaderDiff) removeNonBreaking() {
+
 	if headerDiff.Empty() {
-		return false
+		return
 	}
 
-	return headerDiff.DeprecatedDiff.CompareWithDefault(false, true, false) ||
-		headerDiff.RequiredDiff.CompareWithDefault(false, true, false) ||
-		headerDiff.SchemaDiff.Breaking() ||
-		headerDiff.ContentDiff.Breaking()
+	headerDiff.ExtensionsDiff = nil
+	headerDiff.DescriptionDiff = nil
+
+	if !headerDiff.DeprecatedDiff.CompareWithDefault(false, true, false) {
+		headerDiff.DeprecatedDiff = nil
+	}
+
+	if !headerDiff.RequiredDiff.CompareWithDefault(false, true, false) {
+		headerDiff.RequiredDiff = nil
+	}
+
+	headerDiff.ExampleDiff = nil
+	headerDiff.ExamplesDiff = nil
+
 }
 
 func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
@@ -37,11 +47,11 @@ func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) (*HeaderDi
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -53,9 +63,9 @@ func getHeaderDiffInternal(config *Config, header1, header2 *openapi3.Header) (*
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, header1.ExtensionProps, header2.ExtensionProps)
-	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, header1.Description, header2.Description)
-	result.DeprecatedDiff = getValueDiff(config, false, header1.Deprecated, header2.Deprecated)
-	result.RequiredDiff = getValueDiff(config, false, header1.Required, header2.Required)
+	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, header1.Description, header2.Description)
+	result.DeprecatedDiff = getValueDiff(config, header1.Deprecated, header2.Deprecated)
+	result.RequiredDiff = getValueDiff(config, header1.Required, header2.Required)
 
 	result.ExamplesDiff, err = getExamplesDiff(config, header1.Examples, header2.Examples)
 	if err != nil {
@@ -67,7 +77,7 @@ func getHeaderDiffInternal(config *Config, header1, header2 *openapi3.Header) (*
 		return nil, err
 	}
 
-	result.ExampleDiff = getValueDiffConditional(config, false, config.ExcludeExamples, header1.Example, header2.Example)
+	result.ExampleDiff = getValueDiffConditional(config, config.ExcludeExamples, header1.Example, header2.Example)
 
 	result.ContentDiff, err = getContentDiff(config, header1.Content, header2.Content)
 	if err != nil {

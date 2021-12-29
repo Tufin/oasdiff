@@ -12,17 +12,6 @@ type EncodingsDiff struct {
 // ModifiedEncodings is map of enconding names to their respective diffs
 type ModifiedEncodings map[string]*EncodingDiff
 
-// Breaking indicates whether this element includes a breaking change
-func (diff ModifiedEncodings) Breaking() bool {
-	for _, encodingDiff := range diff {
-		if encodingDiff.Breaking() {
-			return true
-		}
-	}
-
-	return false
-}
-
 // Empty indicates whether a change was found in this element
 func (diff *EncodingsDiff) Empty() bool {
 	if diff == nil {
@@ -34,15 +23,13 @@ func (diff *EncodingsDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *EncodingsDiff) Breaking() bool {
+func (diff *EncodingsDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return len(diff.Deleted) > 0 ||
-		diff.Modified.Breaking()
-
+	diff.Added = nil
 }
 
 func newEncodingsDiff() *EncodingsDiff {
@@ -58,11 +45,12 @@ func getEncodingsDiff(config *Config, encodings1, encodings2 map[string]*openapi
 	if err != nil {
 		return nil, err
 	}
-	if diff.Empty() {
-		return nil, nil
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 

@@ -34,18 +34,23 @@ func (methodDiff *MethodDiff) Empty() bool {
 	return *methodDiff == MethodDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (methodDiff *MethodDiff) Breaking() bool {
+func (methodDiff *MethodDiff) removeNonBreaking() {
+
 	if methodDiff.Empty() {
-		return false
+		return
 	}
 
-	return methodDiff.ParametersDiff.Breaking() ||
-		methodDiff.RequestBodyDiff.Breaking() ||
-		methodDiff.ResponsesDiff.Breaking() ||
-		methodDiff.CallbacksDiff.Breaking() ||
-		methodDiff.DeprecatedDiff.CompareWithDefault(false, true, false) ||
-		methodDiff.SecurityDiff.Breaking()
+	methodDiff.ExtensionsDiff = nil
+	methodDiff.TagsDiff = nil
+	methodDiff.SummaryDiff = nil
+	methodDiff.DescriptionDiff = nil
+
+	if !methodDiff.DeprecatedDiff.CompareWithDefault(false, true, false) {
+		methodDiff.DeprecatedDiff = nil
+	}
+
+	methodDiff.ServersDiff = nil
+	methodDiff.ExternalDocsDiff = nil
 }
 
 func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) (*MethodDiff, error) {
@@ -55,11 +60,11 @@ func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) (*M
 		return nil, err
 	}
 
-	if diff.Empty() {
-		return nil, nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil, nil
 	}
 
@@ -72,10 +77,10 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
-	result.TagsDiff = getStringsDiff(config, false, pathItem1.Tags, pathItem2.Tags)
-	result.SummaryDiff = getValueDiff(config, false, pathItem1.Summary, pathItem2.Summary)
-	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
-	result.OperationIDDiff = getValueDiff(config, false, pathItem1.OperationID, pathItem2.OperationID)
+	result.TagsDiff = getStringsDiff(config, pathItem1.Tags, pathItem2.Tags)
+	result.SummaryDiff = getValueDiff(config, pathItem1.Summary, pathItem2.Summary)
+	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
+	result.OperationIDDiff = getValueDiff(config, pathItem1.OperationID, pathItem2.OperationID)
 	result.ParametersDiff, err = getParametersDiff(config, pathItem1.Parameters, pathItem2.Parameters)
 	if err != nil {
 		return nil, err
@@ -95,7 +100,7 @@ func getMethodDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Operat
 	if err != nil {
 		return nil, err
 	}
-	result.DeprecatedDiff = getValueDiff(config, false, pathItem1.Deprecated, pathItem2.Deprecated)
+	result.DeprecatedDiff = getValueDiff(config, pathItem1.Deprecated, pathItem2.Deprecated)
 	result.SecurityDiff = getSecurityRequirementsDiff(config, pathItem1.Security, pathItem2.Security)
 	result.ServersDiff = getServersDiff(config, pathItem1.Servers, pathItem2.Servers)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, pathItem1.ExternalDocs, pathItem2.ExternalDocs)

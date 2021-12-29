@@ -19,25 +19,24 @@ func (diff *ServerDiff) Empty() bool {
 	return diff == nil || *diff == ServerDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *ServerDiff) Breaking() bool {
+func (diff *ServerDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.Deleted ||
-		diff.URLDiff.Breaking() ||
-		diff.VariablesDiff.Breaking()
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
 }
 
 func getServerDiff(config *Config, value1, value2 *openapi3.Server) *ServerDiff {
 	diff := getServerDiffInternal(config, value1, value2)
 
-	if diff.Empty() {
-		return nil
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
-	if config.BreakingOnly && !diff.Breaking() {
+	if diff.Empty() {
 		return nil
 	}
 
@@ -63,8 +62,8 @@ func getServerDiffInternal(config *Config, value1, value2 *openapi3.Server) *Ser
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
-	result.URLDiff = getValueDiff(config, false, value1.URL, value2.URL)
-	result.DescriptionDiff = getValueDiffConditional(config, false, config.ExcludeDescription, value1.Description, value2.Description)
+	result.URLDiff = getValueDiff(config, value1.URL, value2.URL)
+	result.DescriptionDiff = getValueDiffConditional(config, config.ExcludeDescription, value1.Description, value2.Description)
 	result.VariablesDiff = getVariablesDiff(config, value1.Variables, value2.Variables)
 
 	return &result
