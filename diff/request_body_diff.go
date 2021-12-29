@@ -17,11 +17,11 @@ type RequestBodyDiff struct {
 }
 
 // Empty indicates whether a change was found in this element
-func (requestBodyDiff *RequestBodyDiff) Empty() bool {
-	if requestBodyDiff == nil {
+func (diff *RequestBodyDiff) Empty() bool {
+	if diff == nil {
 		return true
 	}
-	return *requestBodyDiff == RequestBodyDiff{}
+	return *diff == RequestBodyDiff{}
 }
 
 func (diff *RequestBodyDiff) removeNonBreaking() {

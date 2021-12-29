@@ -28,7 +28,7 @@ func (diff *ValueDiff) CompareWithDefault(from, to, defaultValue interface{}) bo
 		getValueWithDefault(diff.To, defaultValue) == to
 }
 
-func (diff *ValueDiff) MinBreaking() bool {
+func (diff *ValueDiff) minBreaking() bool {
 	if diff.Empty() {
 		return false
 	}
@@ -48,7 +48,7 @@ func (diff *ValueDiff) MinBreaking() bool {
 	return false
 }
 
-func (diff *ValueDiff) MaxBreaking() bool {
+func (diff *ValueDiff) maxBreaking() bool {
 	if diff.Empty() {
 		return false
 	}

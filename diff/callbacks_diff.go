@@ -14,15 +14,15 @@ type CallbacksDiff struct {
 }
 
 // Empty indicates whether a change was found in this element
-func (callbacksDiff *CallbacksDiff) Empty() bool {
+func (diff *CallbacksDiff) Empty() bool {
 
-	if callbacksDiff == nil {
+	if diff == nil {
 		return true
 	}
 
-	return len(callbacksDiff.Added) == 0 &&
-		len(callbacksDiff.Deleted) == 0 &&
-		len(callbacksDiff.Modified) == 0
+	return len(diff.Added) == 0 &&
+		len(diff.Deleted) == 0 &&
+		len(diff.Modified) == 0
 }
 
 func (diff *CallbacksDiff) removeNonBreaking() {
@@ -115,10 +115,10 @@ func getCallbackDiff(config *Config, callback1, callback2 *openapi3.Callback) (*
 	return getPathsDiff(config, openapi3.Paths(*callback1), openapi3.Paths(*callback2))
 }
 
-func (callbacksDiff *CallbacksDiff) getSummary() *SummaryDetails {
+func (diff *CallbacksDiff) getSummary() *SummaryDetails {
 	return &SummaryDetails{
-		Added:    len(callbacksDiff.Added),
-		Deleted:  len(callbacksDiff.Deleted),
-		Modified: len(callbacksDiff.Modified),
+		Added:    len(diff.Added),
+		Deleted:  len(diff.Deleted),
+		Modified: len(diff.Modified),
 	}
 }

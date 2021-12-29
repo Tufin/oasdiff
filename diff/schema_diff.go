@@ -104,35 +104,35 @@ func (diff *SchemaDiff) removeNonBreaking() {
 		diff.DeprecatedDiff = nil
 	}
 
-	if !diff.MinDiff.MinBreaking() {
+	if !diff.MinDiff.minBreaking() {
 		diff.MinDiff = nil
 	}
 
-	if !diff.MaxDiff.MaxBreaking() {
+	if !diff.MaxDiff.maxBreaking() {
 		diff.MaxDiff = nil
 	}
 
-	if !diff.MinLengthDiff.MinBreaking() {
+	if !diff.MinLengthDiff.minBreaking() {
 		diff.MinLengthDiff = nil
 	}
 
-	if !diff.MaxLengthDiff.MaxBreaking() {
+	if !diff.MaxLengthDiff.maxBreaking() {
 		diff.MaxLengthDiff = nil
 	}
 
-	if !diff.MinPropsDiff.MinBreaking() {
+	if !diff.MinPropsDiff.minBreaking() {
 		diff.MinPropsDiff = nil
 	}
 
-	if !diff.MaxPropsDiff.MaxBreaking() {
+	if !diff.MaxPropsDiff.maxBreaking() {
 		diff.MaxPropsDiff = nil
 	}
 
-	if !diff.MinItemsDiff.MinBreaking() {
+	if !diff.MinItemsDiff.minBreaking() {
 		diff.MinItemsDiff = nil
 	}
 
-	if !diff.MaxItemsDiff.MaxBreaking() {
+	if !diff.MaxItemsDiff.maxBreaking() {
 		diff.MaxItemsDiff = nil
 	}
 }
