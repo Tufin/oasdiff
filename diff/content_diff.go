@@ -33,15 +33,28 @@ func (diff *ContentDiff) Empty() bool {
 		len(diff.MediaTypeModified) == 0
 }
 
+func (diff *ContentDiff) removeNonBreaking() {
+	if diff.Empty() {
+		return
+	}
+
+	diff.MediaTypeAdded = nil
+}
+
 func getContentDiff(config *Config, content1, content2 openapi3.Content) (*ContentDiff, error) {
 	diff, err := getContentDiffInternal(config, content1, content2)
 	if err != nil {
 		return nil, err
 	}
 
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

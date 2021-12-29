@@ -35,6 +35,15 @@ func (diff *EndpointsDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
+func (diff *EndpointsDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.Added = nil
+}
+
 func newEndpointsDiff() *EndpointsDiff {
 	return &EndpointsDiff{
 		Added:    Endpoints{},
@@ -53,6 +62,10 @@ func getEndpointsDiff(config *Config, paths1, paths2 openapi3.Paths) (*Endpoints
 	diff, err := getEndpointsDiffInternal(config, paths1, paths2)
 	if err != nil {
 		return nil, err
+	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

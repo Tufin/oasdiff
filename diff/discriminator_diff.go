@@ -18,6 +18,15 @@ func (diff *DiscriminatorDiff) Empty() bool {
 	return diff == nil || *diff == DiscriminatorDiff{}
 }
 
+func (diff *DiscriminatorDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.ExtensionsDiff = nil
+}
+
 func newDiscriminatorDiff() *DiscriminatorDiff {
 	return &DiscriminatorDiff{}
 
@@ -26,9 +35,14 @@ func newDiscriminatorDiff() *DiscriminatorDiff {
 func getDiscriminatorDiff(config *Config, discriminator1, discriminator2 *openapi3.Discriminator) *DiscriminatorDiff {
 	diff := getDiscriminatorDiffInternal(config, discriminator1, discriminator2)
 
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

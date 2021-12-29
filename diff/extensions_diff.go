@@ -14,9 +14,11 @@ func (diff *ExtensionsDiff) Empty() bool {
 
 func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.ExtensionProps) *ExtensionsDiff {
 	diff := getExtensionsDiffInternal(config, extensions1, extensions2)
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return (*ExtensionsDiff)(diff)
 }
 

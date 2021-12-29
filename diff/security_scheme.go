@@ -20,11 +20,27 @@ func (diff *SecuritySchemeDiff) Empty() bool {
 	return diff == nil || *diff == SecuritySchemeDiff{}
 }
 
+func (diff *SecuritySchemeDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
+}
+
 func getSecuritySchemeDiff(config *Config, scheme1, scheme2 *openapi3.SecurityScheme) *SecuritySchemeDiff {
 	diff := getSecuritySchemeDiffInternal(config, scheme1, scheme2)
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

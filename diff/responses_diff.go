@@ -24,6 +24,15 @@ func (responsesDiff *ResponsesDiff) Empty() bool {
 		len(responsesDiff.Modified) == 0
 }
 
+func (responsesDiff *ResponsesDiff) removeNonBreaking() {
+
+	if responsesDiff.Empty() {
+		return
+	}
+
+	responsesDiff.Added = nil
+}
+
 // ModifiedResponses is map of response values to their respective diffs
 type ModifiedResponses map[string]*ResponseDiff
 
@@ -40,9 +49,15 @@ func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses)
 	if err != nil {
 		return nil, err
 	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

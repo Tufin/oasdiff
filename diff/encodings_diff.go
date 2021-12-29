@@ -23,6 +23,15 @@ func (diff *EncodingsDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
+func (diff *EncodingsDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.Added = nil
+}
+
 func newEncodingsDiff() *EncodingsDiff {
 	return &EncodingsDiff{
 		Added:    StringList{},
@@ -36,9 +45,15 @@ func getEncodingsDiff(config *Config, encodings1, encodings2 map[string]*openapi
 	if err != nil {
 		return nil, err
 	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

@@ -31,9 +31,11 @@ func (diff *StringMapDiff) Empty() bool {
 
 func getStringMapDiff(strings1, strings2 StringMap) *StringMapDiff {
 	diff := getStringMapDiffInternal(strings1, strings2)
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

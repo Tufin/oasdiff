@@ -30,13 +30,19 @@ func (diff *Diff) Empty() bool {
 	return diff == nil || *diff == Diff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *Diff) Breaking() bool {
+func (diff *Diff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	return diff.PathsDiff.Breaking()
+	diff.ExtensionsDiff = nil
+	diff.OpenAPIDiff = nil
+	diff.InfoDiff = nil
+	diff.TagsDiff = nil
+	diff.ExternalDocsDiff = nil
+
+	diff.ComponentsDiff.removeNonBreaking()
 }
 
 /*
@@ -64,6 +70,10 @@ func getDiff(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	diff, err := getDiffInternal(config, s1, s2)
 	if err != nil {
 		return nil, err
+	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

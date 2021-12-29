@@ -21,15 +21,33 @@ func (diff *EncodingDiff) Empty() bool {
 	return diff == nil || *diff == EncodingDiff{}
 }
 
+func (diff *EncodingDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.ExtensionsDiff = nil
+
+	// TODO: if request body media type isn't application/x-www-form-urlencoded => diff.StyleDiff = nil
+	// TODO: diff.ExplodeDiff is non breaking in specific cases
+	// TODO: diff.AllowReservedDiff is non breaking in specific cases
+}
+
 func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
 	diff, err := getEncodingDiffInternal(config, value1, value2)
 	if err != nil {
 		return nil, err
 	}
 
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

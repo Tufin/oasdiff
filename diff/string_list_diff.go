@@ -25,9 +25,11 @@ func (stringsDiff *StringsDiff) Empty() bool {
 
 func getStringsDiff(strings1, strings2 StringList) *StringsDiff {
 	diff := getStringsDiffInternal(strings1, strings2)
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

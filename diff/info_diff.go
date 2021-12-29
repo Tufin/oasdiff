@@ -31,6 +31,7 @@ func getInfoDiff(config *Config, info1, info2 *openapi3.Info) (*InfoDiff, error)
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

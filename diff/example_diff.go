@@ -24,6 +24,7 @@ func getExampleDiff(config *Config, value1, value2 *openapi3.Example) *ExampleDi
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

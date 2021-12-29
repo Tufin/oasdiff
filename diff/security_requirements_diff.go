@@ -36,9 +36,11 @@ func newSecurityRequirementsDiff() *SecurityRequirementsDiff {
 
 func getSecurityRequirementsDiff(config *Config, securityRequirements1, securityRequirements2 *openapi3.SecurityRequirements) *SecurityRequirementsDiff {
 	diff := getSecurityRequirementsDiffInternal(config, securityRequirements1, securityRequirements2)
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

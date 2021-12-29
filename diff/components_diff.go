@@ -67,3 +67,20 @@ func getComponentsDiff(config *Config, s1, s2 openapi3.Components) (ComponentsDi
 
 	return result, nil
 }
+
+func (diff *ComponentsDiff) removeNonBreaking() {
+
+	if diff == nil {
+		return
+	}
+
+	diff.SchemasDiff = nil
+	diff.ParametersDiff = nil
+	diff.HeadersDiff = nil
+	diff.RequestBodiesDiff = nil
+	diff.ResponsesDiff = nil
+	diff.SecuritySchemesDiff = nil
+	diff.ExamplesDiff = nil
+	diff.LinksDiff = nil
+	diff.CallbacksDiff = nil
+}

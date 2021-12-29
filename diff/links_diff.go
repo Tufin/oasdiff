@@ -40,9 +40,11 @@ func getLinksDiff(config *Config, links1, links2 openapi3.Links) (*LinksDiff, er
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

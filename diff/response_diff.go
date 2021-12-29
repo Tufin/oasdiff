@@ -16,14 +16,30 @@ func (diff *ResponseDiff) Empty() bool {
 	return diff == nil || *diff == ResponseDiff{}
 }
 
+func (diff *ResponseDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
+}
+
 func diffResponseValues(config *Config, response1, response2 *openapi3.Response) (*ResponseDiff, error) {
 	diff, err := diffResponseValuesInternal(config, response1, response2)
 	if err != nil {
 		return nil, err
 	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

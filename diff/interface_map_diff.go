@@ -34,9 +34,11 @@ func newInterfaceMapDiff() *InterfaceMapDiff {
 
 func getInterfaceMapDiff(map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
 	diff := getInterfaceMapDiffInternal(map1, map2, filter)
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

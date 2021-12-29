@@ -26,6 +26,7 @@ func getExternalDocsDiff(config *Config, docs1, docs2 *openapi3.ExternalDocs) *E
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

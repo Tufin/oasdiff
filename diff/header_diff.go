@@ -19,14 +19,42 @@ func (headerDiff *HeaderDiff) Empty() bool {
 	return headerDiff == nil || *headerDiff == HeaderDiff{}
 }
 
+func (headerDiff *HeaderDiff) removeNonBreaking() {
+
+	if headerDiff.Empty() {
+		return
+	}
+
+	headerDiff.ExtensionsDiff = nil
+	headerDiff.DescriptionDiff = nil
+
+	if !headerDiff.DeprecatedDiff.CompareWithDefault(false, true, false) {
+		headerDiff.DeprecatedDiff = nil
+	}
+
+	if !headerDiff.RequiredDiff.CompareWithDefault(false, true, false) {
+		headerDiff.RequiredDiff = nil
+	}
+
+	headerDiff.ExampleDiff = nil
+	headerDiff.ExamplesDiff = nil
+
+}
+
 func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
 	diff, err := getHeaderDiffInternal(config, header1, header2)
 	if err != nil {
 		return nil, err
 	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

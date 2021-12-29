@@ -34,16 +34,23 @@ func (methodDiff *MethodDiff) Empty() bool {
 	return *methodDiff == MethodDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (methodDiff *MethodDiff) Breaking() bool {
+func (methodDiff *MethodDiff) removeNonBreaking() {
+
 	if methodDiff.Empty() {
-		return false
+		return
 	}
 
-	return methodDiff.ParametersDiff.Breaking()
-	// methodDiff.RequestBodyDiff.Breaking() ||
-	// methodDiff.ResponsesDiff.Breaking() ||
-	// methodDiff.CallbacksDiff.Breaking()
+	methodDiff.ExtensionsDiff = nil
+	methodDiff.TagsDiff = nil
+	methodDiff.SummaryDiff = nil
+	methodDiff.DescriptionDiff = nil
+
+	if !methodDiff.DeprecatedDiff.CompareWithDefault(false, true, false) {
+		methodDiff.DeprecatedDiff = nil
+	}
+
+	methodDiff.ServersDiff = nil
+	methodDiff.ExternalDocsDiff = nil
 }
 
 func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) (*MethodDiff, error) {
@@ -51,6 +58,10 @@ func getMethodDiff(config *Config, pathItem1, pathItem2 *openapi3.Operation) (*M
 
 	if err != nil {
 		return nil, err
+	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

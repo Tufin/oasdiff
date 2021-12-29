@@ -23,6 +23,15 @@ func (diff *VariablesDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
+func (diff *VariablesDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.Added = nil
+}
+
 func newVariablesDiff() *VariablesDiff {
 	return &VariablesDiff{
 		Added:    StringList{},
@@ -33,9 +42,15 @@ func newVariablesDiff() *VariablesDiff {
 
 func getVariablesDiff(config *Config, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
 	diff := getVariablesDiffInternal(config, variables1, variables2)
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

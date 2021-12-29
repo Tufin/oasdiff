@@ -23,9 +23,11 @@ func getSchemaListsDiff(config *Config, schemaRefs1, schemaRefs2 openapi3.Schema
 	if err != nil {
 		return nil, err
 	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

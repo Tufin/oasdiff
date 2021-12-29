@@ -9,7 +9,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const securityScorePath = "/api/{domain}/{project}/badges/security-score"
+const (
+	securityScorePath      = "/api/{domain}/{project}/badges/security-score"
+	securityScorePathSlash = securityScorePath + "/"
+	installCommandPath     = "/api/{domain}/{project}/install-command"
+)
 
 func l(t *testing.T, v int) *openapi3.T {
 	loader := openapi3.NewLoader()
@@ -49,7 +53,7 @@ func TestDiff_Empty(t *testing.T) {
 
 func TestDiff_DeletedPaths(t *testing.T) {
 	require.ElementsMatch(t,
-		[]string{"/api/{domain}/{project}/install-command", "/register", "/subscribe"},
+		[]string{installCommandPath, "/register", "/subscribe"},
 		d(t, diff.NewConfig(), 1, 2).PathsDiff.Deleted)
 }
 
@@ -61,7 +65,7 @@ func TestDiff_AddedOperation(t *testing.T) {
 
 func TestDiff_DeletedOperation(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Deleted,
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Deleted,
 		"POST")
 }
 
@@ -134,7 +138,7 @@ func TestDiff_ModifiedEncodingHeaders(t *testing.T) {
 
 func TestDiff_AddedParam(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
 		"X-Auth-Name")
 }
 
@@ -150,16 +154,19 @@ func TestDiff_ModifiedParam(t *testing.T) {
 			From: true,
 			To:   (interface{})(nil),
 		},
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].ExplodeDiff)
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].ExplodeDiff)
 }
 
 func TestSchemaDiff_TypeDiff(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 2)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "string",
-			To:   "integer",
-		},
-		d(t, diff.NewConfig(), 1, 2).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff)
+		"string",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff.From)
+
+	require.Equal(t,
+		"integer",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff.To)
 }
 
 func TestSchemaDiff_EnumDiff(t *testing.T) {
@@ -168,7 +175,7 @@ func TestSchemaDiff_EnumDiff(t *testing.T) {
 			Added:   diff.EnumValues{"test1"},
 			Deleted: diff.EnumValues{},
 		},
-		d(t, diff.NewConfig(), 1, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["project"].SchemaDiff.EnumDiff)
+		d(t, diff.NewConfig(), 1, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["project"].SchemaDiff.EnumDiff)
 }
 
 func TestSchemaDiff_RequiredAdded(t *testing.T) {
@@ -190,12 +197,15 @@ func TestSchemaDiff_NotDiff(t *testing.T) {
 }
 
 func TestSchemaDiff_ContentDiff(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 2, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "number",
-			To:   "string",
-		},
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified["/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff)
+		"number",
+		dd.PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.From)
+
+	require.Equal(t,
+		"string",
+		dd.PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.To)
 }
 
 func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
@@ -211,16 +221,15 @@ func TestSchemaDiff_MediaTypeDeleted(t *testing.T) {
 }
 
 func TestSchemaDiff_MediaTypeModified(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 5)
+
 	require.Equal(t,
-		&diff.MediaTypeDiff{
-			SchemaDiff: &diff.SchemaDiff{
-				TypeDiff: &diff.ValueDiff{
-					From: "object",
-					To:   "string",
-				},
-			},
-		},
-		d(t, diff.NewConfig(), 1, 5).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"])
+		"object",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.From)
+
+	require.Equal(t,
+		"string",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.To)
 }
 
 func TestSchemaDiff_MediaType_MultiEntries(t *testing.T) {
@@ -254,12 +263,15 @@ func TestSchemaDiff_WithExamples(t *testing.T) {
 }
 
 func TestSchemaDiff_MinDiff(t *testing.T) {
+
+	dd := d(t, &diff.Config{PathPrefix: "/prefix"}, 4, 2)
+
+	require.Nil(t,
+		dd.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.From)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: nil,
-			To:   float64(7),
-		},
-		d(t, &diff.Config{PathPrefix: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff)
+		float64(7),
+		dd.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.To)
 }
 
 func TestResponseAdded(t *testing.T) {
@@ -284,7 +296,7 @@ func TestResponseDescriptionModified(t *testing.T) {
 			From: "Tufin",
 			To:   "Tufin1",
 		},
-		d(t, &config, 3, 1).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
+		d(t, &config, 3, 1).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestResponseHeadersModified(t *testing.T) {
@@ -293,18 +305,18 @@ func TestResponseHeadersModified(t *testing.T) {
 			From: "Request limit per min.",
 			To:   "Request limit per hour.",
 		},
-		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].DescriptionDiff)
+		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].DescriptionDiff)
 }
 
 func TestServerAdded(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Added,
+		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Added,
 		"https://tufin.io/securecloud")
 }
 
 func TestServerDeleted(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Deleted,
+		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Deleted,
 		"https://tufin.io/securecloud")
 }
 
@@ -314,34 +326,38 @@ func TestServerModified(t *testing.T) {
 	}
 
 	require.Contains(t,
-		d(t, &config, 5, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Modified,
+		d(t, &config, 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified,
 		"https://www.tufin.io/securecloud")
 }
 
 func TestServerVariableAdded(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Added,
+		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Added,
 		"name")
 }
 
 func TestServerVariableModified(t *testing.T) {
+
+	dd := d(t, diff.NewConfig(), 3, 5)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "CEO",
-			To:   "developer",
-		},
-		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff)
+		"CEO",
+		dd.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff.From)
+
+	require.Equal(t,
+		"developer",
+		dd.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff.To)
 }
 
 func TestServerAddedToPathItem(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].ServersDiff.Added,
+		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].ServersDiff.Added,
 		"https://tufin.io/securecloud")
 }
 
 func TestParamAddedToPathItem(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified["/api/{domain}/{project}/install-command"].ParametersDiff.Added[openapi3.ParameterInHeader],
+		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].ParametersDiff.Added[openapi3.ParameterInHeader],
 		"name")
 }
 
@@ -364,45 +380,58 @@ func TestHeaderDeleted(t *testing.T) {
 }
 
 func TestRequestBodyModified(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 3)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "number",
-			To:   "integer",
-		},
-		d(t, diff.NewConfig(), 1, 3).RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff,
+		"number",
+		dd.RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.From,
+	)
+
+	require.Equal(t,
+		"integer",
+		dd.RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.To,
 	)
 }
 
 func TestHeaderModifiedSchema(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 5, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: false,
-			To:   true,
-		},
-		d(t, diff.NewConfig(), 5, 1).HeadersDiff.Modified["test"].SchemaDiff.AdditionalPropertiesAllowedDiff)
+		false,
+		dd.HeadersDiff.Modified["test"].SchemaDiff.AdditionalPropertiesAllowedDiff.From)
+
+	require.Equal(t,
+		true,
+		dd.HeadersDiff.Modified["test"].SchemaDiff.AdditionalPropertiesAllowedDiff.To)
 }
 
 func TestHeaderModifiedContent(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 5, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "string",
-			To:   "object",
-		},
-		d(t, diff.NewConfig(), 5, 1).HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff)
+		"string",
+		dd.HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.From)
+
+	require.Equal(t,
+		"object",
+		dd.HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.To)
 }
 
 func TestResponseContentModified(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 5, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: "object",
-			To:   "string",
-		},
-		d(t, diff.NewConfig(), 5, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff)
+		"object",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff.From)
+
+	require.Equal(t,
+		"string",
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff.To)
 }
 
 func TestResponseDespcriptionNil(t *testing.T) {
 	s3 := l(t, 3)
-	s3.Paths["/api/{domain}/{project}/install-command"].Get.Responses["default"].Value.Description = nil
+	s3.Paths[installCommandPath].Get.Responses["default"].Value.Description = nil
 
 	d, err := diff.Get(diff.NewConfig(), s3, l(t, 1))
 	require.NoError(t, err)
@@ -412,7 +441,7 @@ func TestResponseDespcriptionNil(t *testing.T) {
 			From: interface{}(nil),
 			To:   "Tufin1",
 		},
-		d.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
+		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestSchemaDiff_DeletedCallback(t *testing.T) {
@@ -445,30 +474,38 @@ func TestSchemaDiff_DeletedSchemas(t *testing.T) {
 }
 
 func TestSchemaDiff_ModifiedSchemas(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 5)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: true,
-			To:   false,
-		},
-		d(t, diff.NewConfig(), 1, 5).SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff)
+		true,
+		dd.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff.From)
+
+	require.Equal(t,
+		false,
+		dd.SchemasDiff.Modified["network-policies"].AdditionalPropertiesAllowedDiff.To)
 }
 
 func TestSchemaDiff_ModifiedSchemasOldNil(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 1, 5)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: nil,
-			To:   false,
-		},
-		d(t, diff.NewConfig(), 1, 5).SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
+		nil,
+		dd.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff.From)
+
+	require.Equal(t,
+		false,
+		dd.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff.To)
 }
 
 func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
+	dd := d(t, diff.NewConfig(), 5, 1)
+
 	require.Equal(t,
-		&diff.ValueDiff{
-			From: false,
-			To:   nil,
-		},
-		d(t, diff.NewConfig(), 5, 1).SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff)
+		false,
+		dd.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff.From)
+
+	require.Nil(t,
+		dd.SchemasDiff.Modified["rules"].AdditionalPropertiesAllowedDiff.To)
 }
 
 func TestSummary(t *testing.T) {

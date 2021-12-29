@@ -25,19 +25,28 @@ func (diff *ParameterDiff) Empty() bool {
 	return diff == nil || *diff == ParameterDiff{}
 }
 
-// Breaking indicates whether this element includes a breaking change
-func (diff *ParameterDiff) Breaking() bool {
+func (diff *ParameterDiff) removeNonBreaking() {
+
 	if diff.Empty() {
-		return false
+		return
 	}
 
-	if diff.RequiredDiff != nil {
-		if diff.RequiredDiff.From == false && diff.RequiredDiff.To == true {
-			return true
-		}
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
+	diff.ExampleDiff = nil
+	diff.ExamplesDiff = nil
+
+	if !diff.DeprecatedDiff.CompareWithDefault(false, true, false) {
+		diff.DeprecatedDiff = nil
 	}
 
-	return false
+	if !diff.RequiredDiff.CompareWithDefault(false, true, false) {
+		diff.RequiredDiff = nil
+	}
+
+	// TODO: diff.ExplodeDiff is breaking only if type is array or object
+	// diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) || // TODO: only if this is a query param
+	// diff.AllowReservedDiff.CompareWithDefault(true, false, false) || // TODO: only if this id a query param
 }
 
 func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
@@ -45,9 +54,15 @@ func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*Para
 	if err != nil {
 		return nil, err
 	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

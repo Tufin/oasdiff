@@ -24,6 +24,23 @@ func (headersDiff *HeadersDiff) Empty() bool {
 		len(headersDiff.Modified) == 0
 }
 
+func (headersDiff *HeadersDiff) emptyNonBreaking(breakingOnly bool) {
+	if !breakingOnly {
+		return
+	}
+
+	headersDiff.Added = nil
+}
+
+func (headersDiff *HeadersDiff) removeNonBreaking() {
+
+	if headersDiff.Empty() {
+		return
+	}
+
+	headersDiff.Added = nil
+}
+
 // ModifiedHeaders is map of header names to their respective diffs
 type ModifiedHeaders map[string]*HeaderDiff
 
@@ -40,9 +57,15 @@ func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) (*Heade
 	if err != nil {
 		return nil, err
 	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

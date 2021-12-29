@@ -24,13 +24,13 @@ func (operationsDiff *OperationsDiff) Empty() bool {
 		len(operationsDiff.Modified) == 0
 }
 
-func (operationsDiff *OperationsDiff) Breaking() bool {
+func (operationsDiff *OperationsDiff) removeNonBreaking() {
+
 	if operationsDiff.Empty() {
-		return false
+		return
 	}
 
-	return len(operationsDiff.Deleted) > 0 ||
-		operationsDiff.Modified.Breaking()
+	operationsDiff.Added = nil
 }
 
 func newOperationsDiff() *OperationsDiff {
@@ -44,24 +44,20 @@ func newOperationsDiff() *OperationsDiff {
 // ModifiedOperations is a map of HTTP methods to their respective diffs
 type ModifiedOperations map[string]*MethodDiff
 
-// Breaking indicates whether this element includes a breaking change
-func (modifiedOperations ModifiedOperations) Breaking() bool {
-	for _, methodDiff := range modifiedOperations {
-		if methodDiff.Breaking() {
-			return true
-		}
-	}
-	return false
-}
-
 func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
 	diff, err := getOperationsDiffInternal(config, pathItem1, pathItem2)
 	if err != nil {
 		return nil, err
 	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

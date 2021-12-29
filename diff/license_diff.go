@@ -22,6 +22,7 @@ func getLicenseDiff(config *Config, license1, license2 *openapi3.License) *Licen
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

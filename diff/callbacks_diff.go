@@ -25,6 +25,15 @@ func (callbacksDiff *CallbacksDiff) Empty() bool {
 		len(callbacksDiff.Modified) == 0
 }
 
+func (diff *CallbacksDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.Added = nil
+}
+
 // ModifiedCallbacks is map of callback names to their respective diffs
 type ModifiedCallbacks map[string]*PathsDiff
 
@@ -41,6 +50,10 @@ func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks)
 
 	if err != nil {
 		return nil, err
+	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

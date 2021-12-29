@@ -15,12 +15,27 @@ func (diff *VariableDiff) Empty() bool {
 	return diff == nil || *diff == VariableDiff{}
 }
 
+func (diff *VariableDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
+}
+
 func getVariableDiff(config *Config, var1, var2 *openapi3.ServerVariable) *VariableDiff {
 	diff := getVariableDiffInternal(config, var1, var2)
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
 
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

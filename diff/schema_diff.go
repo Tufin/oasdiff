@@ -55,14 +55,102 @@ func (diff *SchemaDiff) Empty() bool {
 	return diff == nil || *diff == SchemaDiff{}
 }
 
+func (diff *SchemaDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.SchemaDeleted = false
+	diff.TitleDiff = nil
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
+	diff.ExampleDiff = nil
+	diff.ExternalDocsDiff = nil
+
+	if !diff.AdditionalPropertiesAllowedDiff.CompareWithDefault(true, false, true) {
+		diff.AdditionalPropertiesAllowedDiff = nil
+	}
+
+	if !diff.UniqueItemsDiff.CompareWithDefault(false, true, false) { // TODO: check default value
+		diff.UniqueItemsDiff = nil
+	}
+
+	if !diff.ExclusiveMinDiff.CompareWithDefault(false, true, false) { // TODO: check default value
+		diff.ExclusiveMinDiff = nil
+	}
+
+	if !diff.ExclusiveMaxDiff.CompareWithDefault(false, true, false) { // TODO: check default value
+		diff.ExclusiveMaxDiff = nil
+	}
+
+	if !diff.NullableDiff.CompareWithDefault(true, false, false) { // TODO: check default value
+		diff.NullableDiff = nil
+	}
+
+	if !diff.ReadOnlyDiff.CompareWithDefault(false, true, false) { // TODO: Relevant only for Schema "properties" definitions
+		diff.ReadOnlyDiff = nil
+	}
+
+	if !diff.WriteOnlyDiff.CompareWithDefault(false, true, false) { // TODO: Relevant only for Schema "properties" definitions
+		diff.WriteOnlyDiff = nil
+	}
+
+	if !diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) {
+		diff.AllowEmptyValueDiff = nil
+	}
+
+	if !diff.DeprecatedDiff.CompareWithDefault(false, true, false) {
+		diff.DeprecatedDiff = nil
+	}
+
+	if !diff.MinDiff.MinBreaking() {
+		diff.MinDiff = nil
+	}
+
+	if !diff.MaxDiff.MaxBreaking() {
+		diff.MaxDiff = nil
+	}
+
+	if !diff.MinLengthDiff.MinBreaking() {
+		diff.MinLengthDiff = nil
+	}
+
+	if !diff.MaxLengthDiff.MaxBreaking() {
+		diff.MaxLengthDiff = nil
+	}
+
+	if !diff.MinPropsDiff.MinBreaking() {
+		diff.MinPropsDiff = nil
+	}
+
+	if !diff.MaxPropsDiff.MaxBreaking() {
+		diff.MaxPropsDiff = nil
+	}
+
+	if !diff.MinItemsDiff.MinBreaking() {
+		diff.MinItemsDiff = nil
+	}
+
+	if !diff.MaxItemsDiff.MaxBreaking() {
+		diff.MaxItemsDiff = nil
+	}
+}
+
 func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
 	diff, err := getSchemaDiffInternal(config, schema1, schema2)
 	if err != nil {
 		return nil, err
 	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 
@@ -105,7 +193,7 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	result.TitleDiff = getValueDiff(value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
-	result.EnumDiff = getEnumDiff(value1.Enum, value2.Enum)
+	result.EnumDiff = getEnumDiff(config, value1.Enum, value2.Enum)
 	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
 	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, value1.Example, value2.Example)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, value1.ExternalDocs, value2.ExternalDocs)

@@ -24,6 +24,21 @@ func (requestBodyDiff *RequestBodyDiff) Empty() bool {
 	return *requestBodyDiff == RequestBodyDiff{}
 }
 
+func (diff *RequestBodyDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.Added = false
+	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
+
+	if !diff.RequiredDiff.CompareWithDefault(false, true, false) {
+		diff.RequiredDiff = nil
+	}
+}
+
 func newRequestBodyDiff() *RequestBodyDiff {
 	return &RequestBodyDiff{}
 }
@@ -34,9 +49,14 @@ func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openap
 		return nil, err
 	}
 
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
+
 	return diff, nil
 }
 

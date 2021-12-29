@@ -15,9 +15,11 @@ func (diff *TagDiff) Empty() bool {
 
 func getTagDiff(config *Config, tag1, tag2 *openapi3.Tag) *TagDiff {
 	diff := getTagDiffInternal(config, tag1, tag2)
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

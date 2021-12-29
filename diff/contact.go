@@ -23,6 +23,7 @@ func getContactDiff(config *Config, contact1, contact2 *openapi3.Contact) *Conta
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 

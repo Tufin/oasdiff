@@ -18,11 +18,26 @@ func (diff *OAuthFlowsDiff) Empty() bool {
 	return diff == nil || *diff == OAuthFlowsDiff{}
 }
 
+func (diff *OAuthFlowsDiff) removeNonBreaking() {
+
+	if diff.Empty() {
+		return
+	}
+
+	diff.ExtensionsDiff = nil
+}
+
 func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
 	diff := getOAuthFlowsDiffInternal(config, flows1, flows2)
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking()
+	}
+
 	if diff.Empty() {
 		return nil
 	}
+
 	return diff
 }
 
