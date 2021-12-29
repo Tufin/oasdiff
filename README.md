@@ -14,6 +14,7 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 - Compare [local files](#comparing-local-files-yaml-output) or [public files](#comparing-public-files-yaml-output) over http
 - Compare specs in YAML or JSON format
 - Comprehensive diff including **all** aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
+- Detect breaking changes (Beta feature. Please report issues)
 
 ## Build
 ```
@@ -45,6 +46,12 @@ docker run --rm -t tufin/oasdiff -format html -base https://raw.githubuserconten
 
 ```bash
 docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+### Breaking changes
+
+```bash
+docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml --breaking-only
 ```
 
 ### Comparing local files (yaml output):
@@ -400,8 +407,7 @@ oasdiff also outputs an altrnate simplified diff per "endpoint" which is a combi
 ```
 
 ## Work in progress
-1. Breaking changes highlighting: in progress
-2. Patch support: currently supports Descriptions and a few fields in Schema 
+1. Patch support: currently supports Descriptions and a few fields in Schema 
 
 ## Requests for enhancements
 1. OpenAPI 3.1 support: see https://github.com/Tufin/oasdiff/issues/52
