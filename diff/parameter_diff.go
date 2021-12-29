@@ -32,14 +32,21 @@ func (diff *ParameterDiff) removeNonBreaking() {
 	}
 
 	diff.ExtensionsDiff = nil
+	diff.DescriptionDiff = nil
 	diff.ExampleDiff = nil
 	diff.ExamplesDiff = nil
+
+	if !diff.DeprecatedDiff.CompareWithDefault(false, true, false) {
+		diff.DeprecatedDiff = nil
+	}
+
+	if !diff.RequiredDiff.CompareWithDefault(false, true, false) {
+		diff.RequiredDiff = nil
+	}
 
 	// TODO: diff.ExplodeDiff is breaking only if type is array or object
 	// diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) || // TODO: only if this is a query param
 	// diff.AllowReservedDiff.CompareWithDefault(true, false, false) || // TODO: only if this id a query param
-	// diff.DeprecatedDiff.CompareWithDefault(false, true, false) ||
-	// diff.RequiredDiff.CompareWithDefault(false, true, false) ||
 }
 
 func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
