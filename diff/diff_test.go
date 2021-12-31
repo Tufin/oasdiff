@@ -69,6 +69,26 @@ func TestDiff_DeletedOperation(t *testing.T) {
 		"POST")
 }
 
+func TestDiff_ModifiedOperation(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/simple1.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/simple2.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(diff.NewConfig(), s2, s1)
+	require.NoError(t, err)
+
+	require.Equal(t, &diff.OperationsDiff{
+		Added:    diff.StringList{"GET"},
+		Deleted:  diff.StringList{"POST"},
+		Modified: diff.ModifiedOperations{},
+	},
+		d.PathsDiff.Modified["/api/test"].OperationsDiff)
+}
+
 func TestAddedExtension(t *testing.T) {
 	config := diff.Config{
 		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},

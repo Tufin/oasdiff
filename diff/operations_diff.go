@@ -99,7 +99,7 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, operation1, 
 	}
 
 	if operation1 != nil && operation2 == nil {
-		operationsDiff.Deleted = append(operationsDiff.Added, method)
+		operationsDiff.Deleted = append(operationsDiff.Deleted, method)
 		return nil
 	}
 
