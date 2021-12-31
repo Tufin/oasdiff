@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"reflect"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
@@ -86,6 +87,10 @@ func main() {
 }
 
 func printYAML(output interface{}) {
+	if reflect.ValueOf(output).IsNil() {
+		return
+	}
+
 	bytes, err := yaml.Marshal(output)
 	if err != nil {
 		fmt.Printf("failed to marshal result as %q with %v", format, err)
