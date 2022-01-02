@@ -24,13 +24,32 @@ func (parametersDiff *ParametersDiff) Empty() bool {
 		len(parametersDiff.Modified) == 0
 }
 
-func (parametersDiff *ParametersDiff) removeNonBreaking() {
+func (parametersDiff *ParametersDiff) removeNonBreaking(params2 openapi3.Parameters) {
 
 	if parametersDiff.Empty() {
 		return
 	}
 
-	parametersDiff.Added = nil
+	parametersDiff.removeAddedButNonRequired(params2)
+}
+
+func (parametersDiff *ParametersDiff) removeAddedButNonRequired(params2 openapi3.Parameters) {
+	for location, paramNames := range parametersDiff.Added {
+		newList := StringList{}
+		for _, paramName := range paramNames {
+			if param := params2.GetByInAndName(location, paramName); param != nil {
+				if param.Required || param.In == openapi3.ParameterInPath {
+					newList = append(newList, paramName)
+				}
+			}
+		}
+
+		if len(newList) > 0 {
+			parametersDiff.Added[location] = newList
+		} else {
+			delete(parametersDiff.Added, location)
+		}
+	}
 }
 
 // ParamNamesByLocation maps param location (path, query, header or cookie) to the params in this location
@@ -84,7 +103,7 @@ func getParametersDiff(config *Config, params1, params2 openapi3.Parameters) (*P
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking()
+		diff.removeNonBreaking(params2)
 	}
 
 	if diff.Empty() {
