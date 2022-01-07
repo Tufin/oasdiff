@@ -15,6 +15,11 @@ type ComponentsDiff struct {
 	CallbacksDiff       *CallbacksDiff       `json:"callbacks,omitempty" yaml:"callbacks,omitempty"`
 }
 
+// Empty indicates whether a change was found in this element
+func (diff *ComponentsDiff) Empty() bool {
+	return diff == nil || *diff == ComponentsDiff{}
+}
+
 func getComponentsDiff(config *Config, s1, s2 openapi3.Components) (ComponentsDiff, error) {
 
 	result := ComponentsDiff{}
