@@ -24,14 +24,6 @@ func (headersDiff *HeadersDiff) Empty() bool {
 		len(headersDiff.Modified) == 0
 }
 
-func (headersDiff *HeadersDiff) emptyNonBreaking(breakingOnly bool) {
-	if !breakingOnly {
-		return
-	}
-
-	headersDiff.Added = nil
-}
-
 func (headersDiff *HeadersDiff) removeNonBreaking() {
 
 	if headersDiff.Empty() {

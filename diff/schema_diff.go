@@ -154,7 +154,7 @@ func (diff *SchemaDiff) removeAddedButNonRequiredProperties(schema2 *openapi3.Sc
 	}
 
 	requiredMap := StringList(schema2.Value.Required).toStringSet()
-	
+
 	newList := StringList{}
 	for _, property := range diff.PropertiesDiff.Added {
 		if _, ok := requiredMap[property]; ok {
