@@ -8,46 +8,46 @@ import (
 
 // SchemaDiff describes the changes between a pair of schema objects: https://swagger.io/specification/#schema-object
 type SchemaDiff struct {
-	SchemaAdded                     bool               `json:"schemaAdded,omitempty" yaml:"schemaAdded,omitempty"`
-	SchemaDeleted                   bool               `json:"schemaDeleted,omitempty" yaml:"schemaDeleted,omitempty"`
-	ExtensionsDiff                  *ExtensionsDiff    `json:"extensions,omitempty" yaml:"extensions,omitempty"`
-	OneOfDiff                       *SchemaListDiff    `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
-	AnyOfDiff                       *SchemaListDiff    `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
-	AllOfDiff                       *SchemaListDiff    `json:"allOf,omitempty" yaml:"allOf,omitempty"`
-	NotDiff                         *SchemaDiff        `json:"not,omitempty" yaml:"not,omitempty"`
-	TypeDiff                        *ValueDiff         `json:"type,omitempty" yaml:"type,omitempty"`
-	TitleDiff                       *ValueDiff         `json:"title,omitempty" yaml:"title,omitempty"`
-	FormatDiff                      *ValueDiff         `json:"format,omitempty" yaml:"format,omitempty"`
-	DescriptionDiff                 *ValueDiff         `json:"description,omitempty" yaml:"description,omitempty"`
-	EnumDiff                        *EnumDiff          `json:"enum,omitempty" yaml:"enum,omitempty"`
-	DefaultDiff                     *ValueDiff         `json:"default,omitempty" yaml:"default,omitempty"`
-	ExampleDiff                     *ValueDiff         `json:"example,omitempty" yaml:"example,omitempty"`
-	ExternalDocsDiff                *ExternalDocsDiff  `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
-	AdditionalPropertiesAllowedDiff *ValueDiff         `json:"additionalPropertiesAllowed,omitempty" yaml:"additionalPropertiesAllowed,omitempty"`
-	UniqueItemsDiff                 *ValueDiff         `json:"uniqueItems,omitempty" yaml:"uniqueItems,omitempty"`
-	ExclusiveMinDiff                *ValueDiff         `json:"exclusiveMin,omitempty" yaml:"exclusiveMin,omitempty"`
-	ExclusiveMaxDiff                *ValueDiff         `json:"exclusiveMax,omitempty" yaml:"exclusiveMax,omitempty"`
-	NullableDiff                    *ValueDiff         `json:"nullable,omitempty" yaml:"nullable,omitempty"`
-	ReadOnlyDiff                    *ValueDiff         `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
-	WriteOnlyDiff                   *ValueDiff         `json:"writeOnly,omitempty" yaml:"writeOnly,omitempty"`
-	AllowEmptyValueDiff             *ValueDiff         `json:"allowEmptyValue,omitempty" yaml:"allowEmptyValue,omitempty"`
-	XMLDiff                         *ValueDiff         `json:"XML,omitempty" yaml:"XML,omitempty"`
-	DeprecatedDiff                  *ValueDiff         `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
-	MinDiff                         *ValueDiff         `json:"min,omitempty" yaml:"min,omitempty"`
-	MaxDiff                         *ValueDiff         `json:"max,omitempty" yaml:"max,omitempty"`
-	MultipleOfDiff                  *ValueDiff         `json:"multipleOf,omitempty" yaml:"multipleOf,omitempty"`
-	MinLengthDiff                   *ValueDiff         `json:"minLength,omitempty" yaml:"minLength,omitempty"`
-	MaxLengthDiff                   *ValueDiff         `json:"maxLength,omitempty" yaml:"maxLength,omitempty"`
-	PatternDiff                     *ValueDiff         `json:"pattern,omitempty" yaml:"pattern,omitempty"`
-	MinItemsDiff                    *ValueDiff         `json:"minItems,omitempty" yaml:"minItems,omitempty"`
-	MaxItemsDiff                    *ValueDiff         `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
-	ItemsDiff                       *SchemaDiff        `json:"items,omitempty" yaml:"items,omitempty"`
-	RequiredDiff                    *StringsDiff       `json:"required,omitempty" yaml:"required,omitempty"`
-	PropertiesDiff                  *SchemasDiff       `json:"properties,omitempty" yaml:"properties,omitempty"`
-	MinPropsDiff                    *ValueDiff         `json:"minProps,omitempty" yaml:"minProps,omitempty"`
-	MaxPropsDiff                    *ValueDiff         `json:"maxProps,omitempty" yaml:"maxProps,omitempty"`
-	AdditionalPropertiesDiff        *SchemaDiff        `json:"additionalProperties,omitempty" yaml:"additionalProperties,omitempty"`
-	DiscriminatorDiff               *DiscriminatorDiff `json:"discriminatorDiff,omitempty" yaml:"discriminatorDiff,omitempty"`
+	SchemaAdded                     bool                    `json:"schemaAdded,omitempty" yaml:"schemaAdded,omitempty"`
+	SchemaDeleted                   bool                    `json:"schemaDeleted,omitempty" yaml:"schemaDeleted,omitempty"`
+	ExtensionsDiff                  *ExtensionsDiff         `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	OneOfDiff                       *SchemaListDiff         `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
+	AnyOfDiff                       *SchemaListDiff         `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
+	AllOfDiff                       *SchemaListDiff         `json:"allOf,omitempty" yaml:"allOf,omitempty"`
+	NotDiff                         *SchemaDiff             `json:"not,omitempty" yaml:"not,omitempty"`
+	TypeDiff                        *ValueDiff              `json:"type,omitempty" yaml:"type,omitempty"`
+	TitleDiff                       *ValueDiff              `json:"title,omitempty" yaml:"title,omitempty"`
+	FormatDiff                      *ValueDiff              `json:"format,omitempty" yaml:"format,omitempty"`
+	DescriptionDiff                 *ValueDiff              `json:"description,omitempty" yaml:"description,omitempty"`
+	EnumDiff                        *EnumDiff               `json:"enum,omitempty" yaml:"enum,omitempty"`
+	DefaultDiff                     *ValueDiff              `json:"default,omitempty" yaml:"default,omitempty"`
+	ExampleDiff                     *ValueDiff              `json:"example,omitempty" yaml:"example,omitempty"`
+	ExternalDocsDiff                *ExternalDocsDiff       `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
+	AdditionalPropertiesAllowedDiff *ValueDiff              `json:"additionalPropertiesAllowed,omitempty" yaml:"additionalPropertiesAllowed,omitempty"`
+	UniqueItemsDiff                 *ValueDiff              `json:"uniqueItems,omitempty" yaml:"uniqueItems,omitempty"`
+	ExclusiveMinDiff                *ValueDiff              `json:"exclusiveMin,omitempty" yaml:"exclusiveMin,omitempty"`
+	ExclusiveMaxDiff                *ValueDiff              `json:"exclusiveMax,omitempty" yaml:"exclusiveMax,omitempty"`
+	NullableDiff                    *ValueDiff              `json:"nullable,omitempty" yaml:"nullable,omitempty"`
+	ReadOnlyDiff                    *ValueDiff              `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
+	WriteOnlyDiff                   *ValueDiff              `json:"writeOnly,omitempty" yaml:"writeOnly,omitempty"`
+	AllowEmptyValueDiff             *ValueDiff              `json:"allowEmptyValue,omitempty" yaml:"allowEmptyValue,omitempty"`
+	XMLDiff                         *ValueDiff              `json:"XML,omitempty" yaml:"XML,omitempty"`
+	DeprecatedDiff                  *ValueDiff              `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
+	MinDiff                         *ValueDiff              `json:"min,omitempty" yaml:"min,omitempty"`
+	MaxDiff                         *ValueDiff              `json:"max,omitempty" yaml:"max,omitempty"`
+	MultipleOfDiff                  *ValueDiff              `json:"multipleOf,omitempty" yaml:"multipleOf,omitempty"`
+	MinLengthDiff                   *ValueDiff              `json:"minLength,omitempty" yaml:"minLength,omitempty"`
+	MaxLengthDiff                   *ValueDiff              `json:"maxLength,omitempty" yaml:"maxLength,omitempty"`
+	PatternDiff                     *ValueDiff              `json:"pattern,omitempty" yaml:"pattern,omitempty"`
+	MinItemsDiff                    *ValueDiff              `json:"minItems,omitempty" yaml:"minItems,omitempty"`
+	MaxItemsDiff                    *ValueDiff              `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
+	ItemsDiff                       *SchemaDiff             `json:"items,omitempty" yaml:"items,omitempty"`
+	RequiredDiff                    *RequiredPropertiesDiff `json:"required,omitempty" yaml:"required,omitempty"`
+	PropertiesDiff                  *SchemasDiff            `json:"properties,omitempty" yaml:"properties,omitempty"`
+	MinPropsDiff                    *ValueDiff              `json:"minProps,omitempty" yaml:"minProps,omitempty"`
+	MaxPropsDiff                    *ValueDiff              `json:"maxProps,omitempty" yaml:"maxProps,omitempty"`
+	AdditionalPropertiesDiff        *SchemaDiff             `json:"additionalProperties,omitempty" yaml:"additionalProperties,omitempty"`
+	DiscriminatorDiff               *DiscriminatorDiff      `json:"discriminatorDiff,omitempty" yaml:"discriminatorDiff,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -55,7 +55,7 @@ func (diff *SchemaDiff) Empty() bool {
 	return diff == nil || *diff == SchemaDiff{}
 }
 
-func (diff *SchemaDiff) removeNonBreaking() {
+func (diff *SchemaDiff) removeNonBreaking(schema2 *openapi3.SchemaRef) {
 
 	if diff.Empty() {
 		return
@@ -68,20 +68,8 @@ func (diff *SchemaDiff) removeNonBreaking() {
 	diff.ExampleDiff = nil
 	diff.ExternalDocsDiff = nil
 
-	if !diff.AdditionalPropertiesAllowedDiff.CompareWithDefault(true, false, true) {
-		diff.AdditionalPropertiesAllowedDiff = nil
-	}
-
 	if !diff.UniqueItemsDiff.CompareWithDefault(false, true, false) { // TODO: check default value
 		diff.UniqueItemsDiff = nil
-	}
-
-	if !diff.ExclusiveMinDiff.CompareWithDefault(false, true, false) { // TODO: check default value
-		diff.ExclusiveMinDiff = nil
-	}
-
-	if !diff.ExclusiveMaxDiff.CompareWithDefault(false, true, false) { // TODO: check default value
-		diff.ExclusiveMaxDiff = nil
 	}
 
 	if !diff.NullableDiff.CompareWithDefault(true, false, false) { // TODO: check default value
@@ -104,6 +92,7 @@ func (diff *SchemaDiff) removeNonBreaking() {
 		diff.DeprecatedDiff = nil
 	}
 
+	// Number
 	if !diff.MinDiff.minBreaking() {
 		diff.MinDiff = nil
 	}
@@ -112,12 +101,37 @@ func (diff *SchemaDiff) removeNonBreaking() {
 		diff.MaxDiff = nil
 	}
 
+	if !diff.ExclusiveMinDiff.CompareWithDefault(false, true, false) { // TODO: check default value
+		diff.ExclusiveMinDiff = nil
+	}
+
+	if !diff.ExclusiveMaxDiff.CompareWithDefault(false, true, false) { // TODO: check default value
+		diff.ExclusiveMaxDiff = nil
+	}
+
+	// String
 	if !diff.MinLengthDiff.minBreaking() {
 		diff.MinLengthDiff = nil
 	}
 
 	if !diff.MaxLengthDiff.maxBreaking() {
 		diff.MaxLengthDiff = nil
+	}
+
+	// Array
+	if !diff.MinItemsDiff.minBreaking() {
+		diff.MinItemsDiff = nil
+	}
+
+	if !diff.MaxItemsDiff.maxBreaking() {
+		diff.MaxItemsDiff = nil
+	}
+
+	// Object
+	diff.removeAddedButNonRequiredProperties(schema2)
+
+	if !diff.AdditionalPropertiesAllowedDiff.CompareWithDefault(true, false, true) {
+		diff.AdditionalPropertiesAllowedDiff = nil
 	}
 
 	if !diff.MinPropsDiff.minBreaking() {
@@ -127,13 +141,30 @@ func (diff *SchemaDiff) removeNonBreaking() {
 	if !diff.MaxPropsDiff.maxBreaking() {
 		diff.MaxPropsDiff = nil
 	}
+}
 
-	if !diff.MinItemsDiff.minBreaking() {
-		diff.MinItemsDiff = nil
+func (diff *SchemaDiff) removeAddedButNonRequiredProperties(schema2 *openapi3.SchemaRef) {
+
+	if diff.Empty() || diff.PropertiesDiff.Empty() {
+		return
 	}
 
-	if !diff.MaxItemsDiff.maxBreaking() {
-		diff.MaxItemsDiff = nil
+	if schema2 == nil || schema2.Value == nil {
+		return
+	}
+
+	requiredMap := StringList(schema2.Value.Required).toStringSet()
+
+	newList := StringList{}
+	for _, property := range diff.PropertiesDiff.Added {
+		if _, ok := requiredMap[property]; ok {
+			newList = append(newList, property)
+		}
+	}
+	diff.PropertiesDiff.Added = newList
+
+	if diff.PropertiesDiff.Empty() {
+		diff.PropertiesDiff = nil
 	}
 }
 
@@ -144,7 +175,7 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*Schem
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking()
+		diff.removeNonBreaking(schema2)
 	}
 
 	if diff.Empty() {
@@ -221,7 +252,8 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 		return nil, err
 	}
 
-	result.RequiredDiff = getStringsDiff(value1.Required, value2.Required)
+	// Object
+	result.RequiredDiff = getRequiredPropertiesDiff(config, value1.Required, value2.Required)
 	result.PropertiesDiff, err = getSchemasDiff(config, value1.Properties, value2.Properties)
 	if err != nil {
 		return nil, err

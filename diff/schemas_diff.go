@@ -22,15 +22,6 @@ func (schemasDiff *SchemasDiff) Empty() bool {
 		len(schemasDiff.Modified) == 0
 }
 
-func (schemasDiff *SchemasDiff) removeNonBreaking() {
-
-	if schemasDiff.Empty() {
-		return
-	}
-
-	schemasDiff.Added = nil
-}
-
 func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
 		Added:    StringList{},
@@ -50,10 +41,6 @@ func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) (*Schem
 	diff, err := getSchemasDiffInternal(config, schemas1, schemas2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {
