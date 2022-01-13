@@ -1,0 +1,23 @@
+openapi: 3.0.1
+info:
+  title: Circular Schema
+  version: v1
+paths:
+  /test:
+    post:
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml:
+              schema:
+                type: string
+components:
+  schemas:
+    circular:
+      type: object
+      properties:
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/circular'

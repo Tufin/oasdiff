@@ -616,3 +616,13 @@ func TestOAS31(t *testing.T) {
 		d.ComponentsDiff.SchemasDiff.Modified["Pet"].RequiredDiff.Added,
 		"nickname")
 }
+
+func TestCircularSchema(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s, err := loader.LoadFromFile("../data/circular.yaml")
+	require.NoError(t, err)
+
+	_, err = diff.Get(diff.NewConfig(), s, s)
+	require.NoError(t, err)
+}
