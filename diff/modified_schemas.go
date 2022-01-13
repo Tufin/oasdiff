@@ -1,8 +1,6 @@
 package diff
 
 import (
-	"fmt"
-
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
