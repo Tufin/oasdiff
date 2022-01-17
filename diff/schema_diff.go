@@ -10,6 +10,7 @@ import (
 type SchemaDiff struct {
 	SchemaAdded                     bool                    `json:"schemaAdded,omitempty" yaml:"schemaAdded,omitempty"`
 	SchemaDeleted                   bool                    `json:"schemaDeleted,omitempty" yaml:"schemaDeleted,omitempty"`
+	CircularRefDiff                 bool                    `json:"circularRef,omitempty" yaml:"circularRef,omitempty"`
 	ExtensionsDiff                  *ExtensionsDiff         `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	OneOfDiff                       *SchemaListDiff         `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
 	AnyOfDiff                       *SchemaListDiff         `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
@@ -187,19 +188,42 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*Schem
 
 func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
 
-	status := getSchemaStatus(schema1, schema2)
-	if status != schemaStatusOK {
-		return toSchemaDiff(status), nil
+	if status := getSchemaStatus(schema1, schema2); status != schemaStatusOK {
+		switch status {
+		case schemaStatusNoSchemas:
+			return nil, nil
+		case schemaStatusSchemaAdded:
+			return &SchemaDiff{SchemaAdded: true}, nil
+		case schemaStatusSchemaDeleted:
+			return &SchemaDiff{SchemaDeleted: true}, nil
+		}
+	}
+
+	if status := getCircularRefsDiff(schema1, schema2); status != circularRefStatusNone {
+		switch status {
+		case circularRefStatusDiff:
+			return &SchemaDiff{CircularRefDiff: true}, nil
+		case circularRefStatusNoDiff:
+			return nil, nil
+		}
 	}
 
 	value1, err := derefSchema(schema1)
 	if err != nil {
 		return nil, err
 	}
+
 	value2, err := derefSchema(schema2)
 	if err != nil {
 		return nil, err
 	}
+
+	// handle circular refs
+	incRefCount(value1)
+	defer decRefCount(value1)
+
+	incRefCount(value2)
+	defer decRefCount(value2)
 
 	result := SchemaDiff{}
 
@@ -278,6 +302,7 @@ const (
 	schemaStatusNoSchemas
 	schemaStatusSchemaAdded
 	schemaStatusSchemaDeleted
+	schemaStatusCircularRefDiff
 )
 
 func getSchemaStatus(schema1, schema2 *openapi3.SchemaRef) schemaStatus {
@@ -304,18 +329,6 @@ func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
 	}
 
 	return ref.Value, nil
-}
-
-func toSchemaDiff(status schemaStatus) *SchemaDiff {
-	switch status {
-	case schemaStatusSchemaAdded:
-		return &SchemaDiff{SchemaAdded: true}
-	case schemaStatusSchemaDeleted:
-		return &SchemaDiff{SchemaDeleted: true}
-	}
-
-	// all other cases -> empty diff
-	return nil
 }
 
 // Patch applies the patch to a schema

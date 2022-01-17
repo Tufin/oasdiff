@@ -616,3 +616,46 @@ func TestOAS31(t *testing.T) {
 		d.ComponentsDiff.SchemasDiff.Modified["Pet"].RequiredDiff.Added,
 		"nickname")
 }
+
+func TestCircularSchema_Diff(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/circular1.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/circular2.yaml")
+	require.NoError(t, err)
+
+	dd, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	require.True(t, dd.SchemasDiff.Modified["circular1"].PropertiesDiff.Modified["children"].ItemsDiff.CircularRefDiff)
+}
+
+func TestCircularSchemaRefs(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/circular1.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/circular2.yaml")
+	require.NoError(t, err)
+
+	dd, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	require.Contains(t, dd.SchemasDiff.Modified, "circular1")
+	require.NotContains(t, dd.SchemasDiff.Modified, "circular2")
+	require.Contains(t, dd.SchemasDiff.Modified, "circular3")
+	require.NotContains(t, dd.SchemasDiff.Modified, "circular4")
+	require.Contains(t, dd.SchemasDiff.Modified, "circular5")
+	require.Contains(t, dd.SchemasDiff.Modified, "circular6")
+
+	for _, schema := range s1.Components.Schemas {
+		require.Empty(t, schema.Value.Extensions)
+	}
+
+	for _, schema := range s2.Components.Schemas {
+		require.Empty(t, schema.Value.Extensions)
+	}
+}

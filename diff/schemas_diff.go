@@ -64,8 +64,8 @@ func getSchemasDiffInternal(config *Config, schemas1, schemas2 openapi3.Schemas)
 		result.addDeletedSchema(schema)
 	}
 
-	for schema, schemaRefPair := range otherSchemas {
-		err := result.addModifiedSchema(config, schema, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
+	for schemaName, schemaRefPair := range otherSchemas {
+		err := result.addModifiedSchema(config, schemaName, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
 		if err != nil {
 			return nil, err
 		}
@@ -111,8 +111,8 @@ func (schemasDiff *SchemasDiff) addDeletedSchema(schema string) {
 	schemasDiff.Deleted = append(schemasDiff.Deleted, schema)
 }
 
-func (schemasDiff *SchemasDiff) addModifiedSchema(config *Config, schema1 string, schemaRef1, schemaRef2 *openapi3.SchemaRef) error {
-	return schemasDiff.Modified.addSchemaDiff(config, schema1, schemaRef1, schemaRef2)
+func (schemasDiff *SchemasDiff) addModifiedSchema(config *Config, schemaName string, schemaRef1, schemaRef2 *openapi3.SchemaRef) error {
+	return schemasDiff.Modified.addSchemaDiff(config, schemaName, schemaRef1, schemaRef2)
 }
 
 func (schemasDiff *SchemasDiff) getSummary() *SummaryDetails {
