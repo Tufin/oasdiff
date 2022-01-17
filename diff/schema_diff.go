@@ -196,12 +196,31 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	if err != nil {
 		return nil, err
 	}
+
 	value2, err := derefSchema(schema2)
 	if err != nil {
 		return nil, err
 	}
 
 	result := SchemaDiff{}
+
+	if r, ok := value1.Extensions["x-oasdiff"]; ok {
+		return r.(*SchemaDiff), nil
+	}
+
+	value1.Extensions["x-oasdiff"] = &result
+	defer func() {
+		delete(value1.Extensions, "x-oasdiff")
+	}()
+
+	if r, ok := value2.Extensions["x-oasdiff"]; ok {
+		return r.(*SchemaDiff), nil
+	}
+
+	value1.Extensions["x-oasdiff"] = &result
+	defer func() {
+		delete(value2.Extensions, "x-oasdiff")
+	}()
 
 	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
 	result.OneOfDiff, err = getSchemaListsDiff(config, value1.OneOf, value2.OneOf)
