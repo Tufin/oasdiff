@@ -8,6 +8,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/circular1'
 components:
   schemas:
     circular1:
