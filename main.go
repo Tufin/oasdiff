@@ -41,13 +41,13 @@ func main() {
 
 	s1, err := load.From(loader, base)
 	if err != nil {
-		fmt.Printf("failed to load base spec from %q with %v", base, err)
+		fmt.Printf("failed to load base spec from %q with %v\n", base, err)
 		return
 	}
 
 	s2, err := load.From(loader, revision)
 	if err != nil {
-		fmt.Printf("failed to load revision spec from %q with %v", revision, err)
+		fmt.Printf("failed to load revision spec from %q with %v\n", revision, err)
 		return
 	}
 
@@ -60,7 +60,7 @@ func main() {
 	}, s1, s2)
 
 	if err != nil {
-		fmt.Printf("diff failed with %v", err)
+		fmt.Printf("diff failed with %v\n", err)
 		return
 	}
 
@@ -73,14 +73,14 @@ func main() {
 	if format == formatYAML {
 		printYAML(diffReport)
 	} else if format == formatText {
-		fmt.Printf("%s\n", report.GetTextReportAsString(diffReport))
+		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
 	} else if format == formatHTML {
 		html, err := report.GetHTMLReportAsString(diffReport)
 		if err != nil {
-			fmt.Printf("failed to generate HTML with %v", err)
+			fmt.Printf("failed to generate HTML with %v\n", err)
 			return
 		}
-		fmt.Printf("%s\n", html)
+		fmt.Printf("%s", html)
 	} else {
 		fmt.Printf("unknown format %q\n", format)
 	}
@@ -93,8 +93,8 @@ func printYAML(output interface{}) {
 
 	bytes, err := yaml.Marshal(output)
 	if err != nil {
-		fmt.Printf("failed to marshal result as %q with %v", format, err)
+		fmt.Printf("failed to marshal result as %q with %v\n", format, err)
 		return
 	}
-	fmt.Printf("%s\n", bytes)
+	fmt.Printf("%s", bytes)
 }
