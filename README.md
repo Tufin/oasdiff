@@ -390,7 +390,7 @@ For example:
                     modified:
                         GET:
 ```
-oasdiff also outputs an altrnate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
+oasdiff also outputs an alternate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
 ```yaml
    endpoints:
         deleted:

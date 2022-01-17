@@ -5,7 +5,7 @@ import (
 )
 
 /*
-EndpointsDiff is an altrnate, simplified view of PathsDiff.
+EndpointsDiff is an alternate, simplified view of PathsDiff.
 It describes the changes between Endpoints which are a flattened combination of OpenAPI Paths and Operations.
 
 For example, if there's a new path "/test" with method POST then EndpointsDiff will describe this as a new endpoint: POST /test.
