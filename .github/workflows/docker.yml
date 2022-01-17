@@ -1,7 +1,13 @@
 name: Publish Docker image
 on:
   push:
-    branches: [ main ]
+    branches:
+      - 'main'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'main'
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -33,9 +39,8 @@ jobs:
         with:
           context: ./
           file: ./Dockerfile
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
