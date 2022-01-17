@@ -141,6 +141,20 @@ func (r *report) printParam(d *diff.ParameterDiff) {
 	}
 }
 
+func (r *report) printRequiredProperties(d *diff.RequiredPropertiesDiff) {
+	if d.Empty() {
+		return
+	}
+
+	for _, added := range d.Added {
+		r.print("New required property:", added)
+	}
+
+	for _, deleted := range d.Deleted {
+		r.print("Deleted required property:", deleted)
+	}
+}
+
 func (r *report) printSchema(d *diff.SchemaDiff) {
 	if d.Empty() {
 		return
@@ -192,7 +206,11 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		r.indent().printSchema(d.ItemsDiff)
 	}
 
-	r.printMessage(d.RequiredDiff, "Required changed")
+	if !d.RequiredDiff.Empty() {
+		r.print("Required changed")
+		r.indent().printRequiredProperties(d.RequiredDiff)
+	}
+
 	r.printValue(d.MinPropsDiff, "MinProps")
 	r.printValue(d.MaxPropsDiff, "MaxProps")
 
