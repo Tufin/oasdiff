@@ -35,14 +35,18 @@ go build
 ```bash
 docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
+Text and markdown output provide only a subset of the full diff.
+To see the full diff, use the default format: YAML.
 
 ### Comparing public files (HTML output):
 
 ```bash
 docker run --rm -t tufin/oasdiff -format html -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
+HTML output provides only a subset of the full diff.
+To see the full diff, use the default format: YAML.
 
-### Comparing public files (yaml output):
+### Comparing public files (YAML output):
 
 ```bash
 docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
@@ -54,7 +58,7 @@ docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubuserconten
 docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml --breaking-only
 ```
 
-### Comparing local files (yaml output):
+### Comparing local files (YAML output):
 
 ```bash
 docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
@@ -366,16 +370,12 @@ diff.Get(&diff.Config{}, spec1, spec2)
 See full example: [main.go](main.go)
 
 ## Notes
-1. oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
-References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [this function](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn).
+1. Output Formats  
+The default output format, YAML, provides a full view of all diff details.  
+Other formats, text, markdown and HTML, provide a partial view of the diff.  
+If you see the need for additional details in any format, please open an issue.
 
-2. Use [configuration](diff/config.go) to exclude certain types of changes:
-   - [Examples](https://swagger.io/specification/#example-object) 
-   - Descriptions
-  
-3. [Extensions](https://swagger.io/specification/#specification-extensions) are excluded by default. Use [configuration](diff/config.go) to specify which ones to include.
-
-4. Paths vs. Endpoints  
+2. Paths vs. Endpoints  
 OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
 oasdiff respects this heirarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified.  
 For example:
@@ -405,6 +405,15 @@ oasdiff also outputs an alternate simplified diff per "endpoint" which is a comb
                     deleted:
                         - security
 ```
+
+## Notes for Developers
+1. oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
+References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [this function](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn).
+
+2. Use [configuration](diff/config.go) to exclude certain types of changes:
+   - [Examples](https://swagger.io/specification/#example-object) 
+   - Descriptions
+   - [Extensions](https://swagger.io/specification/#specification-extensions) are excluded by default
 
 ## Work in progress
 1. Patch support: currently supports Descriptions and a few fields in Schema 
