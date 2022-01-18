@@ -377,9 +377,8 @@ If you see the need for additional details in any format, please open an issue.
 
 2. Paths vs. Endpoints  
 OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
-oasdiff respects this heirarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified.  
-For example:
-```yaml
+oasdiff respects this heirarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
+    ```yaml
     paths:
         deleted:
             - /register
@@ -389,10 +388,10 @@ For example:
                 operations:
                     modified:
                         GET:
-```
-oasdiff also outputs an alternate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
-```yaml
-   endpoints:
+    ```
+    oasdiff also outputs an alternate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
+    ```yaml
+    endpoints:
         deleted:
             - method: POST
               path: /subscribe
@@ -404,7 +403,7 @@ oasdiff also outputs an alternate simplified diff per "endpoint" which is a comb
             :   tags:
                     deleted:
                         - security
-```
+    ```
 
 ## Notes for Developers
 1. oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
