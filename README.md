@@ -175,8 +175,9 @@ paths:
                         application/json:
                           schema:
                             required:
-                              added:
-                                - type
+                              stringsdiff:
+                                added:
+                                  - type
                   image:
                     examples:
                       deleted:
@@ -261,8 +262,9 @@ endpoints:
                   application/json:
                     schema:
                       required:
-                        added:
-                          - type
+                        stringsdiff:
+                          added:
+                            - type
             image:
               examples:
                 deleted:
@@ -361,6 +363,16 @@ components:
   securitySchemes:
     deleted:
       - OAuth
+    modified:
+      AccessToken:
+        type:
+          from: http
+          to: oauth2
+        scheme:
+          from: bearer
+          to: ""
+        OAuthFlows:
+          added: true
 ```
 
 ## Embedding into your Go program
