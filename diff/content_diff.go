@@ -41,8 +41,8 @@ func (diff *ContentDiff) removeNonBreaking() {
 	diff.MediaTypeAdded = nil
 }
 
-func getContentDiff(config *Config, content1, content2 openapi3.Content) (*ContentDiff, error) {
-	diff, err := getContentDiffInternal(config, content1, content2)
+func getContentDiff(config *Config, state *state, content1, content2 openapi3.Content) (*ContentDiff, error) {
+	diff, err := getContentDiffInternal(config, state, content1, content2)
 	if err != nil {
 		return nil, err
 	}
@@ -58,13 +58,13 @@ func getContentDiff(config *Config, content1, content2 openapi3.Content) (*Conte
 	return diff, nil
 }
 
-func getContentDiffInternal(config *Config, content1, content2 openapi3.Content) (*ContentDiff, error) {
+func getContentDiffInternal(config *Config, state *state, content1, content2 openapi3.Content) (*ContentDiff, error) {
 
 	result := newContentDiff()
 
 	for name1, media1 := range content1 {
 		if media2, ok := content2[name1]; ok {
-			diff, err := getMediaTypeDiff(config, media1, media2)
+			diff, err := getMediaTypeDiff(config, state, media1, media2)
 			if err != nil {
 				return nil, err
 			}

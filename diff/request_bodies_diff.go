@@ -42,8 +42,8 @@ func newRequestBodiesDiff() *RequestBodiesDiff {
 	}
 }
 
-func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) (*RequestBodiesDiff, error) {
-	diff, err := getRequestBodiesDiffInternal(config, requestBodies1, requestBodies2)
+func getRequestBodiesDiff(config *Config, state *state, requestBodies1, requestBodies2 openapi3.RequestBodies) (*RequestBodiesDiff, error) {
+	diff, err := getRequestBodiesDiffInternal(config, state, requestBodies1, requestBodies2)
 	if err != nil {
 		return nil, err
 	}
@@ -59,13 +59,13 @@ func getRequestBodiesDiff(config *Config, requestBodies1, requestBodies2 openapi
 	return diff, nil
 }
 
-func getRequestBodiesDiffInternal(config *Config, requestBodies1, requestBodies2 openapi3.RequestBodies) (*RequestBodiesDiff, error) {
+func getRequestBodiesDiffInternal(config *Config, state *state, requestBodies1, requestBodies2 openapi3.RequestBodies) (*RequestBodiesDiff, error) {
 
 	result := newRequestBodiesDiff()
 
 	for requestBodyValue1, requestBodyRef1 := range requestBodies1 {
 		if requestBodyValue2, ok := requestBodies2[requestBodyValue1]; ok {
-			diff, err := getRequestBodyDiff(config, requestBodyRef1, requestBodyValue2)
+			diff, err := getRequestBodyDiff(config, state, requestBodyRef1, requestBodyValue2)
 			if err != nil {
 				return nil, err
 			}

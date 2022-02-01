@@ -41,8 +41,8 @@ func (headerDiff *HeaderDiff) removeNonBreaking() {
 
 }
 
-func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
-	diff, err := getHeaderDiffInternal(config, header1, header2)
+func getHeaderDiff(config *Config, state *state, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
+	diff, err := getHeaderDiffInternal(config, state, header1, header2)
 	if err != nil {
 		return nil, err
 	}
@@ -58,28 +58,28 @@ func getHeaderDiff(config *Config, header1, header2 *openapi3.Header) (*HeaderDi
 	return diff, nil
 }
 
-func getHeaderDiffInternal(config *Config, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
+func getHeaderDiffInternal(config *Config, state *state, header1, header2 *openapi3.Header) (*HeaderDiff, error) {
 	result := HeaderDiff{}
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, header1.ExtensionProps, header2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, header1.ExtensionProps, header2.ExtensionProps)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, header1.Description, header2.Description)
 	result.DeprecatedDiff = getValueDiff(header1.Deprecated, header2.Deprecated)
 	result.RequiredDiff = getValueDiff(header1.Required, header2.Required)
 
-	result.ExamplesDiff, err = getExamplesDiff(config, header1.Examples, header2.Examples)
+	result.ExamplesDiff, err = getExamplesDiff(config, state, header1.Examples, header2.Examples)
 	if err != nil {
 		return nil, err
 	}
 
-	result.SchemaDiff, err = getSchemaDiff(config, header1.Schema, header2.Schema)
+	result.SchemaDiff, err = getSchemaDiff(config, state, header1.Schema, header2.Schema)
 	if err != nil {
 		return nil, err
 	}
 
 	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, header1.Example, header2.Example)
 
-	result.ContentDiff, err = getContentDiff(config, header1.Content, header2.Content)
+	result.ContentDiff, err = getContentDiff(config, state, header1.Content, header2.Content)
 	if err != nil {
 		return nil, err
 	}

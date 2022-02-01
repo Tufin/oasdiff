@@ -17,8 +17,8 @@ func (diff *ContactDiff) Empty() bool {
 	return diff == nil || *diff == ContactDiff{}
 }
 
-func getContactDiff(config *Config, contact1, contact2 *openapi3.Contact) *ContactDiff {
-	diff := getContactDiffInternal(config, contact1, contact2)
+func getContactDiff(config *Config, state *state, contact1, contact2 *openapi3.Contact) *ContactDiff {
+	diff := getContactDiffInternal(config, state, contact1, contact2)
 
 	if diff.Empty() {
 		return nil
@@ -27,7 +27,7 @@ func getContactDiff(config *Config, contact1, contact2 *openapi3.Contact) *Conta
 	return diff
 }
 
-func getContactDiffInternal(config *Config, contact1, contact2 *openapi3.Contact) *ContactDiff {
+func getContactDiffInternal(config *Config, state *state, contact1, contact2 *openapi3.Contact) *ContactDiff {
 
 	result := ContactDiff{}
 
@@ -45,7 +45,7 @@ func getContactDiffInternal(config *Config, contact1, contact2 *openapi3.Contact
 		return &result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, contact1.ExtensionProps, contact2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, contact1.ExtensionProps, contact2.ExtensionProps)
 	result.NameDiff = getValueDiff(contact1.Name, contact2.Name)
 	result.URLDiff = getValueDiff(contact1.URL, contact2.URL)
 	result.EmailDiff = getValueDiff(contact1.Email, contact2.Email)

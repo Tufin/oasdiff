@@ -45,8 +45,8 @@ func newCallbacksDiff() *CallbacksDiff {
 	}
 }
 
-func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks) (*CallbacksDiff, error) {
-	diff, err := getCallbacksDiffInternal(config, callbacks1, callbacks2)
+func getCallbacksDiff(config *Config, state *state, callbacks1, callbacks2 openapi3.Callbacks) (*CallbacksDiff, error) {
+	diff, err := getCallbacksDiffInternal(config, state, callbacks1, callbacks2)
 
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func getCallbacksDiff(config *Config, callbacks1, callbacks2 openapi3.Callbacks)
 	return diff, nil
 }
 
-func getCallbacksDiffInternal(config *Config, callbacks1, callbacks2 openapi3.Callbacks) (*CallbacksDiff, error) {
+func getCallbacksDiffInternal(config *Config, state *state, callbacks1, callbacks2 openapi3.Callbacks) (*CallbacksDiff, error) {
 
 	result := newCallbacksDiff()
 
@@ -79,7 +79,7 @@ func getCallbacksDiffInternal(config *Config, callbacks1, callbacks2 openapi3.Ca
 				return nil, err
 			}
 
-			diff, err := getCallbackDiff(config, value1, value2)
+			diff, err := getCallbackDiff(config, state, value1, value2)
 			if err != nil {
 				return nil, err
 			}
@@ -111,8 +111,8 @@ func derefCallback(ref *openapi3.CallbackRef) (*openapi3.Callback, error) {
 	return ref.Value, nil
 }
 
-func getCallbackDiff(config *Config, callback1, callback2 *openapi3.Callback) (*PathsDiff, error) {
-	return getPathsDiff(config, openapi3.Paths(*callback1), openapi3.Paths(*callback2))
+func getCallbackDiff(config *Config, state *state, callback1, callback2 *openapi3.Callback) (*PathsDiff, error) {
+	return getPathsDiff(config, state, openapi3.Paths(*callback1), openapi3.Paths(*callback2))
 }
 
 func (diff *CallbacksDiff) getSummary() *SummaryDetails {

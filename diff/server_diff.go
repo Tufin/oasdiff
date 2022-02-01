@@ -29,8 +29,8 @@ func (diff *ServerDiff) removeNonBreaking() {
 	diff.DescriptionDiff = nil
 }
 
-func getServerDiff(config *Config, value1, value2 *openapi3.Server) *ServerDiff {
-	diff := getServerDiffInternal(config, value1, value2)
+func getServerDiff(config *Config, state *state, value1, value2 *openapi3.Server) *ServerDiff {
+	diff := getServerDiffInternal(config, state, value1, value2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking()
@@ -43,7 +43,7 @@ func getServerDiff(config *Config, value1, value2 *openapi3.Server) *ServerDiff 
 	return diff
 }
 
-func getServerDiffInternal(config *Config, value1, value2 *openapi3.Server) *ServerDiff {
+func getServerDiffInternal(config *Config, state *state, value1, value2 *openapi3.Server) *ServerDiff {
 
 	if value1 == nil && value2 == nil {
 		return nil
@@ -61,10 +61,10 @@ func getServerDiffInternal(config *Config, value1, value2 *openapi3.Server) *Ser
 		return &result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.ExtensionProps, value2.ExtensionProps)
 	result.URLDiff = getValueDiff(value1.URL, value2.URL)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
-	result.VariablesDiff = getVariablesDiff(config, value1.Variables, value2.Variables)
+	result.VariablesDiff = getVariablesDiff(config, state, value1.Variables, value2.Variables)
 
 	return &result
 }

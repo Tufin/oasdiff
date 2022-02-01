@@ -25,8 +25,8 @@ func (diff *VariableDiff) removeNonBreaking() {
 	diff.DescriptionDiff = nil
 }
 
-func getVariableDiff(config *Config, var1, var2 *openapi3.ServerVariable) *VariableDiff {
-	diff := getVariableDiffInternal(config, var1, var2)
+func getVariableDiff(config *Config, state *state, var1, var2 *openapi3.ServerVariable) *VariableDiff {
+	diff := getVariableDiffInternal(config, state, var1, var2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking()
@@ -39,10 +39,10 @@ func getVariableDiff(config *Config, var1, var2 *openapi3.ServerVariable) *Varia
 	return diff
 }
 
-func getVariableDiffInternal(config *Config, var1, var2 *openapi3.ServerVariable) *VariableDiff {
+func getVariableDiffInternal(config *Config, state *state, var1, var2 *openapi3.ServerVariable) *VariableDiff {
 	result := VariableDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, var1.ExtensionProps, var2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, var1.ExtensionProps, var2.ExtensionProps)
 	result.EnumDiff = getStringsDiff(var1.Enum, var2.Enum)
 	result.DefaultDiff = getValueDiff(var1.Default, var2.Default)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, var1.Description, var2.Description)

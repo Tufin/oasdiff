@@ -12,8 +12,8 @@ func (diff *ExtensionsDiff) Empty() bool {
 	return (*InterfaceMapDiff)(diff).Empty()
 }
 
-func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.ExtensionProps) *ExtensionsDiff {
-	diff := getExtensionsDiffInternal(config, extensions1, extensions2)
+func getExtensionsDiff(config *Config, state *state, extensions1, extensions2 openapi3.ExtensionProps) *ExtensionsDiff {
+	diff := getExtensionsDiffInternal(config, state, extensions1, extensions2)
 
 	if diff.Empty() {
 		return nil
@@ -22,6 +22,6 @@ func getExtensionsDiff(config *Config, extensions1, extensions2 openapi3.Extensi
 	return (*ExtensionsDiff)(diff)
 }
 
-func getExtensionsDiffInternal(config *Config, extensions1, extensions2 openapi3.ExtensionProps) *InterfaceMapDiff {
+func getExtensionsDiffInternal(config *Config, state *state, extensions1, extensions2 openapi3.ExtensionProps) *InterfaceMapDiff {
 	return getInterfaceMapDiff(extensions1.Extensions, extensions2.Extensions, config.IncludeExtensions)
 }

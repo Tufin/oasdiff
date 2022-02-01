@@ -27,8 +27,8 @@ func (diff *OAuthFlowsDiff) removeNonBreaking() {
 	diff.ExtensionsDiff = nil
 }
 
-func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
-	diff := getOAuthFlowsDiffInternal(config, flows1, flows2)
+func getOAuthFlowsDiff(config *Config, state *state, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
+	diff := getOAuthFlowsDiffInternal(config, state, flows1, flows2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking()
@@ -41,7 +41,7 @@ func getOAuthFlowsDiff(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAu
 	return diff
 }
 
-func getOAuthFlowsDiffInternal(config *Config, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
+func getOAuthFlowsDiffInternal(config *Config, state *state, flows1, flows2 *openapi3.OAuthFlows) *OAuthFlowsDiff {
 
 	if flows1 == nil && flows2 == nil {
 		return nil
@@ -61,11 +61,11 @@ func getOAuthFlowsDiffInternal(config *Config, flows1, flows2 *openapi3.OAuthFlo
 
 	result := OAuthFlowsDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, flows1.ExtensionProps, flows2.ExtensionProps)
-	result.ImplicitDiff = getOAuthFlowDiff(config, flows1.Implicit, flows2.Implicit)
-	result.PasswordDiff = getOAuthFlowDiff(config, flows1.Password, flows2.Password)
-	result.ClientCredentialsDiff = getOAuthFlowDiff(config, flows1.ClientCredentials, flows2.ClientCredentials)
-	result.AuthorizationCodeDiff = getOAuthFlowDiff(config, flows1.AuthorizationCode, flows2.AuthorizationCode)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, flows1.ExtensionProps, flows2.ExtensionProps)
+	result.ImplicitDiff = getOAuthFlowDiff(config, state, flows1.Implicit, flows2.Implicit)
+	result.PasswordDiff = getOAuthFlowDiff(config, state, flows1.Password, flows2.Password)
+	result.ClientCredentialsDiff = getOAuthFlowDiff(config, state, flows1.ClientCredentials, flows2.ClientCredentials)
+	result.AuthorizationCodeDiff = getOAuthFlowDiff(config, state, flows1.AuthorizationCode, flows2.AuthorizationCode)
 
 	return &result
 }

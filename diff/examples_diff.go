@@ -35,9 +35,9 @@ func newExamplessDiff() *ExamplesDiff {
 	}
 }
 
-func getExamplesDiff(config *Config, examples1, examples2 openapi3.Examples) (*ExamplesDiff, error) {
+func getExamplesDiff(config *Config, state *state, examples1, examples2 openapi3.Examples) (*ExamplesDiff, error) {
 
-	diff, err := getExamplesDiffInternal(config, examples1, examples2)
+	diff, err := getExamplesDiffInternal(config, state, examples1, examples2)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func getExamplesDiff(config *Config, examples1, examples2 openapi3.Examples) (*E
 	return diff, nil
 }
 
-func getExamplesDiffInternal(config *Config, examples1, examples2 openapi3.Examples) (*ExamplesDiff, error) {
+func getExamplesDiffInternal(config *Config, state *state, examples1, examples2 openapi3.Examples) (*ExamplesDiff, error) {
 
 	if config.ExcludeExamples {
 		return nil, nil
@@ -70,7 +70,7 @@ func getExamplesDiffInternal(config *Config, examples1, examples2 openapi3.Examp
 				return nil, err
 			}
 
-			diff := getExampleDiff(config, value1, value2)
+			diff := getExampleDiff(config, state, value1, value2)
 
 			if !diff.Empty() {
 				result.Modified[name1] = diff

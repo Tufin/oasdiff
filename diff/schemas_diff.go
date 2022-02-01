@@ -37,8 +37,8 @@ type schemaRefPair struct {
 
 type schemaRefPairs map[string]*schemaRefPair
 
-func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) (*SchemasDiff, error) {
-	diff, err := getSchemasDiffInternal(config, schemas1, schemas2)
+func getSchemasDiff(config *Config, state *state, schemas1, schemas2 openapi3.Schemas) (*SchemasDiff, error) {
+	diff, err := getSchemasDiffInternal(config, state, schemas1, schemas2)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func getSchemasDiff(config *Config, schemas1, schemas2 openapi3.Schemas) (*Schem
 	return diff, nil
 }
 
-func getSchemasDiffInternal(config *Config, schemas1, schemas2 openapi3.Schemas) (*SchemasDiff, error) {
+func getSchemasDiffInternal(config *Config, state *state, schemas1, schemas2 openapi3.Schemas) (*SchemasDiff, error) {
 
 	result := newSchemasDiff()
 
@@ -65,7 +65,7 @@ func getSchemasDiffInternal(config *Config, schemas1, schemas2 openapi3.Schemas)
 	}
 
 	for schemaName, schemaRefPair := range otherSchemas {
-		err := result.addModifiedSchema(config, schemaName, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
+		err := result.addModifiedSchema(config, state, schemaName, schemaRefPair.SchemaRef1, schemaRefPair.SchemaRef2)
 		if err != nil {
 			return nil, err
 		}
@@ -111,8 +111,8 @@ func (schemasDiff *SchemasDiff) addDeletedSchema(schema string) {
 	schemasDiff.Deleted = append(schemasDiff.Deleted, schema)
 }
 
-func (schemasDiff *SchemasDiff) addModifiedSchema(config *Config, schemaName string, schemaRef1, schemaRef2 *openapi3.SchemaRef) error {
-	return schemasDiff.Modified.addSchemaDiff(config, schemaName, schemaRef1, schemaRef2)
+func (schemasDiff *SchemasDiff) addModifiedSchema(config *Config, state *state, schemaName string, schemaRef1, schemaRef2 *openapi3.SchemaRef) error {
+	return schemasDiff.Modified.addSchemaDiff(config, state, schemaName, schemaRef1, schemaRef2)
 }
 
 func (schemasDiff *SchemasDiff) getSummary() *SummaryDetails {

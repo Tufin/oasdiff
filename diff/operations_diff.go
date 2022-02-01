@@ -44,8 +44,8 @@ func newOperationsDiff() *OperationsDiff {
 // ModifiedOperations is a map of HTTP methods to their respective diffs
 type ModifiedOperations map[string]*MethodDiff
 
-func getOperationsDiff(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
-	diff, err := getOperationsDiffInternal(config, pathItem1, pathItem2)
+func getOperationsDiff(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
+	diff, err := getOperationsDiffInternal(config, state, pathItem1, pathItem2)
 	if err != nil {
 		return nil, err
 	}
@@ -73,13 +73,13 @@ var operations = []string{
 	http.MethodTrace,
 }
 
-func getOperationsDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
+func getOperationsDiffInternal(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
 
 	result := newOperationsDiff()
 	var err error
 
 	for _, op := range operations {
-		err = result.diffOperation(config, pathItem1.GetOperation(op), pathItem2.GetOperation(op), op)
+		err = result.diffOperation(config, state, pathItem1.GetOperation(op), pathItem2.GetOperation(op), op)
 		if err != nil {
 			return nil, err
 		}
@@ -88,7 +88,7 @@ func getOperationsDiffInternal(config *Config, pathItem1, pathItem2 *openapi3.Pa
 	return result, nil
 }
 
-func (operationsDiff *OperationsDiff) diffOperation(config *Config, operation1, operation2 *openapi3.Operation, method string) error {
+func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state, operation1, operation2 *openapi3.Operation, method string) error {
 	if operation1 == nil && operation2 == nil {
 		return nil
 	}
@@ -103,7 +103,7 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, operation1, 
 		return nil
 	}
 
-	diff, err := getMethodDiff(config, operation1, operation2)
+	diff, err := getMethodDiff(config, state, operation1, operation2)
 	if err != nil {
 		return err
 	}

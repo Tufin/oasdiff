@@ -18,8 +18,8 @@ func (diff *SchemaListDiff) Empty() bool {
 	return diff == nil || *diff == SchemaListDiff{}
 }
 
-func getSchemaListsDiff(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
-	diff, err := getSchemaListsDiffInternal(config, schemaRefs1, schemaRefs2)
+func getSchemaListsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
+	diff, err := getSchemaListsDiffInternal(config, state, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
 	}
@@ -31,20 +31,20 @@ func getSchemaListsDiff(config *Config, schemaRefs1, schemaRefs2 openapi3.Schema
 	return diff, nil
 }
 
-func getSchemaListsDiffInternal(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
+func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
 
-	added, err := schemaRefsContained(config, schemaRefs1, schemaRefs2)
+	added, err := schemaRefsContained(config, state, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
 	}
 
-	deleted, err := schemaRefsContained(config, schemaRefs2, schemaRefs1)
+	deleted, err := schemaRefsContained(config, state, schemaRefs2, schemaRefs1)
 	if err != nil {
 		return nil, err
 	}
 
 	if len(added) == 1 && len(deleted) == 1 {
-		d, err := getSchemaDiff(config, added[0], deleted[0])
+		d, err := getSchemaDiff(config, state, added[0], deleted[0])
 		if err != nil {
 			return nil, err
 		}
@@ -59,12 +59,12 @@ func getSchemaListsDiffInternal(config *Config, schemaRefs1, schemaRefs2 openapi
 	}, nil
 }
 
-func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]*openapi3.SchemaRef, error) {
+func schemaRefsContained(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]*openapi3.SchemaRef, error) {
 
 	result := []*openapi3.SchemaRef{}
 
 	for _, schemaRef1 := range schemaRefs1 {
-		found, err := findSchema(config, schemaRef1, schemaRefs2)
+		found, err := findSchema(config, state, schemaRef1, schemaRefs2)
 		if err != nil {
 			return nil, err
 		}
@@ -75,10 +75,10 @@ func schemaRefsContained(config *Config, schemaRefs1, schemaRefs2 openapi3.Schem
 	return result, nil
 }
 
-func findSchema(config *Config, schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
+func findSchema(config *Config, state *state, schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
 	// TODO: optimize with a map
 	for _, schemaRef2 := range schemaRefs2 {
-		diff, err := getSchemaDiff(config, schemaRef1, schemaRef2)
+		diff, err := getSchemaDiff(config, state, schemaRef1, schemaRef2)
 		if err != nil {
 			return false, err
 		}

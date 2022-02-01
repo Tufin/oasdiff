@@ -40,8 +40,8 @@ func newVariablesDiff() *VariablesDiff {
 	}
 }
 
-func getVariablesDiff(config *Config, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
-	diff := getVariablesDiffInternal(config, variables1, variables2)
+func getVariablesDiff(config *Config, state *state, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
+	diff := getVariablesDiffInternal(config, state, variables1, variables2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking()
@@ -54,7 +54,7 @@ func getVariablesDiff(config *Config, variables1, variables2 map[string]*openapi
 	return diff
 }
 
-func getVariablesDiffInternal(config *Config, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
+func getVariablesDiffInternal(config *Config, state *state, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
 	result := newVariablesDiff()
 
 	for name1, var1 := range variables1 {
@@ -64,7 +64,7 @@ func getVariablesDiffInternal(config *Config, variables1, variables2 map[string]
 			continue
 		}
 
-		if diff := getVariableDiff(config, var1, var2); !diff.Empty() {
+		if diff := getVariableDiff(config, state, var1, var2); !diff.Empty() {
 			result.Modified[name1] = diff
 		}
 	}

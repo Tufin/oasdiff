@@ -31,8 +31,8 @@ func (diff *MediaTypeDiff) removeNonBreaking() {
 	diff.ExampleDiff = nil
 }
 
-func getMediaTypeDiff(config *Config, mediaType1 *openapi3.MediaType, mediaType2 *openapi3.MediaType) (*MediaTypeDiff, error) {
-	diff, err := getMediaTypeDiffInternal(config, mediaType1, mediaType2)
+func getMediaTypeDiff(config *Config, state *state, mediaType1 *openapi3.MediaType, mediaType2 *openapi3.MediaType) (*MediaTypeDiff, error) {
+	diff, err := getMediaTypeDiffInternal(config, state, mediaType1, mediaType2)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func getMediaTypeDiff(config *Config, mediaType1 *openapi3.MediaType, mediaType2
 	return diff, nil
 }
 
-func getMediaTypeDiffInternal(config *Config, mediaType1 *openapi3.MediaType, mediaType2 *openapi3.MediaType) (*MediaTypeDiff, error) {
+func getMediaTypeDiffInternal(config *Config, state *state, mediaType1 *openapi3.MediaType, mediaType2 *openapi3.MediaType) (*MediaTypeDiff, error) {
 	result := MediaTypeDiff{}
 	var err error
 
@@ -56,17 +56,17 @@ func getMediaTypeDiffInternal(config *Config, mediaType1 *openapi3.MediaType, me
 		return nil, fmt.Errorf("media type is nil")
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, mediaType1.ExtensionProps, mediaType2.ExtensionProps)
-	result.SchemaDiff, err = getSchemaDiff(config, mediaType1.Schema, mediaType2.Schema)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, mediaType1.ExtensionProps, mediaType2.ExtensionProps)
+	result.SchemaDiff, err = getSchemaDiff(config, state, mediaType1.Schema, mediaType2.Schema)
 	if err != nil {
 		return nil, err
 	}
 	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, mediaType1.Example, mediaType2.Example)
-	result.EncodingsDiff, err = getEncodingsDiff(config, mediaType1.Encoding, mediaType2.Encoding)
+	result.EncodingsDiff, err = getEncodingsDiff(config, state, mediaType1.Encoding, mediaType2.Encoding)
 	if err != nil {
 		return nil, err
 	}
-	result.ExamplesDiff, err = getExamplesDiff(config, mediaType1.Examples, mediaType2.Examples)
+	result.ExamplesDiff, err = getExamplesDiff(config, state, mediaType1.Examples, mediaType2.Examples)
 	if err != nil {
 		return nil, err
 	}

@@ -51,13 +51,14 @@ func main() {
 		return
 	}
 
-	diffReport, err := diff.Get(&diff.Config{
-		ExcludeExamples:    excludeExamples,
-		ExcludeDescription: excludeDescription,
-		PathFilter:         filter,
-		PathPrefix:         prefix,
-		BreakingOnly:       breakingOnly,
-	}, s1, s2)
+	config := diff.NewConfig()
+	config.ExcludeExamples = excludeExamples
+	config.ExcludeDescription = excludeDescription
+	config.PathFilter = filter
+	config.PathPrefix = prefix
+	config.BreakingOnly = breakingOnly
+
+	diffReport, err := diff.Get(config, s1, s2)
 
 	if err != nil {
 		fmt.Printf("diff failed with %v\n", err)

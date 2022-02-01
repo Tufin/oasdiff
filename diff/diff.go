@@ -53,7 +53,7 @@ References are normally resolved automatically when you load the spec.
 In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn.
 */
 func Get(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
-	diff, err := getDiff(config, s1, s2)
+	diff, err := getDiff(config, newState(), s1, s2)
 	if err != nil {
 		return nil, err
 	}
@@ -61,13 +61,13 @@ func Get(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	return diff, nil
 }
 
-func getDiff(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
+func getDiff(config *Config, state *state, s1, s2 *openapi3.T) (*Diff, error) {
 
 	if s1 == nil || s2 == nil {
 		return nil, errors.New("spec is nil")
 	}
 
-	diff, err := getDiffInternal(config, s1, s2)
+	diff, err := getDiffInternal(config, state, s1, s2)
 	if err != nil {
 		return nil, err
 	}
@@ -83,35 +83,35 @@ func getDiff(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	return diff, nil
 }
 
-func getDiffInternal(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
+func getDiffInternal(config *Config, state *state, s1, s2 *openapi3.T) (*Diff, error) {
 
 	result := newDiff()
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, s1.ExtensionProps, s2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, s1.ExtensionProps, s2.ExtensionProps)
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 
-	result.InfoDiff, err = getInfoDiff(config, s1.Info, s2.Info)
+	result.InfoDiff, err = getInfoDiff(config, state, s1.Info, s2.Info)
 	if err != nil {
 		return nil, err
 	}
 
-	result.PathsDiff, err = getPathsDiff(config, s1.Paths, s2.Paths)
+	result.PathsDiff, err = getPathsDiff(config, state, s1.Paths, s2.Paths)
 	if err != nil {
 		return nil, err
 	}
 
-	result.EndpointsDiff, err = getEndpointsDiff(config, s1.Paths, s2.Paths)
+	result.EndpointsDiff, err = getEndpointsDiff(config, state, s1.Paths, s2.Paths)
 	if err != nil {
 		return nil, err
 	}
 
-	result.SecurityDiff = getSecurityRequirementsDiff(config, &s1.Security, &s2.Security)
-	result.ServersDiff = getServersDiff(config, &s1.Servers, &s2.Servers)
-	result.TagsDiff = getTagsDiff(config, s1.Tags, s2.Tags)
-	result.ExternalDocsDiff = getExternalDocsDiff(config, s1.ExternalDocs, s2.ExternalDocs)
+	result.SecurityDiff = getSecurityRequirementsDiff(config, state, &s1.Security, &s2.Security)
+	result.ServersDiff = getServersDiff(config, state, &s1.Servers, &s2.Servers)
+	result.TagsDiff = getTagsDiff(config, state, s1.Tags, s2.Tags)
+	result.ExternalDocsDiff = getExternalDocsDiff(config, state, s1.ExternalDocs, s2.ExternalDocs)
 
-	result.ComponentsDiff, err = getComponentsDiff(config, s1.Components, s2.Components)
+	result.ComponentsDiff, err = getComponentsDiff(config, state, s1.Components, s2.Components)
 	if err != nil {
 		return nil, err
 	}

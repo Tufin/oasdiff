@@ -52,14 +52,14 @@ func newEndpointsDiff() *EndpointsDiff {
 	}
 }
 
-func getEndpointsDiff(config *Config, paths1, paths2 openapi3.Paths) (*EndpointsDiff, error) {
+func getEndpointsDiff(config *Config, state *state, paths1, paths2 openapi3.Paths) (*EndpointsDiff, error) {
 
 	err := filterPaths2(config.PathFilter, paths1, paths2)
 	if err != nil {
 		return nil, err
 	}
 
-	diff, err := getEndpointsDiffInternal(config, paths1, paths2)
+	diff, err := getEndpointsDiffInternal(config, state, paths1, paths2)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func getEndpointsDiff(config *Config, paths1, paths2 openapi3.Paths) (*Endpoints
 	return diff, nil
 }
 
-func getEndpointsDiffInternal(config *Config, paths1, paths2 openapi3.Paths) (*EndpointsDiff, error) {
+func getEndpointsDiffInternal(config *Config, state *state, paths1, paths2 openapi3.Paths) (*EndpointsDiff, error) {
 
 	result := newEndpointsDiff()
 
@@ -94,7 +94,7 @@ func getEndpointsDiffInternal(config *Config, paths1, paths2 openapi3.Paths) (*E
 	}
 
 	for path, pathItemPair := range otherPaths {
-		result.addModifiedPaths(config, path, pathItemPair)
+		result.addModifiedPaths(config, state, path, pathItemPair)
 	}
 
 	return result, nil
@@ -114,9 +114,9 @@ func (diff *EndpointsDiff) addDeletedPath(path string, method string) {
 	})
 }
 
-func (diff *EndpointsDiff) addModifiedPaths(config *Config, path string, pathItemPair *pathItemPair) error {
+func (diff *EndpointsDiff) addModifiedPaths(config *Config, state *state, path string, pathItemPair *pathItemPair) error {
 
-	pathDiff, err := getPathDiff(config, pathItemPair.PathItem1, pathItemPair.PathItem2)
+	pathDiff, err := getPathDiff(config, state, pathItemPair.PathItem1, pathItemPair.PathItem2)
 	if err != nil {
 		return err
 	}

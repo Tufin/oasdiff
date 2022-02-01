@@ -22,8 +22,8 @@ func (diff *InfoDiff) Empty() bool {
 	return diff == nil || *diff == InfoDiff{}
 }
 
-func getInfoDiff(config *Config, info1, info2 *openapi3.Info) (*InfoDiff, error) {
-	diff, err := getInfoDiffInternal(config, info1, info2)
+func getInfoDiff(config *Config, state *state, info1, info2 *openapi3.Info) (*InfoDiff, error) {
+	diff, err := getInfoDiffInternal(config, state, info1, info2)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func getInfoDiff(config *Config, info1, info2 *openapi3.Info) (*InfoDiff, error)
 	return diff, nil
 }
 
-func getInfoDiffInternal(config *Config, info1, info2 *openapi3.Info) (*InfoDiff, error) {
+func getInfoDiffInternal(config *Config, state *state, info1, info2 *openapi3.Info) (*InfoDiff, error) {
 
 	result := InfoDiff{}
 
@@ -43,12 +43,12 @@ func getInfoDiffInternal(config *Config, info1, info2 *openapi3.Info) (*InfoDiff
 		return nil, fmt.Errorf("info is nil")
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, info1.ExtensionProps, info2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, info1.ExtensionProps, info2.ExtensionProps)
 	result.TitleDiff = getValueDiff(info1.Title, info2.Title)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, info1.Description, info2.Description)
 	result.TermsOfServiceDiff = getValueDiff(info1.TermsOfService, info2.TermsOfService)
-	result.ContactDiff = getContactDiff(config, info1.Contact, info2.Contact)
-	result.LicenseDiff = getLicenseDiff(config, info1.License, info2.License)
+	result.ContactDiff = getContactDiff(config, state, info1.Contact, info2.Contact)
+	result.LicenseDiff = getLicenseDiff(config, state, info1.License, info2.License)
 	result.VersionDiff = getValueDiff(info1.Version, info2.Version)
 
 	return &result, nil

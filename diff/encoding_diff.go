@@ -34,8 +34,8 @@ func (diff *EncodingDiff) removeNonBreaking() {
 	// TODO: diff.AllowReservedDiff is non breaking in specific cases
 }
 
-func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
-	diff, err := getEncodingDiffInternal(config, value1, value2)
+func getEncodingDiff(config *Config, state *state, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
+	diff, err := getEncodingDiffInternal(config, state, value1, value2)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func getEncodingDiff(config *Config, value1, value2 *openapi3.Encoding) (*Encodi
 	return diff, nil
 }
 
-func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
+func getEncodingDiffInternal(config *Config, state *state, value1, value2 *openapi3.Encoding) (*EncodingDiff, error) {
 	result := EncodingDiff{}
 	var err error
 
@@ -59,9 +59,9 @@ func getEncodingDiffInternal(config *Config, value1, value2 *openapi3.Encoding) 
 		return nil, fmt.Errorf("encoding is nil")
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.ExtensionProps, value2.ExtensionProps)
 	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
-	result.HeadersDiff, err = getHeadersDiff(config, value1.Headers, value2.Headers)
+	result.HeadersDiff, err = getHeadersDiff(config, state, value1.Headers, value2.Headers)
 	if err != nil {
 		return nil, err
 	}

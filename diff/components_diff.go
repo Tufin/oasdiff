@@ -20,52 +20,52 @@ func (diff *ComponentsDiff) Empty() bool {
 	return diff == nil || *diff == ComponentsDiff{}
 }
 
-func getComponentsDiff(config *Config, s1, s2 openapi3.Components) (ComponentsDiff, error) {
+func getComponentsDiff(config *Config, state *state, s1, s2 openapi3.Components) (ComponentsDiff, error) {
 
 	result := ComponentsDiff{}
 	var err error
 
-	result.SchemasDiff, err = getSchemasDiff(config, s1.Schemas, s2.Schemas)
+	result.SchemasDiff, err = getSchemasDiff(config, state, s1.Schemas, s2.Schemas)
 	if err != nil {
 		return result, err
 	}
 
-	result.ParametersDiff, err = getParametersDiff(config, toParameters(s1.Parameters), toParameters(s2.Parameters))
+	result.ParametersDiff, err = getParametersDiff(config, state, toParameters(s1.Parameters), toParameters(s2.Parameters))
 	if err != nil {
 		return result, err
 	}
 
-	result.HeadersDiff, err = getHeadersDiff(config, s1.Headers, s2.Headers)
+	result.HeadersDiff, err = getHeadersDiff(config, state, s1.Headers, s2.Headers)
 	if err != nil {
 		return result, err
 	}
 
-	result.RequestBodiesDiff, err = getRequestBodiesDiff(config, s1.RequestBodies, s2.RequestBodies)
+	result.RequestBodiesDiff, err = getRequestBodiesDiff(config, state, s1.RequestBodies, s2.RequestBodies)
 	if err != nil {
 		return result, err
 	}
 
-	result.ResponsesDiff, err = getResponsesDiff(config, s1.Responses, s2.Responses)
+	result.ResponsesDiff, err = getResponsesDiff(config, state, s1.Responses, s2.Responses)
 	if err != nil {
 		return result, err
 	}
 
-	result.SecuritySchemesDiff, err = getSecuritySchemesDiff(config, s1.SecuritySchemes, s2.SecuritySchemes)
+	result.SecuritySchemesDiff, err = getSecuritySchemesDiff(config, state, s1.SecuritySchemes, s2.SecuritySchemes)
 	if err != nil {
 		return result, err
 	}
 
-	result.ExamplesDiff, err = getExamplesDiff(config, s1.Examples, s2.Examples)
+	result.ExamplesDiff, err = getExamplesDiff(config, state, s1.Examples, s2.Examples)
 	if err != nil {
 		return result, err
 	}
 
-	result.LinksDiff, err = getLinksDiff(config, s1.Links, s2.Links)
+	result.LinksDiff, err = getLinksDiff(config, state, s1.Links, s2.Links)
 	if err != nil {
 		return result, err
 	}
 
-	result.CallbacksDiff, err = getCallbacksDiff(config, s1.Callbacks, s2.Callbacks)
+	result.CallbacksDiff, err = getCallbacksDiff(config, state, s1.Callbacks, s2.Callbacks)
 	if err != nil {
 		return result, err
 	}
