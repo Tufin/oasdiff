@@ -43,8 +43,8 @@ func newRequestBodyDiff() *RequestBodyDiff {
 	return &RequestBodyDiff{}
 }
 
-func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) (*RequestBodyDiff, error) {
-	diff, err := getRequestBodyDiffInternal(config, requestBodyRef1, requestBodyRef2)
+func getRequestBodyDiff(config *Config, state *state, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) (*RequestBodyDiff, error) {
+	diff, err := getRequestBodyDiffInternal(config, state, requestBodyRef1, requestBodyRef2)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func getRequestBodyDiff(config *Config, requestBodyRef1, requestBodyRef2 *openap
 	return diff, nil
 }
 
-func getRequestBodyDiffInternal(config *Config, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) (*RequestBodyDiff, error) {
+func getRequestBodyDiffInternal(config *Config, state *state, requestBodyRef1, requestBodyRef2 *openapi3.RequestBodyRef) (*RequestBodyDiff, error) {
 
 	if requestBodyRef1 == nil && requestBodyRef2 == nil {
 		return nil, nil
@@ -87,10 +87,10 @@ func getRequestBodyDiffInternal(config *Config, requestBodyRef1, requestBodyRef2
 		return nil, err
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, requestBody1.ExtensionProps, requestBody2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, requestBody1.ExtensionProps, requestBody2.ExtensionProps)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, requestBody1.Description, requestBody2.Description)
 	result.RequiredDiff = getValueDiff(requestBody1.Required, requestBody2.Required)
-	result.ContentDiff, err = getContentDiff(config, requestBody1.Content, requestBody2.Content)
+	result.ContentDiff, err = getContentDiff(config, state, requestBody1.Content, requestBody2.Content)
 	if err != nil {
 		return nil, err
 	}

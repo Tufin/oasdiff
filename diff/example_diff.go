@@ -18,8 +18,8 @@ func (diff *ExampleDiff) Empty() bool {
 	return diff == nil || *diff == ExampleDiff{}
 }
 
-func getExampleDiff(config *Config, value1, value2 *openapi3.Example) *ExampleDiff {
-	diff := getExampleDiffInternal(config, value1, value2)
+func getExampleDiff(config *Config, state *state, value1, value2 *openapi3.Example) *ExampleDiff {
+	diff := getExampleDiffInternal(config, state, value1, value2)
 
 	if diff.Empty() {
 		return nil
@@ -28,10 +28,10 @@ func getExampleDiff(config *Config, value1, value2 *openapi3.Example) *ExampleDi
 	return diff
 }
 
-func getExampleDiffInternal(config *Config, value1, value2 *openapi3.Example) *ExampleDiff {
+func getExampleDiffInternal(config *Config, state *state, value1, value2 *openapi3.Example) *ExampleDiff {
 	result := ExampleDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.ExtensionProps, value2.ExtensionProps)
 	result.SummaryDiff = getValueDiff(value1.Summary, value2.Summary)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
 	result.ValueDiff = getValueDiff(value1.Value, value2.Value)

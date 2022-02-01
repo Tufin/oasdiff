@@ -40,8 +40,8 @@ func newServersDiff() *ServersDiff {
 	}
 }
 
-func getServersDiff(config *Config, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
-	diff := getServersDiffInternal(config, pServers1, pServers2)
+func getServersDiff(config *Config, state *state, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
+	diff := getServersDiffInternal(config, state, pServers1, pServers2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking()
@@ -54,7 +54,7 @@ func getServersDiff(config *Config, pServers1, pServers2 *openapi3.Servers) *Ser
 	return diff
 }
 
-func getServersDiffInternal(config *Config, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
+func getServersDiffInternal(config *Config, state *state, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
 
 	result := newServersDiff()
 
@@ -63,7 +63,7 @@ func getServersDiffInternal(config *Config, pServers1, pServers2 *openapi3.Serve
 
 	for _, server1 := range servers1 {
 		if server2 := findServer(server1, servers2); server2 != nil {
-			if diff := getServerDiff(config, server1, server2); !diff.Empty() {
+			if diff := getServerDiff(config, state, server1, server2); !diff.Empty() {
 				result.Modified[server1.URL] = diff
 			}
 		} else {

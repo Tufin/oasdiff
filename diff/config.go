@@ -8,7 +8,6 @@ type Config struct {
 	PathFilter         string    // diff will only include paths that match this regex (optional)
 	PathPrefix         string    // a prefix that exists in first spec paths but not in second one (optional)
 	BreakingOnly       bool      // whether to calc breaking changes only
-
 }
 
 // NewConfig returns a default configuration

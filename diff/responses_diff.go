@@ -44,8 +44,8 @@ func newResponsesDiff() *ResponsesDiff {
 	}
 }
 
-func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses) (*ResponsesDiff, error) {
-	diff, err := getResponsesDiffInternal(config, responses1, responses2)
+func getResponsesDiff(config *Config, state *state, responses1, responses2 openapi3.Responses) (*ResponsesDiff, error) {
+	diff, err := getResponsesDiffInternal(config, state, responses1, responses2)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func getResponsesDiff(config *Config, responses1, responses2 openapi3.Responses)
 	return diff, nil
 }
 
-func getResponsesDiffInternal(config *Config, responses1, responses2 openapi3.Responses) (*ResponsesDiff, error) {
+func getResponsesDiffInternal(config *Config, state *state, responses1, responses2 openapi3.Responses) (*ResponsesDiff, error) {
 
 	result := newResponsesDiff()
 
@@ -77,7 +77,7 @@ func getResponsesDiffInternal(config *Config, responses1, responses2 openapi3.Re
 				return nil, err
 			}
 
-			diff, err := diffResponseValues(config, value1, value2)
+			diff, err := diffResponseValues(config, state, value1, value2)
 			if err != nil {
 				return nil, err
 			}

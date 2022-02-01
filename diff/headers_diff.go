@@ -44,8 +44,8 @@ func newHeadersDiff() *HeadersDiff {
 	}
 }
 
-func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) (*HeadersDiff, error) {
-	diff, err := getHeadersDiffInternal(config, headers1, headers2)
+func getHeadersDiff(config *Config, state *state, headers1, headers2 openapi3.Headers) (*HeadersDiff, error) {
+	diff, err := getHeadersDiffInternal(config, state, headers1, headers2)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func getHeadersDiff(config *Config, headers1, headers2 openapi3.Headers) (*Heade
 	return diff, nil
 }
 
-func getHeadersDiffInternal(config *Config, headers1, headers2 openapi3.Headers) (*HeadersDiff, error) {
+func getHeadersDiffInternal(config *Config, state *state, headers1, headers2 openapi3.Headers) (*HeadersDiff, error) {
 
 	result := newHeadersDiff()
 
@@ -77,7 +77,7 @@ func getHeadersDiffInternal(config *Config, headers1, headers2 openapi3.Headers)
 				return nil, err
 			}
 
-			diff, err := getHeaderDiff(config, value1, value2)
+			diff, err := getHeaderDiff(config, state, value1, value2)
 			if err != nil {
 				return nil, err
 			}

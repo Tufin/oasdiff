@@ -26,7 +26,7 @@ func (diff *RequiredPropertiesDiff) removeNonBreaking() {
 	diff.Deleted = nil
 }
 
-func getRequiredPropertiesDiff(config *Config, strings1, strings2 StringList) *RequiredPropertiesDiff {
+func getRequiredPropertiesDiff(config *Config, state *state, strings1, strings2 StringList) *RequiredPropertiesDiff {
 
 	diff := getRequiredPropertiesDiffInternal(strings1, strings2)
 

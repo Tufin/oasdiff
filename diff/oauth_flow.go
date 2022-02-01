@@ -27,8 +27,8 @@ func (diff *OAuthFlowDiff) removeNonBreaking() {
 	diff.ExtensionsDiff = nil
 }
 
-func getOAuthFlowDiff(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
-	diff := getOAuthFlowDiffInternal(config, flow1, flow2)
+func getOAuthFlowDiff(config *Config, state *state, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
+	diff := getOAuthFlowDiffInternal(config, state, flow1, flow2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking()
@@ -41,7 +41,7 @@ func getOAuthFlowDiff(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFl
 	return diff
 }
 
-func getOAuthFlowDiffInternal(config *Config, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
+func getOAuthFlowDiffInternal(config *Config, state *state, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
 
 	if flow1 == nil && flow2 == nil {
 		return nil
@@ -59,7 +59,7 @@ func getOAuthFlowDiffInternal(config *Config, flow1, flow2 *openapi3.OAuthFlow) 
 		return &result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, flow1.ExtensionProps, flow2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, flow1.ExtensionProps, flow2.ExtensionProps)
 	result.AuthorizationURLDiff = getValueDiff(flow1.AuthorizationURL, flow2.AuthorizationURL)
 	result.TokenURLDiff = getValueDiff(flow1.TokenURL, flow2.TokenURL)
 	result.RefreshURLDiff = getValueDiff(flow1.RefreshURL, flow2.RefreshURL)

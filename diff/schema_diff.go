@@ -169,8 +169,13 @@ func (diff *SchemaDiff) removeAddedButNonRequiredProperties(schema2 *openapi3.Sc
 	}
 }
 
-func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
-	diff, err := getSchemaDiffInternal(config, schema1, schema2)
+func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
+
+	if diff, ok := state.cache[schemaPair{schema1, schema2}]; ok {
+		return diff, nil
+	}
+
+	diff, err := getSchemaDiffInternal(config, state, schema1, schema2)
 	if err != nil {
 		return nil, err
 	}
@@ -180,13 +185,14 @@ func getSchemaDiff(config *Config, schema1, schema2 *openapi3.SchemaRef) (*Schem
 	}
 
 	if diff.Empty() {
-		return nil, nil
+		diff = nil
 	}
 
+	state.cache[schemaPair{schema1, schema2}] = diff
 	return diff, nil
 }
 
-func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
+func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
 
 	if status := getSchemaStatus(schema1, schema2); status != schemaStatusOK {
 		switch status {
@@ -199,7 +205,7 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 		}
 	}
 
-	if status := getCircularRefsDiff(schema1, schema2); status != circularRefStatusNone {
+	if status := getCircularRefsDiff(state.visitedSchemasBase, state.visitedSchemasRevision, schema1, schema2); status != circularRefStatusNone {
 		switch status {
 		case circularRefStatusDiff:
 			return &SchemaDiff{CircularRefDiff: true}, nil
@@ -218,29 +224,34 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 		return nil, err
 	}
 
-	// handle circular refs
-	incRefCount(value1)
-	defer decRefCount(value1)
+	// mark visited schema references to avoid infinite loops
+	if schema1.Ref != "" {
+		state.visitedSchemasBase.add(schema1.Ref)
+		defer state.visitedSchemasBase.remove(schema1.Ref)
 
-	incRefCount(value2)
-	defer decRefCount(value2)
+	}
+
+	if schema2.Ref != "" {
+		state.visitedSchemasRevision.add(schema2.Ref)
+		defer state.visitedSchemasRevision.remove(schema2.Ref)
+	}
 
 	result := SchemaDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, value1.ExtensionProps, value2.ExtensionProps)
-	result.OneOfDiff, err = getSchemaListsDiff(config, value1.OneOf, value2.OneOf)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.ExtensionProps, value2.ExtensionProps)
+	result.OneOfDiff, err = getSchemaListsDiff(config, state, value1.OneOf, value2.OneOf)
 	if err != nil {
 		return nil, err
 	}
-	result.AnyOfDiff, err = getSchemaListsDiff(config, value1.AnyOf, value2.AnyOf)
+	result.AnyOfDiff, err = getSchemaListsDiff(config, state, value1.AnyOf, value2.AnyOf)
 	if err != nil {
 		return nil, err
 	}
-	result.AllOfDiff, err = getSchemaListsDiff(config, value1.AllOf, value2.AllOf)
+	result.AllOfDiff, err = getSchemaListsDiff(config, state, value1.AllOf, value2.AllOf)
 	if err != nil {
 		return nil, err
 	}
-	result.NotDiff, err = getSchemaDiff(config, value1.Not, value2.Not)
+	result.NotDiff, err = getSchemaDiff(config, state, value1.Not, value2.Not)
 	if err != nil {
 		return nil, err
 	}
@@ -248,10 +259,10 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	result.TitleDiff = getValueDiff(value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
-	result.EnumDiff = getEnumDiff(config, value1.Enum, value2.Enum)
+	result.EnumDiff = getEnumDiff(config, state, value1.Enum, value2.Enum)
 	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
 	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, value1.Example, value2.Example)
-	result.ExternalDocsDiff = getExternalDocsDiff(config, value1.ExternalDocs, value2.ExternalDocs)
+	result.ExternalDocsDiff = getExternalDocsDiff(config, state, value1.ExternalDocs, value2.ExternalDocs)
 	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(value1.AdditionalPropertiesAllowed, value2.AdditionalPropertiesAllowed)
 	result.UniqueItemsDiff = getValueDiff(value1.UniqueItems, value2.UniqueItems)
 	result.ExclusiveMinDiff = getValueDiff(value1.ExclusiveMin, value2.ExclusiveMin)
@@ -271,26 +282,26 @@ func getSchemaDiffInternal(config *Config, schema1, schema2 *openapi3.SchemaRef)
 	// compiledPattern is derived from pattern -> no need to diff
 	result.MinItemsDiff = getValueDiff(value1.MinItems, value2.MinItems)
 	result.MaxItemsDiff = getUInt64RefDiff(value1.MaxItems, value2.MaxItems)
-	result.ItemsDiff, err = getSchemaDiff(config, value1.Items, value2.Items)
+	result.ItemsDiff, err = getSchemaDiff(config, state, value1.Items, value2.Items)
 	if err != nil {
 		return nil, err
 	}
 
 	// Object
-	result.RequiredDiff = getRequiredPropertiesDiff(config, value1.Required, value2.Required)
-	result.PropertiesDiff, err = getSchemasDiff(config, value1.Properties, value2.Properties)
+	result.RequiredDiff = getRequiredPropertiesDiff(config, state, value1.Required, value2.Required)
+	result.PropertiesDiff, err = getSchemasDiff(config, state, value1.Properties, value2.Properties)
 	if err != nil {
 		return nil, err
 	}
 
 	result.MinPropsDiff = getValueDiff(value1.MinProps, value2.MinProps)
 	result.MaxPropsDiff = getUInt64RefDiff(value1.MaxProps, value2.MaxProps)
-	result.AdditionalPropertiesDiff, err = getSchemaDiff(config, value1.AdditionalProperties, value2.AdditionalProperties)
+	result.AdditionalPropertiesDiff, err = getSchemaDiff(config, state, value1.AdditionalProperties, value2.AdditionalProperties)
 	if err != nil {
 		return nil, err
 	}
 
-	result.DiscriminatorDiff = getDiscriminatorDiff(config, value1.Discriminator, value2.Discriminator)
+	result.DiscriminatorDiff = getDiscriminatorDiff(config, state, value1.Discriminator, value2.Discriminator)
 
 	return &result, nil
 }

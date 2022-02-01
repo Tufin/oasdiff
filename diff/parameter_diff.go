@@ -49,8 +49,8 @@ func (diff *ParameterDiff) removeNonBreaking() {
 	// diff.AllowReservedDiff.CompareWithDefault(true, false, false) || // TODO: only if this id a query param
 }
 
-func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
-	diff, err := getParameterDiffInternal(config, param1, param2)
+func getParameterDiff(config *Config, state *state, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
+	diff, err := getParameterDiffInternal(config, state, param1, param2)
 	if err != nil {
 		return nil, err
 	}
@@ -66,12 +66,12 @@ func getParameterDiff(config *Config, param1, param2 *openapi3.Parameter) (*Para
 	return diff, nil
 }
 
-func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
+func getParameterDiffInternal(config *Config, state *state, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
 
 	result := ParameterDiff{}
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, param1.ExtensionProps, param2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, param1.ExtensionProps, param2.ExtensionProps)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, param1.Description, param2.Description)
 	result.StyleDiff = getValueDiff(param1.Style, param2.Style)
 	result.ExplodeDiff = getBoolRefDiff(param1.Explode, param2.Explode)
@@ -79,19 +79,19 @@ func getParameterDiffInternal(config *Config, param1, param2 *openapi3.Parameter
 	result.AllowReservedDiff = getValueDiff(param1.AllowReserved, param2.AllowReserved)
 	result.DeprecatedDiff = getValueDiff(param1.Deprecated, param2.Deprecated)
 	result.RequiredDiff = getValueDiff(param1.Required, param2.Required)
-	result.SchemaDiff, err = getSchemaDiff(config, param1.Schema, param2.Schema)
+	result.SchemaDiff, err = getSchemaDiff(config, state, param1.Schema, param2.Schema)
 	if err != nil {
 		return nil, err
 	}
 
 	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, param1.Example, param2.Example)
 
-	result.ExamplesDiff, err = getExamplesDiff(config, param1.Examples, param2.Examples)
+	result.ExamplesDiff, err = getExamplesDiff(config, state, param1.Examples, param2.Examples)
 	if err != nil {
 		return nil, err
 	}
 
-	result.ContentDiff, err = getContentDiff(config, param1.Content, param2.Content)
+	result.ContentDiff, err = getContentDiff(config, state, param1.Content, param2.Content)
 	if err != nil {
 		return nil, err
 	}

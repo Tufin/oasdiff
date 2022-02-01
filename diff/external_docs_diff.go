@@ -20,8 +20,8 @@ func (diff *ExternalDocsDiff) Empty() bool {
 	return diff == nil || *diff == ExternalDocsDiff{}
 }
 
-func getExternalDocsDiff(config *Config, docs1, docs2 *openapi3.ExternalDocs) *ExternalDocsDiff {
-	diff := getExternalDocsDiffInternal(config, docs1, docs2)
+func getExternalDocsDiff(config *Config, state *state, docs1, docs2 *openapi3.ExternalDocs) *ExternalDocsDiff {
+	diff := getExternalDocsDiffInternal(config, state, docs1, docs2)
 
 	if diff.Empty() {
 		return nil
@@ -30,7 +30,7 @@ func getExternalDocsDiff(config *Config, docs1, docs2 *openapi3.ExternalDocs) *E
 	return diff
 }
 
-func getExternalDocsDiffInternal(config *Config, docs1, docs2 *openapi3.ExternalDocs) *ExternalDocsDiff {
+func getExternalDocsDiffInternal(config *Config, state *state, docs1, docs2 *openapi3.ExternalDocs) *ExternalDocsDiff {
 	result := newExternalDocsDiff()
 
 	if docs1 == nil && docs2 == nil {
@@ -47,7 +47,7 @@ func getExternalDocsDiffInternal(config *Config, docs1, docs2 *openapi3.External
 		return result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, docs1.ExtensionProps, docs2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, docs1.ExtensionProps, docs2.ExtensionProps)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, docs1.Description, docs2.Description)
 	result.URLDiff = getValueDiff(docs1.URL, docs2.URL)
 

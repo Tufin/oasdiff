@@ -39,7 +39,7 @@ func (enumDiff *EnumDiff) removeNonBreaking() {
 	enumDiff.Added = nil
 }
 
-func getEnumDiff(config *Config, enum1, enum2 EnumValues) *EnumDiff {
+func getEnumDiff(config *Config, state *state, enum1, enum2 EnumValues) *EnumDiff {
 
 	diff := getEnumDiffInternal(enum1, enum2)
 

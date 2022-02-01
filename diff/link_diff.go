@@ -28,8 +28,8 @@ func (diff *LinkDiff) removeNonBreaking() {
 	diff.DescriptionDiff = nil
 }
 
-func getLinkDiff(config *Config, link1, link2 *openapi3.Link) (*LinkDiff, error) {
-	diff, err := getLinkDiffInternal(config, link1, link2)
+func getLinkDiff(config *Config, state *state, link1, link2 *openapi3.Link) (*LinkDiff, error) {
+	diff, err := getLinkDiffInternal(config, state, link1, link2)
 	if err != nil {
 		return nil, err
 	}
@@ -45,15 +45,15 @@ func getLinkDiff(config *Config, link1, link2 *openapi3.Link) (*LinkDiff, error)
 	return diff, nil
 }
 
-func getLinkDiffInternal(config *Config, link1, link2 *openapi3.Link) (*LinkDiff, error) {
+func getLinkDiffInternal(config *Config, state *state, link1, link2 *openapi3.Link) (*LinkDiff, error) {
 	result := LinkDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, link1.ExtensionProps, link2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, link1.ExtensionProps, link2.ExtensionProps)
 	result.OperationIDDiff = getValueDiff(link1.OperationID, link2.OperationID)
 	result.OperationRefDiff = getValueDiff(link1.OperationRef, link2.OperationRef)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, link1.Description, link2.Description)
 	result.ParametersDiff = getInterfaceMapDiff(link1.Parameters, link2.Parameters, StringSet{})
-	result.ServerDiff = getServerDiff(config, link1.Server, link2.Server)
+	result.ServerDiff = getServerDiff(config, state, link1.Server, link2.Server)
 	result.RequestBodyDiff = getValueDiff(link1.RequestBody, link2.RequestBody)
 
 	return &result, nil

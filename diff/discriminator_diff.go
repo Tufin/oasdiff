@@ -32,8 +32,8 @@ func newDiscriminatorDiff() *DiscriminatorDiff {
 
 }
 
-func getDiscriminatorDiff(config *Config, discriminator1, discriminator2 *openapi3.Discriminator) *DiscriminatorDiff {
-	diff := getDiscriminatorDiffInternal(config, discriminator1, discriminator2)
+func getDiscriminatorDiff(config *Config, state *state, discriminator1, discriminator2 *openapi3.Discriminator) *DiscriminatorDiff {
+	diff := getDiscriminatorDiffInternal(config, state, discriminator1, discriminator2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking()
@@ -46,7 +46,7 @@ func getDiscriminatorDiff(config *Config, discriminator1, discriminator2 *openap
 	return diff
 }
 
-func getDiscriminatorDiffInternal(config *Config, discriminator1, discriminator2 *openapi3.Discriminator) *DiscriminatorDiff {
+func getDiscriminatorDiffInternal(config *Config, state *state, discriminator1, discriminator2 *openapi3.Discriminator) *DiscriminatorDiff {
 
 	result := newDiscriminatorDiff()
 
@@ -64,7 +64,7 @@ func getDiscriminatorDiffInternal(config *Config, discriminator1, discriminator2
 		return result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, discriminator1.ExtensionProps, discriminator2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, discriminator1.ExtensionProps, discriminator2.ExtensionProps)
 	result.PropertyNameDiff = getValueDiff(discriminator1.PropertyName, discriminator2.PropertyName)
 	result.MappingDiff = getStringMapDiff(discriminator1.Mapping, discriminator2.Mapping)
 

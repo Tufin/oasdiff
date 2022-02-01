@@ -35,8 +35,8 @@ func newLinksDiff() *LinksDiff {
 	}
 }
 
-func getLinksDiff(config *Config, links1, links2 openapi3.Links) (*LinksDiff, error) {
-	diff, err := getLinksDiffsInternal(config, links1, links2)
+func getLinksDiff(config *Config, state *state, links1, links2 openapi3.Links) (*LinksDiff, error) {
+	diff, err := getLinksDiffsInternal(config, state, links1, links2)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func getLinksDiff(config *Config, links1, links2 openapi3.Links) (*LinksDiff, er
 	return diff, nil
 }
 
-func getLinksDiffsInternal(config *Config, links1, links2 openapi3.Links) (*LinksDiff, error) {
+func getLinksDiffsInternal(config *Config, state *state, links1, links2 openapi3.Links) (*LinksDiff, error) {
 
 	result := newLinksDiff()
 
@@ -64,7 +64,7 @@ func getLinksDiffsInternal(config *Config, links1, links2 openapi3.Links) (*Link
 				return nil, err
 			}
 
-			diff, err := getLinkDiff(config, value1, value2)
+			diff, err := getLinkDiff(config, state, value1, value2)
 			if err != nil {
 				return nil, err
 			}

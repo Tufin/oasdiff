@@ -16,8 +16,8 @@ func (diff *LicenseDiff) Empty() bool {
 	return diff == nil || *diff == LicenseDiff{}
 }
 
-func getLicenseDiff(config *Config, license1, license2 *openapi3.License) *LicenseDiff {
-	diff := getLicenseDiffInternal(config, license1, license2)
+func getLicenseDiff(config *Config, state *state, license1, license2 *openapi3.License) *LicenseDiff {
+	diff := getLicenseDiffInternal(config, state, license1, license2)
 
 	if diff.Empty() {
 		return nil
@@ -26,7 +26,7 @@ func getLicenseDiff(config *Config, license1, license2 *openapi3.License) *Licen
 	return diff
 }
 
-func getLicenseDiffInternal(config *Config, license1, license2 *openapi3.License) *LicenseDiff {
+func getLicenseDiffInternal(config *Config, state *state, license1, license2 *openapi3.License) *LicenseDiff {
 
 	result := LicenseDiff{}
 
@@ -44,7 +44,7 @@ func getLicenseDiffInternal(config *Config, license1, license2 *openapi3.License
 		return &result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, license1.ExtensionProps, license2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, license1.ExtensionProps, license2.ExtensionProps)
 	result.NameDiff = getValueDiff(license1.Name, license2.Name)
 	result.URLDiff = getValueDiff(license1.URL, license2.URL)
 

@@ -44,8 +44,8 @@ func newSecuritySchemesDiff() *SecuritySchemesDiff {
 	}
 }
 
-func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) (*SecuritySchemesDiff, error) {
-	diff, err := getSecuritySchemesDiffInternal(config, securitySchemes1, securitySchemes2)
+func getSecuritySchemesDiff(config *Config, state *state, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) (*SecuritySchemesDiff, error) {
+	diff, err := getSecuritySchemesDiffInternal(config, state, securitySchemes1, securitySchemes2)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func getSecuritySchemesDiff(config *Config, securitySchemes1, securitySchemes2 o
 	return diff, nil
 }
 
-func getSecuritySchemesDiffInternal(config *Config, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) (*SecuritySchemesDiff, error) {
+func getSecuritySchemesDiffInternal(config *Config, state *state, securitySchemes1, securitySchemes2 openapi3.SecuritySchemes) (*SecuritySchemesDiff, error) {
 
 	result := newSecuritySchemesDiff()
 
@@ -75,7 +75,7 @@ func getSecuritySchemesDiffInternal(config *Config, securitySchemes1, securitySc
 			if err != nil {
 				return nil, err
 			}
-			if diff := getSecuritySchemeDiff(config, value1, value2); !diff.Empty() {
+			if diff := getSecuritySchemeDiff(config, state, value1, value2); !diff.Empty() {
 				result.Modified[name1] = diff
 			}
 		} else {
