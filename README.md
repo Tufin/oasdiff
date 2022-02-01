@@ -51,6 +51,8 @@ To see the full diff, use the default format: YAML.
 ```bash
 docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
+This is the default output format.  
+Note that no output means an empty diff (no changes).
 
 ### Breaking changes
 
@@ -383,9 +385,10 @@ See full example: [main.go](main.go)
 
 ## Notes
 1. Output Formats  
-The default output format, YAML, provides a full view of all diff details.  
-Other formats, text, markdown and HTML, provide a partial view of the diff.  
-If you see the need for additional details in any format, please open an issue.
+   - The default output format, YAML, provides a full view of all diff details.  
+     Note that no output in YAML format signifies that the diff is empty, or, in other words, there are no changes.
+   - Other formats: text, markdown and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
+     If you wish to include additional details in non-YAML formats, please open an issue.
 
 2. Paths vs. Endpoints  
 OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
