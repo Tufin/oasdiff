@@ -33,21 +33,41 @@ func init() {
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 }
 
+func validateFlags() bool {
+	if base == "" {
+		fmt.Printf("Please specify the '-base' flag: the path of the original OpenAPI spec in YAML or JSON format\n")
+		return false
+	}
+	if revision == "" {
+		fmt.Printf("Please specify the '-revision' flag: the path of the revised OpenAPI spec in YAML or JSON format\n")
+		return false
+	}
+	supportedFormats := map[string]bool{"": true, "yaml": true, "text": true, "html": true}
+	if !supportedFormats[format] {
+		fmt.Printf("Invalid format. Should be yaml, text or html\n")
+		return false
+	}
+	return true
+}
+
 func main() {
 	flag.Parse()
+	if !validateFlags() {
+		return
+	}
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
 
 	s1, err := load.From(loader, base)
 	if err != nil {
-		fmt.Printf("failed to load base spec from %q with %v\n", base, err)
+		fmt.Printf("Failed to load base spec from %q with %v\n", base, err)
 		return
 	}
 
 	s2, err := load.From(loader, revision)
 	if err != nil {
-		fmt.Printf("failed to load revision spec from %q with %v\n", revision, err)
+		fmt.Printf("Failed to load revision spec from %q with %v\n", revision, err)
 		return
 	}
 
@@ -61,7 +81,7 @@ func main() {
 	diffReport, err := diff.Get(config, s1, s2)
 
 	if err != nil {
-		fmt.Printf("diff failed with %v\n", err)
+		fmt.Printf("Diff failed with %v\n", err)
 		return
 	}
 
@@ -78,12 +98,12 @@ func main() {
 	} else if format == formatHTML {
 		html, err := report.GetHTMLReportAsString(diffReport)
 		if err != nil {
-			fmt.Printf("failed to generate HTML with %v\n", err)
+			fmt.Printf("Failed to generate HTML with %v\n", err)
 			return
 		}
 		fmt.Printf("%s", html)
 	} else {
-		fmt.Printf("unknown format %q\n", format)
+		fmt.Printf("Unknown format %q\n", format)
 	}
 }
 
@@ -94,7 +114,7 @@ func printYAML(output interface{}) {
 
 	bytes, err := yaml.Marshal(output)
 	if err != nil {
-		fmt.Printf("failed to marshal result as %q with %v\n", format, err)
+		fmt.Printf("Failed to marshal result as %q with %v\n", format, err)
 		return
 	}
 	fmt.Printf("%s", bytes)
