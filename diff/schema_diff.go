@@ -94,13 +94,15 @@ func (diff *SchemaDiff) removeNonBreaking(schema2 *openapi3.SchemaRef) {
 	}
 
 	// Number
-	if !diff.MinDiff.minBreaking() {
+	if !diff.MinDiff.minBreakingFloat64() { // *float64
 		diff.MinDiff = nil
 	}
 
-	if !diff.MaxDiff.maxBreaking() {
+	if !diff.MaxDiff.maxBreakingFloat64() { // *float64
 		diff.MaxDiff = nil
 	}
+
+	// TODO: check MultipleOf
 
 	if !diff.ExclusiveMinDiff.CompareWithDefault(false, true, false) { // TODO: check default value
 		diff.ExclusiveMinDiff = nil
@@ -111,20 +113,20 @@ func (diff *SchemaDiff) removeNonBreaking(schema2 *openapi3.SchemaRef) {
 	}
 
 	// String
-	if !diff.MinLengthDiff.minBreaking() {
+	if !diff.MinLengthDiff.minBreakingUInt64() { // uint64
 		diff.MinLengthDiff = nil
 	}
 
-	if !diff.MaxLengthDiff.maxBreaking() {
+	if !diff.MaxLengthDiff.maxBreakingUInt64() { // *uint64
 		diff.MaxLengthDiff = nil
 	}
 
 	// Array
-	if !diff.MinItemsDiff.minBreaking() {
+	if !diff.MinItemsDiff.minBreakingUInt64() { // uint64
 		diff.MinItemsDiff = nil
 	}
 
-	if !diff.MaxItemsDiff.maxBreaking() {
+	if !diff.MaxItemsDiff.maxBreakingUInt64() { // *uint64
 		diff.MaxItemsDiff = nil
 	}
 
@@ -135,11 +137,11 @@ func (diff *SchemaDiff) removeNonBreaking(schema2 *openapi3.SchemaRef) {
 		diff.AdditionalPropertiesAllowedDiff = nil
 	}
 
-	if !diff.MinPropsDiff.minBreaking() {
+	if !diff.MinPropsDiff.minBreakingUInt64() { // uint64
 		diff.MinPropsDiff = nil
 	}
 
-	if !diff.MaxPropsDiff.maxBreaking() {
+	if !diff.MaxPropsDiff.maxBreakingUInt64() { // *uint64
 		diff.MaxPropsDiff = nil
 	}
 }

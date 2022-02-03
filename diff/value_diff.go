@@ -28,7 +28,27 @@ func (diff *ValueDiff) CompareWithDefault(from, to, defaultValue interface{}) bo
 		getValueWithDefault(diff.To, defaultValue) == to
 }
 
-func (diff *ValueDiff) minBreaking() bool {
+func (diff *ValueDiff) minBreakingFloat64() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	if diff.From == nil {
+		return true
+	}
+
+	if diff.To == nil {
+		return false
+	}
+
+	if diff.From.(float64) < diff.To.(float64) {
+		return true
+	}
+
+	return false
+}
+
+func (diff *ValueDiff) minBreakingUInt64() bool {
 	if diff.Empty() {
 		return false
 	}
@@ -48,7 +68,27 @@ func (diff *ValueDiff) minBreaking() bool {
 	return false
 }
 
-func (diff *ValueDiff) maxBreaking() bool {
+func (diff *ValueDiff) maxBreakingFloat64() bool {
+	if diff.Empty() {
+		return false
+	}
+
+	if diff.From == nil {
+		return true
+	}
+
+	if diff.To == nil {
+		return false
+	}
+
+	if diff.To.(float64) < diff.From.(float64) {
+		return true
+	}
+
+	return false
+}
+
+func (diff *ValueDiff) maxBreakingUInt64() bool {
 	if diff.Empty() {
 		return false
 	}
