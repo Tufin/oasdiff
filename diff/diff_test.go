@@ -650,12 +650,4 @@ func TestCircularSchemaRefs(t *testing.T) {
 	require.NotContains(t, dd.SchemasDiff.Modified, "circular4")
 	require.Contains(t, dd.SchemasDiff.Modified, "circular5")
 	require.Contains(t, dd.SchemasDiff.Modified, "circular6")
-
-	for _, schema := range s1.Components.Schemas {
-		require.Empty(t, schema.Value.Extensions)
-	}
-
-	for _, schema := range s2.Components.Schemas {
-		require.Empty(t, schema.Value.Extensions)
-	}
 }
