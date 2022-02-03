@@ -8,12 +8,12 @@
 A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 
 ## Features 
-- Generate a diff report in [YAML](#comparing-public-files-yaml-output), [Text/Markdown](#comparing-public-files-textmarkdown-output) or [HTML](#comparing-public-files-html-output) from the cmd-line
+- Generate a diff report in YAML, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-into-your-go-program)
-- Compare [local files](#comparing-local-files-yaml-output) or [public files](#comparing-public-files-yaml-output) over http
+- Compare files from the file system or over http/s
 - Compare specs in YAML or JSON format
-- Comprehensive diff including **all** aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
+- Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Detect breaking changes (Beta feature. Please report issues)
 
 ## Build
@@ -30,7 +30,7 @@ go build
 
 ## Running with Docker
 
-### Comparing public files (Text/Markdown output):
+### Text/Markdown output (http):
 
 ```bash
 docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
@@ -38,7 +38,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 Text and markdown output provide only a subset of the full diff.
 To see the full diff, use the default format: YAML.
 
-### Comparing public files (HTML output):
+### HTML output (http):
 
 ```bash
 docker run --rm -t tufin/oasdiff -format html -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
@@ -46,7 +46,7 @@ docker run --rm -t tufin/oasdiff -format html -base https://raw.githubuserconten
 HTML output provides only a subset of the full diff.
 To see the full diff, use the default format: YAML.
 
-### Comparing public files (YAML output):
+### YAML output (http):
 
 ```bash
 docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
@@ -54,13 +54,13 @@ docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubuserconten
 This is the default output format.  
 Note that no output means an empty diff (no changes).
 
-### Breaking changes
+### Breaking changes (http):
 
 ```bash
 docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml --breaking-only
 ```
 
-### Comparing local files (YAML output):
+### YAML output (local files):
 
 ```bash
 docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
