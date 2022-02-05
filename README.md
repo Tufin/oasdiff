@@ -11,7 +11,7 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 - Generate a diff report in YAML, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-into-your-go-program)
-- Compare files from the file system or over http/s
+- Compare specs from the file system or over http/s
 - Compare specs in YAML or JSON format
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Detect breaking changes (Beta feature. Please report issues)
@@ -422,7 +422,7 @@ oasdiff respects this heirarchy and displays a hierarchial diff with path change
 
 ## Notes for Developers
 1. oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
-References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [this function](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#SwaggerLoader.ResolveRefsIn).
+References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [Loader.ResolveRefsIn](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn).
 
 2. Use [configuration](diff/config.go) to exclude certain types of changes:
    - [Examples](https://swagger.io/specification/#example-object) 
