@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"reflect"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -13,7 +14,7 @@ import (
 )
 
 var base, revision, prefix, filter, format string
-var excludeExamples, excludeDescription, summary, breakingOnly bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff bool
 
 const (
 	formatYAML = "yaml"
@@ -31,6 +32,7 @@ func init() {
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
 	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
+	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
 }
 
 func validateFlags() bool {
@@ -52,8 +54,9 @@ func validateFlags() bool {
 
 func main() {
 	flag.Parse()
+
 	if !validateFlags() {
-		return
+		os.Exit(101)
 	}
 
 	loader := openapi3.NewLoader()
@@ -62,13 +65,13 @@ func main() {
 	s1, err := load.From(loader, base)
 	if err != nil {
 		fmt.Printf("failed to load base spec from %q with %v\n", base, err)
-		return
+		os.Exit(102)
 	}
 
 	s2, err := load.From(loader, revision)
 	if err != nil {
 		fmt.Printf("failed to load revision spec from %q with %v\n", revision, err)
-		return
+		os.Exit(103)
 	}
 
 	config := diff.NewConfig()
@@ -82,40 +85,55 @@ func main() {
 
 	if err != nil {
 		fmt.Printf("diff failed with %v\n", err)
-		return
+		os.Exit(104)
 	}
 
 	if summary {
-		summary := diffReport.GetSummary()
-		printYAML(summary)
-		return
+		if err = printYAML(diffReport.GetSummary()); err != nil {
+			fmt.Printf("failed to print summary with %v\n", err)
+			os.Exit(105)
+		}
+		exitNormally(diffReport.Empty())
 	}
 
 	if format == formatYAML {
-		printYAML(diffReport)
+		if err = printYAML(diffReport); err != nil {
+			fmt.Printf("failed to print diff YAML with %v\n", err)
+			os.Exit(106)
+		}
 	} else if format == formatText {
 		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
 	} else if format == formatHTML {
 		html, err := report.GetHTMLReportAsString(diffReport)
 		if err != nil {
-			fmt.Printf("failed to generate HTML with %v\n", err)
-			return
+			fmt.Printf("failed to generate HTML diff report with %v\n", err)
+			os.Exit(107)
 		}
 		fmt.Printf("%s", html)
 	} else {
-		fmt.Printf("unknown format %q\n", format)
+		fmt.Printf("unknown output format %q\n", format)
+		os.Exit(108)
 	}
+
+	exitNormally(diffReport.Empty())
 }
 
-func printYAML(output interface{}) {
+func exitNormally(diffEmpty bool) {
+	if failOnDiff && !diffEmpty {
+		os.Exit(1)
+	}
+	os.Exit(0)
+}
+
+func printYAML(output interface{}) error {
 	if reflect.ValueOf(output).IsNil() {
-		return
+		return nil
 	}
 
 	bytes, err := yaml.Marshal(output)
 	if err != nil {
-		fmt.Printf("failed to marshal result as %q with %v\n", format, err)
-		return
+		return err
 	}
 	fmt.Printf("%s", bytes)
+	return nil
 }
