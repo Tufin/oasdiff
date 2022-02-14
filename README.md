@@ -69,10 +69,30 @@ docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-tes
 Replace `$(pwd)/data` by the path that contains your files.  
 Add the `-format` flag to generate other formats (text or html).
 
-### Help
+## Usage
 
+```./oasdiff -help```
 ```
-docker run --rm -t tufin/oasdiff -help
+-base string
+    path of original OpenAPI spec in YAML or JSON format
+-breaking-only
+    display breaking changes only
+-exclude-description
+    exclude changes to descriptions
+-exclude-examples
+    exclude changes to examples
+-fail-on-diff
+    fail with exit code 1 if a difference is found
+-filter string
+    regex to filter result paths (optional)
+-format string
+    output format: yaml, text or html (default "yaml")
+-prefix string
+    path prefix that exists in base spec but not the revision (optional)
+-revision string
+    path of revised OpenAPI spec in YAML or JSON format
+-summary
+    display a summary of the changes instead of the full diff
 ```
 
 ## Output example - Text/Markdown
