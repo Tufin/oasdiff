@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"reflect"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -52,8 +53,9 @@ func validateFlags() bool {
 
 func main() {
 	flag.Parse()
+
 	if !validateFlags() {
-		return
+		os.Exit(101)
 	}
 
 	loader := openapi3.NewLoader()
@@ -62,13 +64,13 @@ func main() {
 	s1, err := load.From(loader, base)
 	if err != nil {
 		fmt.Printf("failed to load base spec from %q with %v\n", base, err)
-		return
+		os.Exit(102)
 	}
 
 	s2, err := load.From(loader, revision)
 	if err != nil {
 		fmt.Printf("failed to load revision spec from %q with %v\n", revision, err)
-		return
+		os.Exit(103)
 	}
 
 	config := diff.NewConfig()
@@ -82,40 +84,46 @@ func main() {
 
 	if err != nil {
 		fmt.Printf("diff failed with %v\n", err)
-		return
+		os.Exit(104)
 	}
 
 	if summary {
-		summary := diffReport.GetSummary()
-		printYAML(summary)
+		if err = printYAML(diffReport.GetSummary()); err != nil {
+			fmt.Printf("failed to print summary with %v\n", err)
+			os.Exit(105)	
+		}
 		return
 	}
 
 	if format == formatYAML {
-		printYAML(diffReport)
+		if err = printYAML(diffReport); err != nil {
+			fmt.Printf("failed to print diff with %v\n", err)
+			os.Exit(106)
+		}
 	} else if format == formatText {
 		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
 	} else if format == formatHTML {
 		html, err := report.GetHTMLReportAsString(diffReport)
 		if err != nil {
 			fmt.Printf("failed to generate HTML with %v\n", err)
-			return
+			os.Exit(107)
 		}
 		fmt.Printf("%s", html)
 	} else {
 		fmt.Printf("unknown format %q\n", format)
+		os.Exit(108)
 	}
 }
 
-func printYAML(output interface{}) {
+func printYAML(output interface{}) error {
 	if reflect.ValueOf(output).IsNil() {
-		return
+		return fmt.Errorf("can't marshal nil")
 	}
 
 	bytes, err := yaml.Marshal(output)
 	if err != nil {
-		fmt.Printf("failed to marshal result as %q with %v\n", format, err)
-		return
+		return fmt.Errorf("marshal YAML failed with %v", err)
 	}
 	fmt.Printf("%s", bytes)
+	return nil
 }
