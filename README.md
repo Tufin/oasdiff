@@ -49,7 +49,7 @@ To see the full diff, use the default format: YAML.
 ### YAML output (http):
 
 ```bash
-docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 This is the default output format.  
 Note that no output means an empty diff (no changes).
@@ -57,7 +57,7 @@ Note that no output means an empty diff (no changes).
 ### Breaking changes (http):
 
 ```bash
-docker run --rm -t tufin/oasdiff -format yaml -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml --breaking-only
+docker run --rm -t tufin/oasdiff -breaking-only -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### YAML output (local files):
@@ -94,9 +94,11 @@ Add the `-format` flag to generate other formats (text or html).
 -summary
     display a summary of the changes instead of the full diff
 ```
+All arguments can be passed with one or two leading minus signs.  
+For example ```-breaking-only``` and ```--breaking-only``` are equivalent.
 
 ## Output example - Text/Markdown
-```./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml -format text```
+```./oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
 
 ### New Endpoints: None
 -----------------------
@@ -146,7 +148,7 @@ GET /api/{domain}/{project}/install-command
       - Deleted header: X-RateLimit-Limit
 
 ## Output example - YAML
-```./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml -format yaml```
+```./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
 
 ```yaml
 info:
