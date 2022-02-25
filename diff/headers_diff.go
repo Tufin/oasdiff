@@ -36,6 +36,17 @@ func (headersDiff *HeadersDiff) removeNonBreaking() {
 // ModifiedHeaders is map of header names to their respective diffs
 type ModifiedHeaders map[string]*HeaderDiff
 
+// ToStringList returns the modified header names
+func (modifiedHeaders ModifiedHeaders) ToStringList() StringList {
+	keys := make(StringList, len(modifiedHeaders))
+	i := 0
+	for k := range modifiedHeaders {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
+
 func newHeadersDiff() *HeadersDiff {
 	return &HeadersDiff{
 		Added:    StringList{},

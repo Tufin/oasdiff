@@ -71,7 +71,7 @@ func newParametersDiff() *ParametersDiff {
 // ParamDiffs is map of parameter names to their respective diffs
 type ParamDiffs map[string]*ParameterDiff
 
-// ToStringList returns a list of parameter names
+// ToStringList returns the modified parameter names
 func (paramDiffs ParamDiffs) ToStringList() StringList {
 	keys := make(StringList, len(paramDiffs))
 	i := 0

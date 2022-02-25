@@ -5,6 +5,17 @@ import "github.com/getkin/kin-openapi/openapi3"
 // SecurityScopesDiff is a map of security schemes to their respective scope diffs
 type SecurityScopesDiff map[string]*StringsDiff
 
+// ToStringList returns the modified security schemes
+func (securityScopesDiff SecurityScopesDiff) ToStringList() StringList {
+	keys := make(StringList, len(securityScopesDiff))
+	i := 0
+	for k := range securityScopesDiff {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
+
 func getSecurityScopesDiff(securityRequirement1, securityRequirements2 openapi3.SecurityRequirement) SecurityScopesDiff {
 	result := SecurityScopesDiff{}
 	for scheme1, scopes1 := range securityRequirement1 {
