@@ -37,10 +37,10 @@ func Test_NoEndpointChanges(t *testing.T) {
 		},
 	}
 
-	d, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	dd, err := diff.Get(diff.NewConfig(), &s1, &s2)
 	require.NoError(t, err)
 
-	require.Equal(t, report.GetTextReportAsString(d), "No endpoint changes\n")
+	require.Equal(t, report.GetTextReportAsString(dd), "No endpoint changes\n")
 }
 
 func TestText1(t *testing.T) {

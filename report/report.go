@@ -42,6 +42,8 @@ func getPrefix(level int) []interface{} {
 	return []interface{}{}
 }
 
+// output prints the diff
+// note that it may mutate diff by sorting its members
 func (r *report) output(d *diff.Diff) {
 
 	if d.Empty() {
@@ -109,22 +111,29 @@ func (r *report) printParams(d *diff.ParametersDiff) {
 		return
 	}
 
-	for location, params := range d.Added {
+	for _, location := range diff.PathLocations {
+		params := d.Added[location]
+		sort.Strings(params)
 		for _, param := range params {
 			r.print("New", location, "param:", param)
 		}
 	}
 
-	for location, params := range d.Deleted {
+	for _, location := range diff.PathLocations {
+		params := d.Deleted[location]
+		sort.Strings(params)
 		for _, param := range params {
 			r.print("Deleted", location, "param:", param)
 		}
 	}
 
-	for location, paramDiffs := range d.Modified {
-		for param, paramDiff := range paramDiffs {
+	for _, location := range diff.PathLocations {
+		paramDiffs := d.Modified[location]
+		keys := paramDiffs.ToStringList()
+		sort.Sort(keys)
+		for _, param := range keys {
 			r.print("Modified", location, "param:", param)
-			r.indent().printParam(paramDiff)
+			r.indent().printParam(paramDiffs[param])
 		}
 	}
 }
@@ -146,10 +155,12 @@ func (r *report) printRequiredProperties(d *diff.RequiredPropertiesDiff) {
 		return
 	}
 
+	sort.Sort(d.Added)
 	for _, added := range d.Added {
 		r.print("New required property:", added)
 	}
 
+	sort.Sort(d.Deleted)
 	for _, deleted := range d.Deleted {
 		r.print("Deleted required property:", deleted)
 	}
@@ -233,17 +244,21 @@ func (r *report) printProperties(d *diff.SchemasDiff) {
 		return
 	}
 
+	sort.Sort(d.Added)
 	for _, property := range d.Added {
 		r.print("New property:", property)
 	}
 
+	sort.Sort(d.Deleted)
 	for _, property := range d.Deleted {
 		r.print("Deleted property:", property)
 	}
 
-	for property, schemaDiff := range d.Modified {
+	keys := d.Modified.ToStringList()
+	sort.Sort(keys)
+	for _, property := range keys {
 		r.print("Modified property:", property)
-		r.indent().printSchema(schemaDiff)
+		r.indent().printSchema(d.Modified[property])
 	}
 }
 
@@ -259,17 +274,21 @@ func (r *report) printResponses(d *diff.ResponsesDiff) {
 		return
 	}
 
+	sort.Sort(d.Added)
 	for _, added := range d.Added {
 		r.print("New response:", added)
 	}
 
+	sort.Sort(d.Deleted)
 	for _, deleted := range d.Deleted {
 		r.print("Deleted response:", deleted)
 	}
 
-	for response, responseDiff := range d.Modified {
+	keys := d.Modified.ToStringList()
+	sort.Sort(keys)
+	for _, response := range keys {
 		r.print("Modified response:", response)
-		r.indent().printResponse(responseDiff)
+		r.indent().printResponse(d.Modified[response])
 	}
 }
 
@@ -309,17 +328,21 @@ func (r *report) printContent(d *diff.ContentDiff) {
 		return
 	}
 
+	sort.Sort(d.MediaTypeAdded)
 	for _, name := range d.MediaTypeAdded {
 		r.print("New media type:", name)
 	}
 
+	sort.Sort(d.MediaTypeDeleted)
 	for _, name := range d.MediaTypeDeleted {
 		r.print("Deleted media type:", name)
 	}
 
-	for name, d := range d.MediaTypeModified {
+	keys := d.MediaTypeModified.ToStringList()
+	sort.Sort(keys)
+	for _, name := range keys {
 		r.print("Modified media type:", name)
-		r.indent().printMediaType(d)
+		r.indent().printMediaType(d.MediaTypeModified[name])
 	}
 }
 
@@ -349,15 +372,19 @@ func (r *report) printHeaders(d *diff.HeadersDiff) {
 		return
 	}
 
+	sort.Sort(d.Added)
 	for _, added := range d.Added {
 		r.print("New header:", added)
 	}
 
+	sort.Sort(d.Deleted)
 	for _, deleted := range d.Deleted {
 		r.print("Deleted header:", deleted)
 	}
 
-	for header := range d.Modified {
+	keys := d.Modified.ToStringList()
+	sort.Sort(keys)
+	for _, header := range keys {
 		r.print("Modified header:", header)
 	}
 }
@@ -367,22 +394,29 @@ func (r *report) printSecurityRequirements(d *diff.SecurityRequirementsDiff) {
 		return
 	}
 
+	sort.Sort(d.Added)
 	for _, added := range d.Added {
 		r.print("New security requirements:", added)
 	}
 
+	sort.Sort(d.Deleted)
 	for _, deleted := range d.Deleted {
 		r.print("Deleted security requirements:", deleted)
 	}
 
-	for securityRequirementID, securityScopesDiff := range d.Modified {
+	keys := d.Modified.ToStringList()
+	sort.Sort(keys)
+	for _, securityRequirementID := range keys {
 		r.print("Modified security requirements:", securityRequirementID)
-		r.indent().printSecurityScopes(securityScopesDiff)
+		r.indent().printSecurityScopes(d.Modified[securityRequirementID])
 	}
 }
 
 func (r *report) printSecurityScopes(d diff.SecurityScopesDiff) {
-	for scheme, scopeDiff := range d {
+	keys := d.ToStringList()
+	sort.Sort(keys)
+	for _, scheme := range keys {
+		scopeDiff := d[scheme]
 		r.printConditional(len(scopeDiff.Added) > 0, "Scheme", scheme, "Added scopes:", scopeDiff.Added)
 		r.printConditional(len(scopeDiff.Deleted) > 0, "Scheme", scheme, "Deleted scopes:", scopeDiff.Deleted)
 	}

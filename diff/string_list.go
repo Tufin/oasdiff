@@ -12,3 +12,18 @@ func (list StringList) toStringSet() StringSet {
 
 	return result
 }
+
+// Len implements the sort.Interface interface
+func (list StringList) Len() int {
+	return len(list)
+}
+
+// Less implements the sort.Interface interface
+func (list StringList) Less(i, j int) bool {
+	return list[i] < list[j]
+}
+
+// Swap implements the sort.Interface interface
+func (list StringList) Swap(i, j int) {
+	list[i], list[j] = list[j], list[i]
+}

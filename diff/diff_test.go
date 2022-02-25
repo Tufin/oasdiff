@@ -530,40 +530,40 @@ func TestSchemaDiff_ModifiedSchemasNewNil(t *testing.T) {
 
 func TestSummary(t *testing.T) {
 
-	d := d(t, diff.NewConfig(), 1, 2).GetSummary()
+	dd := d(t, diff.NewConfig(), 1, 2).GetSummary()
 
-	require.Equal(t, diff.SummaryDetails{0, 3, 1}, d.GetSummaryDetails(diff.PathsDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.SecurityDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ServersDetail))
-	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.TagsDetail))
-	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SchemasDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ParametersDetail))
-	require.Equal(t, diff.SummaryDetails{0, 3, 0}, d.GetSummaryDetails(diff.HeadersDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.RequestBodiesDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ResponsesDetail))
-	require.Equal(t, diff.SummaryDetails{0, 3, 0}, d.GetSummaryDetails(diff.SecuritySchemesDetail))
-	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.ExamplesDetail))
-	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.LinksDetail))
-	require.Equal(t, diff.SummaryDetails{}, d.GetSummaryDetails(diff.CallbacksDetail))
+	require.Equal(t, diff.SummaryDetails{0, 3, 1}, dd.GetSummaryDetails(diff.PathsDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.SecurityDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.ServersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 2, 0}, dd.GetSummaryDetails(diff.TagsDetail))
+	require.Equal(t, diff.SummaryDetails{0, 2, 0}, dd.GetSummaryDetails(diff.SchemasDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.ParametersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 3, 0}, dd.GetSummaryDetails(diff.HeadersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.RequestBodiesDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.ResponsesDetail))
+	require.Equal(t, diff.SummaryDetails{0, 3, 0}, dd.GetSummaryDetails(diff.SecuritySchemesDetail))
+	require.Equal(t, diff.SummaryDetails{}, dd.GetSummaryDetails(diff.ExamplesDetail))
+	require.Equal(t, diff.SummaryDetails{}, dd.GetSummaryDetails(diff.LinksDetail))
+	require.Equal(t, diff.SummaryDetails{}, dd.GetSummaryDetails(diff.CallbacksDetail))
 }
 
 func TestSummary2(t *testing.T) {
 
-	d := d(t, diff.NewConfig(), 1, 3).GetSummary()
+	dd := d(t, diff.NewConfig(), 1, 3).GetSummary()
 
-	require.Equal(t, diff.SummaryDetails{0, 0, 4}, d.GetSummaryDetails(diff.PathsDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.SecurityDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ServersDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 1}, d.GetSummaryDetails(diff.TagsDetail))
-	require.Equal(t, diff.SummaryDetails{0, 2, 0}, d.GetSummaryDetails(diff.SchemasDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ParametersDetail))
-	require.Equal(t, diff.SummaryDetails{0, 3, 0}, d.GetSummaryDetails(diff.HeadersDetail))
-	require.Equal(t, diff.SummaryDetails{0, 0, 1}, d.GetSummaryDetails(diff.RequestBodiesDetail))
-	require.Equal(t, diff.SummaryDetails{0, 1, 0}, d.GetSummaryDetails(diff.ResponsesDetail))
-	require.Equal(t, diff.SummaryDetails{0, 2, 1}, d.GetSummaryDetails(diff.SecuritySchemesDetail))
-	require.Equal(t, diff.SummaryDetails{1, 0, 0}, d.GetSummaryDetails(diff.ExamplesDetail))
-	require.Equal(t, diff.SummaryDetails{1, 0, 0}, d.GetSummaryDetails(diff.LinksDetail))
-	require.Equal(t, diff.SummaryDetails{1, 0, 0}, d.GetSummaryDetails(diff.CallbacksDetail))
+	require.Equal(t, diff.SummaryDetails{0, 0, 4}, dd.GetSummaryDetails(diff.PathsDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.SecurityDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.ServersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 1}, dd.GetSummaryDetails(diff.TagsDetail))
+	require.Equal(t, diff.SummaryDetails{0, 2, 0}, dd.GetSummaryDetails(diff.SchemasDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.ParametersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 3, 0}, dd.GetSummaryDetails(diff.HeadersDetail))
+	require.Equal(t, diff.SummaryDetails{0, 0, 1}, dd.GetSummaryDetails(diff.RequestBodiesDetail))
+	require.Equal(t, diff.SummaryDetails{0, 1, 0}, dd.GetSummaryDetails(diff.ResponsesDetail))
+	require.Equal(t, diff.SummaryDetails{0, 2, 1}, dd.GetSummaryDetails(diff.SecuritySchemesDetail))
+	require.Equal(t, diff.SummaryDetails{1, 0, 0}, dd.GetSummaryDetails(diff.ExamplesDetail))
+	require.Equal(t, diff.SummaryDetails{1, 0, 0}, dd.GetSummaryDetails(diff.LinksDetail))
+	require.Equal(t, diff.SummaryDetails{1, 0, 0}, dd.GetSummaryDetails(diff.CallbacksDetail))
 }
 func TestSummaryInvalidComponent(t *testing.T) {
 	require.Equal(t, diff.SummaryDetails{
