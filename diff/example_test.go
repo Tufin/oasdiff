@@ -38,21 +38,20 @@ func ExampleGet() {
 	}
 	fmt.Printf("%s\n", bytes)
 
-/* Output:
-paths:
-    modified:
-        /api/test:
-            operations:
-                added:
-                    - POST
-                deleted:
-                    - GET
-endpoints:
-    added:
-        - method: POST
-          path: /api/test
-    deleted:
-        - method: GET
-          path: /api/test
-*/
+	// Output:
+	// paths:
+	//     modified:
+	//         /api/test:
+	//             operations:
+	//                 added:
+	//                     - POST
+	//                 deleted:
+	//                     - GET
+	// endpoints:
+	//     added:
+	//         - method: POST
+	//           path: /api/test
+	//     deleted:
+	//         - method: GET
+	//           path: /api/test
 }
