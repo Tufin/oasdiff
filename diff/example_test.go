@@ -12,13 +12,13 @@ func ExampleGet() {
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
 
-	s1, err := loader.LoadFromFile("../data/openapi-test1.yaml")
+	s1, err := loader.LoadFromFile("../data/simple1.yaml")
 	if err != nil {
 		fmt.Printf("failed to load spec with %v", err)
 		return
 	}
 
-	s2, err := loader.LoadFromFile("../data/openapi-test3.yaml")
+	s2, err := loader.LoadFromFile("../data/simple2.yaml")
 	if err != nil {
 		fmt.Printf("failed to load spec with %v", err)
 		return
@@ -37,4 +37,22 @@ func ExampleGet() {
 		return
 	}
 	fmt.Printf("%s\n", bytes)
+
+/* Output:
+paths:
+    modified:
+        /api/test:
+            operations:
+                added:
+                    - POST
+                deleted:
+                    - GET
+endpoints:
+    added:
+        - method: POST
+          path: /api/test
+    deleted:
+        - method: GET
+          path: /api/test
+*/
 }

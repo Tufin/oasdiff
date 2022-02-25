@@ -52,6 +52,8 @@ func (parametersDiff *ParametersDiff) removeAddedButNonRequired(params2 openapi3
 	}
 }
 
+var PathLocations = []string{openapi3.ParameterInPath, openapi3.ParameterInQuery, openapi3.ParameterInHeader, openapi3.ParameterInCookie}
+
 // ParamNamesByLocation maps param location (path, query, header or cookie) to the params in this location
 type ParamNamesByLocation map[string]StringList
 
@@ -68,6 +70,17 @@ func newParametersDiff() *ParametersDiff {
 
 // ParamDiffs is map of parameter names to their respective diffs
 type ParamDiffs map[string]*ParameterDiff
+
+// ToStringList returns a list of parameter names
+func (paramDiffs ParamDiffs) ToStringList() StringList {
+	keys := make(StringList, len(paramDiffs))
+	i := 0
+	for k := range paramDiffs {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
 
 func (parametersDiff *ParametersDiff) addAddedParam(param *openapi3.Parameter) {
 
