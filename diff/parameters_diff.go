@@ -52,7 +52,8 @@ func (parametersDiff *ParametersDiff) removeAddedButNonRequired(params2 openapi3
 	}
 }
 
-var PathLocations = []string{openapi3.ParameterInPath, openapi3.ParameterInQuery, openapi3.ParameterInHeader, openapi3.ParameterInCookie}
+// ParamLocations are the four possible locations of parameters: path, query, header or cookie
+var ParamLocations = []string{openapi3.ParameterInPath, openapi3.ParameterInQuery, openapi3.ParameterInHeader, openapi3.ParameterInCookie}
 
 // ParamNamesByLocation maps param location (path, query, header or cookie) to the params in this location
 type ParamNamesByLocation map[string]StringList

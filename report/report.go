@@ -111,7 +111,7 @@ func (r *report) printParams(d *diff.ParametersDiff) {
 		return
 	}
 
-	for _, location := range diff.PathLocations {
+	for _, location := range diff.ParamLocations {
 		params := d.Added[location]
 		sort.Strings(params)
 		for _, param := range params {
@@ -119,7 +119,7 @@ func (r *report) printParams(d *diff.ParametersDiff) {
 		}
 	}
 
-	for _, location := range diff.PathLocations {
+	for _, location := range diff.ParamLocations {
 		params := d.Deleted[location]
 		sort.Strings(params)
 		for _, param := range params {
@@ -127,7 +127,7 @@ func (r *report) printParams(d *diff.ParametersDiff) {
 		}
 	}
 
-	for _, location := range diff.PathLocations {
+	for _, location := range diff.ParamLocations {
 		paramDiffs := d.Modified[location]
 		keys := paramDiffs.ToStringList()
 		sort.Sort(keys)
