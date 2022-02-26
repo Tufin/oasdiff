@@ -23,52 +23,6 @@ cd oasdiff
 go build
 ```
 
-## Running from the command-line
-```bash
-./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
-```
-
-## Running with Docker
-
-### Text/Markdown output (http):
-
-```bash
-docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-Text and markdown output provide only a subset of the full diff.
-To see the full diff, use the default format: YAML.
-
-### HTML output (http):
-
-```bash
-docker run --rm -t tufin/oasdiff -format html -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-HTML output provides only a subset of the full diff.
-To see the full diff, use the default format: YAML.
-
-### YAML output (http):
-
-```bash
-docker run --rm -t tufin/oasdiff -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-This is the default output format.  
-Note that no output means an empty diff (no changes).
-
-### Breaking changes (http):
-
-```bash
-docker run --rm -t tufin/oasdiff -breaking-only -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-### YAML output (local files):
-
-```bash
-docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
-```
-
-Replace `$(pwd)/data` by the path that contains your files.  
-Add the `-format` flag to generate other formats (text or html).
-
 ## Usage
 
 ```./oasdiff -help```
@@ -97,6 +51,70 @@ Add the `-format` flag to generate other formats (text or html).
 All arguments can be passed with one or two leading minus signs.  
 For example ```-breaking-only``` and ```--breaking-only``` are equivalent.
 
+## Usage Examples
+
+### YAML diff of local files:
+```bash
+./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
+```
+The default output format is YAML.  
+No output means that the diff is empty, or, in other words, there are no changes.
+
+### Text/Markdown diff of local files:
+```bash
+./oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
+```
+The Text/Markdown diff report provides a simplified view of the changes.  
+To view all details, use the default format: YAML.
+
+### HTML diff of local files:
+```bash
+./oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
+```
+The HTML diff report provides a simplified view of the changes.  
+To view all details, use the default format: YAML.
+
+### Text/Markdown diff of http files:
+
+```bash
+./oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+### Display breaking changes only:
+
+```bash
+./oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+### Display changes to endpoints containing /api in the path:
+
+```bash
+./oasdiff -breaking-only -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+### Display change summary:
+
+```bash
+./oasdiff -breaking-only -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+### Running with Docker
+
+To run with docker just replace the `./oasdiff` command by `docker run --rm -t tufin/oasdiff`, for example:
+
+```bash
+docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+### Comparing local files with Docker:
+
+```bash
+docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
+```
+
+Replace `$(pwd)/data` by the path that contains your files.
+Note that the `-base` and `-revision` paths must begin with `/`.  
+
 ## Output example - Text/Markdown
 ```./oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
 
@@ -116,6 +134,7 @@ GET /api/{domain}/{project}/badges/security-score
     - Modified media type: application/json
       - Schema changed
         - Required changed
+          - New required property: type
 - Modified query param: image
 - Modified query param: token
   - Schema changed
