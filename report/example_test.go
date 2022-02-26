@@ -71,6 +71,7 @@ func ExampleGetTextReportAsString() {
 	//     - Description changed from 'Tufin1' to 'Tufin'
 	//     - Headers changed
 	//       - Modified header: X-RateLimit-Limit
+	//         - Description changed from 'Request limit per hour.' to 'Request limit per min.'
 	//
 	// POST /register
 	// - Callbacks changed
@@ -178,7 +179,11 @@ func ExampleGetHTMLReportAsString() {
 	// <li>Description changed from 'Tufin1' to 'Tufin'</li>
 	// <li>Headers changed
 	// <ul>
-	// <li>Modified header: X-RateLimit-Limit</li>
+	// <li>Modified header: X-RateLimit-Limit
+	// <ul>
+	// <li>Description changed from 'Request limit per hour.' to 'Request limit per min.'</li>
+	// </ul>
+	// </li>
 	// </ul>
 	// </li>
 	// </ul>

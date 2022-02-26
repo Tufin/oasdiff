@@ -386,6 +386,27 @@ func (r *report) printHeaders(d *diff.HeadersDiff) {
 	sort.Sort(keys)
 	for _, header := range keys {
 		r.print("Modified header:", header)
+		r.indent().printHeader(d.Modified[header])
+	}
+}
+
+func (r *report) printHeader(d *diff.HeaderDiff) {
+	if d.Empty() {
+		return
+	}
+
+	r.printValue(d.DescriptionDiff, "Description")
+	r.printValue(d.DeprecatedDiff, "Deprecated")
+	r.printValue(d.RequiredDiff, "Required")
+
+	if !d.SchemaDiff.Empty() {
+		r.print("Schema changed")
+		r.indent().printSchema(d.SchemaDiff)
+	}
+
+	if !d.ContentDiff.Empty() {
+		r.print("Content changed")
+		r.indent().printContent(d.ContentDiff)
 	}
 }
 
