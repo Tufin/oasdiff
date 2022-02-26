@@ -6,7 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// Diff describes the changes between a pair of OpenAPI specifications: https://swagger.io/specification/#schema
+// Diff describes the changes between a pair of OpenAPI objects: https://swagger.io/specification/#schema
 type Diff struct {
 	ExtensionsDiff   *ExtensionsDiff           `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	OpenAPIDiff      *ValueDiff                `json:"openAPI,omitempty" yaml:"openAPI,omitempty"`
@@ -46,7 +46,7 @@ func (diff *Diff) removeNonBreaking() {
 }
 
 /*
-Get calculates the diff between a pair of OpenAPI specifications.
+Get calculates the diff between a pair of OpenAPI objects.
 
 Note that Get expects OpenAPI References (https://swagger.io/docs/specification/using-ref/) to be resolved.
 References are normally resolved automatically when you load the spec.
