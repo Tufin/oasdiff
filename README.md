@@ -86,10 +86,10 @@ To view all details, use the default format: YAML.
 ./oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Display changes to endpoints containing /api in the path:
+### Display changes to endpoints containing "/api" in the path:
 
 ```bash
-./oasdiff -breaking-only -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+./oasdiff -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Display change summary:
