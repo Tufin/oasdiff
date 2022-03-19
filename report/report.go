@@ -263,6 +263,9 @@ func (r *report) printProperties(d *diff.SchemasDiff) {
 }
 
 func quote(value interface{}) interface{} {
+	if value == nil {
+		return "null"
+	}
 	if reflect.ValueOf(value).Kind() == reflect.String {
 		return "'" + value.(string) + "'"
 	}

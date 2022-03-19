@@ -136,7 +136,7 @@ GET /api/{domain}/{project}/badges/security-score
 - Modified query param: image
 - Modified query param: token
   - Schema changed
-    - MaxLength changed from 29 to <nil>
+    - MaxLength changed from 29 to null
 - Modified header param: user
   - Schema changed
     - Schema added
