@@ -18,7 +18,7 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 
 ## Install
 ```bash
-go install github.com/Tufin/oasdiff@latest
+go install github.com/tufin/oasdiff@latest
 ```
 
 ## Usage
