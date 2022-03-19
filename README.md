@@ -98,7 +98,7 @@ oasdiff -breaking-only -summary -base https://raw.githubusercontent.com/Tufin/oa
 
 ### Running with Docker
 
-To run with docker just replace the `./oasdiff` command by `docker run --rm -t tufin/oasdiff`, for example:
+To run with docker just replace the `oasdiff` command by `docker run --rm -t tufin/oasdiff`, for example:
 
 ```bash
 docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
@@ -165,7 +165,7 @@ GET /api/{domain}/{project}/install-command
       - Deleted header: X-RateLimit-Limit
 
 ## Output example - YAML
-```./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
+```oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
 
 ```yaml
 info:
