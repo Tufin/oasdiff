@@ -16,16 +16,14 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Detect breaking changes (Beta feature. Please report issues)
 
-## Build
-```
-git clone https://github.com/Tufin/oasdiff.git
-cd oasdiff
-go build
+## Install
+```bash
+go install github.com/tufin/oasdiff@latest
 ```
 
 ## Usage
 
-```./oasdiff -help```
+```oasdiff -help```
 ```
 -base string
     path of original OpenAPI spec in YAML or JSON format
@@ -55,21 +53,21 @@ For example ```-breaking-only``` and ```--breaking-only``` are equivalent.
 
 ### YAML diff of local files:
 ```bash
-./oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
+oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 The default output format is YAML.  
 No output means that the diff is empty, or, in other words, there are no changes.
 
 ### Text/Markdown diff of local files:
 ```bash
-./oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
+oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 The Text/Markdown diff report provides a simplified view of the changes.  
 To view all details, use the default format: YAML.
 
 ### HTML diff of local files:
 ```bash
-./oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
+oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 The HTML diff report provides a simplified view of the changes.  
 To view all details, use the default format: YAML.
@@ -77,25 +75,25 @@ To view all details, use the default format: YAML.
 ### Text/Markdown diff of http files:
 
 ```bash
-./oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Display breaking changes only:
 
 ```bash
-./oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Display changes to endpoints containing /api in the path:
 
 ```bash
-./oasdiff -breaking-only -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff -breaking-only -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Display change summary:
 
 ```bash
-./oasdiff -breaking-only -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff -breaking-only -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Running with Docker
@@ -116,7 +114,7 @@ Replace `$(pwd)/data` by the path that contains your files.
 Note that the `-base` and `-revision` paths must begin with `/`.  
 
 ## Output example - Text/Markdown
-```./oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
+```oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
 
 ### New Endpoints: None
 -----------------------
