@@ -85,58 +85,7 @@ jobs:
     - if: runner.os == 'Linux' && matrix.go != '1.16'
       name: nilness
       run: go run golang.org/x/tools/go/analysis/passes/nilness/cmd/nilness@latest ./...
-
-    - if: runner.os == 'Linux'
-      name: Missing specification object link to definition
-      run: |
-        [[ 30 -eq $(git grep -InE '^// See https:.+OpenAPI-Specification.+3[.]0[.]3[.]md#.+bject$' openapi3/*.go | grep -v _test.go | grep -v doc.go | wc -l) ]]
-
-    - if: runner.os == 'Linux'
-      name: Style around ExtensionProps embedding
-      run: |
-        ! ag -B2 -A2 'type.[A-Z].+struct..\n.+ExtensionProps\n[^\n]' openapi3/*.go
   
-    - if: runner.os == 'Linux'
-      name: Ensure all exported fields are mentioned in Validate() impls
-      run: |
-        for ty in $TYPES; do
-          # Ensure definition
-          if ! ag 'type.[A-Z].+struct..\n.+ExtensionProps' openapi3/*.go | grep -F "type $ty struct"; then
-            echo "OAI type $ty is not defined" && exit 1
-          fi
-          # Ensure impl Validate()
-          if ! git grep -InE 'func [(].+Schema[)] Validate[(]ctx context.Context[)].+error.+[{]'; then
-            echo "OAI type $ty does not implement Validate()" && exit 1
-          fi
-          # TODO: $ty mention all its exported fields within Validate()
-        done
-      env:
-        TYPES: >
-          Components
-          Contact
-          Discriminator
-          Encoding
-          Example
-          ExternalDocs
-          Info
-          License
-          Link
-          MediaType
-          OAuthFlow
-          OAuthFlows
-          Operation
-          Parameter
-          PathItem
-          RequestBody
-          Response
-          Schema
-          SecurityScheme
-          Server
-          ServerVariable
-          T
-          Tag
-          XML
-
     - uses: codecov/codecov-action@v2
       with:
         files: ./coverage.txt
