@@ -47,9 +47,6 @@ jobs:
         path: ${{ steps.go-cache-paths.outputs.go-build }}
         key: ${{ runner.os }}-go-${{ matrix.go }}-build-${{ hashFiles('**/go.sum') }}
 
-    - if: runner.os == 'Linux'
-      run: sudo apt install silversearcher-ag
-
     - uses: actions/checkout@v3
 
     - run: go mod download && go mod tidy && go mod verify
