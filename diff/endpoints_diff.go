@@ -20,7 +20,7 @@ type EndpointsDiff struct {
 
 // Endpoint is a combination of an HTTP method and a Path
 type Endpoint struct {
-	Method string `json:"method,omitempty" method:"added,omitempty"`
+	Method string `json:"method,omitempty" yaml:"method,omitempty"`
 	Path   string `json:"path,omitempty" yaml:"path,omitempty"`
 }
 
