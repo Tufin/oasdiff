@@ -12,64 +12,130 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        # Locked at https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+        go: ['1.18', '1.x']
         os:
-        - ubuntu-20.04
-        - windows-2019
-        - macos-10.15
+        - ubuntu-latest
+        - windows-latest
+        - macos-latest
     runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: bash
+    name: ${{ matrix.go }} on ${{ matrix.os }}
     steps:
 
     - uses: actions/setup-go@v3
       with:
-        go-version: 1.18
+        go-version: ${{ matrix.go }}
 
     - id: go-cache-paths
       run: |
         echo "::set-output name=go-build::$(go env GOCACHE)"
         echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+    - run: echo ${{ steps.go-cache-paths.outputs.go-build }}
+    - run: echo ${{ steps.go-cache-paths.outputs.go-mod }}
+
     - name: Go Build Cache
       uses: actions/cache@v2
       with:
         path: ${{ steps.go-cache-paths.outputs.go-build }}
-        key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+        key: ${{ runner.os }}-go-${{ matrix.go }}-build-${{ hashFiles('**/go.sum') }}
 
     - name: Go Mod Cache
       uses: actions/cache@v2
       with:
-        path: ${{ steps.go-cache-paths.outputs.go-mod }}
-        key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+        path: ${{ steps.go-cache-paths.outputs.go-build }}
+        key: ${{ runner.os }}-go-${{ matrix.go }}-build-${{ hashFiles('**/go.sum') }}
 
+    - if: runner.os == 'Linux'
+      run: sudo apt install silversearcher-ag
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - run: go mod download && go mod tidy && go mod verify
-    - if: runner.os == 'Linux'
-      run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
+    - run: git --no-pager diff --exit-code
 
     - run: go vet ./...
-    - if: runner.os == 'Linux'
-      run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
+    - run: git --no-pager diff --exit-code
 
     - run: go fmt ./...
-    - if: runner.os == 'Linux'
-      run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
+    - run: git --no-pager diff --exit-code
 
     - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
-    - if: runner.os == 'Linux'
-      run: git --no-pager diff && [[ $(git --no-pager diff --name-only | wc -l) = 0 ]]
+    - run: go test -v -run TestRaceyPatternSchema -race ./...
+      env:
+        CGO_ENABLED: '1'
+    - run: git --no-pager diff --exit-code
 
     - if: runner.os == 'Linux'
       name: Errors must not be capitalized https://github.com/golang/go/wiki/CodeReviewComments#error-strings
       run: |
         ! git grep -E '(fmt|errors)[^(]+\(.[A-Z]'
+        
     - if: runner.os == 'Linux'
       name: Did you mean %q
       run: |
         ! git grep -E "'[%].'"
+
+    - if: runner.os == 'Linux'
+      name: Also add yaml tags
+      run: |
+        ! git grep -InE 'json:"' | grep -v _test.go | grep -v yaml:
+
+    - if: runner.os == 'Linux' && matrix.go != '1.16'
+      name: nilness
+      run: go run golang.org/x/tools/go/analysis/passes/nilness/cmd/nilness@latest ./...
+
+    - if: runner.os == 'Linux'
+      name: Missing specification object link to definition
+      run: |
+        [[ 30 -eq $(git grep -InE '^// See https:.+OpenAPI-Specification.+3[.]0[.]3[.]md#.+bject$' openapi3/*.go | grep -v _test.go | grep -v doc.go | wc -l) ]]
+
+    - if: runner.os == 'Linux'
+      name: Style around ExtensionProps embedding
+      run: |
+        ! ag -B2 -A2 'type.[A-Z].+struct..\n.+ExtensionProps\n[^\n]' openapi3/*.go
+  
+    - if: runner.os == 'Linux'
+      name: Ensure all exported fields are mentioned in Validate() impls
+      run: |
+        for ty in $TYPES; do
+          # Ensure definition
+          if ! ag 'type.[A-Z].+struct..\n.+ExtensionProps' openapi3/*.go | grep -F "type $ty struct"; then
+            echo "OAI type $ty is not defined" && exit 1
+          fi
+          # Ensure impl Validate()
+          if ! git grep -InE 'func [(].+Schema[)] Validate[(]ctx context.Context[)].+error.+[{]'; then
+            echo "OAI type $ty does not implement Validate()" && exit 1
+          fi
+          # TODO: $ty mention all its exported fields within Validate()
+        done
+      env:
+        TYPES: >
+          Components
+          Contact
+          Discriminator
+          Encoding
+          Example
+          ExternalDocs
+          Info
+          License
+          Link
+          MediaType
+          OAuthFlow
+          OAuthFlows
+          Operation
+          Parameter
+          PathItem
+          RequestBody
+          Response
+          Schema
+          SecurityScheme
+          Server
+          ServerVariable
+          T
+          Tag
+          XML
 
     - uses: codecov/codecov-action@v2
       with:
