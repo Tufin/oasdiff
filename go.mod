@@ -3,7 +3,7 @@ module github.com/tufin/oasdiff
 go 1.18
 
 require (
-	github.com/getkin/kin-openapi v0.92.0
+	github.com/getkin/kin-openapi v0.93.0
 	github.com/stretchr/testify v1.7.1
 	github.com/yuin/goldmark v1.4.11
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
