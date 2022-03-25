@@ -72,6 +72,9 @@ func ExampleGetTextReportAsString() {
 	//     - Headers changed
 	//       - Modified header: X-RateLimit-Limit
 	//         - Description changed from 'Request limit per hour.' to 'Request limit per min.'
+	// - Servers changed
+	//   - New server: https://tufin.io/securecloud
+	//   - New server: https://www.tufin.io/securecloud
 	//
 	// POST /register
 	// - Callbacks changed
@@ -82,6 +85,9 @@ func ExampleGetTextReportAsString() {
 	//
 	// POST /subscribe
 	// - Callbacks changed
+	//
+	// Servers changed
+	// - Deleted server: tufin.com
 }
 
 func ExampleGetHTMLReportAsString() {
@@ -190,6 +196,12 @@ func ExampleGetHTMLReportAsString() {
 	// </li>
 	// </ul>
 	// </li>
+	// <li>Servers changed
+	// <ul>
+	// <li>New server: <a href="https://tufin.io/securecloud">https://tufin.io/securecloud</a></li>
+	// <li>New server: <a href="https://www.tufin.io/securecloud">https://www.tufin.io/securecloud</a></li>
+	// </ul>
+	// </li>
 	// </ul>
 	// <p>POST /register</p>
 	// <ul>
@@ -208,5 +220,9 @@ func ExampleGetHTMLReportAsString() {
 	// <p>POST /subscribe</p>
 	// <ul>
 	// <li>Callbacks changed</li>
+	// </ul>
+	// <p>Servers changed</p>
+	// <ul>
+	// <li>Deleted server: tufin.com</li>
 	// </ul>
 }

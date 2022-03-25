@@ -12,6 +12,17 @@ type ServersDiff struct {
 // ModifiedServers is map of server names to their respective diffs
 type ModifiedServers map[string]*ServerDiff
 
+// ToStringList returns the modified server names
+func (modifiedServers ModifiedServers) ToStringList() StringList {
+	keys := make(StringList, len(modifiedServers))
+	i := 0
+	for k := range modifiedServers {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
+
 // Empty indicates whether a change was found in this element
 func (diff *ServersDiff) Empty() bool {
 	if diff == nil {
