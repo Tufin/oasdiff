@@ -12,10 +12,10 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+1. Run `oasdiff  <flags> -base <spec1> -revision <spec2>`
+2. With <spec1-URL> or attachment 
+3. And <spec2-URL> or attachment
+4. Recieve <snippet of incorrect diff>
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
