@@ -53,30 +53,61 @@ func (r *report) output(d *diff.Diff) {
 
 	if d.EndpointsDiff.Empty() {
 		r.print("No endpoint changes")
-		return
+	} else {
+		r.printEndpoints(d.EndpointsDiff)
 	}
 
-	r.printTitle("New Endpoints", len(d.EndpointsDiff.Added))
-	sort.Sort(d.EndpointsDiff.Added)
-	for _, added := range d.EndpointsDiff.Added {
+	if !d.ServersDiff.Empty() {
+		r.print("Servers changed")
+		r.indent().printServers(d.ServersDiff)
+	}
+}
+
+func (r *report) printEndpoints(d *diff.EndpointsDiff) {
+
+	r.printTitle("New Endpoints", len(d.Added))
+	sort.Sort(d.Added)
+	for _, added := range d.Added {
 		r.print(added.Method, added.Path, " ")
 	}
 	r.print("")
 
-	r.printTitle("Deleted Endpoints", len(d.EndpointsDiff.Deleted))
-	sort.Sort(d.EndpointsDiff.Deleted)
-	for _, deleted := range d.EndpointsDiff.Deleted {
+	r.printTitle("Deleted Endpoints", len(d.Deleted))
+	sort.Sort(d.Deleted)
+	for _, deleted := range d.Deleted {
 		r.print(deleted.Method, deleted.Path, " ")
 	}
 	r.print("")
 
-	r.printTitle("Modified Endpoints", len(d.EndpointsDiff.Modified))
-	keys := d.EndpointsDiff.Modified.ToEndpoints()
+	r.printTitle("Modified Endpoints", len(d.Modified))
+	keys := d.Modified.ToEndpoints()
 	sort.Sort(keys)
 	for _, endpoint := range keys {
 		r.print(endpoint.Method, endpoint.Path)
-		r.indent().printMethod(d.EndpointsDiff.Modified[endpoint])
+		r.indent().printMethod(d.Modified[endpoint])
 		r.print("")
+	}
+}
+
+func (r *report) printServers(d *diff.ServersDiff) {
+	if d.Empty() {
+		return
+	}
+
+	sort.Sort(d.Added)
+	for _, added := range d.Added {
+		r.print("New server:", added)
+	}
+
+	sort.Sort(d.Deleted)
+	for _, deleted := range d.Deleted {
+		r.print("Deleted server:", deleted)
+	}
+
+	keys := d.Modified.ToStringList()
+	sort.Sort(keys)
+	for _, server := range keys {
+		r.print("Modified server:", server)
 	}
 }
 

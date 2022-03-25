@@ -62,14 +62,14 @@ No output means that the diff is empty, or, in other words, there are no changes
 ```bash
 oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
-The Text/Markdown diff report provides a simplified view of the changes.  
+The Text/Markdown diff report provides a simplified and partial view of the changes.  
 To view all details, use the default format: YAML.
 
 ### HTML diff of local files
 ```bash
 oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
-The HTML diff report provides a simplified view of the changes.  
+The HTML diff report provides a simplified and partial view of the changes.  
 To view all details, use the default format: YAML.
 
 ### Text/Markdown diff of http files

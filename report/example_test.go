@@ -82,6 +82,9 @@ func ExampleGetTextReportAsString() {
 	//
 	// POST /subscribe
 	// - Callbacks changed
+	//
+	// Servers changed
+	// - Deleted server: tufin.com
 }
 
 func ExampleGetHTMLReportAsString() {
@@ -208,5 +211,9 @@ func ExampleGetHTMLReportAsString() {
 	// <p>POST /subscribe</p>
 	// <ul>
 	// <li>Callbacks changed</li>
+	// </ul>
+	// <p>Servers changed</p>
+	// <ul>
+	// <li>Deleted server: tufin.com</li>
 	// </ul>
 }
