@@ -108,6 +108,7 @@ func (r *report) printServers(d *diff.ServersDiff) {
 	sort.Sort(keys)
 	for _, server := range keys {
 		r.print("Modified server:", server)
+		r.indent().printServer(d.Modified[server])
 	}
 }
 
@@ -134,6 +135,11 @@ func (r *report) printMethod(d *diff.MethodDiff) {
 	if !d.SecurityDiff.Empty() {
 		r.print("Security changed")
 		r.indent().printSecurityRequirements(d.SecurityDiff)
+	}
+
+	if !d.ServersDiff.Empty() {
+		r.print("Servers changed")
+		r.indent().printServers(d.ServersDiff)
 	}
 }
 
@@ -195,6 +201,58 @@ func (r *report) printRequiredProperties(d *diff.RequiredPropertiesDiff) {
 	for _, deleted := range d.Deleted {
 		r.print("Deleted required property:", deleted)
 	}
+}
+
+func (r *report) printServer(d *diff.ServerDiff) {
+	if d.Empty() {
+		return
+	}
+
+	r.printConditional(d.Added, "Server added")
+	r.printConditional(d.Deleted, "Server deleted")
+	r.printValue(d.URLDiff, "URL")
+	r.printValue(d.DescriptionDiff, "Description")
+	if !d.VariablesDiff.Empty() {
+		r.print("Variables changed")
+		r.indent().printVariables(d.VariablesDiff)
+	}
+}
+
+func (r *report) printVariables(d *diff.VariablesDiff) {
+	if d.Empty() {
+		return
+	}
+
+	sort.Sort(d.Added)
+	for _, variable := range d.Added {
+		r.print("New variable:", variable)
+	}
+
+	sort.Sort(d.Deleted)
+	for _, variable := range d.Deleted {
+		r.print("Deleted variable:", variable)
+	}
+
+	keys := d.Modified.ToStringList()
+	sort.Sort(keys)
+	for _, variable := range keys {
+		r.print("Modified variable:", variable)
+		r.indent().printVariable(d.Modified[variable])
+	}
+
+}
+
+func (r *report) printVariable(d *diff.VariableDiff) {
+	if d.Empty() {
+		return
+	}
+
+	if !d.EnumDiff.Empty() {
+		r.printConditional(len(d.EnumDiff.Added) > 0, "New enum values:", d.EnumDiff.Added)
+		r.printConditional(len(d.EnumDiff.Deleted) > 0, "Deleted enum values:", d.EnumDiff.Deleted)
+	}
+	r.printValue(d.DefaultDiff, "Default")
+	r.printValue(d.DescriptionDiff, "Description")
 }
 
 func (r *report) printSchema(d *diff.SchemaDiff) {

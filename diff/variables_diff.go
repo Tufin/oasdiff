@@ -12,6 +12,17 @@ type VariablesDiff struct {
 // ModifiedVariables is map of variable names to their respective diffs
 type ModifiedVariables map[string]*VariableDiff
 
+// ToStringList returns the modified variable names
+func (modifiedVariables ModifiedVariables) ToStringList() StringList {
+	keys := make(StringList, len(modifiedVariables))
+	i := 0
+	for k := range modifiedVariables {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
+
 // Empty indicates whether a change was found in this element
 func (diff *VariablesDiff) Empty() bool {
 	if diff == nil {
