@@ -1,0 +1,30 @@
+builds:
+ - binary: oasdiff
+   goos:
+     - darwin
+     - linux
+   goarch:
+     - amd64
+     - arm64
+   env:
+     - CGO_ENABLED=0
+
+release:
+ prerelease: auto
+
+universal_binaries:
+ - replace: true
+
+brews:
+ -
+   name: oasdiff
+   homepage: "https://github.com/tufin/oasdiff"
+   tap:
+     owner: tufin
+     name: homebrew-tufin
+   commit_author:
+     name: reuvenharrison
+     email: rh@tufin.com
+
+checksum:
+ name_template: 'checksums.txt'
