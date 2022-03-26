@@ -16,6 +16,7 @@ tags:
 paths:
   /api/{domain}/{project}/badges/security-score:
     get:
+      x-beta: true
       parameters:
       - in: query
         name: image

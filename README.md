@@ -25,26 +25,29 @@ go install github.com/tufin/oasdiff@latest
 
 ```oasdiff -help```
 ```
--base string
-    path of original OpenAPI spec in YAML or JSON format
--breaking-only
-    display breaking changes only
--exclude-description
-    exclude changes to descriptions
--exclude-examples
-    exclude changes to examples
--fail-on-diff
-    fail with exit code 1 if a difference is found
--filter string
-    regex to filter result paths (optional)
--format string
-    output format: yaml, text or html (default "yaml")
--prefix string
-    path prefix that exists in base spec but not the revision (optional)
--revision string
-    path of revised OpenAPI spec in YAML or JSON format
--summary
-    display a summary of the changes instead of the full diff
+Usage of oasdiff:
+  -base string
+    	path of original OpenAPI spec in YAML or JSON format
+  -breaking-only
+    	display breaking changes only
+  -exclude-description
+    	exclude changes to descriptions
+  -exclude-examples
+    	exclude changes to examples
+  -fail-on-diff
+    	fail with exit code 1 if a difference is found
+  -filter string
+    	if provided, diff will include only paths that match this regular expression
+  -filter-extension string
+    	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
+  -format string
+    	output format: yaml, text or html (default "yaml")
+  -prefix string
+    	if provided, paths in base spec will be compared with 'prefix'+paths in revision spec
+  -revision string
+    	path of revised OpenAPI spec in YAML or JSON format
+  -summary
+    	display a summary of the changes instead of the full diff
 ```
 All arguments can be passed with one or two leading minus signs.  
 For example ```-breaking-only``` and ```--breaking-only``` are equivalent.
@@ -92,6 +95,13 @@ oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufi
 ```bash
 oasdiff -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
+
+### Exclude [paths and operations](https://swagger.io/docs/specification/paths-and-operations/) with [OpenAPI Extension](https://swagger.io/docs/specification/openapi-extensions/) "x-beta"
+
+```bash
+oasdiff -format text -filter-extension "x-beta" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+``` 
+Note: if a path or operation has this extension only in one of the specs, but not in the other, it will appear as Added or Deleted.
 
 ### Display change summary
 
