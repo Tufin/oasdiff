@@ -21,6 +21,12 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 go install github.com/tufin/oasdiff@latest
 ```
 
+## Install on macOS with Brew
+```bash
+brew tap tufin/homebrew-tufin
+brew install oasdiff
+```
+
 ## Usage
 
 ```oasdiff -help```
