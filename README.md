@@ -16,7 +16,7 @@ A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Detect breaking changes (Beta feature. Please report issues)
 
-## Install
+## Install with Go
 ```bash
 go install github.com/tufin/oasdiff@latest
 ```
