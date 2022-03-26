@@ -96,7 +96,7 @@ oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufi
 oasdiff -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Exclude [paths and operations](https://swagger.io/docs/specification/paths-and-operations/) with [OpenAPI Extension](https://swagger.io/docs/specification/openapi-extensions/) "x-beta"
+### Exclude [paths and operations](https://swagger.io/docs/specification/paths-and-operations/) with [extension](https://swagger.io/docs/specification/openapi-extensions/) "x-beta"
 
 ```bash
 oasdiff -format text -filter-extension "x-beta" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
