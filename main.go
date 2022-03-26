@@ -13,7 +13,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var base, revision, prefix, filter, format string
+var base, revision, prefix, filter, filterExtension, format string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff bool
 
 const (
@@ -25,8 +25,9 @@ const (
 func init() {
 	flag.StringVar(&base, "base", "", "path of original OpenAPI spec in YAML or JSON format")
 	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec in YAML or JSON format")
-	flag.StringVar(&prefix, "prefix", "", "path prefix that exists in base spec but not the revision (optional)")
-	flag.StringVar(&filter, "filter", "", "regex to filter result paths (optional)")
+	flag.StringVar(&prefix, "prefix", "", "if provided, paths in base spec will be compared with 'prefix'+paths in revision spec")
+	flag.StringVar(&filter, "filter", "", "if provided, diff will include only paths that match this regular expression")
+	flag.StringVar(&filterExtension, "filter-extension", "", "if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	flag.BoolVar(&excludeExamples, "exclude-examples", false, "exclude changes to examples")
 	flag.BoolVar(&excludeDescription, "exclude-description", false, "exclude changes to descriptions")
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
@@ -78,6 +79,7 @@ func main() {
 	config.ExcludeExamples = excludeExamples
 	config.ExcludeDescription = excludeDescription
 	config.PathFilter = filter
+	config.FilterExtension = filterExtension
 	config.PathPrefix = prefix
 	config.BreakingOnly = breakingOnly
 

@@ -579,6 +579,22 @@ func TestFilterByRegex(t *testing.T) {
 	require.Nil(t, d.GetSummary().Details[diff.PathsDetail])
 }
 
+func TestFilterPathsByExtension(t *testing.T) {
+	d, err := diff.Get(&diff.Config{FilterExtension: "x-extension-test"}, l(t, 1), l(t, 2))
+	require.NoError(t, err)
+	require.Equal(t,
+		&diff.SummaryDetails{Added: 1, Deleted: 3, Modified: 0},
+		d.GetSummary().Details[diff.PathsDetail])
+}
+
+func TestFilterOperationssByExtension(t *testing.T) {
+	d, err := diff.Get(&diff.Config{FilterExtension: "x-beta"}, l(t, 1), l(t, 3))
+	require.NoError(t, err)
+	require.Equal(t,
+		&diff.SummaryDetails{Added: 0, Deleted: 0, Modified: 3},
+		d.GetSummary().Details[diff.EndpointsDetail])
+}
+
 func TestAddedSecurityRequirement(t *testing.T) {
 	require.Contains(t,
 		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified["/register"].OperationsDiff.Modified["POST"].SecurityDiff.Added,

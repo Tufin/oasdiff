@@ -1,7 +1,9 @@
 package diff
 
 import (
+	"fmt"
 	"net/http"
+	"regexp"
 
 	"github.com/getkin/kin-openapi/openapi3"
 )
@@ -45,6 +47,10 @@ func newOperationsDiff() *OperationsDiff {
 type ModifiedOperations map[string]*MethodDiff
 
 func getOperationsDiff(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
+	if err := filterOperations(config.FilterExtension, pathItem1, pathItem2); err != nil {
+		return nil, err
+	}
+
 	diff, err := getOperationsDiffInternal(config, state, pathItem1, pathItem2)
 	if err != nil {
 		return nil, err
@@ -113,6 +119,42 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state
 	}
 
 	return nil
+}
+
+func filterOperations(filterExtension string, pathItem1, pathItem2 *openapi3.PathItem) error {
+
+	if err := filterOperationsByExtensions(filterExtension, pathItem1, pathItem2); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func filterOperationsByExtensions(filterExtension string, pathItem1, pathItem2 *openapi3.PathItem) error {
+	if filterExtension == "" {
+		return nil
+	}
+
+	r, err := regexp.Compile(filterExtension)
+	if err != nil {
+		return fmt.Errorf("failed to compile extension filter regex %q with %w", filterExtension, err)
+	}
+
+	filterOperationsByExtensionInternal(pathItem1, r)
+	filterOperationsByExtensionInternal(pathItem2, r)
+
+	return nil
+}
+
+func filterOperationsByExtensionInternal(pathItem *openapi3.PathItem, r *regexp.Regexp) {
+	for method, operation := range pathItem.Operations() {
+		for extension := range operation.Extensions {
+			if r.MatchString(extension) {
+				pathItem.SetOperation(method, nil)
+				break
+			}
+		}
+	}
 }
 
 // Patch applies the patch to operations

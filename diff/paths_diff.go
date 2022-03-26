@@ -44,8 +44,7 @@ func newPathsDiff() *PathsDiff {
 
 func getPathsDiff(config *Config, state *state, paths1, paths2 openapi3.Paths) (*PathsDiff, error) {
 
-	err := filterPaths(config.PathFilter, paths1, paths2)
-	if err != nil {
+	if err := filterPaths(config.PathFilter, config.FilterExtension, paths1, paths2); err != nil {
 		return nil, err
 	}
 
@@ -109,8 +108,20 @@ func (pathsDiff *PathsDiff) addModifiedPath(config *Config, state *state, path1 
 	return pathsDiff.Modified.addPathDiff(config, state, path1, pathItem1, pathItem2)
 }
 
-func filterPaths(filter string, paths1, paths2 openapi3.Paths) error {
+func filterPaths(filter, filterExtension string, paths1, paths2 openapi3.Paths) error {
 
+	if err := filterPathsByName(filter, paths1, paths2); err != nil {
+		return err
+	}
+
+	if err := filterPathsByExtensions(filterExtension, paths1, paths2); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func filterPathsByName(filter string, paths1, paths2 openapi3.Paths) error {
 	if filter == "" {
 		return nil
 	}
@@ -130,6 +141,33 @@ func filterPathsInternal(paths openapi3.Paths, r *regexp.Regexp) {
 	for path := range paths {
 		if !r.MatchString(path) {
 			delete(paths, path)
+		}
+	}
+}
+
+func filterPathsByExtensions(filterExtension string, paths1, paths2 openapi3.Paths) error {
+	if filterExtension == "" {
+		return nil
+	}
+
+	r, err := regexp.Compile(filterExtension)
+	if err != nil {
+		return fmt.Errorf("failed to compile extension filter regex %q with %w", filterExtension, err)
+	}
+
+	filterPathsByExtensionInternal(paths1, r)
+	filterPathsByExtensionInternal(paths2, r)
+
+	return nil
+}
+
+func filterPathsByExtensionInternal(paths openapi3.Paths, r *regexp.Regexp) {
+	for path, pathItem := range paths {
+		for extension := range pathItem.Extensions {
+			if r.MatchString(extension) {
+				delete(paths, path)
+				break
+			}
 		}
 	}
 }

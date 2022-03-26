@@ -91,18 +91,15 @@ func getDiffInternal(config *Config, state *state, s1, s2 *openapi3.T) (*Diff, e
 	result.ExtensionsDiff = getExtensionsDiff(config, state, s1.ExtensionProps, s2.ExtensionProps)
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 
-	result.InfoDiff, err = getInfoDiff(config, state, s1.Info, s2.Info)
-	if err != nil {
+	if result.InfoDiff, err = getInfoDiff(config, state, s1.Info, s2.Info); err != nil {
 		return nil, err
 	}
 
-	result.PathsDiff, err = getPathsDiff(config, state, s1.Paths, s2.Paths)
-	if err != nil {
+	if result.PathsDiff, err = getPathsDiff(config, state, s1.Paths, s2.Paths); err != nil {
 		return nil, err
 	}
 
-	result.EndpointsDiff, err = getEndpointsDiff(config, state, s1.Paths, s2.Paths)
-	if err != nil {
+	if result.EndpointsDiff, err = getEndpointsDiff(config, state, s1.Paths, s2.Paths); err != nil {
 		return nil, err
 	}
 
@@ -111,8 +108,7 @@ func getDiffInternal(config *Config, state *state, s1, s2 *openapi3.T) (*Diff, e
 	result.TagsDiff = getTagsDiff(config, state, s1.Tags, s2.Tags)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, state, s1.ExternalDocs, s2.ExternalDocs)
 
-	result.ComponentsDiff, err = getComponentsDiff(config, state, s1.Components, s2.Components)
-	if err != nil {
+	if result.ComponentsDiff, err = getComponentsDiff(config, state, s1.Components, s2.Components); err != nil {
 		return nil, err
 	}
 

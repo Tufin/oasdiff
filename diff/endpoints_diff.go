@@ -54,8 +54,7 @@ func newEndpointsDiff() *EndpointsDiff {
 
 func getEndpointsDiff(config *Config, state *state, paths1, paths2 openapi3.Paths) (*EndpointsDiff, error) {
 
-	err := filterPaths(config.PathFilter, paths1, paths2)
-	if err != nil {
+	if err := filterPaths(config.PathFilter, config.FilterExtension, paths1, paths2); err != nil {
 		return nil, err
 	}
 
