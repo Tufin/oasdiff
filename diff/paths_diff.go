@@ -44,7 +44,7 @@ func newPathsDiff() *PathsDiff {
 
 func getPathsDiff(config *Config, state *state, paths1, paths2 openapi3.Paths) (*PathsDiff, error) {
 
-	err := filterPaths2(config.PathFilter, paths1, paths2)
+	err := filterPaths(config.PathFilter, paths1, paths2)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (pathsDiff *PathsDiff) addModifiedPath(config *Config, state *state, path1 
 	return pathsDiff.Modified.addPathDiff(config, state, path1, pathItem1, pathItem2)
 }
 
-func filterPaths2(filter string, paths1, paths2 openapi3.Paths) error {
+func filterPaths(filter string, paths1, paths2 openapi3.Paths) error {
 
 	if filter == "" {
 		return nil
@@ -120,13 +120,13 @@ func filterPaths2(filter string, paths1, paths2 openapi3.Paths) error {
 		return fmt.Errorf("failed to compile filter regex %q with %w", filter, err)
 	}
 
-	filterPaths1(paths1, r)
-	filterPaths1(paths2, r)
+	filterPathsInternal(paths1, r)
+	filterPathsInternal(paths2, r)
 
 	return nil
 }
 
-func filterPaths1(paths openapi3.Paths, r *regexp.Regexp) {
+func filterPathsInternal(paths openapi3.Paths, r *regexp.Regexp) {
 	for path := range paths {
 		if !r.MatchString(path) {
 			delete(paths, path)

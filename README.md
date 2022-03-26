@@ -166,6 +166,11 @@ GET /api/{domain}/{project}/install-command
     - Description changed from 'Tufin1' to 'Tufin'
     - Headers changed
       - Deleted header: X-RateLimit-Limit
+- Servers changed
+  - New server: https://www.tufin.io/securecloud
+
+Servers changed
+- Deleted server: tufin.com
 
 ## Output example - YAML
 ```oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
