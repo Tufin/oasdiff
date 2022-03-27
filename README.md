@@ -27,6 +27,9 @@ brew tap tufin/homebrew-tufin
 brew install oasdiff
 ```
 
+## Install on macOS, Windows and Linux
+Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
+
 ## Usage
 
 ```oasdiff -help```
@@ -84,39 +87,43 @@ To view all details, use the default format: YAML.
 If you'd like to see additional details in the HTML report, please submit a [feature request](https://github.com/Tufin/oasdiff/issues/new?assignees=&labels=&template=feature_request.md&title=).
 
 
-### Text/Markdown diff of http files
-
+### Diff files over http/s
 ```bash
 oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Display breaking changes only
-
 ```bash
 oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Display changes to endpoints containing "/api" in the path
+### Fail with exit code 1 if a change is found
+```bash
+oasdiff -fail-on-diff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
 
+### Fail with exit code 1 if a breaking change is found
+```bash
+oasdiff -fail-on-diff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+### Display changes to endpoints containing "/api" in the path
 ```bash
 oasdiff -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Exclude [paths and operations](https://swagger.io/docs/specification/paths-and-operations/) with [extension](https://swagger.io/docs/specification/openapi-extensions/) "x-beta"
-
 ```bash
 oasdiff -format text -filter-extension "x-beta" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ``` 
 Note: if a path or operation has this extension only in one of the specs, but not in the other, it will appear as Added or Deleted.
 
 ### Display change summary
-
 ```bash
 oasdiff -breaking-only -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Running with Docker
-
 To run with docker just replace the `oasdiff` command by `docker run --rm -t tufin/oasdiff`, for example:
 
 ```bash
@@ -124,12 +131,11 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 ```
 
 ### Comparing local files with Docker
-
 ```bash
 docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
 ```
 
-Replace `$(pwd)/data` by the path that contains your files.
+Replace `$(pwd)/data` by the path that contains your files.  
 Note that the `-base` and `-revision` paths must begin with `/`.  
 
 ## Output example - Text/Markdown
