@@ -112,11 +112,13 @@ oasdiff -fail-on-diff -breaking-only -format text -base https://raw.githubuserco
 oasdiff -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Exclude [paths and operations](https://swagger.io/docs/specification/paths-and-operations/) with [extension](https://swagger.io/docs/specification/openapi-extensions/) "x-beta"
+### Exclude paths and operations with extension "x-beta"
 ```bash
 oasdiff -format text -filter-extension "x-beta" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ``` 
-Note: if a path or operation has this extension only in one of the specs, but not in the other, it will appear as Added or Deleted.
+Notes:
+1. [OpenAPI Extensions](https://swagger.io/docs/specification/openapi-extensions/) can be defined both at the [path](https://swagger.io/docs/specification/paths-and-operations/) level and at the [operation](https://swagger.io/docs/specification/paths-and-operations/) level. Both are matched and excluded with this flag.
+2. If a path or operation has a matching extension only in one of the specs, but not in the other, it will appear as Added or Deleted.
 
 ### Display change summary
 ```bash
