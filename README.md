@@ -141,7 +141,9 @@ Replace `$(pwd)/data` by the path that contains your files.
 Note that the `-base` and `-revision` paths must begin with `/`.  
 
 ## Output example - Text/Markdown
-```oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
+```
+oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test5.yaml
+```
 
 ### New Endpoints: None
 -----------------------
@@ -193,11 +195,16 @@ GET /api/{domain}/{project}/install-command
 - Servers changed
   - New server: https://www.tufin.io/securecloud
 
+Security Requirements changed
+- Deleted security requirements: bearerAuth
+
 Servers changed
 - Deleted server: tufin.com
 
 ## Output example - YAML
-```oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml```
+```
+oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml
+```
 
 ```yaml
 info:
