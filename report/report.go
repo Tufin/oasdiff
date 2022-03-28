@@ -57,9 +57,16 @@ func (r *report) output(d *diff.Diff) {
 		r.printEndpoints(d.EndpointsDiff)
 	}
 
+	if !d.SecurityDiff.Empty() {
+		r.print("Security Requirements changed")
+		r.indent().printSecurityRequirements(d.SecurityDiff)
+		r.print("")
+	}
+
 	if !d.ServersDiff.Empty() {
 		r.print("Servers changed")
 		r.indent().printServers(d.ServersDiff)
+		r.print("")
 	}
 }
 
