@@ -120,6 +120,11 @@ Notes:
 1. [OpenAPI Extensions](https://swagger.io/docs/specification/openapi-extensions/) can be defined both at the [path](https://swagger.io/docs/specification/paths-and-operations/) level and at the [operation](https://swagger.io/docs/specification/paths-and-operations/) level. Both are matched and excluded with this flag.
 2. If a path or operation has a matching extension only in one of the specs, but not in the other, it will appear as Added or Deleted.
 
+### Ignore changes to descriptions and examples
+```bash
+oasdiff -exclude-description -exclude-examples -format text -base data/openapi-test1.yaml -revision data/openapi-test3.yaml
+``` 
+
 ### Display change summary
 ```bash
 oasdiff -breaking-only -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
