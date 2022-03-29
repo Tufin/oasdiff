@@ -40,9 +40,9 @@ Usage of oasdiff:
   -breaking-only
     	display breaking changes only
   -exclude-description
-    	exclude changes to descriptions
+    	ignore changes to descriptions
   -exclude-examples
-    	exclude changes to examples
+    	ignore changes to examples
   -fail-on-diff
     	fail with exit code 1 if a difference is found
   -filter string
