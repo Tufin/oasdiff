@@ -338,6 +338,7 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 	}
 
 	r.printValue(d.DefaultDiff, "Default")
+	r.printValue(d.ExampleDiff, "Example")
 	r.printValue(d.AdditionalPropertiesAllowedDiff, "AdditionalProperties")
 	r.printValue(d.UniqueItemsDiff, "UniqueItems")
 	r.printValue(d.ExclusiveMinDiff, "ExclusiveMin")
@@ -503,6 +504,13 @@ func (r *report) printMediaType(d *diff.MediaTypeDiff) {
 		r.indent().printSchema(d.SchemaDiff)
 	}
 
+	r.printValue(d.ExampleDiff, "Example")
+
+	if !d.ExamplesDiff.Empty() {
+		r.print("Examples changed")
+		r.indent().printExamples(d.ExamplesDiff)
+	}
+
 	r.printMessage(d.EncodingsDiff, "Encodings changed")
 }
 
@@ -545,6 +553,13 @@ func (r *report) printHeader(d *diff.HeaderDiff) {
 	r.printValue(d.DescriptionDiff, "Description")
 	r.printValue(d.DeprecatedDiff, "Deprecated")
 	r.printValue(d.RequiredDiff, "Required")
+
+	r.printValue(d.ExampleDiff, "Example")
+
+	if !d.ExamplesDiff.Empty() {
+		r.print("Examples changed")
+		r.indent().printExamples(d.ExamplesDiff)
+	}
 
 	if !d.SchemaDiff.Empty() {
 		r.print("Schema changed")

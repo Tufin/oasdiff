@@ -52,6 +52,7 @@ func ExampleGetTextReportAsString() {
 	//     - Type changed from 'string' to ''
 	//     - Format changed from 'general string' to ''
 	//     - Description changed from 'alphanumeric' to ''
+	//     - Example changed from 'tufinim/generic-bank:cia-latest' to null
 	//     - Pattern changed from '^(?:[\w-./:]+)$' to ''
 	//   - Examples changed
 	//     - New example: 1
@@ -59,6 +60,7 @@ func ExampleGetTextReportAsString() {
 	//       - Value changed from 'reuven' to 'reuven1'
 	// - Modified query param: token
 	//   - Schema changed
+	//     - Example changed from '26734565-dbcc-449a-a370-0beaaf04b0e8' to '26734565-dbcc-449a-a370-0beaaf04b0e7'
 	//     - MaxLength changed from 29 to 30
 	// - Responses changed
 	//   - New response: default
@@ -152,6 +154,7 @@ func ExampleGetHTMLReportAsString() {
 	// <li>Type changed from 'string' to ''</li>
 	// <li>Format changed from 'general string' to ''</li>
 	// <li>Description changed from 'alphanumeric' to ''</li>
+	// <li>Example changed from 'tufinim/generic-bank:cia-latest' to null</li>
 	// <li>Pattern changed from '^(?:[\w-./:]+)$' to ''</li>
 	// </ul>
 	// </li>
@@ -171,6 +174,7 @@ func ExampleGetHTMLReportAsString() {
 	// <ul>
 	// <li>Schema changed
 	// <ul>
+	// <li>Example changed from '26734565-dbcc-449a-a370-0beaaf04b0e8' to '26734565-dbcc-449a-a370-0beaaf04b0e7'</li>
 	// <li>MaxLength changed from 29 to 30</li>
 	// </ul>
 	// </li>
