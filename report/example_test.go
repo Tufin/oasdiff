@@ -56,6 +56,7 @@ func ExampleGetTextReportAsString() {
 	//   - Examples changed
 	//     - New example: 1
 	//     - Modified example: 0
+	//       - Value changed from 'reuven' to 'reuven1'
 	// - Modified query param: token
 	//   - Schema changed
 	//     - MaxLength changed from 29 to 30
@@ -157,9 +158,13 @@ func ExampleGetHTMLReportAsString() {
 	// <li>Examples changed
 	// <ul>
 	// <li>New example: 1</li>
-	// <li>Modified example: 0</li>
+	// <li>Modified example: 0
+	// <ul>
+	// <li>Value changed from 'reuven' to 'reuven1'</li>
 	// </ul>
-	// </li>	
+	// </li>
+	// </ul>
+	// </li>
 	// </ul>
 	// </li>
 	// <li>Modified query param: token

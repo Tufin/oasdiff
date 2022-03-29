@@ -228,8 +228,19 @@ func (r *report) printExamples(d *diff.ExamplesDiff) {
 	sort.Sort(keys)
 	for _, example := range keys {
 		r.print("Modified example:", example)
-		// r.indent().printExample(d.Modified[example])
+		r.indent().printExample(d.Modified[example])
 	}
+}
+
+func (r *report) printExample(d *diff.ExampleDiff) {
+	if d.Empty() {
+		return
+	}
+
+	r.printValue(d.SummaryDiff, "Summary")
+	r.printValue(d.DescriptionDiff, "Description")
+	r.printValue(d.ValueDiff, "Value")
+	r.printValue(d.ExternalValueDiff, "ExternalValue")
 }
 
 func (r *report) printRequiredProperties(d *diff.RequiredPropertiesDiff) {
