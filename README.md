@@ -163,6 +163,8 @@ GET /api/{domain}/{project}/badges/security-score
         - Required changed
           - New required property: type
 - Modified query param: image
+  - Examples changed
+    - Deleted example: 0
 - Modified query param: token
   - Schema changed
     - MaxLength changed from 29 to null
@@ -313,6 +315,24 @@ endpoints:
       path: /subscribe
   modified:
     ? method: GET
+      path: /api/{domain}/{project}/install-command
+    : parameters:
+        deleted:
+          header:
+            - network-policies
+      responses:
+        modified:
+          default:
+            description:
+              from: Tufin1
+              to: Tufin
+            headers:
+              deleted:
+                - X-RateLimit-Limit
+      servers:
+        added:
+          - https://www.tufin.io/securecloud
+    ? method: GET
       path: /api/{domain}/{project}/badges/security-score
     : tags:
         deleted:
@@ -368,24 +388,6 @@ endpoints:
                     type:
                       from: string
                       to: object
-    ? method: GET
-      path: /api/{domain}/{project}/install-command
-    : parameters:
-        deleted:
-          header:
-            - network-policies
-      responses:
-        modified:
-          default:
-            description:
-              from: Tufin1
-              to: Tufin
-            headers:
-              deleted:
-                - X-RateLimit-Limit
-      servers:
-        added:
-          - https://www.tufin.io/securecloud
 security:
   deleted:
     - bearerAuth
