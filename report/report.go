@@ -183,9 +183,24 @@ func (r *report) printParams(d *diff.ParametersDiff) {
 }
 
 func (r *report) printParam(d *diff.ParameterDiff) {
+	r.printValue(d.DescriptionDiff, "Description")
+	r.printValue(d.StyleDiff, "Style")
+	r.printValue(d.ExplodeDiff, "Explode")
+	r.printValue(d.AllowEmptyValueDiff, "AllowEmptyValue")
+	r.printValue(d.AllowReservedDiff, "AllowReserved")
+	r.printValue(d.DeprecatedDiff, "Deprecated")
+	r.printValue(d.RequiredDiff, "Required")
+
 	if !d.SchemaDiff.Empty() {
 		r.print("Schema changed")
 		r.indent().printSchema(d.SchemaDiff)
+	}
+
+	r.printValue(d.ExampleDiff, "Example")
+
+	if !d.ExamplesDiff.Empty() {
+		r.print("Examples changed")
+		r.indent().printExamples(d.ExamplesDiff)
 	}
 
 	if !d.ContentDiff.Empty() {

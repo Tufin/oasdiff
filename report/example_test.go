@@ -53,6 +53,9 @@ func ExampleGetTextReportAsString() {
 	//     - Format changed from 'general string' to ''
 	//     - Description changed from 'alphanumeric' to ''
 	//     - Pattern changed from '^(?:[\w-./:]+)$' to ''
+	//   - Examples changed
+	//     - New example: 1
+	//     - Modified example: 0
 	// - Modified query param: token
 	//   - Schema changed
 	//     - MaxLength changed from 29 to 30
@@ -151,6 +154,12 @@ func ExampleGetHTMLReportAsString() {
 	// <li>Pattern changed from '^(?:[\w-./:]+)$' to ''</li>
 	// </ul>
 	// </li>
+	// <li>Examples changed
+	// <ul>
+	// <li>New example: 1</li>
+	// <li>Modified example: 0</li>
+	// </ul>
+	// </li>	
 	// </ul>
 	// </li>
 	// <li>Modified query param: token
