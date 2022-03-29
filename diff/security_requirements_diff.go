@@ -26,17 +26,6 @@ func (diff *SecurityRequirementsDiff) Empty() bool {
 // ModifiedSecurityRequirements is map of security requirements to their respective diffs
 type ModifiedSecurityRequirements map[string]SecurityScopesDiff
 
-// ToStringList returns the modified security requirements
-func (modifiedSecurityRequirements ModifiedSecurityRequirements) ToStringList() StringList {
-	keys := make(StringList, len(modifiedSecurityRequirements))
-	i := 0
-	for k := range modifiedSecurityRequirements {
-		keys[i] = k
-		i++
-	}
-	return keys
-}
-
 func newSecurityRequirementsDiff() *SecurityRequirementsDiff {
 	return &SecurityRequirementsDiff{
 		Added:    StringList{},

@@ -72,17 +72,6 @@ func newParametersDiff() *ParametersDiff {
 // ParamDiffs is map of parameter names to their respective diffs
 type ParamDiffs map[string]*ParameterDiff
 
-// ToStringList returns the modified parameter names
-func (paramDiffs ParamDiffs) ToStringList() StringList {
-	keys := make(StringList, len(paramDiffs))
-	i := 0
-	for k := range paramDiffs {
-		keys[i] = k
-		i++
-	}
-	return keys
-}
-
 func (parametersDiff *ParametersDiff) addAddedParam(param *openapi3.Parameter) {
 
 	if paramNames, ok := parametersDiff.Added[param.In]; ok {

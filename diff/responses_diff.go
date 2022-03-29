@@ -36,17 +36,6 @@ func (responsesDiff *ResponsesDiff) removeNonBreaking() {
 // ModifiedResponses is map of response values to their respective diffs
 type ModifiedResponses map[string]*ResponseDiff
 
-// ToStringList returns the modified response values
-func (modifiedResponses ModifiedResponses) ToStringList() StringList {
-	keys := make(StringList, len(modifiedResponses))
-	i := 0
-	for k := range modifiedResponses {
-		keys[i] = k
-		i++
-	}
-	return keys
-}
-
 func newResponsesDiff() *ResponsesDiff {
 	return &ResponsesDiff{
 		Added:    StringList{},

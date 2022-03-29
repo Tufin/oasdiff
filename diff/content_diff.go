@@ -14,17 +14,6 @@ type ContentDiff struct {
 // ModifiedMediaTypes is map of media type names to their respective diffs
 type ModifiedMediaTypes map[string]*MediaTypeDiff
 
-// ToStringList returns the modified media type names
-func (modifiedMediaTypes ModifiedMediaTypes) ToStringList() StringList {
-	keys := make(StringList, len(modifiedMediaTypes))
-	i := 0
-	for k := range modifiedMediaTypes {
-		keys[i] = k
-		i++
-	}
-	return keys
-}
-
 func newContentDiff() *ContentDiff {
 	return &ContentDiff{
 		MediaTypeAdded:    StringList{},

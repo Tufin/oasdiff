@@ -13,6 +13,29 @@ func (list StringList) toStringSet() StringSet {
 	return result
 }
 
+type T interface {
+	*ExampleDiff |
+		*ServerDiff |
+		*ParameterDiff |
+		*VariableDiff |
+		*SchemaDiff |
+		*ResponseDiff |
+		*MediaTypeDiff |
+		*HeaderDiff |
+		SecurityScopesDiff |
+		*StringsDiff
+}
+
+func ToStringList[V T](m map[string]V) StringList {
+	keys := make(StringList, len(m))
+	i := 0
+	for k := range m {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
+
 // Len implements the sort.Interface interface
 func (list StringList) Len() int {
 	return len(list)
