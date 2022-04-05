@@ -521,6 +521,7 @@ References are normally resolved automatically when you load the spec. In other 
 
 ## Requests for enhancements
 1. OpenAPI 3.1 support: see https://github.com/Tufin/oasdiff/issues/52
-
+2. [Share your own ideas](https://github.com/Tufin/oasdiff/discussions/new?category=ideas)
+  
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi) 
