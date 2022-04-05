@@ -462,12 +462,6 @@ components:
           added: true
 ```
 
-## Embedding into your Go program
-```go
-diff.Get(&diff.Config{}, spec1, spec2)
-```
-See full example: [main.go](main.go)
-
 ## Notes
 1. Output Formats  
    - The default output format, YAML, provides a full view of all diff details.  
@@ -504,12 +498,20 @@ oasdiff respects this heirarchy and displays a hierarchial diff with path change
                     deleted:
                         - security
     ```
+    The modified endpoints section has two items per key, method and path, this is called a `complex key mapping` in YAML.
+    Some YAML libraries don't support complex key mappings, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
 
-## Notes for Developers
-1. oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
+## Notes for Go Developers
+1. Embedding oasdiff into your program is easy:
+   ```go
+   diff.Get(&diff.Config{}, spec1, spec2)
+   ```
+   See full example: [main.go](main.go)
+
+2. oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
 References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [Loader.ResolveRefsIn](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn).
 
-2. Use [configuration](diff/config.go) to exclude certain types of changes:
+3. Use [configuration](diff/config.go) to exclude certain types of changes:
    - [Examples](https://swagger.io/specification/#example-object) 
    - Descriptions
    - [Extensions](https://swagger.io/specification/#specification-extensions) are excluded by default
