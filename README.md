@@ -498,8 +498,8 @@ oasdiff respects this heirarchy and displays a hierarchial diff with path change
                     deleted:
                         - security
     ```
-    The modified endpoints section has two items per key, method and path, this is called a `complex key mapping` in YAML.
-    Some YAML libraries don't support complex key mappings, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
+    The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.
+    Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
 
 ## Notes for Go Developers
 1. Embedding oasdiff into your program is easy:
