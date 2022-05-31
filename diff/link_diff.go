@@ -25,6 +25,7 @@ func (diff *LinkDiff) removeNonBreaking() {
 	}
 
 	diff.ExtensionsDiff = nil
+	diff.OperationIDDiff = nil
 	diff.DescriptionDiff = nil
 }
 

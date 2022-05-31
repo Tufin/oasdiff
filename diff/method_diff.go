@@ -44,6 +44,7 @@ func (methodDiff *MethodDiff) removeNonBreaking() {
 	methodDiff.TagsDiff = nil
 	methodDiff.SummaryDiff = nil
 	methodDiff.DescriptionDiff = nil
+	methodDiff.OperationIDDiff = nil
 
 	if !methodDiff.DeprecatedDiff.CompareWithDefault(false, true, false) {
 		methodDiff.DeprecatedDiff = nil
