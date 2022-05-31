@@ -111,6 +111,8 @@ oasdiff -fail-on-diff -breaking-only -format text -base https://raw.githubuserco
 ```bash
 oasdiff -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
+Notes:
+1. Filters are applied recursively at all levels. For example, if a path contains a [callback](https://swagger.io/docs/specification/callbacks/), the filter will be applied both to the path itself and to the callback path. To include such a nested change, use a regular expression that contains both paths, for example ```-filter "path|callback-path"```
 
 ### Exclude paths and operations with extension "x-beta"
 ```bash
