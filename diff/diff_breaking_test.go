@@ -390,3 +390,17 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, d)
 }
+
+func TestBreaking_OperationID(t *testing.T) {
+	require.Empty(t,
+		d(t, &diff.Config{
+			BreakingOnly: true,
+		}, 3, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].OperationIDDiff)
+}
+
+func TestBreaking_LinkOperationID(t *testing.T) {
+	require.Empty(t,
+		d(t, &diff.Config{
+			BreakingOnly: true,
+		}, 3, 1).PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].ResponsesDiff.Modified["200"].LinksDiff.Modified)
+}

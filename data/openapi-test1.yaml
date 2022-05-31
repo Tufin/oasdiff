@@ -31,6 +31,7 @@ paths:
         pattern: ^(?:([a-z]+-)*([a-z]+)?)$
         type: string
     get:
+      operationId: GetSecurityScores
       x-extension-test: 
       x-beta: true
       tags:
@@ -206,6 +207,9 @@ paths:
                     "test1":
                       operationId: "reuven"
                       description: "test"
+                    "test2":
+                      operationId: "GetSecurityScores"
+                    
           'bye':
             post:
               requestBody:   # Contents of the callback message

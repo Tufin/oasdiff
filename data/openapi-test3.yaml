@@ -16,6 +16,7 @@ tags:
 paths:
   /api/{domain}/{project}/badges/security-score:
     get:
+      operationId: GetSecurityScore
       x-beta: true
       parameters:
       - in: query
@@ -188,6 +189,8 @@ paths:
                   links:
                     "test":
                       operationId: "reuven"
+                    "test2":
+                      operationId: "GetSecurityScore"
           '{$request.body#/callbackUrl}':   # The callback URL,
                                             # Refers to the passed URL
             post:
