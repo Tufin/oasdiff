@@ -7,6 +7,11 @@
 # OpenAPI Diff
 A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
 
+## Try it
+```
+docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
 ## Features 
 - Generate a diff report in YAML, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
