@@ -180,6 +180,7 @@ func TestBreaking_NewPathParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// new required path param breaks client
 	require.Contains(t,
 		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInPath],
 		"project")
@@ -197,6 +198,7 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// new required header param breaks client
 	require.Contains(t,
 		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
 		"network-policies")
@@ -214,6 +216,7 @@ func TestBreaking_NewNonRequiredHeaderParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// new non-required header param doesn't break client
 	require.Empty(t, d)
 }
 
@@ -229,6 +232,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// changing an existing header param to required breaks client
 	require.Equal(t,
 		&diff.ValueDiff{
 			From: false,
@@ -249,6 +253,7 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// changing an existing header param to non-required doesn't break client
 	require.Empty(t, d)
 }
 

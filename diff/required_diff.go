@@ -14,7 +14,7 @@ func (diff *RequiredPropertiesDiff) Empty() bool {
 	return diff.StringsDiff.Empty()
 }
 
-func (diff *RequiredPropertiesDiff) removeNonBreaking() {
+func (diff *RequiredPropertiesDiff) removeNonBreaking(state *state) {
 	if diff.Empty() {
 		return
 	}
@@ -23,7 +23,14 @@ func (diff *RequiredPropertiesDiff) removeNonBreaking() {
 		return
 	}
 
-	diff.Deleted = nil
+	switch state.direction {
+	case directionRequest:
+		// if this is part of the request, then required properties can be deleted without breaking the client
+		diff.Deleted = nil
+	case directionResponse:
+		// if this is part of the response, then required properties can be added without breaking the client
+		diff.Added = nil
+	}
 }
 
 func getRequiredPropertiesDiff(config *Config, state *state, strings1, strings2 StringList) *RequiredPropertiesDiff {
@@ -31,7 +38,7 @@ func getRequiredPropertiesDiff(config *Config, state *state, strings1, strings2 
 	diff := getRequiredPropertiesDiffInternal(strings1, strings2)
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking()
+		diff.removeNonBreaking(state)
 	}
 
 	if diff.Empty() {
