@@ -56,7 +56,7 @@ func (diff *SchemaDiff) Empty() bool {
 	return diff == nil || *diff == SchemaDiff{}
 }
 
-func (diff *SchemaDiff) removeNonBreaking(schema2 *openapi3.SchemaRef) {
+func (diff *SchemaDiff) removeNonBreaking(state *state, schema2 *openapi3.SchemaRef) {
 
 	if diff.Empty() {
 		return
@@ -131,7 +131,7 @@ func (diff *SchemaDiff) removeNonBreaking(schema2 *openapi3.SchemaRef) {
 	}
 
 	// Object
-	diff.removeAddedButNonRequiredProperties(schema2)
+	diff.removeChangedButNonRequiredProperties(state, schema2)
 
 	if !diff.AdditionalPropertiesAllowedDiff.CompareWithDefault(true, false, true) {
 		diff.AdditionalPropertiesAllowedDiff = nil
@@ -146,8 +146,17 @@ func (diff *SchemaDiff) removeNonBreaking(schema2 *openapi3.SchemaRef) {
 	}
 }
 
-func (diff *SchemaDiff) removeAddedButNonRequiredProperties(schema2 *openapi3.SchemaRef) {
+func getChangedSet(propertiesDiff *SchemasDiff, direction direction) *StringList {
+	if direction == directionRequest {
+		return &propertiesDiff.Added
+	}
+	return &propertiesDiff.Deleted
+}
 
+// removeChangedButNonRequiredProperties deletes non-required property changes that don't break client
+// In request: remove added but non-required properties
+// In response: remove deleted but non-required properties
+func (diff *SchemaDiff) removeChangedButNonRequiredProperties(state *state, schema2 *openapi3.SchemaRef) {
 	if diff.Empty() || diff.PropertiesDiff.Empty() {
 		return
 	}
@@ -157,14 +166,15 @@ func (diff *SchemaDiff) removeAddedButNonRequiredProperties(schema2 *openapi3.Sc
 	}
 
 	requiredMap := StringList(schema2.Value.Required).toStringSet()
+	changedSet := getChangedSet(diff.PropertiesDiff, state.direction)
 
 	newList := StringList{}
-	for _, property := range diff.PropertiesDiff.Added {
+	for _, property := range *changedSet {
 		if _, ok := requiredMap[property]; ok {
 			newList = append(newList, property)
 		}
 	}
-	diff.PropertiesDiff.Added = newList
+	*changedSet = newList
 
 	if diff.PropertiesDiff.Empty() {
 		diff.PropertiesDiff = nil
@@ -183,7 +193,7 @@ func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.Sche
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(schema2)
+		diff.removeNonBreaking(state, schema2)
 	}
 
 	if diff.Empty() {

@@ -38,6 +38,7 @@ func (diff *ContentDiff) removeNonBreaking() {
 		return
 	}
 
+	// TODO: check breaking conditions
 	diff.MediaTypeAdded = nil
 }
 

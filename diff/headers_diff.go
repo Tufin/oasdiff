@@ -30,6 +30,7 @@ func (headersDiff *HeadersDiff) removeNonBreaking() {
 		return
 	}
 
+	// TODO: check if we need to consider header.Required flags
 	headersDiff.Added = nil
 }
 

@@ -68,91 +68,6 @@ func TestCompareWithDefault_Nil(t *testing.T) {
 	)
 }
 
-func TestBreaking_NewRequiredProperty(t *testing.T) {
-	s1 := l(t, 1)
-	s2 := l(t, 1)
-
-	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &openapi3.SchemaRef{
-		Value: &openapi3.Schema{
-			Type:        "string",
-			Description: "Unique ID of the course",
-		},
-	}
-	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{"courseId"}
-
-	d, err := diff.Get(&diff.Config{
-		BreakingOnly: true,
-	}, s1, s2)
-	require.NoError(t, err)
-	require.NotEmpty(t, d)
-}
-
-func TestBreaking_NewNonRequiredProperty(t *testing.T) {
-	s1 := l(t, 1)
-	s2 := l(t, 1)
-
-	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &openapi3.SchemaRef{
-		Value: &openapi3.Schema{
-			Type:        "string",
-			Description: "Unique ID of the course",
-		},
-	}
-
-	d, err := diff.Get(&diff.Config{
-		BreakingOnly: true,
-	}, s1, s2)
-	require.NoError(t, err)
-	require.Empty(t, d)
-}
-
-func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
-	s1 := l(t, 1)
-	s2 := l(t, 1)
-
-	sr := openapi3.SchemaRef{
-		Value: &openapi3.Schema{
-			Type:        "string",
-			Description: "Unique ID of the course",
-		},
-	}
-
-	s1.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &sr
-	s1.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{}
-
-	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &sr
-	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{"courseId"}
-
-	d, err := diff.Get(&diff.Config{
-		BreakingOnly: true,
-	}, s1, s2)
-	require.NoError(t, err)
-	require.NotEmpty(t, d)
-}
-
-func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
-	s1 := l(t, 1)
-	s2 := l(t, 1)
-
-	sr := openapi3.SchemaRef{
-		Value: &openapi3.Schema{
-			Type:        "string",
-			Description: "Unique ID of the course",
-		},
-	}
-
-	s1.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &sr
-	s1.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{"courseId"}
-
-	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &sr
-	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{}
-
-	d, err := diff.Get(&diff.Config{
-		BreakingOnly: true,
-	}, s1, s2)
-	require.NoError(t, err)
-	require.Empty(t, d)
-}
-
 func deleteParam(op *openapi3.Operation, in string, name string) {
 
 	result := openapi3.NewParameters()
@@ -180,6 +95,7 @@ func TestBreaking_NewPathParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// new required path param breaks client
 	require.Contains(t,
 		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInPath],
 		"project")
@@ -197,6 +113,7 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// new required header param breaks client
 	require.Contains(t,
 		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
 		"network-policies")
@@ -214,6 +131,7 @@ func TestBreaking_NewNonRequiredHeaderParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// new optional header param doesn't break client
 	require.Empty(t, d)
 }
 
@@ -229,6 +147,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// changing an existing header param to required breaks client
 	require.Equal(t,
 		&diff.ValueDiff{
 			From: false,
@@ -249,6 +168,7 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
+	// changing an existing header param to optional doesn't break client
 	require.Empty(t, d)
 }
 
