@@ -101,6 +101,7 @@ oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/
 ```bash
 oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
+Breaking changes are relative to the client. For example, a deleted endpoint or a new required property in the request body.
 
 ### Fail with exit code 1 if a change is found
 ```bash
@@ -116,8 +117,7 @@ oasdiff -fail-on-diff -breaking-only -format text -base https://raw.githubuserco
 ```bash
 oasdiff -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
-Notes:
-1. Filters are applied recursively at all levels. For example, if a path contains a [callback](https://swagger.io/docs/specification/callbacks/), the filter will be applied both to the path itself and to the callback path. To include such a nested change, use a regular expression that contains both paths, for example ```-filter "path|callback-path"```
+Filters are applied recursively at all levels. For example, if a path contains a [callback](https://swagger.io/docs/specification/callbacks/), the filter will be applied both to the path itself and to the callback path. To include such a nested change, use a regular expression that contains both paths, for example ```-filter "path|callback-path"```
 
 ### Exclude paths and operations with extension "x-beta"
 ```bash
