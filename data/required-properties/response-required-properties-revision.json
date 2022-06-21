@@ -1,0 +1,104 @@
+{
+  "info": {
+    "title": "title",
+    "version": "1.0.102"
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/web/search": {
+      "get": {
+        "operationId": "searchArticles",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "user-agent",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "properties": {
+                    "helpAndSupport": {
+                      "properties": {
+                        "expandLink": {
+                          "properties": {
+                            "title": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "url"
+                          ],
+                          "type": "object"
+                        },
+                        "pages": {
+                          "items": {
+                            "properties": {
+                              "contentPreview": {
+                                "type": "string"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "image": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "totalResultsCount": {
+                          "format": "int32",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "expandLink",
+                        "pages",
+                        "totalResultsCount"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "helpAndSupport"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "web-search-controller"
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/api/"
+    }
+  ]
+}
