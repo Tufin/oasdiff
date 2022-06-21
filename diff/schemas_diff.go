@@ -22,6 +22,22 @@ func (schemasDiff *SchemasDiff) Empty() bool {
 		len(schemasDiff.Modified) == 0
 }
 
+func (schemasDiff *SchemasDiff) removeNonBreaking(state *state) {
+
+	if schemasDiff.Empty() {
+		return
+	}
+
+	switch state.direction {
+	case directionRequest:
+		// In request: deleting properties is non-breaking (for client)
+		schemasDiff.Deleted = nil
+	case directionResponse:
+		// In response: adding properties is non-breaking (for client)
+		schemasDiff.Added = nil
+	}
+}
+
 func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
 		Added:    StringList{},
@@ -41,6 +57,10 @@ func getSchemasDiff(config *Config, state *state, schemas1, schemas2 openapi3.Sc
 	diff, err := getSchemasDiffInternal(config, state, schemas1, schemas2)
 	if err != nil {
 		return nil, err
+	}
+
+	if config.BreakingOnly {
+		diff.removeNonBreaking(state)
 	}
 
 	if diff.Empty() {
