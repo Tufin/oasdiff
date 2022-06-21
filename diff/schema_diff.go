@@ -147,7 +147,7 @@ func (diff *SchemaDiff) removeNonBreaking(state *state, schema2 *openapi3.Schema
 }
 
 func getChangedSet(propertiesDiff *SchemasDiff, direction direction) *StringList {
- 	if direction == directionRequest {
+	if direction == directionRequest {
 		return &propertiesDiff.Added
 	}
 	return &propertiesDiff.Deleted
