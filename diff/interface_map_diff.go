@@ -61,7 +61,7 @@ func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter StringSet) *Int
 	for name2 := range map2 {
 		if _, ok := filter[name2]; ok {
 			if _, ok := map1[name2]; !ok {
-				result.Added = append(result.Deleted, name2)
+				result.Added = append(result.Added, name2)
 			}
 		}
 	}
