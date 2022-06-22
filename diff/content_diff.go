@@ -80,7 +80,7 @@ func getContentDiffInternal(config *Config, state *state, content1, content2 ope
 
 	for name2 := range content2 {
 		if _, ok := content1[name2]; !ok {
-			result.MediaTypeAdded = append(result.MediaTypeDeleted, name2)
+			result.MediaTypeAdded = append(result.MediaTypeAdded, name2)
 		}
 	}
 
