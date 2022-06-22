@@ -249,3 +249,39 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	// deleting a required property in response body breaks client
 	require.NotEmpty(t, d)
 }
+
+func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-required-properties-base.json"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-required-properties-revision.json"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// adding a new required property in response body doesn't break client
+	require.Empty(t, d)
+}
+
+func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-required-properties-revision.json"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-required-properties-base.json"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// deleting a required property in response body breaks client
+	require.NotEmpty(t, d)
+}
