@@ -114,29 +114,7 @@ func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
 		Components: openapi3.Components{
 			Schemas: openapi3.Schemas{
 				"test": &openapi3.SchemaRef{
-					Value: &openapi3.Schema{
-						OneOf: []*openapi3.SchemaRef{
-							{
-								Value: &openapi3.Schema{
-									AnyOf: []*openapi3.SchemaRef{
-										{
-											Value: &openapi3.Schema{
-												AllOf: []*openapi3.SchemaRef{
-													{
-														Value: &openapi3.Schema{
-															Not: &openapi3.SchemaRef{
-																Value: nil,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-					},
+					Value: nil,
 				},
 			},
 		},
