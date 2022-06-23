@@ -264,7 +264,7 @@ func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// adding a new required property in response body doesn't break client
+	// adding a new required property under AllOf in response body doesn't break client
 	require.Empty(t, d)
 }
 
@@ -282,6 +282,6 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// deleting a required property in response body breaks client
+	// deleting a required property under AllOf in response body breaks client
 	require.NotEmpty(t, d)
 }
