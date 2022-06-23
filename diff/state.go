@@ -10,7 +10,7 @@ const (
 type state struct {
 	visitedSchemasBase     visitedRefs
 	visitedSchemasRevision visitedRefs
-	cache                  schemaDiffCache
+	cache                  directionalSchemaDiffCache
 	direction              direction
 }
 
@@ -18,7 +18,7 @@ func newState() *state {
 	return &state{
 		visitedSchemasBase:     visitedRefs{},
 		visitedSchemasRevision: visitedRefs{},
-		cache:                  schemaDiffCache{},
+		cache:                  newDirectionalSchemaDiffCache(),
 		direction:              directionRequest,
 	}
 }
