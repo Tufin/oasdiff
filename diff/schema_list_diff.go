@@ -1,6 +1,10 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"reflect"
+
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 /*
 SchemaListDiff describes the changes between a pair of lists of schema objects: https://swagger.io/specification/#schema-object
@@ -33,18 +37,18 @@ func getSchemaListsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 o
 
 func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
 
-	added, err := schemaRefsContained(config, state, schemaRefs1, schemaRefs2)
+	added, err := getGroupDifference(schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
 	}
 
-	deleted, err := schemaRefsContained(config, state, schemaRefs2, schemaRefs1)
+	deleted, err := getGroupDifference(schemaRefs2, schemaRefs1)
 	if err != nil {
 		return nil, err
 	}
 
 	if len(added) == 1 && len(deleted) == 1 {
-		d, err := getSchemaDiff(config, state, added[0], deleted[0])
+		d, err := getSchemaDiff(config, state, schemaRefs1[added[0]], schemaRefs2[deleted[0]])
 		if err != nil {
 			return nil, err
 		}
@@ -59,30 +63,27 @@ func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schem
 	}, nil
 }
 
-func schemaRefsContained(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]*openapi3.SchemaRef, error) {
+func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, error) {
 
-	result := []*openapi3.SchemaRef{}
+	notContained := []int{}
 
-	for _, schemaRef1 := range schemaRefs1 {
-		found, err := findSchema(config, state, schemaRef1, schemaRefs2)
+	// TODO: optimize with a map
+	for i, schemaRef1 := range schemaRefs1 {
+		found, err := findSchema(schemaRef1, schemaRefs2)
 		if err != nil {
 			return nil, err
 		}
 		if !found {
-			result = append(result, schemaRef1)
+			notContained = append(notContained, i)
 		}
 	}
-	return result, nil
+	return notContained, nil
 }
 
-func findSchema(config *Config, state *state, schemaRef1 *openapi3.SchemaRef, schemaRefs2 openapi3.SchemaRefs) (bool, error) {
-	// TODO: optimize with a map
-	for _, schemaRef2 := range schemaRefs2 {
-		diff, err := getSchemaDiff(config, state, schemaRef1, schemaRef2)
-		if err != nil {
-			return false, err
-		}
-		if diff.Empty() {
+func findSchema(schema1 *openapi3.SchemaRef, schemas2 openapi3.SchemaRefs) (bool, error) {
+	for _, schema2 := range schemas2 {
+		// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
+		if reflect.DeepEqual(schema1, schema2) {
 			return true, nil
 		}
 	}

@@ -183,7 +183,7 @@ func (diff *SchemaDiff) removeChangedButNonRequiredProperties(state *state, sche
 
 func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
 
-	if diff, ok := state.cache[schemaPair{schema1, schema2}]; ok {
+	if diff, ok := state.cache.get(state.direction, schema1, schema2); ok {
 		return diff, nil
 	}
 
@@ -200,7 +200,7 @@ func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.Sche
 		diff = nil
 	}
 
-	state.cache[schemaPair{schema1, schema2}] = diff
+	state.cache.add(state.direction, schema1, schema2, diff)
 	return diff, nil
 }
 

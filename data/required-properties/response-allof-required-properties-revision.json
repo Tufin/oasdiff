@@ -1,0 +1,38 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Foobar API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/foobar": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Foobar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "foobar": {
+                          "type": "string"
+                        },
+                        "bazqux": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["foobar", "bazqux"]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
