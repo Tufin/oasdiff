@@ -306,21 +306,3 @@ func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 	// as a result we can't determine that the change was "a new required property" and the change appears as breaking
 	require.NotEmpty(t, d)
 }
-
-func TestBreaking_RespBodyDeleteAllOfMultiRequiredProperty(t *testing.T) {
-	loader := openapi3.NewLoader()
-
-	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-multi-required-properties-revision.json"))
-	require.NoError(t, err)
-
-	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-multi-required-properties-base.json"))
-	require.NoError(t, err)
-
-	d, err := diff.Get(&diff.Config{
-		BreakingOnly: true,
-	}, s1, s2)
-	require.NoError(t, err)
-
-	// deleting a required property under AllOf in response body breaks client
-	require.NotEmpty(t, d)
-}
