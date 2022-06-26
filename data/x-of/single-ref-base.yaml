@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: ACME
+  version: 1.0.0
+
+paths:
+  /api:
+    get:
+      responses:
+        '200':
+          description: JSON Array of products
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/ProductDto'
+components:
+  schemas:
+    ProductDto:
+      type: object
+      properties:
+        name:
+          type: string
