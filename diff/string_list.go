@@ -13,7 +13,7 @@ func (list StringList) toStringSet() StringSet {
 	return result
 }
 
-type T interface {
+type DiffT interface {
 	*ExampleDiff |
 		*ServerDiff |
 		*ParameterDiff |
@@ -26,7 +26,7 @@ type T interface {
 		*StringsDiff
 }
 
-func ToStringList[V T](m map[string]V) StringList {
+func ToStringList[diff DiffT](m map[string]diff) StringList {
 	keys := make(StringList, len(m))
 	i := 0
 	for k := range m {

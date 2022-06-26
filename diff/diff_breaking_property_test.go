@@ -109,10 +109,10 @@ func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("response-required-properties-base.json"))
+	s1, err := loader.LoadFromFile(getReqPropFile("response-base.json"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("response-required-properties-revision.json"))
+	s2, err := loader.LoadFromFile(getReqPropFile("response-revision.json"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -127,10 +127,10 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("response-required-properties-revision.json"))
+	s1, err := loader.LoadFromFile(getReqPropFile("response-revision.json"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("response-required-properties-base.json"))
+	s2, err := loader.LoadFromFile(getReqPropFile("response-base.json"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -145,10 +145,10 @@ func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 func TestBreaking_ReqBodyRequiredPropertyDisabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("request-required-properties-base.yaml"))
+	s1, err := loader.LoadFromFile(getReqPropFile("request-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("request-required-properties-revision.yaml"))
+	s2, err := loader.LoadFromFile(getReqPropFile("request-revision.yaml"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -163,10 +163,10 @@ func TestBreaking_ReqBodyRequiredPropertyDisabled(t *testing.T) {
 func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("request-required-properties-revision.yaml"))
+	s1, err := loader.LoadFromFile(getReqPropFile("request-revision.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("request-required-properties-base.yaml"))
+	s2, err := loader.LoadFromFile(getReqPropFile("request-base.yaml"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -181,10 +181,10 @@ func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 func TestBreaking_ReqBodyNewRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("request-new-required-properties-base.yaml"))
+	s1, err := loader.LoadFromFile(getReqPropFile("request-new-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("request-new-required-properties-revision.yaml"))
+	s2, err := loader.LoadFromFile(getReqPropFile("request-new-revision.yaml"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -199,10 +199,10 @@ func TestBreaking_ReqBodyNewRequiredProperty(t *testing.T) {
 func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("request-new-required-properties-revision.yaml"))
+	s1, err := loader.LoadFromFile(getReqPropFile("request-new-revision.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("request-new-required-properties-base.yaml"))
+	s2, err := loader.LoadFromFile(getReqPropFile("request-new-base.yaml"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -217,10 +217,10 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("response-new-required-properties-base.json"))
+	s1, err := loader.LoadFromFile(getReqPropFile("response-new-base.json"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("response-new-required-properties-revision.json"))
+	s2, err := loader.LoadFromFile(getReqPropFile("response-new-revision.json"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -235,10 +235,10 @@ func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("response-new-required-properties-revision.json"))
+	s1, err := loader.LoadFromFile(getReqPropFile("response-new-revision.json"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("response-new-required-properties-base.json"))
+	s2, err := loader.LoadFromFile(getReqPropFile("response-new-base.json"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -253,10 +253,10 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-required-properties-base.json"))
+	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-base.json"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-required-properties-revision.json"))
+	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-revision.json"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -271,10 +271,10 @@ func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-required-properties-revision.json"))
+	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-revision.json"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-required-properties-base.json"))
+	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-base.json"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
@@ -289,10 +289,10 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-multi-required-properties-base.json"))
+	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-multi-base.json"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-multi-required-properties-revision.json"))
+	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-multi-revision.json"))
 	require.NoError(t, err)
 
 	d, err := diff.Get(&diff.Config{
