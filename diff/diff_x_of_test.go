@@ -1,6 +1,7 @@
 package diff_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -8,13 +9,17 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+func getXOfFile(file string) string {
+	return fmt.Sprintf("../data/x-of/%s", file)
+}
+
 func TestAllOf_SingleRef(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/x-of/single-ref-base.yaml")
+	s1, err := loader.LoadFromFile(getXOfFile("single-ref-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/x-of/single-ref-revision.yaml")
+	s2, err := loader.LoadFromFile(getXOfFile("single-ref-revision.yaml"))
 	require.NoError(t, err)
 
 	dd, err := diff.Get(&diff.Config{}, s1, s2)
@@ -25,10 +30,10 @@ func TestAllOf_SingleRef(t *testing.T) {
 func TestOneOf_TwoRefs(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/x-of/two-refs-base.yaml")
+	s1, err := loader.LoadFromFile(getXOfFile("two-refs-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/x-of/two-refs-revision.yaml")
+	s2, err := loader.LoadFromFile(getXOfFile("two-refs-revision.yaml"))
 	require.NoError(t, err)
 
 	dd, err := diff.Get(&diff.Config{}, s1, s2)
