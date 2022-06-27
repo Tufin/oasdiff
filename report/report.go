@@ -400,10 +400,10 @@ func (r *report) printSchemaListDiff(d *diff.SchemaListDiff) {
 	}
 
 	if d.Added > 0 {
-		r.print("%d schemas added")
+		r.print(d.Added, "schemas added")
 	}
 	if d.Deleted > 0 {
-		r.print("%d schemas deleted")
+		r.print(d.Deleted, 	"schemas deleted")
 	}
 	if len(d.Modified) > 0 {
 		for schemaRef, schemaDiff := range d.Modified {
