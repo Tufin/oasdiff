@@ -1,6 +1,7 @@
 package diff
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -8,18 +9,25 @@ import (
 
 /*
 SchemaListDiff describes the changes between a pair of lists of schema objects: https://swagger.io/specification/#schema-object
-Unlike other diff structs, this one doesn't indicate the exact change but only tells us how many schema objects where added and/or deleted.
-As a special case, when exactly one schema was added and one deleted, the Modified field will show a diff between them.
+The result is a combination of two diffs:
+1. Diff of schemas with a Ref: number of added/deleted schemas; modified=diff of schemas with the same Ref
+2. Diff of schemas without a Ref (inline): number of added/deleted schemas; modified=only if exactly one schema was added and one deleted, the Modified field will show a diff between them
 */
 type SchemaListDiff struct {
-	Added    int         `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  int         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified *SchemaDiff `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added    int             `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  int             `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedSchemas `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
 func (diff *SchemaListDiff) Empty() bool {
-	return diff == nil || *diff == SchemaListDiff{}
+	if diff == nil {
+		return true
+	}
+
+	return diff.Added == 0 &&
+		diff.Deleted == 0 &&
+		len(diff.Modified) == 0
 }
 
 func getSchemaListsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
@@ -35,29 +43,99 @@ func getSchemaListsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 o
 	return diff, nil
 }
 
+type SchemaRefMap map[string]*openapi3.SchemaRef
+
+func toSchemaRefsMap(schemaRefs openapi3.SchemaRefs) SchemaRefMap {
+	result := SchemaRefMap{}
+	for _, schemaRef := range schemaRefs {
+		if !isSchemaInline(schemaRef) {
+			result[schemaRef.Ref] = schemaRef
+		}
+	}
+	return result
+}
+
+func (diff SchemaListDiff) combine(other SchemaListDiff) (*SchemaListDiff, error) {
+
+	return &SchemaListDiff{
+		Added:    diff.Added + other.Added,
+		Deleted:  diff.Deleted + diff.Deleted,
+		Modified: diff.Modified.combine(other.Modified),
+	}, nil
+}
+
 func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
 
-	added, err := getGroupDifference(schemaRefs1, schemaRefs2)
+	diffRefs, err := getSchemaListsRefsDiff(config, state, toSchemaRefsMap(schemaRefs1), toSchemaRefsMap(schemaRefs2))
 	if err != nil {
 		return nil, err
 	}
 
-	deleted, err := getGroupDifference(schemaRefs2, schemaRefs1)
+	diffInline, err := getSchemaListsInlineDiff(config, state, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
+	}
+
+	return diffRefs.combine(diffInline)
+}
+
+// getSchemaListsRefsDiff compares schemas that have a reference
+func getSchemaListsRefsDiff(config *Config, state *state, schemaMap1, schemaMap2 SchemaRefMap) (SchemaListDiff, error) {
+
+	deleted := 0
+	modified := ModifiedSchemas{}
+	for ref, schema1 := range schemaMap1 {
+		if schema2, found := schemaMap2[ref]; found {
+			if err := modified.addSchemaDiff(config, state, ref, schema1, schema2); err != nil {
+				return SchemaListDiff{}, err
+			}
+		} else {
+			deleted++
+		}
+	}
+
+	added := 0
+	for ref, _ := range schemaMap2 {
+		if _, found := schemaMap1[ref]; !found {
+			added++
+		}
+	}
+	return SchemaListDiff{
+		Added:    added,
+		Deleted:  deleted,
+		Modified: modified,
+	}, nil
+}
+
+// getSchemaListsRefsDiff compares schemas that don't have a reference (they are defined "inline")
+func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (SchemaListDiff, error) {
+
+	added, err := getGroupDifference(schemaRefs1, schemaRefs2)
+	if err != nil {
+		return SchemaListDiff{}, err
+	}
+
+	deleted, err := getGroupDifference(schemaRefs2, schemaRefs1)
+	if err != nil {
+		return SchemaListDiff{}, err
 	}
 
 	if len(added) == 1 && len(deleted) == 1 {
 		d, err := getSchemaDiff(config, state, schemaRefs1[added[0]], schemaRefs2[deleted[0]])
 		if err != nil {
-			return nil, err
+			return SchemaListDiff{}, err
 		}
-		return &SchemaListDiff{
-			Modified: d,
+
+		if d.Empty() {
+			return SchemaListDiff{}, err
+		}
+
+		return SchemaListDiff{
+			Modified: ModifiedSchemas{fmt.Sprintf("#%d", added[0]): d},
 		}, nil
 	}
 
-	return &SchemaListDiff{
+	return SchemaListDiff{
 		Added:   len(added),
 		Deleted: len(deleted),
 	}, nil
@@ -67,26 +145,37 @@ func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, er
 
 	notContained := []int{}
 
-	// TODO: optimize with a map
 	for i, schemaRef1 := range schemaRefs1 {
-		found, err := findSchema(schemaRef1, schemaRefs2)
-		if err != nil {
-			return nil, err
-		}
-		if !found {
-			notContained = append(notContained, i)
+		if isSchemaInline(schemaRef1) {
+
+			found, err := findIndenticalSchema(schemaRef1, schemaRefs2)
+			if err != nil {
+				return nil, err
+			}
+			if !found {
+				notContained = append(notContained, i)
+			}
 		}
 	}
 	return notContained, nil
 }
 
-func findSchema(schema1 *openapi3.SchemaRef, schemas2 openapi3.SchemaRefs) (bool, error) {
-	for _, schema2 := range schemas2 {
-		// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
-		if reflect.DeepEqual(schema1, schema2) {
-			return true, nil
+func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs) (bool, error) {
+	for _, schemaRef2 := range schemasRefs2 {
+		if isSchemaInline(schemaRef2) {
+			// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
+			if reflect.DeepEqual(schemaRef1, schemaRef2) {
+				return true, nil
+			}
 		}
 	}
 
 	return false, nil
+}
+
+func isSchemaInline(schemaRef *openapi3.SchemaRef) bool {
+	if schemaRef == nil {
+		return false
+	}
+	return schemaRef.Ref == ""
 }

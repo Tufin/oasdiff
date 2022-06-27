@@ -23,4 +23,3 @@ components:
           type: string
         sku:
           type: string
-  

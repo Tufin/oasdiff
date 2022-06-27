@@ -318,9 +318,19 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 	r.printConditional(d.SchemaAdded, "Schema added")
 	r.printConditional(d.SchemaDeleted, "Schema deleted")
 	r.printConditional(d.CircularRefDiff, "Schema circular referecnce changed")
-	r.printMessage(d.OneOfDiff, "Property 'OneOf' changed")
-	r.printMessage(d.AnyOfDiff, "Property 'AnyOf' changed")
-	r.printMessage(d.AllOfDiff, "Property 'AllOf' changed")
+
+	if !d.OneOfDiff.Empty() {
+		r.print("Property 'OneOf' changed")
+		r.indent().printSchemaListDiff(d.OneOfDiff)
+	}
+	if !d.AnyOfDiff.Empty() {
+		r.print("Property 'AnyOf' changed")
+		r.indent().printSchemaListDiff(d.AnyOfDiff)
+	}
+	if !d.AllOfDiff.Empty() {
+		r.print("Property 'AllOf' changed")
+		r.indent().printSchemaListDiff(d.AllOfDiff)
+	}
 
 	if !d.NotDiff.Empty() {
 		r.print("Property 'Not' changed")
@@ -382,6 +392,25 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 	}
 
 	r.printMessage(d.DiscriminatorDiff, "Discriminator changed")
+}
+
+func (r *report) printSchemaListDiff(d *diff.SchemaListDiff) {
+	if d.Empty() {
+		return
+	}
+
+	if d.Added > 0 {
+		r.print("%d schemas added")
+	}
+	if d.Deleted > 0 {
+		r.print("%d schemas deleted")
+	}
+	if len(d.Modified) > 0 {
+		for schemaRef, schemaDiff := range d.Modified {
+			r.print("Schema", schemaRef, "modified")
+			r.indent().printSchema(schemaDiff)
+		}
+	}
 }
 
 func (r *report) printProperties(d *diff.SchemasDiff) {

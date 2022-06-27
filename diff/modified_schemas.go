@@ -19,3 +19,15 @@ func (modifiedSchemas ModifiedSchemas) addSchemaDiff(config *Config, state *stat
 
 	return nil
 }
+
+func (modifiedSchemas ModifiedSchemas) combine(other ModifiedSchemas) ModifiedSchemas {
+	result := ModifiedSchemas{}
+
+	for ref, d := range modifiedSchemas {
+		result[ref] = d
+	}
+	for ref, d := range other {
+		result[ref] = d
+	}
+	return result
+}
