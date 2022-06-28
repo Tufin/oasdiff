@@ -10,8 +10,8 @@ import (
 /*
 SchemaListDiff describes the changes between a pair of lists of schema objects: https://swagger.io/specification/#schema-object
 The result is a combination of two diffs:
-1. Diff of schemas with a Ref: number of added/deleted schemas; modified=diff of schemas with the same Ref
-2. Diff of schemas without a Ref (inline): number of added/deleted schemas; modified=only if exactly one schema was added and one deleted, the Modified field will show a diff between them
+1. Diff of schemas with a $ref: number of added/deleted schemas; modified=diff of schemas with the same $ref
+2. Diff of schemas without a $ref (inline schemas): number of added/deleted schemas; modified=only if exactly one schema was added and one deleted, the Modified field will show a diff between them
 */
 type SchemaListDiff struct {
 	Added    int             `json:"added,omitempty" yaml:"added,omitempty"`
@@ -59,7 +59,7 @@ func (diff SchemaListDiff) combine(other SchemaListDiff) (*SchemaListDiff, error
 
 	return &SchemaListDiff{
 		Added:    diff.Added + other.Added,
-		Deleted:  diff.Deleted + diff.Deleted,
+		Deleted:  diff.Deleted + other.Deleted,
 		Modified: diff.Modified.combine(other.Modified),
 	}, nil
 }
@@ -107,15 +107,15 @@ func getSchemaListsRefsDiff(config *Config, state *state, schemaMap1, schemaMap2
 	}, nil
 }
 
-// getSchemaListsRefsDiff compares schemas that don't have a reference (they are defined "inline")
+// getSchemaListsRefsDiff compares schemas that don't have a reference (inline schemas)
 func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (SchemaListDiff, error) {
 
-	added, err := getGroupDifference(schemaRefs1, schemaRefs2)
+	added, err := getGroupDifference(schemaRefs2, schemaRefs1)
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
 
-	deleted, err := getGroupDifference(schemaRefs2, schemaRefs1)
+	deleted, err := getGroupDifference(schemaRefs1, schemaRefs2)
 	if err != nil {
 		return SchemaListDiff{}, err
 	}

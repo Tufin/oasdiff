@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: ACME
+  version: 1.0.0
+
+paths:
+  /api:
+    get:
+      responses:
+        '200':
+          description: JSON Array of products
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    name1:
+                      type: string
+                - type: object
+                  properties:
+                    name2:
+                      type: string
