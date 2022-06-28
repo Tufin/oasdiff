@@ -95,7 +95,7 @@ func getSchemaListsRefsDiff(config *Config, state *state, schemaMap1, schemaMap2
 	}
 
 	added := 0
-	for ref, _ := range schemaMap2 {
+	for ref := range schemaMap2 {
 		if _, found := schemaMap1[ref]; !found {
 			added++
 		}
