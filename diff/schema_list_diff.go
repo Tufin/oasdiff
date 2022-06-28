@@ -121,7 +121,7 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 	}
 
 	if len(added) == 1 && len(deleted) == 1 {
-		d, err := getSchemaDiff(config, state, schemaRefs1[added[0]], schemaRefs2[deleted[0]])
+		d, err := getSchemaDiff(config, state, schemaRefs1[deleted[0]], schemaRefs2[added[0]])
 		if err != nil {
 			return SchemaListDiff{}, err
 		}
@@ -131,7 +131,7 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 		}
 
 		return SchemaListDiff{
-			Modified: ModifiedSchemas{fmt.Sprintf("#%d", 1+added[0]): d},
+			Modified: ModifiedSchemas{fmt.Sprintf("#%d", 1+deleted[0]): d},
 		}, nil
 	}
 
@@ -145,32 +145,27 @@ func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, er
 
 	notContained := []int{}
 
-	for i, schemaRef1 := range schemaRefs1 {
+	for index1, schemaRef1 := range schemaRefs1 {
 		if isSchemaInline(schemaRef1) {
-
-			found, err := findIndenticalSchema(schemaRef1, schemaRefs2)
-			if err != nil {
-				return nil, err
-			}
-			if !found {
-				notContained = append(notContained, i)
+			if found := findIndenticalSchema(schemaRef1, schemaRefs2); !found {
+				notContained = append(notContained, index1)
 			}
 		}
 	}
 	return notContained, nil
 }
 
-func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs) (bool, error) {
+func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs) bool {
 	for _, schemaRef2 := range schemasRefs2 {
 		if isSchemaInline(schemaRef2) {
 			// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
 			if reflect.DeepEqual(schemaRef1, schemaRef2) {
-				return true, nil
+				return true
 			}
 		}
 	}
 
-	return false, nil
+	return false
 }
 
 func isSchemaInline(schemaRef *openapi3.SchemaRef) bool {
