@@ -44,7 +44,7 @@ func TestOneOf_TwoRefs(t *testing.T) {
 func TestOneOf_ChangeBoth(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getXOfFile("two-refs-both-changed-base.yaml"))
+	s1, err := loader.LoadFromFile(getXOfFile("two-refs-base.yaml"))
 	require.NoError(t, err)
 
 	s2, err := loader.LoadFromFile(getXOfFile("two-refs-both-changed-revision.yaml"))
