@@ -131,7 +131,7 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 		}
 
 		return SchemaListDiff{
-			Modified: ModifiedSchemas{fmt.Sprintf("#%d", added[0]): d},
+			Modified: ModifiedSchemas{fmt.Sprintf("#%d", 1+added[0]): d},
 		}, nil
 	}
 
