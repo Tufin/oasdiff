@@ -149,10 +149,8 @@ func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, er
 	notContained := []int{}
 
 	for index1, schemaRef1 := range schemaRefs1 {
-		if isSchemaInline(schemaRef1) {
-			if found := findIndenticalSchema(schemaRef1, schemaRefs2); !found {
-				notContained = append(notContained, index1)
-			}
+		if found := findIndenticalSchema(schemaRef1, schemaRefs2); !found {
+			notContained = append(notContained, index1)
 		}
 	}
 	return notContained, nil
@@ -160,11 +158,9 @@ func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, er
 
 func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs) bool {
 	for _, schemaRef2 := range schemasRefs2 {
-		if isSchemaInline(schemaRef2) {
-			// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
-			if reflect.DeepEqual(schemaRef1, schemaRef2) {
-				return true
-			}
+		// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
+		if reflect.DeepEqual(schemaRef1, schemaRef2) {
+			return true
 		}
 	}
 
