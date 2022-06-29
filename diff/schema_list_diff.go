@@ -43,18 +43,6 @@ func getSchemaListsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 o
 	return diff, nil
 }
 
-type SchemaRefMap map[string]*openapi3.SchemaRef
-
-func toSchemaRefsMap(schemaRefs openapi3.SchemaRefs) SchemaRefMap {
-	result := SchemaRefMap{}
-	for _, schemaRef := range schemaRefs {
-		if !isSchemaInline(schemaRef) {
-			result[schemaRef.Ref] = schemaRef
-		}
-	}
-	return result
-}
-
 func (diff SchemaListDiff) combine(other SchemaListDiff) (*SchemaListDiff, error) {
 
 	return &SchemaListDiff{
@@ -66,12 +54,16 @@ func (diff SchemaListDiff) combine(other SchemaListDiff) (*SchemaListDiff, error
 
 func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
 
-	diffRefs, err := getSchemaListsRefsDiff(config, state, filterSchemaRefs(schemaRefs1, isSchemaRef), filterSchemaRefs(schemaRefs2, isSchemaRef))
+	if len(schemaRefs1) == 0 && len(schemaRefs2) == 0 {
+		return nil, nil
+	}
+
+	diffRefs, err := getSchemaListsRefsDiff(config, state, schemaRefs1, schemaRefs2, isSchemaRef)
 	if err != nil {
 		return nil, err
 	}
 
-	diffInline, err := getSchemaListsInlineDiff(config, state, filterSchemaRefs(schemaRefs1, isSchemaInline), filterSchemaRefs(schemaRefs2, isSchemaInline))
+	diffInline, err := getSchemaListsInlineDiff(config, state, schemaRefs1, schemaRefs2, isSchemaInline)
 	if err != nil {
 		return nil, err
 	}
@@ -79,17 +71,22 @@ func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schem
 	return diffRefs.combine(diffInline)
 }
 
-// getSchemaListsRefsDiff compares schemas by $ref name
-func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (SchemaListDiff, error) {
-	return getSchemaMapsRefsDiff(config, state, toSchemaRefsMap(schemaRefs1), toSchemaRefsMap(schemaRefs2))
-}
+type schemaRefsFilter func(schemaRef *openapi3.SchemaRef) bool
 
-func getSchemaMapsRefsDiff(config *Config, state *state, schemaMap1, schemaMap2 SchemaRefMap) (SchemaListDiff, error) {
+// getSchemaListsRefsDiff compares schemas by $ref name
+func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SchemaListDiff, error) {
 	deleted := 0
 	modified := ModifiedSchemas{}
-	for ref, schema1 := range schemaMap1 {
+
+	schemaMap2 := toSchemaRefMap(schemaRefs2, filter)
+	for _, schema1 := range schemaRefs1 {
+		if !filter(schema1) {
+			continue
+		}
+		ref := schema1.Ref
 		if schema2, found := schemaMap2[ref]; found {
-			if err := modified.addSchemaDiff(config, state, ref, schema1, schema2); err != nil {
+			schemaMap2.delete(ref)
+			if err := modified.addSchemaDiff(config, state, ref, schema1, schema2.schemaRef); err != nil {
 				return SchemaListDiff{}, err
 			}
 		} else {
@@ -98,8 +95,15 @@ func getSchemaMapsRefsDiff(config *Config, state *state, schemaMap1, schemaMap2 
 	}
 
 	added := 0
-	for ref := range schemaMap2 {
-		if _, found := schemaMap1[ref]; !found {
+	schemaMap1 := toSchemaRefMap(schemaRefs1, filter)
+	for _, schema2 := range schemaRefs2 {
+		if !filter(schema2) {
+			continue
+		}
+		ref := schema2.Ref
+		if _, found := schemaMap1[ref]; found {
+			schemaMap1.delete(ref)
+		} else {
 			added++
 		}
 	}
@@ -111,14 +115,14 @@ func getSchemaMapsRefsDiff(config *Config, state *state, schemaMap1, schemaMap2 
 }
 
 // getSchemaListsRefsDiff compares schemas by their syntax
-func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (SchemaListDiff, error) {
+func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SchemaListDiff, error) {
 
-	added, err := getGroupDifference(schemaRefs2, schemaRefs1)
+	added, err := getGroupDifference(schemaRefs2, schemaRefs1, filter)
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
 
-	deleted, err := getGroupDifference(schemaRefs1, schemaRefs2)
+	deleted, err := getGroupDifference(schemaRefs1, schemaRefs2, filter)
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
@@ -144,31 +148,46 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 	}, nil
 }
 
-func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, error) {
+func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) ([]int, error) {
 
 	notContained := []int{}
+	matched := map[int]struct{}{}
 
 	for index1, schemaRef1 := range schemaRefs1 {
-		if isSchemaInline(schemaRef1) {
-			if found := findIndenticalSchema(schemaRef1, schemaRefs2); !found {
-				notContained = append(notContained, index1)
-			}
+		if !filter(schemaRef1) {
+			continue
+		}
+
+		if found, index2 := findIndenticalSchema(schemaRef1, schemaRefs2, matched, filter); !found {
+			notContained = append(notContained, index1)
+		} else {
+			matched[index2] = struct{}{}
 		}
 	}
 	return notContained, nil
 }
 
-func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs) bool {
-	for _, schemaRef2 := range schemasRefs2 {
-		if isSchemaInline(schemaRef2) {
-			// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
-			if reflect.DeepEqual(schemaRef1, schemaRef2) {
-				return true
-			}
+func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs, matched map[int]struct{}, filter schemaRefsFilter) (bool, int) {
+	for index2, schemaRef2 := range schemasRefs2 {
+		if !filter(schemaRef1) {
+			continue
+		}
+		if alreadyMatched(index2, matched) {
+			continue
+		}
+
+		// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
+		if reflect.DeepEqual(schemaRef1, schemaRef2) {
+			return true, index2
 		}
 	}
 
-	return false
+	return false, 0
+}
+
+func alreadyMatched(index int, matched map[int]struct{}) bool {
+	_, found := matched[index]
+	return found
 }
 
 func isSchemaInline(schemaRef *openapi3.SchemaRef) bool {
@@ -183,16 +202,4 @@ func isSchemaRef(schemaRef *openapi3.SchemaRef) bool {
 		return false
 	}
 	return schemaRef.Ref != ""
-}
-
-type SchemaRefsFilter func(schemaRef *openapi3.SchemaRef) bool
-
-func filterSchemaRefs(schemaRefs openapi3.SchemaRefs, filter SchemaRefsFilter) openapi3.SchemaRefs {
-	result := openapi3.SchemaRefs{}
-	for _, schemaRef := range schemaRefs {
-		if filter(schemaRef) {
-			result = append(result, schemaRef)
-		}
-	}
-	return schemaRefs
 }
