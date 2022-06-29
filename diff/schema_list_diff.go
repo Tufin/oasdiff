@@ -147,24 +147,36 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, error) {
 
 	notContained := []int{}
+	matched := map[int]struct{}{}
 
 	for index1, schemaRef1 := range schemaRefs1 {
-		if found := findIndenticalSchema(schemaRef1, schemaRefs2); !found {
+		if found, index2 := findIndenticalSchema(schemaRef1, schemaRefs2, matched); !found {
 			notContained = append(notContained, index1)
+		} else {
+			matched[index2] = struct{}{}
 		}
 	}
 	return notContained, nil
 }
 
-func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs) bool {
-	for _, schemaRef2 := range schemasRefs2 {
+func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs, matched map[int]struct{}) (bool, int) {
+	for index2, schemaRef2 := range schemasRefs2 {
+		if alreadyMatched(index2, matched) {
+			continue
+		}
+
 		// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
 		if reflect.DeepEqual(schemaRef1, schemaRef2) {
-			return true
+			return true, index2
 		}
 	}
 
-	return false
+	return false, 0
+}
+
+func alreadyMatched(index int, matched map[int]struct{}) bool {
+	_, found := matched[index]
+	return found
 }
 
 func isSchemaInline(schemaRef *openapi3.SchemaRef) bool {

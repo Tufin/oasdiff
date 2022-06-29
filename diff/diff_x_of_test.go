@@ -67,7 +67,8 @@ func TestOneOf_TwoInlineDuplicate(t *testing.T) {
 
 	dd, err := diff.Get(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	require.Equal(t, 1, dd.PathsDiff.Modified["/api"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Deleted)
+	require.Equal(t, "name2", dd.PathsDiff.Modified["/api"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Modified["#1"].PropertiesDiff.Added[0])
+	require.Equal(t, "name1", dd.PathsDiff.Modified["/api"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Modified["#1"].PropertiesDiff.Deleted[0])
 }
 
 func TestOneOf_TwoInlineOneModified(t *testing.T) {
