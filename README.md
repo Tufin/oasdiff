@@ -508,12 +508,6 @@ components:
     The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.
     Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
 
-3. AllOf, AnyOf, OneOf  
-   OpenAPI Specification allows you to [combine schemas using AllOf, AnyOf, OneOf keywords](https://swagger.io/docs/specification/data-models/oneof-anyof-allof-not/).
-   Calculating the diff for these keywords is challenging because they consist of lists of schemas without keys which prevents association of corresponding schemas in ‘base’ and ‘revision’ specifications. 
-   oasdiff tries to work around this limitation by using [$ref](https://swagger.io/docs/specification/using-ref/) as the schema key when possible.
-   In other cases, when the schema is defined inline, without a $ref, oasdiff may not be able to accurately identify the changes.
-
 ## Notes for Go Developers
 1. Embedding oasdiff into your program is easy:
    ```go
