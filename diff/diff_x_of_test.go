@@ -85,3 +85,18 @@ func TestOneOf_TwoInlineOneModified(t *testing.T) {
 	require.Equal(t, "name4", dd.PathsDiff.Modified["/api"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Modified["#1"].PropertiesDiff.Added[0])
 	require.Equal(t, "name1", dd.PathsDiff.Modified["/api"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Modified["#1"].PropertiesDiff.Deleted[0])
 }
+
+func TestOneOf_MultiRefs(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getXOfFile("multi-refs-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getXOfFile("multi-refs-revision.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	require.Equal(t, "bark", dd.PathsDiff.Modified["/pets"].OperationsDiff.Modified["GET"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Modified["#/components/schemas/Dog"].PropertiesDiff.Added[0])
+	require.Equal(t, "name", dd.PathsDiff.Modified["/pets"].OperationsDiff.Modified["GET"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Modified["#/components/schemas/Dog"].PropertiesDiff.Deleted[0])
+}
