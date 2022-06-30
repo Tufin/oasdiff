@@ -324,3 +324,39 @@ func TestBreaking_LinkOperationID(t *testing.T) {
 			BreakingOnly: true,
 		}, 3, 1).PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].ResponsesDiff.Modified["200"].LinksDiff.Modified)
 }
+
+func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/response-media-type-base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/response-media-type-revision.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// deleting a media-type from response is breaking
+	require.NotEmpty(t, d)
+}
+
+func TestBreaking_ResponseAddMediaType(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/response-media-type-revision.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/response-media-type-base.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// adding a media-type to response is not breaking
+	require.Empty(t, d)
+}
