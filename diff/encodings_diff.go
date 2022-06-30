@@ -29,7 +29,6 @@ func (diff *EncodingsDiff) removeNonBreaking() {
 		return
 	}
 
-	// TODO: check breaking conditions
 	diff.Added = nil
 }
 
