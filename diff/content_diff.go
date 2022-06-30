@@ -33,13 +33,19 @@ func (diff *ContentDiff) Empty() bool {
 		len(diff.MediaTypeModified) == 0
 }
 
-func (diff *ContentDiff) removeNonBreaking() {
+func (diff *ContentDiff) removeNonBreaking(state *state) {
 	if diff.Empty() {
 		return
 	}
 
-	// TODO: check breaking conditions
-	diff.MediaTypeAdded = nil
+	switch state.direction {
+	case directionRequest:
+		// if this is part of the request, then media-types can be deleted without breaking the client
+		diff.MediaTypeDeleted = nil
+	case directionResponse:
+		// if this is part of the response, then media-types can be added without breaking the client
+		diff.MediaTypeAdded = nil
+	}
 }
 
 func getContentDiff(config *Config, state *state, content1, content2 openapi3.Content) (*ContentDiff, error) {
@@ -49,7 +55,7 @@ func getContentDiff(config *Config, state *state, content1, content2 openapi3.Co
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking()
+		diff.removeNonBreaking(state)
 	}
 
 	if diff.Empty() {
