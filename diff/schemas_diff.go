@@ -123,6 +123,13 @@ func diffSchemas(schemas1, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi
 	return added, deleted, other
 }
 
+func (schemasDiff *SchemasDiff) getBreakingSetByDirection(direction direction) *StringList {
+	if direction == directionRequest {
+		return &schemasDiff.Added
+	}
+	return &schemasDiff.Deleted
+}
+
 func (schemasDiff *SchemasDiff) addAddedSchema(schema string) {
 	schemasDiff.Added = append(schemasDiff.Added, schema)
 }
