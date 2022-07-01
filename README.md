@@ -19,7 +19,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Compare specs from the file system or over http/s
 - Compare specs in YAML or JSON format
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Detect [breaking changes](#breaking-changes) (Beta feature. Please report issues)
+- Detect [breaking changes](#breaking-changes)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
 
 ## Install with Go
@@ -102,6 +102,7 @@ oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/
 ```bash
 oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
+See [breaking changes](#breaking-changes)
 
 ### Fail with exit code 1 if a change is found
 ```bash
@@ -134,7 +135,7 @@ oasdiff -exclude-description -exclude-examples -format text -base data/openapi-t
 
 ### Display change summary
 ```bash
-oasdiff -breaking-only -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Running with Docker
@@ -509,13 +510,30 @@ components:
     Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
 
 3. <a name="breaking-changes"></a>Breaking Changes  
-   Breaking changes are relative to the client. For example:
+   Note: this is a Beta feature. Please report issues.
+
+   Examples of breaking changes:
    - deleting an endpoint
    - deleting an enum value
-   - deleteing an encoding/media-type
-   - adding a new required property in the request body
-   - adding a new required parameter
-   - deleting a equired property from response body
+   - deleting a media-type
+   - new required property in the request
+   - changing an existing property in response body from required to optional
+   - new required parameter
+   - changing an existing parameter from optional to required
+   - deleting a required property from response body
+   - reducing the value of schema properties: maximum, maxLength, maxItems or maxProperties
+   - increasing the value of schema properties: minimum, minLength, minItems or minProperties
+   
+   Examples of non-breaking changes:
+   - new optional request header
+   - new optional property in request
+   - new required property in response
+   - changing an existing property in request from required to optional
+   - changing an existing property in response body from optional to required
+   - new media-type
+   - increasing the value of schema properties: maximum, maxLength, maxItems or maxProperties
+   - reducing the value of schema properties: minimum, minLength, minItems or minProperties
+   - changes to components which aren't referenced from properties outside the components object
 
 ## Notes for Go Developers
 1. Embedding oasdiff into your program is easy:
