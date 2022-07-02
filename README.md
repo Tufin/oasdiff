@@ -520,22 +520,21 @@ See examples in test files:
 Note: this is a Beta feature. Please report issues.
 
 ## Notes for Go Developers
-1. Embedding oasdiff into your program is easy:
-   ```go
-   diff.Get(&diff.Config{}, spec1, spec2)
-   ```
-   See full example: [main.go](main.go)
+### Embedding oasdiff into your program
+```go
+diff.Get(&diff.Config{}, spec1, spec2)
+```
+See full example: [main.go](main.go)
 
-2. oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
+### OpenAPI References
+oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
 References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [Loader.ResolveRefsIn](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn).
 
-3. Use [configuration](diff/config.go) to exclude certain types of changes:
-   - [Examples](https://swagger.io/specification/#example-object) 
-   - Descriptions
-   - [Extensions](https://swagger.io/specification/#specification-extensions) are excluded by default
-
-## Work in progress
-1. Patch support: currently supports Descriptions and a few fields in Schema 
+### Excluding Changes to Examples etc.
+Use [configuration](diff/config.go) to exclude certain types of changes:
+- [Examples](https://swagger.io/specification/#example-object) 
+- Descriptions
+- [Extensions](https://swagger.io/specification/#specification-extensions) are excluded by default
 
 ## Requests for enhancements
 1. OpenAPI 3.1 support: see https://github.com/Tufin/oasdiff/issues/52
