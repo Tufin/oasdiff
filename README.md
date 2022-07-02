@@ -19,7 +19,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Compare specs from the file system or over http/s
 - Compare specs in YAML or JSON format
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Detect breaking changes (Beta feature. Please report issues)
+- Detect [breaking changes](#breaking-changes)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
 
 ## Install with Go
@@ -102,7 +102,7 @@ oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/
 ```bash
 oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
-Breaking changes are relative to the client. For example, a deleted endpoint or a new required property in the request body.
+See [breaking changes](#breaking-changes)
 
 ### Fail with exit code 1 if a change is found
 ```bash
@@ -135,7 +135,7 @@ oasdiff -exclude-description -exclude-examples -format text -base data/openapi-t
 
 ### Display change summary
 ```bash
-oasdiff -breaking-only -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff -summary -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Running with Docker
@@ -508,6 +508,15 @@ components:
     ```
     The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.
     Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
+
+3. <a name="breaking-changes"></a>Breaking Changes  
+   Breaking changes are changes that could break a client that is relying on the OpenAPI specification. See examples in test files:
+   - breaking_test.go
+   - breaking_property_test.go
+   - breaking_min_max_test.go
+   - not_breaking_test.go
+   
+   Note: this is a Beta feature. Please report issues.
 
 ## Notes for Go Developers
 1. Embedding oasdiff into your program is easy:

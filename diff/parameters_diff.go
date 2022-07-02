@@ -30,7 +30,6 @@ func (parametersDiff *ParametersDiff) removeNonBreaking(params2 openapi3.Paramet
 		return
 	}
 
-	// TODO: check vs. SchemaDiff.removeChangedButNonRequiredProperties
 	parametersDiff.removeAddedButNonRequired(params2)
 }
 

@@ -146,13 +146,6 @@ func (diff *SchemaDiff) removeNonBreaking(state *state, schema2 *openapi3.Schema
 	}
 }
 
-func getChangedSet(propertiesDiff *SchemasDiff, direction direction) *StringList {
-	if direction == directionRequest {
-		return &propertiesDiff.Added
-	}
-	return &propertiesDiff.Deleted
-}
-
 // removeChangedButNonRequiredProperties deletes non-required property changes that don't break client
 // In request: remove added but non-required properties
 // In response: remove deleted but non-required properties
@@ -166,7 +159,7 @@ func (diff *SchemaDiff) removeChangedButNonRequiredProperties(state *state, sche
 	}
 
 	requiredMap := StringList(schema2.Value.Required).toStringSet()
-	changedSet := getChangedSet(diff.PropertiesDiff, state.direction)
+	changedSet := diff.PropertiesDiff.getBreakingSetByDirection(state.direction)
 
 	newList := StringList{}
 	for _, property := range *changedSet {
