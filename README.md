@@ -19,7 +19,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Compare specs from the file system or over http/s
 - Compare specs in YAML or JSON format
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Detect [#breaking-changes](#breaking-changes)
+- Detect [breaking changes](#breaking-changes)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
 
 ## Install with Go
@@ -471,13 +471,13 @@ components:
 ```
 
 ## Notes
-### Output Formats  
+### Output Formats
 The default output format, YAML, provides a full view of all diff details.  
 Note that no output in YAML format signifies that the diff is empty, or, in other words, there are no changes.  
 Other formats: text, markdown and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
 If you wish to include additional details in non-YAML formats, please open an issue.
 
-### Paths vs. Endpoints  
+### Paths vs. Endpoints
 OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
 oasdiff respects this hierarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
 ```yaml
@@ -509,7 +509,7 @@ endpoints:
 The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.  
 Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
 
-### Breaking Changes  
+### Breaking Changes
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
 See examples in test files:
 - [breaking_test.go](diff/breaking_test.go)
