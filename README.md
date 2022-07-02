@@ -471,52 +471,53 @@ components:
 ```
 
 ## Notes
-1. Output Formats  
-   - The default output format, YAML, provides a full view of all diff details.  
-     Note that no output in YAML format signifies that the diff is empty, or, in other words, there are no changes.
-   - Other formats: text, markdown and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
-     If you wish to include additional details in non-YAML formats, please open an issue.
+### Output Formats  
+The default output format, YAML, provides a full view of all diff details.  
+Note that no output in YAML format signifies that the diff is empty, or, in other words, there are no changes.  
+Other formats: text, markdown and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
+If you wish to include additional details in non-YAML formats, please open an issue.
 
-2. Paths vs. Endpoints  
-   OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
-   oasdiff respects this heirarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
-    ```yaml
-    paths:
-        deleted:
-            - /register
-            - /subscribe
-        modified:
-            /api/{domain}/{project}/badges/security-score:
-                operations:
-                    modified:
-                        GET:
-    ```
-    oasdiff also outputs an alternate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
-    ```yaml
-    endpoints:
-        deleted:
-            - method: POST
-              path: /subscribe
-            - method: POST
-              path: /register
-        modified:
-            ?   method: GET
-                path: /api/{domain}/{project}/badges/security-score
-            :   tags:
-                    deleted:
-                        - security
-    ```
-    The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.
-    Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
+### Paths vs. Endpoints  
+OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
+oasdiff respects this hierarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
+```yaml
+paths:
+    deleted:
+        - /register
+        - /subscribe
+    modified:
+        /api/{domain}/{project}/badges/security-score:
+            operations:
+                modified:
+                    GET:
+```
+oasdiff also outputs an alternate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
+```yaml
+endpoints:
+    deleted:
+        - method: POST
+          path: /subscribe
+        - method: POST
+          path: /register
+    modified:
+        ?   method: GET
+            path: /api/{domain}/{project}/badges/security-score
+        :   tags:
+                deleted:
+                    - security
+```
+The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.  
+Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
 
-3. <a name="breaking-changes"></a>Breaking Changes  
-   Breaking changes are changes that could break a client that is relying on the OpenAPI specification. See examples in test files:
-   - [breaking_test.go](diff/breaking_test.go)
-   - [breaking_property_test.go](diff/breaking_property_test.go)
-   - [breaking_min_max_test.go](diff/breaking_min_max_test.go)
-   - [not_breaking_test.go](diff/not_breaking_test.go)
+### Breaking Changes  
+Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
+See examples in test files:
+- [breaking_test.go](diff/breaking_test.go)
+- [breaking_property_test.go](diff/breaking_property_test.go)
+- [breaking_min_max_test.go](diff/breaking_min_max_test.go)
+- [not_breaking_test.go](diff/not_breaking_test.go)
    
-   Note: this is a Beta feature. Please report issues.
+Note: this is a Beta feature. Please report issues.
 
 ## Notes for Go Developers
 1. Embedding oasdiff into your program is easy:
