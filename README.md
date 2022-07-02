@@ -511,10 +511,10 @@ components:
 
 3. <a name="breaking-changes"></a>Breaking Changes  
    Breaking changes are changes that could break a client that is relying on the OpenAPI specification. See examples in test files:
-   - breaking_test.go
-   - breaking_property_test.go
-   - breaking_min_max_test.go
-   - not_breaking_test.go
+   - [breaking_test.go](diff/breaking_test.go)
+   - [breaking_property_test.go](breaking_property_test.go)
+   - [breaking_min_max_test.go](breaking_min_max_test.go)
+   - [not_breaking_test.go](not_breaking_test.go)
    
    Note: this is a Beta feature. Please report issues.
 
