@@ -24,16 +24,25 @@ func (diff *RequestBodyDiff) Empty() bool {
 	return *diff == RequestBodyDiff{}
 }
 
-func (diff *RequestBodyDiff) removeNonBreaking() {
+func (diff *RequestBodyDiff) removeNonBreaking(requestBodyRef2 *openapi3.RequestBodyRef) {
 
 	if diff.Empty() {
 		return
 	}
 
-	diff.Added = false
+	// remove added but not required
+	if diff.Added {
+		if requestBodyRef2 != nil &&
+			requestBodyRef2.Value != nil &&
+			!requestBodyRef2.Value.Required {
+			diff.Added = false
+		}
+	}
+
 	diff.ExtensionsDiff = nil
 	diff.DescriptionDiff = nil
 
+	// remove 'required disabled' (only required enabled is breaking)
 	if !diff.RequiredDiff.CompareWithDefault(false, true, false) {
 		diff.RequiredDiff = nil
 	}
@@ -50,7 +59,7 @@ func getRequestBodyDiff(config *Config, state *state, requestBodyRef1, requestBo
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking()
+		diff.removeNonBreaking(requestBodyRef2)
 	}
 
 	if diff.Empty() {
