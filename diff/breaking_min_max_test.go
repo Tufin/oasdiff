@@ -25,7 +25,7 @@ func TestBreaking_MaxLengthSmaller(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// reducing max length is breaking 
+	// reducing max length is breaking
 	require.NotEmpty(t, d)
 }
 
