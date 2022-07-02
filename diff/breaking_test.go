@@ -8,9 +8,25 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func TestBreaking_DeletedPaths(t *testing.T) {
+func TestBreaking_DeletedPath(t *testing.T) {
+	d := d(t, &diff.Config{BreakingOnly: true}, 1, 2)
 	// deleting a path is breaking
-	require.NotEmpty(t, d(t, &diff.Config{BreakingOnly: true}, 1, 2))
+	require.NotEmpty(t, d.PathsDiff.Deleted)
+}
+
+func TestBreaking_DeletedOp(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[installCommandPath].Put = openapi3.NewOperation()
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// deleting an operation is breaking
+	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Deleted)
 }
 
 func TestBreaking_DeletedEnum(t *testing.T) {
@@ -34,10 +50,6 @@ func deleteParam(op *openapi3.Operation, in string, name string) {
 		}
 	}
 	op.Parameters = result
-}
-
-func deleteResponseHeader(response *openapi3.Response, name string) {
-	delete(response.Headers, name)
 }
 
 func TestBreaking_NewPathParam(t *testing.T) {
