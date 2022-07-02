@@ -76,6 +76,10 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	require.Empty(t, d)
 }
 
+func deleteResponseHeader(response *openapi3.Response, name string) {
+	delete(response.Headers, name)
+}
+
 func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)

@@ -510,30 +510,13 @@ components:
     Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
 
 3. <a name="breaking-changes"></a>Breaking Changes  
-   Note: this is a Beta feature. Please report issues.
-
-   Examples of breaking changes:
-   - deleting an endpoint
-   - deleting an enum value
-   - deleting a media-type
-   - new required property in the request
-   - changing an existing property in response body from required to optional
-   - new required parameter
-   - changing an existing parameter from optional to required
-   - deleting a required property from response body
-   - reducing the value of schema properties: maximum, maxLength, maxItems or maxProperties
-   - increasing the value of schema properties: minimum, minLength, minItems or minProperties
+   Breaking changes are changes that could break a client that is relying on the OpenAPI specification. See examples in test files:
+   - breaking_test.go
+   - breaking_property_test.go
+   - breaking_min_max_test.go
+   - not_breaking_test.go
    
-   Examples of non-breaking changes:
-   - new optional request header
-   - new optional property in request
-   - new required property in response
-   - changing an existing property in request from required to optional
-   - changing an existing property in response body from optional to required
-   - new media-type
-   - increasing the value of schema properties: maximum, maxLength, maxItems or maxProperties
-   - reducing the value of schema properties: minimum, minLength, minItems or minProperties
-   - changes to components which aren't referenced from properties outside the components object
+   Note: this is a Beta feature. Please report issues.
 
 ## Notes for Go Developers
 1. Embedding oasdiff into your program is easy:
