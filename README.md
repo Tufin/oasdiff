@@ -19,7 +19,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Compare specs from the file system or over http/s
 - Compare specs in YAML or JSON format
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Detect [breaking changes](#breaking-changes)
+- Detect [breaking-changes](#breaking-changes)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
 
 ## Install with Go
