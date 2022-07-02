@@ -29,6 +29,44 @@ func TestBreaking_DeletedOp(t *testing.T) {
 	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Deleted)
 }
 
+func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+		Value: openapi3.NewRequestBody().WithRequired(true),
+	}
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// adding a required request body is breaking
+	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].RequestBodyDiff)
+}
+
+func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+		Value: openapi3.NewRequestBody().WithRequired(false),
+	}
+
+	s2.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+		Value: openapi3.NewRequestBody().WithRequired(true),
+	}
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// changing an existing request body from optional to required is breaking
+	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].RequestBodyDiff)
+}
+
 func TestBreaking_DeletedEnum(t *testing.T) {
 	// deleting an enum value is breaking
 	require.NotEmpty(t,

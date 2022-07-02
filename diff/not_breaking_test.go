@@ -13,6 +13,44 @@ func TestBreaking_Same(t *testing.T) {
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true}, 1, 1))
 }
 
+func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+		Value: openapi3.NewRequestBody().WithRequired(false),
+	}
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// adding an optional request body isn't breaking
+	require.Empty(t, d)
+}
+
+func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+		Value: openapi3.NewRequestBody().WithRequired(true),
+	}
+
+	s2.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+		Value: openapi3.NewRequestBody().WithRequired(false),
+	}
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// changing an existing request body from required to optional isn't breaking
+	require.Empty(t, d)
+}
+
 func TestBreaking_DeletedTag(t *testing.T) {
 	// deleting a tag isn't breaking
 	require.Empty(t, d(t, &diff.Config{
