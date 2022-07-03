@@ -25,7 +25,7 @@
 - adding a media-type to response isn't breaking
 - adding a new required property in response body isn't breaking
 - adding a new required property under AllOf in response body isn't breaking
-- adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simutaniously, we detect is as breaking
+- adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking
 - adding an enum value isn't breaking
 - adding an optional request body isn't breaking
 - both max lengths are nil isn't breaking
