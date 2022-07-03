@@ -25,7 +25,7 @@ func TestBreaking_MaxLengthSmaller(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// reducing max length is breaking
+	// BC: reducing max length is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -41,7 +41,7 @@ func TestBreaking_MinLengthSmaller(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// reducing min length isn't breaking
+	// BC: reducing min length isn't breaking
 	require.Empty(t, d)
 }
 
@@ -60,7 +60,7 @@ func TestBreaking_MaxLengthGreater(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// increasing max length isn't breaking
+	// BC: increasing max length isn't breaking
 	require.Empty(t, d)
 }
 
@@ -78,7 +78,7 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing max length from nil to any value is breaking
+	// BC: changing max length from nil to any value is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -96,7 +96,7 @@ func TestBreaking_MaxLengthToNil(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing max length from any value to nil isn't breaking
+	// BC: changing max length from any value to nil isn't breaking
 	require.Empty(t, d)
 }
 
@@ -112,7 +112,7 @@ func TestBreaking_MaxLengthBothNil(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// both max lengths are nil isn't breaking
+	// BC: both max lengths are nil isn't breaking
 	require.Empty(t, d)
 }
 
@@ -128,7 +128,7 @@ func TestBreaking_MinItemsSmaller(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// reducing min items isn't breaking
+	// BC: reducing min items isn't breaking
 	require.Empty(t, d)
 }
 
@@ -144,7 +144,7 @@ func TestBreaking_MinItemsGreater(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// increasing min items is breaking
+	// BC: increasing min items is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -163,6 +163,6 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// reducing max is breaking
+	// BC: reducing max is breaking
 	require.NotEmpty(t, d)
 }

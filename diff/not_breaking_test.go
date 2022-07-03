@@ -9,7 +9,7 @@ import (
 )
 
 func TestBreaking_Same(t *testing.T) {
-	// no change isn't breaking
+	// BC: no change isn't breaking
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true}, 1, 1))
 }
 
@@ -26,7 +26,7 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// adding an optional request body isn't breaking
+	// BC: adding an optional request body isn't breaking
 	require.Empty(t, d)
 }
 
@@ -47,19 +47,19 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing an existing request body from required to optional isn't breaking
+	// BC: changing an existing request body from required to optional isn't breaking
 	require.Empty(t, d)
 }
 
 func TestBreaking_DeletedTag(t *testing.T) {
-	// deleting a tag isn't breaking
+	// BC: deleting a tag isn't breaking
 	require.Empty(t, d(t, &diff.Config{
 		BreakingOnly: true,
 	}, 1, 5).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].TagsDiff)
 }
 
 func TestBreaking_AddedEnum(t *testing.T) {
-	// adding an enum value isn't breaking
+	// BC: adding an enum value isn't breaking
 	require.Empty(t,
 		d(t, &diff.Config{
 			BreakingOnly: true,
@@ -67,7 +67,7 @@ func TestBreaking_AddedEnum(t *testing.T) {
 }
 
 func TestBreaking_ModifiedExtension(t *testing.T) {
-	// changing extensions isn't breaking
+	// BC: changing extensions isn't breaking
 	config := diff.Config{
 		BreakingOnly:      true,
 		IncludeExtensions: diff.StringSet{"x-extension-test2": struct{}{}},
@@ -77,7 +77,7 @@ func TestBreaking_ModifiedExtension(t *testing.T) {
 }
 
 func TestBreaking_Components(t *testing.T) {
-	// chaning comments isn't breaking
+	// BC: changing comments isn't breaking
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true},
 		1, 3).ComponentsDiff)
 }
@@ -94,7 +94,7 @@ func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// new optional header param isn't breaking
+	// BC: new optional header param isn't breaking
 	require.Empty(t, d)
 }
 
@@ -110,7 +110,7 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing an existing header param to optional doesn't break client
+	// BC: changing an existing header param to optional isn't breaking
 	require.Empty(t, d)
 }
 
@@ -130,12 +130,12 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// new required response header param isn't breaking
+	// BC: new required response header param isn't breaking
 	require.Empty(t, d)
 }
 
 func TestBreaking_OperationID(t *testing.T) {
-	// chaning operation ID isn't breaking
+	// BC: changing operation ID isn't breaking
 	require.Empty(t,
 		d(t, &diff.Config{
 			BreakingOnly: true,
@@ -143,7 +143,7 @@ func TestBreaking_OperationID(t *testing.T) {
 }
 
 func TestBreaking_LinkOperationID(t *testing.T) {
-	// chaning a link to operation ID isn't breaking
+	// BC: changing a link to operation ID isn't breaking
 	require.Empty(t,
 		d(t, &diff.Config{
 			BreakingOnly: true,
@@ -164,6 +164,6 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// adding a media-type to response isn't breaking
+	// BC: adding a media-type to response isn't breaking
 	require.Empty(t, d)
 }

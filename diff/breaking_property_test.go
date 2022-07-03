@@ -300,9 +300,8 @@ func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// adding a new required property under AllOf in response body shouldn't break client
-	// however, in this case, multiple schemas under AllOf were modified
-	// in such cases, we can't determine which schemas in base correspond to other schemas in revision
+	// BC: adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simutaniously, we detect is as breaking
+	// explanation: when multiple inline (without $ref) schemas under AllOf are modified we can't correlate schemas across base and revision
 	// as a result we can't determine that the change was "a new required property" and the change appears as breaking
 	require.NotEmpty(t, d)
 }

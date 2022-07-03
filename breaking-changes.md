@@ -16,15 +16,17 @@
 
 ## Examples of non-breaking changes
 - adding a media-type to response isn't breaking
+- adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simutaniously, we detect is as breaking
 - adding an enum value isn't breaking
 - adding an optional request body isn't breaking
 - both max lengths are nil isn't breaking
+- changing a link to operation ID isn't breaking
+- changing an existing header param to optional isn't breaking
 - changing an existing request body from required to optional isn't breaking
+- changing comments isn't breaking
 - changing extensions isn't breaking
 - changing max length from any value to nil isn't breaking
-- chaning a link to operation ID isn't breaking
-- chaning comments isn't breaking
-- chaning operation ID isn't breaking
+- changing operation ID isn't breaking
 - deleting a tag isn't breaking
 - increasing max length isn't breaking
 - new optional header param isn't breaking
