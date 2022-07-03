@@ -1,0 +1,34 @@
+## Examples of breaking changes
+- adding a required request body is breaking
+- changing an existing header param from optional to required is breaking
+- changing an existing request body from optional to required is breaking
+- changing an existing response header from required to optional is breaking
+- changing max length from nil to any value is breaking
+- deleting a media-type from response is breaking
+- deleting a path is breaking
+- deleting an enum value is breaking
+- deleting an operation is breaking
+- increasing min items is breaking
+- new required header param is breaking
+- new required path param is breaking
+- reducing max is breaking
+- reducing max length is breaking
+
+## Examples of non-breaking changes
+- adding a media-type to response isn't breaking
+- adding an enum value isn't breaking
+- adding an optional request body isn't breaking
+- both max lengths are nil isn't breaking
+- changing an existing request body from required to optional isn't breaking
+- changing extensions isn't breaking
+- changing max length from any value to nil isn't breaking
+- chaning a link to operation ID isn't breaking
+- chaning comments isn't breaking
+- chaning operation ID isn't breaking
+- deleting a tag isn't breaking
+- increasing max length isn't breaking
+- new optional header param isn't breaking
+- new required response header param isn't breaking
+- no change isn't breaking
+- reducing min items isn't breaking
+- reducing min length isn't breaking

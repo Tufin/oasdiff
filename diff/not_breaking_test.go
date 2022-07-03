@@ -9,7 +9,7 @@ import (
 )
 
 func TestBreaking_Same(t *testing.T) {
-	// no change -> not breaking
+	// no change isn't breaking
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true}, 1, 1))
 }
 
@@ -164,6 +164,6 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// adding a media-type to response is not breaking
+	// adding a media-type to response isn't breaking
 	require.Empty(t, d)
 }

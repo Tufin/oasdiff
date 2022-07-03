@@ -511,12 +511,7 @@ Some YAML libraries don't support complex mapping keys, for example, python's Py
 
 ### Breaking Changes
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
-See examples in test files:
-- [breaking_test.go](diff/breaking_test.go)
-- [breaking_property_test.go](diff/breaking_property_test.go)
-- [breaking_min_max_test.go](diff/breaking_min_max_test.go)
-- [not_breaking_test.go](diff/not_breaking_test.go)
-   
+[See some examples of breaking and non-breaking changes](breaking-changes.md).  
 Note: this is a Beta feature. Please report issues.
 
 ## Notes for Go Developers
