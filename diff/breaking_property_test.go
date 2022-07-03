@@ -30,7 +30,7 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// new required property in request header breaks client
+	// BC: new required property in request header is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -50,7 +50,7 @@ func TestBreaking_NewNonRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// new optional property in request header doesn't break client
+	// BC: new optional property in request header isn't breaking
 	require.Empty(t, d)
 }
 
@@ -76,7 +76,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing an existing property in request header to required breaks client
+	// BC: changing an existing property in request header to required is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -102,7 +102,7 @@ func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing an existing property in request header to optional doesn't break client
+	// BC: changing an existing property in request header to optional isn't breaking
 	require.Empty(t, d)
 }
 
@@ -120,7 +120,7 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing an existing property in response body to optional breaks client
+	// BC: changing an existing property in response body to optional is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -138,7 +138,7 @@ func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing an existing property in response body to required doesn't break client
+	// BC: changing an existing property in response body to required isn't breaking
 	require.Empty(t, d)
 }
 
@@ -156,7 +156,7 @@ func TestBreaking_ReqBodyRequiredPropertyDisabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing an existing property in request body to optional doesn't break client
+	// BC: changing an existing property in request body to optional isn't breaking
 	require.Empty(t, d)
 }
 
@@ -174,7 +174,7 @@ func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// changing an existing property in request body to required breaks client
+	// BC: changing an existing property in request body to required is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -192,7 +192,7 @@ func TestBreaking_ReqBodyNewRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// adding a new required property in request body breaks client
+	// BC: adding a new required property in request body is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -210,7 +210,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// deleting a required property in request doesn't break client
+	// BC: deleting a required property in request isn't breaking
 	require.Empty(t, d)
 }
 
@@ -228,7 +228,7 @@ func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// adding a new required property in response body doesn't break client
+	// BC: adding a new required property in response body isn't breaking
 	require.Empty(t, d)
 }
 
@@ -246,7 +246,7 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// deleting a required property in response body breaks client
+	// BC: deleting a required property in response body is breaking
 	require.NotEmpty(t, d)
 }
 
@@ -264,7 +264,7 @@ func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// adding a new required property under AllOf in response body doesn't break client
+	// BC: adding a new required property under AllOf in response body isn't breaking
 	require.Empty(t, d)
 }
 
@@ -282,7 +282,7 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// deleting a required property under AllOf in response body breaks client
+	// BC: deleting a required property under AllOf in response body is breaking
 	require.NotEmpty(t, d)
 }
 
