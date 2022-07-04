@@ -18,7 +18,8 @@
 - new required header param is breaking
 - new required path param is breaking
 - new required property in request header is breaking
-- reducing max is breaking
+- reducing max in request is breaking
+- reducing max in response breaking
 - reducing max length is breaking
 
 ## Examples of non-breaking changes

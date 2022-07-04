@@ -8,8 +8,6 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// TODO: check whether this logic applies to response too
-
 func TestBreaking_MaxLengthSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -163,6 +161,25 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// BC: reducing max is breaking
+	// BC: reducing max in request is breaking
+	require.NotEmpty(t, d)
+}
+
+func TestBreaking_MaxSmallerInReponse(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	maxLengthFrom := uint64(13)
+	s1.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.MaxLength = &maxLengthFrom
+
+	maxLengthTo := uint64(11)
+	s2.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.MaxLength = &maxLengthTo
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	// BC: reducing max in response is breaking
 	require.NotEmpty(t, d)
 }
