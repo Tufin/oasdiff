@@ -42,6 +42,10 @@
 - changing operation ID isn't breaking
 - deleting a required property in request isn't breaking
 - deleting a tag isn't breaking
+- deprecating a header isn't breaking
+- deprecating a parameter isn't breaking
+- deprecating a schema isn't breaking
+- deprecating an operation isn't breaking
 - increasing max length isn't breaking
 - new optional header param isn't breaking
 - new optional property in request header isn't breaking
