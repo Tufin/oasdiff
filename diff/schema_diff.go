@@ -89,9 +89,7 @@ func (diff *SchemaDiff) removeNonBreaking(state *state, schema2 *openapi3.Schema
 		diff.AllowEmptyValueDiff = nil
 	}
 
-	if !diff.DeprecatedDiff.CompareWithDefault(false, true, false) {
-		diff.DeprecatedDiff = nil
-	}
+	diff.DeprecatedDiff = nil
 
 	// Number
 	if !diff.MinDiff.minBreakingFloat64() { // *float64

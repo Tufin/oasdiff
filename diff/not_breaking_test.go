@@ -167,3 +167,59 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 	// BC: adding a media-type to response isn't breaking
 	require.Empty(t, d)
 }
+
+// BC: deprecating an operation isn't breaking
+func TestBreaking_DeprecatedOperation(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Paths[installCommandPath].Get.Deprecated = true
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: deprecating a parameter isn't breaking
+func TestBreaking_DeprecatedParameter(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Deprecated = true
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: deprecating a header isn't breaking
+func TestBreaking_DeprecatedHeader(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Deprecated = true
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: deprecating a schema isn't breaking
+func TestBreaking_DeprecatedSchema(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Deprecated = true
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}

@@ -27,10 +27,7 @@ func (headerDiff *HeaderDiff) removeNonBreaking(state *state) {
 
 	headerDiff.ExtensionsDiff = nil
 	headerDiff.DescriptionDiff = nil
-
-	if !headerDiff.DeprecatedDiff.CompareWithDefault(false, true, false) {
-		headerDiff.DeprecatedDiff = nil
-	}
+	headerDiff.DeprecatedDiff = nil
 
 	// In request: remove required that changed from true to false
 	// In response: remove required that changed from false to true
