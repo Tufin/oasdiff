@@ -35,10 +35,7 @@ func (diff *ParameterDiff) removeNonBreaking() {
 	diff.DescriptionDiff = nil
 	diff.ExampleDiff = nil
 	diff.ExamplesDiff = nil
-
-	if !diff.DeprecatedDiff.CompareWithDefault(false, true, false) {
-		diff.DeprecatedDiff = nil
-	}
+	diff.DeprecatedDiff = nil
 
 	if !diff.RequiredDiff.CompareWithDefault(false, true, false) {
 		diff.RequiredDiff = nil
