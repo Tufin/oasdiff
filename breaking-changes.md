@@ -1,55 +1,55 @@
 ## Examples of breaking changes
-- adding a new required property in request body is breaking
-- adding a required request body is breaking
-- changing an existing header param from optional to required is breaking
-- changing an existing property in request body to required is breaking
-- changing an existing property in request header to required is breaking
-- changing an existing property in response body to optional is breaking
-- changing an existing request body from optional to required is breaking
-- changing an existing response header from required to optional is breaking
-- changing max length from nil to any value is breaking
-- deleting a media-type from response is breaking
-- deleting a path is breaking
-- deleting a required property in response body is breaking
-- deleting a required property under AllOf in response body is breaking
-- deleting an enum value is breaking
-- deleting an operation is breaking
-- increasing min items is breaking
-- new required header param is breaking
-- new required path param is breaking
-- new required property in request header is breaking
-- reducing max in request is breaking
-- reducing max in response is breaking
-- reducing max length is breaking
+[adding a new required property in request body is breaking](diff/breaking_property_test.go?plain=1#L173)
+[adding a required request body is breaking](diff/breaking_test.go?plain=1#L31)
+[changing an existing header param from optional to required is breaking](diff/breaking_test.go?plain=1#L126)
+[changing an existing property in request body to required is breaking](diff/breaking_property_test.go?plain=1#L156)
+[changing an existing property in request header to required is breaking](diff/breaking_property_test.go?plain=1#L55)
+[changing an existing property in response body to optional is breaking](diff/breaking_property_test.go?plain=1#L105)
+[changing an existing request body from optional to required is breaking](diff/breaking_test.go?plain=1#L47)
+[changing an existing response header from required to optional is breaking](diff/breaking_test.go?plain=1#L147)
+[changing max length from nil to any value is breaking](diff/breaking_min_max_test.go?plain=1#L62)
+[deleting a media-type from response is breaking](diff/breaking_test.go?plain=1#L162)
+[deleting a path is breaking](diff/breaking_test.go?plain=1#L11)
+[deleting a required property in response body is breaking](diff/breaking_property_test.go?plain=1#L224)
+[deleting a required property under AllOf in response body is breaking](diff/breaking_property_test.go?plain=1#L258)
+[deleting an enum value is breaking](diff/breaking_test.go?plain=1#L67)
+[deleting an operation is breaking](diff/breaking_test.go?plain=1#L17)
+[increasing min items is breaking](diff/breaking_min_max_test.go?plain=1#L126)
+[new required header param is breaking](diff/breaking_test.go?plain=1#L108)
+[new required path param is breaking](diff/breaking_test.go?plain=1#L90)
+[new required property in request header is breaking](diff/breaking_property_test.go?plain=1#L16)
+[reducing max in request is breaking](diff/breaking_min_max_test.go?plain=1#L141)
+[reducing max in response is breaking](diff/breaking_min_max_test.go?plain=1#L159)
+[reducing max length is breaking](diff/breaking_min_max_test.go?plain=1#L11)
 
 ## Examples of non-breaking changes
-- adding a media-type to response isn't breaking
-- adding a new required property in response body isn't breaking
-- adding a new required property under AllOf in response body isn't breaking
-- adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking
-- adding an enum value isn't breaking
-- adding an optional request body isn't breaking
-- both max lengths are nil isn't breaking
-- changing a link to operation ID isn't breaking
-- changing an existing header param to optional isn't breaking
-- changing an existing property in request body to optional isn't breaking
-- changing an existing property in request header to optional isn't breaking
-- changing an existing property in response body to required isn't breaking
-- changing an existing request body from required to optional isn't breaking
-- changing comments isn't breaking
-- changing extensions isn't breaking
-- changing max length from any value to nil isn't breaking
-- changing operation ID isn't breaking
-- deleting a required property in request isn't breaking
-- deleting a tag isn't breaking
-- deprecating a header isn't breaking
-- deprecating a parameter isn't breaking
-- deprecating a schema isn't breaking
-- deprecating an operation isn't breaking
-- increasing max length isn't breaking
-- new optional header param isn't breaking
-- new optional property in request header isn't breaking
-- new required response header param isn't breaking
-- no change isn't breaking
-- reducing min items isn't breaking
-- reducing min length isn't breaking
+[adding a media-type to response isn't breaking](diff/not_breaking_test.go?plain=1#L148)
+[adding a new required property in response body isn't breaking](diff/breaking_property_test.go?plain=1#L207)
+[adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking](diff/breaking_property_test.go?plain=1#L275)
+[adding a new required property under AllOf in response body isn't breaking](diff/breaking_property_test.go?plain=1#L241)
+[adding an enum value isn't breaking](diff/not_breaking_test.go?plain=1#L59)
+[adding an optional request body isn't breaking](diff/not_breaking_test.go?plain=1#L16)
+[both max lengths are nil isn't breaking](diff/breaking_min_max_test.go?plain=1#L96)
+[changing a link to operation ID isn't breaking](diff/not_breaking_test.go?plain=1#L140)
+[changing an existing header param to optional isn't breaking](diff/not_breaking_test.go?plain=1#L98)
+[changing an existing property in request body to optional isn't breaking](diff/breaking_property_test.go?plain=1#L139)
+[changing an existing property in request header to optional isn't breaking](diff/breaking_property_test.go?plain=1#L80)
+[changing an existing property in response body to required isn't breaking](diff/breaking_property_test.go?plain=1#L122)
+[changing an existing request body from required to optional isn't breaking](diff/not_breaking_test.go?plain=1#L32)
+[changing comments isn't breaking](diff/not_breaking_test.go?plain=1#L77)
+[changing extensions isn't breaking](diff/not_breaking_test.go?plain=1#L67)
+[changing max length from any value to nil isn't breaking](diff/breaking_min_max_test.go?plain=1#L79)
+[changing operation ID isn't breaking](diff/not_breaking_test.go?plain=1#L132)
+[deleting a required property in request isn't breaking](diff/breaking_property_test.go?plain=1#L190)
+[deleting a tag isn't breaking](diff/not_breaking_test.go?plain=1#L52)
+[deprecating a header isn't breaking](diff/not_breaking_test.go?plain=1#L193)
+[deprecating a parameter isn't breaking](diff/not_breaking_test.go?plain=1#L179)
+[deprecating a schema isn't breaking](diff/not_breaking_test.go?plain=1#L207)
+[deprecating an operation isn't breaking](diff/not_breaking_test.go?plain=1#L165)
+[increasing max length isn't breaking](diff/breaking_min_max_test.go?plain=1#L44)
+[new optional header param isn't breaking](diff/not_breaking_test.go?plain=1#L83)
+[new optional property in request header isn't breaking](diff/breaking_property_test.go?plain=1#L36)
+[new required response header param isn't breaking](diff/not_breaking_test.go?plain=1#L117)
+[no change isn't breaking](diff/not_breaking_test.go?plain=1#L11)
+[reducing min items isn't breaking](diff/breaking_min_max_test.go?plain=1#L111)
+[reducing min length isn't breaking](diff/breaking_min_max_test.go?plain=1#L29)
