@@ -8,11 +8,12 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+// BC: no change isn't breaking
 func TestBreaking_Same(t *testing.T) {
-	// BC: no change isn't breaking
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true}, 1, 1))
 }
 
+// BC: adding an optional request body isn't breaking
 func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -25,11 +26,10 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: adding an optional request body isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: changing an existing request body from required to optional isn't breaking
 func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -46,28 +46,26 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing request body from required to optional isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: deleting a tag isn't breaking
 func TestBreaking_DeletedTag(t *testing.T) {
-	// BC: deleting a tag isn't breaking
 	require.Empty(t, d(t, &diff.Config{
 		BreakingOnly: true,
 	}, 1, 5).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].TagsDiff)
 }
 
+// BC: adding an enum value isn't breaking
 func TestBreaking_AddedEnum(t *testing.T) {
-	// BC: adding an enum value isn't breaking
 	require.Empty(t,
 		d(t, &diff.Config{
 			BreakingOnly: true,
 		}, 1, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath])
 }
 
+// BC: changing extensions isn't breaking
 func TestBreaking_ModifiedExtension(t *testing.T) {
-	// BC: changing extensions isn't breaking
 	config := diff.Config{
 		BreakingOnly:      true,
 		IncludeExtensions: diff.StringSet{"x-extension-test2": struct{}{}},
@@ -76,12 +74,13 @@ func TestBreaking_ModifiedExtension(t *testing.T) {
 	require.Empty(t, d(t, &config, 1, 3).ExtensionsDiff)
 }
 
+// BC: changing comments isn't breaking
 func TestBreaking_Components(t *testing.T) {
-	// BC: changing comments isn't breaking
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true},
 		1, 3).ComponentsDiff)
 }
 
+// BC: new optional header param isn't breaking
 func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -93,11 +92,10 @@ func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: new optional header param isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: changing an existing header param to optional isn't breaking
 func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -109,8 +107,6 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing header param to optional isn't breaking
 	require.Empty(t, d)
 }
 
@@ -118,6 +114,7 @@ func deleteResponseHeader(response *openapi3.Response, name string) {
 	delete(response.Headers, name)
 }
 
+// BC: new required response header param isn't breaking
 func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -129,27 +126,26 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: new required response header param isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: changing operation ID isn't breaking
 func TestBreaking_OperationID(t *testing.T) {
-	// BC: changing operation ID isn't breaking
 	require.Empty(t,
 		d(t, &diff.Config{
 			BreakingOnly: true,
 		}, 3, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].OperationIDDiff)
 }
 
+// BC: changing a link to operation ID isn't breaking
 func TestBreaking_LinkOperationID(t *testing.T) {
-	// BC: changing a link to operation ID isn't breaking
 	require.Empty(t,
 		d(t, &diff.Config{
 			BreakingOnly: true,
 		}, 3, 1).PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].ResponsesDiff.Modified["200"].LinksDiff.Modified)
 }
 
+// BC: adding a media-type to response isn't breaking
 func TestBreaking_ResponseAddMediaType(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -163,8 +159,6 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: adding a media-type to response isn't breaking
 	require.Empty(t, d)
 }
 

@@ -13,6 +13,7 @@ func getReqPropFile(file string) string {
 	return fmt.Sprintf("../data/required-properties/%s", file)
 }
 
+// BC: new required property in request header is breaking
 func TestBreaking_NewRequiredProperty(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -29,11 +30,10 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: new required property in request header is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: new optional property in request header isn't breaking
 func TestBreaking_NewNonRequiredProperty(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -49,11 +49,10 @@ func TestBreaking_NewNonRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: new optional property in request header isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: changing an existing property in request header to required is breaking
 func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -75,11 +74,10 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing property in request header to required is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: changing an existing property in request header to optional isn't breaking
 func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -101,11 +99,10 @@ func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing property in request header to optional isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: changing an existing property in response body to optional is breaking
 func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -119,11 +116,10 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing property in response body to optional is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: changing an existing property in response body to required isn't breaking
 func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -137,11 +133,10 @@ func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing property in response body to required isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: changing an existing property in request body to optional isn't breaking
 func TestBreaking_ReqBodyRequiredPropertyDisabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -155,11 +150,10 @@ func TestBreaking_ReqBodyRequiredPropertyDisabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing property in request body to optional isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: changing an existing property in request body to required is breaking
 func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -173,11 +167,10 @@ func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing property in request body to required is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: adding a new required property in request body is breaking
 func TestBreaking_ReqBodyNewRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -191,11 +184,10 @@ func TestBreaking_ReqBodyNewRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: adding a new required property in request body is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: deleting a required property in request isn't breaking
 func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -209,11 +201,10 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: deleting a required property in request isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: adding a new required property in response body isn't breaking
 func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -227,11 +218,10 @@ func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: adding a new required property in response body isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: deleting a required property in response body is breaking
 func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -245,11 +235,10 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: deleting a required property in response body is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: adding a new required property under AllOf in response body isn't breaking
 func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -263,11 +252,10 @@ func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: adding a new required property under AllOf in response body isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: deleting a required property under AllOf in response body is breaking
 func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -281,11 +269,12 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: deleting a required property under AllOf in response body is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking
+// explanation: when multiple inline (without $ref) schemas under AllOf are modified we can't correlate schemas across base and revision
+// as a result we can't determine that the change was "a new required property" and the change appears as breaking
 func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -299,9 +288,5 @@ func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking
-	// explanation: when multiple inline (without $ref) schemas under AllOf are modified we can't correlate schemas across base and revision
-	// as a result we can't determine that the change was "a new required property" and the change appears as breaking
 	require.NotEmpty(t, d)
 }

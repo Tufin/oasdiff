@@ -8,6 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+// BC: reducing max length is breaking
 func TestBreaking_MaxLengthSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -22,11 +23,10 @@ func TestBreaking_MaxLengthSmaller(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: reducing max length is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: reducing min length isn't breaking
 func TestBreaking_MinLengthSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -38,11 +38,10 @@ func TestBreaking_MinLengthSmaller(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: reducing min length isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: increasing max length isn't breaking
 func TestBreaking_MaxLengthGreater(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -57,11 +56,10 @@ func TestBreaking_MaxLengthGreater(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: increasing max length isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: changing max length from nil to any value is breaking
 func TestBreaking_MaxLengthFromNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -75,11 +73,10 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing max length from nil to any value is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: changing max length from any value to nil isn't breaking
 func TestBreaking_MaxLengthToNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -93,11 +90,10 @@ func TestBreaking_MaxLengthToNil(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing max length from any value to nil isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: both max lengths are nil isn't breaking
 func TestBreaking_MaxLengthBothNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -109,11 +105,10 @@ func TestBreaking_MaxLengthBothNil(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: both max lengths are nil isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: reducing min items isn't breaking
 func TestBreaking_MinItemsSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -125,11 +120,10 @@ func TestBreaking_MinItemsSmaller(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: reducing min items isn't breaking
 	require.Empty(t, d)
 }
 
+// BC: increasing min items is breaking
 func TestBreaking_MinItemsGreater(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -141,11 +135,10 @@ func TestBreaking_MinItemsGreater(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: increasing min items is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: reducing max in request is breaking
 func TestBreaking_MaxSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -160,11 +153,10 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: reducing max in request is breaking
 	require.NotEmpty(t, d)
 }
 
+// BC: reducing max in response is breaking
 func TestBreaking_MaxSmallerInReponse(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -179,7 +171,5 @@ func TestBreaking_MaxSmallerInReponse(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: reducing max in response is breaking
 	require.NotEmpty(t, d)
 }

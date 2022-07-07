@@ -8,12 +8,13 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+// BC: deleting a path is breaking
 func TestBreaking_DeletedPath(t *testing.T) {
 	d := d(t, &diff.Config{BreakingOnly: true}, 1, 2)
-	// BC: deleting a path is breaking
 	require.NotEmpty(t, d.PathsDiff.Deleted)
 }
 
+// BC: deleting an operation is breaking
 func TestBreaking_DeletedOp(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -24,11 +25,10 @@ func TestBreaking_DeletedOp(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: deleting an operation is breaking
 	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Deleted)
 }
 
+// BC: adding a required request body is breaking
 func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -41,11 +41,10 @@ func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: adding a required request body is breaking
 	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].RequestBodyDiff)
 }
 
+// BC: changing an existing request body from optional to required is breaking
 func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -62,13 +61,11 @@ func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing request body from optional to required is breaking
 	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].RequestBodyDiff)
 }
 
+// BC: deleting an enum value is breaking
 func TestBreaking_DeletedEnum(t *testing.T) {
-	// BC: deleting an enum value is breaking
 	require.NotEmpty(t,
 		d(t, &diff.Config{
 			BreakingOnly: true,
@@ -90,6 +87,7 @@ func deleteParam(op *openapi3.Operation, in string, name string) {
 	op.Parameters = result
 }
 
+// BC: new required path param is breaking
 func TestBreaking_NewPathParam(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -102,12 +100,12 @@ func TestBreaking_NewPathParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// BC: new required path param is breaking
 	require.Contains(t,
 		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInPath],
 		"project")
 }
 
+// BC: new required header param is breaking
 func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -120,12 +118,12 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// BC: new required header param is breaking
 	require.Contains(t,
 		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
 		"network-policies")
 }
 
+// BC: changing an existing header param from optional to required is breaking
 func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -138,7 +136,6 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 
-	// BC: changing an existing header param from optional to required is breaking
 	require.Equal(t,
 		&diff.ValueDiff{
 			From: false,
@@ -147,6 +144,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInHeader]["network-policies"].RequiredDiff)
 }
 
+// BC: changing an existing response header from required to optional is breaking
 func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -158,11 +156,10 @@ func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: changing an existing response header from required to optional is breaking
 	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].HeadersDiff.Modified["X-RateLimit-Limit"].RequiredDiff)
 }
 
+// BC: deleting a media-type from response is breaking
 func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -176,7 +173,5 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-
-	// BC: deleting a media-type from response is breaking
 	require.NotEmpty(t, d)
 }
