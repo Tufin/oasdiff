@@ -1,3 +1,5 @@
+# Examples of Breaking and Non-Breaking Changes
+These examples are automatically generated from unit tests.
 ## Examples of breaking changes
 [adding a new required property in request body is breaking](diff/breaking_property_test.go?plain=1#L173)  
 [adding a required request body is breaking](diff/breaking_test.go?plain=1#L31)  
