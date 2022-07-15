@@ -58,7 +58,11 @@ Usage of oasdiff:
   -format string
     	output format: yaml, text or html (default "yaml")
   -prefix string
-    	if provided, paths in base spec will be compared with 'prefix'+paths in revision spec
+    	deprecated. use -prefix-revision instead
+  -prefix-base string
+    	if provided, paths in original (base) spec will be prefixed with the given prefix before comparison
+  -prefix-revision string
+    	if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison
   -revision string
     	path of revised OpenAPI spec in YAML or JSON format
   -summary

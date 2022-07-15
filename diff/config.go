@@ -7,7 +7,8 @@ type Config struct {
 	IncludeExtensions  StringSet
 	PathFilter         string
 	FilterExtension    string
-	PathPrefix         string
+	PathPrefixBase     string
+	PathPrefixRevision string
 	BreakingOnly       bool
 }
 
