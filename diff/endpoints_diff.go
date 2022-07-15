@@ -78,7 +78,7 @@ func getEndpointsDiffInternal(config *Config, state *state, paths1, paths2 opena
 
 	result := newEndpointsDiff()
 
-	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1, paths2, config.PathPrefix)
+	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1, paths2, config)
 
 	for path, pathItem := range addedPaths {
 		for method := range pathItem.Operations() {

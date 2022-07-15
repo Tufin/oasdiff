@@ -269,7 +269,7 @@ func TestSchemaDiff_MediaType_MultiEntries(t *testing.T) {
 
 func TestSchemaDiff_AnyOfModified(t *testing.T) {
 	require.False(t,
-		d(t, &diff.Config{PathPrefix: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["token"].SchemaDiff.AnyOfDiff.Empty())
+		d(t, &diff.Config{PathPrefixRevision: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["token"].SchemaDiff.AnyOfDiff.Empty())
 }
 
 func TestSchemaDiff_WithExamples(t *testing.T) {
@@ -284,7 +284,7 @@ func TestSchemaDiff_WithExamples(t *testing.T) {
 
 func TestSchemaDiff_MinDiff(t *testing.T) {
 
-	dd := d(t, &diff.Config{PathPrefix: "/prefix"}, 4, 2)
+	dd := d(t, &diff.Config{PathPrefixRevision: "/prefix"}, 4, 2)
 
 	require.Nil(t,
 		dd.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.From)

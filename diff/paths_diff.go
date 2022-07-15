@@ -68,7 +68,7 @@ func getPathsDiffInternal(config *Config, state *state, paths1, paths2 openapi3.
 
 	result := newPathsDiff()
 
-	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1, paths2, config.PathPrefix)
+	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1, paths2, config)
 
 	for endpoint := range addedPaths {
 		result.addAddedPath(endpoint)
