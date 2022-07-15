@@ -57,6 +57,8 @@ Usage of oasdiff:
     	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
   -format string
     	output format: yaml, text or html (default "yaml")
+  -prefix string
+    	deprecated. use -prefix-revision instead
   -prefix-base string
     	if provided, paths in original (base) spec will be prefixed with the given prefix before comparison
   -prefix-revision string

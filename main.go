@@ -13,7 +13,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var base, revision, prefix_base, prefix_revision, filter, filterExtension, format string
+var base, revision, prefix_base, prefix_revision, prefix, filter, filterExtension, format string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff bool
 
 const (
@@ -27,6 +27,7 @@ func init() {
 	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec in YAML or JSON format")
 	flag.StringVar(&prefix_base, "prefix-base", "", "if provided, paths in original (base) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&prefix_revision, "prefix-revision", "", "if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison")
+	flag.StringVar(&prefix, "prefix", "", "deprecated. use -prefix-revision instead")
 	flag.StringVar(&filter, "filter", "", "if provided, diff will include only paths that match this regular expression")
 	flag.StringVar(&filterExtension, "filter-extension", "", "if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	flag.BoolVar(&excludeExamples, "exclude-examples", false, "ignore changes to examples")
@@ -50,6 +51,13 @@ func validateFlags() bool {
 	if !supportedFormats[format] {
 		fmt.Printf("invalid format. Should be yaml, text or html\n")
 		return false
+	}
+	if prefix != "" {
+		if prefix_revision != "" {
+			fmt.Printf("'-prefix' and '-prefix_revision' can't be used simultaneously\n")
+			return false
+		}
+		prefix_revision = prefix
 	}
 	return true
 }
