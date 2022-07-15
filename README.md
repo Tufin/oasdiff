@@ -20,6 +20,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Compare specs in YAML or JSON format
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Detect [breaking changes](#breaking-changes)
+- Support [path prefix modification](#path-prefix-modification)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
 
 ## Install with Go
@@ -65,6 +66,10 @@ Usage of oasdiff:
     	if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison
   -revision string
     	path of revised OpenAPI spec in YAML or JSON format
+  -strip-prefix-base string
+    	if provided, this prefix will be stripped from paths in original (base) spec before comparison
+  -strip-prefix-revision string
+    	if provided, this prefix will be stripped from paths in revised (revision) spec before comparison
   -summary
     	display a summary of the changes instead of the full diff
 ```
@@ -517,6 +522,22 @@ Some YAML libraries don't support complex mapping keys, for example, python's Py
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
 Note: this is a Beta feature. Please report issues.
+
+### Path prefix modification
+Sometimes paths names need to be modified, for example, if we are moving from v1 to v2:
+- Original paths: /api/v1/path1, /api/v1/path2...
+- New paths: /api/v2/path1, /api/v2/path2...
+
+oasdiff allows comparison of modified path names by stripping and/or prepending path prefixes.  
+In the example above you could compare the files as follows:
+```
+oasdiff -base original.yaml -revision new.yaml -strip-prefix-base /api/v1 -prefix-base /api/v2/
+```
+or
+```
+oasdiff -base original.yaml -revision new.yaml -strip-prefix-base /api/v1 -strip-prefix-revision /api/v2
+```
+Note that stripping precedes prepending.
 
 ## Notes for Go Developers
 ### Embedding oasdiff into your program
