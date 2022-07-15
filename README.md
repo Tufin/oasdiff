@@ -523,7 +523,7 @@ Breaking changes are changes that could break a client that is relying on the Op
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
 Note: this is a Beta feature. Please report issues.
 
-### Path prefix modification
+### Path Prefix Modification
 Sometimes paths names need to be modified, for example, if we are moving from v1 to v2:
 - Original paths: /api/v1/path1, /api/v1/path2...
 - New paths: /api/v2/path1, /api/v2/path2...
