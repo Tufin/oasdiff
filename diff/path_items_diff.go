@@ -14,7 +14,9 @@ type pathItemPair struct {
 type pathItemPairs map[string]*pathItemPair
 
 func getPathItemsDiff(paths1, paths2 openapi3.Paths, config *Config) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
-	return getPathItemsDiffInternal(addPrefix(paths1, config.PathPrefixBase), addPrefix(paths2, config.PathPrefixRevision))
+	return getPathItemsDiffInternal(
+		rewritePrefix(paths1, config.PathStripPrefixBase, config.PathPrefixBase),
+		rewritePrefix(paths2, config.PathStripPrefixRevision, config.PathPrefixRevision))
 }
 
 func getPathItemsDiffInternal(paths1, paths2 openapi3.Paths) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
@@ -43,10 +45,10 @@ func getPathItemsDiffInternal(paths1, paths2 openapi3.Paths) (openapi3.Paths, op
 	return added, deleted, other
 }
 
-func addPrefix(paths openapi3.Paths, prefix string) openapi3.Paths {
+func rewritePrefix(paths openapi3.Paths, strip, prepend string) openapi3.Paths {
 	result := make(openapi3.Paths, len(paths))
 	for path, pathItem := range paths {
-		result[prefix+path] = pathItem
+		result[prepend+strings.TrimPrefix(path, strip)] = pathItem
 	}
 	return result
 }

@@ -2,14 +2,16 @@ package diff
 
 // Config includes various settings to control the diff
 type Config struct {
-	ExcludeExamples    bool
-	ExcludeDescription bool
-	IncludeExtensions  StringSet
-	PathFilter         string
-	FilterExtension    string
-	PathPrefixBase     string
-	PathPrefixRevision string
-	BreakingOnly       bool
+	ExcludeExamples         bool
+	ExcludeDescription      bool
+	IncludeExtensions       StringSet
+	PathFilter              string
+	FilterExtension         string
+	PathPrefixBase          string
+	PathPrefixRevision      string
+	PathStripPrefixBase     string
+	PathStripPrefixRevision string
+	BreakingOnly            bool
 }
 
 // NewConfig returns a default configuration
