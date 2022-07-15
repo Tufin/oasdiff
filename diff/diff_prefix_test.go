@@ -74,3 +74,52 @@ func TestPrefix_BasePrefixModified(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, dd)
 }
+
+func TestPrefix_RevisionStrip(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getPrefixFile("simple1.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getPrefixFile("simple2.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		PathStripPrefixRevision: "/tenant",
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, dd)
+}
+
+func TestPrefix_BaseStrip(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getPrefixFile("simple2.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getPrefixFile("simple1.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		PathStripPrefixBase: "/tenant",
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, dd)
+}
+
+func TestPrefix_StripAndPrefix(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getPrefixFile("simple2.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getPrefixFile("simple4.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		PathStripPrefixBase: "/tenant",
+		PathPrefixBase:      "/tenant1",
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, dd)
+}

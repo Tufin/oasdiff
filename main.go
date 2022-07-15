@@ -13,7 +13,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var base, revision, prefix_base, prefix_revision, prefix, filter, filterExtension, format string
+var base, revision, filter, filterExtension, format string
+var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff bool
 
 const (
@@ -27,6 +28,8 @@ func init() {
 	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec in YAML or JSON format")
 	flag.StringVar(&prefix_base, "prefix-base", "", "if provided, paths in original (base) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&prefix_revision, "prefix-revision", "", "if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison")
+	flag.StringVar(&strip_prefix_base, "strip-prefix-base", "", "if provided, paths in original (base) spec will be stripped from given prefix before comparison")
+	flag.StringVar(&strip_prefix_revision, "strip-prefix-revision", "", "if provided, paths in revised (revision) spec will be stripped from the given prefix before comparison")
 	flag.StringVar(&prefix, "prefix", "", "deprecated. use -prefix-revision instead")
 	flag.StringVar(&filter, "filter", "", "if provided, diff will include only paths that match this regular expression")
 	flag.StringVar(&filterExtension, "filter-extension", "", "if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression")
@@ -91,6 +94,8 @@ func main() {
 	config.FilterExtension = filterExtension
 	config.PathPrefixBase = prefix_base
 	config.PathPrefixRevision = prefix_revision
+	config.PathStripPrefixBase = strip_prefix_base
+	config.PathStripPrefixRevision = strip_prefix_revision
 	config.BreakingOnly = breakingOnly
 
 	diffReport, err := diff.Get(config, s1, s2)
