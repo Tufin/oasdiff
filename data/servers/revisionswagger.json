@@ -6,14 +6,24 @@
   },
   "servers": [
     {
-      "url": "https://dev-testapi.azurewebsites.net"
+      "url": "https://qa-testapi.azurewebsites.net"
     }
   ],
   "paths": {
     "/api/{uniqueId}/tests": {
+      "servers": [
+        {
+          "url": "https://qa-testapi.azurewebsites.net"
+        }
+      ],
       "post": {
         "tags": [
           "test"
+        ],
+        "servers": [
+          {
+            "url": "https://qa-testapi.azurewebsites.net"
+          }
         ],
         "summary": "/api/{uniqueId:int}/tests - POST",
         "description": "Creates a test record",
