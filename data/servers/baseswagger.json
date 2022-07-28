@@ -1,0 +1,117 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Test API",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://qa-testapi.azurewebsites.net"
+    }
+  ],
+  "paths": {
+    "/api/{uniqueId}/tests": {
+      "post": {
+        "tags": [
+          "test"
+        ],
+        "summary": "/api/{uniqueId:int}/tests - POST",
+        "description": "Creates a test record",
+        "operationId": "testsPOST",
+        "parameters": [
+          {
+            "name": "uniqueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/test"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/test"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/test"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/test"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "test": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "uniqueId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdByUserId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTimeLocal": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdOnLocal": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdOnUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedOnUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

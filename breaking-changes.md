@@ -42,6 +42,7 @@ These examples are automatically generated from unit tests.
 [changing extensions isn't breaking](diff/not_breaking_test.go?plain=1#L67)  
 [changing max length from any value to nil isn't breaking](diff/breaking_min_max_test.go?plain=1#L79)  
 [changing operation ID isn't breaking](diff/not_breaking_test.go?plain=1#L132)  
+[changing servers isn't breaking](diff/not_breaking_test.go?plain=1#L221)  
 [deleting a required property in request isn't breaking](diff/breaking_property_test.go?plain=1#L190)  
 [deleting a tag isn't breaking](diff/not_breaking_test.go?plain=1#L52)  
 [deprecating a header isn't breaking](diff/not_breaking_test.go?plain=1#L193)  

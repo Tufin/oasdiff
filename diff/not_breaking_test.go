@@ -217,3 +217,20 @@ func TestBreaking_DeprecatedSchema(t *testing.T) {
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
+
+// BC: changing servers isn't breaking
+func TestBreaking_Servers(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/servers/baseswagger.json")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/servers/revisionswagger.json")
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}

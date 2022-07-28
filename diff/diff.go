@@ -39,6 +39,7 @@ func (diff *Diff) removeNonBreaking() {
 	diff.ExtensionsDiff = nil
 	diff.OpenAPIDiff = nil
 	diff.InfoDiff = nil
+	diff.ServersDiff = nil
 	diff.TagsDiff = nil
 	diff.ExternalDocsDiff = nil
 
