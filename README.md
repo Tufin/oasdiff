@@ -524,14 +524,14 @@ Breaking changes are changes that could break a client that is relying on the Op
 Note: this is a Beta feature. Please report issues.
 
 ### Path Prefix Modification
-Sometimes paths names need to be modified, for example, if we are moving from v1 to v2:
-- Original paths: /api/v1/path1, /api/v1/path2...
-- New paths: /api/v2/path1, /api/v2/path2...
+Sometimes paths prefixes need to be modified, for example, to create a new version:
+- /api/v1/...
+- /api/v2/...
 
-oasdiff allows comparison of modified path names by stripping and/or prepending path prefixes.  
+oasdiff allows comparison of API specifications with modified prefixes by stripping and/or prepending path prefixes.  
 In the example above you could compare the files as follows:
 ```
-oasdiff -base original.yaml -revision new.yaml -strip-prefix-base /api/v1 -prefix-base /api/v2/
+oasdiff -base original.yaml -revision new.yaml -strip-prefix-base /api/v1 -prefix-base /api/v2
 ```
 or
 ```
