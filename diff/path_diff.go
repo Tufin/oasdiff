@@ -36,6 +36,7 @@ func (pathDiff *PathDiff) removeNonBreaking() {
 	pathDiff.RefDiff = nil
 	pathDiff.SummaryDiff = nil
 	pathDiff.DescriptionDiff = nil
+	pathDiff.ServersDiff = nil
 }
 
 func getPathDiff(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
