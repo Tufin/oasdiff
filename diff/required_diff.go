@@ -1,5 +1,9 @@
 package diff
 
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
+
 // RequiredPropertiesDiff describes the changes between a pair of lists of required properties
 type RequiredPropertiesDiff struct {
 	StringsDiff
@@ -14,7 +18,7 @@ func (diff *RequiredPropertiesDiff) Empty() bool {
 	return diff.StringsDiff.Empty()
 }
 
-func (diff *RequiredPropertiesDiff) removeNonBreaking(state *state) {
+func (diff *RequiredPropertiesDiff) removeNonBreaking(state *state, value1, value2 *openapi3.Schema) {
 	if diff.Empty() {
 		return
 	}
@@ -27,18 +31,33 @@ func (diff *RequiredPropertiesDiff) removeNonBreaking(state *state) {
 	case directionRequest:
 		// if this is part of the request, then required properties can be deleted without breaking the client
 		diff.Deleted = nil
+		// filter out readonly fields from the revision spec
+		filtered := make(StringList, 0)
+		for _, v := range diff.Added {
+			if p, ok := value2.Properties[v]; ok && !p.Value.ReadOnly {
+				filtered = append(filtered, v)
+			}
+		}
+		diff.Added = filtered
 	case directionResponse:
 		// if this is part of the response, then required properties can be added without breaking the client
 		diff.Added = nil
+		// filter out write only fields from the base spec
+		filtered := make(StringList, 0)
+		for _, v := range diff.Deleted {
+			if p, ok := value1.Properties[v]; ok && !p.Value.WriteOnly {
+				filtered = append(filtered, v)
+			}
+		}
+		diff.Deleted = filtered
 	}
 }
 
-func getRequiredPropertiesDiff(config *Config, state *state, strings1, strings2 StringList) *RequiredPropertiesDiff {
-
-	diff := getRequiredPropertiesDiffInternal(strings1, strings2)
+func getRequiredPropertiesDiff(config *Config, state *state, value1, value2 *openapi3.Schema) *RequiredPropertiesDiff {
+	diff := getRequiredPropertiesDiffInternal(value1.Required, value2.Required)
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(state)
+		diff.removeNonBreaking(state, value1, value2)
 	}
 
 	if diff.Empty() {

@@ -290,3 +290,37 @@ func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, d)
 }
+
+// BC: adding a new required readonly property in request body is not breaking
+func TestBreaking_ReadOnlyNewRequiredProperty(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("read-only-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("read-only-revision.yaml"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: removing a required write-only property in response body is not breaking
+func TestBreaking_WriteOnlyNewRequiredProperty(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("write-only-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("write-only-revision.yaml"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}

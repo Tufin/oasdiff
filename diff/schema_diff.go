@@ -1,8 +1,7 @@
 package diff
 
 import (
-	"fmt"
-
+	"errors"
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -196,7 +195,6 @@ func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.Sche
 }
 
 func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
-
 	if status := getSchemaStatus(schema1, schema2); status != schemaStatusOK {
 		switch status {
 		case schemaStatusNoSchemas:
@@ -231,7 +229,6 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	if schema1.Ref != "" {
 		state.visitedSchemasBase.add(schema1.Ref)
 		defer state.visitedSchemasBase.remove(schema1.Ref)
-
 	}
 
 	if schema2.Ref != "" {
@@ -291,7 +288,7 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	}
 
 	// Object
-	result.RequiredDiff = getRequiredPropertiesDiff(config, state, value1.Required, value2.Required)
+	result.RequiredDiff = getRequiredPropertiesDiff(config, state, value1, value2)
 	result.PropertiesDiff, err = getSchemasDiff(config, state, value1.Properties, value2.Properties)
 	if err != nil {
 		return nil, err
@@ -320,7 +317,6 @@ const (
 )
 
 func getSchemaStatus(schema1, schema2 *openapi3.SchemaRef) schemaStatus {
-
 	if schema1 == nil && schema2 == nil {
 		return schemaStatusNoSchemas
 	}
@@ -337,9 +333,8 @@ func getSchemaStatus(schema1, schema2 *openapi3.SchemaRef) schemaStatus {
 }
 
 func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
-
 	if ref == nil || ref.Value == nil {
-		return nil, fmt.Errorf("schema reference is nil")
+		return nil, errors.New("schema reference is nil")
 	}
 
 	return ref.Value, nil
@@ -347,7 +342,6 @@ func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
 
 // Patch applies the patch to a schema
 func (diff *SchemaDiff) Patch(schema *openapi3.Schema) error {
-
 	if diff.Empty() {
 		return nil
 	}
