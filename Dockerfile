@@ -6,7 +6,11 @@ COPY go.mod go.sum ./
 # Download dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly
+
+RUN VERSION=$(git describe --always --tags) && \
+    CGO_ENABLED=0 GOOS=linux go build \
+    -mod=readonly \
+    -ldflags "-s -w -X github.com/tufin/oasdiff/build.Version=${VERSION}"
 
 ### Create image ###
 FROM alpine:3

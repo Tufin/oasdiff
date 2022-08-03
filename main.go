@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/build"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
@@ -67,7 +68,10 @@ func validateFlags() bool {
 
 func main() {
 	flag.Parse()
-
+	if flag.NArg() > 0 && flag.Arg(0) == "version" {
+		fmt.Printf("oasdiff version: %s\n", build.Version)
+		os.Exit(0)
+	}
 	if !validateFlags() {
 		os.Exit(101)
 	}
@@ -113,21 +117,22 @@ func main() {
 		exitNormally(diffReport.Empty())
 	}
 
-	if format == formatYAML {
+	switch {
+	case format == formatYAML:
 		if err = printYAML(diffReport); err != nil {
 			fmt.Printf("failed to print diff YAML with %v\n", err)
 			os.Exit(106)
 		}
-	} else if format == formatText {
+	case format == formatText:
 		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
-	} else if format == formatHTML {
+	case format == formatHTML:
 		html, err := report.GetHTMLReportAsString(diffReport)
 		if err != nil {
 			fmt.Printf("failed to generate HTML diff report with %v\n", err)
 			os.Exit(107)
 		}
 		fmt.Printf("%s", html)
-	} else {
+	default:
 		fmt.Printf("unknown output format %q\n", format)
 		os.Exit(108)
 	}

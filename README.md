@@ -487,8 +487,8 @@ Other formats: text, markdown and HTML, are designed to be more user-friendly by
 If you wish to include additional details in non-YAML formats, please open an issue.
 
 ### Paths vs. Endpoints
-OpenAPI Specification has a hierarchial model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
-oasdiff respects this hierarchy and displays a hierarchial diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
+OpenAPI Specification has a hierarchical model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
+oasdiff respects this hierarchy and displays a hierarchical diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
 ```yaml
 paths:
     deleted:
