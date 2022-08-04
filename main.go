@@ -25,11 +25,6 @@ const (
 )
 
 func init() {
-	flag.BoolVar(&version, "version", false, "show version and quit")
-	if version {
-		return
-	}
-
 	flag.StringVar(&base, "base", "", "path of original OpenAPI spec in YAML or JSON format")
 	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec in YAML or JSON format")
 	flag.StringVar(&prefix_base, "prefix-base", "", "if provided, paths in original (base) spec will be prefixed with the given prefix before comparison")
@@ -45,6 +40,7 @@ func init() {
 	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
+	flag.BoolVar(&version, "version", false, "show version and quit")
 }
 
 func validateFlags() bool {
