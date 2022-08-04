@@ -73,7 +73,7 @@ Usage of oasdiff:
   -summary
     	display a summary of the changes instead of the full diff
   -version
-    	show version number and quit
+    	show version and quit
 ```
 All arguments can be passed with one or two leading minus signs.  
 For example ```-breaking-only``` and ```--breaking-only``` are equivalent.
