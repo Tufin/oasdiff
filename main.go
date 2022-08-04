@@ -16,7 +16,7 @@ import (
 
 var base, revision, filter, filterExtension, format string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
-var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version bool
 
 const (
 	formatYAML = "yaml"
@@ -40,6 +40,7 @@ func init() {
 	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
+	flag.BoolVar(&version, "version", false, "show version number and quit")
 }
 
 func validateFlags() bool {
@@ -68,10 +69,12 @@ func validateFlags() bool {
 
 func main() {
 	flag.Parse()
+
 	if flag.NArg() > 0 && flag.Arg(0) == "version" {
 		fmt.Printf("oasdiff version: %s\n", build.Version)
 		os.Exit(0)
 	}
+
 	if !validateFlags() {
 		os.Exit(101)
 	}

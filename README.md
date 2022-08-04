@@ -72,6 +72,8 @@ Usage of oasdiff:
     	if provided, this prefix will be stripped from paths in revised (revision) spec before comparison
   -summary
     	display a summary of the changes instead of the full diff
+  -version
+    	show version number and quit
 ```
 All arguments can be passed with one or two leading minus signs.  
 For example ```-breaking-only``` and ```--breaking-only``` are equivalent.
