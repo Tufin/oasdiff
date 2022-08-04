@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/build"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
@@ -15,7 +16,7 @@ import (
 
 var base, revision, filter, filterExtension, format string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
-var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version bool
 
 const (
 	formatYAML = "yaml"
@@ -39,6 +40,7 @@ func init() {
 	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
+	flag.BoolVar(&version, "version", false, "show version and quit")
 }
 
 func validateFlags() bool {
@@ -67,6 +69,11 @@ func validateFlags() bool {
 
 func main() {
 	flag.Parse()
+
+	if version {
+		fmt.Printf("oasdiff version: %s\n", build.Version)
+		os.Exit(0)
+	}
 
 	if !validateFlags() {
 		os.Exit(101)
@@ -113,21 +120,22 @@ func main() {
 		exitNormally(diffReport.Empty())
 	}
 
-	if format == formatYAML {
+	switch {
+	case format == formatYAML:
 		if err = printYAML(diffReport); err != nil {
 			fmt.Printf("failed to print diff YAML with %v\n", err)
 			os.Exit(106)
 		}
-	} else if format == formatText {
+	case format == formatText:
 		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
-	} else if format == formatHTML {
+	case format == formatHTML:
 		html, err := report.GetHTMLReportAsString(diffReport)
 		if err != nil {
 			fmt.Printf("failed to generate HTML diff report with %v\n", err)
 			os.Exit(107)
 		}
 		fmt.Printf("%s", html)
-	} else {
+	default:
 		fmt.Printf("unknown output format %q\n", format)
 		os.Exit(108)
 	}
