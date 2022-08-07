@@ -13,7 +13,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GroupView"
-        description: Creates one project.
+        description: Creates one group.
         required: true
       responses:
         "200":

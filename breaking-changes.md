@@ -2,6 +2,7 @@
 These examples are automatically generated from unit tests.
 ## Examples of breaking changes
 [adding a new required property in request body is breaking](diff/breaking_property_test.go?plain=1#L173)  
+[adding a new required readonly property in request body is not breaking](diff/breaking_property_test.go?plain=1#L294)  
 [adding a required request body is breaking](diff/breaking_test.go?plain=1#L31)  
 [changing an existing header param from optional to required is breaking](diff/breaking_test.go?plain=1#L126)  
 [changing an existing property in request body to required is breaking](diff/breaking_property_test.go?plain=1#L156)  
@@ -24,6 +25,7 @@ These examples are automatically generated from unit tests.
 [reducing max in request is breaking](diff/breaking_min_max_test.go?plain=1#L141)  
 [reducing max in response is breaking](diff/breaking_min_max_test.go?plain=1#L159)  
 [reducing max length is breaking](diff/breaking_min_max_test.go?plain=1#L11)  
+[removing a required write-only property in response body is not breaking](diff/breaking_property_test.go?plain=1#L311)  
 
 ## Examples of non-breaking changes
 [adding a media-type to response is not breaking](diff/not_breaking_test.go?plain=1#L148)  

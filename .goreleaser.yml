@@ -9,6 +9,8 @@ builds:
      - arm64
    env:
      - CGO_ENABLED=0
+   ldflags:
+     - -s -w -X github.com/tufin/oasdiff/build.Version={{.Version}}
 
 release:
  prerelease: auto

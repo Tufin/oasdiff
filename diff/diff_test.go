@@ -16,6 +16,7 @@ const (
 )
 
 func l(t *testing.T, v int) *openapi3.T {
+	t.Helper()
 	loader := openapi3.NewLoader()
 	oas, err := loader.LoadFromFile(fmt.Sprintf("../data/openapi-test%d.yaml", v))
 	require.NoError(t, err)
@@ -23,6 +24,7 @@ func l(t *testing.T, v int) *openapi3.T {
 }
 
 func d(t *testing.T, config *diff.Config, v1, v2 int) *diff.Diff {
+	t.Helper()
 	d, err := diff.Get(config, l(t, v1), l(t, v2))
 	require.NoError(t, err)
 	return d
@@ -630,7 +632,7 @@ func TestOAS31(t *testing.T) {
 	// while specific 3.1 features, such as webhooks, are not yet supported by kin-openapi, the diff still works
 	require.Contains(t,
 		d.ComponentsDiff.SchemasDiff.Modified["Pet"].RequiredDiff.Added,
-		"nickname")
+		"tag")
 }
 
 func TestCircularSchema_Diff(t *testing.T) {
