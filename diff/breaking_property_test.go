@@ -33,7 +33,7 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: new optional property in request header isn't breaking
+// BC: new optional property in request header is not breaking
 func TestBreaking_NewNonRequiredProperty(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -77,7 +77,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: changing an existing property in request header to optional isn't breaking
+// BC: changing an existing property in request header to optional is not breaking
 func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -119,7 +119,7 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: changing an existing property in response body to required isn't breaking
+// BC: changing an existing property in response body to required is not breaking
 func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -136,7 +136,7 @@ func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: changing an existing property in request body to optional isn't breaking
+// BC: changing an existing property in request body to optional is not breaking
 func TestBreaking_ReqBodyRequiredPropertyDisabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -187,7 +187,7 @@ func TestBreaking_ReqBodyNewRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: deleting a required property in request isn't breaking
+// BC: deleting a required property in request is not breaking
 func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -204,7 +204,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: adding a new required property in response body isn't breaking
+// BC: adding a new required property in response body is not breaking
 func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -238,7 +238,7 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: adding a new required property under AllOf in response body isn't breaking
+// BC: adding a new required property under AllOf in response body is not breaking
 func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -272,7 +272,7 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: adding a new required property under AllOf in response body isn't breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking
+// BC: adding a new required property under AllOf in response body is not breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking
 // explanation: when multiple inline (without $ref) schemas under AllOf are modified we can't correlate schemas across base and revision
 // as a result we can't determine that the change was "a new required property" and the change appears as breaking
 func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
@@ -291,8 +291,25 @@ func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: adding a new required readonly property in request body is not breaking
+// BC: adding a new required read-only property in request body is not breaking
 func TestBreaking_ReadOnlyNewRequiredProperty(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("read-only-new-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("read-only-new-revision.yaml"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BG: changing an existing read-only property in request body to required is not breaking
+func TestBreaking_ReadOnlyPropertyRequiredEnabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
 	s1, err := loader.LoadFromFile(getReqPropFile("read-only-base.yaml"))
@@ -308,8 +325,42 @@ func TestBreaking_ReadOnlyNewRequiredProperty(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: removing a required write-only property in response body is not breaking
-func TestBreaking_WriteOnlyNewRequiredProperty(t *testing.T) {
+// BC: deleting a required write-only property in response body is not breaking
+func TestBreaking_WriteOnlyDeleteRequiredProperty(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("write-only-delete-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("write-only-delete-revision.yaml"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: deleting a non-required non-write-only property in response body is not breaking
+func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("write-only-delete-partial-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("write-only-delete-partial-revision.yaml"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: changing an existing write-only property in response body to optional is not breaking
+func TestBreaking_WriteOnlyPropertyRequiredDisabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
 	s1, err := loader.LoadFromFile(getReqPropFile("write-only-base.yaml"))
@@ -323,4 +374,38 @@ func TestBreaking_WriteOnlyNewRequiredProperty(t *testing.T) {
 	}, s1, s2)
 	require.NoError(t, err)
 	require.Empty(t, d)
+}
+
+// BC: changing an existing required property in response body to write-only is not breaking
+func TestBreaking_RequiredPropertyWriteOnlyEnabled(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("write-only-changed-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("write-only-changed-revision.yaml"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: changing an existing required property in response body to not-write-only is breaking
+func TestBreaking_RequiredPropertyWriteOnlyDisabled(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getReqPropFile("write-only-changed-revision.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getReqPropFile("write-only-changed-base.yaml"))
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
 }

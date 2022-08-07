@@ -2,6 +2,7 @@ package diff
 
 import (
 	"errors"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -55,7 +56,7 @@ func (diff *SchemaDiff) Empty() bool {
 	return diff == nil || *diff == SchemaDiff{}
 }
 
-func (diff *SchemaDiff) removeNonBreaking(state *state, schema2 *openapi3.SchemaRef) {
+func (diff *SchemaDiff) removeNonBreaking(state *state, schema1, schema2 *openapi3.SchemaRef) {
 
 	if diff.Empty() {
 		return
@@ -74,14 +75,6 @@ func (diff *SchemaDiff) removeNonBreaking(state *state, schema2 *openapi3.Schema
 
 	if !diff.NullableDiff.CompareWithDefault(true, false, false) { // TODO: check default value
 		diff.NullableDiff = nil
-	}
-
-	if !diff.ReadOnlyDiff.CompareWithDefault(false, true, false) { // TODO: Relevant only for Schema "properties" definitions
-		diff.ReadOnlyDiff = nil
-	}
-
-	if !diff.WriteOnlyDiff.CompareWithDefault(false, true, false) { // TODO: Relevant only for Schema "properties" definitions
-		diff.WriteOnlyDiff = nil
 	}
 
 	if !diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) {
@@ -128,7 +121,8 @@ func (diff *SchemaDiff) removeNonBreaking(state *state, schema2 *openapi3.Schema
 	}
 
 	// Object
-	diff.removeChangedButNonRequiredProperties(state, schema2)
+	diff.removeNonBreakingProperties(state, schema1, schema2)
+	diff.removeNonBreakingReadWriteOnly(state, schema1, schema2)
 
 	if !diff.AdditionalPropertiesAllowedDiff.CompareWithDefault(true, false, true) {
 		diff.AdditionalPropertiesAllowedDiff = nil
@@ -143,28 +137,120 @@ func (diff *SchemaDiff) removeNonBreaking(state *state, schema2 *openapi3.Schema
 	}
 }
 
-// removeChangedButNonRequiredProperties deletes non-required property changes that don't break client
-// In request: remove added but non-required properties
-// In response: remove deleted but non-required properties
-func (diff *SchemaDiff) removeChangedButNonRequiredProperties(state *state, schema2 *openapi3.SchemaRef) {
+func getRequiredMap(direction direction, schema1, schema2 *openapi3.SchemaRef) map[string]bool {
+	result := map[string]bool{}
+
+	if schema1 == nil || schema1.Value == nil ||
+		schema2 == nil || schema2.Value == nil {
+		return result
+	}
+
+	switch direction {
+	case directionRequest:
+		for _, prop := range schema2.Value.Required {
+			result[prop] = true
+		}
+	case directionResponse:
+		for _, prop := range schema1.Value.Required {
+			result[prop] = true
+		}
+	}
+
+	return result
+}
+
+func getReadWriteOnlyMap(direction direction, schema1, schema2 *openapi3.SchemaRef) map[string]bool {
+	result := map[string]bool{}
+
+	if schema1 == nil || schema1.Value == nil ||
+		schema2 == nil || schema2.Value == nil {
+		return result
+	}
+
+	switch direction {
+	case directionRequest:
+		for prop, schema := range schema2.Value.Properties {
+			result[prop] = schema.Value.ReadOnly
+		}
+	case directionResponse:
+		for prop, schema := range schema1.Value.Properties {
+			result[prop] = schema.Value.WriteOnly
+		}
+	}
+
+	return result
+}
+
+// removeNonBreakingProperties deletes property changes (add/delete) that don't break client
+// in request: remove added properties that are either non-required or read-only
+// in response: remove deleted properties that were either non-required or write-only properties
+func (diff *SchemaDiff) removeNonBreakingProperties(state *state, schema1, schema2 *openapi3.SchemaRef) {
 	if diff.Empty() || diff.PropertiesDiff.Empty() {
 		return
 	}
 
-	if schema2 == nil || schema2.Value == nil {
+	if schema1 == nil || schema1.Value == nil ||
+		schema2 == nil || schema2.Value == nil {
 		return
 	}
 
-	requiredMap := StringList(schema2.Value.Required).toStringSet()
+	requiredMap := getRequiredMap(state.direction, schema1, schema2)
+	readWriteOnlyMap := getReadWriteOnlyMap(state.direction, schema1, schema2)
 	changedSet := diff.PropertiesDiff.getBreakingSetByDirection(state.direction)
 
 	newList := StringList{}
 	for _, property := range *changedSet {
-		if _, ok := requiredMap[property]; ok {
+		if requiredMap[property] && !readWriteOnlyMap[property] {
 			newList = append(newList, property)
 		}
 	}
 	*changedSet = newList
+
+	if diff.PropertiesDiff.Empty() {
+		diff.PropertiesDiff = nil
+	}
+}
+
+// removeNonBreakingReadWriteOnly deletes property read-only/write-only modifications that don't break client
+// keep only:
+// "disable read-only" changes to required properties in requests
+// "disable write-only" changes to required properties in responses
+// remove all others
+func (diff *SchemaDiff) removeNonBreakingReadWriteOnly(state *state, schema1, schema2 *openapi3.SchemaRef) {
+
+	if diff.Empty() || diff.PropertiesDiff.Empty() {
+		return
+	}
+
+	// get a map of required properties in schema2 (new state)
+	required2Map := getRequiredMap(directionRequest, schema1, schema2)
+
+	for property, propertyDiff := range diff.PropertiesDiff.Modified {
+
+		// in requests, if property is required and ReadOnly was changed from true to false
+		if state.direction == directionRequest &&
+			required2Map[property] &&
+			propertyDiff.ReadOnlyDiff.CompareWithDefault(true, false, false) {
+			// this is a breaking change -> keep it
+		} else {
+			// not breaking -> remove it
+			propertyDiff.ReadOnlyDiff = nil
+		}
+
+		// in responses, if property is required and WriteOnly was changed from true to false
+		if state.direction == directionResponse &&
+			required2Map[property] &&
+			propertyDiff.WriteOnlyDiff.CompareWithDefault(true, false, false) {
+			// this is a breaking change -> keep it
+		} else {
+			// not breaking -> remove it
+			propertyDiff.WriteOnlyDiff = nil
+		}
+
+		if propertyDiff.Empty() {
+			delete(diff.PropertiesDiff.Modified, property)
+		}
+	}
 
 	if diff.PropertiesDiff.Empty() {
 		diff.PropertiesDiff = nil
@@ -183,7 +269,7 @@ func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.Sche
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(state, schema2)
+		diff.removeNonBreaking(state, schema1, schema2)
 	}
 
 	if diff.Empty() {

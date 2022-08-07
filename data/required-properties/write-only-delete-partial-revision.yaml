@@ -59,3 +59,4 @@ components:
           type: string
       required:
         - name
+        - test

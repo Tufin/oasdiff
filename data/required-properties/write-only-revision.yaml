@@ -12,7 +12,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupView'
+              $ref: "#/components/schemas/GroupView"
         description: Creates one project.
         required: true
       responses:
@@ -20,20 +20,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupView'
+                $ref: "#/components/schemas/GroupView"
           description: OK
       summary: Create One Group
   /api/atlas/v1.0/groups/{groupId}:
     get:
       operationId: returnOneGroup
       parameters:
-        - $ref: '#/components/parameters/groupId'
+        - $ref: "#/components/parameters/groupId"
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupView'
+                $ref: "#/components/schemas/GroupView"
           description: OK
       summary: Return One Group
 components:
@@ -62,4 +62,3 @@ components:
           writeOnly: true
       required:
         - name
-          

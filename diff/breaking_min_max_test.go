@@ -26,7 +26,7 @@ func TestBreaking_MaxLengthSmaller(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: reducing min length isn't breaking
+// BC: reducing min length is not breaking
 func TestBreaking_MinLengthSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -41,7 +41,7 @@ func TestBreaking_MinLengthSmaller(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: increasing max length isn't breaking
+// BC: increasing max length is not breaking
 func TestBreaking_MaxLengthGreater(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -76,7 +76,7 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: changing max length from any value to nil isn't breaking
+// BC: changing max length from any value to nil is not breaking
 func TestBreaking_MaxLengthToNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -93,7 +93,7 @@ func TestBreaking_MaxLengthToNil(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: both max lengths are nil isn't breaking
+// BC: both max lengths are nil is not breaking
 func TestBreaking_MaxLengthBothNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -108,7 +108,7 @@ func TestBreaking_MaxLengthBothNil(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: reducing min items isn't breaking
+// BC: reducing min items is not breaking
 func TestBreaking_MinItemsSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)

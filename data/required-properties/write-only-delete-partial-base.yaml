@@ -57,5 +57,8 @@ components:
           readOnly: true
         name:
           type: string
+        test:
+          type: string
+          writeOnly: false
       required:
         - name
