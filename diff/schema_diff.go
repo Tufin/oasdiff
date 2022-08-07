@@ -222,7 +222,7 @@ func (diff *SchemaDiff) removeNonBreakingReadWriteOnly(state *state, schema1, sc
 		return
 	}
 
-	// get a map of required properties in schema2 (new state)
+	// get a map of required properties in schema2 (new/revised spec)
 	required2Map := getRequiredMap(directionRequest, schema1, schema2)
 
 	for property, propertyDiff := range diff.PropertiesDiff.Modified {
