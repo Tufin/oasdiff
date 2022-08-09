@@ -45,21 +45,21 @@ func init() {
 
 func validateFlags() bool {
 	if base == "" {
-		fmt.Printf("please specify the '-base' flag: the path of the original OpenAPI spec in YAML or JSON format\n")
+		fmt.Fprintf(os.Stderr, "please specify the '-base' flag: the path of the original OpenAPI spec in YAML or JSON format\n")
 		return false
 	}
 	if revision == "" {
-		fmt.Printf("please specify the '-revision' flag: the path of the revised OpenAPI spec in YAML or JSON format\n")
+		fmt.Fprintf(os.Stderr, "please specify the '-revision' flag: the path of the revised OpenAPI spec in YAML or JSON format\n")
 		return false
 	}
 	supportedFormats := map[string]bool{"": true, "yaml": true, "text": true, "html": true}
 	if !supportedFormats[format] {
-		fmt.Printf("invalid format. Should be yaml, text or html\n")
+		fmt.Fprintf(os.Stderr, "invalid format. Should be yaml, text or html\n")
 		return false
 	}
 	if prefix != "" {
 		if prefix_revision != "" {
-			fmt.Printf("'-prefix' and '-prefix_revision' can't be used simultaneously\n")
+			fmt.Fprintf(os.Stderr, "'-prefix' and '-prefix_revision' can't be used simultaneously\n")
 			return false
 		}
 		prefix_revision = prefix
@@ -84,13 +84,13 @@ func main() {
 
 	s1, err := load.From(loader, base)
 	if err != nil {
-		fmt.Printf("failed to load base spec from %q with %v\n", base, err)
+		fmt.Fprintf(os.Stderr, "failed to load base spec from %q with %v\n", base, err)
 		os.Exit(102)
 	}
 
 	s2, err := load.From(loader, revision)
 	if err != nil {
-		fmt.Printf("failed to load revision spec from %q with %v\n", revision, err)
+		fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
 		os.Exit(103)
 	}
 
@@ -108,13 +108,13 @@ func main() {
 	diffReport, err := diff.Get(config, s1, s2)
 
 	if err != nil {
-		fmt.Printf("diff failed with %v\n", err)
+		fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
 		os.Exit(104)
 	}
 
 	if summary {
 		if err = printYAML(diffReport.GetSummary()); err != nil {
-			fmt.Printf("failed to print summary with %v\n", err)
+			fmt.Fprintf(os.Stderr, "failed to print summary with %v\n", err)
 			os.Exit(105)
 		}
 		exitNormally(diffReport.Empty())
@@ -123,7 +123,7 @@ func main() {
 	switch {
 	case format == formatYAML:
 		if err = printYAML(diffReport); err != nil {
-			fmt.Printf("failed to print diff YAML with %v\n", err)
+			fmt.Fprintf(os.Stderr, "failed to print diff YAML with %v\n", err)
 			os.Exit(106)
 		}
 	case format == formatText:
@@ -131,12 +131,12 @@ func main() {
 	case format == formatHTML:
 		html, err := report.GetHTMLReportAsString(diffReport)
 		if err != nil {
-			fmt.Printf("failed to generate HTML diff report with %v\n", err)
+			fmt.Fprintf(os.Stderr, "failed to generate HTML diff report with %v\n", err)
 			os.Exit(107)
 		}
 		fmt.Printf("%s", html)
 	default:
-		fmt.Printf("unknown output format %q\n", format)
+		fmt.Fprintf(os.Stderr, "unknown output format %q\n", format)
 		os.Exit(108)
 	}
 
