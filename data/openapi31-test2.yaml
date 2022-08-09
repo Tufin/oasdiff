@@ -24,7 +24,7 @@ components:
       required:
         - id
         - name
-        - nickname
+        - tag
       properties:
         id:
           type: integer

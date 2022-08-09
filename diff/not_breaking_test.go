@@ -8,12 +8,12 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// BC: no change isn't breaking
+// BC: no change is not breaking
 func TestBreaking_Same(t *testing.T) {
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true}, 1, 1))
 }
 
-// BC: adding an optional request body isn't breaking
+// BC: adding an optional request body is not breaking
 func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -29,7 +29,7 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: changing an existing request body from required to optional isn't breaking
+// BC: changing an existing request body from required to optional is not breaking
 func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -49,14 +49,14 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: deleting a tag isn't breaking
+// BC: deleting a tag is not breaking
 func TestBreaking_DeletedTag(t *testing.T) {
 	require.Empty(t, d(t, &diff.Config{
 		BreakingOnly: true,
 	}, 1, 5).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].TagsDiff)
 }
 
-// BC: adding an enum value isn't breaking
+// BC: adding an enum value is not breaking
 func TestBreaking_AddedEnum(t *testing.T) {
 	require.Empty(t,
 		d(t, &diff.Config{
@@ -64,7 +64,7 @@ func TestBreaking_AddedEnum(t *testing.T) {
 		}, 1, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath])
 }
 
-// BC: changing extensions isn't breaking
+// BC: changing extensions is not breaking
 func TestBreaking_ModifiedExtension(t *testing.T) {
 	config := diff.Config{
 		BreakingOnly:      true,
@@ -74,13 +74,13 @@ func TestBreaking_ModifiedExtension(t *testing.T) {
 	require.Empty(t, d(t, &config, 1, 3).ExtensionsDiff)
 }
 
-// BC: changing comments isn't breaking
+// BC: changing comments is not breaking
 func TestBreaking_Components(t *testing.T) {
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true},
 		1, 3).ComponentsDiff)
 }
 
-// BC: new optional header param isn't breaking
+// BC: new optional header param is not breaking
 func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -95,7 +95,7 @@ func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: changing an existing header param to optional isn't breaking
+// BC: changing an existing header param to optional is not breaking
 func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -114,7 +114,7 @@ func deleteResponseHeader(response *openapi3.Response, name string) {
 	delete(response.Headers, name)
 }
 
-// BC: new required response header param isn't breaking
+// BC: new required response header param is not breaking
 func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -129,7 +129,7 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: changing operation ID isn't breaking
+// BC: changing operation ID is not breaking
 func TestBreaking_OperationID(t *testing.T) {
 	require.Empty(t,
 		d(t, &diff.Config{
@@ -137,7 +137,7 @@ func TestBreaking_OperationID(t *testing.T) {
 		}, 3, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].OperationIDDiff)
 }
 
-// BC: changing a link to operation ID isn't breaking
+// BC: changing a link to operation ID is not breaking
 func TestBreaking_LinkOperationID(t *testing.T) {
 	require.Empty(t,
 		d(t, &diff.Config{
@@ -145,7 +145,7 @@ func TestBreaking_LinkOperationID(t *testing.T) {
 		}, 3, 1).PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].ResponsesDiff.Modified["200"].LinksDiff.Modified)
 }
 
-// BC: adding a media-type to response isn't breaking
+// BC: adding a media-type to response is not breaking
 func TestBreaking_ResponseAddMediaType(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -162,7 +162,7 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: deprecating an operation isn't breaking
+// BC: deprecating an operation is not breaking
 func TestBreaking_DeprecatedOperation(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -176,7 +176,7 @@ func TestBreaking_DeprecatedOperation(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: deprecating a parameter isn't breaking
+// BC: deprecating a parameter is not breaking
 func TestBreaking_DeprecatedParameter(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -190,7 +190,7 @@ func TestBreaking_DeprecatedParameter(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: deprecating a header isn't breaking
+// BC: deprecating a header is not breaking
 func TestBreaking_DeprecatedHeader(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -204,7 +204,7 @@ func TestBreaking_DeprecatedHeader(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: deprecating a schema isn't breaking
+// BC: deprecating a schema is not breaking
 func TestBreaking_DeprecatedSchema(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -218,7 +218,7 @@ func TestBreaking_DeprecatedSchema(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: changing servers isn't breaking
+// BC: changing servers is not breaking
 func TestBreaking_Servers(t *testing.T) {
 	loader := openapi3.NewLoader()
 

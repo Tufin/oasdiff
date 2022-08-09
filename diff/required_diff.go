@@ -1,5 +1,9 @@
 package diff
 
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
+
 // RequiredPropertiesDiff describes the changes between a pair of lists of required properties
 type RequiredPropertiesDiff struct {
 	StringsDiff
@@ -33,9 +37,53 @@ func (diff *RequiredPropertiesDiff) removeNonBreaking(state *state) {
 	}
 }
 
-func getRequiredPropertiesDiff(config *Config, state *state, strings1, strings2 StringList) *RequiredPropertiesDiff {
+func (diff *RequiredPropertiesDiff) removeReadOnly(state *state, value1, value2 *openapi3.Schema) {
+	if diff.Empty() || diff.StringsDiff.Empty() || state.direction == directionResponse {
+		// readonly properties are only valid for responses
+		return
+	}
+	added := make(StringList, 0)
+	for _, v := range diff.Added {
+		if p, ok := value2.Properties[v]; ok && !p.Value.ReadOnly {
+			added = append(added, v)
+		}
+	}
+	diff.Added = added
+	deleted := make(StringList, 0)
+	for _, v := range diff.Deleted {
+		if p, ok := value1.Properties[v]; ok && !p.Value.ReadOnly {
+			deleted = append(deleted, v)
+		}
+	}
+	diff.Deleted = deleted
+}
 
-	diff := getRequiredPropertiesDiffInternal(strings1, strings2)
+func (diff *RequiredPropertiesDiff) removeWriteOnly(state *state, value1, value2 *openapi3.Schema) {
+	if diff.Empty() || diff.StringsDiff.Empty() || state.direction == directionRequest {
+		// writeOnly properties are only valid for requests
+		return
+	}
+	added := make(StringList, 0)
+	for _, v := range diff.Added {
+		if p, ok := value2.Properties[v]; ok && !p.Value.WriteOnly {
+			added = append(added, v)
+		}
+	}
+	diff.Added = added
+	deleted := make(StringList, 0)
+	for _, v := range diff.Deleted {
+		if p, ok := value1.Properties[v]; ok && !p.Value.WriteOnly {
+			deleted = append(deleted, v)
+		}
+	}
+	diff.Deleted = deleted
+}
+
+func getRequiredPropertiesDiff(config *Config, state *state, value1, value2 *openapi3.Schema) *RequiredPropertiesDiff {
+	diff := getRequiredPropertiesDiffInternal(value1.Required, value2.Required)
+
+	diff.removeReadOnly(state, value1, value2)
+	diff.removeWriteOnly(state, value1, value2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking(state)
