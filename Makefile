@@ -1,0 +1,2 @@
+test:
+	scripts/test.sh
