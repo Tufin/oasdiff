@@ -39,6 +39,7 @@ These examples are automatically generated from unit tests.
 [changing an existing property in request body to optional is not breaking](diff/breaking_property_test.go?plain=1#L139)  
 [changing an existing property in request header to optional is not breaking](diff/breaking_property_test.go?plain=1#L80)  
 [changing an existing property in response body to required is not breaking](diff/breaking_property_test.go?plain=1#L122)  
+[changing an existing read-only property in request body to required is not breaking](diff/breaking_property_test.go?plain=1#L311)  
 [changing an existing request body from required to optional is not breaking](diff/not_breaking_test.go?plain=1#L32)  
 [changing an existing required property in response body to write-only is not breaking](diff/breaking_property_test.go?plain=1#L379)  
 [changing an existing write-only property in response body to optional is not breaking](diff/breaking_property_test.go?plain=1#L362)  

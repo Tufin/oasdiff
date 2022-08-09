@@ -308,7 +308,7 @@ func TestBreaking_ReadOnlyNewRequiredProperty(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BG: changing an existing read-only property in request body to required is not breaking
+// BC: changing an existing read-only property in request body to required is not breaking
 func TestBreaking_ReadOnlyPropertyRequiredEnabled(t *testing.T) {
 	loader := openapi3.NewLoader()
 
