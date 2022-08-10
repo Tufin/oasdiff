@@ -52,6 +52,7 @@ These examples are automatically generated from unit tests.
 [deleting a required property in request is not breaking](diff/breaking_property_test.go?plain=1#L190)  
 [deleting a required write-only property in response body is not breaking](diff/breaking_property_test.go?plain=1#L328)  
 [deleting a tag is not breaking](diff/not_breaking_test.go?plain=1#L52)  
+[deleting an endpoint after sunset is not breaking](diff/deprecation_test.go?plain=1#L16)  
 [deprecating a header is not breaking](diff/not_breaking_test.go?plain=1#L193)  
 [deprecating a parameter is not breaking](diff/not_breaking_test.go?plain=1#L179)  
 [deprecating a schema is not breaking](diff/not_breaking_test.go?plain=1#L207)  

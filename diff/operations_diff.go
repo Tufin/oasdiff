@@ -1,9 +1,11 @@
 package diff
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"regexp"
+	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 )
@@ -26,12 +28,41 @@ func (operationsDiff *OperationsDiff) Empty() bool {
 		len(operationsDiff.Modified) == 0
 }
 
-func (operationsDiff *OperationsDiff) removeNonBreaking() {
+func (operationsDiff *OperationsDiff) properlyDeprecated(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem, op string) bool {
+	operation := pathItem1.GetOperation(op)
+	if operation.Deprecated {
+		var sunset string
+		if err := json.Unmarshal(operation.ExtensionProps.Extensions["x-sunset"].(json.RawMessage), &sunset); err != nil {
+			return false
+		}
+		date, err := time.Parse("2006-01-02", sunset)
+		if err != nil {
+			return false
+		}
+		return time.Now().After(date)
+	}
+
+	return false
+}
+
+func (operationsDiff *OperationsDiff) removeProperlyDeprecated(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) {
+	deleted := []string{}
+	for _, op := range operationsDiff.Deleted {
+		if !operationsDiff.properlyDeprecated(config, state, pathItem1, pathItem2, op) {
+			deleted = append(deleted, op)
+		}
+	}
+	operationsDiff.Deleted = deleted
+
+}
+
+func (operationsDiff *OperationsDiff) removeNonBreaking(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) {
 
 	if operationsDiff.Empty() {
 		return
 	}
 
+	operationsDiff.removeProperlyDeprecated(config, state, pathItem1, pathItem2)
 	operationsDiff.Added = nil
 }
 
@@ -57,7 +88,7 @@ func getOperationsDiff(config *Config, state *state, pathItem1, pathItem2 *opena
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking()
+		diff.removeNonBreaking(config, state, pathItem1, pathItem2)
 	}
 
 	if diff.Empty() {
