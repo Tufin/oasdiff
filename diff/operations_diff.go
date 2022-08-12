@@ -28,27 +28,39 @@ func (operationsDiff *OperationsDiff) Empty() bool {
 		len(operationsDiff.Modified) == 0
 }
 
-func (operationsDiff *OperationsDiff) properlyDeprecated(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem, op string) bool {
-	operation := pathItem1.GetOperation(op)
-	if operation.Deprecated {
-		var sunset string
-		if err := json.Unmarshal(operation.ExtensionProps.Extensions["x-sunset"].(json.RawMessage), &sunset); err != nil {
-			return false
-		}
-		date, err := time.Parse("2006-01-02", sunset)
-		if err != nil {
-			return false
-		}
-		return time.Now().After(date)
+func properlyDeprecated(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem, op string) bool {
+	if pathItem1 == nil {
+		return false
 	}
 
-	return false
+	operation := pathItem1.GetOperation(op)
+
+	if !operation.Deprecated {
+		return false
+	}
+
+	sunsetJson, ok := operation.ExtensionProps.Extensions["x-sunset"].(json.RawMessage)
+	if !ok {
+		return false
+	}
+
+	var sunset string
+	if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
+		return false
+	}
+
+	date, err := time.Parse("2006-01-02", sunset)
+	if err != nil {
+		return false
+	}
+
+	return time.Now().After(date)
 }
 
 func (operationsDiff *OperationsDiff) removeProperlyDeprecated(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) {
 	deleted := []string{}
 	for _, op := range operationsDiff.Deleted {
-		if !operationsDiff.properlyDeprecated(config, state, pathItem1, pathItem2, op) {
+		if !properlyDeprecated(config, state, pathItem1, pathItem2, op) {
 			deleted = append(deleted, op)
 		}
 	}
