@@ -536,6 +536,12 @@ When a resource (operation or other object) is eventually removed, the change **
 oasdiff allows you to gracefully deprecate a resource and then remove it without getting the ```breaking-change``` warning:
 1. At first, a resource such as an [operation](https://swagger.io/specification/#operation-object) exists in the spec
 2. At some point, the resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed
+   ```
+   /api/test:
+    get:
+     deprecated: true
+     x-sunset: "2022-08-10"
+   ```
 3. At the sunset date or anytime later, the resource can be removed without triggering a ```breaking-change``` warning
 
 oasdiff allows you to control the minimal number of days required between deprecating a resource and removing it with the ```derecation-days``` flag.  
