@@ -5,25 +5,26 @@ import (
 	"errors"
 	"time"
 
+	"cloud.google.com/go/civil"
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
 const SunsetExtension = "x-sunset"
 
-func getSunsetDate(extensionProps openapi3.ExtensionProps) (time.Time, error) {
+func getSunsetDate(extensionProps openapi3.ExtensionProps) (civil.Date, error) {
 	sunsetJson, ok := extensionProps.Extensions[SunsetExtension].(json.RawMessage)
 	if !ok {
-		return time.Time{}, errors.New("not found")
+		return civil.Date{}, errors.New("not found")
 	}
 
 	var sunset string
 	if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
-		return time.Time{}, errors.New("unmarshal failed")
+		return civil.Date{}, errors.New("unmarshal failed")
 	}
 
-	date, err := time.Parse("2006-01-02", sunset)
+	date, err := civil.ParseDate(sunset)
 	if err != nil {
-		return time.Time{}, errors.New("failed to parse time")
+		return civil.Date{}, errors.New("failed to parse time")
 	}
 
 	return date, nil
@@ -41,7 +42,7 @@ func sunsetAllowed(deprecated bool, extensionProps openapi3.ExtensionProps) bool
 		return false
 	}
 
-	return time.Now().After(date)
+	return civil.DateOf(time.Now()).After(date)
 }
 
 func deprecationPeriodSufficient(deprecationDays int, extensionProps openapi3.ExtensionProps) bool {
@@ -54,7 +55,7 @@ func deprecationPeriodSufficient(deprecationDays int, extensionProps openapi3.Ex
 		return false
 	}
 
-	days := int(date.Sub(time.Now()).Hours() / 24)
+	days := date.DaysSince(civil.DateOf(time.Now()))
 
 	return days >= deprecationDays
 }
