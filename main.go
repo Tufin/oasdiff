@@ -17,6 +17,7 @@ import (
 var base, revision, filter, filterExtension, format string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version bool
+var deprecationDays int
 
 const (
 	formatYAML = "yaml"
@@ -38,6 +39,7 @@ func init() {
 	flag.BoolVar(&excludeDescription, "exclude-description", false, "ignore changes to descriptions")
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
 	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
+	flag.IntVar(&deprecationDays, "deprecation-days", 0, "number of days before a deprecated element can be deleted without being considered 'breaking'")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
 	flag.BoolVar(&version, "version", false, "show version and quit")
@@ -104,6 +106,7 @@ func main() {
 	config.PathStripPrefixBase = strip_prefix_base
 	config.PathStripPrefixRevision = strip_prefix_revision
 	config.BreakingOnly = breakingOnly
+	config.DeprecationDays = deprecationDays
 
 	diffReport, err := diff.Get(config, s1, s2)
 
