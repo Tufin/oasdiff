@@ -12,6 +12,7 @@ type Config struct {
 	PathStripPrefixBase     string
 	PathStripPrefixRevision string
 	BreakingOnly            bool
+	DeprecationDays         int
 }
 
 // NewConfig returns a default configuration

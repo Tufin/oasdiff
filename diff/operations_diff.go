@@ -1,11 +1,9 @@
 package diff
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"regexp"
-	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 )
@@ -28,39 +26,18 @@ func (operationsDiff *OperationsDiff) Empty() bool {
 		len(operationsDiff.Modified) == 0
 }
 
-func properlyDeprecated(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem, op string) bool {
+// removeSunset removes deleted endpoints that have been deleted after a sufficient deprecation period
+func (operationsDiff *OperationsDiff) removeSunset(pathItem1 *openapi3.PathItem) {
+
 	if pathItem1 == nil {
-		return false
+		return
 	}
 
-	operation := pathItem1.GetOperation(op)
-
-	if !operation.Deprecated {
-		return false
-	}
-
-	sunsetJson, ok := operation.ExtensionProps.Extensions["x-sunset"].(json.RawMessage)
-	if !ok {
-		return false
-	}
-
-	var sunset string
-	if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
-		return false
-	}
-
-	date, err := time.Parse("2006-01-02", sunset)
-	if err != nil {
-		return false
-	}
-
-	return time.Now().After(date)
-}
-
-func (operationsDiff *OperationsDiff) removeProperlyDeprecated(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) {
 	deleted := []string{}
 	for _, op := range operationsDiff.Deleted {
-		if !properlyDeprecated(config, state, pathItem1, pathItem2, op) {
+		operation := pathItem1.GetOperation(op)
+
+		if !sunsetAllowed(operation.Deprecated, operation.ExtensionProps) {
 			deleted = append(deleted, op)
 		}
 	}
@@ -68,13 +45,13 @@ func (operationsDiff *OperationsDiff) removeProperlyDeprecated(config *Config, s
 
 }
 
-func (operationsDiff *OperationsDiff) removeNonBreaking(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) {
+func (operationsDiff *OperationsDiff) removeNonBreaking(pathItem1 *openapi3.PathItem) {
 
 	if operationsDiff.Empty() {
 		return
 	}
 
-	operationsDiff.removeProperlyDeprecated(config, state, pathItem1, pathItem2)
+	operationsDiff.removeSunset(pathItem1)
 	operationsDiff.Added = nil
 }
 
@@ -100,7 +77,7 @@ func getOperationsDiff(config *Config, state *state, pathItem1, pathItem2 *opena
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(config, state, pathItem1, pathItem2)
+		diff.removeNonBreaking(pathItem1)
 	}
 
 	if diff.Empty() {
