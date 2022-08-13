@@ -26,7 +26,7 @@ func (operationsDiff *OperationsDiff) Empty() bool {
 		len(operationsDiff.Modified) == 0
 }
 
-// removeSunset removes deleted endpoints that have been deleted after a sufficient deprecation period
+// removeSunset removes deleted operations that were deleted after a sufficient deprecation period
 func (operationsDiff *OperationsDiff) removeSunset(pathItem1 *openapi3.PathItem) {
 
 	if pathItem1 == nil {

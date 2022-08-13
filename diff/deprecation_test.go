@@ -16,7 +16,7 @@ func getDeprecationFile(file string) string {
 	return fmt.Sprintf("../data/deprecation/%s", file)
 }
 
-// BC: deleting an endpoint before sunset is breaking
+// BC: deleting an operation before sunset is breaking
 func TestBreaking_DeprecationFuture(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -33,7 +33,7 @@ func TestBreaking_DeprecationFuture(t *testing.T) {
 	require.NotEmpty(t, dd)
 }
 
-// BC: deleting an endpoint without sunset is breaking
+// BC: deleting an operation without sunset is breaking
 func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -50,7 +50,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.NotEmpty(t, dd)
 }
 
-// BC: deleting an endpoint after sunset is not breaking
+// BC: deleting an operation after sunset is not breaking
 func TestBreaking_DeprecationPast(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -67,7 +67,7 @@ func TestBreaking_DeprecationPast(t *testing.T) {
 	require.Empty(t, dd)
 }
 
-// BC: deprecating an endpoint with a deprecation policy but without specifying sunset date is breaking
+// BC: deprecating an operation with a deprecation policy but without specifying sunset date is breaking
 func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -85,7 +85,7 @@ func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 	require.NotEmpty(t, dd)
 }
 
-// BC: deprecating an endpoint without a deprecation policy and without specifying sunset date is not breaking
+// BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking
 func TestBreaking_DeprecationWithoutPoicy(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -109,7 +109,7 @@ func toJson(t *testing.T, value string) json.RawMessage {
 	return data
 }
 
-// BC: deprecating an endpoint with a deprecation policy and sunset date before required deprecation period is breaking
+// BC: deprecating an operation with a deprecation policy and sunset date before required deprecation period is breaking
 func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -128,7 +128,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 	require.NotEmpty(t, dd)
 }
 
-// BC: deprecating an endpoint with a deprecation policy and sunset date after required deprecation period is not breaking
+// BC: deprecating an operation with a deprecation policy and sunset date after required deprecation period is not breaking
 func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -143,6 +143,23 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	dd, err := diff.Get(&diff.Config{
 		BreakingOnly:    true,
 		DeprecationDays: 10,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, dd)
+}
+
+// BC: deleting a path after sunset of all contained operations is not breaking
+func TestBreaking_DeprecationPathPast(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-path-past.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getDeprecationFile("sunset-path.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
 	require.Empty(t, dd)
