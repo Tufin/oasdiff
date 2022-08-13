@@ -8,8 +8,10 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
+const SunsetExtension = "x-sunset"
+
 func getSunsetDate(extensionProps openapi3.ExtensionProps) (time.Time, error) {
-	sunsetJson, ok := extensionProps.Extensions["x-sunset"].(json.RawMessage)
+	sunsetJson, ok := extensionProps.Extensions[SunsetExtension].(json.RawMessage)
 	if !ok {
 		return time.Time{}, errors.New("not found")
 	}
