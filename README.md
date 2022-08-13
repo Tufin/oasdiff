@@ -20,6 +20,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Compare specs in YAML or JSON format
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Detect [breaking changes](#breaking-changes)
+- Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources)
 - Support [path prefix modification](#path-prefix-modification)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
 
@@ -527,7 +528,7 @@ Breaking changes are changes that could break a client that is relying on the Op
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
 Note: this is a Beta feature. Please report issues.
 
-### Deprecating Resources
+### Non Breaking Removal of Deprecated Resources
 OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and several other object types as deprecated.  
 Deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future.  
 When a resource (operation or other object) is eventually removed, the change **is** considered a breaking change.
@@ -552,7 +553,7 @@ For example, this is breaking:
 ```
 oasdiff --breaking-only -base data/deprecation/deprecated-future.yaml -revision data/deprecation/sunset.yaml
 ```
-However, this is not breaking, because the sunset date has passed:
+However, this is not breaking, because the sunset date is in the past:
 ```
 oasdiff --breaking-only -base data/deprecation/deprecated-past.yaml -revision data/deprecation/sunset.yaml
 ```
