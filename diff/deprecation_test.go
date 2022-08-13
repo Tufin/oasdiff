@@ -16,7 +16,7 @@ func getDeprecationFile(file string) string {
 	return fmt.Sprintf("../data/deprecation/%s", file)
 }
 
-// BC: deleting an operation before sunset is breaking
+// BC: deleting an operation before sunset date is breaking
 func TestBreaking_DeprecationFuture(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -33,7 +33,7 @@ func TestBreaking_DeprecationFuture(t *testing.T) {
 	require.NotEmpty(t, dd)
 }
 
-// BC: deleting an operation without sunset is breaking
+// BC: deleting an operation without sunset date is breaking
 func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -50,7 +50,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.NotEmpty(t, dd)
 }
 
-// BC: deleting an operation after sunset is not breaking
+// BC: deleting an operation after sunset date is not breaking
 func TestBreaking_DeprecationPast(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -148,7 +148,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	require.Empty(t, dd)
 }
 
-// BC: deleting a path after sunset of all contained operations is not breaking
+// BC: deleting a path after sunset date of all contained operations is not breaking
 func TestBreaking_DeprecationPathPast(t *testing.T) {
 	loader := openapi3.NewLoader()
 
