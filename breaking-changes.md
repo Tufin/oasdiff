@@ -13,6 +13,7 @@ These examples are automatically generated from unit tests.
 [changing max length from nil to any value is breaking](diff/breaking_min_max_test.go?plain=1#L62)  
 [deleting a media-type from response is breaking](diff/breaking_test.go?plain=1#L162)  
 [deleting a path is breaking](diff/breaking_test.go?plain=1#L11)  
+[deleting a path with some operations having sunset date in the future is breaking](diff/deprecation_test.go?plain=1#L168)  
 [deleting a required property in response body is breaking](diff/breaking_property_test.go?plain=1#L224)  
 [deleting a required property under AllOf in response body is breaking](diff/breaking_property_test.go?plain=1#L258)  
 [deleting an enum value is breaking](diff/breaking_test.go?plain=1#L67)  

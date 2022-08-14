@@ -164,3 +164,20 @@ func TestBreaking_DeprecationPathPast(t *testing.T) {
 	require.NoError(t, err)
 	require.Empty(t, dd)
 }
+
+// BC: deleting a path with some operations having sunset date in the future is breaking
+func TestBreaking_DeprecationPathMixed(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-path-mixed.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getDeprecationFile("sunset-path.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, dd)
+}
