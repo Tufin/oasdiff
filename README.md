@@ -529,42 +529,27 @@ Breaking changes are changes that could break a client that is relying on the Op
 Note: this is a Beta feature. Please report issues.
 
 ### Non Breaking Removal of Deprecated Resources
-OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and several other object types as deprecated.  
-Deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future.  
-When a resource (operation or other object) is eventually removed, the change **is** considered a breaking change.
+OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and other object types as deprecated.  
+Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource (operation or other object) **is** considered a breaking change.
 
-oasdiff allows you to gracefully deprecate a resource and then remove it without getting the ```breaking-change``` warning:
-1. At first, a resource such as an [operation](https://swagger.io/specification/#operation-object) exists in the spec
-2. At some point, the resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed
+oasdiff allows you to gracefully remove a resource without getting the ```breaking-change``` warning, as follows:
+1.   First, the resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed
    ```
    /api/test:
     get:
      deprecated: true
      x-sunset: "2022-08-10"
    ```
-3. At the sunset date or anytime later, the resource can be removed without triggering a ```breaking-change``` warning
+2. At the sunset date or anytime later, the resource can be removed without triggering a ```breaking-change``` warning. An earlier removal will be considered a breaking change.
 
-oasdiff allows you to control the minimal number of days required between deprecating a resource and removing it with the ```derecation-days``` flag.  
-For example, this is not breaking, because deprecating a resource doesn't break the client:
+In addition, oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it with the ```derecation-days``` flag.  
+For example, this command requires any deprecation to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
 ```
-oasdiff --breaking-only -base data/deprecation/deprecated-base.yaml -revision data/deprecation/deprecated-future.yaml
-```
-However, this is breaking, because the announced sunset date (which is in the past) doesn't meet the minimal deprecation days requirement (at least 10 days from now):
-```
-oasdiff -deprecation-days=10 --breaking-only -base data/deprecation/deprecated-base.yaml -revision data/deprecation/deprecated-past.yaml
+oasdiff -deprecation-days=10 -breaking-only -base data/deprecation/deprecated-base.yaml -revision data/deprecation/deprecated-past.yaml
 ```
 
 Setting deprecation-days to 0 is equivalent to the default which allows non-breaking deprecation regardless of the sunset date.
 
-When a resource is removed, oasdiff also checks that it is not done before the sunset date.  
-For example, this is breaking because the sunset date is far away in the future:
-```
-oasdiff --breaking-only -base data/deprecation/deprecated-future.yaml -revision data/deprecation/sunset.yaml
-```
-However, this is not breaking, because the sunset date is in the past:
-```
-oasdiff --breaking-only -base data/deprecation/deprecated-past.yaml -revision data/deprecation/sunset.yaml
-```
 
 ### Path Prefix Modification
 Sometimes paths prefixes need to be modified, for example, to create a new version:
