@@ -530,7 +530,7 @@ Note: this is a Beta feature. Please report issues.
 
 ### Non Breaking Removal of Deprecated Resources
 OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and other object types as deprecated.  
-Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource (operation or other object) **is** considered a breaking change.
+Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource **is** considered a breaking change.
 
 oasdiff allows you to gracefully remove a resource without getting the ```breaking-change``` warning, as follows:
 1.   First, the resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed
@@ -542,8 +542,8 @@ oasdiff allows you to gracefully remove a resource without getting the ```breaki
    ```
 2. At the sunset date or anytime later, the resource can be removed without triggering a ```breaking-change``` warning. An earlier removal will be considered a breaking change.
 
-In addition, oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it with the ```derecation-days``` flag.  
-For example, this command requires any deprecation to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
+In addition, oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it with the ```deprecation-days``` flag.  
+For example, the following command requires any deprecation to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
 ```
 oasdiff -deprecation-days=10 -breaking-only -base data/deprecation/deprecated-base.yaml -revision data/deprecation/deprecated-past.yaml
 ```
