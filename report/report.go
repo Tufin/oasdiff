@@ -138,6 +138,7 @@ func (r *report) printMethod(d *diff.MethodDiff) {
 	}
 
 	r.printMessage(d.CallbacksDiff, "Callbacks changed")
+	r.printValue(d.DeprecatedDiff, "Deprecated")
 
 	if !d.SecurityDiff.Empty() {
 		r.print("Security changed")
