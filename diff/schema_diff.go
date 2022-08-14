@@ -56,7 +56,7 @@ func (diff *SchemaDiff) Empty() bool {
 	return diff == nil || *diff == SchemaDiff{}
 }
 
-func (diff *SchemaDiff) removeNonBreaking(state *state, schema1, schema2 *openapi3.SchemaRef) {
+func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) {
 
 	if diff.Empty() {
 		return
@@ -81,8 +81,9 @@ func (diff *SchemaDiff) removeNonBreaking(state *state, schema1, schema2 *openap
 		diff.AllowEmptyValueDiff = nil
 	}
 
-	diff.DeprecatedDiff = nil
-
+	if schema2 == nil || schema2.Value == nil || deprecationPeriodSufficient(config.DeprecationDays, schema2.Value.ExtensionProps) {
+		diff.DeprecatedDiff = nil
+	}
 	// Number
 	if !diff.MinDiff.minBreakingFloat64() { // *float64
 		diff.MinDiff = nil
@@ -269,7 +270,7 @@ func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.Sche
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(state, schema1, schema2)
+		diff.removeNonBreaking(config, state, schema1, schema2)
 	}
 
 	if diff.Empty() {

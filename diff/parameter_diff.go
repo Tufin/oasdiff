@@ -25,7 +25,7 @@ func (diff *ParameterDiff) Empty() bool {
 	return diff == nil || *diff == ParameterDiff{}
 }
 
-func (diff *ParameterDiff) removeNonBreaking() {
+func (diff *ParameterDiff) removeNonBreaking(config *Config, param2 *openapi3.Parameter) {
 
 	if diff.Empty() {
 		return
@@ -35,7 +35,9 @@ func (diff *ParameterDiff) removeNonBreaking() {
 	diff.DescriptionDiff = nil
 	diff.ExampleDiff = nil
 	diff.ExamplesDiff = nil
-	diff.DeprecatedDiff = nil
+	if deprecationPeriodSufficient(config.DeprecationDays, param2.ExtensionProps) {
+		diff.DeprecatedDiff = nil
+	}
 
 	if !diff.RequiredDiff.CompareWithDefault(false, true, false) {
 		diff.RequiredDiff = nil
@@ -53,7 +55,7 @@ func getParameterDiff(config *Config, state *state, param1, param2 *openapi3.Par
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking()
+		diff.removeNonBreaking(config, param2)
 	}
 
 	if diff.Empty() {
