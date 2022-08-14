@@ -79,7 +79,7 @@ Usage of oasdiff:
     	show version and quit
 ```
 All arguments can be passed with one or two leading minus signs.  
-For example ```-breaking-only``` and ```--breaking-only``` are equivalent.
+For example, ```-breaking-only``` and ```--breaking-only``` are equivalent.
 
 ## Usage Examples
 
@@ -488,7 +488,7 @@ components:
 ### Output Formats
 The default output format, YAML, provides a full view of all diff details.  
 Note that no output in YAML format signifies that the diff is empty, or, in other words, there are no changes.  
-Other formats: text, markdown and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
+Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
 If you wish to include additional details in non-YAML formats, please open an issue.
 
 ### Paths vs. Endpoints
