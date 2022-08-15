@@ -30,6 +30,7 @@ func (parametersDiff *ParametersDiff) removeNonBreaking(params2 openapi3.Paramet
 		return
 	}
 
+	// TODO: handle sunset
 	parametersDiff.removeAddedButNonRequired(params2)
 }
 

@@ -28,6 +28,7 @@ func (schemasDiff *SchemasDiff) removeNonBreaking(state *state) {
 		return
 	}
 
+	// TODO: handle sunset
 	switch state.direction {
 	case directionRequest:
 		// In request: deleting properties is non-breaking (for client)
