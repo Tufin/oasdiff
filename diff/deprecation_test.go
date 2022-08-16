@@ -17,7 +17,7 @@ func getDeprecationFile(file string) string {
 }
 
 // BC: deleting an operation before sunset date is breaking
-func TestBreaking_DeprecationFuture(t *testing.T) {
+func TestBreaking_DeprecationEarlySunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
 	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-future.yaml"))
@@ -71,7 +71,7 @@ func TestBreaking_DeprecationPast(t *testing.T) {
 func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-base.yaml"))
+	s1, err := loader.LoadFromFile(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 
 	s2, err := loader.LoadFromFile(getDeprecationFile("deprecated-no-sunset.yaml"))
@@ -89,7 +89,7 @@ func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 func TestBreaking_DeprecationWithoutPoicy(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-base.yaml"))
+	s1, err := loader.LoadFromFile(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 
 	s2, err := loader.LoadFromFile(getDeprecationFile("deprecated-no-sunset.yaml"))
@@ -113,7 +113,7 @@ func toJson(t *testing.T, value string) json.RawMessage {
 func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-base.yaml"))
+	s1, err := loader.LoadFromFile(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 
 	s2, err := loader.LoadFromFile(getDeprecationFile("deprecated-future.yaml"))
@@ -132,7 +132,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-base.yaml"))
+	s1, err := loader.LoadFromFile(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 
 	s2, err := loader.LoadFromFile(getDeprecationFile("deprecated-future.yaml"))
@@ -173,6 +173,76 @@ func TestBreaking_DeprecationPathMixed(t *testing.T) {
 	require.NoError(t, err)
 
 	s2, err := loader.LoadFromFile(getDeprecationFile("sunset-path.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, dd)
+}
+
+// BC: deprecating a property with a deprecation policy and sunset date before required deprecation period is breaking
+func TestBreaking_DeprecationPropertyPast(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getDeprecationFile("base-property.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getDeprecationFile("deprecated-property-past.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		BreakingOnly:    true,
+		DeprecationDays: 10,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, dd)
+}
+
+// BC: deprecating a property without a deprecation policy is not breaking
+func TestBreaking_DeprecationPropertyWithoutPoicy(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getDeprecationFile("base-property.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getDeprecationFile("deprecated-property-past.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		BreakingOnly:    true,
+		DeprecationDays: 0,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, dd)
+}
+
+// BC: deleting a property after sunset date is not breaking
+func TestBreaking_DeprecationPropertyTimelySunset(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-property-past.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getDeprecationFile("sunset-property.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, dd)
+}
+
+// BC: deleting a property before sunset date is breaking
+func TestBreaking_DeprecationPropertyEarlySunset(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getDeprecationFile("deprecated-property-future.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getDeprecationFile("sunset-property.yaml"))
 	require.NoError(t, err)
 
 	dd, err := diff.Get(&diff.Config{

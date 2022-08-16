@@ -42,7 +42,6 @@ func (operationsDiff *OperationsDiff) removeSunset(pathItem1 *openapi3.PathItem)
 		}
 	}
 	operationsDiff.Deleted = deleted
-
 }
 
 func (operationsDiff *OperationsDiff) removeNonBreaking(pathItem1 *openapi3.PathItem) {

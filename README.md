@@ -533,7 +533,7 @@ OpenAPI specification supports a ```deprecated``` flag which can be used to mark
 Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource **is** considered a breaking change.
 
 oasdiff allows you to gracefully remove a resource without getting the ```breaking-change``` warning, as follows:
-1.   First, the resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed
+1. First, the resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed
    ```
    /api/test:
     get:
@@ -545,7 +545,7 @@ oasdiff allows you to gracefully remove a resource without getting the ```breaki
 In addition, oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it with the ```deprecation-days``` flag.  
 For example, the following command requires any deprecation to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
 ```
-oasdiff -deprecation-days=10 -breaking-only -base data/deprecation/deprecated-base.yaml -revision data/deprecation/deprecated-past.yaml
+oasdiff -deprecation-days=10 -breaking-only -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
 ```
 
 Setting deprecation-days to 0 is equivalent to the default which allows non-breaking deprecation regardless of the sunset date.

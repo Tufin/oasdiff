@@ -22,13 +22,41 @@ func (schemasDiff *SchemasDiff) Empty() bool {
 		len(schemasDiff.Modified) == 0
 }
 
-func (schemasDiff *SchemasDiff) removeNonBreaking(state *state) {
+// removeSunset removes deleted properties that were deleted after a sufficient deprecation period
+func (schemasDiff *SchemasDiff) removeSunset(schemas1 openapi3.Schemas) {
+
+	if schemasDiff == nil {
+		return
+	}
+
+	deleted := []string{}
+	for _, schemaName := range schemasDiff.Deleted {
+		schemaRef := schemas1[schemaName]
+
+		if schemaRef == nil {
+			deleted = append(deleted, schemaName)
+			continue
+		}
+
+		schema := schemaRef.Value
+		if schema == nil {
+			deleted = append(deleted, schemaName)
+			continue
+		}
+
+		if !sunsetAllowed(schema.Deprecated, schema.ExtensionProps) {
+			deleted = append(deleted, schemaName)
+		}
+	}
+	schemasDiff.Deleted = deleted
+}
+
+func (schemasDiff *SchemasDiff) removeNonBreaking(state *state, schemas1 openapi3.Schemas) {
 
 	if schemasDiff.Empty() {
 		return
 	}
 
-	// TODO: handle sunset
 	switch state.direction {
 	case directionRequest:
 		// In request: deleting properties is non-breaking (for client)
@@ -36,6 +64,7 @@ func (schemasDiff *SchemasDiff) removeNonBreaking(state *state) {
 	case directionResponse:
 		// In response: adding properties is non-breaking (for client)
 		schemasDiff.Added = nil
+		schemasDiff.removeSunset(schemas1)
 	}
 }
 
@@ -61,7 +90,7 @@ func getSchemasDiff(config *Config, state *state, schemas1, schemas2 openapi3.Sc
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(state)
+		diff.removeNonBreaking(state, schemas1)
 	}
 
 	if diff.Empty() {
