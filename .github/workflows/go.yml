@@ -59,7 +59,7 @@ jobs:
     - run: git --no-pager diff --exit-code
 
     - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
-    - run: go test -v -run TestRaceyPatternSchema -race ./...
+    
       env:
         CGO_ENABLED: '1'
     - run: git --no-pager diff --exit-code

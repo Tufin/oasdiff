@@ -37,53 +37,99 @@ func (diff *RequiredPropertiesDiff) removeNonBreaking(state *state) {
 	}
 }
 
-func (diff *RequiredPropertiesDiff) removeReadOnly(state *state, value1, value2 *openapi3.Schema) {
+func (diff *RequiredPropertiesDiff) removeReadOnly(state *state, schema1, schema2 *openapi3.Schema) {
 	if diff.Empty() || diff.StringsDiff.Empty() || state.direction == directionResponse {
 		// readonly properties are only valid for responses
 		return
 	}
 	added := make(StringList, 0)
 	for _, v := range diff.Added {
-		if p, ok := value2.Properties[v]; ok && !p.Value.ReadOnly {
+		if p, ok := schema2.Properties[v]; ok && !p.Value.ReadOnly {
 			added = append(added, v)
 		}
 	}
 	diff.Added = added
 	deleted := make(StringList, 0)
 	for _, v := range diff.Deleted {
-		if p, ok := value1.Properties[v]; ok && !p.Value.ReadOnly {
+		if p, ok := schema1.Properties[v]; ok && !p.Value.ReadOnly {
 			deleted = append(deleted, v)
 		}
 	}
 	diff.Deleted = deleted
 }
 
-func (diff *RequiredPropertiesDiff) removeWriteOnly(state *state, value1, value2 *openapi3.Schema) {
+func (diff *RequiredPropertiesDiff) removeWriteOnly(state *state, schema1, schema2 *openapi3.Schema) {
 	if diff.Empty() || diff.StringsDiff.Empty() || state.direction == directionRequest {
 		// writeOnly properties are only valid for requests
 		return
 	}
 	added := make(StringList, 0)
 	for _, v := range diff.Added {
-		if p, ok := value2.Properties[v]; ok && !p.Value.WriteOnly {
+		if p, ok := schema2.Properties[v]; ok && !p.Value.WriteOnly {
 			added = append(added, v)
 		}
 	}
 	diff.Added = added
 	deleted := make(StringList, 0)
 	for _, v := range diff.Deleted {
-		if p, ok := value1.Properties[v]; ok && !p.Value.WriteOnly {
+		if p, ok := schema1.Properties[v]; ok && !p.Value.WriteOnly {
 			deleted = append(deleted, v)
 		}
 	}
 	diff.Deleted = deleted
 }
 
-func getRequiredPropertiesDiff(config *Config, state *state, value1, value2 *openapi3.Schema) *RequiredPropertiesDiff {
-	diff := getRequiredPropertiesDiffInternal(value1.Required, value2.Required)
+func propDeleted(property string, schema1, schema2 *openapi3.Schema) bool {
+	if schema1 == nil || schema2 == nil {
+		return false
+	}
 
-	diff.removeReadOnly(state, value1, value2)
-	diff.removeWriteOnly(state, value1, value2)
+	_, ok1 := schema1.Properties[property]
+	_, ok2 := schema2.Properties[property]
+
+	return ok1 && !ok2
+}
+
+func propSunsetAllowed(property string, schema1 *openapi3.Schema) bool {
+	if schema1 == nil {
+		return false
+	}
+
+	schemaRef, ok := schema1.Properties[property]
+	if !ok || schemaRef == nil || schemaRef.Value == nil {
+		return false
+	}
+
+	return sunsetAllowed(schemaRef.Value.Deprecated, schemaRef.Value.ExtensionProps)
+}
+
+func (diff *RequiredPropertiesDiff) removeSunsetProperties(state *state, schema1, schema2 *openapi3.Schema) {
+	if diff.Empty() {
+		return
+	}
+
+	if state.direction != directionResponse {
+		return
+	}
+
+	deleted := make(StringList, 0)
+	for _, property := range diff.Deleted {
+		// if property was sunset then making it optional is not breaking
+		if propDeleted(property, schema1, schema2) && propSunsetAllowed(property, schema1) {
+			continue
+		} else {
+			deleted = append(deleted, property)
+		}
+	}
+	diff.Deleted = deleted
+}
+
+func getRequiredPropertiesDiff(config *Config, state *state, schema1, schema2 *openapi3.Schema) *RequiredPropertiesDiff {
+	diff := getRequiredPropertiesDiffInternal(schema1.Required, schema2.Required)
+
+	diff.removeReadOnly(state, schema1, schema2)
+	diff.removeWriteOnly(state, schema1, schema2)
+	diff.removeSunsetProperties(state, schema1, schema2)
 
 	if config.BreakingOnly {
 		diff.removeNonBreaking(state)

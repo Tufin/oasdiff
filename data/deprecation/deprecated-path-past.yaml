@@ -1,0 +1,23 @@
+info:
+  title: Tufin
+  version: 1.0.0
+openapi: 3.0.3
+paths:
+  /api/placeholder:
+    get:
+      responses:
+        200:
+          description: OK
+  /api/test:
+    get:
+      deprecated: true
+      x-sunset: "2022-08-10"
+      responses:
+        200:
+          description: OK
+    post:
+      deprecated: true
+      x-sunset: "2022-07-10"
+      responses:
+        201:
+          description: OK

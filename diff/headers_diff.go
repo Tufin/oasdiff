@@ -30,6 +30,7 @@ func (headersDiff *HeadersDiff) removeNonBreaking(state *state) {
 		return
 	}
 
+	// TODO: handle sunset
 	switch state.direction {
 	case directionRequest:
 		// In request: deleting headers is non-breaking (for client)

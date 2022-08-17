@@ -26,12 +26,31 @@ func (operationsDiff *OperationsDiff) Empty() bool {
 		len(operationsDiff.Modified) == 0
 }
 
-func (operationsDiff *OperationsDiff) removeNonBreaking() {
+// removeSunset removes deleted operations that were deleted after a sufficient deprecation period
+func (operationsDiff *OperationsDiff) removeSunset(pathItem1 *openapi3.PathItem) {
+
+	if pathItem1 == nil {
+		return
+	}
+
+	deleted := []string{}
+	for _, op := range operationsDiff.Deleted {
+		operation := pathItem1.GetOperation(op)
+
+		if !sunsetAllowed(operation.Deprecated, operation.ExtensionProps) {
+			deleted = append(deleted, op)
+		}
+	}
+	operationsDiff.Deleted = deleted
+}
+
+func (operationsDiff *OperationsDiff) removeNonBreaking(pathItem1 *openapi3.PathItem) {
 
 	if operationsDiff.Empty() {
 		return
 	}
 
+	operationsDiff.removeSunset(pathItem1)
 	operationsDiff.Added = nil
 }
 
@@ -57,7 +76,7 @@ func getOperationsDiff(config *Config, state *state, pathItem1, pathItem2 *opena
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking()
+		diff.removeNonBreaking(pathItem1)
 	}
 
 	if diff.Empty() {

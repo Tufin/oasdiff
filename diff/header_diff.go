@@ -19,7 +19,7 @@ func (headerDiff *HeaderDiff) Empty() bool {
 	return headerDiff == nil || *headerDiff == HeaderDiff{}
 }
 
-func (headerDiff *HeaderDiff) removeNonBreaking(state *state) {
+func (headerDiff *HeaderDiff) removeNonBreaking(config *Config, state *state, header2 *openapi3.Header) {
 
 	if headerDiff.Empty() {
 		return
@@ -27,7 +27,9 @@ func (headerDiff *HeaderDiff) removeNonBreaking(state *state) {
 
 	headerDiff.ExtensionsDiff = nil
 	headerDiff.DescriptionDiff = nil
-	headerDiff.DeprecatedDiff = nil
+	if deprecationPeriodSufficient(config.DeprecationDays, header2.ExtensionProps) {
+		headerDiff.DeprecatedDiff = nil
+	}
 
 	// In request: remove required that changed from true to false
 	// In response: remove required that changed from false to true
@@ -48,7 +50,7 @@ func getHeaderDiff(config *Config, state *state, header1, header2 *openapi3.Head
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(state)
+		diff.removeNonBreaking(config, state, header2)
 	}
 
 	if diff.Empty() {
