@@ -122,7 +122,6 @@ func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1,
 	}
 
 	// Object
-	diff.removeNonBreakingRequired(state, schema1, schema2)
 	diff.removeNonBreakingProperties(state, schema1, schema2)
 	diff.removeNonBreakingReadWriteOnly(state, schema1, schema2)
 
@@ -181,36 +180,6 @@ func getReadWriteOnlyMap(direction direction, schema1, schema2 *openapi3.SchemaR
 	}
 
 	return result
-}
-
-// removeNonBreakingRequired deletes changes to "required properties" that have no impact because their associated property was also deleted
-// in request: ?
-// in response: remove deleted required properties of properties that have been deleted
-// TODO: finish this
-func (diff *SchemaDiff) removeNonBreakingRequired(state *state, schema1, schema2 *openapi3.SchemaRef) {
-
-	if diff.Empty() || diff.RequiredDiff.Empty() {
-		return
-	}
-
-	if schema2.Value == nil {
-		return
-	}
-
-	properties2 := schema2.Value.Properties
-
-	newList := StringList{}
-	for _, prop := range diff.RequiredDiff.Deleted {
-		if _, ok := properties2[prop]; ok {
-			newList = append(newList, prop)
-		}
-	}
-
-	diff.RequiredDiff.Deleted = newList
-
-	if diff.RequiredDiff.Empty() {
-		diff.RequiredDiff = nil
-	}
 }
 
 // removeNonBreakingProperties deletes property changes (add/delete) that don't break client

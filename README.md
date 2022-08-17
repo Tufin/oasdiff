@@ -548,8 +548,8 @@ For example, the following command requires any deprecation to be accompanied by
 oasdiff -deprecation-days=10 -breaking-only -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
 ```
 
-Setting deprecation-days to 0 is equivalent to the default which allows non-breaking deprecation regardless of the sunset date.
-
+Setting deprecation-days to 0 is equivalent to the default which allows non-breaking deprecation regardless of the sunset date.  
+Note: this is a Beta feature. Please report issues.
 
 ### Path Prefix Modification
 Sometimes paths prefixes need to be modified, for example, to create a new version:
