@@ -521,7 +521,7 @@ endpoints:
                     - security
 ```
 The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.  
-Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
+Some YAML libraries don't support complex mapping keys, for example, python's PyYAML. [Here's a possible solution](https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450).
 
 ### Breaking Changes
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
