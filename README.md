@@ -529,6 +529,9 @@ Breaking changes are changes that could break a client that is relying on the Op
 Note: this is a Beta feature. Please report issues.
 
 ### Non Breaking Removal of Deprecated Resources
+Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
+As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
+
 OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and other object types as deprecated.  
 Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource **is** considered a breaking change.
 
