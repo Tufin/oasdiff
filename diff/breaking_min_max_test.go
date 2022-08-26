@@ -8,8 +8,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// BC: reducing max length is breaking
-func TestBreaking_MaxLengthSmaller(t *testing.T) {
+// BC: reducing max length in request is breaking
+func TestBreaking_RequestMaxLengthSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -26,8 +26,26 @@ func TestBreaking_MaxLengthSmaller(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: reducing min length is not breaking
-func TestBreaking_MinLengthSmaller(t *testing.T) {
+// BC: reducing max length in response is not breaking
+func TestBreaking_ResponseMaxLengthSmaller(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	maxLengthFrom := uint64(13)
+	s1.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
+
+	maxLengthTo := uint64(11)
+	s2.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: reducing min length in request is not breaking
+func TestBreaking_RequestMinLengthSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -41,8 +59,23 @@ func TestBreaking_MinLengthSmaller(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: increasing max length is not breaking
-func TestBreaking_MaxLengthGreater(t *testing.T) {
+// BC: reducing min length in response is breaking
+func TestBreaking_MinLengthSmaller(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinLength = uint64(13)
+	s2.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinLength = uint64(11)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
+}
+
+// BC: increasing max length in request is not breaking
+func TestBreaking_RequestMaxLengthGreater(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -59,7 +92,25 @@ func TestBreaking_MaxLengthGreater(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: changing max length from nil to any value is breaking
+// BC: increasing max length in response is breaking
+func TestBreaking_ResponseMaxLengthGreater(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	maxLengthFrom := uint64(13)
+	s1.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
+
+	maxLengthTo := uint64(14)
+	s2.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
+}
+
+// BC: changing max length in request from nil to any value is breaking
 func TestBreaking_MaxLengthFromNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -76,8 +127,25 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: changing max length from any value to nil is not breaking
-func TestBreaking_MaxLengthToNil(t *testing.T) {
+// BC: changing max length in response from nil to any value is not breaking
+func TestBreaking_ResponseMaxLengthFromNil(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = nil
+
+	maxLengthTo := uint64(14)
+	s2.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: changing max length in request from any value to nil is not breaking
+func TestBreaking_RequestMaxLengthToNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -93,7 +161,24 @@ func TestBreaking_MaxLengthToNil(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: both max lengths are nil is not breaking
+// BC: changing max length in response from any value to nil is breaking
+func TestBreaking_ResponseMaxLengthToNil(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	maxLengthFrom := uint64(13)
+	s1.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
+
+	s2.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = nil
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
+}
+
+// BC: both max lengths in request are nil is not breaking
 func TestBreaking_MaxLengthBothNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -108,8 +193,23 @@ func TestBreaking_MaxLengthBothNil(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: reducing min items is not breaking
-func TestBreaking_MinItemsSmaller(t *testing.T) {
+// BC: both max lengths in response are nil is not breaking
+func TestBreaking_ResponseMaxLengthBothNil(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = nil
+	s2.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = nil
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: reducing min items in request is not breaking
+func TestBreaking_RequestMinItemsSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -123,8 +223,23 @@ func TestBreaking_MinItemsSmaller(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: increasing min items is breaking
-func TestBreaking_MinItemsGreater(t *testing.T) {
+// BC: reducing min items in response is breaking
+func TestBreaking_ResponseMinItemsSmaller(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinItems = 13
+	s2.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinItems = 11
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
+}
+
+// BC: increasing min items in request is breaking
+func TestBreaking_RequeatMinItemsGreater(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -138,7 +253,22 @@ func TestBreaking_MinItemsGreater(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: reducing max in request is breaking
+// BC: increasing min items in response is not breaking
+func TestBreaking_ResponseMinItemsGreater(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinItems = 13
+	s2.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinItems = 14
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: reducing max length in request is breaking
 func TestBreaking_MaxSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -156,7 +286,7 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: reducing max in response is breaking
+// BC: reducing max length in response is not breaking
 func TestBreaking_MaxSmallerInReponse(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -171,5 +301,5 @@ func TestBreaking_MaxSmallerInReponse(t *testing.T) {
 		BreakingOnly: true,
 	}, s1, s2)
 	require.NoError(t, err)
-	require.NotEmpty(t, d)
+	require.Empty(t, d)
 }

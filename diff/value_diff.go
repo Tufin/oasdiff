@@ -28,84 +28,85 @@ func (diff *ValueDiff) CompareWithDefault(from, to, defaultValue interface{}) bo
 		getValueWithDefault(diff.To, defaultValue) == to
 }
 
-func (diff *ValueDiff) minBreakingFloat64() bool {
+func (diff *ValueDiff) minBreakingFloat64(direction direction) bool {
 	if diff.Empty() {
 		return false
 	}
 
-	if diff.From == nil {
+	from, _ := diff.From.(float64)
+	to, _ := diff.To.(float64)
+
+	return minBreaking(direction, diff.From == nil, diff.To == nil, from, to)
+}
+
+type numeric interface {
+	uint64 |
+		float64
+}
+
+func lessThan[N numeric](aNil, bNil bool, a, b N) bool {
+	if aNil {
 		return true
 	}
-
-	if diff.To == nil {
+	if bNil {
 		return false
 	}
+	return b < a
+}
 
-	if diff.From.(float64) < diff.To.(float64) {
-		return true
+func maxBreaking[N numeric](direction direction, fromNil, toNil bool, from, to N) bool {
+	switch direction {
+	case directionRequest:
+		return lessThan(fromNil, toNil, from, to)
+	case directionResponse:
+		return lessThan(toNil, fromNil, to, from)
 	}
 
 	return false
 }
 
-func (diff *ValueDiff) minBreakingUInt64() bool {
-	if diff.Empty() {
-		return false
-	}
-
-	if diff.From == nil {
-		return true
-	}
-
-	if diff.To == nil {
-		return false
-	}
-
-	if diff.From.(uint64) < diff.To.(uint64) {
-		return true
+func minBreaking[N numeric](direction direction, fromNil, toNil bool, from, to N) bool {
+	switch direction {
+	case directionRequest:
+		return lessThan(toNil, fromNil, to, from)
+	case directionResponse:
+		return lessThan(fromNil, toNil, from, to)
 	}
 
 	return false
 }
 
-func (diff *ValueDiff) maxBreakingFloat64() bool {
+func (diff *ValueDiff) minBreakingUInt64(direction direction) bool {
 	if diff.Empty() {
 		return false
 	}
 
-	if diff.From == nil {
-		return true
-	}
+	from, _ := diff.From.(uint64)
+	to, _ := diff.To.(uint64)
 
-	if diff.To == nil {
-		return false
-	}
-
-	if diff.To.(float64) < diff.From.(float64) {
-		return true
-	}
-
-	return false
+	return minBreaking(direction, diff.From == nil, diff.To == nil, from, to)
 }
 
-func (diff *ValueDiff) maxBreakingUInt64() bool {
+func (diff *ValueDiff) maxBreakingFloat64(direction direction) bool {
 	if diff.Empty() {
 		return false
 	}
 
-	if diff.From == nil {
-		return true
-	}
+	from, _ := diff.From.(float64)
+	to, _ := diff.To.(float64)
 
-	if diff.To == nil {
+	return maxBreaking(direction, diff.From == nil, diff.To == nil, from, to)
+}
+
+func (diff *ValueDiff) maxBreakingUInt64(direction direction) bool {
+	if diff.Empty() {
 		return false
 	}
 
-	if diff.To.(uint64) < diff.From.(uint64) {
-		return true
-	}
+	from, _ := diff.From.(uint64)
+	to, _ := diff.To.(uint64)
 
-	return false
+	return maxBreaking(direction, diff.From == nil, diff.To == nil, from, to)
 }
 
 func getValueWithDefault(value interface{}, defaultValue interface{}) interface{} {

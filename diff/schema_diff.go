@@ -85,11 +85,11 @@ func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1,
 		diff.DeprecatedDiff = nil
 	}
 	// Number
-	if !diff.MinDiff.minBreakingFloat64() { // *float64
+	if !diff.MinDiff.minBreakingFloat64(state.direction) { // *float64
 		diff.MinDiff = nil
 	}
 
-	if !diff.MaxDiff.maxBreakingFloat64() { // *float64
+	if !diff.MaxDiff.maxBreakingFloat64(state.direction) { // *float64
 		diff.MaxDiff = nil
 	}
 
@@ -104,20 +104,20 @@ func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1,
 	}
 
 	// String
-	if !diff.MinLengthDiff.minBreakingUInt64() { // uint64
+	if !diff.MinLengthDiff.minBreakingUInt64(state.direction) { // uint64
 		diff.MinLengthDiff = nil
 	}
 
-	if !diff.MaxLengthDiff.maxBreakingUInt64() { // *uint64
+	if !diff.MaxLengthDiff.maxBreakingUInt64(state.direction) { // *uint64
 		diff.MaxLengthDiff = nil
 	}
 
 	// Array
-	if !diff.MinItemsDiff.minBreakingUInt64() { // uint64
+	if !diff.MinItemsDiff.minBreakingUInt64(state.direction) { // uint64
 		diff.MinItemsDiff = nil
 	}
 
-	if !diff.MaxItemsDiff.maxBreakingUInt64() { // *uint64
+	if !diff.MaxItemsDiff.maxBreakingUInt64(state.direction) { // *uint64
 		diff.MaxItemsDiff = nil
 	}
 
@@ -129,11 +129,11 @@ func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1,
 		diff.AdditionalPropertiesAllowedDiff = nil
 	}
 
-	if !diff.MinPropsDiff.minBreakingUInt64() { // uint64
+	if !diff.MinPropsDiff.minBreakingUInt64(state.direction) { // uint64
 		diff.MinPropsDiff = nil
 	}
 
-	if !diff.MaxPropsDiff.maxBreakingUInt64() { // *uint64
+	if !diff.MaxPropsDiff.maxBreakingUInt64(state.direction) { // *uint64
 		diff.MaxPropsDiff = nil
 	}
 }
