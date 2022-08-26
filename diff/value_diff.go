@@ -28,17 +28,6 @@ func (diff *ValueDiff) CompareWithDefault(from, to, defaultValue interface{}) bo
 		getValueWithDefault(diff.To, defaultValue) == to
 }
 
-func (diff *ValueDiff) minBreakingFloat64(direction direction) bool {
-	if diff.Empty() {
-		return false
-	}
-
-	from, _ := diff.From.(float64)
-	to, _ := diff.To.(float64)
-
-	return minBreaking(direction, diff.From == nil, diff.To == nil, from, to)
-}
-
 type numeric interface {
 	uint64 |
 		float64
@@ -74,6 +63,17 @@ func minBreaking[N numeric](direction direction, fromNil, toNil bool, from, to N
 	}
 
 	return false
+}
+
+func (diff *ValueDiff) minBreakingFloat64(direction direction) bool {
+	if diff.Empty() {
+		return false
+	}
+
+	from, _ := diff.From.(float64)
+	to, _ := diff.To.(float64)
+
+	return minBreaking(direction, diff.From == nil, diff.To == nil, from, to)
 }
 
 func (diff *ValueDiff) minBreakingUInt64(direction direction) bool {
