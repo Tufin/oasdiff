@@ -268,7 +268,7 @@ func TestBreaking_ResponseMinItemsGreater(t *testing.T) {
 	require.Empty(t, d)
 }
 
-// BC: reducing max length in request is breaking
+// BC: reducing max in request is breaking
 func TestBreaking_MaxSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -286,16 +286,16 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: reducing max length in response is not breaking
+// BC: reducing max in response is not breaking
 func TestBreaking_MaxSmallerInReponse(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	maxLengthFrom := uint64(13)
-	s1.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.MaxLength = &maxLengthFrom
+	maxFrom := float64(13)
+	s1.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.Max = &maxFrom
 
-	maxLengthTo := uint64(11)
-	s2.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.MaxLength = &maxLengthTo
+	maxTo := float64(11)
+	s2.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.Max = &maxTo
 
 	d, err := diff.Get(&diff.Config{
 		BreakingOnly: true,

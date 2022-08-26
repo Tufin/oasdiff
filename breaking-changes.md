@@ -30,8 +30,8 @@ These examples are automatically generated from unit tests.
 [new required header param is breaking](diff/breaking_test.go?plain=1#L108)  
 [new required path param is breaking](diff/breaking_test.go?plain=1#L90)  
 [new required property in request header is breaking](diff/breaking_property_test.go?plain=1#L16)  
+[reducing max in request is breaking](diff/breaking_min_max_test.go?plain=1#L271)  
 [reducing max length in request is breaking](diff/breaking_min_max_test.go?plain=1#L11)  
-[reducing max length in request is breaking](diff/breaking_min_max_test.go?plain=1#L271)  
 [reducing min items in response is breaking](diff/breaking_min_max_test.go?plain=1#L226)  
 [reducing min length in response is breaking](diff/breaking_min_max_test.go?plain=1#L62)  
 
@@ -80,7 +80,7 @@ These examples are automatically generated from unit tests.
 [new optional property in request header is not breaking](diff/breaking_property_test.go?plain=1#L36)  
 [new required response header param is not breaking](diff/not_breaking_test.go?plain=1#L117)  
 [no change is not breaking](diff/not_breaking_test.go?plain=1#L11)  
-[reducing max length in response is not breaking](diff/breaking_min_max_test.go?plain=1#L289)  
+[reducing max in response is not breaking](diff/breaking_min_max_test.go?plain=1#L289)  
 [reducing max length in response is not breaking](diff/breaking_min_max_test.go?plain=1#L29)  
 [reducing min items in request is not breaking](diff/breaking_min_max_test.go?plain=1#L211)  
 [reducing min length in request is not breaking](diff/breaking_min_max_test.go?plain=1#L47)  
