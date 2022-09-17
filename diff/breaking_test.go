@@ -175,3 +175,54 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, d)
 }
+
+// BC: deleting a pattern from a schema is not breaking
+func TestBreaking_DeletePatten(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/pattern-base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/pattern-revision.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+// BC: adding a pattern to a schema is breaking
+func TestBreaking_AddPatten(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/pattern-revision.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/pattern-base.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
+}
+
+// BC: modifying a pattern in a schema is breaking
+func TestBreaking_ModifyPatten(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/pattern-base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/pattern-modified.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
+}

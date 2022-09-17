@@ -2,6 +2,7 @@
 These examples are automatically generated from unit tests.
 ## Examples of breaking changes
 [adding a new required property in request body is breaking](diff/breaking_property_test.go?plain=1#L173)  
+[adding a pattern to a schema is breaking](diff/breaking_test.go?plain=1#L196)  
 [adding a required request body is breaking](diff/breaking_test.go?plain=1#L31)  
 [changing an existing header param from optional to required is breaking](diff/breaking_test.go?plain=1#L126)  
 [changing an existing property in request body to required is breaking](diff/breaking_property_test.go?plain=1#L156)  
@@ -27,6 +28,7 @@ These examples are automatically generated from unit tests.
 [deprecating an operation with a deprecation policy but without specifying sunset date is breaking](diff/deprecation_test.go?plain=1#L70)  
 [increasing max length in response is breaking](diff/breaking_min_max_test.go?plain=1#L95)  
 [increasing min items in request is breaking](diff/breaking_min_max_test.go?plain=1#L241)  
+[modifying a pattern in a schema is breaking](diff/breaking_test.go?plain=1#L213)  
 [new required header param is breaking](diff/breaking_test.go?plain=1#L108)  
 [new required path param is breaking](diff/breaking_test.go?plain=1#L90)  
 [new required property in request header is breaking](diff/breaking_property_test.go?plain=1#L16)  
@@ -62,6 +64,7 @@ These examples are automatically generated from unit tests.
 [changing servers is not breaking](diff/not_breaking_test.go?plain=1#L221)  
 [deleting a non-required non-write-only property in response body is not breaking](diff/breaking_property_test.go?plain=1#L345)  
 [deleting a path after sunset date of all contained operations is not breaking](diff/deprecation_test.go?plain=1#L151)  
+[deleting a pattern from a schema is not breaking](diff/breaking_test.go?plain=1#L179)  
 [deleting a property after sunset date is not breaking](diff/deprecation_test.go?plain=1#L221)  
 [deleting a required property in request is not breaking](diff/breaking_property_test.go?plain=1#L190)  
 [deleting a required write-only property in response body is not breaking](diff/breaking_property_test.go?plain=1#L328)  
