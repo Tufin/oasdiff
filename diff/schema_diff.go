@@ -84,6 +84,10 @@ func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1,
 	if schema2 == nil || schema2.Value == nil || deprecationPeriodSufficient(config.DeprecationDays, schema2.Value.ExtensionProps) {
 		diff.DeprecatedDiff = nil
 	}
+
+	// pattern
+	diff.removeNonBreakingPattern()
+
 	// Number
 	if !diff.MinDiff.minBreakingFloat64(state.direction) { // *float64
 		diff.MinDiff = nil
@@ -180,6 +184,16 @@ func getReadWriteOnlyMap(direction direction, schema1, schema2 *openapi3.SchemaR
 	}
 
 	return result
+}
+
+func (diff *SchemaDiff) removeNonBreakingPattern() {
+	if diff.Empty() || diff.PatternDiff.Empty() {
+		return
+	}
+
+	if diff.PatternDiff.From != "" && diff.PatternDiff.To == "" {
+		diff.PatternDiff = nil
+	}
 }
 
 // removeNonBreakingProperties deletes property changes (add/delete) that don't break client
