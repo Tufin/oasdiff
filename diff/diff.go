@@ -1,9 +1,16 @@
 package diff
 
 import (
+	"encoding/json"
 	"errors"
 
+	"cloud.google.com/go/civil"
 	"github.com/getkin/kin-openapi/openapi3"
+)
+
+const SinceDateExtension = "x-since-date"
+var (
+	DefaultSinceDate = civil.Date{2000, 1, 1}
 )
 
 // Diff describes the changes between a pair of OpenAPI objects: https://swagger.io/specification/#schema
@@ -60,6 +67,112 @@ func Get(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	}
 
 	return diff, nil
+}
+
+/*
+GetPathsDiff calculates the diff between a pair of slice of OpenAPI objects.
+It is helpfull when you want to find diff and check for breaking changes for API divided into multiple files.
+If there are same paths in different OpenAPI objects, then function uses version of the path with the last x-since-date extension.
+The x-since-date extension should be set on path or operations level. Extension set on the operations level overrides teh value set on path level.
+If such path doesn't have the x-since-date extension, its value is default "2000-01-01"
+If there are same paths with the same x-since-date value, then function returns error.
+The format of the x-since-date is the RFC3339 full-date format
+
+Note that Get expects OpenAPI References (https://swagger.io/docs/specification/using-ref/) to be resolved.
+References are normally resolved automatically when you load the spec.
+In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn.
+*/
+func GetPathsDiff(config *Config, s1, s2 *[]*openapi3.T) (*Diff, error) {
+	state := newState()
+	result := newDiff()
+	var err error
+	paths1, err := mergedPaths(s1)
+	if err != nil {
+		return nil, err
+	}
+	paths2, err := mergedPaths(s2)
+	if err != nil {
+		return nil, err
+	}
+
+	if result.PathsDiff, err = getPathsDiff(config, state, *paths1, *paths2); err != nil {
+		return nil, err
+	}
+
+	if result.EndpointsDiff, err = getEndpointsDiff(config, state, *paths1, *paths2); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func mergedPaths(s1 *[]*openapi3.T) (*openapi3.Paths, error) {
+	result := make(openapi3.Paths, 0)
+	for _, s := range *s1 {
+		for path, pathItem := range s.Paths {
+			p := result.Find(path)
+			if p == nil {
+				result[path] = pathItem
+				continue
+			}
+
+			for op, opItem := range pathItem.Operations() {
+				oldOperation := p.GetOperation(op)
+				if oldOperation == nil {
+					p.SetOperation(op, opItem)
+					continue
+				}
+
+				oldSince, err := sinceDateFrom(*p, *oldOperation)
+				if err != nil {
+					return nil, err
+				}
+				newSince, err := sinceDateFrom(*pathItem, *opItem)
+				if err != nil {
+					return nil, err
+				}
+				if newSince.After(oldSince) {
+					p.SetOperation(op, opItem)
+				}
+			}
+
+		}
+	}
+	return &result, nil
+}
+
+func sinceDateFrom(pathItem openapi3.PathItem, operation openapi3.Operation) (civil.Date, error) {
+	since, _, err := getSinceDate(pathItem.ExtensionProps)
+	if err != nil {
+		return DefaultSinceDate, err
+	}
+	opSince, ok, err := getSinceDate(operation.ExtensionProps)
+	if err != nil {
+		return DefaultSinceDate, err
+	}
+	if ok {
+		since = opSince
+	}
+	return since, nil
+}
+
+func getSinceDate(extensionProps openapi3.ExtensionProps) (civil.Date, bool, error) {
+	sinceJson, ok := extensionProps.Extensions[SinceDateExtension].(json.RawMessage)
+	if !ok {
+		return DefaultSinceDate, false, nil
+	}
+
+	var since string
+	if err := json.Unmarshal(sinceJson, &since); err != nil {
+		return civil.Date{}, false, errors.New("unmarshal failed")
+	}
+
+	date, err := civil.ParseDate(since)
+	if err != nil {
+		return civil.Date{}, false, errors.New("failed to parse time")
+	}
+
+	return date, true, nil
 }
 
 func getDiff(config *Config, state *state, s1, s2 *openapi3.T) (*Diff, error) {

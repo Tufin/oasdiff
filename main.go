@@ -16,7 +16,7 @@ import (
 
 var base, revision, filter, filterExtension, format string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
-var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version, composed bool
 var deprecationDays int
 
 const (
@@ -28,6 +28,7 @@ const (
 func init() {
 	flag.StringVar(&base, "base", "", "path of original OpenAPI spec in YAML or JSON format")
 	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec in YAML or JSON format")
+	flag.BoolVar(&composed, "composed", false, "work in 'composed' mode, compare paths in all specs in the base and revision direcories")
 	flag.StringVar(&prefix_base, "prefix-base", "", "if provided, paths in original (base) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&prefix_revision, "prefix-revision", "", "if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&strip_prefix_base, "strip-prefix-base", "", "if provided, this prefix will be stripped from paths in original (base) spec before comparison")
@@ -84,18 +85,6 @@ func main() {
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
 
-	s1, err := load.From(loader, base)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load base spec from %q with %v\n", base, err)
-		os.Exit(102)
-	}
-
-	s2, err := load.From(loader, revision)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
-		os.Exit(103)
-	}
-
 	config := diff.NewConfig()
 	config.ExcludeExamples = excludeExamples
 	config.ExcludeDescription = excludeDescription
@@ -108,11 +97,43 @@ func main() {
 	config.BreakingOnly = breakingOnly
 	config.DeprecationDays = deprecationDays
 
-	diffReport, err := diff.Get(config, s1, s2)
+	var diffReport *diff.Diff
+	var err error
 
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
-		os.Exit(104)
+	if composed {
+		s1, err := load.FromGlob(loader, base)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to load base spec from %q with %v\n", base, err)
+			os.Exit(102)
+		}
+
+		s2, err := load.FromGlob(loader, revision)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
+			os.Exit(103)
+		}
+		diffReport, err = diff.GetPathsDiff(config, s1, s2)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
+			os.Exit(104)
+		}
+	} else {
+		s1, err := load.From(loader, base)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to load base spec from %q with %v\n", base, err)
+			os.Exit(102)
+		}
+
+		s2, err := load.From(loader, revision)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
+			os.Exit(103)
+		}
+		diffReport, err = diff.Get(config, s1, s2)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
+			os.Exit(104)
+		}
 	}
 
 	if summary {
