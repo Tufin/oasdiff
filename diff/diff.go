@@ -31,6 +31,8 @@ type Diff struct {
 	ComponentsDiff `json:"components,omitempty" yaml:"components,omitempty"`
 }
 
+type OperationsSourcesMap map[*openapi3.Operation]string
+
 func newDiff() *Diff {
 	return &Diff{}
 }
@@ -85,40 +87,44 @@ Note that Get expects OpenAPI References (https://swagger.io/docs/specification/
 References are normally resolved automatically when you load the spec.
 In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn.
 */
-func GetPathsDiff(config *Config, s1, s2 []load.OpenAPISpecInfo) (*Diff, error) {
+func GetPathsDiff(config *Config, s1, s2 []load.OpenAPISpecInfo) (*Diff, *OperationsSourcesMap, error) {
 	state := newState()
 	result := newDiff()
 	var err error
-	paths1, err := mergedPaths(s1)
+	paths1, operationsSources1, err := mergedPaths(s1)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	paths2, err := mergedPaths(s2)
+	paths2, operationsSources2, err := mergedPaths(s2)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if result.PathsDiff, err = getPathsDiff(config, state, *paths1, *paths2); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if result.EndpointsDiff, err = getEndpointsDiff(config, state, *paths1, *paths2); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return result, nil
+	operationsSources := *operationsSources1
+	for k, v := range *operationsSources2 {
+		operationsSources[k] = v
+	}
+	return result, &operationsSources, nil
 }
 
-func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, error) {
+func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, *OperationsSourcesMap, error) {
 	result := make(openapi3.Paths, 0)
-	operationsUrl := make(map[*openapi3.Operation]string)
+	operationsSources := make(OperationsSourcesMap)
 	for _, s := range s1 {
 		for path, pathItem := range s.Spec.Paths {
 			p := result.Find(path)
 			if p == nil {
 				result[path] = pathItem
 				for _, opItem := range pathItem.Operations() {
-					operationsUrl[opItem] = s.Url
+					operationsSources[opItem] = s.Url
 				}
 				continue
 			}
@@ -127,31 +133,31 @@ func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, error) {
 				oldOperation := p.GetOperation(op)
 				if oldOperation == nil {
 					p.SetOperation(op, opItem)
-					operationsUrl[opItem] = s.Url
+					operationsSources[opItem] = s.Url
 					continue
 				}
 
 				oldSince, err := sinceDateFrom(*p, *oldOperation)
 				if err != nil {
-					return nil, fmt.Errorf("Invalid %s extension value in %s(%s %s), %w", SinceDateExtension, operationsUrl[oldOperation], op, path, err)
+					return nil, nil, fmt.Errorf("Invalid %s extension value in %s(%s %s), %w", SinceDateExtension, operationsSources[oldOperation], op, path, err)
 				}
 				newSince, err := sinceDateFrom(*pathItem, *opItem)
 				if err != nil {
-					return nil, fmt.Errorf("Invalid %s extension value in %s(%s %s), %w", SinceDateExtension, s.Url, op, path, err)
+					return nil, nil, fmt.Errorf("Invalid %s extension value in %s(%s %s), %w", SinceDateExtension, s.Url, op, path, err)
 				}
 				if newSince.After(oldSince) {
 					p.SetOperation(op, opItem)
-					operationsUrl[opItem] = s.Url
+					operationsSources[opItem] = s.Url
 				}
 
 				if newSince == oldSince {
-					return nil, fmt.Errorf("Multiple endpoints found in %s(%s %s) and %s(%s %s). Add the %s extension with ordered values to operations to specify its order.", operationsUrl[oldOperation], op, path, s.Url, op, path, SinceDateExtension)
+					return nil, nil, fmt.Errorf("Multiple endpoints found in %s(%s %s) and %s(%s %s). Add the %s extension with ordered values to operations to specify its order.", operationsSources[oldOperation], op, path, s.Url, op, path, SinceDateExtension)
 				}
 			}
 
 		}
 	}
-	return &result, nil
+	return &result, &operationsSources, nil
 }
 
 func sinceDateFrom(pathItem openapi3.PathItem, operation openapi3.Operation) (civil.Date, error) {

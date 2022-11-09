@@ -8,13 +8,15 @@ import (
 
 // PathDiff describes the changes between a pair of path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
-	ExtensionsDiff  *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
-	RefDiff         *ValueDiff      `json:"ref,omitempty" yaml:"ref,omitempty"`
-	SummaryDiff     *ValueDiff      `json:"summary,omitempty" yaml:"summary,omitempty"`
-	DescriptionDiff *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
-	OperationsDiff  *OperationsDiff `json:"operations,omitempty" yaml:"operations,omitempty"`
-	ServersDiff     *ServersDiff    `json:"servers,omitempty" yaml:"servers,omitempty"`
-	ParametersDiff  *ParametersDiff `json:"parameters,omitempty" yaml:"parameters,omitempty"`
+	ExtensionsDiff  *ExtensionsDiff    `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	RefDiff         *ValueDiff         `json:"ref,omitempty" yaml:"ref,omitempty"`
+	SummaryDiff     *ValueDiff         `json:"summary,omitempty" yaml:"summary,omitempty"`
+	DescriptionDiff *ValueDiff         `json:"description,omitempty" yaml:"description,omitempty"`
+	OperationsDiff  *OperationsDiff    `json:"operations,omitempty" yaml:"operations,omitempty"`
+	ServersDiff     *ServersDiff       `json:"servers,omitempty" yaml:"servers,omitempty"`
+	ParametersDiff  *ParametersDiff    `json:"parameters,omitempty" yaml:"parameters,omitempty"`
+	Base            *openapi3.PathItem `json:"-" yaml:"-"`
+	Revision        *openapi3.PathItem `json:"-" yaml:"-"`
 }
 
 func newPathDiff() *PathDiff {
@@ -23,7 +25,7 @@ func newPathDiff() *PathDiff {
 
 // Empty indicates whether a change was found in this element
 func (pathDiff *PathDiff) Empty() bool {
-	return pathDiff == nil || *pathDiff == *newPathDiff()
+	return pathDiff == nil || *pathDiff == PathDiff{Base: pathDiff.Base, Revision: pathDiff.Revision}
 }
 
 func (pathDiff *PathDiff) removeNonBreaking() {
@@ -78,6 +80,8 @@ func getPathDiffInternal(config *Config, state *state, pathItem1, pathItem2 *ope
 
 	result.ServersDiff = getServersDiff(config, state, &pathItem1.Servers, &pathItem2.Servers)
 	result.ParametersDiff, err = getParametersDiff(config, state, pathItem1.Parameters, pathItem2.Parameters)
+	result.Base = pathItem1
+	result.Revision = pathItem2
 	if err != nil {
 		return nil, err
 	}

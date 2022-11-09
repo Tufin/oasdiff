@@ -6,23 +6,25 @@ import (
 
 // ParameterDiff describes the changes between a pair of parameter objects: https://swagger.io/specification/#parameter-object
 type ParameterDiff struct {
-	ExtensionsDiff      *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
-	DescriptionDiff     *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
-	StyleDiff           *ValueDiff      `json:"style,omitempty" yaml:"style,omitempty"`
-	ExplodeDiff         *ValueDiff      `json:"explode,omitempty" yaml:"explode,omitempty"`
-	AllowEmptyValueDiff *ValueDiff      `json:"allowEmptyValue,omitempty" yaml:"allowEmptyValue,omitempty"`
-	AllowReservedDiff   *ValueDiff      `json:"allowReserved,omitempty" yaml:"allowReserved,omitempty"`
-	DeprecatedDiff      *ValueDiff      `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
-	RequiredDiff        *ValueDiff      `json:"required,omitempty" yaml:"required,omitempty"`
-	SchemaDiff          *SchemaDiff     `json:"schema,omitempty" yaml:"schema,omitempty"`
-	ExampleDiff         *ValueDiff      `json:"example,omitempty" yaml:"example,omitempty"`
-	ExamplesDiff        *ExamplesDiff   `json:"examples,omitempty" yaml:"examples,omitempty"`
-	ContentDiff         *ContentDiff    `json:"content,omitempty" yaml:"content,omitempty"`
+	ExtensionsDiff      *ExtensionsDiff     `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	DescriptionDiff     *ValueDiff          `json:"description,omitempty" yaml:"description,omitempty"`
+	StyleDiff           *ValueDiff          `json:"style,omitempty" yaml:"style,omitempty"`
+	ExplodeDiff         *ValueDiff          `json:"explode,omitempty" yaml:"explode,omitempty"`
+	AllowEmptyValueDiff *ValueDiff          `json:"allowEmptyValue,omitempty" yaml:"allowEmptyValue,omitempty"`
+	AllowReservedDiff   *ValueDiff          `json:"allowReserved,omitempty" yaml:"allowReserved,omitempty"`
+	DeprecatedDiff      *ValueDiff          `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
+	RequiredDiff        *ValueDiff          `json:"required,omitempty" yaml:"required,omitempty"`
+	SchemaDiff          *SchemaDiff         `json:"schema,omitempty" yaml:"schema,omitempty"`
+	ExampleDiff         *ValueDiff          `json:"example,omitempty" yaml:"example,omitempty"`
+	ExamplesDiff        *ExamplesDiff       `json:"examples,omitempty" yaml:"examples,omitempty"`
+	ContentDiff         *ContentDiff        `json:"content,omitempty" yaml:"content,omitempty"`
+	Base                *openapi3.Parameter `json:"-" yaml:"-"`
+	Revision            *openapi3.Parameter `json:"-" yaml:"-"`
 }
 
 // Empty indicates whether a change was found in this element
 func (diff *ParameterDiff) Empty() bool {
-	return diff == nil || *diff == ParameterDiff{}
+	return diff == nil || *diff == ParameterDiff{Base: diff.Base, Revision: diff.Revision}
 }
 
 func (diff *ParameterDiff) removeNonBreaking(config *Config, param2 *openapi3.Parameter) {
@@ -94,6 +96,8 @@ func getParameterDiffInternal(config *Config, state *state, param1, param2 *open
 	if err != nil {
 		return nil, err
 	}
+	result.Base = param1
+	result.Revision = param2
 
 	return &result, nil
 }

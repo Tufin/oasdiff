@@ -2,17 +2,16 @@ module github.com/tufin/oasdiff
 
 go 1.19
 
-replace github.com/getkin/kin-openapi => /home/tolokanal/git/kin-openapi
-
 require (
 	cloud.google.com/go v0.105.0
-	github.com/getkin/kin-openapi v0.107.0 // v0.107.0
+	github.com/getkin/kin-openapi v0.108.0
 	github.com/stretchr/testify v1.8.1
 	github.com/yuin/goldmark v1.5.2
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
+	github.com/TwiN/go-color v1.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/swag v0.21.1 // indirect

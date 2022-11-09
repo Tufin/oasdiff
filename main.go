@@ -11,12 +11,13 @@ import (
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
+	"github.com/tufin/oasdiff/checker"
 	"gopkg.in/yaml.v3"
 )
 
 var base, revision, filter, filterExtension, format string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
-var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version, composed bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version, composed, checkBreaking bool
 var deprecationDays int
 
 const (
@@ -40,6 +41,7 @@ func init() {
 	flag.BoolVar(&excludeDescription, "exclude-description", false, "ignore changes to descriptions")
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
 	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
+	flag.BoolVar(&checkBreaking, "check-breaking", false, "check breaking")
 	flag.IntVar(&deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
@@ -99,6 +101,7 @@ func main() {
 
 	var diffReport *diff.Diff
 	var err error
+	var operationsSources *diff.OperationsSourcesMap
 
 	if composed {
 		s1, err := load.FromGlob(loader, base)
@@ -112,7 +115,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
 			os.Exit(103)
 		}
-		diffReport, err = diff.GetPathsDiff(config, s1, s2)
+		diffReport, operationsSources, err = diff.GetPathsDiff(config, s1, s2)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
 			os.Exit(104)
@@ -134,6 +137,25 @@ func main() {
 			fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
 			os.Exit(104)
 		}
+	}
+
+	if checkBreaking {
+
+		// if err = printYAML(diffReport); err != nil {
+		// 	fmt.Fprintf(os.Stderr, "failed to print diff YAML with %v\n", err)
+		// 	os.Exit(106)
+		// }
+
+		errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
+		for _, bcerr := range errs {
+			fmt.Printf("%s\n", bcerr.ColorizedError())
+		}
+		
+		// if err = printYAML(errs); err != nil {
+		// 	fmt.Fprintf(os.Stderr, "failed to print summary with %v\n", err)
+		// 	os.Exit(105)
+		// }
+		exitNormally(diffReport.Empty())
 	}
 
 	if summary {
