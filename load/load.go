@@ -25,22 +25,27 @@ func From(loader Loader, path string) (*openapi3.T, error) {
 	return loader.LoadFromFile(path)
 }
 
+type OpenAPISpecInfo struct {
+	Url string
+	Spec *openapi3.T
+}
+
 // From is a convenience function that opens OpenAPI specs from a local iles matching the specified glob parameter
-func FromGlob(loader Loader, glob string) (*[]*openapi3.T, error) {
+func FromGlob(loader Loader, glob string) ([]OpenAPISpecInfo, error) {
 	files, err := filepathx.Glob(glob)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]*openapi3.T, 0)
+	result := make([]OpenAPISpecInfo, 0)
 	for _, file := range files {
-		api, err := loader.LoadFromFile(file)
+		spec, err := loader.LoadFromFile(file)
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, api)
+		result = append(result, OpenAPISpecInfo{ Url: file, Spec: spec })
 	}
 
-	return &result, nil
+	return result, nil
 }
 
 func loadFromURI(loader Loader, uri *url.URL) (*openapi3.T, error) {

@@ -3,12 +3,15 @@ package diff
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"cloud.google.com/go/civil"
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/load"
 )
 
 const SinceDateExtension = "x-since-date"
+
 var (
 	DefaultSinceDate = civil.Date{2000, 1, 1}
 )
@@ -82,7 +85,7 @@ Note that Get expects OpenAPI References (https://swagger.io/docs/specification/
 References are normally resolved automatically when you load the spec.
 In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn.
 */
-func GetPathsDiff(config *Config, s1, s2 *[]*openapi3.T) (*Diff, error) {
+func GetPathsDiff(config *Config, s1, s2 []load.OpenAPISpecInfo) (*Diff, error) {
 	state := newState()
 	result := newDiff()
 	var err error
@@ -106,13 +109,17 @@ func GetPathsDiff(config *Config, s1, s2 *[]*openapi3.T) (*Diff, error) {
 	return result, nil
 }
 
-func mergedPaths(s1 *[]*openapi3.T) (*openapi3.Paths, error) {
+func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, error) {
 	result := make(openapi3.Paths, 0)
-	for _, s := range *s1 {
-		for path, pathItem := range s.Paths {
+	operationsUrl := make(map[*openapi3.Operation]string)
+	for _, s := range s1 {
+		for path, pathItem := range s.Spec.Paths {
 			p := result.Find(path)
 			if p == nil {
 				result[path] = pathItem
+				for _, opItem := range pathItem.Operations() {
+					operationsUrl[opItem] = s.Url
+				}
 				continue
 			}
 
@@ -120,19 +127,25 @@ func mergedPaths(s1 *[]*openapi3.T) (*openapi3.Paths, error) {
 				oldOperation := p.GetOperation(op)
 				if oldOperation == nil {
 					p.SetOperation(op, opItem)
+					operationsUrl[opItem] = s.Url
 					continue
 				}
 
 				oldSince, err := sinceDateFrom(*p, *oldOperation)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("Invalid %s extension value in %s(%s %s), %w", SinceDateExtension, operationsUrl[oldOperation], op, path, err)
 				}
 				newSince, err := sinceDateFrom(*pathItem, *opItem)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("Invalid %s extension value in %s(%s %s), %w", SinceDateExtension, s.Url, op, path, err)
 				}
 				if newSince.After(oldSince) {
 					p.SetOperation(op, opItem)
+					operationsUrl[opItem] = s.Url
+				}
+
+				if newSince == oldSince {
+					return nil, fmt.Errorf("Multiple endpoints found in %s(%s %s) and %s(%s %s). Add the %s extension with ordered values to operations to specify its order.", operationsUrl[oldOperation], op, path, s.Url, op, path, SinceDateExtension)
 				}
 			}
 
