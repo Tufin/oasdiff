@@ -23,7 +23,7 @@ type BackwardCompatibilityError struct {
 	ToDo      string `json:"source,omitempty" yaml:"source,omitempty"`
 }
 
-type BackwardCompatibilityCheck func(diff *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError
+type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, diffBC *BCDiff) []BackwardCompatibilityError
 
 func (r *BackwardCompatibilityError) Error() string {
 	var levelName string
@@ -57,13 +57,45 @@ func (r *BackwardCompatibilityError) ColorizedError() string {
 	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]", levelName, r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, color.InYellow(r.Id))
 }
 
-func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diff *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) ([]BackwardCompatibilityError, diff.Diff) {
 	result := make([]BackwardCompatibilityError, 0)
+	diffBC := BCDiff{}
 
 	for _, check := range checks {
-		errs := check(diff, operationsSources)
+		errs := check(diffReport, operationsSources, &diffBC)
 		result = append(result, errs...)
 	}
 
-	return result
+	return result, diffBC.Diff
+}
+
+type BCDiff struct {
+	diff.Diff
+}
+
+func (d *BCDiff) AddModifiedOperation(path string, operation string) *diff.MethodDiff {
+	pathDiff := d.AddModifiedPath(path)
+	if pathDiff.OperationsDiff == nil {
+		pathDiff.OperationsDiff = &diff.OperationsDiff{}
+	}
+	if pathDiff.OperationsDiff.Modified == nil {
+		pathDiff.OperationsDiff.Modified = make(diff.ModifiedOperations)
+	}
+	if pathDiff.OperationsDiff.Modified[operation] == nil {
+		pathDiff.OperationsDiff.Modified[operation] = &diff.MethodDiff{}
+	}
+	return pathDiff.OperationsDiff.Modified[operation]
+}
+
+func (d *BCDiff) AddModifiedPath(path string) *diff.PathDiff {
+	if d.PathsDiff == nil {
+		d.PathsDiff = &diff.PathsDiff{}
+	}
+	if d.PathsDiff.Modified == nil {
+		d.PathsDiff.Modified = make(diff.ModifiedPaths)
+	}
+	if d.PathsDiff.Modified[path] == nil {
+		d.PathsDiff.Modified[path] = &diff.PathDiff{}
+	}
+	return d.PathsDiff.Modified[path]
 }

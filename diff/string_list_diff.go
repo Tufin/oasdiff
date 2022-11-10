@@ -36,11 +36,11 @@ func getStringsDiff(strings1, strings2 StringList) *StringsDiff {
 func getStringsDiffInternal(strings1, strings2 StringList) *StringsDiff {
 	result := newStringsDiff()
 
-	s1 := strings1.toStringSet()
-	s2 := strings2.toStringSet()
+	s1 := strings1.ToStringSet()
+	s2 := strings2.ToStringSet()
 
-	result.Added = s2.minus(s1).toStringList()
-	result.Deleted = s1.minus(s2).toStringList()
+	result.Added = s2.Minus(s1).ToStringList()
+	result.Deleted = s1.Minus(s2).ToStringList()
 
 	return result
 }

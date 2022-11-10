@@ -12,12 +12,12 @@ func DefaultChecks() []BackwardCompatibilityCheck {
 	return checks
 }
 
-func parameterRemovedCheck(diff *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func parameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, diffBC *BCDiff) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
-	if diff.PathsDiff == nil {
+	if diffReport.PathsDiff == nil {
 		return result
 	}
-	for path, pathItem := range diff.PathsDiff.Modified {
+	for path, pathItem := range diffReport.PathsDiff.Modified {
 		if pathItem.OperationsDiff == nil {
 			continue
 		}
@@ -37,6 +37,18 @@ func parameterRemovedCheck(diff *diff.Diff, operationsSources *diff.OperationsSo
 						Source:    source,
 						ToDo:      "Add to exceptions-list.md",
 					})
+					opDiff := diffBC.AddModifiedOperation(path, operation)
+					if opDiff.ParametersDiff == nil {
+						opDiff.ParametersDiff = &diff.ParametersDiff{}
+					}
+					if opDiff.ParametersDiff.Deleted == nil {
+						opDiff.ParametersDiff.Deleted = make(diff.ParamNamesByLocation)
+					}
+					items := opDiff.ParametersDiff.Deleted[paramLocation].ToStringSet()
+					for _, v := range paramItems {
+						items.Add(v)
+					}
+					opDiff.ParametersDiff.Deleted[paramLocation] = items.ToStringList()
 				}
 			}
 		}

@@ -77,7 +77,7 @@ func findSecurityRequirement(securityRequirement1 openapi3.SecurityRequirement, 
 	securitySchemes1 := getSecuritySchemes(securityRequirement1)
 	for _, securityRequirement2 := range *securityRequirements2 {
 		securitySchemes2 := getSecuritySchemes(securityRequirement2)
-		if securitySchemes1.equals(securitySchemes2) {
+		if securitySchemes1.Equals(securitySchemes2) {
 			return securityRequirement2
 		}
 	}
@@ -87,7 +87,7 @@ func findSecurityRequirement(securityRequirement1 openapi3.SecurityRequirement, 
 func getSecuritySchemes(securityRequirement openapi3.SecurityRequirement) StringSet {
 	result := StringSet{}
 	for name := range securityRequirement {
-		result.add(name)
+		result.Add(name)
 	}
 	return result
 }

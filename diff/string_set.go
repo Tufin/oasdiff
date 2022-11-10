@@ -3,7 +3,7 @@ package diff
 // StringSet is a set of string values
 type StringSet map[string]struct{}
 
-func (stringSet StringSet) toStringList() StringList {
+func (stringSet StringSet) ToStringList() StringList {
 	result := make(StringList, len(stringSet))
 	i := 0
 	for s := range stringSet {
@@ -13,30 +13,30 @@ func (stringSet StringSet) toStringList() StringList {
 	return result
 }
 
-func (stringSet StringSet) add(s string) {
+func (stringSet StringSet) Add(s string) {
 	stringSet[s] = struct{}{}
 }
 
-func (stringSet StringSet) contains(s string) bool {
+func (stringSet StringSet) Contains(s string) bool {
 	_, ok := stringSet[s]
 	return ok
 }
 
-func (stringSet StringSet) minus(other StringSet) StringSet {
+func (stringSet StringSet) Minus(other StringSet) StringSet {
 	result := StringSet{}
 
 	for s := range stringSet {
-		if !other.contains(s) {
-			result.add(s)
+		if !other.Contains(s) {
+			result.Add(s)
 		}
 	}
 
 	return result
 }
 
-func (stringSet StringSet) equals(other StringSet) bool {
-	return stringSet.minus(other).Empty() &&
-		other.minus(stringSet).Empty()
+func (stringSet StringSet) Equals(other StringSet) bool {
+	return stringSet.Minus(other).Empty() &&
+		other.Minus(stringSet).Empty()
 }
 
 // Empty indicates whether a change was found in this element

@@ -8,10 +8,10 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/build"
+	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
-	"github.com/tufin/oasdiff/checker"
 	"gopkg.in/yaml.v3"
 )
 
@@ -146,16 +146,17 @@ func main() {
 		// 	os.Exit(106)
 		// }
 
-		errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
+		errs, diffBC := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
 		for _, bcerr := range errs {
 			fmt.Printf("%s\n", bcerr.ColorizedError())
 		}
-		
+
+		diffReport = &diffBC
 		// if err = printYAML(errs); err != nil {
 		// 	fmt.Fprintf(os.Stderr, "failed to print summary with %v\n", err)
 		// 	os.Exit(105)
 		// }
-		exitNormally(diffReport.Empty())
+		//  exitNormally(diffReport.Empty())
 	}
 
 	if summary {
