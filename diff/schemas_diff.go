@@ -6,9 +6,11 @@ import (
 
 // SchemasDiff describes the changes between a pair of sets of schema objects: https://swagger.io/specification/#schema-object
 type SchemasDiff struct {
-	Added    StringList      `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList      `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedSchemas `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added    StringList       `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList       `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedSchemas  `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Base     openapi3.Schemas `json:"-" yaml:"-"`
+	Revision openapi3.Schemas `json:"-" yaml:"-"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -120,6 +122,9 @@ func getSchemasDiffInternal(config *Config, state *state, schemas1, schemas2 ope
 			return nil, err
 		}
 	}
+
+	result.Base = schemas1
+	result.Revision = schemas2
 
 	return result, nil
 }

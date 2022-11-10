@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"text/tabwriter"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/build"
@@ -141,22 +142,47 @@ func main() {
 
 	if checkBreaking {
 
-		// if err = printYAML(diffReport); err != nil {
-		// 	fmt.Fprintf(os.Stderr, "failed to print diff YAML with %v\n", err)
-		// 	os.Exit(106)
-		// }
-
-		errs, diffBC := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
-		for _, bcerr := range errs {
-			fmt.Printf("%s\n", bcerr.ColorizedError())
+		if err = printYAML(diffReport); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to print diff YAML with %v\n", err)
+			os.Exit(106)
 		}
 
+		errs, diffBC := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
 		diffReport = &diffBC
-		// if err = printYAML(errs); err != nil {
-		// 	fmt.Fprintf(os.Stderr, "failed to print summary with %v\n", err)
-		// 	os.Exit(105)
+
+		if err = printYAML(diffReport); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to print summary with %v\n", err)
+			os.Exit(105)
+		}
+
+		// color output
+		w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)
+		for _, bcerr := range errs {
+			fmt.Fprintf(w, "%s\n", bcerr.ColorizedError())
+		}
+		w.Flush()
+
+		// table output
+		// data := make([][]string, 0)
+		// for _, bcerr := range errs {
+		// 	data = append(data, bcerr.TableDataError())
 		// }
-		//  exitNormally(diffReport.Empty())
+
+		// table := tablewriter.NewWriter(os.Stdout)
+		// table.SetAutoWrapText(true)
+		// table.SetHeader([]string{"Level", "Id", "Source", "API", "Description"})
+		// for _, v := range data {
+		// 	table.Append(v)
+		// }
+		// table.Render() // Send output
+
+		// pretty output
+		fmt.Println("\n\n\nPretty results:")
+		for _, bcerr := range errs {
+			fmt.Printf("%s\n\n", bcerr.PrettyError())
+		}
+
+		exitNormally(diffReport.Empty())
 	}
 
 	if summary {

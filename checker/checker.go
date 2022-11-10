@@ -39,9 +39,7 @@ func (r *BackwardCompatibilityError) Error() string {
 }
 
 func (r *BackwardCompatibilityError) ColorizedError() string {
-	fi, _ := os.Stdout.Stat()
-
-	if (fi.Mode() & os.ModeCharDevice) == 0 {
+	if IsPipedOutput() {
 		return r.Error()
 	}
 
@@ -54,7 +52,35 @@ func (r *BackwardCompatibilityError) ColorizedError() string {
 	default:
 		levelName = color.InGray("issue")
 	}
-	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]", levelName, r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, color.InYellow(r.Id))
+	return fmt.Sprintf("%s at %s in API %s %s %s [%s]", levelName, r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, color.InYellow(r.Id))
+}
+
+var pipedOutput *bool
+func IsPipedOutput() bool {
+	if pipedOutput != nil {
+		return *pipedOutput
+	}
+	fi, _ := os.Stdout.Stat()
+	a := (fi.Mode() & os.ModeCharDevice) == 0
+	pipedOutput = &a
+	return *pipedOutput
+}
+
+func (r *BackwardCompatibilityError) PrettyError() string {
+	if IsPipedOutput() {
+		return r.Error()
+	}
+
+	var levelName string
+	switch r.Level {
+	case ERR:
+		levelName = color.InRed("error")
+	case WARN:
+		levelName = color.InPurple("warning")
+	default:
+		levelName = color.InGray("issue")
+	}
+	return fmt.Sprintf("%s\t[%s] at %s\t\n\tin API %s %s\n\t\t%s", levelName, color.InYellow(r.Id), r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text)
 }
 
 func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) ([]BackwardCompatibilityError, diff.Diff) {
@@ -98,4 +124,11 @@ func (d *BCDiff) AddModifiedPath(path string) *diff.PathDiff {
 		d.PathsDiff.Modified[path] = &diff.PathDiff{}
 	}
 	return d.PathsDiff.Modified[path]
+}
+
+func ColorizedValue(arg string) string {
+	if IsPipedOutput() {
+		return arg
+	}
+	return color.InBold(arg)
 }

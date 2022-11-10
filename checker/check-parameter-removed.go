@@ -6,13 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func DefaultChecks() []BackwardCompatibilityCheck {
-	checks := make([]BackwardCompatibilityCheck, 0)
-	checks = append(checks, parameterRemovedCheck)
-	return checks
-}
-
-func parameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, diffBC *BCDiff) []BackwardCompatibilityError {
+func ParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, diffBC *BCDiff) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -31,7 +25,7 @@ func parameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					result = append(result, BackwardCompatibilityError{
 						Id:        "parameter-removed",
 						Level:     WARN,
-						Text:      fmt.Sprintf("deleted %s request parameter %s", paramLocation, paramName),
+						Text:      fmt.Sprintf("deleted the %s request parameter %s", ColorizedValue(paramLocation), ColorizedValue(paramName)),
 						Operation: operation,
 						Path:      path,
 						Source:    source,
@@ -45,9 +39,7 @@ func parameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 						opDiff.ParametersDiff.Deleted = make(diff.ParamNamesByLocation)
 					}
 					items := opDiff.ParametersDiff.Deleted[paramLocation].ToStringSet()
-					for _, v := range paramItems {
-						items.Add(v)
-					}
+					items.Add(paramName)
 					opDiff.ParametersDiff.Deleted[paramLocation] = items.ToStringList()
 				}
 			}
