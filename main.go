@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"reflect"
-	"text/tabwriter"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/build"
@@ -156,11 +155,11 @@ func main() {
 		}
 
 		// color output
-		w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)
-		for _, bcerr := range errs {
-			fmt.Fprintf(w, "%s\n", bcerr.ColorizedError())
-		}
-		w.Flush()
+		// w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)
+		// for _, bcerr := range errs {
+		// 	fmt.Fprintf(w, "%s\n", bcerr.ColorizedError())
+		// }
+		// w.Flush()
 
 		// table output
 		// data := make([][]string, 0)
