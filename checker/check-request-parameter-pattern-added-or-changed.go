@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, diffBC *BCDiff) []BackwardCompatibilityError {
+func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -27,21 +27,23 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 					if paramItem.SchemaDiff == nil {
 						continue
 					}
-					if paramItem.SchemaDiff.PatternDiff == nil {
+					patternDiff := paramItem.SchemaDiff.PatternDiff
+					if patternDiff == nil {
 						continue
 					}
-					if paramItem.SchemaDiff.PatternDiff.To == "" ||
-						paramItem.SchemaDiff.PatternDiff.To == ".*" {
+					if patternDiff.To == "" ||
+						patternDiff.To == ".*" {
 						continue
 					}
-				
+
 					source := (*operationsSources)[operationItem.Revision]
 
-					if paramItem.SchemaDiff.PatternDiff.From == "" {
+					if patternDiff.From == "" {
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-parameter-pattern-added",
-							Level:     ERR,
-							Text:      fmt.Sprintf("added the pattern '%s' for the %s request parameter %s", paramItem.SchemaDiff.PatternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Level:     WARN,
+							Text:      fmt.Sprintf("added the pattern '%s' for the %s request parameter %s", patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Comment:   PatternChangedWarnComment,
 							Operation: operation,
 							Path:      path,
 							Source:    source,
@@ -51,32 +53,13 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-parameter-pattern-changed",
 							Level:     WARN,
-							Text:      fmt.Sprintf("changed the pattern for the %s request parameter %s from '%s' to '%s'", ColorizedValue(paramLocation), ColorizedValue(paramName), paramItem.SchemaDiff.PatternDiff.From, paramItem.SchemaDiff.PatternDiff.To),
+							Text:      fmt.Sprintf("changed the pattern for the %s request parameter %s from '%s' to '%s'", ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
+							Comment:   PatternChangedWarnComment,
 							Operation: operation,
 							Path:      path,
 							Source:    source,
 							ToDo:      "Add to exceptions-list.md",
 						})
-					}
-
-					opDiff := diffBC.AddModifiedOperation(path, operation)
-					if opDiff.ParametersDiff == nil {
-						opDiff.ParametersDiff = &diff.ParametersDiff{}
-					}
-					if opDiff.ParametersDiff.Modified == nil {
-						opDiff.ParametersDiff.Modified = make(diff.ParamDiffByLocation)
-					}
-					if opDiff.ParametersDiff.Modified[paramLocation] == nil {
-						opDiff.ParametersDiff.Modified[paramLocation] = make(diff.ParamDiffs)
-					}
-					if opDiff.ParametersDiff.Modified[paramLocation][paramName] == nil {
-						opDiff.ParametersDiff.Modified[paramLocation][paramName] = &diff.ParameterDiff{}
-					}
-					if opDiff.ParametersDiff.Modified[paramLocation][paramName].SchemaDiff == nil {
-						opDiff.ParametersDiff.Modified[paramLocation][paramName].SchemaDiff = &diff.SchemaDiff{}
-					}
-					if opDiff.ParametersDiff.Modified[paramLocation][paramName].SchemaDiff.PatternDiff == nil {
-						opDiff.ParametersDiff.Modified[paramLocation][paramName].SchemaDiff.PatternDiff = paramItem.SchemaDiff.PatternDiff
 					}
 				}
 			}

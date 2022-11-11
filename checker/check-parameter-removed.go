@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, diffBC *BCDiff) []BackwardCompatibilityError {
+func ParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -31,16 +31,6 @@ func ParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 						Source:    source,
 						ToDo:      "Add to exceptions-list.md",
 					})
-					opDiff := diffBC.AddModifiedOperation(path, operation)
-					if opDiff.ParametersDiff == nil {
-						opDiff.ParametersDiff = &diff.ParametersDiff{}
-					}
-					if opDiff.ParametersDiff.Deleted == nil {
-						opDiff.ParametersDiff.Deleted = make(diff.ParamNamesByLocation)
-					}
-					items := opDiff.ParametersDiff.Deleted[paramLocation].ToStringSet()
-					items.Add(paramName)
-					opDiff.ParametersDiff.Deleted[paramLocation] = items.ToStringList()
 				}
 			}
 		}
