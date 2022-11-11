@@ -5,7 +5,9 @@ import (
 	"os"
 
 	"github.com/TwiN/go-color"
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -89,16 +91,15 @@ func (r *BackwardCompatibilityError) PrettyError() string {
 	return fmt.Sprintf("%s\t[%s] at %s\t\n\tin API %s %s\n\t\t%s%s", levelName, color.InYellow(r.Id), r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
 }
 
-func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) ([]BackwardCompatibilityError, diff.Diff) {
+func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) ([]BackwardCompatibilityError) {
 	result := make([]BackwardCompatibilityError, 0)
-	diffBC := BCDiff{}
 
 	for _, check := range checks {
 		errs := check(diffReport, operationsSources)
 		result = append(result, errs...)
 	}
 
-	return result, diffBC.Diff
+	return result
 }
 
 type BCDiff struct {
@@ -171,4 +172,11 @@ func (diffBC *BCDiff) AddRequestPropertiesDiff(path string, operation string, me
 		mediaTypeBCDiff.SchemaDiff.PropertiesDiff = &diff.SchemasDiff{}
 	}
 	return mediaTypeBCDiff.SchemaDiff.PropertiesDiff
+}
+
+// LoadOpenAPISpecInfoFromFile loads a LoadOpenAPISpecInfoFromFile from a local file path
+func LoadOpenAPISpecInfoFromFile(location string) (*load.OpenAPISpecInfo, error) {
+	loader := openapi3.NewLoader()
+	s, err := loader.LoadFromFile(location)
+	return &load.OpenAPISpecInfo{Spec: s, Url: location}, err
 }

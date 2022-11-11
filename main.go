@@ -121,18 +121,18 @@ func main() {
 			os.Exit(104)
 		}
 	} else {
-		s1, err := load.From(loader, base)
+		s1, err := checker.LoadOpenAPISpecInfoFromFile(base)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "failed to load base spec from %q with %v\n", base, err)
 			os.Exit(102)
 		}
 
-		s2, err := load.From(loader, revision)
+		s2, err := checker.LoadOpenAPISpecInfoFromFile(revision)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
 			os.Exit(103)
 		}
-		diffReport, err = diff.Get(config, s1, s2)
+		diffReport, operationsSources, err = diff.GetWithOperationsSourcesMap(config, s1, s2)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
 			os.Exit(104)
@@ -146,13 +146,7 @@ func main() {
 			os.Exit(106)
 		}
 
-		errs, diffBC := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
-		diffReport = &diffBC
-
-		if err = printYAML(diffReport); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to print summary with %v\n", err)
-			os.Exit(105)
-		}
+		errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
 
 		// color output
 		// w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)

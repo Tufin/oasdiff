@@ -70,8 +70,36 @@ func Get(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return diff, nil
+}
+
+/*
+Get calculates the diff between a pair of OpenAPI objects.
+
+Note that Get expects OpenAPI References (https://swagger.io/docs/specification/using-ref/) to be resolved.
+References are normally resolved automatically when you load the spec.
+In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn.
+*/
+func GetWithOperationsSourcesMap(config *Config, s1, s2 *load.OpenAPISpecInfo) (*Diff, *OperationsSourcesMap, error) {
+	diff, err := getDiff(config, newState(), s1.Spec, s2.Spec)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	_, operationsSources1, err := mergedPaths([]load.OpenAPISpecInfo{*s1})
+	if err != nil {
+		return nil, nil, err
+	}
+	_, operationsSources2, err := mergedPaths([]load.OpenAPISpecInfo{*s2})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	operationsSources := *operationsSources1
+	for k, v := range *operationsSources2 {
+		operationsSources[k] = v
+	}
+	return diff, &operationsSources, nil
 }
 
 /*

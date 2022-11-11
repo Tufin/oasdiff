@@ -6,5 +6,6 @@ func DefaultChecks() []BackwardCompatibilityCheck {
 	checks = append(checks, NewRequiredRequestPropertyCheck)
 	checks = append(checks, RequestParameterPatternAddedOrChangedCheck)
 	checks = append(checks, RequestPropertyPatternAddedOrChangedCheck)
+	checks = append(checks, AddedRequiredBodyCheck)
 	return checks
 }
