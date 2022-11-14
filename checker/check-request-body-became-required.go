@@ -4,7 +4,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func RequestBodyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -17,13 +17,13 @@ func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *dif
 			if operationItem.RequestBodyDiff == nil {
 				continue
 			}
-			if operationItem.RequestBodyDiff.Added &&
-				operationItem.Revision.RequestBody.Value.Required {
+			if (operationItem.RequestBodyDiff.RequiredDiff!=nil &&
+			operationItem.RequestBodyDiff.RequiredDiff.To == true) {
 				source := (*operationsSources)[operationItem.Revision]
 				result = append(result, BackwardCompatibilityError{
-					Id:        "added-required-request-body",
+					Id:        "request-body-became-required",
 					Level:     ERR,
-					Text:      "added required request body",
+					Text:      "request body became required",
 					Operation: operation,
 					Path:      path,
 					Source:    source,
