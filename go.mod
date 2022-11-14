@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.106.0
 	github.com/getkin/kin-openapi v0.108.0
 	github.com/stretchr/testify v1.8.1
-	github.com/yuin/goldmark v1.5.2
+	github.com/yuin/goldmark v1.5.3
 	gopkg.in/yaml.v3 v3.0.1
 )
 
