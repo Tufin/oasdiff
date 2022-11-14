@@ -22,7 +22,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 				continue
 			}
 
-			for _, responseDiff := range operationItem.ResponsesDiff.Modified {
+			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
 				if responseDiff.ContentDiff == nil ||
 					responseDiff.ContentDiff.MediaTypeModified == nil {
 					continue
@@ -42,7 +42,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-property-became-optional",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the response property %s became optional", ColorizedValue(changedRequiredPropertyName)),
+								Text:      fmt.Sprintf("the response property %s became optional for the status %s", ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -73,7 +73,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 									result = append(result, BackwardCompatibilityError{
 										Id:        "response-property-became-optional",
 										Level:     ERR,
-										Text:      fmt.Sprintf("the response property %s became optional", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+										Text:      fmt.Sprintf("the response property %s became optional for the status %s", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
 										Operation: operation,
 										Path:      path,
 										Source:    source,

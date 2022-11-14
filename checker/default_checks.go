@@ -12,6 +12,7 @@ func DefaultChecks() []BackwardCompatibilityCheck {
 		RequestHeaderPropertyBecameRequiredCheck,
 		ResponsePropertyBecameOptionalCheck,
 		RequestBodyBecameRequiredCheck,
+		ResponseHeaderBecameOptional,
 	}
 	return checks
 }
