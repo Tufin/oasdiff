@@ -22,7 +22,7 @@ func AddedRequiredBodyCheck(diffReport *diff.Diff, operationsSources *diff.Opera
 				source := (*operationsSources)[operationItem.Revision]
 				result = append(result, BackwardCompatibilityError{
 					Id:        "added-required-request-body",
-					Level:     WARN,
+					Level:     ERR,
 					Text:      "added required request body",
 					Operation: operation,
 					Path:      path,

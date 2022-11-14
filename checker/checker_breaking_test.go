@@ -153,7 +153,17 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	// FIXME
-	require.Equal(t, errs, []checker.BackwardCompatibilityError{checker.BackwardCompatibilityError{}})
+	require.Equal(t, []checker.BackwardCompatibilityError{
+		{
+			Id:        "request-parameter-became-required",
+			Text:      "the header request parameter network-policies became required",
+			Comment:   "",
+			Level:     checker.ERR,
+			Operation: "GET",
+			Path:      "/api/{domain}/{project}/install-command",
+			Source:    "../data/openapi-test1.yaml",
+			ToDo:      "Add to exceptions-list.md",
+		}}, errs)
 }
 
 // BC: changing an existing response header from required to optional is breaking

@@ -19,7 +19,7 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 
 func ColorizedValue(arg string) string {
 	if IsPipedOutput() {
-		return arg
+		return fmt.Sprintf("'%s'", arg)
 	}
 	return color.InBold(arg)
 }
