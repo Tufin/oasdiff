@@ -23,7 +23,7 @@ type BackwardCompatibilityError struct {
 	Operation string `json:"operation,omitempty" yaml:"operation,omitempty"`
 	Path      string `json:"path,omitempty" yaml:"path,omitempty"`
 	Source    string `json:"source,omitempty" yaml:"source,omitempty"`
-	ToDo      string `json:"source,omitempty" yaml:"source,omitempty"`
+	ToDo      string `json:"todo,omitempty" yaml:"todo,omitempty"`
 }
 
 type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError
@@ -91,7 +91,7 @@ func (r *BackwardCompatibilityError) PrettyError() string {
 	return fmt.Sprintf("%s\t[%s] at %s\t\n\tin API %s %s\n\t\t%s%s", levelName, color.InYellow(r.Id), r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
 }
 
-func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) ([]BackwardCompatibilityError) {
+func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 
 	for _, check := range checks {
