@@ -94,6 +94,10 @@ func (r *BackwardCompatibilityError) PrettyError() string {
 func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 
+	if diffReport==nil {
+		return result
+	}
+	
 	for _, check := range checks {
 		errs := check(diffReport, operationsSources)
 		result = append(result, errs...)

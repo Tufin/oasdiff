@@ -2,7 +2,7 @@ package checker
 
 func DefaultChecks() []BackwardCompatibilityCheck {
 	checks := []BackwardCompatibilityCheck{
-		ParameterRemovedCheck,
+		RequestParameterRemovedCheck,
 		NewRequiredRequestPropertyCheck,
 		RequestParameterPatternAddedOrChangedCheck,
 		RequestPropertyPatternAddedOrChangedCheck,
@@ -13,6 +13,11 @@ func DefaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyBecameOptionalCheck,
 		RequestBodyBecameRequiredCheck,
 		ResponseHeaderBecameOptional,
+		ResponseHeaderRemoved,
+		ResponseSuccessStatusRemoved,
+		ResponseMediaTypeRemoved,
+		NewRequestPathParameterCheck,
+		NewRequiredRequestNonPathParameterCheck,
 	}
 	return checks
 }

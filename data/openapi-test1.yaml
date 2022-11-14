@@ -121,6 +121,12 @@ paths:
             application/xml:
               schema:
                 type: string
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                type: string
       servers: []
   /api/{domain}/{project}/install-command:
     get:

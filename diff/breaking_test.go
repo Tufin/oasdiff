@@ -226,3 +226,33 @@ func TestBreaking_ModifyPatten(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, d)
 }
+
+// BC: removing an existing required response header is breaking
+func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = true
+	delete(s2.Paths[installCommandPath].Get.Responses["default"].Value.Headers, "X-RateLimit-Limit")
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
+}
+
+// BC: removing an existing optional response header is breaking
+func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = false
+	delete(s2.Paths[installCommandPath].Get.Responses["default"].Value.Headers, "X-RateLimit-Limit")
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, d)
+}

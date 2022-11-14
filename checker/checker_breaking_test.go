@@ -120,8 +120,8 @@ func TestBreaking_NewPathParam(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 
-	// FIXME
-	require.Contains(t, errs, checker.BackwardCompatibilityError{})
+	require.Len(t, errs, 1)
+	require.Equal(t, "new-request-path-parameter", errs[0].Id)
 }
 
 // BC: new required header param is breaking
@@ -136,8 +136,8 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
-	// FIXME
-	require.Contains(t, errs, checker.BackwardCompatibilityError{})
+	require.Len(t, errs, 1)
+	require.Equal(t, "new-required-request-parameter", errs[0].Id)
 }
 
 // BC: changing an existing header param from optional to required is breaking
@@ -152,11 +152,10 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
-	// FIXME
 	require.Equal(t, []checker.BackwardCompatibilityError{
 		{
 			Id:        "request-parameter-became-required",
-			Text:      "the header request parameter network-policies became required",
+			Text:      "the 'header' request parameter 'network-policies' became required",
 			Comment:   "",
 			Level:     checker.ERR,
 			Operation: "GET",
@@ -177,6 +176,88 @@ func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+}
+
+// BC: removing an existing required response header is breaking as error
+func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = true
+	delete(s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers, "X-RateLimit-Limit")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.NotEmpty(t, errs)
+}
+
+// BC: removing an existing response with successful status is breaking
+func TestBreaking_ResponseSuccessStatusRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	delete(s2.Spec.Paths[securityScorePath].Get.Responses, "200")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.NotEmpty(t, errs)
+}
+
+// BC: removing an existing response with unparseable status is non-breaking
+func TestBreaking_ResponseUnparseableStatusRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	delete(s2.Spec.Paths[installCommandPath].Get.Responses, "default")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.Empty(t, errs)
+}
+
+// BC: removing an existing response with error status is non-breaking
+func TestBreaking_ResponseErrorStatusRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	delete(s2.Spec.Paths[securityScorePath].Get.Responses, "400")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.Empty(t, errs)
+}
+
+// BC: removing an existing optional response header is breaking as warn
+func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = false
+	delete(s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers, "X-RateLimit-Limit")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.WARN, err.Level)
+	}
 	require.NotEmpty(t, errs)
 }
 
