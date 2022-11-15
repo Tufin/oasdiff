@@ -38,9 +38,9 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							if paramDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
 								continue
 							}
-							
+
 							if paramDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
-								// new added required properties processed via the new-required-request-header-property rule
+								// new added required properties processed via the new-required-request-header-property trule
 								continue
 							}
 
@@ -55,47 +55,30 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							})
 						}
 					}
-	
-					if paramDiff.SchemaDiff.PropertiesDiff == nil {
-						continue
-					}
-	
-					for topPropertyName, topPropertyDiff := range paramDiff.SchemaDiff.PropertiesDiff.Modified {
-						processModifiedPropertiesDiff(
-							"",
-							topPropertyName,
-							topPropertyDiff,
-							nil,
-							func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-								requiredDiff := propertyDiff.RequiredDiff
-								if requiredDiff == nil {
-									return
-								}
-								for _, changedRequiredPropertyName := range requiredDiff.Added {
-									if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
-										continue
-									}
-									if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
-										// new added required properties processed via the new-required-request-header-property rule
-										continue
-									}
-		
-									result = append(result, BackwardCompatibilityError{
-										Id:        "request-header-property-became-required",
-										Level:     ERR,
-										Text:      fmt.Sprintf("the %s request header's property %s became required", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
-										Operation: operation,
-										Path:      path,
-										Source:    source,
-										ToDo:      "Add to exceptions-list.md",
-									})							
-								}
-							})
-					}
-	
 
+					CheckModifiedPropertiesDiff(
+						paramDiff.SchemaDiff,
+						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+							requiredDiff := propertyDiff.RequiredDiff
+							if requiredDiff == nil {
+								return
+							}
+							for _, changedRequiredPropertyName := range requiredDiff.Added {
+								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+									continue
+								}
+								result = append(result, BackwardCompatibilityError{
+									Id:        "request-header-property-became-required",
+									Level:     ERR,
+									Text:      fmt.Sprintf("the %s request header's property %s became required", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+									Operation: operation,
+									Path:      path,
+									Source:    source,
+									ToDo:      "Add to exceptions-list.md",
+								})
+							}
+						})
 				}
-
 			}
 		}
 	}

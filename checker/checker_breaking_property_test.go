@@ -31,6 +31,8 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "new-required-request-header-property", errs[0].Id)
 }
 
 // BC: new optional property in request header is not breaking
@@ -73,6 +75,8 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-header-property-became-required", errs[0].Id)
 }
 
 // BC: changing an existing property in request header to optional is not breaking
@@ -111,6 +115,8 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-property-became-optional", errs[0].Id)
 }
 
 // BC: changing an existing property in response body to required is not breaking
@@ -153,6 +159,8 @@ func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-property-became-required", errs[0].Id)
 }
 
 // BC: adding a new required property in request body is breaking
@@ -209,6 +217,8 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-required-property-removed", errs[0].Id)
 }
 
 // BC: adding a new required property under AllOf in response body is not breaking
@@ -237,6 +247,8 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-required-property-removed", errs[0].Id)
 }
 
 // BC: adding a new required property under AllOf in response body is not breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking

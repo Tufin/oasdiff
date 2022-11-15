@@ -33,10 +33,14 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 					if mediaTypeDiff.SchemaDiff == nil {
 						continue
 					}
-	
+
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
+								continue
+							}
+							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+								// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
 								continue
 							}
 							result = append(result, BackwardCompatibilityError{
@@ -50,40 +54,35 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							})
 						}
 					}
-	
-					if mediaTypeDiff.SchemaDiff.PropertiesDiff == nil {
-						continue
-					}
-	
-					for topPropertyName, topPropertyDiff := range mediaTypeDiff.SchemaDiff.PropertiesDiff.Modified {
-						processModifiedPropertiesDiff(
-							"",
-							topPropertyName,
-							topPropertyDiff,
-							nil,
-							func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-								requiredDiff := propertyDiff.RequiredDiff
-								if requiredDiff == nil {
-									return
+
+					CheckModifiedPropertiesDiff(
+						mediaTypeDiff.SchemaDiff,
+						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+							requiredDiff := propertyDiff.RequiredDiff
+							if requiredDiff == nil {
+								return
+							}
+							for _, changedRequiredPropertyName := range requiredDiff.Deleted {
+								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
+									continue
 								}
-								for _, changedRequiredPropertyName := range requiredDiff.Deleted {
-									if propertyDiff.Base.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
-										continue
-									}
-									result = append(result, BackwardCompatibilityError{
-										Id:        "response-property-became-optional",
-										Level:     ERR,
-										Text:      fmt.Sprintf("the response property %s became optional for the status %s", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
-										Operation: operation,
-										Path:      path,
-										Source:    source,
-										ToDo:      "Add to exceptions-list.md",
-									})							
+								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+									// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
+									continue
 								}
-							})
-					}
+								result = append(result, BackwardCompatibilityError{
+									Id:        "response-property-became-optional",
+									Level:     ERR,
+									Text:      fmt.Sprintf("the response property %s became optional for the status %s", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
+									Operation: operation,
+									Path:      path,
+									Source:    source,
+									ToDo:      "Add to exceptions-list.md",
+								})
+							}
+						})
 				}
-	
+
 			}
 		}
 	}

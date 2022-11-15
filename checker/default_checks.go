@@ -19,6 +19,7 @@ func DefaultChecks() []BackwardCompatibilityCheck {
 		NewRequestPathParameterCheck,
 		NewRequiredRequestNonPathParameterCheck,
 		NewRequiredRequestHeaderPropertyCheck,
+		ResponseRequiredPropertyRemovedCheck,
 	}
 	return checks
 }

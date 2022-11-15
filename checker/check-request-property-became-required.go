@@ -34,6 +34,10 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
 							continue
 						}
+						if mediaTypeDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+							// it is a new property, checked by the new-required-request-property check
+							continue
+						}
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-property-became-required",
 							Level:     ERR,
@@ -46,37 +50,32 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 					}
 				}
 
-				if mediaTypeDiff.SchemaDiff.PropertiesDiff == nil {
-					continue
-				}
-
-				for topPropertyName, topPropertyDiff := range mediaTypeDiff.SchemaDiff.PropertiesDiff.Modified {
-					processModifiedPropertiesDiff(
-						"",
-						topPropertyName,
-						topPropertyDiff,
-						nil,
-						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-							requiredDiff := propertyDiff.RequiredDiff
-							if requiredDiff == nil {
+				CheckModifiedPropertiesDiff(
+					mediaTypeDiff.SchemaDiff,
+					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+						requiredDiff := propertyDiff.RequiredDiff
+						if requiredDiff == nil {
+							return
+						}
+						for _, changedRequiredPropertyName := range requiredDiff.Added {
+							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+								continue
+							}
+							if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+								// it is a new property, checked by the new-required-request-property check
 								return
 							}
-							for _, changedRequiredPropertyName := range requiredDiff.Added {
-								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
-									continue
-								}		
-								result = append(result, BackwardCompatibilityError{
-									Id:        "request-property-became-required",
-									Level:     ERR,
-									Text:      fmt.Sprintf("the request property %s became required", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
-								})							
-							}
-						})
-				}
+							result = append(result, BackwardCompatibilityError{
+								Id:        "request-property-became-required",
+								Level:     ERR,
+								Text:      fmt.Sprintf("the request property %s became required", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Operation: operation,
+								Path:      path,
+								Source:    source,
+								ToDo:      "Add to exceptions-list.md",
+							})
+						}
+					})
 			}
 		}
 	}

@@ -25,55 +25,44 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
-				if mediaTypeDiff.SchemaDiff == nil {
-					continue
-				}
-				if mediaTypeDiff.SchemaDiff.PropertiesDiff == nil {
-					continue
-				}
-				for topPropertyName, topPropertyDiff := range mediaTypeDiff.SchemaDiff.PropertiesDiff.Modified {
-					processModifiedPropertiesDiff(
-						"",
-						topPropertyName,
-						topPropertyDiff,
-						nil,
-						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-							patternDiff := propertyDiff.PatternDiff
-							if patternDiff == nil {
-								return
-							}
-							if patternDiff.To == "" ||
-								patternDiff.To == ".*" {
-								return
-							}
-		
-							source := (*operationsSources)[operationItem.Revision]
-		
-							if patternDiff.From == "" {
-								result = append(result, BackwardCompatibilityError{
-									Id:        "request-property-pattern-added",
-									Level:     WARN,
-									Text:      fmt.Sprintf("added the pattern '%s' for the request property %s", patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-									Comment:   PatternChangedWarnComment,
-									Operation: operation,
-									Path:      path,
-									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
-								})
-							} else {
-								result = append(result, BackwardCompatibilityError{
-									Id:        "request-property-pattern-changed",
-									Level:     WARN,
-									Text:      fmt.Sprintf("changed the pattern for the request property %s from '%s' to '%s'", ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
-									Comment:   PatternChangedWarnComment,
-									Operation: operation,
-									Path:      path,
-									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
-								})
-							}
-						})
-				}
+				CheckModifiedPropertiesDiff(
+					mediaTypeDiff.SchemaDiff,
+					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+						patternDiff := propertyDiff.PatternDiff
+						if patternDiff == nil {
+							return
+						}
+						if patternDiff.To == "" ||
+							patternDiff.To == ".*" {
+							return
+						}
+
+						source := (*operationsSources)[operationItem.Revision]
+
+						if patternDiff.From == "" {
+							result = append(result, BackwardCompatibilityError{
+								Id:        "request-property-pattern-added",
+								Level:     WARN,
+								Text:      fmt.Sprintf("added the pattern '%s' for the request property %s", patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Comment:   PatternChangedWarnComment,
+								Operation: operation,
+								Path:      path,
+								Source:    source,
+								ToDo:      "Add to exceptions-list.md",
+							})
+						} else {
+							result = append(result, BackwardCompatibilityError{
+								Id:        "request-property-pattern-changed",
+								Level:     WARN,
+								Text:      fmt.Sprintf("changed the pattern for the request property %s from '%s' to '%s'", ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
+								Comment:   PatternChangedWarnComment,
+								Operation: operation,
+								Path:      path,
+								Source:    source,
+								ToDo:      "Add to exceptions-list.md",
+							})
+						}
+					})
 			}
 		}
 	}

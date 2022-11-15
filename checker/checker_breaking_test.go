@@ -290,7 +290,7 @@ func TestBreaking_DeletePatten(t *testing.T) {
 }
 
 // BC: adding a pattern to a schema is breaking
-func TestBreaking_AddPatten(t *testing.T) {
+func TestBreaking_AddPattern(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-revision.yaml")
 	require.NoError(t, err)
 
@@ -301,10 +301,12 @@ func TestBreaking_AddPatten(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-property-pattern-added", errs[0].Id)
 }
 
 // BC: modifying a pattern in a schema is breaking
-func TestBreaking_ModifyPatten(t *testing.T) {
+func TestBreaking_ModifyPattern(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base.yaml")
 	require.NoError(t, err)
 
@@ -315,10 +317,12 @@ func TestBreaking_ModifyPatten(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-property-pattern-changed", errs[0].Id)
 }
 
 // BC: modifying a pattern to ".*"" in a schema is not breaking
-func TestBreaking_ModifyPattenToAnyString(t *testing.T) {
+func TestBreaking_ModifyPatternToAnyString(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base.yaml")
 	require.NoError(t, err)
 

@@ -3,6 +3,7 @@ package checker
 import (
 	"fmt"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
 )
@@ -30,69 +31,27 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 				}
 
 				for paramName, paramDiff := range paramDiffs {
-					if paramDiff.SchemaDiff == nil {
-						continue
-					}
-
-					if paramDiff.SchemaDiff.PropertiesDiff != nil {
-						for _, newPropertyName := range paramDiff.SchemaDiff.PropertiesDiff.Added {
-							if paramDiff.SchemaDiff.Revision.Value.Properties[newPropertyName].Value.ReadOnly {
-								continue
-							}
-							if !slices.Contains[string](paramDiff.SchemaDiff.Revision.Value.Required, newPropertyName) {
-								continue
-							}
-							result = append(result, BackwardCompatibilityError{
-								Id:        "new-required-request-header-property",
-								Level:     ERR,
-								Text:      fmt.Sprintf("added the new required %s request header's property %s", ColorizedValue(paramName), ColorizedValue(newPropertyName)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
-							})
-						}
-					}
-	
-					if paramDiff.SchemaDiff.PropertiesDiff == nil {
-						continue
-					}
-	
-					for topPropertyName, topPropertyDiff := range paramDiff.SchemaDiff.PropertiesDiff.Modified {
-						processModifiedPropertiesDiff(
-							"",
-							topPropertyName,
-							topPropertyDiff,
-							nil,
-							func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-								propertiesDiff := propertyDiff.PropertiesDiff
-								if propertiesDiff == nil {
+					CheckAddedPropertiesDiff(
+						paramDiff.SchemaDiff,
+						func(propertyPath string, newPropertyName string, newProperty *openapi3.Schema, parent *diff.SchemaDiff) {
+								if newProperty.ReadOnly {
 									return
 								}
-								for _, newPropertyName := range propertiesDiff.Added {
-									if propertyDiff.Revision.Value.Properties[newPropertyName].Value.ReadOnly {
-										continue
-									}
-									if !slices.Contains[string](propertyDiff.Revision.Value.Required, newPropertyName) {
-										continue
-									}
-		
-									result = append(result, BackwardCompatibilityError{
-										Id:        "new-required-request-header-property",
-										Level:     ERR,
-										Text:      fmt.Sprintf("added the new required %s request header's property %s", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, newPropertyName)))),
-										Operation: operation,
-										Path:      path,
-										Source:    source,
-										ToDo:      "Add to exceptions-list.md",
-									})							
+								if !slices.Contains(parent.Revision.Value.Required, newPropertyName) {
+									return
 								}
-							})
-					}
 	
-
+								result = append(result, BackwardCompatibilityError{
+									Id:        "new-required-request-header-property",
+									Level:     ERR,
+									Text:      fmt.Sprintf("added the new required %s request header's property %s", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
+									Operation: operation,
+									Path:      path,
+									Source:    source,
+									ToDo:      "Add to exceptions-list.md",
+								})
+						})
 				}
-
 			}
 		}
 	}
