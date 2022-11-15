@@ -67,6 +67,7 @@ func ExampleGetTextReportAsString() {
 	//   - New response: default
 	//   - Deleted response: 200
 	//   - Deleted response: 201
+	//   - Deleted response: 400
 	//
 	// GET /api/{domain}/{project}/install-command
 	// - Deleted header param: network-policies
@@ -186,6 +187,7 @@ func ExampleGetHTMLReportAsString() {
 	// <li>New response: default</li>
 	// <li>Deleted response: 200</li>
 	// <li>Deleted response: 201</li>
+	// <li>Deleted response: 400</li>
 	// </ul>
 	// </li>
 	// </ul>
