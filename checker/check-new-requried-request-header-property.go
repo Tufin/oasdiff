@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	"github.com/tufin/oasdiff/diff"
+	"golang.org/x/exp/slices"
 )
 
-func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -33,21 +34,18 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 						continue
 					}
 
-					if paramDiff.SchemaDiff.RequiredDiff != nil {
-						for _, changedRequiredPropertyName := range paramDiff.SchemaDiff.RequiredDiff.Added {
-							if paramDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+					if paramDiff.SchemaDiff.PropertiesDiff != nil {
+						for _, newPropertyName := range paramDiff.SchemaDiff.PropertiesDiff.Added {
+							if paramDiff.SchemaDiff.Revision.Value.Properties[newPropertyName].Value.ReadOnly {
 								continue
 							}
-							
-							if paramDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
-								// new added required properties processed via the new-required-request-header-property rule
+							if !slices.Contains[string](paramDiff.SchemaDiff.Revision.Value.Required, newPropertyName) {
 								continue
 							}
-
 							result = append(result, BackwardCompatibilityError{
-								Id:        "request-header-property-became-required",
+								Id:        "new-required-request-header-property",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the %s request header's property %s became required", ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
+								Text:      fmt.Sprintf("added the new required %s request header's property %s", ColorizedValue(paramName), ColorizedValue(newPropertyName)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -67,23 +65,22 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							topPropertyDiff,
 							nil,
 							func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-								requiredDiff := propertyDiff.RequiredDiff
-								if requiredDiff == nil {
+								propertiesDiff := propertyDiff.PropertiesDiff
+								if propertiesDiff == nil {
 									return
 								}
-								for _, changedRequiredPropertyName := range requiredDiff.Added {
-									if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+								for _, newPropertyName := range propertiesDiff.Added {
+									if propertyDiff.Revision.Value.Properties[newPropertyName].Value.ReadOnly {
 										continue
 									}
-									if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
-										// new added required properties processed via the new-required-request-header-property rule
+									if !slices.Contains[string](propertyDiff.Revision.Value.Required, newPropertyName) {
 										continue
 									}
 		
 									result = append(result, BackwardCompatibilityError{
-										Id:        "request-header-property-became-required",
+										Id:        "new-required-request-header-property",
 										Level:     ERR,
-										Text:      fmt.Sprintf("the %s request header's property %s became required", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+										Text:      fmt.Sprintf("added the new required %s request header's property %s", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, newPropertyName)))),
 										Operation: operation,
 										Path:      path,
 										Source:    source,
