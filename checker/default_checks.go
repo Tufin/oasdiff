@@ -20,6 +20,10 @@ func DefaultChecks() []BackwardCompatibilityCheck {
 		NewRequiredRequestNonPathParameterCheck,
 		NewRequiredRequestHeaderPropertyCheck,
 		ResponseRequiredPropertyRemovedCheck,
+		UncheckedRequestAllOfWarnCheck,
+		UncheckedResponseAllOfWarnCheck,
+		RequestPropertyRemovedCheck,
+		ResponseRequiredPropertyBecameNonWriteOnlyCheck,
 	}
 	return checks
 }
