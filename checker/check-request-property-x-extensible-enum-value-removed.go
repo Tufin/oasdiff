@@ -50,7 +50,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						var fromSlice []string
 						if err := json.Unmarshal(from, &fromSlice); err != nil {
 							result = append(result, BackwardCompatibilityError{
-								Id:        "unparseable-from-x-extensible-enum",
+								Id:        "unparseable-property-from-x-extensible-enum",
 								Level:     ERR,
 								Text:      fmt.Sprintf("unparseable x-extensible-enum of the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation: operation,
@@ -63,7 +63,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						var toSlice []string
 						if err := json.Unmarshal(to, &toSlice); err != nil {
 							result = append(result, BackwardCompatibilityError{
-								Id:        "unparseable-to-x-extensible-enum",
+								Id:        "unparseable-property-to-x-extensible-enum",
 								Level:     ERR,
 								Text:      fmt.Sprintf("unparseable x-extensible-enum of the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation: operation,
