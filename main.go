@@ -103,6 +103,10 @@ func main() {
 	var err error
 	var operationsSources *diff.OperationsSourcesMap
 
+	if checkBreaking {
+		config.IncludeExtensions.Add("x-extensible-enum")
+	}
+
 	if composed {
 		s1, err := load.FromGlob(loader, base)
 		if err != nil {

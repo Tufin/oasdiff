@@ -166,3 +166,39 @@ func processDeletedPropertiesDiff(propertyPath string, propertyName string, sche
 		}
 	}
 }
+
+func IsIncreased(from interface{}, to interface{}) bool {
+	fromUint64, ok := from.(uint64)
+	toUint64, okTo := to.(uint64)
+	if ok && okTo {
+		return fromUint64 < toUint64 
+	}
+	fromFloat64, ok := from.(float64)
+	toFloat64, okTo := to.(float64)
+	if ok && okTo {
+		return fromFloat64 < toFloat64 
+	}
+	return false
+}
+
+func IsIncreasedValue(diff *diff.ValueDiff) bool {
+	return IsIncreased(diff.From, diff.To)
+}
+
+func IsDecreasedValue(diff *diff.ValueDiff) bool {
+	return IsDecreased(diff.From, diff.To)
+}
+
+func IsDecreased(from interface{}, to interface{}) bool {
+	fromUint64, ok := from.(uint64)
+	toUint64, okTo := to.(uint64)
+	if ok && okTo {
+		return fromUint64 > toUint64 
+	}
+	fromFloat64, ok := from.(float64)
+	toFloat64, okTo := to.(float64)
+	if ok && okTo {
+		return fromFloat64 > toFloat64 
+	}
+	return false
+}
