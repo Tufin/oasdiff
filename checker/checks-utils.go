@@ -21,7 +21,7 @@ func ColorizedValue(arg string) string {
 	if IsPipedOutput() {
 		return fmt.Sprintf("'%s'", arg)
 	}
-	if (arg=="") {
+	if arg == "" {
 		return "''"
 	}
 	return color.InBold(arg)
@@ -97,7 +97,7 @@ func processModifiedPropertiesDiff(propertyPath string, propertyName string, sch
 	}
 }
 
-func CheckAddedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string,propertyName string, propertyItem *openapi3.Schema, propertyParentDiff *diff.SchemaDiff)) {
+func CheckAddedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentDiff *diff.SchemaDiff)) {
 	if schemaDiff == nil {
 		return
 	}
@@ -174,12 +174,12 @@ func IsIncreased(from interface{}, to interface{}) bool {
 	fromUint64, ok := from.(uint64)
 	toUint64, okTo := to.(uint64)
 	if ok && okTo {
-		return fromUint64 < toUint64 
+		return fromUint64 < toUint64
 	}
 	fromFloat64, ok := from.(float64)
 	toFloat64, okTo := to.(float64)
 	if ok && okTo {
-		return fromFloat64 < toFloat64 
+		return fromFloat64 < toFloat64
 	}
 	return false
 }
@@ -196,18 +196,18 @@ func IsDecreased(from interface{}, to interface{}) bool {
 	fromUint64, ok := from.(uint64)
 	toUint64, okTo := to.(uint64)
 	if ok && okTo {
-		return fromUint64 > toUint64 
+		return fromUint64 > toUint64
 	}
 	fromFloat64, ok := from.(float64)
 	toFloat64, okTo := to.(float64)
 	if ok && okTo {
-		return fromFloat64 > toFloat64 
+		return fromFloat64 > toFloat64
 	}
 	return false
 }
 
 func empty2none(a interface{}) interface{} {
-	if a==nil || a=="" {
+	if a == nil || a == "" {
 		return "none"
 	}
 	return a

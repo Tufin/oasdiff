@@ -13,7 +13,7 @@ import (
 const SinceDateExtension = "x-since-date"
 
 var (
-	DefaultSinceDate = civil.Date{2000, 1, 1}
+	DefaultSinceDate = civil.Date{Year: 2000, Month: 1, Day: 1}
 )
 
 // Diff describes the changes between a pair of OpenAPI objects: https://swagger.io/specification/#schema

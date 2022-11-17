@@ -98,8 +98,8 @@ func (r *BackwardCompatibilityError) PrettyError() string {
 }
 
 type BackwardCompatibilityCheckConfig struct {
-	Checks []BackwardCompatibilityCheck
-	MinSunsetBetaDays int
+	Checks              []BackwardCompatibilityCheck
+	MinSunsetBetaDays   int
 	MinSunsetStableDays int
 }
 

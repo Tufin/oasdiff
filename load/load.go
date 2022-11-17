@@ -26,7 +26,7 @@ func From(loader Loader, path string) (*openapi3.T, error) {
 }
 
 type OpenAPISpecInfo struct {
-	Url string
+	Url  string
 	Spec *openapi3.T
 }
 
@@ -42,7 +42,7 @@ func FromGlob(loader Loader, glob string) ([]OpenAPISpecInfo, error) {
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, OpenAPISpecInfo{ Url: file, Spec: spec })
+		result = append(result, OpenAPISpecInfo{Url: file, Spec: spec})
 	}
 
 	return result, nil

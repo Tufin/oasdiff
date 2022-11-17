@@ -13,9 +13,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 	if diffReport.PathsDiff == nil {
 		return result
 	}
-	
+
 	for _, path := range diffReport.PathsDiff.Deleted {
-		if diffReport.PathsDiff.Base[path] == nil || diffReport.PathsDiff.Base[path].Operations()  == nil {
+		if diffReport.PathsDiff.Base[path] == nil || diffReport.PathsDiff.Base[path].Operations() == nil {
 			continue
 		}
 		for operation, _ := range diffReport.PathsDiff.Base[path].Operations() {

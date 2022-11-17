@@ -58,8 +58,8 @@ func DefaultChecks() BackwardCompatibilityCheckConfig {
 		APISunsetChangedCheck,
 	}
 	return BackwardCompatibilityCheckConfig{
-		Checks: checks,
-		MinSunsetBetaDays: 31,
+		Checks:              checks,
+		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
 	}
 }
