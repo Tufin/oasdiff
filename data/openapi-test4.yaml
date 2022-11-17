@@ -3,7 +3,7 @@ info:
   version: 1.0.0
 openapi: 3.0.3
 paths:
-  /prefix/api/{domain}/{project}/badges/security-score/:
+  /prefix/api/{domain}/{project}/badges/security-score:
     get:
       parameters:
       - in: query
