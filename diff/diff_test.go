@@ -10,9 +10,8 @@ import (
 )
 
 const (
-	securityScorePath      = "/api/{domain}/{project}/badges/security-score"
-	securityScorePathSlash = securityScorePath + "/"
-	installCommandPath     = "/api/{domain}/{project}/install-command"
+	securityScorePath  = "/api/{domain}/{project}/badges/security-score"
+	installCommandPath = "/api/{domain}/{project}/install-command"
 )
 
 func l(t *testing.T, v int) *openapi3.T {
@@ -67,7 +66,7 @@ func TestDiff_AddedOperation(t *testing.T) {
 
 func TestDiff_DeletedOperation(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Deleted,
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Deleted,
 		"POST")
 }
 
@@ -160,7 +159,7 @@ func TestDiff_ModifiedEncodingHeaders(t *testing.T) {
 
 func TestDiff_AddedParam(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Added[openapi3.ParameterInHeader],
 		"X-Auth-Name")
 }
 
@@ -176,7 +175,7 @@ func TestDiff_ModifiedParam(t *testing.T) {
 			From: true,
 			To:   (interface{})(nil),
 		},
-		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].ExplodeDiff)
+		d(t, diff.NewConfig(), 2, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["image"].ExplodeDiff)
 }
 
 func TestSchemaDiff_TypeDiff(t *testing.T) {
@@ -223,11 +222,11 @@ func TestSchemaDiff_ContentDiff(t *testing.T) {
 
 	require.Equal(t,
 		"number",
-		dd.PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.From)
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.From)
 
 	require.Equal(t,
 		"string",
-		dd.PathsDiff.Modified[securityScorePathSlash].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.To)
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.To)
 }
 
 func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
@@ -270,8 +269,7 @@ func TestSchemaDiff_MediaType_MultiEntries(t *testing.T) {
 }
 
 func TestSchemaDiff_AnyOfModified(t *testing.T) {
-	require.False(t,
-		d(t, &diff.Config{PathPrefixRevision: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["token"].SchemaDiff.AnyOfDiff.Empty())
+	require.False(t, d(t, &diff.Config{PathPrefixRevision: "/prefix"}, 4, 2).PathsDiff.Modified["/prefix"+securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["token"].SchemaDiff.AnyOfDiff.Empty())
 }
 
 func TestSchemaDiff_WithExamples(t *testing.T) {
@@ -287,13 +285,14 @@ func TestSchemaDiff_WithExamples(t *testing.T) {
 func TestSchemaDiff_MinDiff(t *testing.T) {
 
 	dd := d(t, &diff.Config{PathPrefixRevision: "/prefix"}, 4, 2)
+	path := "/prefix" + securityScorePath
 
 	require.Nil(t,
-		dd.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.From)
+		dd.PathsDiff.Modified[path].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.From)
 
 	require.Equal(t,
 		float64(7),
-		dd.PathsDiff.Modified["/prefix/api/{domain}/{project}/badges/security-score/"].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.To)
+		dd.PathsDiff.Modified[path].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.MinDiff.To)
 }
 
 func TestResponseAdded(t *testing.T) {

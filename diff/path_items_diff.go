@@ -54,21 +54,6 @@ func rewritePrefix(paths openapi3.Paths, strip, prepend string) openapi3.Paths {
 }
 
 func findEndpoint(entrypoint string, paths openapi3.Paths) (*openapi3.PathItem, bool) {
-	noSlash, withSlash := combine(entrypoint)
-
-	if pathItem, ok := paths[noSlash]; ok {
-		return pathItem, true
-	}
-
-	if pathItem, ok := paths[withSlash]; ok {
-		return pathItem, true
-	}
-
-	return nil, false
-}
-
-func combine(s string) (string, string) {
-	s = strings.TrimSuffix(s, "/")
-
-	return s, s + "/"
+	pathItem, ok := paths[entrypoint]
+	return pathItem, ok
 }
