@@ -1,5 +1,5 @@
-cloud.google.com/go v0.106.0 h1:AWaMWuZb2oFeiV91OfNHZbmwUhMVuXEaLPm9sqDAOl8=
-cloud.google.com/go v0.106.0/go.mod h1:5NEGxGuIeMQiPaWLwLYZ7kfNWiP6w1+QJK+xqyIT+dw=
+cloud.google.com/go v0.107.0 h1:qkj22L7bgkl6vIeZDlOY2po43Mx/TIa2Wsa7VR+PEww=
+cloud.google.com/go v0.107.0/go.mod h1:wpc2eNrD7hXUTy8EKS10jkxpZBjASrORK7goS+3YX2I=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
