@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -49,7 +49,7 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 	return result
 }
 
-func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -64,8 +64,8 @@ func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *d
 			}
 			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
 				if responseDiff == nil ||
-				responseDiff.ContentDiff == nil ||
-				responseDiff.ContentDiff.MediaTypeModified == nil {
+					responseDiff.ContentDiff == nil ||
+					responseDiff.ContentDiff.MediaTypeModified == nil {
 					continue
 				}
 				modifiedMediaTypes := responseDiff.ContentDiff.MediaTypeModified

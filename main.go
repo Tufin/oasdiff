@@ -104,6 +104,8 @@ func main() {
 	var operationsSources *diff.OperationsSourcesMap
 
 	if checkBreaking {
+		config.IncludeExtensions.Add(checker.XStabilityLevelExtension)
+		config.IncludeExtensions.Add(diff.SunsetExtension)
 		config.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
 	}
 

@@ -1,6 +1,6 @@
 package checker
 
-func DefaultChecks() []BackwardCompatibilityCheck {
+func DefaultChecks() BackwardCompatibilityCheckConfig {
 	checks := []BackwardCompatibilityCheck{
 		RequestParameterRemovedCheck,
 		NewRequiredRequestPropertyCheck,
@@ -53,6 +53,13 @@ func DefaultChecks() []BackwardCompatibilityCheck {
 		RequestParameterTypeChangedCheck,
 		RequestPropertyTypeChangedCheck,
 		ResponsePropertyTypeChangedCheck,
+		APIRemovedCheck,
+		APIDeprecationCheck,
+		APISunsetChangedCheck,
 	}
-	return checks
+	return BackwardCompatibilityCheckConfig{
+		Checks: checks,
+		MinSunsetBetaDays: 31,
+		MinSunsetStableDays: 180,
+	}
 }

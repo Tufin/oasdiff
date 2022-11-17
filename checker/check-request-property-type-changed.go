@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -28,10 +28,10 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 				if mediaTypeDiff.SchemaDiff != nil {
 					typeDiff := mediaTypeDiff.SchemaDiff.TypeDiff
 					formatDiff := mediaTypeDiff.SchemaDiff.FormatDiff
-					if (typeDiff != nil || formatDiff!=nil) && (typeDiff == nil || typeDiff != nil &&
+					if (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
 						!(typeDiff.From == "integer" && typeDiff.To == "number") &&
 						!(typeDiff.To == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
-						(formatDiff==nil || formatDiff != nil && formatDiff.To != nil && formatDiff.To != "" &&
+						(formatDiff == nil || formatDiff != nil && formatDiff.To != nil && formatDiff.To != "" &&
 							!(mediaTypeDiff.SchemaDiff.Revision.Value.Type == "string" &&
 								(formatDiff.From == "date" && formatDiff.To == "date-time" ||
 									formatDiff.From == "time" && formatDiff.To == "date-time")) &&
@@ -70,10 +70,10 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						typeDiff := propertyDiff.TypeDiff
 						formatDiff := propertyDiff.FormatDiff
 
-						if (typeDiff != nil || formatDiff!=nil) && (typeDiff == nil || typeDiff != nil &&
+						if (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
 							!(typeDiff.From == "integer" && typeDiff.To == "number") &&
 							!(typeDiff.To == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
-							(formatDiff==nil || formatDiff != nil && formatDiff.To != nil && formatDiff.To != "" &&
+							(formatDiff == nil || formatDiff != nil && formatDiff.To != nil && formatDiff.To != "" &&
 								!(propertyDiff.Revision.Value.Type == "string" &&
 									(formatDiff.From == "date" && formatDiff.To == "date-time" ||
 										formatDiff.From == "time" && formatDiff.To == "date-time")) &&

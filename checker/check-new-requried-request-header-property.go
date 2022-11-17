@@ -8,7 +8,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -34,22 +34,22 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 					CheckAddedPropertiesDiff(
 						paramDiff.SchemaDiff,
 						func(propertyPath string, newPropertyName string, newProperty *openapi3.Schema, parent *diff.SchemaDiff) {
-								if newProperty.ReadOnly {
-									return
-								}
-								if !slices.Contains(parent.Revision.Value.Required, newPropertyName) {
-									return
-								}
-	
-								result = append(result, BackwardCompatibilityError{
-									Id:        "new-required-request-header-property",
-									Level:     ERR,
-									Text:      fmt.Sprintf("added the new required %s request header's property %s", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
-								})
+							if newProperty.ReadOnly {
+								return
+							}
+							if !slices.Contains(parent.Revision.Value.Required, newPropertyName) {
+								return
+							}
+
+							result = append(result, BackwardCompatibilityError{
+								Id:        "new-required-request-header-property",
+								Level:     ERR,
+								Text:      fmt.Sprintf("added the new required %s request header's property %s", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
+								Operation: operation,
+								Path:      path,
+								Source:    source,
+								ToDo:      "Add to exceptions-list.md",
+							})
 						})
 				}
 			}

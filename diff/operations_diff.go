@@ -37,7 +37,7 @@ func (operationsDiff *OperationsDiff) removeSunset(pathItem1 *openapi3.PathItem)
 	for _, op := range operationsDiff.Deleted {
 		operation := pathItem1.GetOperation(op)
 
-		if !sunsetAllowed(operation.Deprecated, operation.ExtensionProps) {
+		if !SunsetAllowed(operation.Deprecated, operation.ExtensionProps) {
 			deleted = append(deleted, op)
 		}
 	}

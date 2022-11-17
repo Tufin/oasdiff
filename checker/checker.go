@@ -32,7 +32,7 @@ type BackwardCompatibilityError struct {
 	ToDo      string `json:"todo,omitempty" yaml:"todo,omitempty"`
 }
 
-type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError
+type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError
 
 func (r *BackwardCompatibilityError) Error() string {
 	var levelName string
@@ -97,7 +97,13 @@ func (r *BackwardCompatibilityError) PrettyError() string {
 	return fmt.Sprintf("%s\t[%s] at %s\t\n\tin API %s %s\n\t\t%s%s", levelName, color.InYellow(r.Id), r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
 }
 
-func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+type BackwardCompatibilityCheckConfig struct {
+	Checks []BackwardCompatibilityCheck
+	MinSunsetBetaDays int
+	MinSunsetStableDays int
+}
+
+func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 
 	if diffReport == nil {
@@ -106,8 +112,8 @@ func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport 
 
 	result = removeDraftAndAlphaOperationsDiffs(diffReport, result, operationsSources)
 
-	for _, check := range checks {
-		errs := check(diffReport, operationsSources)
+	for _, check := range config.Checks {
+		errs := check(diffReport, operationsSources, config)
 		result = append(result, errs...)
 	}
 
@@ -122,8 +128,8 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 		}
 		// remove draft and alpha operations diffs deleted
 		iOperation := 0
-		for iOperation, operation := range pathDiff.OperationsDiff.Deleted {
-			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps, XStabilityLevelExtension)
+		for _, operation := range pathDiff.OperationsDiff.Deleted {
+			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps)
 			source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
@@ -146,7 +152,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 
 		// remove draft and alpha operations diffs modified
 		for operation, _ := range pathDiff.OperationsDiff.Modified {
-			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps, XStabilityLevelExtension)
+			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 				result = append(result, BackwardCompatibilityError{
@@ -160,7 +166,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 				})
 				continue
 			}
-			revisionStability, err := getStabilityLevel(pathDiff.Revision.Operations()[operation].ExtensionProps, XStabilityLevelExtension)
+			revisionStability, err := getStabilityLevel(pathDiff.Revision.Operations()[operation].ExtensionProps)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
 				result = append(result, BackwardCompatibilityError{
@@ -198,11 +204,11 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 	return result
 }
 
-func getStabilityLevel(i openapi3.ExtensionProps, extension string) (string, error) {
-	if i.Extensions == nil || i.Extensions[extension] == nil {
+func getStabilityLevel(i openapi3.ExtensionProps) (string, error) {
+	if i.Extensions == nil || i.Extensions[XStabilityLevelExtension] == nil {
 		return "", nil
 	}
-	jsonStability, ok := i.Extensions[extension].(json.RawMessage)
+	jsonStability, ok := i.Extensions[XStabilityLevelExtension].(json.RawMessage)
 	if !ok {
 		return "", fmt.Errorf("unparseable x-stability-level")
 	}

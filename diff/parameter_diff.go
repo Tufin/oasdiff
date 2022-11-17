@@ -37,7 +37,7 @@ func (diff *ParameterDiff) removeNonBreaking(config *Config, param2 *openapi3.Pa
 	diff.DescriptionDiff = nil
 	diff.ExampleDiff = nil
 	diff.ExamplesDiff = nil
-	if deprecationPeriodSufficient(config.DeprecationDays, param2.ExtensionProps) {
+	if DeprecationPeriodSufficient(config.DeprecationDays, param2.ExtensionProps) {
 		diff.DeprecatedDiff = nil
 	}
 

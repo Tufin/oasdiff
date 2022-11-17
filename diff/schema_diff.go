@@ -83,7 +83,7 @@ func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1,
 		diff.AllowEmptyValueDiff = nil
 	}
 
-	if schema2 == nil || schema2.Value == nil || deprecationPeriodSufficient(config.DeprecationDays, schema2.Value.ExtensionProps) {
+	if schema2 == nil || schema2.Value == nil || DeprecationPeriodSufficient(config.DeprecationDays, schema2.Value.ExtensionProps) {
 		diff.DeprecatedDiff = nil
 	}
 

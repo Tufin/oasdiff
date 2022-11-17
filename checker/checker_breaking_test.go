@@ -37,8 +37,9 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) []checker.BackwardCompatib
 
 // BC: deleting a path is breaking
 func TestBreaking_DeletedPath(t *testing.T) {
-	d := d(t, &diff.Config{}, 1, 2)
-	require.NotEmpty(t, d)
+	errs := d(t, &diff.Config{}, 1, 701)
+	require.Len(t, errs, 1)
+	require.Equal(t, "api-path-removed-without-deprecation", errs[0].Id)
 }
 
 // BC: deleting an operation is breaking
@@ -52,6 +53,8 @@ func TestBreaking_DeletedOp(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "api-removed-without-deprecation", errs[0].Id)
 }
 
 // BC: adding a required request body is breaking
@@ -67,6 +70,8 @@ func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "added-required-request-body", errs[0].Id)
 }
 
 // BC: changing an existing request body from optional to required is breaking
@@ -86,11 +91,25 @@ func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-body-became-required", errs[0].Id)
 }
 
 // BC: deleting an enum value is breaking
 func TestBreaking_DeletedEnum(t *testing.T) {
-	require.NotEmpty(t, d(t, &diff.Config{}, 3, 1))
+	errs := d(t, &diff.Config{}, 702, 1)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-enum-value-removed", errs[0].Id)
+}
+
+// BC: added an enum value to response breaking
+func TestBreaking_AddedResponseEnum(t *testing.T) {
+	errs := d(t, &diff.Config{}, 703, 704)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 2)
+	require.Equal(t, "response-property-enum-value-added", errs[0].Id)
+	require.Equal(t, "response-property-enum-value-added", errs[1].Id)
 }
 
 func deleteParam(op *openapi3.Operation, in string, name string) {
@@ -177,6 +196,8 @@ func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-header-became-optional", errs[0].Id)
 }
 
 // BC: removing an existing required response header is breaking as error
@@ -194,6 +215,8 @@ func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 		require.Equal(t, checker.ERR, err.Level)
 	}
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "required-response-header-removed", errs[0].Id)
 }
 
 // BC: removing an existing response with successful status is breaking
@@ -210,6 +233,8 @@ func TestBreaking_ResponseSuccessStatusRemoved(t *testing.T) {
 		require.Equal(t, checker.ERR, err.Level)
 	}
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-success-status-removed", errs[0].Id)
 }
 
 // BC: removing an existing response with unparseable status is non-breaking
@@ -259,6 +284,8 @@ func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
 		require.Equal(t, checker.WARN, err.Level)
 	}
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "optional-response-header-removed", errs[0].Id)
 }
 
 // BC: deleting a media-type from response is breaking
@@ -273,6 +300,8 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-media-type-removed", errs[0].Id)
 }
 
 // BC: deleting a pattern from a schema is not breaking

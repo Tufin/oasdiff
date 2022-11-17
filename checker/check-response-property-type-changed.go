@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -32,10 +32,10 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					if mediaTypeDiff.SchemaDiff != nil {
 						typeDiff := mediaTypeDiff.SchemaDiff.TypeDiff
 						formatDiff := mediaTypeDiff.SchemaDiff.FormatDiff
-						if (typeDiff != nil || formatDiff!=nil) && (typeDiff==nil || typeDiff != nil &&
+						if (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
 							!(typeDiff.To == "integer" && typeDiff.From == "number") &&
 							!(typeDiff.From == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
-							(formatDiff==nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
+							(formatDiff == nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
 								!(mediaTypeDiff.SchemaDiff.Revision.Value.Type == "number" &&
 									(formatDiff.To == "float" && formatDiff.From == "double")) &&
 								!(mediaTypeDiff.SchemaDiff.Revision.Value.Type == "integer" &&
@@ -69,10 +69,10 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 							typeDiff := propertyDiff.TypeDiff
 							formatDiff := propertyDiff.FormatDiff
 
-							if (typeDiff != nil || formatDiff!=nil) && (typeDiff==nil || typeDiff != nil &&
+							if (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
 								!(typeDiff.To == "integer" && typeDiff.From == "number") &&
 								!(typeDiff.From == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
-								(formatDiff==nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
+								(formatDiff == nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
 									!(propertyDiff.Revision.Value.Type == "number" &&
 										(formatDiff.To == "float" && formatDiff.From == "double")) &&
 									!(propertyDiff.Revision.Value.Type == "integer" &&

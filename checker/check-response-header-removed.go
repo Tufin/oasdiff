@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -39,7 +39,7 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 							Path:      path,
 							Source:    source,
 							ToDo:      "Add to exceptions-list.md",
-						})	
+						})
 					} else {
 						result = append(result, BackwardCompatibilityError{
 							Id:        "optional-response-header-removed",
@@ -49,7 +49,7 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 							Path:      path,
 							Source:    source,
 							ToDo:      "Add to exceptions-list.md",
-						})	
+						})
 					}
 				}
 			}

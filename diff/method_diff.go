@@ -47,7 +47,7 @@ func (methodDiff *MethodDiff) removeNonBreaking(config *Config, pathItem2 *opena
 	methodDiff.SummaryDiff = nil
 	methodDiff.DescriptionDiff = nil
 	methodDiff.OperationIDDiff = nil
-	if deprecationPeriodSufficient(config.DeprecationDays, pathItem2.ExtensionProps) {
+	if DeprecationPeriodSufficient(config.DeprecationDays, pathItem2.ExtensionProps) {
 		methodDiff.DeprecatedDiff = nil
 	}
 	methodDiff.ServersDiff = nil
