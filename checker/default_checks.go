@@ -50,6 +50,9 @@ func DefaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyEnumValueAddedCheck,
 		RequestParameterXExtensibleEnumValueRemovedCheck,
 		RequestPropertyXExtensibleEnumValueRemovedCheck,
+		RequestParameterTypeChangedCheck,
+		RequestPropertyTypeChangedCheck,
+		ResponsePropertyTypeChangedCheck,
 	}
 	return checks
 }

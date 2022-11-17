@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -13,6 +14,11 @@ import (
 const (
 	ERR  = 0
 	WARN = 1
+)
+
+const (
+	XStabilityLevelExtension = "x-stability-level"
+	XExtensibleEnumExtension = "x-extensible-enum"
 )
 
 type BackwardCompatibilityError struct {
@@ -94,16 +100,118 @@ func (r *BackwardCompatibilityError) PrettyError() string {
 func CheckBackwardCompatibility(checks []BackwardCompatibilityCheck, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 
-	if diffReport==nil {
+	if diffReport == nil {
 		return result
 	}
-	
+
+	result = removeDraftAndAlphaOperationsDiffs(diffReport, result, operationsSources)
+
 	for _, check := range checks {
 		errs := check(diffReport, operationsSources)
 		result = append(result, errs...)
 	}
 
 	return result
+}
+
+func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []BackwardCompatibilityError, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+	// remove draft and alpha paths diffs modified
+	for path, pathDiff := range diffReport.PathsDiff.Modified {
+		if pathDiff.OperationsDiff == nil {
+			continue
+		}
+		// remove draft and alpha operations diffs deleted
+		iOperation := 0
+		for iOperation, operation := range pathDiff.OperationsDiff.Deleted {
+			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps, XStabilityLevelExtension)
+			source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
+			if err != nil {
+				result = append(result, BackwardCompatibilityError{
+					Id:        "parsing-error",
+					Level:     ERR,
+					Text:      fmt.Sprintf("parsing error %s", err.Error()),
+					Operation: operation,
+					Path:      path,
+					Source:    source,
+					ToDo:      "Add to exceptions-list.md",
+				})
+				continue
+			}
+			if !(baseStability == "draft" || baseStability == "alpha") {
+				pathDiff.OperationsDiff.Deleted[iOperation] = operation
+				iOperation++
+			}
+		}
+		pathDiff.OperationsDiff.Deleted = pathDiff.OperationsDiff.Deleted[:iOperation]
+
+		// remove draft and alpha operations diffs modified
+		for operation, _ := range pathDiff.OperationsDiff.Modified {
+			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps, XStabilityLevelExtension)
+			if err != nil {
+				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
+				result = append(result, BackwardCompatibilityError{
+					Id:        "parsing-error",
+					Level:     ERR,
+					Text:      fmt.Sprintf("parsing error %s", err.Error()),
+					Operation: operation,
+					Path:      path,
+					Source:    source,
+					ToDo:      "Add to exceptions-list.md",
+				})
+				continue
+			}
+			revisionStability, err := getStabilityLevel(pathDiff.Revision.Operations()[operation].ExtensionProps, XStabilityLevelExtension)
+			if err != nil {
+				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
+				result = append(result, BackwardCompatibilityError{
+					Id:        "parsing-error",
+					Level:     ERR,
+					Text:      fmt.Sprintf("parsing error %s", err.Error()),
+					Operation: operation,
+					Path:      path,
+					Source:    source,
+					ToDo:      "Add to exceptions-list.md",
+				})
+				continue
+			}
+			source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
+			if baseStability == "stable" && revisionStability != "stable" ||
+				baseStability == "beta" && revisionStability != "beta" && revisionStability != "stable" ||
+				baseStability == "alpha" && revisionStability != "alpha" && revisionStability != "beta" && revisionStability != "stable" ||
+				revisionStability == "" && baseStability != "" {
+				result = append(result, BackwardCompatibilityError{
+					Id:        "api-stability-decreased",
+					Level:     ERR,
+					Text:      fmt.Sprintf("API stability decreased from '%s' to '%s'", baseStability, revisionStability),
+					Operation: operation,
+					Path:      path,
+					Source:    source,
+					ToDo:      "Add to exceptions-list.md",
+				})
+				continue
+			}
+			if revisionStability == "draft" || revisionStability == "alpha" {
+				delete(pathDiff.OperationsDiff.Modified, operation)
+			}
+		}
+	}
+	return result
+}
+
+func getStabilityLevel(i openapi3.ExtensionProps, extension string) (string, error) {
+	if i.Extensions == nil || i.Extensions[extension] == nil {
+		return "", nil
+	}
+	jsonStability, ok := i.Extensions[extension].(json.RawMessage)
+	if !ok {
+		return "", fmt.Errorf("unparseable x-stability-level")
+	}
+	var stabilityLevel string
+	err := json.Unmarshal(jsonStability, &stabilityLevel)
+	if err != nil {
+		return "", fmt.Errorf("unparseable x-stability-level")
+	}
+	return stabilityLevel, nil
 }
 
 type BCDiff struct {

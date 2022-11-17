@@ -104,7 +104,7 @@ func main() {
 	var operationsSources *diff.OperationsSourcesMap
 
 	if checkBreaking {
-		config.IncludeExtensions.Add("x-extensible-enum")
+		config.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
 	}
 
 	if composed {

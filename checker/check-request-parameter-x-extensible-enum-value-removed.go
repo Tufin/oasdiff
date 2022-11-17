@@ -36,14 +36,14 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 					if paramItem.SchemaDiff.ExtensionsDiff.Modified == nil {
 						continue
 					}
-					if paramItem.SchemaDiff.ExtensionsDiff.Modified["x-extensible-enum"] == nil {
+					if paramItem.SchemaDiff.ExtensionsDiff.Modified[XExtensibleEnumExtension] == nil {
 						continue
 					}
-					from, ok := paramItem.SchemaDiff.ExtensionsDiff.Modified["x-extensible-enum"].From.(json.RawMessage)
+					from, ok := paramItem.SchemaDiff.ExtensionsDiff.Modified[XExtensibleEnumExtension].From.(json.RawMessage)
 					if !ok {
 						continue
 					}
-					to, ok := paramItem.SchemaDiff.ExtensionsDiff.Modified["x-extensible-enum"].To.(json.RawMessage)
+					to, ok := paramItem.SchemaDiff.ExtensionsDiff.Modified[XExtensibleEnumExtension].To.(json.RawMessage)
 					if !ok {
 						continue
 					}

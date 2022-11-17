@@ -21,6 +21,9 @@ func ColorizedValue(arg string) string {
 	if IsPipedOutput() {
 		return fmt.Sprintf("'%s'", arg)
 	}
+	if (arg=="") {
+		return "''"
+	}
 	return color.InBold(arg)
 }
 
@@ -201,4 +204,11 @@ func IsDecreased(from interface{}, to interface{}) bool {
 		return fromFloat64 > toFloat64 
 	}
 	return false
+}
+
+func empty2none(a interface{}) interface{} {
+	if a==nil || a=="" {
+		return "none"
+	}
+	return a
 }

@@ -9,9 +9,11 @@ import (
 
 // PathsDiff describes the changes between a pair of Paths objects: https://swagger.io/specification/#paths-object
 type PathsDiff struct {
-	Added    StringList    `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList    `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedPaths `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added    StringList     `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList     `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedPaths  `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Base     openapi3.Paths `json:"-" yaml:"-"`
+	Revision openapi3.Paths `json:"-" yaml:"-"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -105,6 +107,8 @@ func getPathsDiffInternal(config *Config, state *state, paths1, paths2 openapi3.
 			return nil, err
 		}
 	}
+	result.Base = paths1
+	result.Revision = paths2
 
 	return result, nil
 }

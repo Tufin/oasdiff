@@ -36,14 +36,14 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						if propertyDiff.ExtensionsDiff.Modified == nil {
 							return
 						}
-						if propertyDiff.ExtensionsDiff.Modified["x-extensible-enum"] == nil {
+						if propertyDiff.ExtensionsDiff.Modified[XExtensibleEnumExtension] == nil {
 							return
 						}
-						from, ok := propertyDiff.ExtensionsDiff.Modified["x-extensible-enum"].From.(json.RawMessage)
+						from, ok := propertyDiff.ExtensionsDiff.Modified[XExtensibleEnumExtension].From.(json.RawMessage)
 						if !ok {
 							return
 						}
-						to, ok := propertyDiff.ExtensionsDiff.Modified["x-extensible-enum"].To.(json.RawMessage)
+						to, ok := propertyDiff.ExtensionsDiff.Modified[XExtensibleEnumExtension].To.(json.RawMessage)
 						if !ok {
 							return
 						}
