@@ -21,10 +21,7 @@ func ColorizedValue(arg string) string {
 	if IsPipedOutput() {
 		return fmt.Sprintf("'%s'", arg)
 	}
-	if arg == "" {
-		return "''"
-	}
-	return color.InBold(arg)
+	return color.InBold(fmt.Sprintf("'%s'", arg))
 }
 
 func processSchemaProperties(propertyPath string, propertyName string, schema *openapi3.Schema, parent *openapi3.Schema, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentItem *openapi3.Schema)) {

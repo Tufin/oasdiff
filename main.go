@@ -15,7 +15,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var base, revision, filter, filterExtension, format string
+var base, revision, filter, filterExtension, format, warnIgnorance, errIgnorance string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version, composed, checkBreaking bool
 var deprecationDays int
@@ -42,6 +42,8 @@ func init() {
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
 	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
 	flag.BoolVar(&checkBreaking, "check-breaking", false, "check breaking")
+	flag.StringVar(&warnIgnorance, "warn-ignore", "", "the filename for check breaking ignore file for warnings")
+	flag.StringVar(&errIgnorance, "err-ignore", "", "the filename for check breaking ignore file for warnings")
 	flag.IntVar(&deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
@@ -146,39 +148,31 @@ func main() {
 	}
 
 	if checkBreaking {
-
-		if err = printYAML(diffReport); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to print diff YAML with %v\n", err)
-			os.Exit(106)
-		}
-
 		errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
 
-		// color output
-		// w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)
-		// for _, bcerr := range errs {
-		// 	fmt.Fprintf(w, "%s\n", bcerr.ColorizedError())
-		// }
-		// w.Flush()
+		if warnIgnorance != "" {
+			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnorance)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "can't process warn ignorance %v\n", err)
+				os.Exit(121)
+			}
+		}
 
-		// table output
-		// data := make([][]string, 0)
-		// for _, bcerr := range errs {
-		// 	data = append(data, bcerr.TableDataError())
-		// }
-
-		// table := tablewriter.NewWriter(os.Stdout)
-		// table.SetAutoWrapText(true)
-		// table.SetHeader([]string{"Level", "Id", "Source", "API", "Description"})
-		// for _, v := range data {
-		// 	table.Append(v)
-		// }
-		// table.Render() // Send output
+		if errIgnorance != "" {
+			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnorance)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "can't process err ignorance %v\n", err)
+				os.Exit(122)
+			}
+		}
 
 		// pretty output
-		fmt.Println("\n\n\nPretty results:")
-		for _, bcerr := range errs {
-			fmt.Printf("%s\n\n", bcerr.PrettyError())
+		if len(errs) > 0 {
+			fmt.Printf("Backward compatibility errors (%d):\n", len(errs))
+			for _, bcerr := range errs {
+				fmt.Printf("%s\n\n", bcerr.PrettyError())
+			}
+			os.Exit(125)
 		}
 
 		exitNormally(diffReport.Empty())

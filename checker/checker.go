@@ -121,6 +121,9 @@ func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffRep
 }
 
 func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []BackwardCompatibilityError, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+	if diffReport.PathsDiff == nil {
+		return result
+	}
 	// remove draft and alpha paths diffs modified
 	for path, pathDiff := range diffReport.PathsDiff.Modified {
 		if pathDiff.OperationsDiff == nil {
@@ -151,7 +154,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 		pathDiff.OperationsDiff.Deleted = pathDiff.OperationsDiff.Deleted[:iOperation]
 
 		// remove draft and alpha operations diffs modified
-		for operation, _ := range pathDiff.OperationsDiff.Modified {
+		for operation := range pathDiff.OperationsDiff.Modified {
 			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]

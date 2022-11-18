@@ -18,7 +18,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 		if diffReport.PathsDiff.Base[path] == nil || diffReport.PathsDiff.Base[path].Operations() == nil {
 			continue
 		}
-		for operation, _ := range diffReport.PathsDiff.Base[path].Operations() {
+		for operation := range diffReport.PathsDiff.Base[path].Operations() {
 			op := diffReport.PathsDiff.Base[path].Operations()[operation]
 			if !op.Deprecated {
 				source := "original_source=" + (*operationsSources)[op]
