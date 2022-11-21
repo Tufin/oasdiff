@@ -1,5 +1,6 @@
 package checker
 
+//go:generate go-localize -input localizations_src -output localizations
 import (
 	"encoding/json"
 	"fmt"
@@ -7,6 +8,7 @@ import (
 
 	"github.com/TwiN/go-color"
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
@@ -47,21 +49,17 @@ func (r *BackwardCompatibilityError) Error() string {
 	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]. %s", levelName, r.Source, r.Operation, r.Path, r.Text, r.Id, r.Comment)
 }
 
-func (r *BackwardCompatibilityError) ColorizedError() string {
-	if IsPipedOutput() {
-		return r.Error()
-	}
-
+func (r *BackwardCompatibilityError) LocalizedError(l localizations.Localizer) string {
 	var levelName string
 	switch r.Level {
 	case ERR:
-		levelName = color.InRed("error")
+		levelName = "error"
 	case WARN:
-		levelName = color.InPurple("warning")
+		levelName = "warning"
 	default:
-		levelName = color.InGray("issue")
+		levelName = "issue"
 	}
-	return fmt.Sprintf("%s at %s in API %s %s %s [%s]. %s", levelName, r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, color.InYellow(r.Id), r.Comment)
+	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", levelName, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Operation, r.Path, r.Text, r.Id, r.Comment)
 }
 
 var pipedOutput *bool
@@ -76,9 +74,9 @@ func IsPipedOutput() bool {
 	return *pipedOutput
 }
 
-func (r *BackwardCompatibilityError) PrettyError() string {
+func (r *BackwardCompatibilityError) PrettyError(l localizations.Localizer) string {
 	if IsPipedOutput() {
-		return r.Error()
+		return r.LocalizedError(l)
 	}
 
 	var levelName string
@@ -94,13 +92,14 @@ func (r *BackwardCompatibilityError) PrettyError() string {
 	if r.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", r.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] at %s\t\n\tin API %s %s\n\t\t%s%s", levelName, color.InYellow(r.Id), r.Source, color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
+	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", levelName, color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
 }
 
 type BackwardCompatibilityCheckConfig struct {
 	Checks              []BackwardCompatibilityCheck
 	MinSunsetBetaDays   int
 	MinSunsetStableDays int
+	Localizer           localizations.Localizer
 }
 
 func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {

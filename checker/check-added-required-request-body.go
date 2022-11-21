@@ -23,7 +23,7 @@ func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *dif
 				result = append(result, BackwardCompatibilityError{
 					Id:        "added-required-request-body",
 					Level:     ERR,
-					Text:      "added required request body",
+					Text:      config.Localizer.Get("messages.added-required-request-body"),
 					Operation: operation,
 					Path:      path,
 					Source:    source,

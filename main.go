@@ -9,13 +9,14 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/build"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
 	"gopkg.in/yaml.v3"
 )
 
-var base, revision, filter, filterExtension, format, warnIgnorance, errIgnorance string
+var base, revision, filter, filterExtension, format, lang, warnIgnorance, errIgnorance string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version, composed, checkBreaking bool
 var deprecationDays int
@@ -46,6 +47,7 @@ func init() {
 	flag.StringVar(&errIgnorance, "err-ignore", "", "the filename for check breaking ignore file for warnings")
 	flag.IntVar(&deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
+	flag.StringVar(&lang, "lang", "en", "language for localized breaking changes checks errors")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
 	flag.BoolVar(&version, "version", false, "show version and quit")
 }
@@ -148,7 +150,9 @@ func main() {
 	}
 
 	if checkBreaking {
-		errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), diffReport, operationsSources)
+		c := checker.DefaultChecks()
+		c.Localizer = *localizations.New(lang, "en")
+		errs := checker.CheckBackwardCompatibility(c, diffReport, operationsSources)
 
 		if warnIgnorance != "" {
 			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnorance)
@@ -168,9 +172,9 @@ func main() {
 
 		// pretty output
 		if len(errs) > 0 {
-			fmt.Printf("Backward compatibility errors (%d):\n", len(errs))
+			fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
 			for _, bcerr := range errs {
-				fmt.Printf("%s\n\n", bcerr.PrettyError())
+				fmt.Printf("%s\n\n", bcerr.PrettyError(c.Localizer))
 			}
 			os.Exit(125)
 		}

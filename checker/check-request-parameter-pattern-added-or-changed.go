@@ -42,7 +42,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-parameter-pattern-added",
 							Level:     WARN,
-							Text:      fmt.Sprintf("added the pattern '%s' for the %s request parameter %s", patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:      fmt.Sprintf(config.Localizer.Get("messages.request-parameter-pattern-added"), patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Comment:   PatternChangedWarnComment,
 							Operation: operation,
 							Path:      path,
@@ -53,7 +53,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-parameter-pattern-changed",
 							Level:     WARN,
-							Text:      fmt.Sprintf("changed the pattern for the %s request parameter %s from '%s' to '%s'", ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
+							Text:      fmt.Sprintf(config.Localizer.Get("messages.request-parameter-pattern-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
 							Comment:   PatternChangedWarnComment,
 							Operation: operation,
 							Path:      path,

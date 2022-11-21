@@ -1,5 +1,7 @@
 package checker
 
+import "github.com/tufin/oasdiff/checker/localizations"
+
 func DefaultChecks() BackwardCompatibilityCheckConfig {
 	checks := []BackwardCompatibilityCheck{
 		RequestParameterRemovedCheck,
@@ -61,5 +63,6 @@ func DefaultChecks() BackwardCompatibilityCheckConfig {
 		Checks:              checks,
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
+		Localizer: *localizations.New("en", "en"),
 	}
 }

@@ -43,7 +43,7 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-pattern-added",
 								Level:     WARN,
-								Text:      fmt.Sprintf("added the pattern '%s' for the request property %s", patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:      fmt.Sprintf(config.Localizer.Get("messages.request-property-pattern-added"), patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Comment:   PatternChangedWarnComment,
 								Operation: operation,
 								Path:      path,
@@ -54,7 +54,7 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-pattern-changed",
 								Level:     WARN,
-								Text:      fmt.Sprintf("changed the pattern for the request property %s from '%s' to '%s'", ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
+								Text:      fmt.Sprintf(config.Localizer.Get("messages.request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
 								Comment:   PatternChangedWarnComment,
 								Operation: operation,
 								Path:      path,
