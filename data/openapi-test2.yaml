@@ -5,7 +5,7 @@ info:
     email: support@tufin.com
 openapi: 3.0.3
 paths:
-  /api/{domain}/{project}/badges/security-score/:
+  /api/{domain}/{project}/badges/security-score:
     get:
       parameters:
       - in: query
