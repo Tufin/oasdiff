@@ -73,7 +73,7 @@ func processSchemaProperties(propertyPath string, propertyName string, schema *o
 }
 
 func CheckModifiedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *diff.SchemaDiff, propertyParentItem *diff.SchemaDiff)) {
-	if schemaDiff.PropertiesDiff != nil && schemaDiff.PropertiesDiff.Modified != nil {
+	if schemaDiff!=nil && schemaDiff.PropertiesDiff != nil && schemaDiff.PropertiesDiff.Modified != nil {
 		for topName, topDiff := range schemaDiff.PropertiesDiff.Modified {
 			processModifiedPropertiesDiff("", topName, topDiff, schemaDiff, processor)
 		}
