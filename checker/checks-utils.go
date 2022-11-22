@@ -41,7 +41,7 @@ func interfaceToString(arg interface{}) string {
 		return fmt.Sprintf("%.2f", argFloat64)
 	}
 
-	return fmt.Sprintf("%v", arg)
+	return fmt.Sprintf("%s", arg)
 }
 
 func processSchemaProperties(propertyPath string, propertyName string, schema *openapi3.Schema, parent *openapi3.Schema, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentItem *openapi3.Schema)) {
