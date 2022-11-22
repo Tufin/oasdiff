@@ -17,11 +17,31 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 	return propertyFullName
 }
 
-func ColorizedValue(arg string) string {
+func ColorizedValue(arg interface{}) string {
+	str := interfaceToString(arg)
 	if IsPipedOutput() {
-		return fmt.Sprintf("'%s'", arg)
+		return fmt.Sprintf("'%s'", str)
 	}
-	return color.InBold(fmt.Sprintf("'%s'", arg))
+	return color.InBold(fmt.Sprintf("'%s'", str))
+}
+
+func interfaceToString(arg interface{}) string {
+	argString, ok := arg.(string)
+	if ok {
+		return argString
+	}
+
+	argUint64, ok := arg.(uint64)
+	if ok {
+		return fmt.Sprintf("%d", argUint64)
+	}
+
+	argFloat64, ok := arg.(float64)
+	if ok {
+		return fmt.Sprintf("%.2f", argFloat64)
+	}
+
+	return fmt.Sprintf("%v", arg)
 }
 
 func processSchemaProperties(propertyPath string, propertyName string, schema *openapi3.Schema, parent *openapi3.Schema, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentItem *openapi3.Schema)) {

@@ -32,7 +32,7 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-body-max-set",
 							Level:     WARN,
-							Text:      fmt.Sprintf("the request's body max was set to '%s'", maxDiff.To),
+							Text:      fmt.Sprintf("the request's body max was set to %s", ColorizedValue(maxDiff.To)),
 							Comment:   "It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.",
 							Operation: operation,
 							Path:      path,
@@ -60,7 +60,7 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-property-max-set",
 							Level:     WARN,
-							Text:      fmt.Sprintf("the %s request property's max was set to '%s'", ColorizedValue(propertyFullName(propertyPath, propertyName)), maxDiff.To),
+							Text:      fmt.Sprintf("the %s request property's max was set to %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
 							Comment:   "It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.",
 							Operation: operation,
 							Path:      path,

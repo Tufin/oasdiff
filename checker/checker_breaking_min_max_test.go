@@ -229,6 +229,8 @@ func TestBreaking_ResponseMinItemsSmaller(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-body-min-items-decreased", errs[0].Id)
 }
 
 // BC: increasing min items in request is breaking

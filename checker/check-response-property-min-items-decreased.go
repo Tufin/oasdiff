@@ -36,7 +36,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 								result = append(result, BackwardCompatibilityError{
 									Id:        "response-body-min-items-decreased",
 									Level:     ERR,
-									Text:      fmt.Sprintf("the response's body minItems was decreased from %s to %s", minItemsDiff.From, minItemsDiff.To),
+									Text:      fmt.Sprintf("the response's body minItems was decreased from %s to %s", ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
 									Operation: operation,
 									Path:      path,
 									Source:    source,
@@ -68,7 +68,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-property-min-items-decreased",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the %s response property's minItems was decreased from %s to %s for the response status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), minItemsDiff.From, minItemsDiff.To, ColorizedValue(responseStatus)),
+								Text:      fmt.Sprintf("the %s response property's minItems was decreased from %#v to %#v for the response status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

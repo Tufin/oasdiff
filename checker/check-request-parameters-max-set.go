@@ -38,7 +38,7 @@ func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.
 					result = append(result, BackwardCompatibilityError{
 						Id:        "request-parameter-max-set",
 						Level:     WARN,
-						Text:      fmt.Sprintf("for the %s request parameter %s, the max was set to '%s'", ColorizedValue(paramLocation), ColorizedValue(paramName), maxDiff.To),
+						Text:      fmt.Sprintf("for the %s request parameter %s, the max was set to %s", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.To)),
 						Comment:   "It is warn because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.",
 						Operation: operation,
 						Path:      path,

@@ -42,7 +42,7 @@ func RequestParameterMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSou
 					result = append(result, BackwardCompatibilityError{
 						Id:        "request-parameter-min-items-increased",
 						Level:     ERR,
-						Text:      fmt.Sprintf("for the %s request parameter %s, the minItems was increased from %s to %s", ColorizedValue(paramLocation), ColorizedValue(paramName), minItemsDiff.From, minItemsDiff.To),
+						Text:      fmt.Sprintf("for the %s request parameter %s, the minItems was increased from %s to %s", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
 						Operation: operation,
 						Path:      path,
 						Source:    source,

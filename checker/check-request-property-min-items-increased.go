@@ -33,7 +33,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-body-min-items-increased",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the request's body minItems was increased to '%s'", minItemsDiff.To),
+								Text:      fmt.Sprintf("the request's body minItems was increased to %s", ColorizedValue(minItemsDiff.To)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -64,7 +64,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-property-min-items-increased",
 							Level:     ERR,
-							Text:      fmt.Sprintf("the %s request property's minItems was increased to %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), minItemsDiff.To),
+							Text:      fmt.Sprintf("the %s request property's minItems was increased to %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
 							Operation: operation,
 							Path:      path,
 							Source:    source,

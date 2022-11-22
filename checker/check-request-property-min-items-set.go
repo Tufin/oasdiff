@@ -32,7 +32,7 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-body-min-items-set",
 							Level:     WARN,
-							Text:      fmt.Sprintf("the request's body minItems was set to '%s'", minItemsDiff.To),
+							Text:      fmt.Sprintf("the request's body minItems was set to %s", ColorizedValue(minItemsDiff.To)),
 							Comment:   "It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.",
 							Operation: operation,
 							Path:      path,
@@ -60,7 +60,7 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-property-min-items-set",
 							Level:     WARN,
-							Text:      fmt.Sprintf("the %s request property's minItems was set to '%s'", ColorizedValue(propertyFullName(propertyPath, propertyName)), minItemsDiff.To),
+							Text:      fmt.Sprintf("the %s request property's minItems was set to %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
 							Comment:   "It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.",
 							Operation: operation,
 							Path:      path,

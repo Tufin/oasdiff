@@ -36,7 +36,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 								result = append(result, BackwardCompatibilityError{
 									Id:        "response-body-min-length-decreased",
 									Level:     ERR,
-									Text:      fmt.Sprintf("the response's body minLength was decreased from %s to %s", minLengthDiff.From, minLengthDiff.To),
+									Text:      fmt.Sprintf("the response's body minLength was decreased from %s to %s", ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 									Operation: operation,
 									Path:      path,
 									Source:    source,
@@ -68,7 +68,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-property-min-length-decreased",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the %s response property's minLength was decreased from %s to %s for the response status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), minLengthDiff.From, minLengthDiff.To, ColorizedValue(responseStatus)),
+								Text:      fmt.Sprintf("the %s response property's minLength was decreased from %s to %s for the response status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

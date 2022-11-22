@@ -36,7 +36,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 								result = append(result, BackwardCompatibilityError{
 									Id:        "response-body-max-length-increased",
 									Level:     ERR,
-									Text:      fmt.Sprintf("the response's body maxLength was increased from %s to %s", maxLengthDiff.From, maxLengthDiff.To),
+									Text:      fmt.Sprintf("the response's body maxLength was increased from %s to %s", ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 									Operation: operation,
 									Path:      path,
 									Source:    source,
@@ -68,7 +68,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-property-max-length-increased",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the %s response property's maxLength was increased from %s to %s for the response status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), maxLengthDiff.From, maxLengthDiff.To, ColorizedValue(responseStatus)),
+								Text:      fmt.Sprintf("the %s response property's maxLength was increased from %s to %s for the response status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
