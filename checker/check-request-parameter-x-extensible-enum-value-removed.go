@@ -85,7 +85,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-parameter-x-extensible-enum-value-removed",
 							Level:     ERR,
-							Text:      fmt.Sprintf("removed the x-extensible-enum value %s for the %s request parameter %s", enumVal, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:      fmt.Sprintf(config.i18n("request-parameter-x-extensible-enum-value-removed"), ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation: operation,
 							Path:      path,
 							Source:    source,

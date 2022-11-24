@@ -32,8 +32,8 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-body-min-set",
 							Level:     WARN,
-							Text:      fmt.Sprintf("the request's body min was set to %s", ColorizedValue(minDiff.To)),
-							Comment:   "It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.",
+							Text:      fmt.Sprintf(config.i18n("request-body-min-set"), ColorizedValue(minDiff.To)),
+							Comment:   config.i18n("request-body-min-set-comment"),
 							Operation: operation,
 							Path:      path,
 							Source:    source,
@@ -60,8 +60,8 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-property-min-set",
 							Level:     WARN,
-							Text:      fmt.Sprintf("the %s request property's min was set to %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
-							Comment:   "It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.",
+							Text:      fmt.Sprintf(config.i18n("request-property-min-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+							Comment:   config.i18n("request-property-min-set-comment"),
 							Operation: operation,
 							Path:      path,
 							Source:    source,

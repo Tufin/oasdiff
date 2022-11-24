@@ -36,7 +36,7 @@ func RequestParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-parameter-enum-value-removed",
 							Level:     ERR,
-							Text:      fmt.Sprintf("removed the enum value %s for the %s request parameter %s", enumVal, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:      fmt.Sprintf(config.i18n("request-parameter-enum-value-removed"), enumVal, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation: operation,
 							Path:      path,
 							Source:    source,

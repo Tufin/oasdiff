@@ -6,8 +6,6 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const PatternChangedWarnComment = "It is the warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')"
-
 func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
@@ -43,8 +41,8 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-pattern-added",
 								Level:     WARN,
-								Text:      fmt.Sprintf(config.Localizer.Get("messages.request-property-pattern-added"), patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Comment:   PatternChangedWarnComment,
+								Text:      fmt.Sprintf(config.i18n("request-property-pattern-added"), patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Comment:   config.i18n("pattern-changed-warn-comment"),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -54,8 +52,8 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-pattern-changed",
 								Level:     WARN,
-								Text:      fmt.Sprintf(config.Localizer.Get("messages.request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
-								Comment:   PatternChangedWarnComment,
+								Text:      fmt.Sprintf(config.i18n("request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
+								Comment:   config.i18n("pattern-changed-warn-comment"),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

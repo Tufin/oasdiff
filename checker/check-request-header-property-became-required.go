@@ -47,7 +47,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-header-property-became-required",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the %s request header's property %s became required", ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
+								Text:      fmt.Sprintf(config.i18n("request-header-property-became-required"), ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -70,7 +70,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								result = append(result, BackwardCompatibilityError{
 									Id:        "request-header-property-became-required",
 									Level:     ERR,
-									Text:      fmt.Sprintf("the %s request header's property %s became required", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+									Text:      fmt.Sprintf(config.i18n("request-header-property-became-required"), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 									Operation: operation,
 									Path:      path,
 									Source:    source,

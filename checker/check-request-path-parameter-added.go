@@ -29,7 +29,7 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, BackwardCompatibilityError{
 						Id:        "new-request-path-parameter",
 						Level:     ERR,
-						Text:      fmt.Sprintf("added the new path request parameter %s", ColorizedValue(paramName)),
+						Text:      fmt.Sprintf(config.i18n("new-request-path-parameter"), ColorizedValue(paramName)),
 						Operation: operation,
 						Path:      path,
 						Source:    source,

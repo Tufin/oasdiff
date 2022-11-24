@@ -36,7 +36,7 @@ func ResponseSuccessStatusRemoved(diffReport *diff.Diff, operationsSources *diff
 				result = append(result, BackwardCompatibilityError{
 					Id:        "response-success-status-removed",
 					Level:     ERR,
-					Text:      fmt.Sprintf("removed the success response with the status %s", ColorizedValue(responseStatus)),
+					Text:      fmt.Sprintf(config.i18n("response-success-status-removed"), ColorizedValue(responseStatus)),
 					Operation: operation,
 					Path:      path,
 					Source:    source,

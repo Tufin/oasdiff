@@ -35,7 +35,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, BackwardCompatibilityError{
 					Id:        "api-deprecated-sunset-parse",
 					Level:     ERR,
-					Text:      "api sunset date can't be parsed for deprecated API",
+					Text:      config.i18n("api-deprecated-sunset-parse"),
 					Operation: operation,
 					Path:      path,
 					Source:    source,
@@ -68,7 +68,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, BackwardCompatibilityError{
 					Id:        "api-sunset-date-too-small",
 					Level:     ERR,
-					Text:      fmt.Sprintf("api sunset date %s is too small, must be at least %d days from now", date, deprecationDays),
+					Text:      fmt.Sprintf(config.i18n("api-sunset-date-too-small"), date, deprecationDays),
 					Operation: operation,
 					Path:      path,
 					Source:    source,

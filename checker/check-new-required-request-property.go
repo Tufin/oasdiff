@@ -34,7 +34,7 @@ func NewRequiredRequestPropertyCheck(diffReport *diff.Diff, operationsSources *d
 							result = append(result, BackwardCompatibilityError{
 								Id:        "new-required-request-property",
 								Level:     ERR,
-								Text:      fmt.Sprintf("added new required request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:      fmt.Sprintf(config.i18n("new-required-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

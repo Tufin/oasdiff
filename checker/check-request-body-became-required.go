@@ -23,7 +23,7 @@ func RequestBodyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *di
 				result = append(result, BackwardCompatibilityError{
 					Id:        "request-body-became-required",
 					Level:     ERR,
-					Text:      "request body became required",
+					Text:      config.i18n("request-body-became-required"),
 					Operation: operation,
 					Path:      path,
 					Source:    source,

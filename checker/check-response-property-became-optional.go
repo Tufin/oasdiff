@@ -46,7 +46,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-property-became-optional",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the response property %s became optional for the status %s", ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
+								Text:      fmt.Sprintf(config.i18n("response-property-became-optional"), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -73,7 +73,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								result = append(result, BackwardCompatibilityError{
 									Id:        "response-property-became-optional",
 									Level:     ERR,
-									Text:      fmt.Sprintf("the response property %s became optional for the status %s", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
+									Text:      fmt.Sprintf(config.i18n("response-property-became-optional"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
 									Operation: operation,
 									Path:      path,
 									Source:    source,

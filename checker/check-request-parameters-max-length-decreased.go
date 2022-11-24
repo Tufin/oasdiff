@@ -42,7 +42,7 @@ func RequestParameterMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 					result = append(result, BackwardCompatibilityError{
 						Id:        "request-parameter-max-length-decreased",
 						Level:     ERR,
-						Text:      fmt.Sprintf("for the %s request parameter %s, the maxLength was decreased from %s to %s", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+						Text:      fmt.Sprintf(config.i18n("request-parameter-max-length-decreased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 						Operation: operation,
 						Path:      path,
 						Source:    source,

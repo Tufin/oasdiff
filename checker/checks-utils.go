@@ -225,7 +225,7 @@ func IsDecreased(from interface{}, to interface{}) bool {
 
 func empty2none(a interface{}) interface{} {
 	if a == nil || a == "" {
-		return "none"
+		return ColorizedValue("none")
 	}
-	return a
+	return ColorizedValue(a)
 }

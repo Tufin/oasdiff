@@ -52,7 +52,7 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-body-type-changed",
 							Level:     ERR,
-							Text:      fmt.Sprintf("the request's body type/format changed from %s/%s to %s/%s", empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+							Text:      fmt.Sprintf(config.i18n("request-body-type-changed"), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
 							Operation: operation,
 							Path:      path,
 							Source:    source,
@@ -94,7 +94,7 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-type-changed",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the %s request property type/format changed from %s/%s to %s/%s", ColorizedValue(propertyFullName(propertyPath, propertyName)), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+								Text:      fmt.Sprintf(config.i18n("request-property-type-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

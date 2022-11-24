@@ -7,3 +7,90 @@ request-parameter-pattern-added: "добавлен pattern '%s' для %s пар
 request-parameter-pattern-changed: "изменён pattern для %s параметра запроса %s со значения '%s' на значение '%s'"
 request-property-pattern-added: "добавлен pattern '%s' для поля запроса %s"
 request-property-pattern-changed: "изменён pattern для поля запроса %s со значения '%s' на значение '%s'"
+api-deprecated-sunset-parse: api sunset date can't be parsed for deprecated API
+api-sunset-date-too-small: "api sunset date %s is too small, must be at least %d days from now"
+api-path-removed-without-deprecation: api path removed without deprecation
+api-path-removed-before-sunset: api path removed before the sunset date %s
+api-removed-without-deprecation: api removed without deprecation
+api-removed-before-sunset: api removed before the sunset date %s
+sunset-deleted: api sunset date deleted, but deprecated=true kept
+api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %d days from now
+new-required-request-parameter: added the new required %s request parameter %s
+new-required-request-property: added the new required request property %s
+new-required-request-header-property: added the new required %s request header's property %s
+request-body-became-required: request body became required
+request-header-property-became-required: the %s request header's property %s became required
+request-parameter-became-required: the %s request parameter %s became required
+request-parameter-enum-value-removed: removed the enum value %s for the %s request parameter %s
+pattern-changed-warn-comment: "It is the warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')"
+request-parameter-x-extensible-enum-value-removed: removed the x-extensible-enum value %s for the %s request parameter %s
+request-parameter-max-decreased: for the %s request parameter %s, the max was decreased from %s to %s
+request-parameter-max-length-decreased: for the %s request parameter %s, the maxLength was decreased from %s to %s
+request-parameter-max-length-set: for the %s request parameter %s, the maxLength was set to %s
+request-parameter-max-length-set-comment: "It is warn because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification."
+request-parameter-max-set: for the %s request parameter %s, the max was set to %s
+request-parameter-max-set-comment: "It is warn because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification."
+request-parameter-min-increased: for the %s request parameter %s, the min was increased from %s to %s
+request-parameter-min-items-increased: for the %s request parameter %s, the minItems was increased from %s to %s
+request-parameter-min-items-set: for the %s request parameter %s, the minItems was set to %s
+request-parameter-min-items-set-comment: It is warn because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-min-set: for the %s request parameter %s, the min was set to %s
+request-parameter-min-set-comment: It is warn because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-type-changed: for the %s request parameter %s, the type/format was changed from %s/%s to %s/%s
+new-request-path-parameter: added the new path request parameter %s
+request-property-became-required: the request property %s became required
+request-property-enum-value-removed: removed the enum value %s of the request property %s
+request-body-max-decreased: the request's body max was decreased to %s
+request-property-max-decreased: the %s request property's max was decreased to %s
+request-body-max-length-decreased: the request's body maxLength was decreased to %s
+request-property-max-length-decreased: the %s request property's maxLength was decreased to %s
+request-body-max-length-set: the request's body maxLength was set to %s
+request-body-max-length-set-comment: It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-max-length-set: the %s request property's maxLength was set to %s
+request-property-max-length-set-comment: It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-max-set: the request's body max was set to %s
+request-body-max-set-comment: It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-max-set: the %s request property's max was set to %s
+request-property-max-set-comment: It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-min-increased: the request's body min was increased to %s
+request-property-min-increased: the %s request property's min was increased to %s
+request-body-min-items-increased: the request's body minItems was increased to %s
+request-property-min-items-increased: the %s request property's minItems was increased to %s
+request-body-min-items-set: the request's body minItems was set to %s
+request-body-min-items-set-comment: It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-min-items-set: the %s request property's minItems was set to %s
+request-property-min-items-set-comment: It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-min-set: the request's body min was set to %s
+request-body-min-set-comment: It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-min-set: the %s request property's min was set to %s
+request-property-min-set-comment: It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-removed: removed the request property %s
+request-body-type-changed: the request's body type/format changed from %s/%s to %s/%s
+request-property-type-changed: the %s request property type/format changed from %s/%s to %s/%s
+request-property-x-extensible-enum-value-removed: removed the x-extensible-enum value '%s' of the request property %s
+response-header-became-optional: the response header %s became optional for the status %s
+required-response-header-removed: the mandatory response header %s removed for the status %s
+optional-response-header-removed: the optional response header %s removed for the status %s
+response-media-type-removed: removed the media type %s for the response with the status %s
+response-optional-property-removed: removed the optional property %s from the response with the %s status
+response-property-became-optional: the response property %s became optional for the status %s
+response-property-enum-value-added: added the new '%s' enum value the %s response property for the response status %s
+response-property-enum-value-added-comment: Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.
+response-body-max-length-increased: the response's body maxLength was increased from %s to %s
+response-property-max-length-increased: the %s response property's maxLength was increased from %s to %s for the response status %s
+response-body-max-length-unset: the response's body maxLength was unset from %s
+response-property-max-length-unset: the %s response property's maxLength was unset from %s for the response status %s
+response-body-min-items-decreased: the response's body minItems was decreased from %s to %s
+response-property-min-items-decreased: the %s response property's minItems was decreased from %s to %s for the response status %s
+response-body-min-items-unset: the response's body minItems was unset from %s
+response-property-min-items-unset: the %s response property's minItems was unset from %s for the response status %s
+response-body-min-length-decreased: the response's body minLength was decreased from %s to %s
+response-property-min-length-decreased: the %s response property's minLength was decreased from %s to %s for the response status %s
+response-body-type-changed: the response's body type/format changed from %s/%s to %s/%s for status %s
+response-property-type-changed: the response's property type/format changed from %s/%s to %s/%s for status %s
+response-required-property-became-not-write-only: the response required property %s became not write-only for the status %s
+response-required-property-became-not-write-only-comment: It is valid only if the property was always returned before the specification has been changed
+response-required-property-removed: removed the required property %s from the response with the %s status
+response-success-status-removed: removed the success response with the status %s
+request-allOf-modified: modified allOf for the request property %s
+request-allOf-modified-comment: It is a warn because it is very difficult to check that allOf changed correctly without breaking changes

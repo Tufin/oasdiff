@@ -25,7 +25,7 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, BackwardCompatibilityError{
 						Id:        "request-parameter-removed",
 						Level:     WARN,
-						Text:      fmt.Sprintf(config.Localizer.Get("messages.request-parameter-removed"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Text:      fmt.Sprintf(config.i18n("request-parameter-removed"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 						Operation: operation,
 						Path:      path,
 						Source:    source,

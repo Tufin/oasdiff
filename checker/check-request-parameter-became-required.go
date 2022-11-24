@@ -36,7 +36,7 @@ func RequestParameterBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 					result = append(result, BackwardCompatibilityError{
 						Id:        "request-parameter-became-required",
 						Level:     ERR,
-						Text:      fmt.Sprintf("the %s request parameter %s became required", ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Text:      fmt.Sprintf(config.i18n("request-parameter-became-required"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 						Operation: operation,
 						Path:      path,
 						Source:    source,

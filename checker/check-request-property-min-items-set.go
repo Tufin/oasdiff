@@ -32,8 +32,8 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-body-min-items-set",
 							Level:     WARN,
-							Text:      fmt.Sprintf("the request's body minItems was set to %s", ColorizedValue(minItemsDiff.To)),
-							Comment:   "It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.",
+							Text:      fmt.Sprintf(config.i18n("request-body-min-items-set"), ColorizedValue(minItemsDiff.To)),
+							Comment:   config.i18n("request-body-min-items-set-comment"),
 							Operation: operation,
 							Path:      path,
 							Source:    source,
@@ -60,8 +60,8 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-property-min-items-set",
 							Level:     WARN,
-							Text:      fmt.Sprintf("the %s request property's minItems was set to %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
-							Comment:   "It is warn because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.",
+							Text:      fmt.Sprintf(config.i18n("request-property-min-items-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Comment:   config.i18n("request-property-min-items-set-comment"),
 							Operation: operation,
 							Path:      path,
 							Source:    source,

@@ -33,7 +33,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-body-max-decreased",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the request's body max was decreased to %s", ColorizedValue(maxDiff.To)),
+								Text:      fmt.Sprintf(config.i18n("request-body-max-decreased"), ColorizedValue(maxDiff.To)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -64,7 +64,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-property-max-decreased",
 							Level:     ERR,
-							Text:      fmt.Sprintf("the %s request property's max was decreased to %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+							Text:      fmt.Sprintf(config.i18n("request-property-max-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
 							Operation: operation,
 							Path:      path,
 							Source:    source,

@@ -102,6 +102,10 @@ type BackwardCompatibilityCheckConfig struct {
 	Localizer           localizations.Localizer
 }
 
+func (c *BackwardCompatibilityCheckConfig) i18n(messageID string) string {
+	return c.Localizer.Get("messages." + messageID)
+}
+
 func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 

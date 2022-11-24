@@ -34,8 +34,8 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-allOf-modified",
 								Level:     WARN,
-								Text:      fmt.Sprintf("modified allOf for the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Comment:   "It is a warn because it is very difficult to check that allOf changed correctly without breaking changes",
+								Text:      fmt.Sprintf(config.i18n("request-allOf-modified"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Comment:   config.i18n("request-allOf-modified-comment"),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

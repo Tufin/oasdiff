@@ -51,7 +51,7 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-body-type-changed",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the response's body type/format changed from %s/%s to %s/%s for status %s", empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
+								Text:      fmt.Sprintf(config.i18n("response-body-type-changed"), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -88,7 +88,7 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 								result = append(result, BackwardCompatibilityError{
 									Id:        "response-property-type-changed",
 									Level:     ERR,
-									Text:      fmt.Sprintf("the response's property type/format changed from %s/%s to %s/%s for status %s", empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
+									Text:      fmt.Sprintf(config.i18n("response-property-type-changed"), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
 									Operation: operation,
 									Path:      path,
 									Source:    source,

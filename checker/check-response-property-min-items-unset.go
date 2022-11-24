@@ -35,7 +35,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-body-min-items-unset",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the response's body minItems was unset from %s", ColorizedValue(minItemsDiff.From)),
+								Text:      fmt.Sprintf(config.i18n("response-body-min-items-unset"), ColorizedValue(minItemsDiff.From)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -62,7 +62,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-property-min-items-unset",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the %s response property's minItems was unset from %s for the response status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),
+								Text:      fmt.Sprintf(config.i18n("response-property-min-items-unset"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

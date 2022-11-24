@@ -41,7 +41,7 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 						result = append(result, BackwardCompatibilityError{
 							Id:        "request-property-became-required",
 							Level:     ERR,
-							Text:      fmt.Sprintf("the request property %s became required", ColorizedValue(changedRequiredPropertyName)),
+							Text:      fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(changedRequiredPropertyName)),
 							Operation: operation,
 							Path:      path,
 							Source:    source,
@@ -68,7 +68,7 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-became-required",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the request property %s became required", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Text:      fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

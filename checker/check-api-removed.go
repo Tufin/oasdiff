@@ -25,7 +25,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, BackwardCompatibilityError{
 					Id:        "api-path-removed-without-deprecation",
 					Level:     ERR,
-					Text:      "api path removed without deprecation",
+					Text:      config.i18n("api-path-removed-without-deprecation"),
 					Operation: operation,
 					Path:      path,
 					Source:    source,
@@ -52,7 +52,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, BackwardCompatibilityError{
 					Id:        "api-path-removed-before-sunset",
 					Level:     ERR,
-					Text:      fmt.Sprintf("api path removed before the sunset date %s", date),
+					Text:      fmt.Sprintf(config.i18n("api-path-removed-before-sunset"), date),
 					Operation: operation,
 					Path:      path,
 					Source:    source,
@@ -73,7 +73,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, BackwardCompatibilityError{
 					Id:        "api-removed-without-deprecation",
 					Level:     ERR,
-					Text:      "api removed without deprecation",
+					Text:      config.i18n("api-removed-without-deprecation"),
 					Operation: operation,
 					Path:      path,
 					Source:    source,
@@ -100,7 +100,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, BackwardCompatibilityError{
 					Id:        "api-removed-before-sunset",
 					Level:     ERR,
-					Text:      fmt.Sprintf("api removed before the sunset date %s", date),
+					Text:      fmt.Sprintf(config.i18n("api-removed-before-sunset"), date),
 					Operation: operation,
 					Path:      path,
 					Source:    source,

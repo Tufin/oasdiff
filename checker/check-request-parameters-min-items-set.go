@@ -37,8 +37,8 @@ func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, BackwardCompatibilityError{
 						Id:        "request-parameter-min-items-set",
 						Level:     WARN,
-						Text:      fmt.Sprintf("for the %s request parameter %s, the minItems was set to %s", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
-						Comment:   "It is warn because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.",
+						Text:      fmt.Sprintf(config.i18n("request-parameter-min-items-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
+						Comment:   config.i18n("request-parameter-min-items-set-comment"),
 						Operation: operation,
 						Path:      path,
 						Source:    source,

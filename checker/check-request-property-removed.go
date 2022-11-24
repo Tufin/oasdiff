@@ -32,7 +32,7 @@ func RequestPropertyRemovedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-removed",
 								Level:     WARN,
-								Text:      fmt.Sprintf("removed the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:      fmt.Sprintf(config.i18n("request-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

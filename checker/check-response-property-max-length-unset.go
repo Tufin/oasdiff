@@ -35,7 +35,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-body-max-length-unset",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the response's body maxLength was unset from %s", ColorizedValue(maxLengthDiff.From)),
+								Text:      fmt.Sprintf(config.i18n("response-body-max-length-unset"), ColorizedValue(maxLengthDiff.From)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -62,7 +62,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-property-max-length-unset",
 								Level:     ERR,
-								Text:      fmt.Sprintf("the %s response property's maxLength was unset from %s for the response status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(responseStatus)),
+								Text:      fmt.Sprintf(config.i18n("response-property-max-length-unset"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -70,9 +70,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							})
 						})
 				}
-
 			}
-
 		}
 	}
 	return result

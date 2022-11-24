@@ -50,15 +50,15 @@ func ResponseRequiredPropertyBecameNonWriteOnlyCheck(diffReport *diff.Diff, oper
 								return
 							}
 							if !slices.Contains(parent.Base.Value.Required, propertyName) {
-								// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
+								// skip non-required properties
 								return
 							}
 
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-required-property-became-not-write-only",
 								Level:     WARN,
-								Text:      fmt.Sprintf("the response required property %s became not write-only for the status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Comment:   "It is valid if the property was always returned before the specification has been changed",
+								Text:      fmt.Sprintf(config.i18n("response-required-property-became-not-write-only"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Comment:   config.i18n("response-required-property-became-not-write-only-comment"),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
@@ -66,7 +66,6 @@ func ResponseRequiredPropertyBecameNonWriteOnlyCheck(diffReport *diff.Diff, oper
 							})
 						})
 				}
-
 			}
 		}
 	}

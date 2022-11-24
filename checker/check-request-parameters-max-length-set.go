@@ -38,8 +38,8 @@ func RequestParameterMaxLengthSetCheck(diffReport *diff.Diff, operationsSources 
 					result = append(result, BackwardCompatibilityError{
 						Id:        "request-parameter-max-length-set",
 						Level:     WARN,
-						Text:      fmt.Sprintf("for the %s request parameter %s, the maxLength was set to %s", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.To)),
-						Comment:   "It is warn because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.",
+						Text:      fmt.Sprintf(config.i18n("request-parameter-max-length-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.To)),
+						Comment:   config.i18n("request-parameter-max-length-set-comment"),
 						Operation: operation,
 						Path:      path,
 						Source:    source,

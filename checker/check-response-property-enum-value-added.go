@@ -43,8 +43,8 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 								result = append(result, BackwardCompatibilityError{
 									Id:        "response-property-enum-value-added",
 									Level:     WARN,
-									Text:      fmt.Sprintf("added the new '%s' enum value the %s response property for the response status %s", enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-									Comment:   "Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.",
+									Text:      fmt.Sprintf(config.i18n("response-property-enum-value-added"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Comment:   config.i18n("response-property-enum-value-added-comment"),
 									Operation: operation,
 									Path:      path,
 									Source:    source,

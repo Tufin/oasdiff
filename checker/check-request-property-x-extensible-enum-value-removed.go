@@ -88,7 +88,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-x-extensible-enum-value-removed",
 								Level:     ERR,
-								Text:      fmt.Sprintf("removed the x-extensible-enum value '%s' of the request property %s", enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:      fmt.Sprintf(config.i18n("request-property-x-extensible-enum-value-removed"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

@@ -33,7 +33,7 @@ func NewRequiredRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSo
 								result = append(result, BackwardCompatibilityError{
 									Id:        "new-required-request-parameter",
 									Level:     ERR,
-									Text:      fmt.Sprintf("added the new required %s request parameter %s", ColorizedValue(paramLocation), ColorizedValue(paramName)),
+									Text:      fmt.Sprintf(config.i18n("new-required-request-parameter"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 									Operation: operation,
 									Path:      path,
 									Source:    source,

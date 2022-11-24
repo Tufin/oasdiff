@@ -39,7 +39,7 @@ func RequestPropertyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, BackwardCompatibilityError{
 								Id:        "request-property-enum-value-removed",
 								Level:     ERR,
-								Text:      fmt.Sprintf("removed the enum value '%s' of the request property %s", enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:      fmt.Sprintf(config.i18n("request-property-enum-value-removed"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

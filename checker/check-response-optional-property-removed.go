@@ -44,7 +44,7 @@ func ResponseOptionalPropertyRemovedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-optional-property-removed",
 								Level:     WARN,
-								Text:      fmt.Sprintf("removed the optional property %s from the response with the %s status", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:      fmt.Sprintf(config.i18n("response-optional-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation: operation,
 								Path:      path,
 								Source:    source,

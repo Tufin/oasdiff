@@ -30,7 +30,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, BackwardCompatibilityError{
 					Id:        "sunset-deleted",
 					Level:     ERR,
-					Text:      "api sunset date deleted, but deprecated=true kept",
+					Text:      config.i18n("sunset-deleted"),
 					Operation: operation,
 					Path:      path,
 					Source:    source,
@@ -94,9 +94,9 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			if baseDate.After(date) && days < deprecationDays {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "api-sunset-date-too-small",
+					Id:        "api-sunset-date-changed-too-small",
 					Level:     ERR,
-					Text:      fmt.Sprintf("api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %d days from now", baseDate, date, baseDate, deprecationDays),
+					Text:      fmt.Sprintf(config.i18n("api-sunset-date-changed-too-small"), baseDate, date, baseDate, deprecationDays),
 					Operation: operation,
 					Path:      path,
 					Source:    source,

@@ -40,7 +40,7 @@ func ResponseHeaderBecameOptional(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, BackwardCompatibilityError{
 						Id:        "response-header-became-optional",
 						Level:     ERR,
-						Text:      fmt.Sprintf("the response header %s became optional for the status %s", ColorizedValue(headerName), ColorizedValue(responseStatus)),
+						Text:      fmt.Sprintf(config.i18n("response-header-became-optional"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
 						Operation: operation,
 						Path:      path,
 						Source:    source,

@@ -44,7 +44,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, BackwardCompatibilityError{
 								Id:        "new-required-request-header-property",
 								Level:     ERR,
-								Text:      fmt.Sprintf("added the new required %s request header's property %s", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
+								Text:      fmt.Sprintf(config.i18n("new-required-request-header-property"), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
