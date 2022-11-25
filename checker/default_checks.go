@@ -63,6 +63,6 @@ func DefaultChecks() BackwardCompatibilityCheckConfig {
 		Checks:              checks,
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
-		Localizer: *localizations.New("en", "en"),
+		Localizer:           *localizations.New("en", "en"),
 	}
 }
