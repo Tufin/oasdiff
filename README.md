@@ -61,6 +61,8 @@ Usage of oasdiff:
     	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
   -format string
     	output format: yaml, text or html (default "yaml")
+  -max-circular-dep int
+    	maximum allowed number of circular dependencies between objects in OpenAPI specs (default 5)
   -prefix string
     	deprecated. use -prefix-revision instead
   -prefix-base string
