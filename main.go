@@ -43,7 +43,7 @@ func init() {
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
 	flag.BoolVar(&version, "version", false, "show version and quit")
-	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "Maximum number of circular dependencies between objects that allowed to process OpenAPI file")
+	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 }
 
 func validateFlags() bool {
