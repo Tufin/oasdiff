@@ -50,6 +50,7 @@ func init() {
 	flag.StringVar(&lang, "lang", "en", "language for localized breaking changes checks errors")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
 	flag.BoolVar(&version, "version", false, "show version and quit")
+	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 }
 
 func validateFlags() bool {

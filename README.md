@@ -65,6 +65,8 @@ Usage of oasdiff:
     	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
   -format string
     	output format: yaml, text or html (default "yaml")
+  -max-circular-dep int
+    	maximum allowed number of circular dependencies between objects in OpenAPI specs (default 5)
   -prefix string
     	deprecated. use -prefix-revision instead
   -prefix-base string
@@ -581,7 +583,7 @@ Current known problems (going to be fixed in the nearest future):
 - not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, atm it could be mitigated with checks errors ignorance feature
 - doesn't support Path Prefix Modification, atm it could be mitigated with checks errors ignorance feature 
 
-### Non Breaking Removal of Deprecated Resources
+### Non-Breaking Removal of Deprecated Resources
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
 As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
 
