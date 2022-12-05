@@ -46,7 +46,11 @@ Usage of oasdiff:
   -base string
     	path of original OpenAPI spec in YAML or JSON format
   -breaking-only
-    	display breaking changes only
+        display breaking changes only (deprecated, use check-breaking instead)
+  -check-breaking
+        check diff for breaking changes with breaking changes checks
+  -composed
+        work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files
   -deprecation-days int
     	minimal number of days required between deprecating a resource and removing it without being considered 'breaking'
   -exclude-description
@@ -75,6 +79,10 @@ Usage of oasdiff:
     	if provided, this prefix will be stripped from paths in revised (revision) spec before comparison
   -summary
     	display a summary of the changes instead of the full diff
+  -warn-ignore string
+    the filename for check breaking ignore file for warnings
+  -err-ignore string
+    the filename for check breaking ignore file for errors
   -version
     	show version and quit
 ```
@@ -117,6 +125,18 @@ oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/
 oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 See [breaking changes](#breaking-changes)
+
+### Check for breaking changes
+```bash
+oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+See [breaking changes](#breaking-changes-checks)
+
+### Check multiple specs' paths for breaking changes
+```bash
+oasdiff -check-breaking -base base/**/*.yaml -revision revision/**/.*yaml
+```
+See [breaking changes](#breaking-changes-checks)
 
 ### Fail with exit code 1 if a change is found
 ```bash
@@ -530,6 +550,37 @@ Breaking changes are changes that could break a client that is relying on the Op
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
 Note: this is a Beta feature. Please report issues.
 
+### Breaking Changes Checks
+The new way do detect breaking changes in specifications. It works differently form the original "Breaking changes" feature.
+
+The Original breaking changes feature tries to 
+remove non-breaking diffs during diff construction, and reports any other changes as breaking.
+This behaviour is not suitable for regular strict validation for complex APIs.
+
+That's why the breaking changes checks feature is here.
+
+It uses the slice of checks which are used to check for backward compatibility. Each check is like a rule that checks specific change type.
+It operaties on the API level (path+operation).
+There are multiple advantages using this feature in comparison with the Original Breaking Changes:
+- outputs founded breaking changes in human readable format.
+- works correctly in composed mode, outputs the API and the files where breaking changes were found.
+- has two levels of check errors: WARN - for important changes which should be noticed by developers and sometimes could not be correctly checked programmatically and ERR - for most of breaking changes which should be avoided.
+- allows adding ignorance for breaking changes to the ignorance files (onre for WARNs, another for ERRs) when it is required (e.g. VERY required breaking change or false positive breaking change error).
+- supports localization for error messages and ignorance entries.
+- the set of checks could be modified by developers with their own specific checks by adding/removing checks from the slice of checks.
+- support x-stability-level extension for APIs which allows ignore breaking changes for unstable APIs. There are 4 levels draft->alpha->beta->stable. Any changes for APIs with the level draft ot alpha are allowed. Stability level could be ingresed, but could not decreased. If there is no specified stability level for the API, breaking changes al disallowed, but the stability level could be set to any level if it is unset.
+- lesser false positive errors by design (reports only errors checked by checks).
+- better support for type changes checks: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
+- allows removal of responses with non-success codes (e.g. 503, 504, 403).
+- allows adding new content-type to request (with the kept current).
+- is going to be improved and more scalable for extending and customization
+
+Current known problems (going to be fixed in the nearest future):
+- there is no checks for `context` instead of `schema` for request parameters
+- there is not checks for `callback`s
+- not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, atm it could be mitigated with checks errors ignorance feature
+- doesn't support Path Prefix Modification, atm it could be mitigated with checks errors ignorance feature 
+
 ### Non Breaking Removal of Deprecated Resources
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
 As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
@@ -577,7 +628,47 @@ Note that stripping precedes prepending.
 ```go
 diff.Get(&diff.Config{}, spec1, spec2)
 ```
+
+For breaking changes checks:
+```go
+diffConfig := &diff.Config{}
+diffConfig.IncludeExtensions.Add(checker.XStabilityLevelExtension)
+diffConfig.IncludeExtensions.Add(diff.SunsetExtension)
+diffConfig.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
+
+diffRes, operationsSources, err := diff.GetPathsDiff(diffConfig, baseContracts, revisionContracts)
+if err != nil {
+  // process
+}
+
+c := checker.DefaultChecks() // here could be added additional checks
+c.Localizer = *localizations.New("en", "en")
+errs := checker.CheckBackwardCompatibility(c, diffRes, operationsSources)
+
+// process WARN ignorance file
+errs, err := processIgnorance(bcWarningIgnoranceFile, checker.WARN, errs)
+if err != nil {
+  // process
+}
+
+// process ERR ignorance file
+errs, err = processIgnorance(bcErrorIgnoranceFile, checker.ERR, errs)
+if err != nil {
+  // process
+}
+
+// pretty print breaking changes errors
+if len(errs) > 0 {
+  fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
+  for _, bcerr := range errs {
+    fmt.Printf("%s\n\n", bcerr.PrettyError(c.Localizer))
+  }
+}
+
+```
+
 See full example: [main.go](main.go)
+
 
 ### OpenAPI References
 oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
