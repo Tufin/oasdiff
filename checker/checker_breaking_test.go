@@ -334,6 +334,40 @@ func TestBreaking_AddPattern(t *testing.T) {
 	require.Equal(t, "request-property-pattern-added", errs[0].Id)
 }
 
+// BC: adding a pattern to a schema is breaking
+/*
+func TestBreaking_AddRequestParameterPattern(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-parameter-revision.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-parameter-base.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-pattern-added", errs[0].Id)
+}
+*/
+
+// BC: adding a pattern to a schema is breaking for recursive properties
+func TestBreaking_AddPatternRecursive(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-revision-recursive.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base-recursive.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-property-pattern-added", errs[0].Id)
+}
+
 // BC: modifying a pattern in a schema is breaking
 func TestBreaking_ModifyPattern(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base.yaml")
@@ -348,6 +382,22 @@ func TestBreaking_ModifyPattern(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-property-pattern-changed", errs[0].Id)
+}
+
+// BC: modifying a pattern in request parameter is breaking
+func TestBreaking_ModifyParameterPattern(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-parameter-base.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-parameter-modified-not-anystring.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-pattern-changed", errs[0].Id)
 }
 
 // BC: modifying a pattern to ".*"" in a schema is not breaking

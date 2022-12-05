@@ -2,7 +2,9 @@ package checker_test
 
 import (
 	"testing"
+	"time"
 
+	"cloud.google.com/go/civil"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
@@ -50,29 +52,50 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 
 // BC: deleting a tag is not breaking
 func TestBreaking_DeletedTag(t *testing.T) {
-	require.Empty(t, d(t, &diff.Config{}, 1, 5))
+	r := d(t, &diff.Config{}, 1, 5)
+	require.Len(t, r, 6)
+	require.Equal(t, "request-parameter-removed", r[0].Id)
+	require.Equal(t, "optional-response-header-removed", r[1].Id)
+	require.Equal(t, "response-success-status-removed", r[2].Id)
+	require.Equal(t, "response-body-type-changed", r[3].Id)
+	require.Equal(t, "api-path-removed-without-deprecation", r[4].Id)
+	require.Equal(t, "api-path-removed-without-deprecation", r[5].Id)
 }
 
 // BC: adding an enum value is not breaking
 func TestBreaking_AddedEnum(t *testing.T) {
-	require.Empty(t,
-		d(t, &diff.Config{}, 1, 3))
+	r := d(t, &diff.Config{}, 1, 3)
+	require.Len(t, r, 6)
+	require.Equal(t, "request-parameter-removed", r[0].Id)
+	require.Equal(t, "request-parameter-removed", r[1].Id)
+	require.Equal(t, "request-parameter-removed", r[2].Id)
+	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "response-success-status-removed", r[4].Id)
+	require.Equal(t, "response-success-status-removed", r[5].Id)
 }
 
 // BC: changing extensions is not breaking
 func TestBreaking_ModifiedExtension(t *testing.T) {
-	config := diff.Config{
-		BreakingOnly:      true,
-		IncludeExtensions: diff.StringSet{"x-extension-test2": struct{}{}},
-	}
-
-	require.Empty(t, d(t, &config, 1, 3))
+	r := d(t, &diff.Config{}, 1, 3)
+	require.Len(t, r, 6)
+	require.Equal(t, "request-parameter-removed", r[0].Id)
+	require.Equal(t, "request-parameter-removed", r[1].Id)
+	require.Equal(t, "request-parameter-removed", r[2].Id)
+	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "response-success-status-removed", r[4].Id)
+	require.Equal(t, "response-success-status-removed", r[5].Id)
 }
 
 // BC: changing comments is not breaking
-func TestBreaking_Components(t *testing.T) {
-	require.Empty(t, d(t, &diff.Config{BreakingOnly: true},
-		1, 3))
+func TestBreaking_Comments(t *testing.T) {
+	r := d(t, &diff.Config{}, 1, 3)
+	require.Len(t, r, 6)
+	require.Equal(t, "request-parameter-removed", r[0].Id)
+	require.Equal(t, "request-parameter-removed", r[1].Id)
+	require.Equal(t, "request-parameter-removed", r[2].Id)
+	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "response-success-status-removed", r[4].Id)
+	require.Equal(t, "response-success-status-removed", r[5].Id)
 }
 
 // BC: new optional header param is not breaking
@@ -123,14 +146,20 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 
 // BC: changing operation ID is not breaking
 func TestBreaking_OperationID(t *testing.T) {
-	require.Empty(t,
-		d(t, &diff.Config{}, 3, 1))
+	r := d(t, &diff.Config{}, 3, 1)
+	require.Len(t, r, 3)
+	require.Equal(t, "request-parameter-pattern-added", r[0].Id)
+	require.Equal(t, "request-parameter-max-length-decreased", r[1].Id)
+	require.Equal(t, "request-parameter-enum-value-removed", r[2].Id)
 }
 
 // BC: changing a link to operation ID is not breaking
 func TestBreaking_LinkOperationID(t *testing.T) {
-	require.Empty(t,
-		d(t, &diff.Config{}, 3, 1))
+	r := d(t, &diff.Config{}, 3, 1)
+	require.Len(t, r, 3)
+	require.Equal(t, "request-parameter-pattern-added", r[0].Id)
+	require.Equal(t, "request-parameter-max-length-decreased", r[1].Id)
+	require.Equal(t, "request-parameter-enum-value-removed", r[2].Id)
 }
 
 // BC: adding a media-type to response is not breaking
@@ -153,6 +182,7 @@ func TestBreaking_DeprecatedOperation(t *testing.T) {
 	s2 := l(t, 1)
 
 	s2.Spec.Paths[installCommandPath].Get.Deprecated = true
+	s2.Spec.Paths[installCommandPath].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(200).String())
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)

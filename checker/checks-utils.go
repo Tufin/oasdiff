@@ -35,7 +35,7 @@ func interfaceToString(arg interface{}) string {
 	if ok {
 		return fmt.Sprintf("%d", argUint64)
 	}
-
+	
 	argFloat64, ok := arg.(float64)
 	if ok {
 		return fmt.Sprintf("%.2f", argFloat64)
