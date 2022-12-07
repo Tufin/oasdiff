@@ -38,7 +38,6 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 					} else {
 						result = append(result, BackwardCompatibilityError{
@@ -48,7 +47,6 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 					}
 				}

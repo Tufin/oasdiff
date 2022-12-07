@@ -46,7 +46,6 @@ func RequestParameterMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 						Operation: operation,
 						Path:      path,
 						Source:    source,
-						ToDo:      "Add to exceptions-list.md",
 					})
 				}
 			}

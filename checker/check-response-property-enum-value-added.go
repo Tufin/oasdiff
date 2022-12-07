@@ -48,7 +48,6 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 									Operation: operation,
 									Path:      path,
 									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
 								})
 							}
 						})

@@ -34,7 +34,6 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 			}
 
@@ -53,7 +52,6 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -67,7 +65,6 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation: operation,
 					Path:      path,
 					Source:    (*operationsSources)[opBase],
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -84,7 +81,6 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -100,7 +96,6 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 			}
 		}

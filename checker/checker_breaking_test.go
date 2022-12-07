@@ -180,7 +180,6 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 			Operation: "GET",
 			Path:      "/api/{domain}/{project}/install-command",
 			Source:    "../data/openapi-test1.yaml",
-			ToDo:      "Add to exceptions-list.md",
 		}}, errs)
 }
 

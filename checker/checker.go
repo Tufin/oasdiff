@@ -31,7 +31,6 @@ type BackwardCompatibilityError struct {
 	Operation string `json:"operation,omitempty" yaml:"operation,omitempty"`
 	Path      string `json:"path,omitempty" yaml:"path,omitempty"`
 	Source    string `json:"source,omitempty" yaml:"source,omitempty"`
-	ToDo      string `json:"todo,omitempty" yaml:"todo,omitempty"`
 }
 
 type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError
@@ -145,7 +144,6 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -168,7 +166,6 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -182,7 +179,6 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -198,7 +194,6 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}

@@ -51,7 +51,6 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						}
 					}
@@ -74,7 +73,6 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 									Operation: operation,
 									Path:      path,
 									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
 								})
 							}
 						})

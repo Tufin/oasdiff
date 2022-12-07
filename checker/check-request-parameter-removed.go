@@ -29,7 +29,6 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 						Operation: operation,
 						Path:      path,
 						Source:    source,
-						ToDo:      "Add to exceptions-list.md",
 					})
 				}
 			}

@@ -37,7 +37,6 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						}
 					}
@@ -68,7 +67,6 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 					})
 			}

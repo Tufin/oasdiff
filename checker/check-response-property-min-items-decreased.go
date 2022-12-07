@@ -40,7 +40,6 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 									Operation: operation,
 									Path:      path,
 									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
 								})
 							}
 						}
@@ -72,7 +71,6 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						})
 				}

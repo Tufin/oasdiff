@@ -46,7 +46,6 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						} else {
 							result = append(result, BackwardCompatibilityError{
@@ -57,7 +56,6 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						}
 					})

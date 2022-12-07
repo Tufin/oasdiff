@@ -46,7 +46,6 @@ func RequestParameterMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSou
 						Operation: operation,
 						Path:      path,
 						Source:    source,
-						ToDo:      "Add to exceptions-list.md",
 					})
 				}
 			}

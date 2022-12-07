@@ -56,7 +56,6 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 					}
 				}
@@ -98,7 +97,6 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						}
 					})

@@ -56,7 +56,6 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 						continue
 					}
@@ -69,7 +68,6 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 						continue
 					}
@@ -89,7 +87,6 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 					}
 				}

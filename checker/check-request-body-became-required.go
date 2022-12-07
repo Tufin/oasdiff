@@ -27,7 +27,6 @@ func RequestBodyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *di
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 			}
 		}

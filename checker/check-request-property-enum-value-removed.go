@@ -43,7 +43,6 @@ func RequestPropertyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSourc
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						}
 					})

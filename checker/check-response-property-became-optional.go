@@ -50,7 +50,6 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						}
 					}
@@ -77,7 +76,6 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 									Operation: operation,
 									Path:      path,
 									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
 								})
 							}
 						})

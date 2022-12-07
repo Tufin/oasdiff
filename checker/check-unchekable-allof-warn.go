@@ -39,7 +39,6 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 								Operation: operation,
 								Path:      path,
 								Source:    source,
-								ToDo:      "Add to exceptions-list.md",
 							})
 						}
 					})
@@ -86,7 +85,6 @@ func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *d
 									Operation: operation,
 									Path:      path,
 									Source:    source,
-									ToDo:      "Add to exceptions-list.md",
 								})
 							}
 						})

@@ -37,7 +37,6 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 					}
 				}
@@ -65,7 +64,6 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 							Operation: operation,
 							Path:      path,
 							Source:    source,
-							ToDo:      "Add to exceptions-list.md",
 						})
 					})
 			}

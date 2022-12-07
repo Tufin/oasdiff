@@ -38,7 +38,6 @@ func ResponseMediaTypeRemoved(diffReport *diff.Diff, operationsSources *diff.Ope
 						Operation: operation,
 						Path:      path,
 						Source:    source,
-						ToDo:      "Add to exceptions-list.md",
 					})
 				}
 			}

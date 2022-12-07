@@ -29,7 +29,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -43,7 +42,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -56,7 +54,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 			}
 		}
@@ -77,7 +74,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -91,7 +87,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 				continue
 			}
@@ -104,7 +99,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation: operation,
 					Path:      path,
 					Source:    source,
-					ToDo:      "Add to exceptions-list.md",
 				})
 			}
 		}
