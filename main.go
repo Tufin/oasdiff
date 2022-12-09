@@ -158,7 +158,7 @@ func main() {
 		if warnIgnorance != "" {
 			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnorance)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "can't process warn ignorance %v\n", err)
+				fmt.Fprintf(os.Stderr, "can't process warn ignore file %v\n", err)
 				os.Exit(121)
 			}
 		}
@@ -166,7 +166,7 @@ func main() {
 		if errIgnorance != "" {
 			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnorance)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "can't process err ignorance %v\n", err)
+				fmt.Fprintf(os.Stderr, "can't process err ignore file %v\n", err)
 				os.Exit(122)
 			}
 		}

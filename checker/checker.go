@@ -191,7 +191,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 				result = append(result, BackwardCompatibilityError{
 					Id:        "api-stability-decreased",
 					Level:     ERR,
-					Text:      fmt.Sprintf("API stability decreased from '%s' to '%s'", baseStability, revisionStability),
+					Text:      fmt.Sprintf("stability level decreased from '%s' to '%s'", baseStability, revisionStability),
 					Operation: operation,
 					Path:      path,
 					Source:    source,
