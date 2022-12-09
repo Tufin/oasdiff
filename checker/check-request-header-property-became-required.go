@@ -40,7 +40,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							}
 
 							if paramDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
-								// new added required properties processed via the new-required-request-header-property trule
+								// new added required properties processed via the new-required-request-header-property check
 								continue
 							}
 

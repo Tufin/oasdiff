@@ -553,35 +553,28 @@ Breaking changes are changes that could break a client that is relying on the Op
 Note: this is a Beta feature. Please report issues.
 
 ### Breaking Changes Checks
-The new way do detect breaking changes in specifications. It works differently form the original "Breaking changes" feature.
+Am improved method for detecting breaking changes in specifications. It works differently form the original "Breaking changes" feature.
 
-The Original breaking changes feature tries to 
-remove non-breaking diffs during diff construction, and reports any other changes as breaking.
-This behaviour is not suitable for regular strict validation for complex APIs.
-
-That's why the breaking changes checks feature is here.
-
-It uses the slice of checks which are used to check for backward compatibility. Each check is like a rule that checks specific change type.
-It operaties on the API level (path+operation).
-There are multiple advantages using this feature in comparison with the Original Breaking Changes:
-- outputs founded breaking changes in human readable format.
-- works correctly in composed mode, outputs the API and the files where breaking changes were found.
-- has two levels of check errors: WARN - for important changes which should be noticed by developers and sometimes could not be correctly checked programmatically and ERR - for most of breaking changes which should be avoided.
-- allows adding ignorance for breaking changes to the ignorance files (onre for WARNs, another for ERRs) when it is required (e.g. VERY required breaking change or false positive breaking change error).
-- supports localization for error messages and ignorance entries.
-- the set of checks could be modified by developers with their own specific checks by adding/removing checks from the slice of checks.
-- support x-stability-level extension for APIs which allows ignore breaking changes for unstable APIs. There are 4 levels draft->alpha->beta->stable. Any changes for APIs with the level draft ot alpha are allowed. Stability level could be ingresed, but could not decreased. If there is no specified stability level for the API, breaking changes al disallowed, but the stability level could be set to any level if it is unset.
-- lesser false positive errors by design (reports only errors checked by checks).
+There are multiple advantages using this feature in comparison with the original implementation:
+- output in human readable format.
+- supports 'composed' mode: outputs the API and the files where breaking changes were found.
+- has two levels of check errors: WARN - for important changes which should be noticed by developers but may not be confirmed programmatically and ERR - for most of breaking changes which should be avoided.
+- allows ignoring breaking changes through dedicated config files (one for WARNs, another for ERRs) for certain changes (e.g., an important breaking change which cannot be avoided, or false positive breaking change errors).
+- supports localization for error messages and ignored changes.
+- the set of checks can be modified by developers with their own specific checks by adding/removing checks from the slice of checks.
+- support x-stability-level extension for APIs which allows ignore breaking changes for unstable APIs. There are 4 levels draft->alpha->beta->stable. Any changes for APIs with the level draft ot alpha are allowed. Stability level may be increased, but not decreased. If there is no specified stability level for an API, breaking changes are disallowed, but the stability level can be set to any level if it is unset.
+- fewer false positive errors by design.
 - better support for type changes checks: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
 - allows removal of responses with non-success codes (e.g. 503, 504, 403).
 - allows adding new content-type to request (with the kept current).
-- is going to be improved and more scalable for extending and customization
+- easier to extend and customize
+- will continue to be improved 
 
-Current known problems (going to be fixed in the nearest future):
-- there is no checks for `context` instead of `schema` for request parameters
-- there is not checks for `callback`s
-- not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, atm it could be mitigated with checks errors ignorance feature
-- doesn't support Path Prefix Modification, atm it could be mitigated with checks errors ignorance feature 
+Current limitation (going to be fixed in the nearest future):
+- there are no checks for `context` instead of `schema` for request parameters
+- there are no checks for `callback`s
+- not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
+- doesn't support Path Prefix Modification, this can be mitigated with checks errors ignore feature 
 
 ### Non-Breaking Removal of Deprecated Resources
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.

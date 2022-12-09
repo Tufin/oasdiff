@@ -74,9 +74,9 @@ func Get(config *Config, s1, s2 *openapi3.T) (*Diff, error) {
 }
 
 /*
-Get calculates the diff between a pair of OpenAPI objects.
+GetWithOperationsSourcesMap calculates the diff between a pair of OpenAPI objects.
 
-Note that Get expects OpenAPI References (https://swagger.io/docs/specification/using-ref/) to be resolved.
+Note that GetWithOperationsSourcesMap expects OpenAPI References (https://swagger.io/docs/specification/using-ref/) to be resolved.
 References are normally resolved automatically when you load the spec.
 In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn.
 */
@@ -167,11 +167,11 @@ func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, *OperationsSources
 
 				oldSince, err := sinceDateFrom(*p, *oldOperation)
 				if err != nil {
-					return nil, nil, fmt.Errorf("Invalid %s extension value in %s(%s %s), %w", SinceDateExtension, operationsSources[oldOperation], op, path, err)
+					return nil, nil, fmt.Errorf("invalid %s extension value in %s(%s %s), %w", SinceDateExtension, operationsSources[oldOperation], op, path, err)
 				}
 				newSince, err := sinceDateFrom(*pathItem, *opItem)
 				if err != nil {
-					return nil, nil, fmt.Errorf("Invalid %s extension value in %s(%s %s), %w", SinceDateExtension, s.Url, op, path, err)
+					return nil, nil, fmt.Errorf("invalid %s extension value in %s(%s %s), %w", SinceDateExtension, s.Url, op, path, err)
 				}
 				if newSince.After(oldSince) {
 					p.SetOperation(op, opItem)
@@ -179,7 +179,7 @@ func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, *OperationsSources
 				}
 
 				if newSince == oldSince {
-					return nil, nil, fmt.Errorf("Multiple endpoints found in %s(%s %s) and %s(%s %s). Add the %s extension with ordered values to operations to specify its order.", operationsSources[oldOperation], op, path, s.Url, op, path, SinceDateExtension)
+					return nil, nil, fmt.Errorf("multiple endpoints found in %s(%s %s) and %s(%s %s). Add the %s extension with ordered values to operations to specify its order.", operationsSources[oldOperation], op, path, s.Url, op, path, SinceDateExtension)
 				}
 			}
 
