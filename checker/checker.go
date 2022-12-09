@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/TwiN/go-color"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -297,5 +298,12 @@ func (diffBC *BCDiff) AddRequestPropertiesDiff(path string, operation string, me
 func LoadOpenAPISpecInfoFromFile(location string) (*load.OpenAPISpecInfo, error) {
 	loader := openapi3.NewLoader()
 	s, err := loader.LoadFromFile(location)
+	return &load.OpenAPISpecInfo{Spec: s, Url: location}, err
+}
+
+
+func LoadOpenAPISpecInfo(location string) (*load.OpenAPISpecInfo, error) {
+	loader := openapi3.NewLoader()
+	s, err := load.From(loader, location)
 	return &load.OpenAPISpecInfo{Spec: s, Url: location}, err
 }

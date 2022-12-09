@@ -30,7 +30,7 @@ const (
 func init() {
 	flag.StringVar(&base, "base", "", "path of original OpenAPI spec in YAML or JSON format")
 	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec in YAML or JSON format")
-	flag.BoolVar(&composed, "composed", false, "work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files")
+	flag.BoolVar(&composed, "composed", false, "work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files. Allows reading specs only from files, not from remote URLs")
 	flag.StringVar(&prefix_base, "prefix-base", "", "if provided, paths in original (base) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&prefix_revision, "prefix-revision", "", "if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&strip_prefix_base, "strip-prefix-base", "", "if provided, this prefix will be stripped from paths in original (base) spec before comparison")
@@ -132,13 +132,13 @@ func main() {
 			os.Exit(104)
 		}
 	} else {
-		s1, err := checker.LoadOpenAPISpecInfoFromFile(base)
+		s1, err := checker.LoadOpenAPISpecInfo(base)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "failed to load base spec from %q with %v\n", base, err)
 			os.Exit(102)
 		}
 
-		s2, err := checker.LoadOpenAPISpecInfoFromFile(revision)
+		s2, err := checker.LoadOpenAPISpecInfo(revision)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
 			os.Exit(103)
