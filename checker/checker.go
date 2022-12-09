@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path"
 
 	"github.com/TwiN/go-color"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -300,7 +299,6 @@ func LoadOpenAPISpecInfoFromFile(location string) (*load.OpenAPISpecInfo, error)
 	s, err := loader.LoadFromFile(location)
 	return &load.OpenAPISpecInfo{Spec: s, Url: location}, err
 }
-
 
 func LoadOpenAPISpecInfo(location string) (*load.OpenAPISpecInfo, error) {
 	loader := openapi3.NewLoader()

@@ -22,7 +22,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			op := pathItem.Revision.Operations()[operation]
 			source := (*operationsSources)[op]
 
-			if op.Deprecated != true {
+			if !op.Deprecated {
 				continue
 			}
 

@@ -104,8 +104,7 @@ func TestBreaking_DeprecationForDraft(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 	bb, _ := json.Marshal("draft")
-	var draft json.RawMessage
-	draft = bb
+	draft := bb
 	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
 
 	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))

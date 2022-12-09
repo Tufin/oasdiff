@@ -179,7 +179,7 @@ func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, *OperationsSources
 				}
 
 				if newSince == oldSince {
-					return nil, nil, fmt.Errorf("multiple endpoints found in %s(%s %s) and %s(%s %s). Add the %s extension with ordered values to operations to specify its order.", operationsSources[oldOperation], op, path, s.Url, op, path, SinceDateExtension)
+					return nil, nil, fmt.Errorf("multiple endpoints found in %s(%s %s) and %s(%s %s). Add the %s extension with ordered values to operations to specify its order", operationsSources[oldOperation], op, path, s.Url, op, path, SinceDateExtension)
 				}
 			}
 
