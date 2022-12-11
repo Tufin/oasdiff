@@ -570,7 +570,7 @@ There are multiple advantages using this feature in comparison with the original
 - easier to extend and customize
 - will continue to be improved 
 
-Current limitation (going to be fixed in the nearest future):
+Current limitations (going to be fixed in the nearest future):
 - there are no checks for `context` instead of `schema` for request parameters
 - there are no checks for `callback`s
 - not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
