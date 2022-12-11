@@ -106,7 +106,7 @@ func GetWithOperationsSourcesMap(config *Config, s1, s2 *load.OpenAPISpecInfo) (
 GetPathsDiff calculates the diff between a pair of slice of OpenAPI objects.
 It is helpfull when you want to find diff and check for breaking changes for API divided into multiple files.
 If there are same paths in different OpenAPI objects, then function uses version of the path with the last x-since-date extension.
-The x-since-date extension should be set on path or operations level. Extension set on the operations level overrides teh value set on path level.
+The x-since-date extension should be set on path or operations level. Extension set on the operations level overrides the value set on path level.
 If such path doesn't have the x-since-date extension, its value is default "2000-01-01"
 If there are same paths with the same x-since-date value, then function returns error.
 The format of the x-since-date is the RFC3339 full-date format

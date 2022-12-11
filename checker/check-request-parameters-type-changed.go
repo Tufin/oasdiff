@@ -35,7 +35,7 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					}
 
 					if typeDiff != nil && typeDiff.To == "string" {
-						// parameters could be change to string anytime
+						// parameters can be changed to string anytime
 						continue
 					}
 

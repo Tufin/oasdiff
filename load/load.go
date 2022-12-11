@@ -30,7 +30,7 @@ type OpenAPISpecInfo struct {
 	Spec *openapi3.T
 }
 
-// From is a convenience function that opens OpenAPI specs from a local iles matching the specified glob parameter
+// FromGlob is a convenience function that opens OpenAPI specs from local files matching the specified glob parameter
 func FromGlob(loader Loader, glob string) ([]OpenAPISpecInfo, error) {
 	files, err := filepathx.Glob(glob)
 	if err != nil {
