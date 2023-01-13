@@ -47,7 +47,7 @@ func getSecuritySchemeDiff(config *Config, state *state, scheme1, scheme2 *opena
 func getSecuritySchemeDiffInternal(config *Config, state *state, scheme1, scheme2 *openapi3.SecurityScheme) *SecuritySchemeDiff {
 	result := SecuritySchemeDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, scheme1.ExtensionProps, scheme2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, scheme1.Extensions, scheme2.Extensions)
 	result.TypeDiff = getValueDiff(scheme1.Type, scheme2.Type)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, scheme1.Description, scheme2.Description)
 	result.NameDiff = getValueDiff(scheme1.Name, scheme2.Name)

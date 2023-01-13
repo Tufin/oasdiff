@@ -45,7 +45,7 @@ func (diff *EndpointsDiff) removeSunset(paths1 openapi3.Paths) {
 	deleted := Endpoints{}
 	for _, endpoint := range diff.Deleted {
 		operation := paths1[endpoint.Path].GetOperation(endpoint.Method)
-		if !sunsetAllowed(operation.Deprecated, operation.ExtensionProps) {
+		if !sunsetAllowed(operation.Deprecated, operation.Extensions) {
 			deleted = append(deleted, endpoint)
 		}
 	}

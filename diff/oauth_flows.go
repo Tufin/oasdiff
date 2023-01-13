@@ -61,7 +61,7 @@ func getOAuthFlowsDiffInternal(config *Config, state *state, flows1, flows2 *ope
 
 	result := OAuthFlowsDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, flows1.ExtensionProps, flows2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, flows1.Extensions, flows2.Extensions)
 	result.ImplicitDiff = getOAuthFlowDiff(config, state, flows1.Implicit, flows2.Implicit)
 	result.PasswordDiff = getOAuthFlowDiff(config, state, flows1.Password, flows2.Password)
 	result.ClientCredentialsDiff = getOAuthFlowDiff(config, state, flows1.ClientCredentials, flows2.ClientCredentials)

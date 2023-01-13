@@ -20,7 +20,7 @@ func (diff *ComponentsDiff) Empty() bool {
 	return diff == nil || *diff == ComponentsDiff{}
 }
 
-func getComponentsDiff(config *Config, state *state, s1, s2 openapi3.Components) (ComponentsDiff, error) {
+func getComponentsDiff(config *Config, state *state, s1, s2 *openapi3.Components) (ComponentsDiff, error) {
 
 	result := ComponentsDiff{}
 	var err error

@@ -45,7 +45,7 @@ func getContactDiffInternal(config *Config, state *state, contact1, contact2 *op
 		return &result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, contact1.ExtensionProps, contact2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, contact1.Extensions, contact2.Extensions)
 	result.NameDiff = getValueDiff(contact1.Name, contact2.Name)
 	result.URLDiff = getValueDiff(contact1.URL, contact2.URL)
 	result.EmailDiff = getValueDiff(contact1.Email, contact2.Email)

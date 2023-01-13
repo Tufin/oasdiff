@@ -47,7 +47,7 @@ func getExternalDocsDiffInternal(config *Config, state *state, docs1, docs2 *ope
 		return result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, docs1.ExtensionProps, docs2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, docs1.Extensions, docs2.Extensions)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, docs1.Description, docs2.Description)
 	result.URLDiff = getValueDiff(docs1.URL, docs2.URL)
 

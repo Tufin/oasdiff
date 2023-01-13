@@ -6,13 +6,12 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
-	"github.com/getkin/kin-openapi/openapi3"
 )
 
 const SunsetExtension = "x-sunset"
 
-func getSunsetDate(extensionProps openapi3.ExtensionProps) (civil.Date, error) {
-	sunsetJson, ok := extensionProps.Extensions[SunsetExtension].(json.RawMessage)
+func getSunsetDate(Extensions map[string]interface{}) (civil.Date, error) {
+	sunsetJson, ok := Extensions[SunsetExtension].(json.RawMessage)
 	if !ok {
 		return civil.Date{}, errors.New("not found")
 	}
@@ -31,13 +30,13 @@ func getSunsetDate(extensionProps openapi3.ExtensionProps) (civil.Date, error) {
 }
 
 // sunsetAllowed checks if an element can be deleted after deprecation period
-func sunsetAllowed(deprecated bool, extensionProps openapi3.ExtensionProps) bool {
+func sunsetAllowed(deprecated bool, Extensions map[string]interface{}) bool {
 
 	if !deprecated {
 		return false
 	}
 
-	date, err := getSunsetDate(extensionProps)
+	date, err := getSunsetDate(Extensions)
 	if err != nil {
 		return false
 	}
@@ -45,12 +44,12 @@ func sunsetAllowed(deprecated bool, extensionProps openapi3.ExtensionProps) bool
 	return civil.DateOf(time.Now()).After(date)
 }
 
-func deprecationPeriodSufficient(deprecationDays int, extensionProps openapi3.ExtensionProps) bool {
+func deprecationPeriodSufficient(deprecationDays int, Extensions map[string]interface{}) bool {
 	if deprecationDays == 0 {
 		return true
 	}
 
-	date, err := getSunsetDate(extensionProps)
+	date, err := getSunsetDate(Extensions)
 	if err != nil {
 		return false
 	}

@@ -61,7 +61,7 @@ func getServerDiffInternal(config *Config, state *state, value1, value2 *openapi
 		return &result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.ExtensionProps, value2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
 	result.URLDiff = getValueDiff(value1.URL, value2.URL)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
 	result.VariablesDiff = getVariablesDiff(config, state, value1.Variables, value2.Variables)
