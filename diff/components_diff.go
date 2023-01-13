@@ -20,9 +20,23 @@ func (diff *ComponentsDiff) Empty() bool {
 	return diff == nil || *diff == ComponentsDiff{}
 }
 
-func getComponentsDiff(config *Config, state *state, s1, s2 *openapi3.Components) (ComponentsDiff, error) {
+func newComponentsDiff() *ComponentsDiff {
+	return &ComponentsDiff{}
+}
 
-	result := ComponentsDiff{}
+func getComponentsDiff(config *Config, state *state, pComponents1, pComponents2 *openapi3.Components) (*ComponentsDiff, error) {
+	diff := newComponentsDiff()
+	if pComponents1 == nil && pComponents2 == nil {
+		return diff, nil
+	}
+	components1 := derefComponents(pComponents1)
+	components2 := derefComponents(pComponents2)
+	return getComponentsDiffInternal(config, state, components1, components2)
+}
+
+func getComponentsDiffInternal(config *Config, state *state, s1, s2 openapi3.Components) (*ComponentsDiff, error) {
+
+	result := newComponentsDiff()
 	var err error
 
 	result.SchemasDiff, err = getSchemasDiff(config, state, s1.Schemas, s2.Schemas)
@@ -71,6 +85,14 @@ func getComponentsDiff(config *Config, state *state, s1, s2 *openapi3.Components
 	}
 
 	return result, nil
+}
+
+func derefComponents(components *openapi3.Components) openapi3.Components {
+	if components == nil {
+		return openapi3.Components{}
+	}
+
+	return *components
 }
 
 func (diff *ComponentsDiff) removeNonBreaking() {

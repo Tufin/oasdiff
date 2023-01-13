@@ -18,7 +18,7 @@ type Diff struct {
 	TagsDiff         *TagsDiff                 `json:"tags,omitempty" yaml:"tags,omitempty"`
 	ExternalDocsDiff *ExternalDocsDiff         `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
 
-	ComponentsDiff `json:"components,omitempty" yaml:"components,omitempty"`
+	*ComponentsDiff `json:"components,omitempty" yaml:"components,omitempty"`
 }
 
 func newDiff() *Diff {
