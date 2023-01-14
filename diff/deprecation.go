@@ -3,6 +3,7 @@ package diff
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"time"
 
 	"cloud.google.com/go/civil"
@@ -11,14 +12,17 @@ import (
 const SunsetExtension = "x-sunset"
 
 func getSunsetDate(Extensions map[string]interface{}) (civil.Date, error) {
-	sunsetJson, ok := Extensions[SunsetExtension].(json.RawMessage)
+	sunset, ok := Extensions[SunsetExtension].(string)
 	if !ok {
-		return civil.Date{}, errors.New("not found")
-	}
-
-	var sunset string
-	if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
-		return civil.Date{}, errors.New("unmarshal failed")
+		log.Printf("sunset extension not a string")
+		sunsetJson, ok := Extensions[SunsetExtension].(json.RawMessage)
+		if !ok {
+			log.Printf("sunset extension not a json.RawMessage")
+			return civil.Date{}, errors.New("not found")
+		}
+		if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
+			return civil.Date{}, errors.New("unmarshal failed")
+		}
 	}
 
 	date, err := civil.ParseDate(sunset)

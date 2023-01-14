@@ -15,28 +15,18 @@ type ComponentsDiff struct {
 	CallbacksDiff       *CallbacksDiff       `json:"callbacks,omitempty" yaml:"callbacks,omitempty"`
 }
 
-// Empty indicates whether a change was found in this element
-func (diff *ComponentsDiff) Empty() bool {
-	return diff == nil || *diff == ComponentsDiff{}
-}
-
-func newComponentsDiff() *ComponentsDiff {
-	return &ComponentsDiff{}
-}
-
-func getComponentsDiff(config *Config, state *state, pComponents1, pComponents2 *openapi3.Components) (*ComponentsDiff, error) {
-	diff := newComponentsDiff()
+func getComponentsDiff(config *Config, state *state, pComponents1, pComponents2 *openapi3.Components) (ComponentsDiff, error) {
 	if pComponents1 == nil && pComponents2 == nil {
-		return diff, nil
+		return ComponentsDiff{}, nil
 	}
 	components1 := derefComponents(pComponents1)
 	components2 := derefComponents(pComponents2)
 	return getComponentsDiffInternal(config, state, components1, components2)
 }
 
-func getComponentsDiffInternal(config *Config, state *state, s1, s2 openapi3.Components) (*ComponentsDiff, error) {
+func getComponentsDiffInternal(config *Config, state *state, s1, s2 openapi3.Components) (ComponentsDiff, error) {
 
-	result := newComponentsDiff()
+	result := ComponentsDiff{}
 	var err error
 
 	result.SchemasDiff, err = getSchemasDiff(config, state, s1.Schemas, s2.Schemas)
