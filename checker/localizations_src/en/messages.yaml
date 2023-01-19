@@ -94,3 +94,7 @@ response-required-property-removed: removed the required property %s from the re
 response-success-status-removed: removed the success response with the status %s
 request-allOf-modified: modified allOf for the request property %s
 request-allOf-modified-comment: It is a warning because it is very difficult to check that allOf changed correctly without breaking changes
+response-body-max-increased: the response's body max was increased from %s to %s
+response-property-max-increased: the %s response property's max was increased from %s to %s for the response status %s
+response-body-min-decreased: the response's body min was decreased from %s to %s
+response-property-min-decreased: the %s response property's min was decreased from %s to %s for the response status %s

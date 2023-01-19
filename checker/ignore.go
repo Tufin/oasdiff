@@ -20,6 +20,7 @@ func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompati
 
 	foundFirst := false
 	ignoreLine := ""
+
 	for _, err := range errs {
 		if err.Level != level {
 			result = append(result, err)
@@ -28,10 +29,6 @@ func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompati
 
 		uncolorizedText := strings.ReplaceAll(err.Text, color.Bold, "")
 		uncolorizedText = strings.ReplaceAll(uncolorizedText, color.Reset, "")
-		if strings.Contains(strings.ToLower(ignoreLine), strings.ToLower(err.Operation+" "+err.Path)) &&
-			strings.Contains(strings.ToLower(ignoreLine), strings.ToLower(uncolorizedText)) {
-			continue
-		}
 
 		found := false
 		for ignoreScanner.Scan() {
@@ -43,6 +40,7 @@ func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompati
 				break
 			}
 
+			// after we found the first ignorance, we require ignorances to be one after for all breaking changes another without any lines in between
 			if foundFirst {
 				break
 			}

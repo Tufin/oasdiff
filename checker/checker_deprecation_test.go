@@ -99,12 +99,11 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking
+// BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for draft level
 func TestBreaking_DeprecationForDraft(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
-	bb, _ := json.Marshal("draft")
-	draft := bb
+	draft := toJson(t, "draft")
 	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
 
 	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
@@ -126,7 +125,6 @@ func toJson(t *testing.T, value string) json.RawMessage {
 
 // BC: deprecating an operation with a deprecation policy and sunset date before required deprecation period is breaking
 func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
-
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 

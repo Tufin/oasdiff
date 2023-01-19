@@ -45,8 +45,7 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type == "string" &&
 						(formatDiff.From == "date" && formatDiff.To == "date-time" ||
-							formatDiff.From == "time" && formatDiff.To == "date-time" ||
-							formatDiff.From == "decimal" && formatDiff.To == "uuid") {
+							formatDiff.From == "time" && formatDiff.To == "date-time") {
 						continue
 					}
 

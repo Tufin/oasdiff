@@ -18,7 +18,7 @@ import (
 
 var base, revision, filter, filterExtension, format, lang, warnIgnorance, errIgnorance string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
-var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, version, composed, checkBreaking bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking bool
 var deprecationDays int
 
 const (
@@ -41,7 +41,7 @@ func init() {
 	flag.BoolVar(&excludeExamples, "exclude-examples", false, "ignore changes to examples")
 	flag.BoolVar(&excludeDescription, "exclude-description", false, "ignore changes to descriptions")
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
-	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only (deprecated, use check-breaking instead)")
+	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
 	flag.BoolVar(&checkBreaking, "check-breaking", false, "check diff for breaking changes with breaking changes checks")
 	flag.StringVar(&warnIgnorance, "warn-ignore", "", "the filename for check breaking ignore file for warnings")
 	flag.StringVar(&errIgnorance, "err-ignore", "", "the filename for check breaking ignore file for warnings")
@@ -49,6 +49,7 @@ func init() {
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.StringVar(&lang, "lang", "en", "language for localized breaking changes checks errors")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
+	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "fail with exit code 1 if only WARN breaking changes found, the option used only with both -check-breaking and -fail-on-diff options")
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 }
@@ -174,13 +175,22 @@ func main() {
 		// pretty output
 		if len(errs) > 0 {
 			fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
-			for _, bcerr := range errs {
-				fmt.Printf("%s\n\n", bcerr.PrettyError(c.Localizer))
-			}
-			os.Exit(125)
 		}
 
-		exitNormally(diffReport.Empty())
+		countWarns := 0
+		for _, bcerr := range errs {
+			if bcerr.Level == checker.WARN {
+				countWarns++
+			}
+			fmt.Printf("%s\n\n", bcerr.PrettyError(c.Localizer))
+		}
+		countErrs := len(errs) - countWarns
+
+		hasErrors := countErrs == 0
+		if failOnWarns {
+			hasErrors = len(errs) == 0
+		}
+		exitNormally(hasErrors)
 	}
 
 	if summary {

@@ -30,24 +30,11 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 				modifiedMediaTypes := responseDiff.ContentDiff.MediaTypeModified
 				for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 					if mediaTypeDiff.SchemaDiff != nil {
-						typeDiff := mediaTypeDiff.SchemaDiff.TypeDiff
-						formatDiff := mediaTypeDiff.SchemaDiff.FormatDiff
-						if (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
-							!(typeDiff.To == "integer" && typeDiff.From == "number") &&
-							!(typeDiff.From == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
-							(formatDiff == nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
-								!(mediaTypeDiff.SchemaDiff.Revision.Value.Type == "number" &&
-									(formatDiff.To == "float" && formatDiff.From == "double")) &&
-								!(mediaTypeDiff.SchemaDiff.Revision.Value.Type == "integer" &&
-									(formatDiff.To == "int32" && formatDiff.From == "int64" ||
-										formatDiff.To == "int32" && formatDiff.From == "bigint" ||
-										formatDiff.To == "int64" && formatDiff.From == "bigint"))) {
-							if typeDiff == nil {
-								typeDiff = &diff.ValueDiff{From: mediaTypeDiff.SchemaDiff.Revision.Value.Type, To: mediaTypeDiff.SchemaDiff.Revision.Value.Type}
-							}
-							if formatDiff == nil {
-								formatDiff = &diff.ValueDiff{From: mediaTypeDiff.SchemaDiff.Revision.Value.Format, To: mediaTypeDiff.SchemaDiff.Revision.Value.Format}
-							}
+						schemaDiff := mediaTypeDiff.SchemaDiff
+						typeDiff := schemaDiff.TypeDiff
+						formatDiff := schemaDiff.FormatDiff
+						if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
+							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-body-type-changed",
 								Level:     ERR,
@@ -65,25 +52,12 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 							if propertyDiff.Revision.Value.ReadOnly {
 								return
 							}
-							typeDiff := propertyDiff.TypeDiff
-							formatDiff := propertyDiff.FormatDiff
+							schemaDiff := propertyDiff
+							typeDiff := schemaDiff.TypeDiff
+							formatDiff := schemaDiff.FormatDiff
 
-							if (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
-								!(typeDiff.To == "integer" && typeDiff.From == "number") &&
-								!(typeDiff.From == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
-								(formatDiff == nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
-									!(propertyDiff.Revision.Value.Type == "number" &&
-										(formatDiff.To == "float" && formatDiff.From == "double")) &&
-									!(propertyDiff.Revision.Value.Type == "integer" &&
-										(formatDiff.To == "int32" && formatDiff.From == "int64" ||
-											formatDiff.To == "int32" && formatDiff.From == "bigint" ||
-											formatDiff.To == "int64" && formatDiff.From == "bigint"))) {
-								if typeDiff == nil {
-									typeDiff = &diff.ValueDiff{From: propertyDiff.Revision.Value.Type, To: propertyDiff.Revision.Value.Type}
-								}
-								if formatDiff == nil {
-									formatDiff = &diff.ValueDiff{From: propertyDiff.Revision.Value.Format, To: propertyDiff.Revision.Value.Format}
-								}
+							if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
+								typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
 								result = append(result, BackwardCompatibilityError{
 									Id:        "response-property-type-changed",
 									Level:     ERR,
@@ -99,4 +73,17 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 		}
 	}
 	return result
+}
+
+func breakingTypeFormatChangedInResponseProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
+	return (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
+		!(typeDiff.To == "integer" && typeDiff.From == "number") &&
+		!(typeDiff.From == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
+		(formatDiff == nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
+			!(schemaDiff.Revision.Value.Type == "number" &&
+				(formatDiff.To == "float" && formatDiff.From == "double")) &&
+			!(schemaDiff.Revision.Value.Type == "integer" &&
+				(formatDiff.To == "int32" && formatDiff.From == "int64" ||
+					formatDiff.To == "int32" && formatDiff.From == "bigint" ||
+					formatDiff.To == "int64" && formatDiff.From == "bigint")))
 }

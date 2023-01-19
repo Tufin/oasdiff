@@ -83,7 +83,7 @@ response-property-max-length-unset: у поля ответа %s maxLength был
 response-body-min-items-decreased: у тела ответа minItems уменьшено с %s до %s
 response-property-min-items-decreased: у поля ответа %s уменьшено minItems с %s до %s для ответа со статусом %s
 response-body-min-items-unset: удалено значение minItems для тела ответа, предыдущее значение - %s
-response-property-min-items-unset: у поля ответа %s улаоено значение minItems, предыдущее значение - %s, для ответа со статусом %s
+response-property-min-items-unset: у поля ответа %s удалено значение minItems, предыдущее значение - %s, для ответа со статусом %s
 response-body-min-length-decreased: значение minLength для тела ответа уменьшено с %s до %s
 response-property-min-length-decreased: для поля ответа %s minLength уменьшен с %s до %s для ответа со статусом %s
 response-body-type-changed: у тела ответа type/format изменился с %s/%s на %s/%s для ответа со статусом %s
@@ -94,3 +94,7 @@ response-required-property-removed: удалено обязательное по
 response-success-status-removed: удален успешный (2xx) статус ответа %s
 request-allOf-modified: изменено allOf для поля запроса %s
 request-allOf-modified-comment: Это предупреждение, потому что очень сложно алгоритмически автоматизированно проверить правильность изменения allOf на обратную совместимость.
+response-body-max-increased: у тела ответа max увеличен с %s до %s
+response-property-max-increased: у поля ответа %s max увеличен с %s до %s для ответа со статусом %s
+response-body-min-decreased: у тела ответа min уменьшено с %s до %s
+response-property-min-decreased: для поля ответа %s min уменьшен с %s до %s для ответа со статусом %s

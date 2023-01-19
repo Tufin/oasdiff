@@ -58,6 +58,8 @@ func DefaultChecks() BackwardCompatibilityCheckConfig {
 		APIRemovedCheck,
 		APIDeprecationCheck,
 		APISunsetChangedCheck,
+		ResponsePropertyMaxIncreasedCheck,
+		ResponsePropertyMinDecreasedCheck,
 	}
 	return BackwardCompatibilityCheckConfig{
 		Checks:              checks,

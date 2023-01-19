@@ -46,11 +46,11 @@ Usage of oasdiff:
   -base string
     	path of original OpenAPI spec in YAML or JSON format
   -breaking-only
-        display breaking changes only (deprecated, use check-breaking instead)
+      display breaking changes only (deprecated, use check-breaking instead)
   -check-breaking
-        check diff for breaking changes with breaking changes checks
+      check diff for breaking changes with breaking changes checks
   -composed
-        work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files
+      work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files
   -deprecation-days int
     	minimal number of days required between deprecating a resource and removing it without being considered 'breaking'
   -exclude-description
@@ -59,6 +59,8 @@ Usage of oasdiff:
     	ignore changes to examples
   -fail-on-diff
     	fail with exit code 1 if a difference is found
+  -fail-on-warns
+      fail with exit code 1 if only WARN breaking changes found, the option used only with both -check-breaking and -fail-on-diff options
   -filter string
     	if provided, diff will include only paths that match this regular expression
   -filter-extension string
@@ -553,16 +555,94 @@ Breaking changes are changes that could break a client that is relying on the Op
 Note: this is a Beta feature. Please report issues.
 
 ### Breaking Changes Checks
-Am improved method for detecting breaking changes in specifications. It works differently form the original "Breaking changes" feature.
+An improved method for detecting breaking changes in specifications. It works differently form the original "Breaking changes" feature.
+It uses the list of rules, each checks specific case and could generate more decent human-readable error messages.
+To use it, run the oasdiff with the `-check-breaking` option, e.g.:
+```
+oasdiff -check-breaking -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
+```
 
-There are multiple advantages using this feature in comparison with the original implementation:
+There are two levels of check errors:
+- `WARN` - for important changes which should be noticed by developers but may not be confirmed programmatically
+- `ERR` - for most of breaking changes which should be avoided
+
+If you use the `-fail-on-diff` option with the `-check-breaking`, oasdiff will exit with return code 1 when any level of error occured.
+If you want to make oasdiff exit with non-zero return code only when there are errors with ERR level, use the `-fail-on-warns` option.
+It makes oasdiff fail with exit code 1 if only WARN breaking changes found. The option is usable only when both `-check-breaking` and `-fail-on-diff` options used.
+
+#### Composed mode
+The "composed mode" could be useful when you want to check for breaking changes multiple specs describing the single API.
+For example, your application could provide multiple APIs decribed in multiple files. Or your API is combined from multiple APIs with API gateway and you want to check for breaking changes your API overally, not single specs.
+When composed mode is used, oasdiff before computing diff (and breaking changes checks)
+
+There are some problems that could be in such usage scenario:
+- Different files could have different components (schemas, properties, etc.) with the same name. So to check for difference we should not only internalize all referencies, but replace local referencies with its contenttoo for each API description
+- To check for backward compatibility, we should use only API (path+method) difference
+- We should support some way to move the API from one file to another without breaking changes. Sometimes it could not be done atomically (e.g. when specifications are in different repositories maintained by different teams). So we should have some rules to order similar API descriptions to find the latest one.
+
+The composed mode allows to do it.
+It is helpfull when you want to find diff and check for breaking changes for API divided into multiple files.
+If there are same paths in different OpenAPI objects, then function uses version of the path with the last x-since-date extension.
+The `x-since-date` extension should be set on path or operations level. Extension set on the operations level overrides the value set on path level.
+If such path doesn't have `the x-since-date` extension, its value is default "2000-01-01"
+If there are same paths with the same x-since-date value, then function returns error.
+The format of the `x-since-date` is the RFC3339 full-date format
+
+Example of the `x-since-date` usage:
+   ```
+   /api/test:
+    get:
+     x-since-date: "2023-01-11"
+   ```
+
+#### Stability level
+Breaking changes checks method supports `x-stability-level` extension for APIs which allows ignore breaking changes for unstable APIs.
+There are 4 levels: `draft`->`alpha`->`beta`->`stable`.
+Any changes for APIs with the levels `draft` or `alpha` are allowed.
+Stability level may be increased, but not decreased, like this: `draft`->`alpha`->`beta`->`stable`
+If there is no specified stability level for an API, breaking changes are disallowed, but the stability level can be set to any level in this case.
+
+Example:
+   ```
+   /api/test:
+    post:
+     x-stability-level: "alpha"
+   ```
+
+#### Breaking changes journal and ignorance
+Sometimes there are detected some false positive breaking changes which should be ignored until the problem fixed in oasdiff. Or there are some important changes which should be noticed by developers but may not be confirmed programmatically as broken changes.
+By default oasdiff with the `-check-breaking` option exists with non-zero status when there are some errors. But you could add any detected breaking change to ignorance file to ignore it during breaking changes checks.
+To do so, you should add to the end of ignorance file the lines for all errors (on per error) which contains two parts for each error:
+- method and path
+- description of the breaking change
+
+Like this:
+```
+GET /api/{domain}/{project}/badges/security-score removed the success response with the status '200'
+```
+
+The line could additionally contains additional simbols in between of required parts, like this:
+```
+ - 12.01.2023 In the GET /api/{domain}/{project}/badges/security-score, we removed the success response with the status '200'
+```
+
+Note that for multiple errors, added lines should be in the same order which oasdiff reports errors and should be without any other lines in between.
+To specify the filename that should be used as the ignorance file, use the `-warn-ignore` option for WARNINGS and the `-err-ignore` option for ERRORS.
+The ignorance files could be of any text type, e.g. Markdown, so you can use them as breaking and important changes journals.
+
+#### x-extensible-enum support
+The breaking changes has rules specific to enum changes which recommends using the `x-extensible-enum`.
+Using such enums allows to add new entries to enums used in responses which is very usable in many case, but requires clients to support fallback to default logic when they receives unknown value.
+The `x-extensible-enum` was introduced by the [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community.
+Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is more explicit way to do it.
+Most tools doesn't support the `x-extensible-enum` but the breaking changes checks do. In most case it treats it similar to enum values, except it allows adding new entries in messages sent to client (responses or callbacks).
+If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changed for you, but if you do oasdiff will find you breaking changes realted to `x-extensible-enum` parameters and properties.
+
+#### Othe differencies from the original implementation
+There are multiple differencies using this feature in comparison with the original implementation:
 - output in human readable format.
-- supports 'composed' mode: outputs the API and the files where breaking changes were found.
-- has two levels of check errors: WARN - for important changes which should be noticed by developers but may not be confirmed programmatically and ERR - for most of breaking changes which should be avoided.
-- allows ignoring breaking changes through dedicated config files (one for WARNs, another for ERRs) for certain changes (e.g., an important breaking change which cannot be avoided, or false positive breaking change errors).
 - supports localization for error messages and ignored changes.
-- the set of checks can be modified by developers with their own specific checks by adding/removing checks from the slice of checks.
-- support x-stability-level extension for APIs which allows ignore breaking changes for unstable APIs. There are 4 levels draft->alpha->beta->stable. Any changes for APIs with the level draft ot alpha are allowed. Stability level may be increased, but not decreased. If there is no specified stability level for an API, breaking changes are disallowed, but the stability level can be set to any level if it is unset.
+- the set of checks can be modified by developers usign oasdiff as library with their own specific checks by adding/removing checks from the slice of checks.
 - fewer false positive errors by design.
 - better support for type changes checks: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
 - allows removal of responses with non-success codes (e.g. 503, 504, 403).
@@ -570,7 +650,7 @@ There are multiple advantages using this feature in comparison with the original
 - easier to extend and customize
 - will continue to be improved 
 
-Current limitations (going to be fixed in the nearest future):
+#### Current limitations (going to be fixed in the nearest future):
 - there are no checks for `context` instead of `schema` for request parameters
 - there are no checks for `callback`s
 - not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
