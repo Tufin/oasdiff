@@ -638,7 +638,7 @@ Technically, it could be replaced with anyOf+classical enum but the `x-extensibl
 Most tools doesn't support the `x-extensible-enum` but the breaking changes checks do. In most case it treats it similar to enum values, except it allows adding new entries in messages sent to client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changed for you, but if you do oasdiff will find you breaking changes realted to `x-extensible-enum` parameters and properties.
 
-#### Othe differencies from the original implementation
+#### Other differencies from the original implementation
 There are multiple differencies using this feature in comparison with the original implementation:
 - output in human readable format.
 - supports localization for error messages and ignored changes.
