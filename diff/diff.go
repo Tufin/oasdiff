@@ -80,7 +80,7 @@ func getDiff(config *Config, state *state, s1, s2 *openapi3.T) (*Diff, error) {
 	if diff.Empty() {
 		return nil, nil
 	}
-
+	
 	return diff, nil
 }
 
