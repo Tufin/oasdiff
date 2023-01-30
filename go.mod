@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	cloud.google.com/go v0.108.0
-	github.com/getkin/kin-openapi v0.112.1-0.20230112145017-1e5c86eeb045
+	github.com/getkin/kin-openapi v0.113.0
 	github.com/stretchr/testify v1.8.1
 	github.com/yuin/goldmark v1.5.3
 	gopkg.in/yaml.v3 v3.0.1
