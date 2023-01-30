@@ -64,7 +64,7 @@ func getDiscriminatorDiffInternal(config *Config, state *state, discriminator1, 
 		return result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, discriminator1.ExtensionProps, discriminator2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, discriminator1.Extensions, discriminator2.Extensions)
 	result.PropertyNameDiff = getValueDiff(discriminator1.PropertyName, discriminator2.PropertyName)
 	result.MappingDiff = getStringMapDiff(discriminator1.Mapping, discriminator2.Mapping)
 

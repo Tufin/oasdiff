@@ -71,13 +71,13 @@ func TestDiff_InfoNil(t *testing.T) {
 func TestDiff_ExampleNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Examples: openapi3.Examples{"test": &openapi3.ExampleRef{Value: &openapi3.Example{}}},
 		},
 	}
 	s2 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Examples: openapi3.Examples{"test": &openapi3.ExampleRef{}},
 		},
 	}
@@ -91,13 +91,13 @@ func TestDiff_ExampleNil(t *testing.T) {
 func TestDiff_ComponentSchemaNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Schemas: openapi3.Schemas{"test": &openapi3.SchemaRef{Value: &openapi3.Schema{}}},
 		},
 	}
 	s2 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Schemas: openapi3.Schemas{"test": &openapi3.SchemaRef{}},
 		},
 	}
@@ -111,7 +111,7 @@ func TestDiff_ComponentSchemaNil(t *testing.T) {
 func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Schemas: openapi3.Schemas{
 				"test": &openapi3.SchemaRef{
 					Value: nil,
@@ -127,13 +127,13 @@ func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
 func TestDiff_ComponentParameterNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Parameters: openapi3.ParametersMap{"test": &openapi3.ParameterRef{Value: &openapi3.Parameter{}}},
 		},
 	}
 	s2 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Parameters: openapi3.ParametersMap{"test": &openapi3.ParameterRef{}},
 		},
 	}
@@ -147,13 +147,13 @@ func TestDiff_ComponentParameterNil(t *testing.T) {
 func TestDiff_ComponentHeadersNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Headers: openapi3.Headers{"test": &openapi3.HeaderRef{Value: &openapi3.Header{}}},
 		},
 	}
 	s2 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Headers: openapi3.Headers{"test": &openapi3.HeaderRef{}},
 		},
 	}
@@ -167,13 +167,13 @@ func TestDiff_ComponentHeadersNil(t *testing.T) {
 func TestDiff_ComponentRequestBodiesNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			RequestBodies: openapi3.RequestBodies{"test": &openapi3.RequestBodyRef{Value: &openapi3.RequestBody{}}},
 		},
 	}
 	s2 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			RequestBodies: openapi3.RequestBodies{"test": &openapi3.RequestBodyRef{}},
 		},
 	}
@@ -187,13 +187,13 @@ func TestDiff_ComponentRequestBodiesNil(t *testing.T) {
 func TestDiff_ComponentResponsesNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Responses: openapi3.Responses{"test": &openapi3.ResponseRef{Value: &openapi3.Response{}}},
 		},
 	}
 	s2 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Responses: openapi3.Responses{"test": &openapi3.ResponseRef{}},
 		},
 	}
@@ -207,14 +207,14 @@ func TestDiff_ComponentResponsesNil(t *testing.T) {
 func TestDiff_ComponentSecuritySchemesNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			SecuritySchemes: openapi3.SecuritySchemes{"test": &openapi3.SecuritySchemeRef{Value: &openapi3.SecurityScheme{}}},
 		},
 	}
 
 	s2 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			SecuritySchemes: openapi3.SecuritySchemes{"test": &openapi3.SecuritySchemeRef{}},
 		},
 	}
@@ -227,13 +227,13 @@ func TestDiff_ComponentSecuritySchemesNil(t *testing.T) {
 func TestDiff_ComponentCallbacksNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Callbacks: openapi3.Callbacks{"test": &openapi3.CallbackRef{Value: &openapi3.Callback{}}},
 		},
 	}
 	s2 := openapi3.T{
 		Info: &openapi3.Info{},
-		Components: openapi3.Components{
+		Components: &openapi3.Components{
 			Callbacks: openapi3.Callbacks{"test": &openapi3.CallbackRef{}},
 		},
 	}

@@ -42,7 +42,7 @@ func getVariableDiff(config *Config, state *state, var1, var2 *openapi3.ServerVa
 func getVariableDiffInternal(config *Config, state *state, var1, var2 *openapi3.ServerVariable) *VariableDiff {
 	result := VariableDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, var1.ExtensionProps, var2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, var1.Extensions, var2.Extensions)
 	result.EnumDiff = getStringsDiff(var1.Enum, var2.Enum)
 	result.DefaultDiff = getValueDiff(var1.Default, var2.Default)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, var1.Description, var2.Description)

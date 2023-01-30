@@ -35,7 +35,7 @@ func (diff *ParameterDiff) removeNonBreaking(config *Config, param2 *openapi3.Pa
 	diff.DescriptionDiff = nil
 	diff.ExampleDiff = nil
 	diff.ExamplesDiff = nil
-	if deprecationPeriodSufficient(config.DeprecationDays, param2.ExtensionProps) {
+	if deprecationPeriodSufficient(config.DeprecationDays, param2.Extensions) {
 		diff.DeprecatedDiff = nil
 	}
 
@@ -70,7 +70,7 @@ func getParameterDiffInternal(config *Config, state *state, param1, param2 *open
 	result := ParameterDiff{}
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, param1.ExtensionProps, param2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, param1.Extensions, param2.Extensions)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, param1.Description, param2.Description)
 	result.StyleDiff = getValueDiff(param1.Style, param2.Style)
 	result.ExplodeDiff = getBoolRefDiff(param1.Explode, param2.Explode)

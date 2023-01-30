@@ -118,7 +118,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 
 	s2, err := loader.LoadFromFile(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
-	s2.Paths["/api/test"].Get.ExtensionProps.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(9).String())
+	s2.Paths["/api/test"].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(9).String())
 
 	dd, err := diff.Get(&diff.Config{
 		BreakingOnly:    true,
@@ -138,7 +138,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	s2, err := loader.LoadFromFile(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
 
-	s2.Paths["/api/test"].Get.ExtensionProps.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
+	s2.Paths["/api/test"].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
 
 	dd, err := diff.Get(&diff.Config{
 		BreakingOnly:    true,
