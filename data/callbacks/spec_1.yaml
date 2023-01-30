@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: Callback Example
+  version: 1.0.0
+paths:
+  /subscribe:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inProgressUrl:
+                  type: string
+                failedUrl:
+                  type: string
+                successUrl:
+                  type: string
+      responses:
+        "200":
+          description: OK
+      callbacks:
+        inProgress:
+          "{$request.body#/callback}":
+            post:
+              requestBody:
+                $ref: "#/components/requestBodies/callbackMessage1"
+              responses:
+                "200":
+                  description: OK
+        Failed:
+          "{$request.body#/callback}":
+            post:
+              requestBody:
+                $ref: "#/components/requestBodies/callbackMessage2"
+              responses:
+                "200":
+                  description: OK
+        Success:
+          "{$request.body#/callback}":
+            post:
+              requestBody:
+                $ref: "#/components/requestBodies/callbackMessage3"
+              responses:
+                "200":
+                  description: OK
+components:
+  requestBodies:
+    callbackMessage1:
+      description: Callback message one
+      content:
+        application/json;charset=utf-8:
+          schema:
+            type: object
+            properties:
+              inProgressUrl:
+                type: string
+              failedUrl:
+                type: string
+              successUrl:
+                type: string
+      required: true
+
+    callbackMessage2:
+      description: Callback message two
+      content:
+        application/json;charset=utf-8:
+          schema:
+            type: object
+            properties:
+              inProgressUrl:
+                type: string
+              failedUrl:
+                type: string
+              successUrl:
+                type: string
+      required: true
+
+    callbackMessage3:
+      description: Callback message three
+      content:
+        application/json;charset=utf-8:
+          schema:
+            type: object
+            properties:
+              inProgressUrl:
+                type: string
+              failedUrl:
+                type: string
+              successUrl:
+                type: string
+      required: true
