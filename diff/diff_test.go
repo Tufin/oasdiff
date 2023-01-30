@@ -669,3 +669,16 @@ func TestCircularSchemaRefs(t *testing.T) {
 	require.Contains(t, dd.SchemasDiff.Modified, "circular5")
 	require.Contains(t, dd.SchemasDiff.Modified, "circular6")
 }
+
+func TestCallbacks(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/callbacks/spec_1.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/callbacks/spec_2.yaml")
+	require.NoError(t, err)
+
+	_, err = diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+}
