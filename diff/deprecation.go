@@ -3,23 +3,26 @@ package diff
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"time"
 
 	"cloud.google.com/go/civil"
-	"github.com/getkin/kin-openapi/openapi3"
 )
 
 const SunsetExtension = "x-sunset"
 
-func GetSunsetDate(extensionProps openapi3.ExtensionProps) (civil.Date, error) {
-	sunsetJson, ok := extensionProps.Extensions[SunsetExtension].(json.RawMessage)
+func GetSunsetDate(Extensions map[string]interface{}) (civil.Date, error) {
+	sunset, ok := Extensions[SunsetExtension].(string)
 	if !ok {
-		return civil.Date{}, errors.New("not found")
-	}
-
-	var sunset string
-	if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
-		return civil.Date{}, errors.New("unmarshal failed")
+		log.Printf("sunset extension not a string")
+		sunsetJson, ok := Extensions[SunsetExtension].(json.RawMessage)
+		if !ok {
+			log.Printf("sunset extension not a json.RawMessage")
+			return civil.Date{}, errors.New("not found")
+		}
+		if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
+			return civil.Date{}, errors.New("unmarshal failed")
+		}
 	}
 
 	date, err := civil.ParseDate(sunset)
@@ -31,13 +34,13 @@ func GetSunsetDate(extensionProps openapi3.ExtensionProps) (civil.Date, error) {
 }
 
 // SunsetAllowed checks if an element can be deleted after deprecation period
-func SunsetAllowed(deprecated bool, extensionProps openapi3.ExtensionProps) bool {
+func SunsetAllowed(deprecated bool, Extensions map[string]interface{}) bool {
 
 	if !deprecated {
 		return false
 	}
 
-	date, err := GetSunsetDate(extensionProps)
+	date, err := GetSunsetDate(Extensions)
 	if err != nil {
 		return false
 	}
@@ -45,12 +48,12 @@ func SunsetAllowed(deprecated bool, extensionProps openapi3.ExtensionProps) bool
 	return civil.DateOf(time.Now()).After(date)
 }
 
-func DeprecationPeriodSufficient(deprecationDays int, extensionProps openapi3.ExtensionProps) bool {
+func DeprecationPeriodSufficient(deprecationDays int, Extensions map[string]interface{}) bool {
 	if deprecationDays == 0 {
 		return true
 	}
 
-	date, err := GetSunsetDate(extensionProps)
+	date, err := GetSunsetDate(Extensions)
 	if err != nil {
 		return false
 	}

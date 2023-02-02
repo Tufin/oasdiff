@@ -189,11 +189,11 @@ func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, *OperationsSources
 }
 
 func sinceDateFrom(pathItem openapi3.PathItem, operation openapi3.Operation) (civil.Date, error) {
-	since, _, err := getSinceDate(pathItem.ExtensionProps)
+	since, _, err := getSinceDate(pathItem.Extensions)
 	if err != nil {
 		return DefaultSinceDate, err
 	}
-	opSince, ok, err := getSinceDate(operation.ExtensionProps)
+	opSince, ok, err := getSinceDate(operation.Extensions)
 	if err != nil {
 		return DefaultSinceDate, err
 	}
@@ -203,15 +203,19 @@ func sinceDateFrom(pathItem openapi3.PathItem, operation openapi3.Operation) (ci
 	return since, nil
 }
 
-func getSinceDate(extensionProps openapi3.ExtensionProps) (civil.Date, bool, error) {
-	sinceJson, ok := extensionProps.Extensions[SinceDateExtension].(json.RawMessage)
-	if !ok {
-		return DefaultSinceDate, false, nil
-	}
-
+func getSinceDate(extensions map[string]interface{}) (civil.Date, bool, error) {
 	var since string
-	if err := json.Unmarshal(sinceJson, &since); err != nil {
-		return civil.Date{}, false, errors.New("unmarshal failed")
+	since, ok := extensions[SinceDateExtension].(string)
+	if !ok {
+		sinceJson, ok := extensions[SinceDateExtension].(json.RawMessage)
+
+		if !ok {
+			return DefaultSinceDate, false, nil
+		}
+
+		if err := json.Unmarshal(sinceJson, &since); err != nil {
+			return civil.Date{}, false, errors.New("unmarshal failed")
+		}
 	}
 
 	date, err := civil.ParseDate(since)
@@ -249,7 +253,7 @@ func getDiffInternal(config *Config, state *state, s1, s2 *openapi3.T) (*Diff, e
 	result := newDiff()
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, s1.ExtensionProps, s2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, s1.Extensions, s2.Extensions)
 	result.OpenAPIDiff = getValueDiff(s1.OpenAPI, s2.OpenAPI)
 
 	if result.InfoDiff, err = getInfoDiff(config, state, s1.Info, s2.Info); err != nil {

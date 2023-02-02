@@ -83,7 +83,7 @@ func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1,
 		diff.AllowEmptyValueDiff = nil
 	}
 
-	if schema2 == nil || schema2.Value == nil || DeprecationPeriodSufficient(config.DeprecationDays, schema2.Value.ExtensionProps) {
+	if schema2 == nil || schema2.Value == nil || DeprecationPeriodSufficient(config.DeprecationDays, schema2.Value.Extensions) {
 		diff.DeprecatedDiff = nil
 	}
 
@@ -341,7 +341,7 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 
 	result := SchemaDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.ExtensionProps, value2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
 	result.OneOfDiff, err = getSchemaListsDiff(config, state, value1.OneOf, value2.OneOf)
 	if err != nil {
 		return nil, err
@@ -366,7 +366,7 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
 	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, value1.Example, value2.Example)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, state, value1.ExternalDocs, value2.ExternalDocs)
-	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(value1.AdditionalPropertiesAllowed, value2.AdditionalPropertiesAllowed)
+	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(value1.AdditionalProperties.Has, value2.AdditionalProperties.Has)
 	result.UniqueItemsDiff = getValueDiff(value1.UniqueItems, value2.UniqueItems)
 	result.ExclusiveMinDiff = getValueDiff(value1.ExclusiveMin, value2.ExclusiveMin)
 	result.ExclusiveMaxDiff = getValueDiff(value1.ExclusiveMax, value2.ExclusiveMax)
@@ -399,7 +399,7 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 
 	result.MinPropsDiff = getValueDiff(value1.MinProps, value2.MinProps)
 	result.MaxPropsDiff = getUInt64RefDiff(value1.MaxProps, value2.MaxProps)
-	result.AdditionalPropertiesDiff, err = getSchemaDiff(config, state, value1.AdditionalProperties, value2.AdditionalProperties)
+	result.AdditionalPropertiesDiff, err = getSchemaDiff(config, state, value1.AdditionalProperties.Schema, value2.AdditionalProperties.Schema)
 	if err != nil {
 		return nil, err
 	}

@@ -130,7 +130,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 
 	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
-	s2.Spec.Paths["/api/test"].Get.ExtensionProps.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(9).String())
+	s2.Spec.Paths["/api/test"].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(9).String())
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
@@ -151,7 +151,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/test"].Get.ExtensionProps.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
+	s2.Spec.Paths["/api/test"].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)

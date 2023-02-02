@@ -134,7 +134,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 		// remove draft and alpha operations diffs deleted
 		iOperation := 0
 		for _, operation := range pathDiff.OperationsDiff.Deleted {
-			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps)
+			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].Extensions)
 			source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
@@ -156,7 +156,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 
 		// remove draft and alpha operations diffs modified
 		for operation := range pathDiff.OperationsDiff.Modified {
-			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].ExtensionProps)
+			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].Extensions)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 				result = append(result, BackwardCompatibilityError{
@@ -169,7 +169,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 				})
 				continue
 			}
-			revisionStability, err := getStabilityLevel(pathDiff.Revision.Operations()[operation].ExtensionProps)
+			revisionStability, err := getStabilityLevel(pathDiff.Revision.Operations()[operation].Extensions)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
 				result = append(result, BackwardCompatibilityError{
@@ -205,19 +205,24 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 	return result
 }
 
-func getStabilityLevel(i openapi3.ExtensionProps) (string, error) {
-	if i.Extensions == nil || i.Extensions[XStabilityLevelExtension] == nil {
+func getStabilityLevel(i map[string]interface{}) (string, error) {
+	if i == nil || i[XStabilityLevelExtension] == nil {
 		return "", nil
 	}
-	jsonStability, ok := i.Extensions[XStabilityLevelExtension].(json.RawMessage)
-	if !ok {
-		return "", fmt.Errorf("unparseable x-stability-level")
-	}
 	var stabilityLevel string
-	err := json.Unmarshal(jsonStability, &stabilityLevel)
-	if err != nil {
-		return "", fmt.Errorf("unparseable x-stability-level")
+
+	stabilityLevel, ok := i[XStabilityLevelExtension].(string)
+	if !ok {
+		jsonStability, ok := i[XStabilityLevelExtension].(json.RawMessage)
+		if !ok {
+			return "", fmt.Errorf("unparseable x-stability-level")
+		}
+		err := json.Unmarshal(jsonStability, &stabilityLevel)
+		if err != nil {
+			return "", fmt.Errorf("unparseable x-stability-level")
+		}
 	}
+
 	return stabilityLevel, nil
 }
 

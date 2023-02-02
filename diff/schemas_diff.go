@@ -46,7 +46,7 @@ func (schemasDiff *SchemasDiff) removeSunset(schemas1 openapi3.Schemas) {
 			continue
 		}
 
-		if !SunsetAllowed(schema.Deprecated, schema.ExtensionProps) {
+		if !SunsetAllowed(schema.Deprecated, schema.Extensions) {
 			deleted = append(deleted, schemaName)
 		}
 	}

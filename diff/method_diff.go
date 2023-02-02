@@ -47,7 +47,7 @@ func (methodDiff *MethodDiff) removeNonBreaking(config *Config, pathItem2 *opena
 	methodDiff.SummaryDiff = nil
 	methodDiff.DescriptionDiff = nil
 	methodDiff.OperationIDDiff = nil
-	if DeprecationPeriodSufficient(config.DeprecationDays, pathItem2.ExtensionProps) {
+	if DeprecationPeriodSufficient(config.DeprecationDays, pathItem2.Extensions) {
 		methodDiff.DeprecatedDiff = nil
 	}
 	methodDiff.ServersDiff = nil
@@ -77,7 +77,7 @@ func getMethodDiffInternal(config *Config, state *state, pathItem1, pathItem2 *o
 	result := newMethodDiff()
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, pathItem1.Extensions, pathItem2.Extensions)
 	result.TagsDiff = getStringsDiff(pathItem1.Tags, pathItem2.Tags)
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, pathItem1.Description, pathItem2.Description)

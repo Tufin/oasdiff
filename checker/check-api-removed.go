@@ -32,7 +32,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				})
 				continue
 			}
-			date, err := diff.GetSunsetDate(op.ExtensionProps)
+			date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
 				source := "original_source=" + (*operationsSources)[op]
 				result = append(result, BackwardCompatibilityError{
@@ -77,7 +77,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				})
 				continue
 			}
-			date, err := diff.GetSunsetDate(op.ExtensionProps)
+			date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
 				source := (*operationsSources)[op]
 				result = append(result, BackwardCompatibilityError{

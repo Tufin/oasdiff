@@ -44,7 +44,7 @@ func getLicenseDiffInternal(config *Config, state *state, license1, license2 *op
 		return &result
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, license1.ExtensionProps, license2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, license1.Extensions, license2.Extensions)
 	result.NameDiff = getValueDiff(license1.Name, license2.Name)
 	result.URLDiff = getValueDiff(license1.URL, license2.URL)
 

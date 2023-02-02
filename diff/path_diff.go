@@ -68,7 +68,7 @@ func getPathDiffInternal(config *Config, state *state, pathItem1, pathItem2 *ope
 	result := newPathDiff()
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, pathItem1.ExtensionProps, pathItem2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, pathItem1.Extensions, pathItem2.Extensions)
 	result.RefDiff = getValueDiff(pathItem1.Ref, pathItem2.Ref)
 	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, pathItem1.Description, pathItem2.Description)

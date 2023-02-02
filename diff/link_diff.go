@@ -49,7 +49,7 @@ func getLinkDiff(config *Config, state *state, link1, link2 *openapi3.Link) (*Li
 func getLinkDiffInternal(config *Config, state *state, link1, link2 *openapi3.Link) (*LinkDiff, error) {
 	result := LinkDiff{}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, link1.ExtensionProps, link2.ExtensionProps)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, link1.Extensions, link2.Extensions)
 	result.OperationIDDiff = getValueDiff(link1.OperationID, link2.OperationID)
 	result.OperationRefDiff = getValueDiff(link1.OperationRef, link2.OperationRef)
 	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, link1.Description, link2.Description)
