@@ -126,6 +126,30 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 	if diffReport.PathsDiff == nil {
 		return result
 	}
+	// remove draft and alpha paths diffs delete
+	iPath := 0
+	for _, path := range diffReport.PathsDiff.Deleted {
+		ignore := true
+		pathDiff := diffReport.PathsDiff
+		for operation := range pathDiff.Base[path].Operations() {
+			baseStability, err := getStabilityLevel(pathDiff.Base[path].Operations()[operation].Extensions)
+			source := (*operationsSources)[pathDiff.Base[path].Operations()[operation]]
+			if err != nil {
+				result = newParsingError(result, err, operation, path, source)
+				continue
+			}
+			if !(baseStability == "draft" || baseStability == "alpha") {
+				ignore = false
+				break
+			}
+		}
+		if !ignore {
+			diffReport.PathsDiff.Deleted[iPath] = path
+			iPath++
+		}
+	}
+	diffReport.PathsDiff.Deleted = diffReport.PathsDiff.Deleted[:iPath]
+
 	// remove draft and alpha paths diffs modified
 	for path, pathDiff := range diffReport.PathsDiff.Modified {
 		if pathDiff.OperationsDiff == nil {
@@ -137,14 +161,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].Extensions)
 			source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 			if err != nil {
-				result = append(result, BackwardCompatibilityError{
-					Id:        "parsing-error",
-					Level:     ERR,
-					Text:      fmt.Sprintf("parsing error %s", err.Error()),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
-				})
+				result = newParsingError(result, err, operation, path, source)
 				continue
 			}
 			if !(baseStability == "draft" || baseStability == "alpha") {
@@ -202,6 +219,18 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 			}
 		}
 	}
+	return result
+}
+
+func newParsingError(result []BackwardCompatibilityError, err error, operation string, path string, source string) []BackwardCompatibilityError {
+	result = append(result, BackwardCompatibilityError{
+		Id:        "parsing-error",
+		Level:     ERR,
+		Text:      fmt.Sprintf("parsing error %s", err.Error()),
+		Operation: operation,
+		Path:      path,
+		Source:    source,
+	})
 	return result
 }
 

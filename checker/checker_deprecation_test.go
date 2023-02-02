@@ -99,6 +99,41 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 	require.Empty(t, errs)
 }
 
+// BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for alpha level
+func TestBreaking_RemovedPathForAlpha(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+	alpha := toJson(t, "alpha")
+	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = alpha
+	s1.Spec.Paths["/api/test"].Post.Extensions["x-stability-level"] = alpha
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	delete(s2.Spec.Paths, "/api/test")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.Empty(t, errs)
+}
+
+// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs has not alpha stability level
+func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	delete(s2.Spec.Paths, "/api/test")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+}
+
 // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for draft level
 func TestBreaking_DeprecationForDraft(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
@@ -114,6 +149,43 @@ func TestBreaking_DeprecationForDraft(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
 	require.Empty(t, errs)
+}
+
+// BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for draft level
+func TestBreaking_RemovedPathForDraft(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+	draft := toJson(t, "draft")
+	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
+	s1.Spec.Paths["/api/test"].Post.Extensions["x-stability-level"] = draft
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	delete(s2.Spec.Paths, "/api/test")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.Empty(t, errs)
+}
+
+// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs has not draft stability level
+func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+	draft := toJson(t, "draft")
+	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	delete(s2.Spec.Paths, "/api/test")
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
 }
 
 func toJson(t *testing.T, value string) json.RawMessage {
