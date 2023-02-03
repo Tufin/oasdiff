@@ -46,13 +46,15 @@ Usage of oasdiff:
   -base string
     	path of original OpenAPI spec in YAML or JSON format
   -breaking-only
-      display breaking changes only (deprecated, use check-breaking instead)
+    	display breaking changes only
   -check-breaking
-      check diff for breaking changes with breaking changes checks
+    	check diff for breaking changes with breaking changes checks
   -composed
-      work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files
+    	work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files. Allows reading specs only from files, not from remote URLs
   -deprecation-days int
     	minimal number of days required between deprecating a resource and removing it without being considered 'breaking'
+  -err-ignore string
+    	the filename for check breaking ignore file for warnings
   -exclude-description
     	ignore changes to descriptions
   -exclude-examples
@@ -60,13 +62,15 @@ Usage of oasdiff:
   -fail-on-diff
     	fail with exit code 1 if a difference is found
   -fail-on-warns
-      fail with exit code 1 if only WARN breaking changes found, the option used only with both -check-breaking and -fail-on-diff options
+    	fail with exit code 1 if only WARN breaking changes found, the option used only with both -check-breaking and -fail-on-diff options
   -filter string
     	if provided, diff will include only paths that match this regular expression
   -filter-extension string
     	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
   -format string
     	output format: yaml, text or html (default "yaml")
+  -lang string
+    	language for localized breaking changes checks errors (default "en")
   -max-circular-dep int
     	maximum allowed number of circular dependencies between objects in OpenAPI specs (default 5)
   -prefix string
@@ -83,12 +87,10 @@ Usage of oasdiff:
     	if provided, this prefix will be stripped from paths in revised (revision) spec before comparison
   -summary
     	display a summary of the changes instead of the full diff
-  -warn-ignore string
-    the filename for check breaking ignore file for warnings
-  -err-ignore string
-    the filename for check breaking ignore file for errors
   -version
     	show version and quit
+  -warn-ignore string
+    	the filename for check breaking ignore file for warnings
 ```
 All arguments can be passed with one or two leading minus signs.  
 For example, ```-breaking-only``` and ```--breaking-only``` are equivalent.
