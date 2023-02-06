@@ -602,13 +602,27 @@ func TestAddedSecurityRequirement(t *testing.T) {
 		"bearerAuth")
 }
 
-func TestModifiedSecurityRequirement(t *testing.T) {
+func TestSecurityRequirementScopesDeleted(t *testing.T) {
 	securityScopesDiff := d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified["/register"].OperationsDiff.Modified["POST"].SecurityDiff.Modified["OAuth"]
 	require.NotEmpty(t, securityScopesDiff)
 
 	require.Contains(t,
 		securityScopesDiff["OAuth"].Deleted,
 		"write:pets")
+}
+
+func TestSecurityRequirementModified(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/security-requirements/spec_1.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/security-requirements/spec_2.yaml")
+	require.NoError(t, err)
+
+	dd, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, dd)
 }
 
 func TestAddedSecurityOAuthFlows(t *testing.T) {
