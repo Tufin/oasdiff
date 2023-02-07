@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/martian/log"
 	"github.com/gorilla/mux"
 	"github.com/onrik/logrus/filename"
+	log "github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/writer"
 )
 
@@ -23,7 +23,7 @@ func (c *Http) Run() {
 	serve(
 		[]string{"oasdiff"},
 		[]string{http.MethodPost},
-		[]func(http.ResponseWriter, *http.Request){func(http.ResponseWriter, *http.Request) {}}
+		[]func(http.ResponseWriter, *http.Request){func(http.ResponseWriter, *http.Request) {}},
 	)
 }
 

@@ -5,7 +5,6 @@ go 1.19
 require (
 	cloud.google.com/go v0.109.0
 	github.com/getkin/kin-openapi v0.114.0
-	github.com/google/martian v2.1.0+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/onrik/logrus v0.10.0
 	github.com/sirupsen/logrus v1.9.0
