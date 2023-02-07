@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"os/signal"
@@ -55,7 +55,7 @@ func serveMulti(routers []*mux.Router, ports []string) {
 			Handler:      routers[i],
 		})
 		go func(server *http.Server, port string) {
-			log.Infof("listening on port '%s'", port)
+			log.Infof("listening on port %q", port)
 			if err := server.ListenAndServe(); err != nil {
 				log.Error(err)
 			}
@@ -80,7 +80,7 @@ func shutdown(server *http.Server) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
-		log.Errorf("failed to shutdown server with '%v'", err)
+		log.Errorf("failed to shutdown server with %q", err)
 	}
 }
 
@@ -98,7 +98,7 @@ func initLogger() {
 
 func initLoggerOutput() {
 
-	log.SetOutput(ioutil.Discard) // Send all logs to nowhere by default - this is required to avoid duplicate log messages
+	log.SetOutput(io.Discard) // Send all logs to nowhere by default - this is required to avoid duplicate log messages
 	log.AddHook(filename.NewHook())
 	log.AddHook(&writer.Hook{ // Send logs with level higher than warning to stderr
 		Writer: os.Stderr,
