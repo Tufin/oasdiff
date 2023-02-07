@@ -167,11 +167,11 @@ func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, *OperationsSources
 
 				oldSince, err := sinceDateFrom(*p, *oldOperation)
 				if err != nil {
-					return nil, nil, fmt.Errorf("invalid %s extension value in %s(%s %s), %w", SinceDateExtension, operationsSources[oldOperation], op, path, err)
+					return nil, nil, fmt.Errorf("invalid %s extension value in %s (%s %s), %w", SinceDateExtension, operationsSources[oldOperation], op, path, err)
 				}
 				newSince, err := sinceDateFrom(*pathItem, *opItem)
 				if err != nil {
-					return nil, nil, fmt.Errorf("invalid %s extension value in %s(%s %s), %w", SinceDateExtension, s.Url, op, path, err)
+					return nil, nil, fmt.Errorf("invalid %s extension value in %s (%s %s), %w", SinceDateExtension, s.Url, op, path, err)
 				}
 				if newSince.After(oldSince) {
 					p.SetOperation(op, opItem)
@@ -179,7 +179,7 @@ func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, *OperationsSources
 				}
 
 				if newSince == oldSince {
-					return nil, nil, fmt.Errorf("multiple endpoints found in %s(%s %s) and %s(%s %s). Add the %s extension with ordered values to operations to specify its order", operationsSources[oldOperation], op, path, s.Url, op, path, SinceDateExtension)
+					return nil, nil, fmt.Errorf("duplicate endpoint (%s %s) found in %s and %s. Add the %s extension with ordered values to operations to specify its order", op, path, operationsSources[oldOperation], s.Url, SinceDateExtension)
 				}
 			}
 
