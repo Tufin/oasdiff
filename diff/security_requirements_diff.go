@@ -20,7 +20,8 @@ func (diff *SecurityRequirementsDiff) Empty() bool {
 	}
 
 	return len(diff.Added) == 0 &&
-		len(diff.Deleted) == 0
+		len(diff.Deleted) == 0 &&
+		len(diff.Modified) == 0
 }
 
 // ModifiedSecurityRequirements is map of security requirements to their respective diffs
@@ -51,7 +52,9 @@ func getSecurityRequirementsDiffInternal(config *Config, state *state, securityR
 	if securityRequirements1 != nil {
 		for _, securityRequirement1 := range *securityRequirements1 {
 			if securityRequirement2 := findSecurityRequirement(securityRequirement1, securityRequirements2); securityRequirement2 != nil {
-				result.Modified[getSecurityRequirementID(securityRequirement1)] = getSecurityScopesDiff(securityRequirement1, securityRequirement2)
+				if securityScopesDiff := getSecurityScopesDiff(securityRequirement1, securityRequirement2); !securityScopesDiff.Empty() {
+					result.Modified[getSecurityRequirementID(securityRequirement1)] = securityScopesDiff
+				}
 			} else {
 				result.Deleted = append(result.Deleted, getSecurityRequirementID(securityRequirement1))
 			}
