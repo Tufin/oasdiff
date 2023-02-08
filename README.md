@@ -565,7 +565,7 @@ While this method is still supported, the new one will eventually replace it.
 
 ### Breaking Changes – New Method
 An improved implementation for detecting breaking changes with the `-check-breaking` flag.
-This method works differently from the old one, is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
+This method works differently from the old one: it is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
 
 To use it, run oasdiff with the `-check-breaking` option, e.g.:
 ```
@@ -576,20 +576,20 @@ There are two levels of breaking changes:
 - `WARN` - potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
 - `ERR` - confirmed breaking changes which should be avoided
 
-If you use the `-fail-on-diff` option with `-check-breaking`, oasdiff will exit with return code 1 if any ERR-level breaking changes are found.
-To exit with return code 1 even when only WARN-level breaking changes are found, add the `-fail-on-warns` options.
+To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` option.  
+To exit with return code 1 also when any WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` options.
 
-#### Composed mode
+#### Composed Mode
 The "composed mode" can be useful when you want to check for breaking changes across multiple specs.
 For example, when multiple APIs, each one with its own spec, are exposed behind an API gateway, and you want to check for breaking changes across all specs at once.
 
-Constraints:
-- Different files may have different components (schemas, properties, etc.) with the same name. So to check for difference we should not only internalize all referencies, but replace local referencies with its content too for each API description
+This mode poses some challenges:
+- Different files may contain components (schemas, properties, etc.) with the same name. So to check for difference we should not only internalize all referencies, but replace local references with its content too for each API description
 - To check for backward compatibility, we should use only API (path+method) difference
-- We should support some way to move the API from one file to another without breaking changes. Sometimes it could not be done atomically (e.g. when specifications are in different repositories maintained by different teams). So we should have some rules to order similar API descriptions to find the latest one.
+- It should be possible to move APIs from one file to another without breaking changes. Sometimes this can't be done atomically (e.g. when specifications are in different repositories maintained by different teams). So we should have some rules to order similar API descriptions to find the latest one.
 
-The composed mode allows to do it.
-It is helpful when you want to find diff and check for breaking changes for API divided into multiple files.
+The composed mode supports these use-cases.
+
 If there are same paths in different OpenAPI objects, then function uses version of the path with the last x-since-date extension.
 The `x-since-date` extension should be set on path or operations level. Extension set on the operations level overrides the value set on path level.
 If such path doesn't have `the x-since-date` extension, its value is default "2000-01-01"
