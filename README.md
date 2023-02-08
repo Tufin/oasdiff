@@ -573,8 +573,8 @@ oasdiff -check-breaking -base data/deprecation/base.yaml -revision data/deprecat
 ```
 
 There are two levels of breaking changes:
-- `WARN` - potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
-- `ERR` - confirmed breaking changes which should be avoided
+- `WARN` - Warning are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
+- `ERR` - Errors are definite breaking changes which should be avoided
 
 To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` option.  
 To exit with return code 1 also when any WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` options.
