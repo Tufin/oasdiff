@@ -16,7 +16,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var base, revision, filter, filterExtension, format, lang, warnIgnorance, errIgnorance string
+var base, revision, filter, filterExtension, format, lang, warnIgnoreFile, errIgnoreFile string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking bool
 var deprecationDays int
@@ -28,9 +28,9 @@ const (
 )
 
 func init() {
-	flag.StringVar(&base, "base", "", "path of original OpenAPI spec in YAML or JSON format")
-	flag.StringVar(&revision, "revision", "", "path of revised OpenAPI spec in YAML or JSON format")
-	flag.BoolVar(&composed, "composed", false, "work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files. Allows reading specs only from files, not from remote URLs")
+	flag.StringVar(&base, "base", "", "path or URL of original OpenAPI spec in YAML or JSON format")
+	flag.StringVar(&revision, "revision", "", "path or URL of revised OpenAPI spec in YAML or JSON format")
+	flag.BoolVar(&composed, "composed", false, "work in 'composed' mode, compare paths in all specs in the base and revision directories. In this mode the base and the revision parameters can be Globs instead of files, but not URLs")
 	flag.StringVar(&prefix_base, "prefix-base", "", "if provided, paths in original (base) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&prefix_revision, "prefix-revision", "", "if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&strip_prefix_base, "strip-prefix-base", "", "if provided, this prefix will be stripped from paths in original (base) spec before comparison")
@@ -41,15 +41,15 @@ func init() {
 	flag.BoolVar(&excludeExamples, "exclude-examples", false, "ignore changes to examples")
 	flag.BoolVar(&excludeDescription, "exclude-description", false, "ignore changes to descriptions")
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
-	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only")
-	flag.BoolVar(&checkBreaking, "check-breaking", false, "check diff for breaking changes with breaking changes checks")
-	flag.StringVar(&warnIgnorance, "warn-ignore", "", "the filename for check breaking ignore file for warnings")
-	flag.StringVar(&errIgnorance, "err-ignore", "", "the filename for check breaking ignore file for warnings")
+	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only (old method)")
+	flag.BoolVar(&checkBreaking, "check-breaking", false, "check for breaking changes (new method)")
+	flag.StringVar(&warnIgnoreFile, "warn-ignore", "", "the configuration file for ignoring warnings with -check-breaking")
+	flag.StringVar(&errIgnoreFile, "err-ignore", "", "the configuration file for ignoring errors with -check-breaking")
 	flag.IntVar(&deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.StringVar(&lang, "lang", "en", "language for localized breaking changes checks errors")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
-	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "fail with exit code 1 if only WARN breaking changes found, the option used only with both -check-breaking and -fail-on-diff options")
+	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "fail with exit code 1 if only WARN breaking changes found, this option is relevant only with both -check-breaking and -fail-on-diff options")
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 }
@@ -75,6 +75,13 @@ func validateFlags() bool {
 		}
 		prefix_revision = prefix
 	}
+	if failOnWarns {
+		if !checkBreaking || !failOnDiff {
+			fmt.Fprintf(os.Stderr, "'-fail-on-warns' option is relevant only with both '-check-breaking' and '-fail-on-diff' options\n")
+			return false
+		}
+	}
+
 	return true
 }
 
@@ -156,16 +163,16 @@ func main() {
 		c.Localizer = *localizations.New(lang, "en")
 		errs := checker.CheckBackwardCompatibility(c, diffReport, operationsSources)
 
-		if warnIgnorance != "" {
-			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnorance)
+		if warnIgnoreFile != "" {
+			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnoreFile)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "can't process warn ignore file %v\n", err)
 				os.Exit(121)
 			}
 		}
 
-		if errIgnorance != "" {
-			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnorance)
+		if errIgnoreFile != "" {
+			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnoreFile)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "can't process err ignore file %v\n", err)
 				os.Exit(122)
@@ -186,11 +193,11 @@ func main() {
 		}
 		countErrs := len(errs) - countWarns
 
-		hasErrors := countErrs == 0
+		diffEmpty := countErrs == 0
 		if failOnWarns {
-			hasErrors = len(errs) == 0
+			diffEmpty = len(errs) == 0
 		}
-		exitNormally(hasErrors)
+		exitNormally(diffEmpty)
 	}
 
 	if summary {

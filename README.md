@@ -44,17 +44,17 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 ```
 Usage of oasdiff:
   -base string
-    	path of original OpenAPI spec in YAML or JSON format
+    	path or URL of original OpenAPI spec in YAML or JSON format
   -breaking-only
-    	display breaking changes only
+    	display breaking changes only (old method)
   -check-breaking
-    	check diff for breaking changes with breaking changes checks
+    	check for breaking changes (new method)
   -composed
-    	work in 'composed' mode, compare paths in all specs in the base and revision directories. In such mode the base and the revision parameters could be Globs instead of files. Allows reading specs only from files, not from remote URLs
+    	work in 'composed' mode, compare paths in all specs in the base and revision directories. In this mode the base and the revision parameters can be Globs instead of files, but not URLs
   -deprecation-days int
     	minimal number of days required between deprecating a resource and removing it without being considered 'breaking'
   -err-ignore string
-    	the filename for check breaking ignore file for warnings
+    	the configuration file for ignoring errors with -check-breaking
   -exclude-description
     	ignore changes to descriptions
   -exclude-examples
@@ -62,7 +62,7 @@ Usage of oasdiff:
   -fail-on-diff
     	fail with exit code 1 if a difference is found
   -fail-on-warns
-    	fail with exit code 1 if only WARN breaking changes found, the option used only with both -check-breaking and -fail-on-diff options
+    	fail with exit code 1 if only WARN breaking changes found, this option is relevant only with both -check-breaking and -fail-on-diff options
   -filter string
     	if provided, diff will include only paths that match this regular expression
   -filter-extension string
@@ -80,7 +80,7 @@ Usage of oasdiff:
   -prefix-revision string
     	if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison
   -revision string
-    	path of revised OpenAPI spec in YAML or JSON format
+    	path or URL of revised OpenAPI spec in YAML or JSON format
   -strip-prefix-base string
     	if provided, this prefix will be stripped from paths in original (base) spec before comparison
   -strip-prefix-revision string
@@ -90,7 +90,7 @@ Usage of oasdiff:
   -version
     	show version and quit
   -warn-ignore string
-    	the filename for check breaking ignore file for warnings
+    	the configuration file for ignoring warnings with -check-breaking
 ```
 All arguments can be passed with one or two leading minus signs.  
 For example, ```-breaking-only``` and ```--breaking-only``` are equivalent.
@@ -554,36 +554,42 @@ Some YAML libraries don't support complex mapping keys:
 ### Breaking Changes
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
-Note: this is a Beta feature. Please report issues.
+Notes: 
+1. This is a Beta feature, please report issues
+2. There are two different methods for detecting breaking changes (see below)
 
-### Breaking Changes Checks
-An improved method for detecting breaking changes in specifications. It works differently form the original "Breaking changes" feature.
-It uses the list of rules, each checks specific case and could generate more decent human-readable error messages.
-To use it, run the oasdiff with the `-check-breaking` option, e.g.:
+
+### Breaking Changes – Old Method
+The original implementation with the `-breaking-only` flag.
+While this method is still supported, the new one will eventually replace it.
+
+### Breaking Changes – New Method
+An improved implementation for detecting breaking changes with the `-check-breaking` flag.
+This method works differently from the old one, is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
+
+To use it, run oasdiff with the `-check-breaking` option, e.g.:
 ```
 oasdiff -check-breaking -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
 ```
 
-There are two levels of check errors:
-- `WARN` - for important changes which should be noticed by developers but may not be confirmed programmatically
-- `ERR` - for most of breaking changes which should be avoided
+There are two levels of breaking changes:
+- `WARN` - potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
+- `ERR` - confirmed breaking changes which should be avoided
 
-If you use the `-fail-on-diff` option with the `-check-breaking`, oasdiff will exit with return code 1 when any level of error occured.
-If you want to make oasdiff exit with non-zero return code only when there are errors with ERR level, use the `-fail-on-warns` option.
-It makes oasdiff fail with exit code 1 if only WARN breaking changes found. The option is usable only when both `-check-breaking` and `-fail-on-diff` options used.
+If you use the `-fail-on-diff` option with `-check-breaking`, oasdiff will exit with return code 1 if any ERR-level breaking changes are found.
+To exit with return code 1 even when only WARN-level breaking changes are found, add the `-fail-on-warns` options.
 
 #### Composed mode
-The "composed mode" could be useful when you want to check for breaking changes multiple specs describing the single API.
-For example, your application could provide multiple APIs decribed in multiple files. Or your API is combined from multiple APIs with API gateway and you want to check for breaking changes your API overally, not single specs.
-When composed mode is used, oasdiff before computing diff (and breaking changes checks)
+The "composed mode" can be useful when you want to check for breaking changes across multiple specs.
+For example, when multiple APIs, each one with its own spec, are exposed behind an API gateway, and you want to check for breaking changes across all specs at once.
 
-There are some problems that could be in such usage scenario:
-- Different files could have different components (schemas, properties, etc.) with the same name. So to check for difference we should not only internalize all referencies, but replace local referencies with its contenttoo for each API description
+Constraints:
+- Different files may have different components (schemas, properties, etc.) with the same name. So to check for difference we should not only internalize all referencies, but replace local referencies with its content too for each API description
 - To check for backward compatibility, we should use only API (path+method) difference
 - We should support some way to move the API from one file to another without breaking changes. Sometimes it could not be done atomically (e.g. when specifications are in different repositories maintained by different teams). So we should have some rules to order similar API descriptions to find the latest one.
 
 The composed mode allows to do it.
-It is helpfull when you want to find diff and check for breaking changes for API divided into multiple files.
+It is helpful when you want to find diff and check for breaking changes for API divided into multiple files.
 If there are same paths in different OpenAPI objects, then function uses version of the path with the last x-since-date extension.
 The `x-since-date` extension should be set on path or operations level. Extension set on the operations level overrides the value set on path level.
 If such path doesn't have `the x-since-date` extension, its value is default "2000-01-01"
@@ -611,43 +617,44 @@ Example:
      x-stability-level: "alpha"
    ```
 
-#### Breaking changes journal and ignorance
-Sometimes there are detected some false positive breaking changes which should be ignored until the problem fixed in oasdiff. Or there are some important changes which should be noticed by developers but may not be confirmed programmatically as broken changes.
-By default oasdiff with the `-check-breaking` option exists with non-zero status when there are some errors. But you could add any detected breaking change to ignorance file to ignore it during breaking changes checks.
-To do so, you should add to the end of ignorance file the lines for all errors (on per error) which contains two parts for each error:
-- method and path
-- description of the breaking change
+#### Ignoring and Documenting Breaking Changes
+Sometimes, you may want to ignore certain breaking changes.
+To do so, add the detected breaking change to a configuration file and specify the file with the `-warn-ignore` option for WARNINGS or the `-err-ignore` option for ERRORS.
+Each line in the configuration file should contain two parts:
+1. method and path
+2. description of the breaking change
 
-Like this:
+For example:
 ```
 GET /api/{domain}/{project}/badges/security-score removed the success response with the status '200'
 ```
 
-The line could additionally contains additional simbols in between of required parts, like this:
+The line may contain additional info, like this:
 ```
  - 12.01.2023 In the GET /api/{domain}/{project}/badges/security-score, we removed the success response with the status '200'
 ```
 
-Note that for multiple errors, added lines should be in the same order which oasdiff reports errors and should be without any other lines in between.
-To specify the filename that should be used as the ignorance file, use the `-warn-ignore` option for WARNINGS and the `-err-ignore` option for ERRORS.
-The ignorance files could be of any text type, e.g. Markdown, so you can use them as breaking and important changes journals.
+The configuration files can be of any text type, e.g., Markdown, so you can use them to document breaking changes and other important changes.
+
+Note that the lines in the configuration files should be in the same order which oasdiff reports errors and should be without any other lines in between.
+
 
 #### x-extensible-enum support
 The breaking changes has rules specific to enum changes which recommends using the `x-extensible-enum`.
-Using such enums allows to add new entries to enums used in responses which is very usable in many case, but requires clients to support fallback to default logic when they receives unknown value.
+Using such enums allows to add new entries to enums used in responses which is very usable in many cases but requires clients to support fallback to default logic when they receive an unknown value.
 The `x-extensible-enum` was introduced by the [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community.
 Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is more explicit way to do it.
-Most tools doesn't support the `x-extensible-enum` but the breaking changes checks do. In most case it treats it similar to enum values, except it allows adding new entries in messages sent to client (responses or callbacks).
-If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changed for you, but if you do oasdiff will find you breaking changes realted to `x-extensible-enum` parameters and properties.
+Most tools don't support the `x-extensible-enum` but the breaking changes checks do. In most case it treats it similar to enum values, except it allows adding new entries in messages sent to client (responses or callbacks).
+If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changed for you, but if you do oasdiff will find you breaking changes related to `x-extensible-enum` parameters and properties.
 
-#### Other differencies from the original implementation
-There are multiple differencies using this feature in comparison with the original implementation:
+#### Other differences from the original implementation
+There are multiple differences using this feature in comparison with the original implementation:
 - output in human readable format.
 - supports localization for error messages and ignored changes.
 - the set of checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks.
 - fewer false positive errors by design.
 - better support for type changes checks: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
-- allows removal of responses with non-success codes (e.g. 503, 504, 403).
+- allows removal of responses with non-success codes (e.g., 503, 504, 403).
 - allows adding new content-type to request (with the kept current).
 - easier to extend and customize
 - will continue to be improved 
@@ -722,13 +729,13 @@ c := checker.DefaultChecks() // here could be added additional checks
 c.Localizer = *localizations.New("en", "en")
 errs := checker.CheckBackwardCompatibility(c, diffRes, operationsSources)
 
-// process WARN ignorance file
+// process configuration file for ignoring warnings
 errs, err := processIgnorance(bcWarningIgnoranceFile, checker.WARN, errs)
 if err != nil {
   // process
 }
 
-// process ERR ignorance file
+// process configuration file for ignoring errors
 errs, err = processIgnorance(bcErrorIgnoranceFile, checker.ERR, errs)
 if err != nil {
   // process
