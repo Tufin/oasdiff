@@ -636,9 +636,6 @@ The line may contain additional info, like this:
 
 The configuration files can be of any text type, e.g., Markdown, so you can use them to document breaking changes and other important changes.
 
-Note that the lines in the configuration files should be in the same order which oasdiff reports errors and should be without any other lines in between.
-
-
 #### x-extensible-enum support
 The breaking changes has rules specific to enum changes which recommends using the `x-extensible-enum`.
 Using such enums allows to add new entries to enums used in responses which is very usable in many cases but requires clients to support fallback to default logic when they receive an unknown value.

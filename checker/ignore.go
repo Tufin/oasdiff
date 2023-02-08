@@ -18,34 +18,27 @@ func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompati
 	defer ignore.Close()
 	ignoreScanner := bufio.NewScanner(ignore)
 
-	foundFirst := false
-	ignoreLine := ""
-
-	for _, err := range errs {
-		if err.Level != level {
-			result = append(result, err)
-			continue
-		}
-
-		uncolorizedText := strings.ReplaceAll(err.Text, color.Bold, "")
-		uncolorizedText = strings.ReplaceAll(uncolorizedText, color.Reset, "")
-
-		found := false
-		for ignoreScanner.Scan() {
-			ignoreLine = ignoreScanner.Text()
-			if strings.Contains(strings.ToLower(ignoreLine), strings.ToLower(err.Operation+" "+err.Path)) &&
-				strings.Contains(strings.ToLower(ignoreLine), strings.ToLower(uncolorizedText)) {
-				found = true
-				foundFirst = true
-				break
+	ignoredErrs := make([]bool, len(errs))
+	for ignoreScanner.Scan() {
+		ignoreLine := strings.ToLower(ignoreScanner.Text())
+		for errIndex, err := range errs {
+			if err.Level != level {
+				continue
 			}
 
-			// after we found the first ignorance, we require ignorances to be one after for all breaking changes another without any lines in between
-			if foundFirst {
+			uncolorizedText := strings.ReplaceAll(err.Text, color.Bold, "")
+			uncolorizedText = strings.ReplaceAll(uncolorizedText, color.Reset, "")
+
+			if strings.Contains(ignoreLine, strings.ToLower(err.Operation+" "+err.Path)) &&
+				strings.Contains(ignoreLine, strings.ToLower(uncolorizedText)) {
+				ignoredErrs[errIndex] = true
 				break
 			}
 		}
-		if !found {
+	}
+
+	for errIndex, err := range errs {
+		if !ignoredErrs[errIndex] {
 			result = append(result, err)
 		}
 	}
