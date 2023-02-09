@@ -60,9 +60,9 @@ Usage of oasdiff:
   -exclude-examples
     	ignore changes to examples
   -fail-on-diff
-    	fail with exit code 1 if a difference is found
+    	exit with return code 1 when any ERR-level breaking changes are found, used together with -check-breaking
   -fail-on-warns
-    	fail with exit code 1 if only WARN breaking changes found, this option is relevant only with both -check-breaking and -fail-on-diff options
+    	exit with return code 1 when any WARN-level breaking changes are found, used together with -check-breaking and -fail-on-diff
   -filter string
     	if provided, diff will include only paths that match this regular expression
   -filter-extension string
@@ -567,7 +567,7 @@ While this method is still supported, the new one will eventually replace it.
 An improved implementation for detecting breaking changes with the `-check-breaking` flag.
 This method works differently from the old one: it is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
 
-To use it, run oasdiff with the `-check-breaking` option, e.g.:
+To use it, run oasdiff with the `-check-breaking` flag, e.g.:
 ```
 oasdiff -check-breaking -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
 ```
@@ -576,8 +576,8 @@ There are two levels of breaking changes:
 - `WARN` - Warning are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
 - `ERR` - Errors are definite breaking changes which should be avoided
 
-To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` option.  
-To exit with return code 1 also when any WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` options.
+To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` flag.  
+To exit with return code 1 even if only WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` flags.
 
 #### Composed Mode
 The "composed mode" can be useful when you want to check for breaking changes across multiple specs.
@@ -588,7 +588,7 @@ This mode poses some challenges:
 - To check for backward compatibility, we should use only API (path+method) difference
 - It should be possible to move APIs from one file to another without breaking changes. Sometimes this can't be done atomically (e.g. when specifications are in different repositories maintained by different teams). So we should have some rules to order similar API descriptions to find the latest one.
 
-The composed mode supports these use-cases.
+Composed mode supports these use-cases.
 
 If there are same paths in different OpenAPI objects, then function uses version of the path with the last x-since-date extension.
 The `x-since-date` extension should be set on path or operations level. Extension set on the operations level overrides the value set on path level.
@@ -619,7 +619,7 @@ Example:
 
 #### Ignoring and Documenting Breaking Changes
 Sometimes, you may want to ignore certain breaking changes.
-To do so, add the detected breaking change to a configuration file and specify the file with the `-warn-ignore` option for WARNINGS or the `-err-ignore` option for ERRORS.
+To do so, add the detected breaking change to a configuration file and specify the file with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.
 Each line in the configuration file should contain two parts:
 1. method and path
 2. description of the breaking change
@@ -645,14 +645,14 @@ Most tools don't support the `x-extensible-enum` but the breaking changes checks
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changed for you, but if you do oasdiff will find you breaking changes related to `x-extensible-enum` parameters and properties.
 
 #### Other differences from the original implementation
-There are multiple differences using this feature in comparison with the original implementation:
-- output in human readable format.
-- supports localization for error messages and ignored changes.
+There are multiple differences betweem this feature and the original implementation:
+- output in human readable format
+- supports localization for error messages and ignored changes
 - the set of checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks.
-- fewer false positive errors by design.
+- fewer false positive errors by design
 - better support for type changes checks: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
-- allows removal of responses with non-success codes (e.g., 503, 504, 403).
-- allows adding new content-type to request (with the kept current).
+- allows removal of responses with non-success codes (e.g., 503, 504, 403)
+- allows adding new content-type to request (with the kept current)
 - easier to extend and customize
 - will continue to be improved 
 
@@ -660,7 +660,7 @@ There are multiple differences using this feature in comparison with the origina
 - there are no checks for `context` instead of `schema` for request parameters
 - there are no checks for `callback`s
 - not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
-- doesn't support Path Prefix Modification, this can be mitigated with checks errors ignore feature 
+- doesn't support Path Prefix Modification, this can be mitigated with check errors ignore feature 
 
 ### Non-Breaking Removal of Deprecated Resources
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.

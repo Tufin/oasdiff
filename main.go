@@ -48,8 +48,8 @@ func init() {
 	flag.IntVar(&deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
 	flag.StringVar(&lang, "lang", "en", "language for localized breaking changes checks errors")
-	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "fail with exit code 1 if a difference is found")
-	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "fail with exit code 1 if only WARN breaking changes found, this option is relevant only with both -check-breaking and -fail-on-diff options")
+	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "exit with return code 1 when any ERR-level breaking changes are found, used together with -check-breaking")
+	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "exit with return code 1 when any WARN-level breaking changes are found, used together with -check-breaking and -fail-on-diff")
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 }
@@ -77,7 +77,7 @@ func validateFlags() bool {
 	}
 	if failOnWarns {
 		if !checkBreaking || !failOnDiff {
-			fmt.Fprintf(os.Stderr, "'-fail-on-warns' option is relevant only with both '-check-breaking' and '-fail-on-diff' options\n")
+			fmt.Fprintf(os.Stderr, "'-fail-on-warns' is relevant only with '-check-breaking' and '-fail-on-diff'\n")
 			return false
 		}
 	}
