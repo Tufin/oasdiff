@@ -595,7 +595,7 @@ Example:
      x-stability-level: "alpha"
    ```
 
-#### Ignoring and Documenting Breaking Changes
+#### Ignoring Breaking Changes
 Sometimes, you may want to ignore certain breaking changes.
 To do so, add the detected breaking change to a configuration file and specify the file with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.
 Each line in the configuration file should contain two parts:
@@ -627,7 +627,7 @@ There are multiple differences betweem this feature and the original implementat
 - output in human readable format
 - supports localization for error messages and ignored changes
 - the set of checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks.
-- fewer false positive errors by design
+- fewer false-positive errors by design
 - better support for type changes checks: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
 - allows removal of responses with non-success codes (e.g., 503, 504, 403)
 - allows adding new content-type to request (with the kept current)
@@ -637,7 +637,7 @@ There are multiple differences betweem this feature and the original implementat
 #### Current limitations (going to be fixed in the nearest future):
 - there are no checks for `context` instead of `schema` for request parameters
 - there are no checks for `callback`s
-- not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
+- false-positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
 
 ### Composed Mode
 Composed mode compares two collections of OpenAPI specs instead of a single spec in the default mode.
@@ -646,8 +646,8 @@ This can be useful when your APIs are defined across multiple files, for example
 
 This mode is a little different from a regular comparison of two specs to each-other:
 - compares only paths and endpoints (other resources are compared only if referenced from the endpoints)
-- compares each endpoint (Path + Operation) under '-base' to its equivalent under '-revision'
-- if any endpoint appears more than once under '-base' or '-revision', then we use the endpoint with the most recent `x-since-date` value
+- compares each endpoint (Path + Operation) in 'base' to its equivalent in 'revision'
+- if any endpoint appears more than once in 'base' or 'revision', then we use the endpoint with the most recent `x-since-date` value
 - the `x-since-date` extension should be set on Path or Operation level
 - `x-since-date` extensions set on the Operation level override the value set on Path level
 - if an endpoint doesn't have `the x-since-date` extension, its value is set to the default: "2000-01-01"
