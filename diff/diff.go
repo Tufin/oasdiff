@@ -136,6 +136,10 @@ func GetPathsDiff(config *Config, s1, s2 []load.OpenAPISpecInfo) (*Diff, *Operat
 		return nil, nil, err
 	}
 
+	if result.Empty() {
+		return nil, nil, nil
+	}
+
 	operationsSources := *operationsSources1
 	for k, v := range *operationsSources2 {
 		operationsSources[k] = v
@@ -179,7 +183,7 @@ func mergedPaths(s1 []load.OpenAPISpecInfo) (*openapi3.Paths, *OperationsSources
 				}
 
 				if newSince == oldSince {
-					return nil, nil, fmt.Errorf("duplicate endpoint (%s %s) found in %s and %s. Add the %s extension with ordered values to operations to specify its order", op, path, operationsSources[oldOperation], s.Url, SinceDateExtension)
+					return nil, nil, fmt.Errorf("duplicate endpoint (%s %s) found in %s and %s. You may add the %s extension to specify order", op, path, operationsSources[oldOperation], s.Url, SinceDateExtension)
 				}
 			}
 

@@ -1,0 +1,14 @@
+info:
+  title: Tufin
+  version: 1.0.0
+openapi: 3.0.3
+paths:
+  /api/test:
+    get:
+      x-since-date: "2023-01-11"
+      tag: 
+        version: old
+      operationId: x
+      responses:
+        200:
+          description: OK
