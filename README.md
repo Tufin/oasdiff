@@ -144,7 +144,7 @@ oasdiff -fail-on-diff -check-breaking -composed -base "data/composed/base/*.yaml
 
 ### Check for any changes across multiple specs
 ```bash
-oasdiff -composed  -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
+oasdiff -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
 ```
 
 ### Fail with exit code 1 if any change is found
@@ -626,7 +626,7 @@ If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing
 - supports localization for error messages and ignored changes
 - checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks
 - fewer false-positive errors by design
-- impproved support for type changes: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
+- improved support for type changes: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
 - allows removal of responses with non-success codes (e.g., 503, 504, 403)
 - allows adding new content-type to request
 - easier to extend and customize
