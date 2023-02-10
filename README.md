@@ -581,12 +581,14 @@ To exit with return code 1 when any ERR-level breaking changes are found, add th
 To exit with return code 1 even if only WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` flags.
 
 
-#### Stability level
-Breaking changes checks method supports `x-stability-level` extension for APIs which allows ignore breaking changes for unstable APIs.
-There are 4 levels: `draft`->`alpha`->`beta`->`stable`.
-Any changes for APIs with the levels `draft` or `alpha` are allowed.
-Stability level may be increased, but not decreased, like this: `draft`->`alpha`->`beta`->`stable`
-If there is no specified stability level for an API, breaking changes are disallowed, but the stability level can be set to any level in this case.
+#### Stability Level
+When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
+The new Breaking Changes method provides this feature through the `x-stability-level` extension.  
+There are four stability levels: `draft`->`alpha`->`beta`->`stable`.  
+APIs with the levels `draft` or `alpha` can be changed freely without triggering a breaking-change error.  
+Stability level may be increased, but not decreased, like this: `draft`->`alpha`->`beta`->`stable`.  
+APIs with no stability level will trigger breaking changes errors upon relevant change.  
+APIs with no stability level can be changed to any stability level.  
 
 Example:
    ```
@@ -596,8 +598,8 @@ Example:
    ```
 
 #### Ignoring Breaking Changes
-Sometimes, you may want to ignore certain breaking changes.
-To do so, add the detected breaking change to a configuration file and specify the file with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.
+Sometimes, you may want to ignore certain breaking changes.  
+To do so, add the detected breaking change to a configuration file and specify the file with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.  
 Each line in the configuration file should contain two parts:
 1. method and path
 2. description of the breaking change
