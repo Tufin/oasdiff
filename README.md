@@ -115,7 +115,7 @@ If you'd like to see additional details in the text/markdown report, please subm
 
 ### HTML diff of local files
 ```bash
-oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
+oasdiff -format html -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 The HTML diff report provides a simplified and partial view of the changes.  
 To view all details, use the default format: YAML.  
@@ -127,32 +127,29 @@ If you'd like to see additional details in the HTML report, please submit a [fea
 oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Display breaking changes only
-```bash
-oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-See [breaking changes](#breaking-changes)
-
-### Check for breaking changes
+### Check for breaking changes (new method)
 ```bash
 oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
-See [breaking changes](#breaking-changes-checks)
 
-### Check multiple specs' paths for breaking changes
+### Check for breaking changes across multiple specs (new method)
 ```bash
-oasdiff -check-breaking -base base/**/*.yaml -revision revision/**/.*yaml
+oasdiff -check-breaking -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
 ```
-See [breaking changes](#breaking-changes-checks)
 
-### Fail with exit code 1 if a change is found
+### Fail with exit code 1 if a breaking change is found (new method)
+```bash
+oasdiff -fail-on-diff -check-breaking -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
+```
+
+### Check for any changes across multiple specs
+```bash
+oasdiff -composed  -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
+```
+
+### Fail with exit code 1 if any change is found
 ```bash
 oasdiff -fail-on-diff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-### Fail with exit code 1 if a breaking change is found
-```bash
-oasdiff -fail-on-diff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Display changes to endpoints containing "/api" in the path
@@ -597,7 +594,7 @@ Example:
      x-stability-level: "alpha"
    ```
 
-#### Ignoring Breaking Changes
+#### Ignoring Specific Breaking Changes
 Sometimes, you may want to ignore certain breaking changes.  
 The new Breaking Changes method allows you define breaking changes that you want to ignore in a configuration file.  
 You can specify the configuration file name in the oasdiff command-line with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.  
@@ -617,29 +614,27 @@ The line may contain additional info, like this:
 
 The configuration files can be of any text type, e.g., Markdown, so you can use them to document breaking changes and other important changes.
 
-#### x-extensible-enum support
-The breaking changes has rules specific to enum changes which recommends using the `x-extensible-enum`.
-Using such enums allows to add new entries to enums used in responses which is very usable in many cases but requires clients to support fallback to default logic when they receive an unknown value.
-The `x-extensible-enum` was introduced by the [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community.
-Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is more explicit way to do it.
-Most tools don't support the `x-extensible-enum` but the breaking changes checks do. In most case it treats it similar to enum values, except it allows adding new entries in messages sent to client (responses or callbacks).
-If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changed for you, but if you do oasdiff will find you breaking changes related to `x-extensible-enum` parameters and properties.
+#### Breaking Changes to Enum Values
+The new Breaking Changes method support rules for enum changes using the `x-extensible-enum` extension.  
+This method allows adding new entries to enums used in responses which is very usable in many cases but requires clients to support a fallback to default logic when they receive an unknown value.
+`x-extensible-enum` was introduced by [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community. Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is a more explicit way to do it.  
+In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
+If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
-#### Other differences from the original implementation
-There are multiple differences betweem this feature and the original implementation:
-- output in human readable format
+#### Advantages of the New Breaking Changes Method 
+- output is human readable
 - supports localization for error messages and ignored changes
-- the set of checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks.
+- checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks
 - fewer false-positive errors by design
-- better support for type changes checks: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
+- impproved support for type changes: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
 - allows removal of responses with non-success codes (e.g., 503, 504, 403)
-- allows adding new content-type to request (with the kept current)
+- allows adding new content-type to request
 - easier to extend and customize
-- will continue to be improved 
+- will continue to be improved
 
-#### Current limitations (going to be fixed in the nearest future):
-- there are no checks for `context` instead of `schema` for request parameters
-- there are no checks for `callback`s
+#### Limitations of the New Breaking Changes Method
+- no checks for `context` instead of `schema` for request parameters
+- no checks for `callback`s
 - false-positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
 
 ### Composed Mode
