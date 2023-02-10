@@ -19,6 +19,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - [Embed in your go program](#embedding-into-your-go-program)
 - Compare specs from the file system or over http/s
 - Compare specs in YAML or JSON format
+- [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources)
 - Support [path prefix modification](#path-prefix-modification)
@@ -637,7 +638,6 @@ There are multiple differences betweem this feature and the original implementat
 - there are no checks for `context` instead of `schema` for request parameters
 - there are no checks for `callback`s
 - not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
-- doesn't support Path Prefix Modification, this can be mitigated with check errors ignore feature 
 
 ### Composed Mode
 Composed mode compares two collections of OpenAPI specs instead of a single spec in the default mode.
@@ -660,6 +660,8 @@ Example of the `x-since-date` usage:
     get:
      x-since-date: "2023-01-11"
    ```
+
+Note: Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
 
 ### Non-Breaking Removal of Deprecated Resources
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
