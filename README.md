@@ -44,13 +44,13 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 ```
 Usage of oasdiff:
   -base string
-    	path or URL of original OpenAPI spec in YAML or JSON format
+    	path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format
   -breaking-only
     	display breaking changes only (old method)
   -check-breaking
     	check for breaking changes (new method)
   -composed
-    	work in 'composed' mode, compare paths in all specs in the base and revision directories. In this mode the base and the revision parameters can be Globs instead of files, but not URLs
+    	work in 'composed' mode, compare paths in all specs matching base and revision globs
   -deprecation-days int
     	minimal number of days required between deprecating a resource and removing it without being considered 'breaking'
   -err-ignore string
@@ -80,7 +80,7 @@ Usage of oasdiff:
   -prefix-revision string
     	if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison
   -revision string
-    	path or URL of revised OpenAPI spec in YAML or JSON format
+    	path or URL (or a glob in Composed mode) of revised OpenAPI spec in YAML or JSON format
   -strip-prefix-base string
     	if provided, this prefix will be stripped from paths in original (base) spec before comparison
   -strip-prefix-revision string
@@ -579,29 +579,6 @@ There are two levels of breaking changes:
 To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` flag.  
 To exit with return code 1 even if only WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` flags.
 
-#### Composed Mode
-The "composed mode" can be useful when you want to check for breaking changes across multiple specs.
-For example, when multiple APIs, each one with its own spec, are exposed behind an API gateway, and you want to check for breaking changes across all specs at once.
-
-This mode poses some challenges:
-- Different files may contain components (schemas, properties, etc.) with the same name. So to check for difference we should not only internalize all referencies, but replace local references with its content too for each API description
-- To check for backward compatibility, we should use only API (path+method) difference
-- It should be possible to move APIs from one file to another without breaking changes. Sometimes this can't be done atomically (e.g. when specifications are in different repositories maintained by different teams). So we should have some rules to order similar API descriptions to find the latest one.
-
-Composed mode supports these use-cases.
-
-If there are same paths in different OpenAPI objects, then function uses version of the path with the last x-since-date extension.
-The `x-since-date` extension should be set on path or operations level. Extension set on the operations level overrides the value set on path level.
-If such path doesn't have `the x-since-date` extension, its value is default "2000-01-01"
-If there are same paths with the same x-since-date value, then function returns error.
-The format of the `x-since-date` is the RFC3339 full-date format
-
-Example of the `x-since-date` usage:
-   ```
-   /api/test:
-    get:
-     x-since-date: "2023-01-11"
-   ```
 
 #### Stability level
 Breaking changes checks method supports `x-stability-level` extension for APIs which allows ignore breaking changes for unstable APIs.
@@ -661,6 +638,28 @@ There are multiple differences betweem this feature and the original implementat
 - there are no checks for `callback`s
 - not fixed false positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
 - doesn't support Path Prefix Modification, this can be mitigated with check errors ignore feature 
+
+### Composed Mode
+Composed mode compares two collections of OpenAPI specs instead of a single spec in the default mode.
+The collections are specified using a [glob](https://en.wikipedia.org/wiki/Glob_(programming)).
+This can be useful when your APIs are defined across multiple files, for example, when multiple services, each one with its own spec, are exposed behind an API gateway, and you want to check changes across all the specs at once.
+
+This mode is a little different from a regular comparison of two specs to each-other:
+- compares only paths and endpoints (other resources are compared only if referenced from the endpoints)
+- compares each endpoint (Path + Operation) under '-base' to its equivalent under '-revision'
+- if any endpoint appears more than once under '-base' or '-revision', then we use the endpoint with the most recent `x-since-date` value
+- the `x-since-date` extension should be set on Path or Operation level
+- `x-since-date` extensions set on the Operation level override the value set on Path level
+- if an endpoint doesn't have `the x-since-date` extension, its value is set to the default: "2000-01-01"
+- duplicate endpoints with the same x-since-date value will trigger an error
+- the format of the `x-since-date` is the RFC3339 full-date format
+
+Example of the `x-since-date` usage:
+   ```
+   /api/test:
+    get:
+     x-since-date: "2023-01-11"
+   ```
 
 ### Non-Breaking Removal of Deprecated Resources
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
