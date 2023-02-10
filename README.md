@@ -599,7 +599,8 @@ Example:
 
 #### Ignoring Breaking Changes
 Sometimes, you may want to ignore certain breaking changes.  
-To do so, add the detected breaking change to a configuration file and specify the file with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.  
+The new Breaking Changes method allows you define breaking changes that you want to ignore in a configuration file.  
+You can specify the configuration file name in the oasdiff command-line with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.  
 Each line in the configuration file should contain two parts:
 1. method and path
 2. description of the breaking change
