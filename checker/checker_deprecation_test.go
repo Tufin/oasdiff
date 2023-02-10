@@ -118,7 +118,7 @@ func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs has not alpha stability level
+// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not alpha stability level
 func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
@@ -170,7 +170,7 @@ func TestBreaking_RemovedPathForDraft(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs has not draft stability level
+// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not draft stability level
 func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)

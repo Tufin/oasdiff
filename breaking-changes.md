@@ -41,8 +41,8 @@ These examples are automatically generated from unit tests.
 [removing an existing optional response header is breaking as warn](checker/checker_breaking_test.go?plain=1#L271)  
 [removing an existing required response header is breaking as error](checker/checker_breaking_test.go?plain=1#L202)  
 [removing an existing response with successful status is breaking](checker/checker_breaking_test.go?plain=1#L221)  
-[removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs has not alpha stability level](checker/checker_deprecation_test.go?plain=1#L121)  
-[removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs has not draft stability level](checker/checker_deprecation_test.go?plain=1#L173)  
+[removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not alpha stability level](checker/checker_deprecation_test.go?plain=1#L121)  
+[removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not draft stability level](checker/checker_deprecation_test.go?plain=1#L173)  
 
 ## Examples of non-breaking changes
 [adding a media-type to response is not breaking](checker/checker_not_breaking_test.go?plain=1#L165)  
