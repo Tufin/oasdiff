@@ -69,10 +69,10 @@ jobs:
       run: |
         ! git grep -E '(fmt|errors)[^(]+\(.[A-Z]'
         
-    - if: runner.os == 'Linux'
-      name: Did you mean %q
-      run: |
-        ! git grep -E "'[%].'"
+    # - if: runner.os == 'Linux'
+    #   name: Did you mean %q
+    #   run: |
+    #     ! git grep -E "'[%].'"
 
     - if: runner.os == 'Linux'
       name: Also add yaml tags

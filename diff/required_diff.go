@@ -100,7 +100,7 @@ func propSunsetAllowed(property string, schema1 *openapi3.Schema) bool {
 		return false
 	}
 
-	return sunsetAllowed(schemaRef.Value.Deprecated, schemaRef.Value.Extensions)
+	return SunsetAllowed(schemaRef.Value.Deprecated, schemaRef.Value.Extensions)
 }
 
 func (diff *RequiredPropertiesDiff) removeSunsetProperties(state *state, schema1, schema2 *openapi3.Schema) {

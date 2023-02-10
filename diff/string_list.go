@@ -3,7 +3,7 @@ package diff
 // StringList is a list of string values
 type StringList []string
 
-func (list StringList) toStringSet() StringSet {
+func (list StringList) ToStringSet() StringSet {
 	result := make(StringSet, len(list))
 
 	for _, s := range list {

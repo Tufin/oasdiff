@@ -19,6 +19,8 @@ type MethodDiff struct {
 	SecurityDiff     *SecurityRequirementsDiff `json:"securityRequirements,omitempty" yaml:"securityRequirements,omitempty"`
 	ServersDiff      *ServersDiff              `json:"servers,omitempty" yaml:"servers,omitempty"`
 	ExternalDocsDiff *ExternalDocsDiff         `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
+	Base             *openapi3.Operation       `json:"-" yaml:"-"`
+	Revision         *openapi3.Operation       `json:"-" yaml:"-"`
 }
 
 func newMethodDiff() *MethodDiff {
@@ -31,7 +33,7 @@ func (methodDiff *MethodDiff) Empty() bool {
 		return true
 	}
 
-	return *methodDiff == MethodDiff{}
+	return *methodDiff == MethodDiff{Base: methodDiff.Base, Revision: methodDiff.Revision}
 }
 
 func (methodDiff *MethodDiff) removeNonBreaking(config *Config, pathItem2 *openapi3.Operation) {
@@ -45,7 +47,7 @@ func (methodDiff *MethodDiff) removeNonBreaking(config *Config, pathItem2 *opena
 	methodDiff.SummaryDiff = nil
 	methodDiff.DescriptionDiff = nil
 	methodDiff.OperationIDDiff = nil
-	if deprecationPeriodSufficient(config.DeprecationDays, pathItem2.Extensions) {
+	if DeprecationPeriodSufficient(config.DeprecationDays, pathItem2.Extensions) {
 		methodDiff.DeprecatedDiff = nil
 	}
 	methodDiff.ServersDiff = nil
@@ -103,6 +105,8 @@ func getMethodDiffInternal(config *Config, state *state, pathItem1, pathItem2 *o
 	result.SecurityDiff = getSecurityRequirementsDiff(config, state, pathItem1.Security, pathItem2.Security)
 	result.ServersDiff = getServersDiff(config, state, pathItem1.Servers, pathItem2.Servers)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, state, pathItem1.ExternalDocs, pathItem2.ExternalDocs)
+	result.Base = pathItem1
+	result.Revision = pathItem2
 
 	return result, nil
 }

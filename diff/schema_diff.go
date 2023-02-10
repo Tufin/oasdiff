@@ -49,11 +49,13 @@ type SchemaDiff struct {
 	MaxPropsDiff                    *ValueDiff              `json:"maxProps,omitempty" yaml:"maxProps,omitempty"`
 	AdditionalPropertiesDiff        *SchemaDiff             `json:"additionalProperties,omitempty" yaml:"additionalProperties,omitempty"`
 	DiscriminatorDiff               *DiscriminatorDiff      `json:"discriminatorDiff,omitempty" yaml:"discriminatorDiff,omitempty"`
+	Base                            *openapi3.SchemaRef     `json:"-" yaml:"-"`
+	Revision                        *openapi3.SchemaRef     `json:"-" yaml:"-"`
 }
 
 // Empty indicates whether a change was found in this element
 func (diff *SchemaDiff) Empty() bool {
-	return diff == nil || *diff == SchemaDiff{}
+	return diff == nil || *diff == SchemaDiff{Base: diff.Base, Revision: diff.Revision}
 }
 
 func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) {
@@ -81,7 +83,7 @@ func (diff *SchemaDiff) removeNonBreaking(config *Config, state *state, schema1,
 		diff.AllowEmptyValueDiff = nil
 	}
 
-	if schema2 == nil || schema2.Value == nil || deprecationPeriodSufficient(config.DeprecationDays, schema2.Value.Extensions) {
+	if schema2 == nil || schema2.Value == nil || DeprecationPeriodSufficient(config.DeprecationDays, schema2.Value.Extensions) {
 		diff.DeprecatedDiff = nil
 	}
 
@@ -403,6 +405,9 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	}
 
 	result.DiscriminatorDiff = getDiscriminatorDiff(config, state, value1.Discriminator, value2.Discriminator)
+
+	result.Base = schema1
+	result.Revision = schema2
 
 	return &result, nil
 }

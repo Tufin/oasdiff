@@ -27,7 +27,7 @@ func (headerDiff *HeaderDiff) removeNonBreaking(config *Config, state *state, he
 
 	headerDiff.ExtensionsDiff = nil
 	headerDiff.DescriptionDiff = nil
-	if deprecationPeriodSufficient(config.DeprecationDays, header2.Extensions) {
+	if DeprecationPeriodSufficient(config.DeprecationDays, header2.Extensions) {
 		headerDiff.DeprecatedDiff = nil
 	}
 

@@ -9,9 +9,11 @@ import (
 
 // PathsDiff describes the changes between a pair of Paths objects: https://swagger.io/specification/#paths-object
 type PathsDiff struct {
-	Added    StringList    `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList    `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedPaths `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added    StringList     `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  StringList     `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedPaths  `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Base     openapi3.Paths `json:"-" yaml:"-"`
+	Revision openapi3.Paths `json:"-" yaml:"-"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -36,7 +38,7 @@ func (pathsDiff *PathsDiff) removeSunset(paths1 openapi3.Paths) {
 	for _, path := range pathsDiff.Deleted {
 		pathItem := paths1[path]
 		for _, operation := range pathItem.Operations() {
-			if !sunsetAllowed(operation.Deprecated, operation.Extensions) {
+			if !SunsetAllowed(operation.Deprecated, operation.Extensions) {
 				deleted = append(deleted, path)
 				break
 			}
@@ -105,6 +107,8 @@ func getPathsDiffInternal(config *Config, state *state, paths1, paths2 openapi3.
 			return nil, err
 		}
 	}
+	result.Base = paths1
+	result.Revision = paths2
 
 	return result, nil
 }

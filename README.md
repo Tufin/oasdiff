@@ -13,13 +13,14 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 ```
 
 ## Features 
+- Detect [breaking changes](#breaking-changes)
 - Generate a diff report in YAML, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-into-your-go-program)
 - Compare specs from the file system or over http/s
 - Compare specs in YAML or JSON format
+- [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Detect [breaking changes](#breaking-changes)
 - Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources)
 - Support [path prefix modification](#path-prefix-modification)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
@@ -44,23 +45,33 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 ```
 Usage of oasdiff:
   -base string
-    	path of original OpenAPI spec in YAML or JSON format
+    	path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format
   -breaking-only
-    	display breaking changes only
+    	display breaking changes only (old method)
+  -check-breaking
+    	check for breaking changes (new method)
+  -composed
+    	work in 'composed' mode, compare paths in all specs matching base and revision globs
   -deprecation-days int
     	minimal number of days required between deprecating a resource and removing it without being considered 'breaking'
+  -err-ignore string
+    	the configuration file for ignoring errors with -check-breaking
   -exclude-description
     	ignore changes to descriptions
   -exclude-examples
     	ignore changes to examples
   -fail-on-diff
-    	fail with exit code 1 if a difference is found
+    	exit with return code 1 when any ERR-level breaking changes are found, used together with -check-breaking
+  -fail-on-warns
+    	exit with return code 1 when any WARN-level breaking changes are found, used together with -check-breaking and -fail-on-diff
   -filter string
     	if provided, diff will include only paths that match this regular expression
   -filter-extension string
     	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
   -format string
     	output format: yaml, text or html (default "yaml")
+  -lang string
+    	language for localized breaking changes checks errors (default "en")
   -max-circular-dep int
     	maximum allowed number of circular dependencies between objects in OpenAPI specs (default 5)
   -prefix string
@@ -70,7 +81,7 @@ Usage of oasdiff:
   -prefix-revision string
     	if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison
   -revision string
-    	path of revised OpenAPI spec in YAML or JSON format
+    	path or URL (or a glob in Composed mode) of revised OpenAPI spec in YAML or JSON format
   -strip-prefix-base string
     	if provided, this prefix will be stripped from paths in original (base) spec before comparison
   -strip-prefix-revision string
@@ -79,6 +90,8 @@ Usage of oasdiff:
     	display a summary of the changes instead of the full diff
   -version
     	show version and quit
+  -warn-ignore string
+    	the configuration file for ignoring warnings with -check-breaking
 ```
 All arguments can be passed with one or two leading minus signs.  
 For example, ```-breaking-only``` and ```--breaking-only``` are equivalent.
@@ -102,7 +115,7 @@ If you'd like to see additional details in the text/markdown report, please subm
 
 ### HTML diff of local files
 ```bash
-oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
+oasdiff -format html -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 The HTML diff report provides a simplified and partial view of the changes.  
 To view all details, use the default format: YAML.  
@@ -114,20 +127,29 @@ If you'd like to see additional details in the HTML report, please submit a [fea
 oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Display breaking changes only
+### Check for breaking changes (new method)
 ```bash
-oasdiff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
-See [breaking changes](#breaking-changes)
 
-### Fail with exit code 1 if a change is found
+### Check for breaking changes across multiple specs (new method)
+```bash
+oasdiff -check-breaking -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
+```
+
+### Fail with exit code 1 if a breaking change is found (new method)
+```bash
+oasdiff -fail-on-diff -check-breaking -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
+```
+
+### Check for any changes across multiple specs
+```bash
+oasdiff -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
+```
+
+### Fail with exit code 1 if any change is found
 ```bash
 oasdiff -fail-on-diff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-### Fail with exit code 1 if a breaking change is found
-```bash
-oasdiff -fail-on-diff -breaking-only -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Display changes to endpoints containing "/api" in the path
@@ -530,7 +552,114 @@ Some YAML libraries don't support complex mapping keys:
 ### Breaking Changes
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
-Note: this is a Beta feature. Please report issues.
+Notes: 
+1. This is a Beta feature, please report issues
+2. There are two different methods for detecting breaking changes (see below)
+
+
+### Breaking Changes – Old Method
+The original implementation with the `-breaking-only` flag.
+While this method is still supported, the new one will eventually replace it.
+
+### Breaking Changes – New Method
+An improved implementation for detecting breaking changes with the `-check-breaking` flag.
+This method works differently from the old one: it is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
+
+To use it, run oasdiff with the `-check-breaking` flag, e.g.:
+```
+oasdiff -check-breaking -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
+```
+
+There are two levels of breaking changes:
+- `WARN` - Warning are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
+- `ERR` - Errors are definite breaking changes which should be avoided
+
+To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` flag.  
+To exit with return code 1 even if only WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` flags.
+
+
+#### Stability Level
+When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
+The new Breaking Changes method provides this feature through the `x-stability-level` extension.  
+There are four stability levels: `draft`->`alpha`->`beta`->`stable`.  
+APIs with the levels `draft` or `alpha` can be changed freely without triggering a breaking-change error.  
+Stability level may be increased, but not decreased, like this: `draft`->`alpha`->`beta`->`stable`.  
+APIs with no stability level will trigger breaking changes errors upon relevant change.  
+APIs with no stability level can be changed to any stability level.  
+
+Example:
+   ```
+   /api/test:
+    post:
+     x-stability-level: "alpha"
+   ```
+
+#### Ignoring Specific Breaking Changes
+Sometimes, you may want to ignore certain breaking changes.  
+The new Breaking Changes method allows you define breaking changes that you want to ignore in a configuration file.  
+You can specify the configuration file name in the oasdiff command-line with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.  
+Each line in the configuration file should contain two parts:
+1. method and path
+2. description of the breaking change
+
+For example:
+```
+GET /api/{domain}/{project}/badges/security-score removed the success response with the status '200'
+```
+
+The line may contain additional info, like this:
+```
+ - 12.01.2023 In the GET /api/{domain}/{project}/badges/security-score, we removed the success response with the status '200'
+```
+
+The configuration files can be of any text type, e.g., Markdown, so you can use them to document breaking changes and other important changes.
+
+#### Breaking Changes to Enum Values
+The new Breaking Changes method support rules for enum changes using the `x-extensible-enum` extension.  
+This method allows adding new entries to enums used in responses which is very usable in many cases but requires clients to support a fallback to default logic when they receive an unknown value.
+`x-extensible-enum` was introduced by [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community. Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is a more explicit way to do it.  
+In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
+If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
+
+#### Advantages of the New Breaking Changes Method 
+- output is human readable
+- supports localization for error messages and ignored changes
+- checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks
+- fewer false-positive errors by design
+- improved support for type changes: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
+- allows removal of responses with non-success codes (e.g., 503, 504, 403)
+- allows adding new content-type to request
+- easier to extend and customize
+- will continue to be improved
+
+#### Limitations of the New Breaking Changes Method
+- no checks for `context` instead of `schema` for request parameters
+- no checks for `callback`s
+- false-positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
+
+### Composed Mode
+Composed mode compares two collections of OpenAPI specs instead of a single spec in the default mode.
+The collections are specified using a [glob](https://en.wikipedia.org/wiki/Glob_(programming)).
+This can be useful when your APIs are defined across multiple files, for example, when multiple services, each one with its own spec, are exposed behind an API gateway, and you want to check changes across all the specs at once.
+
+This mode is a little different from a regular comparison of two specs to each-other:
+- compares only paths and endpoints (other resources are compared only if referenced from the endpoints)
+- compares each endpoint (Path + Operation) in 'base' to its equivalent in 'revision'
+- if any endpoint appears more than once in 'base' or 'revision', then we use the endpoint with the most recent `x-since-date` value
+- the `x-since-date` extension should be set on Path or Operation level
+- `x-since-date` extensions set on the Operation level override the value set on Path level
+- if an endpoint doesn't have `the x-since-date` extension, its value is set to the default: "2000-01-01"
+- duplicate endpoints with the same x-since-date value will trigger an error
+- the format of the `x-since-date` is the RFC3339 full-date format
+
+Example of the `x-since-date` usage:
+   ```
+   /api/test:
+    get:
+     x-since-date: "2023-01-11"
+   ```
+
+Note: Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
 
 ### Non-Breaking Removal of Deprecated Resources
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
@@ -579,7 +708,47 @@ Note that stripping precedes prepending.
 ```go
 diff.Get(&diff.Config{}, spec1, spec2)
 ```
+
+For breaking changes checks:
+```go
+diffConfig := &diff.Config{}
+diffConfig.IncludeExtensions.Add(checker.XStabilityLevelExtension)
+diffConfig.IncludeExtensions.Add(diff.SunsetExtension)
+diffConfig.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
+
+diffRes, operationsSources, err := diff.GetPathsDiff(diffConfig, baseContracts, revisionContracts)
+if err != nil {
+  // process
+}
+
+c := checker.DefaultChecks() // here could be added additional checks
+c.Localizer = *localizations.New("en", "en")
+errs := checker.CheckBackwardCompatibility(c, diffRes, operationsSources)
+
+// process configuration file for ignoring warnings
+errs, err := processIgnorance(bcWarningIgnoranceFile, checker.WARN, errs)
+if err != nil {
+  // process
+}
+
+// process configuration file for ignoring errors
+errs, err = processIgnorance(bcErrorIgnoranceFile, checker.ERR, errs)
+if err != nil {
+  // process
+}
+
+// pretty print breaking changes errors
+if len(errs) > 0 {
+  fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
+  for _, bcerr := range errs {
+    fmt.Printf("%s\n\n", bcerr.PrettyError(c.Localizer))
+  }
+}
+
+```
+
 See full example: [main.go](main.go)
+
 
 ### OpenAPI References
 oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  

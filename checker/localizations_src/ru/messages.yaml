@@ -1,0 +1,100 @@
+at: в
+in: в
+added-required-request-body: добавлено обязательное тело запроса
+request-parameter-removed: удалён %s параметр запроса %s
+total-errors: "Ошибки обратной совместимости (всего: %d):\\n"
+request-parameter-pattern-added: добавлен pattern '%s' у %s параметра запроса %s
+request-parameter-pattern-changed: изменён pattern у %s параметра запроса %s со значения '%s' на значение '%s'
+request-property-pattern-added: добавлен pattern '%s' у поля запроса %s
+request-property-pattern-changed: изменён pattern у поля запроса %s со значения '%s' на значение '%s'
+api-deprecated-sunset-parse: API deprecated без валидно парсящейся даты sunset 
+api-sunset-date-too-small: дата API sunset date %s слишком ранняя, должно быть как минимум %d дней от текущего дня
+api-path-removed-without-deprecation: api path удалён без процедуры deprecation
+api-path-removed-before-sunset: API path удалён до даты sunset %s
+api-removed-without-deprecation: API удалён без deprecation
+api-removed-before-sunset: API удалёг до даты sunset %s
+sunset-deleted: удалена дата sunset date у API, но сохранён deprecated=true
+api-sunset-date-changed-too-small: дата sunset у API изменена на более раннюю с %s на %s, новая дата sunset должна быть либо не раньше %s, либо, как минимум, %d дней от текущего дня
+new-required-request-parameter: добавлен новый обязательный %s параметр зароса %s
+new-required-request-property: добавлено новле обязательное поле запроса %s
+new-required-request-header-property: в заголовке запроса %s добавлено новое обязательное поле %s
+request-body-became-required: тело запроса стало обязательным
+request-header-property-became-required: в заголовке запроса %s поле %s стало обязательным
+request-parameter-became-required: ранее необязательный %s параметр запроса %s стал обязательным
+request-parameter-enum-value-removed: удалено значение enum %s у %s параметра запроса %s
+pattern-changed-warn-comment: Это предупреждение, потому что сложно автоматически проанализировать, является ли новый шаблон надмножеством предыдущего шаблона (например, изменен с '[0-9]+' на '[0-9]*').
+request-parameter-x-extensible-enum-value-removed: удалено из x-extensible-enum значение %s у %s параметра запроса %s
+request-parameter-max-decreased: в %s параметре запроса %s, max уменьшен с %s до %s
+request-parameter-max-length-decreased: в %s параметре запроса %s, maxLength уменьшен с %s до %s
+request-parameter-max-length-set: в %s параметре запроса %s, maxLength установлен в %s
+request-parameter-max-length-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-parameter-max-set: в %s параметре запроса %s, max установлен в %s
+request-parameter-max-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-parameter-min-increased: в %s параметре запроса %s, min увеличен с %s до %s
+request-parameter-min-items-increased: в %s параметре запроса %s, minItems увеличен с %s до %s
+request-parameter-min-items-set: в %s параметре запроса %s, minItems установлен в %s
+request-parameter-min-items-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-parameter-min-set: в %s параметре запроса %s, min установлен в %s
+request-parameter-min-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-parameter-type-changed: в %s параметре запроса %s, type/format изменился с %s/%s на %s/%s
+new-request-path-parameter: добален новый path параметр запроса %s
+request-property-became-required: поле запроса %s стало обязательным
+request-property-enum-value-removed: удалено enum значение %s у поля запроса %s
+request-body-max-decreased: значение max у тела запроса уменьшено до %s
+request-property-max-decreased: значение max у поля запроса %s уменьшено до %s
+request-body-max-length-decreased: значение maxLength у тела запроса уменьшено до %s
+request-property-max-length-decreased: значение maxLength у поля запроса %s уменьшено до %s
+request-body-max-length-set: у тела запроса задано значение maxLength в %s
+request-body-max-length-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-property-max-length-set: у поля запроса %s задано значение maxLength в %s
+request-property-max-length-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-body-max-set: у тела запроса задано значение max в %s
+request-body-max-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-property-max-set: у поля запроса %s задано значение max в %s
+request-property-max-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-body-min-increased: значение min у тела запроса увеличено до %s
+request-property-min-increased: у поля запроса %s, увеличено значение min до %s
+request-body-min-items-increased: значение minItems у тела запроса увеличено до %s
+request-property-min-items-increased: значение minItems у поля запроса %s увеличено до %s
+request-body-min-items-set: задано значение minItems у тела запроса в %s
+request-body-min-items-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-property-min-items-set: у поля запроса %s задано значение minItems в %s
+request-property-min-items-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-body-min-set: задано значение min у тела запроса в %s
+request-body-min-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-property-min-set: у поля запроса %s задано значение min в %s
+request-property-min-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
+request-property-removed: удалено поле запроса %s
+request-body-type-changed: изменился type/format тела запроса с %s/%s на %s/%s
+request-property-type-changed: у поля запроса %s изменился type/format с %s/%s на %s/%s
+request-property-x-extensible-enum-value-removed: удалено значение x-extensible-enum '%s' в поле запроса %s
+response-header-became-optional: заголовок ответа %s стал необязательным для ответа со статусом %s
+required-response-header-removed: удалён ранее обязательный заголовок ответа %s для ответа со статусом %s
+optional-response-header-removed: удалён ранее необязательный заголовок ответа %s для ответа со статусом %s
+response-media-type-removed: удалён media type %s для ответа со статусом %s
+response-optional-property-removed: удалено необязательное поле %s из ответа со статусом %s
+response-property-became-optional: поле ответа %s стало необязательным для ответа со статусом %s
+response-property-enum-value-added: добавлено новое enum значение %s в поле ответа %s для ответа со статусом %s
+response-property-enum-value-added-comment: Добавление новых значений перечисления в ответ может быть неожиданным для клиентов, вместо этого используйте x-extensible-enum.
+response-body-max-length-increased: у тела ответа maxLength увеличен с %s до %s
+response-property-max-length-increased: у поля ответа %s maxLength увеличен с %s до %s для ответа со статусом %s
+response-body-max-length-unset: у тела ответа maxLength был удалён, предыдущее значение - %s
+response-property-max-length-unset: у поля ответа %s maxLength был удалён, предыдущее значение - %s, для ответа со статусом %s
+response-body-min-items-decreased: у тела ответа minItems уменьшено с %s до %s
+response-property-min-items-decreased: у поля ответа %s уменьшено minItems с %s до %s для ответа со статусом %s
+response-body-min-items-unset: удалено значение minItems для тела ответа, предыдущее значение - %s
+response-property-min-items-unset: у поля ответа %s удалено значение minItems, предыдущее значение - %s, для ответа со статусом %s
+response-body-min-length-decreased: значение minLength для тела ответа уменьшено с %s до %s
+response-property-min-length-decreased: для поля ответа %s minLength уменьшен с %s до %s для ответа со статусом %s
+response-body-type-changed: у тела ответа type/format изменился с %s/%s на %s/%s для ответа со статусом %s
+response-property-type-changed: у поля type/format изменился с %s/%s на %s/%s для ответа со статусом %s
+response-required-property-became-not-write-only: обязательное поле ответа %s перестало быть write-only для ответа со статусом %s
+response-required-property-became-not-write-only-comment: Изменение допустимо только в том случае, если свойство ВСЕГДА возвращалось ДО изменения спецификации.
+response-required-property-removed: удалено обязательное поле ответа %s из ответа со статусом %s
+response-success-status-removed: удален успешный (2xx) статус ответа %s
+request-allOf-modified: изменено allOf для поля запроса %s
+request-allOf-modified-comment: Это предупреждение, потому что очень сложно алгоритмически автоматизированно проверить правильность изменения allOf на обратную совместимость.
+response-body-max-increased: у тела ответа max увеличен с %s до %s
+response-property-max-increased: у поля ответа %s max увеличен с %s до %s для ответа со статусом %s
+response-body-min-decreased: у тела ответа min уменьшено с %s до %s
+response-property-min-decreased: для поля ответа %s min уменьшен с %s до %s для ответа со статусом %s

@@ -11,7 +11,7 @@ import (
 
 const SunsetExtension = "x-sunset"
 
-func getSunsetDate(Extensions map[string]interface{}) (civil.Date, error) {
+func GetSunsetDate(Extensions map[string]interface{}) (civil.Date, error) {
 	sunset, ok := Extensions[SunsetExtension].(string)
 	if !ok {
 		log.Printf("sunset extension not a string")
@@ -33,14 +33,14 @@ func getSunsetDate(Extensions map[string]interface{}) (civil.Date, error) {
 	return date, nil
 }
 
-// sunsetAllowed checks if an element can be deleted after deprecation period
-func sunsetAllowed(deprecated bool, Extensions map[string]interface{}) bool {
+// SunsetAllowed checks if an element can be deleted after deprecation period
+func SunsetAllowed(deprecated bool, Extensions map[string]interface{}) bool {
 
 	if !deprecated {
 		return false
 	}
 
-	date, err := getSunsetDate(Extensions)
+	date, err := GetSunsetDate(Extensions)
 	if err != nil {
 		return false
 	}
@@ -48,12 +48,12 @@ func sunsetAllowed(deprecated bool, Extensions map[string]interface{}) bool {
 	return civil.DateOf(time.Now()).After(date)
 }
 
-func deprecationPeriodSufficient(deprecationDays int, Extensions map[string]interface{}) bool {
+func DeprecationPeriodSufficient(deprecationDays int, Extensions map[string]interface{}) bool {
 	if deprecationDays == 0 {
 		return true
 	}
 
-	date, err := getSunsetDate(Extensions)
+	date, err := GetSunsetDate(Extensions)
 	if err != nil {
 		return false
 	}
