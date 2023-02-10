@@ -13,13 +13,13 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 ```
 
 ## Features 
+- Detect [breaking changes](#breaking-changes)
 - Generate a diff report in YAML, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-into-your-go-program)
 - Compare specs from the file system or over http/s
 - Compare specs in YAML or JSON format
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Detect [breaking changes](#breaking-changes)
 - Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources)
 - Support [path prefix modification](#path-prefix-modification)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
