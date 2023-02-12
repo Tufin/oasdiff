@@ -638,13 +638,13 @@ If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing
 - false-positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
 
 ### Composed Mode
-Composed mode compares two collections of OpenAPI specs instead of a single spec in the default mode.
+Composed mode compares two collections of OpenAPI specs instead of a pair of specs in the default mode.
 The collections are specified using a [glob](https://en.wikipedia.org/wiki/Glob_(programming)).
 This can be useful when your APIs are defined across multiple files, for example, when multiple services, each one with its own spec, are exposed behind an API gateway, and you want to check changes across all the specs at once.
 
 This mode is a little different from a regular comparison of two specs to each-other:
-- compares only paths and endpoints (other resources are compared only if referenced from the endpoints)
-- compares each endpoint (Path + Operation) in 'base' to its equivalent in 'revision'
+- compares only [paths and endpoints](#paths-vs-endpoints), other resources are compared only if referenced from the paths or endpoints
+- compares each path/endpoint in 'base' to its equivalent in 'revision'
 - if any endpoint appears more than once in 'base' or 'revision', then we use the endpoint with the most recent `x-since-date` value
 - the `x-since-date` extension should be set on Path or Operation level
 - `x-since-date` extensions set on the Operation level override the value set on Path level
