@@ -557,11 +557,11 @@ Notes:
 2. There are two different methods for detecting breaking changes (see below)
 
 
-### Breaking Changes – Old Method
+#### Old Method
 The original implementation with the `-breaking-only` flag.
 While this method is still supported, the new one will eventually replace it.
 
-### Breaking Changes – New Method
+#### New Method
 An improved implementation for detecting breaking changes with the `-check-breaking` flag.
 This method works differently from the old one: it is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
 
