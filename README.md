@@ -551,6 +551,8 @@ Some YAML libraries don't support complex mapping keys:
 - python PyYAML: see https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450
 - golang gopkg.in/yaml.v3 fails to unmarshal the oasdiff output. This package offers a solution: https://github.com/tliron/yamlkeys
 
+In such cases, consider using the `-exclude-endpoints` flag and `format json` as a workaround.
+
 ### Breaking Changes
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
