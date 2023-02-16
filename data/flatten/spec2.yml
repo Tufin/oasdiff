@@ -1,0 +1,30 @@
+openapi: 3.0.3
+info:
+  title: Test
+  version: "2"
+
+paths:
+  /test:
+    get:
+      summary: Test operation
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseSchema"
+
+components:
+  schemas:
+
+    ResponseSchema:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+        - type: object
+          properties:
+            description:
+              type: string

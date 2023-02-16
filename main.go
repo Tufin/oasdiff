@@ -18,7 +18,7 @@ import (
 
 var base, revision, filter, filterExtension, format, lang, warnIgnoreFile, errIgnoreFile string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
-var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking, mergeAllof bool
 var deprecationDays int
 
 const (
@@ -52,6 +52,7 @@ func init() {
 	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "exit with return code 1 when any WARN-level breaking changes are found, used together with -check-breaking and -fail-on-diff")
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
+	flag.BoolVar(&mergeAllof, "merge-allof", false, "replaces 'allOf' elements by merging their properties")
 }
 
 func validateFlags() bool {
