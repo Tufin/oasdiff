@@ -14,7 +14,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 
 ## Features 
 - Detect [breaking changes](#breaking-changes)
-- Generate a diff report in YAML, Text/Markdown or HTML
+- Generate a diff report in YAML, JSON, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-into-your-go-program)
 - Compare specs from the file system or over http/s
