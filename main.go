@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -18,19 +19,20 @@ import (
 
 var base, revision, filter, filterExtension, format, lang, warnIgnoreFile, errIgnoreFile string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
-var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking, excludeEndpoints bool
 var deprecationDays int
 
 const (
 	formatYAML = "yaml"
+	formatJSON = "json"
 	formatText = "text"
 	formatHTML = "html"
 )
 
 func init() {
-	flag.StringVar(&base, "base", "", "path or URL of original OpenAPI spec in YAML or JSON format")
-	flag.StringVar(&revision, "revision", "", "path or URL of revised OpenAPI spec in YAML or JSON format")
-	flag.BoolVar(&composed, "composed", false, "work in 'composed' mode, compare paths in all specs in the base and revision directories. In this mode the base and the revision parameters can be Globs instead of files, but not URLs")
+	flag.StringVar(&base, "base", "", "path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format")
+	flag.StringVar(&revision, "revision", "", "path or URL (or a glob in Composed mode) of revised OpenAPI spec in YAML or JSON format")
+	flag.BoolVar(&composed, "composed", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	flag.StringVar(&prefix_base, "prefix-base", "", "if provided, paths in original (base) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&prefix_revision, "prefix-revision", "", "if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&strip_prefix_base, "strip-prefix-base", "", "if provided, this prefix will be stripped from paths in original (base) spec before comparison")
@@ -46,12 +48,13 @@ func init() {
 	flag.StringVar(&warnIgnoreFile, "warn-ignore", "", "the configuration file for ignoring warnings with -check-breaking")
 	flag.StringVar(&errIgnoreFile, "err-ignore", "", "the configuration file for ignoring errors with -check-breaking")
 	flag.IntVar(&deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
-	flag.StringVar(&format, "format", formatYAML, "output format: yaml, text or html")
+	flag.StringVar(&format, "format", formatYAML, "output format: yaml, json, text or html")
 	flag.StringVar(&lang, "lang", "en", "language for localized breaking changes checks errors")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "exit with return code 1 when any ERR-level breaking changes are found, used together with -check-breaking")
 	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "exit with return code 1 when any WARN-level breaking changes are found, used together with -check-breaking and -fail-on-diff")
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
+	flag.BoolVar(&excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output")
 }
 
 func validateFlags() bool {
@@ -63,9 +66,13 @@ func validateFlags() bool {
 		fmt.Fprintf(os.Stderr, "please specify the '-revision' flag: the path of the revised OpenAPI spec in YAML or JSON format\n")
 		return false
 	}
-	supportedFormats := map[string]bool{"": true, "yaml": true, "text": true, "html": true}
+	supportedFormats := map[string]bool{"yaml": true, "json": true, "text": true, "html": true}
 	if !supportedFormats[format] {
-		fmt.Fprintf(os.Stderr, "invalid format. Should be yaml, text or html\n")
+		fmt.Fprintf(os.Stderr, "invalid format. Should be yaml, json text or html\n")
+		return false
+	}
+	if format == "json" && !excludeEndpoints {
+		fmt.Fprintf(os.Stderr, "json format requires the '-exclude-endpoints' flag\n")
 		return false
 	}
 	if prefix != "" {
@@ -111,6 +118,7 @@ func main() {
 	config.PathStripPrefixRevision = strip_prefix_revision
 	config.BreakingOnly = breakingOnly
 	config.DeprecationDays = deprecationDays
+	config.ExcludeEndpoints = excludeEndpoints
 
 	var diffReport *diff.Diff
 	var err error
@@ -214,6 +222,11 @@ func main() {
 			fmt.Fprintf(os.Stderr, "failed to print diff YAML with %v\n", err)
 			os.Exit(106)
 		}
+	case format == formatJSON:
+		if err = printJSON(diffReport); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to print diff JSON with %v\n", err)
+			os.Exit(106)
+		}
 	case format == formatText:
 		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
 	case format == formatHTML:
@@ -248,5 +261,18 @@ func printYAML(output interface{}) error {
 		return err
 	}
 	fmt.Printf("%s", bytes)
+	return nil
+}
+
+func printJSON(output interface{}) error {
+	if reflect.ValueOf(output).IsNil() {
+		return nil
+	}
+
+	bytes, err := json.MarshalIndent(output, "", "  ")
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%s\n", bytes)
 	return nil
 }

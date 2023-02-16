@@ -13,6 +13,7 @@ type Config struct {
 	PathStripPrefixRevision string
 	BreakingOnly            bool
 	DeprecationDays         int
+	ExcludeEndpoints        bool
 }
 
 // NewConfig returns a default configuration
@@ -22,5 +23,6 @@ func NewConfig() *Config {
 		ExcludeDescription: false,
 		IncludeExtensions:  StringSet{},
 		BreakingOnly:       false,
+		ExcludeEndpoints:   false,
 	}
 }

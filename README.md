@@ -58,6 +58,8 @@ Usage of oasdiff:
     	the configuration file for ignoring errors with -check-breaking
   -exclude-description
     	ignore changes to descriptions
+  -exclude-endpoints
+    	exclude endpoints from output
   -exclude-examples
     	ignore changes to examples
   -fail-on-diff
@@ -69,7 +71,7 @@ Usage of oasdiff:
   -filter-extension string
     	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
   -format string
-    	output format: yaml, text or html (default "yaml")
+    	output format: yaml, json, text or html (default "yaml")
   -lang string
     	language for localized breaking changes checks errors (default "en")
   -max-circular-dep int
