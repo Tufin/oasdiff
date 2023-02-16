@@ -571,7 +571,7 @@ This method works differently from the old one: it is more accurate, generates n
 
 To use it, run oasdiff with the `-check-breaking` flag, e.g.:
 ```
-oasdiff -check-breaking -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
+oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 There are two levels of breaking changes:
