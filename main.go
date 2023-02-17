@@ -19,7 +19,7 @@ import (
 
 var base, revision, filter, filterExtension, format, lang, warnIgnoreFile, errIgnoreFile string
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
-var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking, excludeEndpoints, mergeAllof bool
+var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking, mergeAllof bool
 var deprecationDays int
 
 const (
@@ -54,7 +54,6 @@ func init() {
 	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "exit with return code 1 when any WARN-level breaking changes are found, used together with -check-breaking and -fail-on-diff")
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
-	flag.BoolVar(&excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output")
 	flag.BoolVar(&mergeAllof, "merge-allof", false, "replaces 'allOf' elements by merging their properties")
 }
 
@@ -70,10 +69,6 @@ func validateFlags() bool {
 	supportedFormats := map[string]bool{"yaml": true, "json": true, "text": true, "html": true}
 	if !supportedFormats[format] {
 		fmt.Fprintf(os.Stderr, "invalid format. Should be yaml, json text or html\n")
-		return false
-	}
-	if format == "json" && !excludeEndpoints {
-		fmt.Fprintf(os.Stderr, "json format requires the '-exclude-endpoints' flag\n")
 		return false
 	}
 	if prefix != "" {
@@ -119,7 +114,6 @@ func main() {
 	config.PathStripPrefixRevision = strip_prefix_revision
 	config.BreakingOnly = breakingOnly
 	config.DeprecationDays = deprecationDays
-	config.ExcludeEndpoints = excludeEndpoints
 
 	var diffReport *diff.Diff
 	var err error
