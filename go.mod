@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.110.0
 	github.com/TwiN/go-color v1.4.0
 	github.com/getkin/kin-openapi v0.114.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.5.4
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
