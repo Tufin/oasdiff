@@ -9,7 +9,7 @@ require (
 	github.com/stretchr/testify v1.8.2
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.5.4
-	golang.org/x/exp v0.0.0-20221114191408-850992195362
+	golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2
 	gopkg.in/yaml.v3 v3.0.1
 )
 
