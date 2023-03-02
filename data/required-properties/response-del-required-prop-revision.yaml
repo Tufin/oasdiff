@@ -1,0 +1,61 @@
+openapi: 3.0.1
+info:
+  title: Test API
+  description: APIs used to validate breaking changes scenarios.
+  license:
+    name: CC BY-NC-SA 3.0 US
+    url: https://creativecommons.org/licenses/by-nc-sa/3.0/us/
+  version: "2.0"
+tags:
+- name: Tests
+  description: Test tag.
+paths:
+  /api/atlas/v2/operationIdTest:
+    get:
+      tags:
+      - Tests
+      summary: This is a test
+      description: Test description.
+      operationId: getTestUpdated
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.atlas.2023-01-01+json:
+              x-xgen-version: 2023-01-01
+      security:
+      - DigestAuth: []
+      x-xgen-owner-team: apix
+  /api/atlas/v2/removeOutputFieldTest:
+    get:
+      tags:
+      - Tests
+      summary: This is a test
+      description: Test description.
+      operationId: getTest
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.atlas.2023-01-01+json:
+              schema:
+                $ref: '#/components/schemas/TestApiView'
+              x-xgen-version: 2023-01-01
+      security:
+      - DigestAuth: []
+      x-xgen-owner-team: apix
+components:
+  schemas:
+    TestApiView:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique 24-hexadecimal digit string that identifies this team.
+          readOnly: true
+  securitySchemes:
+    DigestAuth:
+      type: http
+      scheme: digest

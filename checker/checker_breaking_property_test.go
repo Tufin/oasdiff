@@ -119,6 +119,34 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	require.Equal(t, "response-property-became-optional", errs[0].Id)
 }
 
+// BC: changing a required property in response body to optional and also deleting it is breaking
+func TestBreaking_RespBodyDeleteAndDisableRequiredProperty(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("response-del-required-prop-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("response-del-required-prop-revision.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+}
+
+// BC: adding a non-existant required property in request body is not breaking
+func TestBreaking_ReqBodyNewRequiredPropertyNew(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("request-new-required-prop-base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("request-new-required-prop-revision.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.Empty(t, errs)
+}
+
 // BC: changing an existing property in response body to required is not breaking
 func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("response-revision.json"))
