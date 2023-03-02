@@ -31,11 +31,14 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 
 				if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 					for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
-						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
-							continue
-						}
 						if mediaTypeDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
 							// it is a new property, checked by the new-required-request-property check
+							continue
+						}
+						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+							continue
+						}
+						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
 							continue
 						}
 						result = append(result, BackwardCompatibilityError{
@@ -57,6 +60,9 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 							return
 						}
 						for _, changedRequiredPropertyName := range requiredDiff.Added {
+							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+								continue
+							}
 							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
 								continue
 							}

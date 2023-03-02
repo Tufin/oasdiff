@@ -29,6 +29,9 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 				}
 
 				for _, headerName := range responseDiff.HeadersDiff.Deleted {
+					if responseDiff.Base.Headers[headerName] == nil {
+						continue
+					}
 					required := responseDiff.Base.Headers[headerName].Value.Required
 					if required {
 						result = append(result, BackwardCompatibilityError{

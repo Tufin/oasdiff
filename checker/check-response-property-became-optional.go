@@ -63,6 +63,9 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								return
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Deleted {
+								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+									continue
+								}
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
 									continue
 								}
