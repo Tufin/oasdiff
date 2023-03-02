@@ -10,7 +10,7 @@ tags:
 - name: Tests
   description: Test tag.
 paths:
-  /api/atlas/v2/operationIdTest:
+  /api/test/v2/operationIdTest:
     get:
       tags:
       - Tests
@@ -20,12 +20,11 @@ paths:
         "200":
           description: OK
           content:
-            application/vnd.atlas.2023-01-01+json:
+            application/vnd.test.2023-01-01+json:
               x-xgen-version: 2023-01-01
       security:
       - DigestAuth: []
-      x-xgen-owner-team: apix
-  /api/atlas/v2/removeOutputFieldTest:
+  /api/test/v2/removeOutputFieldTest:
     post:
       tags:
       - Tests
@@ -33,13 +32,12 @@ paths:
       description: Test description.
       requestBody:
         content:
-          application/vnd.atlas.2023-01-01+json:
+          application/vnd.test.2023-01-01+json:
             schema:
               $ref: '#/components/schemas/TestApiView'
             x-xgen-version: 2023-01-01
       security:
       - DigestAuth: []
-      x-xgen-owner-team: apix
 components:
   schemas:
     TestApiView:
