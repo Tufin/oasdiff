@@ -35,6 +35,9 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 
 					if paramDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range paramDiff.SchemaDiff.RequiredDiff.Added {
+							if paramDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+								continue
+							}
 							if paramDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
 								continue
 							}
@@ -63,6 +66,9 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								return
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Added {
+								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+									continue
+								}
 								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
 									continue
 								}

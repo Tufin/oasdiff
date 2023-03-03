@@ -127,11 +127,10 @@ func (diff *RequiredPropertiesDiff) removeSunsetProperties(state *state, schema1
 func getRequiredPropertiesDiff(config *Config, state *state, schema1, schema2 *openapi3.Schema) *RequiredPropertiesDiff {
 	diff := getRequiredPropertiesDiffInternal(schema1.Required, schema2.Required)
 
-	diff.removeReadOnly(state, schema1, schema2)
-	diff.removeWriteOnly(state, schema1, schema2)
-	diff.removeSunsetProperties(state, schema1, schema2)
-
 	if config.BreakingOnly {
+		diff.removeReadOnly(state, schema1, schema2)
+		diff.removeWriteOnly(state, schema1, schema2)
+		diff.removeSunsetProperties(state, schema1, schema2)
 		diff.removeNonBreaking(state)
 	}
 

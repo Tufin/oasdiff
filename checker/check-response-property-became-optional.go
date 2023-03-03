@@ -36,13 +36,14 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
-							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
-								continue
-							}
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
 								continue
 							}
+							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
+								continue
+							}
+
 							result = append(result, BackwardCompatibilityError{
 								Id:        "response-property-became-optional",
 								Level:     ERR,
@@ -62,6 +63,9 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								return
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Deleted {
+								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+									continue
+								}
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
 									continue
 								}
