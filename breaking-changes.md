@@ -50,7 +50,7 @@ These examples are automatically generated from unit tests.
 [adding a new required property in response body is not breaking](checker/checker_breaking_property_test.go?plain=1#L227)  
 [adding a new required property under AllOf in response body is not breaking](checker/checker_breaking_property_test.go?plain=1#L257)  
 [adding a new required read-only property in request body is not breaking](checker/checker_breaking_property_test.go?plain=1#L311)  
-[adding a non-existant required property in request body is not breaking](checker/checker_breaking_property_test.go?plain=1#L136)  
+[adding a non-existent required property in request body is not breaking](checker/checker_breaking_property_test.go?plain=1#L136)  
 [adding an enum value is not breaking](checker/checker_not_breaking_test.go?plain=1#L65)  
 [adding an optional request body is not breaking](checker/checker_not_breaking_test.go?plain=1#L19)  
 [both max lengths in request are nil is not breaking](checker/checker_breaking_min_max_test.go?plain=1#L178)  

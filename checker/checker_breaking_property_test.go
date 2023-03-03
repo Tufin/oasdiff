@@ -133,7 +133,7 @@ func TestBreaking_RespBodyDeleteAndDisableRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, errs)
 }
 
-// BC: adding a non-existant required property in request body is not breaking
+// BC: adding a non-existent required property in request body is not breaking
 func TestBreaking_ReqBodyNewRequiredPropertyNew(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("request-new-required-prop-base.yaml"))
 	require.NoError(t, err)
