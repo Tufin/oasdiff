@@ -5,7 +5,7 @@
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
 # OpenAPI Diff
-A diff tool for [OpenAPI Spec 3](https://swagger.io/specification/).
+A tool to compare and detect breaking changes between [OpenAPI Specifications](https://swagger.io/specification/).
 
 ## Try it
 ```
