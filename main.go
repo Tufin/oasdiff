@@ -72,10 +72,6 @@ func validateFlags() bool {
 		fmt.Fprintf(os.Stderr, "invalid format. Should be yaml, json text or html\n")
 		return false
 	}
-	if format == "json" && !excludeEndpoints {
-		fmt.Fprintf(os.Stderr, "json format requires the '-exclude-endpoints' flag\n")
-		return false
-	}
 	if prefix != "" {
 		if prefix_revision != "" {
 			fmt.Fprintf(os.Stderr, "'-prefix' and '-prefix_revision' can't be used simultaneously\n")
@@ -119,7 +115,6 @@ func main() {
 	config.PathStripPrefixRevision = strip_prefix_revision
 	config.BreakingOnly = breakingOnly
 	config.DeprecationDays = deprecationDays
-	config.ExcludeEndpoints = excludeEndpoints
 
 	var diffReport *diff.Diff
 	var err error
