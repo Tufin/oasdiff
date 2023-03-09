@@ -24,6 +24,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources)
 - Support [path prefix modification](#path-prefix-modification)
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
+- [Diff and Breaking-Changes as a Service](#diff-and-breaking-changes-as-a-service)
 
 ## Install with Go
 ```bash
@@ -509,6 +510,22 @@ components:
         OAuthFlows:
           added: true
 ```
+
+## Diff and Breaking-Changes as a Service
+You can use oasdiff as a service like this:
+```
+curl -o openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml
+curl -o openapi-test3.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+curl -X POST -F base=@openapi-test1.yaml -F revision=@openapi-test3.yaml https://api.oasdiff.com/diff
+```
+Or, to see breaking changes:
+```
+curl -o openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml
+curl -o openapi-test3.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+curl -X POST -F base=@openapi-test1.yaml -F revision=@openapi-test3.yaml https://api.oasdiff.com/breaking-changes
+```
+The service repo: https://github.com/tufin/oasdiff-service
+
 
 ## Notes
 ### Output Formats
