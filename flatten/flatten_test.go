@@ -63,7 +63,7 @@ func TestFlatten_OneObjectOneProp(t *testing.T) {
 	require.Equal(t, &schema, flat)
 }
 
-func TestFlatten_OneObjectTwoProps(t *testing.T) {
+func TestFlatten_TwoObjects(t *testing.T) {
 
 	obj1 := openapi3.Schemas{}
 	obj1["description"] = &openapi3.SchemaRef{
@@ -100,4 +100,42 @@ func TestFlatten_OneObjectTwoProps(t *testing.T) {
 	require.Len(t, flat.AllOf[0].Value.Properties, 2)
 	require.Equal(t, obj1["description"], flat.AllOf[0].Value.Properties["description"])
 	require.Equal(t, obj2["name"], flat.AllOf[0].Value.Properties["name"])
+}
+
+func TestFlatten_OverlappingProps(t *testing.T) {
+
+	obj1 := openapi3.Schemas{}
+	obj1["description"] = &openapi3.SchemaRef{
+		Value: &openapi3.Schema{
+			Type: "string",
+		},
+	}
+
+	obj2 := openapi3.Schemas{}
+	obj2["description"] = &openapi3.SchemaRef{
+		Value: &openapi3.Schema{
+			Type: "int",
+		},
+	}
+
+	schema := openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:       "object",
+					Properties: obj1,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:       "object",
+					Properties: obj2,
+				},
+			},
+		},
+	}
+
+	flat := flatten.Handle(schema)
+	require.Len(t, flat.AllOf[0].Value.Properties, 1)
+	require.Equal(t, obj1["description"], flat.AllOf[0].Value.Properties["description"])
 }
