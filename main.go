@@ -91,6 +91,11 @@ func validateFlags() bool {
 			return false
 		}
 	}
+	invalidChecks := checker.ValidateIncludeChecks(includeChecks)
+	if len(invalidChecks) > 0 {
+		fmt.Fprintf(os.Stderr, "invalid include-checks: %s\n", invalidChecks.String())
+		return false
+	}
 
 	return true
 }

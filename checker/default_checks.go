@@ -19,14 +19,24 @@ func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig 
 	}
 }
 
+var optionalChecks = map[string]BackwardCompatibilityCheck{
+	"response-non-success-status-removed": ResponseNonSuccessStatusRemoved,
+}
+
+func ValidateIncludeChecks(includeChecks utils.StringList) utils.StringList {
+	result := utils.StringList{}
+	for _, s := range includeChecks {
+		if _, ok := optionalChecks[s]; !ok {
+			result = append(result, s)
+		}
+	}
+	return result
+}
+
 func includedChecks(includeChecks utils.StringList) []BackwardCompatibilityCheck {
 	result := []BackwardCompatibilityCheck{}
 	for _, s := range includeChecks {
-		switch s {
-		case "response-non-success-status-removed":
-			result = append(result, ResponseNonSuccessStatusRemoved)
-
-		}
+		result = append(result, optionalChecks[s])
 	}
 	return result
 }
