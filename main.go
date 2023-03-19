@@ -14,6 +14,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
+	"github.com/tufin/oasdiff/utils"
 	"gopkg.in/yaml.v3"
 )
 
@@ -21,6 +22,7 @@ var base, revision, filter, filterExtension, format, lang, warnIgnoreFile, errIg
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking, excludeEndpoints bool
 var deprecationDays int
+var includeChecks utils.StringList
 
 const (
 	formatYAML = "yaml"
@@ -55,6 +57,7 @@ func init() {
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 	flag.BoolVar(&excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output")
+	flag.Var(&includeChecks, "include-checks", "additional backwards compatibility checks")
 }
 
 func validateFlags() bool {
@@ -167,7 +170,7 @@ func main() {
 	}
 
 	if checkBreaking {
-		c := checker.DefaultChecks()
+		c := checker.GetChecks(includeChecks)
 		c.Localizer = *localizations.New(lang, "en")
 		errs := checker.CheckBackwardCompatibility(c, diffReport, operationsSources)
 
