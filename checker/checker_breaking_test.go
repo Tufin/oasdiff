@@ -237,7 +237,7 @@ func TestBreaking_ResponseSuccessStatusRemoved(t *testing.T) {
 	require.Equal(t, "response-success-status-removed", errs[0].Id)
 }
 
-// BC: removing an existing response with non-successful status is breaking
+// BC: removing an existing response with non-successful status is breaking (optional)
 func TestBreaking_ResponseNonSuccessStatusRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
