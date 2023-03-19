@@ -73,6 +73,8 @@ Usage of oasdiff:
     	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
   -format string
     	output format: yaml, json, text or html (default "yaml")
+  -include-checks value
+    	comma-seperated list of optional backwards compatibility checks
   -lang string
     	language for localized breaking changes checks errors (default "en")
   -max-circular-dep int
@@ -642,6 +644,10 @@ This method allows adding new entries to enums used in responses which is very u
 `x-extensible-enum` was introduced by [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community. Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is a more explicit way to do it.  
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
+
+#### Optional Backwards Compatibility Checks
+You can use the `-include-checks` flag to include the following optional backwards compatibility checks:
+- response-non-success-status-removed
 
 #### Advantages of the New Breaking Changes Method 
 - output is human readable

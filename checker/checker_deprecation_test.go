@@ -27,7 +27,7 @@ func TestBreaking_DeprecationEarlySunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-removed-before-sunset", errs[0].Id)
@@ -43,7 +43,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NoError(t, err)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
@@ -61,7 +61,7 @@ func TestBreaking_DeprecationPast(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -76,7 +76,7 @@ func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	c := checker.DefaultChecks()
+	c := checker.GetDefaultChecks()
 	c.MinSunsetStableDays = 10
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 	require.NotEmpty(t, errs)
@@ -95,7 +95,7 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -114,7 +114,7 @@ func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -130,7 +130,7 @@ func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 }
 
@@ -147,7 +147,7 @@ func TestBreaking_DeprecationForDraft(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -166,7 +166,7 @@ func TestBreaking_RemovedPathForDraft(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -184,7 +184,7 @@ func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 }
 
@@ -206,7 +206,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	c := checker.DefaultChecks()
+	c := checker.GetDefaultChecks()
 	c.MinSunsetStableDays = 10
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 	require.NotEmpty(t, errs)
@@ -227,7 +227,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	c := checker.DefaultChecks()
+	c := checker.GetDefaultChecks()
 	c.MinSunsetStableDays = 10
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 	require.Empty(t, errs)
@@ -244,7 +244,7 @@ func TestBreaking_DeprecationPathPast(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -259,7 +259,7 @@ func TestBreaking_DeprecationPathMixed(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-path-removed-before-sunset", errs[0].Id)

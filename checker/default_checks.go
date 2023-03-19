@@ -1,9 +1,48 @@
 package checker
 
-import "github.com/tufin/oasdiff/checker/localizations"
+import (
+	"github.com/tufin/oasdiff/checker/localizations"
+	"github.com/tufin/oasdiff/utils"
+)
 
-func DefaultChecks() BackwardCompatibilityCheckConfig {
-	checks := []BackwardCompatibilityCheck{
+func GetDefaultChecks() BackwardCompatibilityCheckConfig {
+	return GetChecks(utils.StringList{})
+}
+
+func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
+
+	return BackwardCompatibilityCheckConfig{
+		Checks:              append(defaultChecks(), includedChecks(includeChecks)...),
+		MinSunsetBetaDays:   31,
+		MinSunsetStableDays: 180,
+		Localizer:           *localizations.New("en", "en"),
+	}
+}
+
+var optionalChecks = map[string]BackwardCompatibilityCheck{
+	"response-non-success-status-removed": ResponseNonSuccessStatusRemoved,
+}
+
+func ValidateIncludeChecks(includeChecks utils.StringList) utils.StringList {
+	result := utils.StringList{}
+	for _, s := range includeChecks {
+		if _, ok := optionalChecks[s]; !ok {
+			result = append(result, s)
+		}
+	}
+	return result
+}
+
+func includedChecks(includeChecks utils.StringList) []BackwardCompatibilityCheck {
+	result := []BackwardCompatibilityCheck{}
+	for _, s := range includeChecks {
+		result = append(result, optionalChecks[s])
+	}
+	return result
+}
+
+func defaultChecks() []BackwardCompatibilityCheck {
+	return []BackwardCompatibilityCheck{
 		RequestParameterRemovedCheck,
 		NewRequiredRequestPropertyCheck,
 		RequestParameterPatternAddedOrChangedCheck,
@@ -60,11 +99,5 @@ func DefaultChecks() BackwardCompatibilityCheckConfig {
 		APISunsetChangedCheck,
 		ResponsePropertyMaxIncreasedCheck,
 		ResponsePropertyMinDecreasedCheck,
-	}
-	return BackwardCompatibilityCheckConfig{
-		Checks:              checks,
-		MinSunsetBetaDays:   31,
-		MinSunsetStableDays: 180,
-		Localizer:           *localizations.New("en", "en"),
 	}
 }

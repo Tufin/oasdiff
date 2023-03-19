@@ -8,6 +8,22 @@ import (
 )
 
 func ResponseSuccessStatusRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+	success := func(status int) bool {
+		return status >= 200 && status <= 299
+	}
+
+	return ResponseSuccessRemoved(diffReport, operationsSources, config, success, "response-success-status-removed")
+}
+
+func ResponseNonSuccessStatusRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+	notSuccess := func(status int) bool {
+		return status < 200 || status > 299
+	}
+
+	return ResponseSuccessRemoved(diffReport, operationsSources, config, notSuccess, "response-non-success-status-removed")
+}
+
+func ResponseSuccessRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig, filter func(int) bool, id string) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -29,18 +45,18 @@ func ResponseSuccessStatusRemoved(diffReport *diff.Diff, operationsSources *diff
 				if err != nil {
 					continue
 				}
-				if status < 200 || status > 299 {
-					continue
+
+				if filter(status) {
+					result = append(result, BackwardCompatibilityError{
+						Id:        id,
+						Level:     ERR,
+						Text:      fmt.Sprintf(config.i18n(id), ColorizedValue(responseStatus)),
+						Operation: operation,
+						Path:      path,
+						Source:    source,
+					})
 				}
 
-				result = append(result, BackwardCompatibilityError{
-					Id:        "response-success-status-removed",
-					Level:     ERR,
-					Text:      fmt.Sprintf(config.i18n("response-success-status-removed"), ColorizedValue(responseStatus)),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
-				})
 			}
 		}
 	}
