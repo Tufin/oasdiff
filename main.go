@@ -57,7 +57,7 @@ func init() {
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 	flag.BoolVar(&excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output")
-	flag.Var(&includeChecks, "include-checks", "additional backwards compatibility checks")
+	flag.Var(&includeChecks, "include-checks", "comma-seperated list of optional backwards compatibility checks")
 }
 
 func validateFlags() bool {
