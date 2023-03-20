@@ -188,6 +188,11 @@ To run with docker just replace the `oasdiff` command by `docker run --rm -t tuf
 docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
+### Breaking changes with Docker
+```bash
+docker run --rm -t tufin/oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
 ### Comparing local files with Docker
 ```bash
 docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-test1.yaml -revision /data/openapi-test3.yaml
@@ -737,7 +742,7 @@ Note that stripping precedes prepending.
 diff.Get(&diff.Config{}, spec1, spec2)
 ```
 
-More examples:
+### Code Examples
 - [diff](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-Get)
 - [breaking changes](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-GetPathsDiff)
 - [oasdiff command-line](main.go)
