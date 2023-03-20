@@ -696,3 +696,30 @@ func TestCallbacks(t *testing.T) {
 	_, err = diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 }
+
+func TestDiff_InfoNil(t *testing.T) {
+	s1 := &openapi3.T{}
+	d, err := diff.Get(diff.NewConfig(), s1, s1)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+func TestDiff_InfoAdded(t *testing.T) {
+	s1 := &openapi3.T{}
+	s2 := &openapi3.T{
+		Info: &openapi3.Info{},
+	}
+	d, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	require.True(t, d.InfoDiff.Added)
+}
+
+func TestDiff_InfoDeleted(t *testing.T) {
+	s1 := &openapi3.T{
+		Info: &openapi3.Info{},
+	}
+	s2 := &openapi3.T{}
+	d, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	require.True(t, d.InfoDiff.Deleted)
+}
