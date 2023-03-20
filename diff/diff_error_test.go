@@ -62,12 +62,6 @@ func TestDiff_SpecNil(t *testing.T) {
 	require.EqualError(t, err, "spec is nil")
 }
 
-func TestDiff_InfoNil(t *testing.T) {
-	s1 := &openapi3.T{}
-	_, err := diff.Get(diff.NewConfig(), s1, s1)
-	require.EqualError(t, err, "info is nil")
-}
-
 func TestDiff_ExampleNil(t *testing.T) {
 	s1 := openapi3.T{
 		Info: &openapi3.Info{},
