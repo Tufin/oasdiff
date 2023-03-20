@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 
 	"github.com/TwiN/go-color"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -31,6 +32,21 @@ type BackwardCompatibilityError struct {
 	Operation string `json:"operation,omitempty" yaml:"operation,omitempty"`
 	Path      string `json:"path,omitempty" yaml:"path,omitempty"`
 	Source    string `json:"source,omitempty" yaml:"source,omitempty"`
+}
+
+type BackwardCompatibilityErrors []BackwardCompatibilityError
+
+func (bcErrors BackwardCompatibilityErrors) Len() int {
+	return len(bcErrors)
+}
+func (bcErrors BackwardCompatibilityErrors) Less(i, j int) bool {
+	if bcErrors[i].Path == bcErrors[j].Path {
+		return bcErrors[i].Operation < bcErrors[j].Operation
+	}
+	return bcErrors[i].Path < bcErrors[j].Path
+}
+func (bcErrors BackwardCompatibilityErrors) Swap(i, j int) {
+	bcErrors[i], bcErrors[j] = bcErrors[j], bcErrors[i]
 }
 
 type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError
@@ -105,8 +121,8 @@ func (c *BackwardCompatibilityCheckConfig) i18n(messageID string) string {
 	return c.Localizer.Get("messages." + messageID)
 }
 
-func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) BackwardCompatibilityErrors {
+	result := make(BackwardCompatibilityErrors, 0)
 
 	if diffReport == nil {
 		return result
@@ -119,6 +135,7 @@ func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffRep
 		result = append(result, errs...)
 	}
 
+	sort.Sort(result)
 	return result
 }
 

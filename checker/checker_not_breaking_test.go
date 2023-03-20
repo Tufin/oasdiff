@@ -54,10 +54,10 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 func TestBreaking_DeletedTag(t *testing.T) {
 	r := d(t, &diff.Config{}, 1, 5)
 	require.Len(t, r, 6)
-	require.Equal(t, "request-parameter-removed", r[0].Id)
-	require.Equal(t, "optional-response-header-removed", r[1].Id)
-	require.Equal(t, "response-success-status-removed", r[2].Id)
-	require.Equal(t, "response-body-type-changed", r[3].Id)
+	require.Equal(t, "response-success-status-removed", r[0].Id)
+	require.Equal(t, "response-body-type-changed", r[1].Id)
+	require.Equal(t, "request-parameter-removed", r[2].Id)
+	require.Equal(t, "optional-response-header-removed", r[3].Id)
 	require.Equal(t, "api-path-removed-without-deprecation", r[4].Id)
 	require.Equal(t, "api-path-removed-without-deprecation", r[5].Id)
 }
@@ -69,9 +69,9 @@ func TestBreaking_AddedEnum(t *testing.T) {
 	require.Equal(t, "request-parameter-removed", r[0].Id)
 	require.Equal(t, "request-parameter-removed", r[1].Id)
 	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "response-success-status-removed", r[3].Id)
 	require.Equal(t, "response-success-status-removed", r[4].Id)
-	require.Equal(t, "response-success-status-removed", r[5].Id)
+	require.Equal(t, "request-parameter-removed", r[5].Id)
 }
 
 // BC: changing extensions is not breaking
@@ -81,9 +81,9 @@ func TestBreaking_ModifiedExtension(t *testing.T) {
 	require.Equal(t, "request-parameter-removed", r[0].Id)
 	require.Equal(t, "request-parameter-removed", r[1].Id)
 	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "response-success-status-removed", r[3].Id)
 	require.Equal(t, "response-success-status-removed", r[4].Id)
-	require.Equal(t, "response-success-status-removed", r[5].Id)
+	require.Equal(t, "request-parameter-removed", r[5].Id)
 }
 
 // BC: changing comments is not breaking
@@ -93,9 +93,9 @@ func TestBreaking_Comments(t *testing.T) {
 	require.Equal(t, "request-parameter-removed", r[0].Id)
 	require.Equal(t, "request-parameter-removed", r[1].Id)
 	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "response-success-status-removed", r[3].Id)
 	require.Equal(t, "response-success-status-removed", r[4].Id)
-	require.Equal(t, "response-success-status-removed", r[5].Id)
+	require.Equal(t, "request-parameter-removed", r[5].Id)
 }
 
 // BC: new optional header param is not breaking

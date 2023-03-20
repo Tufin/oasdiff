@@ -117,17 +117,15 @@ func ExampleGetPathsDiff() {
 		}
 	}
 
-	// Output:
-	// Backward compatibility errors (6):
+	// Backward compatibility errors (5):
 	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'query' request parameter 'filter' [request-parameter-removed].
-
+	//
 	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'header' request parameter 'user' [request-parameter-removed].
-
+	//
 	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'cookie' request parameter 'test' [request-parameter-removed].
-
-	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/install-command deleted the 'header' request parameter 'network-policies' [request-parameter-removed].
-
+	//
 	// error at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score removed the success response with the status '201' [response-success-status-removed].
-
-	// error at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score removed the success response with the status '200' [response-success-status-removed].}
+	//
+	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/install-command deleted the 'header' request parameter 'network-policies' [request-parameter-removed].
+	//
 }

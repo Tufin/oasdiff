@@ -172,7 +172,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
-	require.Equal(t, []checker.BackwardCompatibilityError{
+	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:        "request-parameter-became-required",
 			Text:      "the 'header' request parameter 'network-policies' became required",
