@@ -1,13 +1,13 @@
 package diff
 
 import (
-	"fmt"
-
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
 // InfoDiff describes the changes between a pair of info objects: https://swagger.io/specification/#info-object
 type InfoDiff struct {
+	Added              bool            `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted            bool            `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	ExtensionsDiff     *ExtensionsDiff `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	TitleDiff          *ValueDiff      `json:"title,omitempty" yaml:"title,omitempty"`
 	DescriptionDiff    *ValueDiff      `json:"description,omitempty" yaml:"description,omitempty"`
@@ -22,34 +22,41 @@ func (diff *InfoDiff) Empty() bool {
 	return diff == nil || *diff == InfoDiff{}
 }
 
-func getInfoDiff(config *Config, state *state, info1, info2 *openapi3.Info) (*InfoDiff, error) {
-	diff, err := getInfoDiffInternal(config, state, info1, info2)
-	if err != nil {
-		return nil, err
-	}
+func getInfoDiff(config *Config, state *state, info1, info2 *openapi3.Info) *InfoDiff {
+	diff := getInfoDiffInternal(config, state, info1, info2)
 
 	if diff.Empty() {
-		return nil, nil
+		return nil
 	}
 
-	return diff, nil
+	return diff
 }
 
-func getInfoDiffInternal(config *Config, state *state, info1, info2 *openapi3.Info) (*InfoDiff, error) {
+func getInfoDiffInternal(config *Config, state *state, info1, info2 *openapi3.Info) *InfoDiff {
 
-	result := InfoDiff{}
-
-	if info1 == nil || info2 == nil {
-		return nil, fmt.Errorf("info is nil")
+	if info1 == nil && info2 == nil {
+		return nil
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, info1.Extensions, info2.Extensions)
-	result.TitleDiff = getValueDiff(info1.Title, info2.Title)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, info1.Description, info2.Description)
-	result.TermsOfServiceDiff = getValueDiff(info1.TermsOfService, info2.TermsOfService)
-	result.ContactDiff = getContactDiff(config, state, info1.Contact, info2.Contact)
-	result.LicenseDiff = getLicenseDiff(config, state, info1.License, info2.License)
-	result.VersionDiff = getValueDiff(info1.Version, info2.Version)
+	if info1 == nil && info2 != nil {
+		return &InfoDiff{
+			Added: true,
+		}
+	}
 
-	return &result, nil
+	if info1 != nil && info2 == nil {
+		return &InfoDiff{
+			Deleted: true,
+		}
+	}
+
+	return &InfoDiff{
+		ExtensionsDiff:     getExtensionsDiff(config, state, info1.Extensions, info2.Extensions),
+		TitleDiff:          getValueDiff(info1.Title, info2.Title),
+		DescriptionDiff:    getValueDiffConditional(config.ExcludeDescription, info1.Description, info2.Description),
+		TermsOfServiceDiff: getValueDiff(info1.TermsOfService, info2.TermsOfService),
+		ContactDiff:        getContactDiff(config, state, info1.Contact, info2.Contact),
+		LicenseDiff:        getLicenseDiff(config, state, info1.License, info2.License),
+		VersionDiff:        getValueDiff(info1.Version, info2.Version),
+	}
 }
