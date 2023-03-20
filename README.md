@@ -737,45 +737,10 @@ Note that stripping precedes prepending.
 diff.Get(&diff.Config{}, spec1, spec2)
 ```
 
-For breaking changes checks:
-```go
-diffConfig := &diff.Config{}
-diffConfig.IncludeExtensions.Add(checker.XStabilityLevelExtension)
-diffConfig.IncludeExtensions.Add(diff.SunsetExtension)
-diffConfig.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
-
-diffRes, operationsSources, err := diff.GetPathsDiff(diffConfig, baseContracts, revisionContracts)
-if err != nil {
-  // process
-}
-
-c := checker.DefaultChecks() // here could be added additional checks
-c.Localizer = *localizations.New("en", "en")
-errs := checker.CheckBackwardCompatibility(c, diffRes, operationsSources)
-
-// process configuration file for ignoring warnings
-errs, err := processIgnorance(bcWarningIgnoranceFile, checker.WARN, errs)
-if err != nil {
-  // process
-}
-
-// process configuration file for ignoring errors
-errs, err = processIgnorance(bcErrorIgnoranceFile, checker.ERR, errs)
-if err != nil {
-  // process
-}
-
-// pretty print breaking changes errors
-if len(errs) > 0 {
-  fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
-  for _, bcerr := range errs {
-    fmt.Printf("%s\n\n", bcerr.PrettyError(c.Localizer))
-  }
-}
-
-```
-
-See full example: [main.go](main.go)
+More examples:
+- [diff](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-Get)
+- [breaking changes](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-GetPathsDiff)
+- [oasdiff command-line](main.go)
 
 
 ### OpenAPI References
