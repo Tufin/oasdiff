@@ -265,7 +265,7 @@ func TestBreaking_DeprecationPathMixed(t *testing.T) {
 	require.Equal(t, "api-path-removed-before-sunset", errs[0].Id)
 }
 
-// BC: deleting a path with some operations having sunset date in the future is breaking
+// test sunset date without double quotes, see https://github.com/Tufin/oasdiff/pull/198/files
 func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
 
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("deprecated-path-mixed-rfc3339-sunset.yaml"))
