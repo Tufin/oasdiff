@@ -41,7 +41,7 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 ## Wrappers
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
 - [REST Service](#diff-and-breaking-changes-as-a-service)
-- [Interactive UI](#diff-and-breaking-changes-as-a-service)
+- [Interactive UI](https://www.oasdiff.com)
 
 ## Usage
 
