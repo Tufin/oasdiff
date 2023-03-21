@@ -264,3 +264,20 @@ func TestBreaking_DeprecationPathMixed(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-path-removed-before-sunset", errs[0].Id)
 }
+
+// BC: deleting a path with some operations having sunset date in the future is breaking
+func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
+
+	s1, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("deprecated-path-mixed-rfc3339-sunset.yaml"))
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile(getDeprecationFile("sunset-path.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.DefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "api-path-removed-before-sunset", errs[0].Id)
+}

@@ -22,12 +22,13 @@ func GetSunsetDate(Extensions map[string]interface{}) (civil.Date, error) {
 		}
 	}
 
-	date, err := civil.ParseDate(sunset)
-	if err != nil {
-		return civil.Date{}, errors.New("failed to parse time")
+	if date, err := civil.ParseDate(sunset); err == nil {
+		return date, nil
+	} else if date, err := time.Parse(time.RFC3339, sunset); err == nil {
+		return civil.DateOf(date), nil
 	}
 
-	return date, nil
+	return civil.Date{}, errors.New("failed to parse time")
 }
 
 // SunsetAllowed checks if an element can be deleted after deprecation period
