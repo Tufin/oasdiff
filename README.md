@@ -23,8 +23,6 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources)
 - Support [path prefix modification](#path-prefix-modification)
-- [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
-- [Diff and Breaking-Changes as a Service](#diff-and-breaking-changes-as-a-service)
 
 ## Install with Go
 ```bash
@@ -39,6 +37,11 @@ brew install oasdiff
 
 ## Install on macOS, Windows and Linux
 Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
+
+## Wrappers
+- [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
+- [REST Service](#diff-and-breaking-changes-as-a-service)
+- [Interactive UI](#diff-and-breaking-changes-as-a-service)
 
 ## Usage
 
@@ -531,7 +534,7 @@ curl -o openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/
 curl -o openapi-test3.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 curl -X POST -F base=@openapi-test1.yaml -F revision=@openapi-test3.yaml https://api.oasdiff.com/breaking-changes
 ```
-The service repo: https://github.com/tufin/oasdiff-service
+Service source code: https://github.com/oasdiff/oasdiff-service
 
 
 ## Notes
