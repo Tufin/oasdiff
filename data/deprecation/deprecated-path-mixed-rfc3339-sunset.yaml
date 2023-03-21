@@ -1,0 +1,24 @@
+info:
+  title: Tufin
+  version: 1.0.0
+openapi: 3.0.3
+paths:
+  /api/placeholder:
+    get:
+      responses:
+        200:
+          description: OK
+  /api/test:
+    get:
+      deprecated: true
+      # kin-openapi will unmarshall x-sunset as "2022-08-10T00:00:00Z"
+      x-sunset: 2022-08-10
+      responses:
+        200:
+          description: OK
+    post:
+      deprecated: true
+      x-sunset: "9999-08-10"
+      responses:
+        201:
+          description: OK
