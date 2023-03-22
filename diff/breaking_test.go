@@ -227,6 +227,22 @@ func TestBreaking_ModifyPatten(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
+// BC: modifying the default value of a schema is breaking
+func TestBreaking_ModifyDefaultValue(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "X"
+	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	require.NotEmpty(t, d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInHeader]["network-policies"].SchemaDiff.DefaultDiff)
+}
+
 // BC: removing an existing required response header is breaking
 func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 	s1 := l(t, 1)
