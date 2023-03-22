@@ -32,6 +32,7 @@ These examples are automatically generated from unit tests.
 [increasing min items in request is breaking](checker/checker_breaking_min_max_test.go?plain=1#L236)  
 [modifying a pattern in a schema is breaking](checker/checker_breaking_test.go?plain=1#L389)  
 [modifying a pattern in request parameter is breaking](checker/checker_breaking_test.go?plain=1#L405)  
+[modifying the default value of a schema is breaking](checker/checker_breaking_test.go?plain=1#L435)  
 [new required header param is breaking](checker/checker_breaking_test.go?plain=1#L147)  
 [new required path param is breaking](checker/checker_breaking_test.go?plain=1#L131)  
 [new required property in request header is breaking](checker/checker_breaking_property_test.go?plain=1#L17)  
