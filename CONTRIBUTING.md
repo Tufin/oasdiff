@@ -5,15 +5,15 @@
    - embed it in your CI pipeline to check how your OpenAPI spec is evolving and whether any breaking-changes were introduced
    - [use the interactive oasdiff calculator](https://www.oasdiff.com)
    - [use the oasdiff web service](README.md#diff-and-breaking-changes-as-a-service)
-2. Help us improve the [documentation](README.md)
-3. Give us feedback by submitting [Bug reports, Requests for enhancement or Security issues](https://github.com/Tufin/oasdiff/issues/new/choose)
+2. Improve the [documentation](README.md)
+3. Provide feedback by submitting [Bug reports, Requests for enhancement or Security issues](https://github.com/Tufin/oasdiff/issues/new/choose)
 4. [Improve the code with pull requests](https://github.com/Tufin/oasdiff/pulls)
-5. [Tell us how you are using oasdiff](https://github.com/Tufin/oasdiff/discussions)
+5. [Share how you are using oasdiff](https://github.com/Tufin/oasdiff/discussions)
    - What is your use-case?
    - What is the workflow/business-process?
    - What problem did it solve?
    - What is the value to your team/organization?
-6. Give us a star
+6. Give oasdiff another star
 7. Spread the word - the more people use oasdiff, the better it will be.
    - tell your team members
    - tell peers in other teams and organizations
