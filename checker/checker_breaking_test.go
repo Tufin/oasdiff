@@ -255,7 +255,7 @@ func TestBreaking_ResponseNonSuccessStatusRemoved(t *testing.T) {
 	require.Equal(t, "response-non-success-status-removed", errs[0].Id)
 }
 
-// BC: removing an existing response with unparseable status is non-breaking
+// BC: removing an existing response with unparseable status is not breaking
 func TestBreaking_ResponseUnparseableStatusRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -271,7 +271,7 @@ func TestBreaking_ResponseUnparseableStatusRemoved(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: removing an existing response with error status is non-breaking
+// BC: removing an existing response with error status is not breaking
 func TestBreaking_ResponseErrorStatusRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -427,6 +427,41 @@ func TestBreaking_ModifyPatternToAnyString(t *testing.T) {
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Empty(t, errs)
+}
+
+// BC: modifying the default value of an optional request parameter is breaking
+func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "X"
+	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
+
+	// By default, OpenAPI treats all request parameters as optional
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+}
+
+// BC: modifying the default value of a required request parameter is not breaking
+func TestBreaking_ModifyRequiredRequiredParamDefaultValue(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	paramBase := s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies")
+	paramBase.Required = true
+	paramBase.Schema.Value.Default = "X"
+
+	paramRevision := s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies")
+	paramRevision.Required = true
+	paramRevision.Schema.Value.Default = "Y"
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)

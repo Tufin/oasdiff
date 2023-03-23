@@ -25,6 +25,7 @@ request-parameter-enum-value-removed: removed the enum value %s for the %s reque
 pattern-changed-warn-comment: "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')"
 request-parameter-x-extensible-enum-value-removed: removed the x-extensible-enum value %s for the %s request parameter %s
 request-parameter-max-decreased: for the %s request parameter %s, the max was decreased from %s to %s
+request-parameter-default-value-changed: for the %s request parameter %s, default value was changed from %s to %s
 request-parameter-max-length-decreased: for the %s request parameter %s, the maxLength was decreased from %s to %s
 request-parameter-max-length-set: for the %s request parameter %s, the maxLength was set to %s
 request-parameter-max-length-set-comment: "This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification."

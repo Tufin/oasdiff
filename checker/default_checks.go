@@ -99,5 +99,6 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		APISunsetChangedCheck,
 		ResponsePropertyMaxIncreasedCheck,
 		ResponsePropertyMinDecreasedCheck,
+		RequestParameterDefaultValueChanged,
 	}
 }
