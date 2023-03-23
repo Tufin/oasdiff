@@ -21,9 +21,21 @@ func RequestParameterDefaultValueChanged(diffReport *diff.Diff, operationsSource
 			}
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {
+
+					baseParam := operationItem.Base.Parameters.GetByInAndName(paramLocation, paramName)
+					if baseParam == nil || baseParam.Required {
+						continue
+					}
+
+					revisionParam := operationItem.Revision.Parameters.GetByInAndName(paramLocation, paramName)
+					if revisionParam == nil || revisionParam.Required {
+						continue
+					}
+
 					if paramDiff.SchemaDiff == nil {
 						continue
 					}
+
 					defaultValueDiff := paramDiff.SchemaDiff.DefaultDiff
 					if defaultValueDiff.Empty() {
 						continue
