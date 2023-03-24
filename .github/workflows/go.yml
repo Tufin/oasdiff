@@ -48,6 +48,7 @@ jobs:
         key: ${{ runner.os }}-go-${{ matrix.go }}-build-${{ hashFiles('**/go.sum') }}
 
     - uses: actions/checkout@v3
+    - uses: gaurav-nelson/github-action-markdown-link-check@v1
 
     - run: go mod download && go mod tidy && go mod verify
     - run: git --no-pager diff --exit-code
