@@ -204,323 +204,6 @@ docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-tes
 Replace `$(pwd)/data` by the path that contains your files.  
 Note that the `-base` and `-revision` paths must begin with `/`.  
 
-## Output example - Text/Markdown
-```
-oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test5.yaml
-```
-
-### New Endpoints: None
------------------------
-
-### Deleted Endpoints: 2
-------------------------
-POST /register
-POST /subscribe
-
-### Modified Endpoints: 2
--------------------------
-GET /api/{domain}/{project}/badges/security-score
-- Modified query param: filter
-  - Content changed
-    - Modified media type: application/json
-      - Schema changed
-        - Required changed
-          - New required property: type
-- Modified query param: image
-  - Examples changed
-    - Deleted example: 0
-- Modified query param: token
-  - Schema changed
-    - MaxLength changed from 29 to null
-- Modified header param: user
-  - Schema changed
-    - Schema added
-  - Content changed
-    - Deleted media type: application/json
-- Modified cookie param: test
-  - Content changed
-    - Modified media type: application/json
-      - Schema changed
-        - Type changed from 'object' to 'string'
-- Responses changed
-  - New response: default
-  - Deleted response: 200
-  - Modified response: 201
-    - Content changed
-      - Modified media type: application/xml
-        - Schema changed
-          - Type changed from 'string' to 'object'
-
-GET /api/{domain}/{project}/install-command
-- Deleted header param: network-policies
-- Responses changed
-  - Modified response: default
-    - Description changed from 'Tufin1' to 'Tufin'
-    - Headers changed
-      - Deleted header: X-RateLimit-Limit
-- Servers changed
-  - New server: https://www.tufin.io/securecloud
-
-Security Requirements changed
-- Deleted security requirements: bearerAuth
-
-Servers changed
-- Deleted server: tufin.com
-
-## Output example - YAML
-```
-oasdiff -base data/openapi-test1.yaml -revision data/openapi-test5.yaml
-```
-
-```yaml
-info:
-  title:
-    from: Tufin
-    to: Tufin1
-  contact:
-    added: true
-  license:
-    added: true
-  version:
-    from: 1.0.0
-    to: 1.0.1
-paths:
-  deleted:
-    - /register
-    - /subscribe
-  modified:
-    /api/{domain}/{project}/badges/security-score:
-      operations:
-        modified:
-          GET:
-            tags:
-              deleted:
-                - security
-            parameters:
-              modified:
-                cookie:
-                  test:
-                    content:
-                      mediaTypeModified:
-                        application/json:
-                          schema:
-                            type:
-                              from: object
-                              to: string
-                header:
-                  user:
-                    schema:
-                      schemaAdded: true
-                    content:
-                      mediaTypeDeleted:
-                        - application/json
-                query:
-                  filter:
-                    content:
-                      mediaTypeModified:
-                        application/json:
-                          schema:
-                            required:
-                              stringsdiff:
-                                added:
-                                  - type
-                  image:
-                    examples:
-                      deleted:
-                        - "0"
-                  token:
-                    schema:
-                      maxLength:
-                        from: 29
-                        to: null
-            responses:
-              added:
-                - default
-              deleted:
-                - "200"
-              modified:
-                "201":
-                  content:
-                    mediaTypeModified:
-                      application/xml:
-                        schema:
-                          type:
-                            from: string
-                            to: object
-      parameters:
-        deleted:
-          path:
-            - domain
-    /api/{domain}/{project}/install-command:
-      operations:
-        modified:
-          GET:
-            parameters:
-              deleted:
-                header:
-                  - network-policies
-            responses:
-              modified:
-                default:
-                  description:
-                    from: Tufin1
-                    to: Tufin
-                  headers:
-                    deleted:
-                      - X-RateLimit-Limit
-            servers:
-              added:
-                - https://www.tufin.io/securecloud
-endpoints:
-  deleted:
-    - method: POST
-      path: /register
-    - method: POST
-      path: /subscribe
-  modified:
-    ? method: GET
-      path: /api/{domain}/{project}/install-command
-    : parameters:
-        deleted:
-          header:
-            - network-policies
-      responses:
-        modified:
-          default:
-            description:
-              from: Tufin1
-              to: Tufin
-            headers:
-              deleted:
-                - X-RateLimit-Limit
-      servers:
-        added:
-          - https://www.tufin.io/securecloud
-    ? method: GET
-      path: /api/{domain}/{project}/badges/security-score
-    : tags:
-        deleted:
-          - security
-      parameters:
-        modified:
-          cookie:
-            test:
-              content:
-                mediaTypeModified:
-                  application/json:
-                    schema:
-                      type:
-                        from: object
-                        to: string
-          header:
-            user:
-              schema:
-                schemaAdded: true
-              content:
-                mediaTypeDeleted:
-                  - application/json
-          query:
-            filter:
-              content:
-                mediaTypeModified:
-                  application/json:
-                    schema:
-                      required:
-                        stringsdiff:
-                          added:
-                            - type
-            image:
-              examples:
-                deleted:
-                  - "0"
-            token:
-              schema:
-                maxLength:
-                  from: 29
-                  to: null
-      responses:
-        added:
-          - default
-        deleted:
-          - "200"
-        modified:
-          "201":
-            content:
-              mediaTypeModified:
-                application/xml:
-                  schema:
-                    type:
-                      from: string
-                      to: object
-security:
-  deleted:
-    - bearerAuth
-servers:
-  deleted:
-    - tufin.com
-tags:
-  deleted:
-    - security
-    - reuven
-externalDocs:
-  deleted: true
-components:
-  schemas:
-    added:
-      - requests
-    modified:
-      network-policies:
-        additionalPropertiesAllowed:
-          from: true
-          to: false
-      rules:
-        additionalPropertiesAllowed:
-          from: null
-          to: false
-  parameters:
-    deleted:
-      header:
-        - network-policies
-  headers:
-    deleted:
-      - new
-    modified:
-      test:
-        schema:
-          additionalPropertiesAllowed:
-            from: true
-            to: false
-      testc:
-        content:
-          mediaTypeModified:
-            application/json:
-              schema:
-                type:
-                  from: object
-                  to: string
-  requestBodies:
-    deleted:
-      - reuven
-  responses:
-    added:
-      - default
-    deleted:
-      - OK
-  securitySchemes:
-    deleted:
-      - OAuth
-    modified:
-      AccessToken:
-        type:
-          from: http
-          to: oauth2
-        scheme:
-          from: bearer
-          to: ""
-        OAuthFlows:
-          added: true
-```
-
 ## Diff and Breaking-Changes as a Service
 You can use oasdiff as a service like this:
 ```
@@ -537,16 +220,14 @@ curl -o openapi-test3.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/
 ```
 Service source code: https://github.com/oasdiff/oasdiff-service
 
-
-## Notes
-### Output Formats
+## Output Formats
 The default output format, YAML, provides a full view of all diff details.  
 Note that no output in the YAML format signifies that the diff is empty, or, in other words, there are no changes.  
 Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
 The JSON format works only with `-exclude-endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
 If you wish to include additional details in non-YAML formats, please open an issue.
 
-### Paths vs. Endpoints
+## Paths vs. Endpoints
 OpenAPI Specification has a hierarchical model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
 oasdiff respects this hierarchy and displays a hierarchical diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
 ```yaml
@@ -582,7 +263,7 @@ Some YAML libraries don't support complex mapping keys:
 
 In such cases, consider using the `-exclude-endpoints` flag and `format json` as a workaround.
 
-### Breaking Changes
+## Breaking Changes
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
 Notes: 
@@ -590,11 +271,11 @@ Notes:
 2. There are two different methods for detecting breaking changes (see below)
 
 
-#### Old Method
+### Old Method
 The original implementation with the `-breaking-only` flag.
 While this method is still supported, the new one will eventually replace it.
 
-#### New Method
+### New Method
 An improved implementation for detecting breaking changes with the `-check-breaking` flag.
 This method works differently from the old one: it is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
 
@@ -611,7 +292,7 @@ To exit with return code 1 when any ERR-level breaking changes are found, add th
 To exit with return code 1 even if only WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` flags.
 
 
-#### Stability Level
+### Stability Level
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
 The new Breaking Changes method provides this feature through the `x-stability-level` extension.  
 There are four stability levels: `draft`->`alpha`->`beta`->`stable`.  
@@ -627,7 +308,7 @@ Example:
      x-stability-level: "alpha"
    ```
 
-#### Ignoring Specific Breaking Changes
+### Ignoring Specific Breaking Changes
 Sometimes, you may want to ignore certain breaking changes.  
 The new Breaking Changes method allows you define breaking changes that you want to ignore in a configuration file.  
 You can specify the configuration file name in the oasdiff command-line with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.  
@@ -647,18 +328,18 @@ The line may contain additional info, like this:
 
 The configuration files can be of any text type, e.g., Markdown, so you can use them to document breaking changes and other important changes.
 
-#### Breaking Changes to Enum Values
+### Breaking Changes to Enum Values
 The new Breaking Changes method support rules for enum changes using the `x-extensible-enum` extension.  
 This method allows adding new entries to enums used in responses which is very usable in many cases but requires clients to support a fallback to default logic when they receive an unknown value.
 `x-extensible-enum` was introduced by [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community. Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is a more explicit way to do it.  
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
-#### Optional Backwards Compatibility Checks
+### Optional Backwards Compatibility Checks
 You can use the `-include-checks` flag to include the following optional backwards compatibility checks:
 - response-non-success-status-removed
 
-#### Advantages of the New Breaking Changes Method 
+### Advantages of the New Breaking Changes Method 
 - output is human readable
 - supports localization for error messages and ignored changes
 - checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks
@@ -669,12 +350,12 @@ You can use the `-include-checks` flag to include the following optional backwar
 - easier to extend and customize
 - will continue to be improved
 
-#### Limitations of the New Breaking Changes Method
+### Limitations of the New Breaking Changes Method
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
 - false-positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
 
-### Composed Mode
+## Composed Mode
 Composed mode compares two collections of OpenAPI specs instead of a pair of specs in the default mode.
 The collections are specified using a [glob](https://en.wikipedia.org/wiki/Glob_(programming)).
 This can be useful when your APIs are defined across multiple files, for example, when multiple services, each one with its own spec, are exposed behind an API gateway, and you want to check changes across all the specs at once.
@@ -698,7 +379,7 @@ Example of the `x-since-date` usage:
 
 Note: Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
 
-### Non-Breaking Removal of Deprecated Resources
+## Non-Breaking Removal of Deprecated Resources
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
 As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
 
@@ -724,7 +405,7 @@ oasdiff -deprecation-days=30 -breaking-only -base data/deprecation/base.yaml -re
 Setting deprecation-days to 0 is equivalent to the default which allows non-breaking deprecation regardless of the sunset date.  
 Note: this is a Beta feature. Please report issues.
 
-### Path Prefix Modification
+## Path Prefix Modification
 Sometimes paths prefixes need to be modified, for example, to create a new version:
 - /api/v1/...
 - /api/v2/...
