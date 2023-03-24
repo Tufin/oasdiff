@@ -120,7 +120,7 @@ paths:
         default:
           description: Tufin
       servers:
-        - url: 'https://www.tufin.io/securecloud'
+        - url: 'https://www.oasdiff.com'
           description: "2"
           variables:
             name: 

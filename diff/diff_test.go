@@ -332,13 +332,13 @@ func TestResponseHeadersModified(t *testing.T) {
 func TestServerAdded(t *testing.T) {
 	require.Contains(t,
 		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Added,
-		"https://tufin.io/securecloud")
+		"https://api.oasdiff.com")
 }
 
 func TestServerDeleted(t *testing.T) {
 	require.Contains(t,
 		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Deleted,
-		"https://tufin.io/securecloud")
+		"https://api.oasdiff.com")
 }
 
 func TestServerModified(t *testing.T) {
@@ -348,12 +348,12 @@ func TestServerModified(t *testing.T) {
 
 	require.Contains(t,
 		d(t, &config, 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified,
-		"https://www.tufin.io/securecloud")
+		"https://www.oasdiff.com")
 }
 
 func TestServerVariableAdded(t *testing.T) {
 	require.Contains(t,
-		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Added,
+		d(t, diff.NewConfig(), 3, 5).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.oasdiff.com"].VariablesDiff.Added,
 		"name")
 }
 
@@ -363,17 +363,17 @@ func TestServerVariableModified(t *testing.T) {
 
 	require.Equal(t,
 		"CEO",
-		dd.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff.From)
+		dd.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.oasdiff.com"].VariablesDiff.Modified["title"].DefaultDiff.From)
 
 	require.Equal(t,
 		"developer",
-		dd.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.tufin.io/securecloud"].VariablesDiff.Modified["title"].DefaultDiff.To)
+		dd.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified["https://www.oasdiff.com"].VariablesDiff.Modified["title"].DefaultDiff.To)
 }
 
 func TestServerAddedToPathItem(t *testing.T) {
 	require.Contains(t,
 		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].ServersDiff.Added,
-		"https://tufin.io/securecloud")
+		"https://api.oasdiff.com")
 }
 
 func TestParamAddedToPathItem(t *testing.T) {
