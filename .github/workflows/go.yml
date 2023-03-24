@@ -53,8 +53,6 @@ jobs:
     - if: runner.os == 'Linux'
       name: Check markdown links
       uses: gaurav-nelson/github-action-markdown-link-check@v1
-      with:
-        use-verbose-mode: 'yes'
 
     - run: go mod download && go mod tidy && go mod verify
     - run: git --no-pager diff --exit-code
