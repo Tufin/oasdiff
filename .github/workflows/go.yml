@@ -47,8 +47,12 @@ jobs:
         path: ${{ steps.go-cache-paths.outputs.go-build }}
         key: ${{ runner.os }}-go-${{ matrix.go }}-build-${{ hashFiles('**/go.sum') }}
 
-    - uses: actions/checkout@v3
-    - uses: gaurav-nelson/github-action-markdown-link-check@v1
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - if: runner.os == 'Linux'
+      name: Check markdown links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
         use-verbose-mode: 'yes'
 
