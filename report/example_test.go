@@ -81,8 +81,8 @@ func ExampleGetTextReportAsString() {
 	//       - Modified header: X-RateLimit-Limit
 	//         - Description changed from 'Request limit per hour.' to 'Request limit per min.'
 	// - Servers changed
-	//   - New server: https://tufin.io/securecloud
-	//   - New server: https://www.tufin.io/securecloud
+	//   - New server: https://api.oasdiff.com
+	//   - New server: https://www.oasdiff.com
 	//
 	// POST /register
 	// - Callbacks changed
@@ -223,8 +223,8 @@ func ExampleGetHTMLReportAsString() {
 	// </li>
 	// <li>Servers changed
 	// <ul>
-	// <li>New server: <a href="https://tufin.io/securecloud">https://tufin.io/securecloud</a></li>
-	// <li>New server: <a href="https://www.tufin.io/securecloud">https://www.tufin.io/securecloud</a></li>
+	// <li>New server: <a href="https://api.oasdiff.com">https://api.oasdiff.com</a></li>
+	// <li>New server: <a href="https://www.oasdiff.com">https://www.oasdiff.com</a></li>
 	// </ul>
 	// </li>
 	// </ul>
