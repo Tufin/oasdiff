@@ -338,6 +338,7 @@ If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing
 ### Optional Backwards Compatibility Checks
 You can use the `-include-checks` flag to include the following optional backwards compatibility checks:
 - response-non-success-status-removed
+- api-operation-id-removed
 
 ### Advantages of the New Breaking Changes Method 
 - output is human readable

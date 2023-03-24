@@ -13,6 +13,7 @@ api-path-removed-without-deprecation: api path removed without deprecation
 api-path-removed-before-sunset: api path removed before the sunset date %s
 api-removed-without-deprecation: api removed without deprecation
 api-removed-before-sunset: api removed before the sunset date %s
+api-operation-id-removed: api operation id %s removed and replaced with %s
 sunset-deleted: api sunset date deleted, but deprecated=true kept
 api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %d days from now
 new-required-request-parameter: added the new required %s request parameter %s
