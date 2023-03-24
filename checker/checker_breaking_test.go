@@ -255,6 +255,24 @@ func TestBreaking_ResponseNonSuccessStatusRemoved(t *testing.T) {
 	require.Equal(t, "response-non-success-status-removed", errs[0].Id)
 }
 
+// BC: removing/updating an operation id is breaking (optional)
+func TestBreaking_OperationIdRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Spec.Paths[securityScorePath].Get.OperationID = "newOperationId"
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-operation-id-removed"}), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "api-operation-id-removed", errs[0].Id)
+}
+
 // BC: removing an existing response with unparseable status is not breaking
 func TestBreaking_ResponseUnparseableStatusRemoved(t *testing.T) {
 	s1 := l(t, 1)
