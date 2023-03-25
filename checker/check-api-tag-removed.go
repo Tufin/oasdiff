@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	apiOperationRemovedCheckId = "api-operation-id-removed"
+	apiTagRemovedCheckId = "api-tag-removed"
 )
 
-func APIOperationIdRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func APITagRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -25,14 +25,14 @@ func APIOperationIdRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 			op := pathItem.Base.Operations()[operation]
 			source := (*operationsSources)[op]
 
-			if operationItem.OperationIDDiff == nil {
+			if operationItem.TagsDiff == nil || operationItem.TagsDiff.Deleted == nil {
 				continue
 			}
 
 			result = append(result, BackwardCompatibilityError{
-				Id:        apiOperationRemovedCheckId,
+				Id:        apiTagRemovedCheckId,
 				Level:     ERR,
-				Text:      fmt.Sprintf(config.i18n(apiOperationRemovedCheckId), ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID)),
+				Text:      fmt.Sprintf(config.i18n(apiTagRemovedCheckId), ColorizedValue(operationItem.TagsDiff.Deleted)),
 				Operation: operation,
 				Path:      path,
 				Source:    source,
