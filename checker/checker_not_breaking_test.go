@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // BC: no change is not breaking
@@ -240,5 +241,35 @@ func TestBreaking_Servers(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Empty(t, errs)
+}
+
+// BC: adding a tag is not breaking
+func TestBreaking_TagAdded(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.Empty(t, errs)
+}
+
+// BC: adding a tag is not breaking with "api-tag-removed" check
+func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-tag-removed"}), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
 	require.Empty(t, errs)
 }
