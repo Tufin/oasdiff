@@ -14,6 +14,7 @@ api-path-removed-before-sunset: API path удалён до даты sunset %s
 api-removed-without-deprecation: API удалён без deprecation
 api-removed-before-sunset: API удалёг до даты sunset %s
 api-operation-id-removed: Идентификатор операции API %s удален и заменен на %s
+api-tag-removed: Тег API %s удален
 sunset-deleted: удалена дата sunset date у API, но сохранён deprecated=true
 api-sunset-date-changed-too-small: дата sunset у API изменена на более раннюю с %s на %s, новая дата sunset должна быть либо не раньше %s, либо, как минимум, %d дней от текущего дня
 new-required-request-parameter: добавлен новый обязательный %s параметр зароса %s

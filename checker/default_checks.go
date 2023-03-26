@@ -22,6 +22,7 @@ func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig 
 var optionalChecks = map[string]BackwardCompatibilityCheck{
 	"response-non-success-status-removed": ResponseNonSuccessStatusRemoved,
 	"api-operation-id-removed":            APIOperationIdRemovedCheck,
+	"api-tag-removed":                     APITagRemovedCheck,
 }
 
 func ValidateIncludeChecks(includeChecks utils.StringList) utils.StringList {
