@@ -29,14 +29,17 @@ func APITagRemovedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 				continue
 			}
 
-			result = append(result, BackwardCompatibilityError{
-				Id:        apiTagRemovedCheckId,
-				Level:     ERR,
-				Text:      fmt.Sprintf(config.i18n(apiTagRemovedCheckId), ColorizedValue(operationItem.TagsDiff.Deleted)),
-				Operation: operation,
-				Path:      path,
-				Source:    source,
-			})
+			for _, tag := range operationItem.TagsDiff.Deleted {
+				result = append(result, BackwardCompatibilityError{
+					Id:        apiTagRemovedCheckId,
+					Level:     ERR,
+					Text:      fmt.Sprintf(config.i18n(apiTagRemovedCheckId), ColorizedValue(tag)),
+					Operation: operation,
+					Path:      path,
+					Source:    source,
+				})
+
+			}
 		}
 	}
 	return result
