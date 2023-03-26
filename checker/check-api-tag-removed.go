@@ -25,7 +25,7 @@ func APITagRemovedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 			op := pathItem.Base.Operations()[operation]
 			source := (*operationsSources)[op]
 
-			if operationItem.TagsDiff == nil || len(operationItem.TagsDiff.Deleted) == 0 {
+			if operationItem.TagsDiff == nil {
 				continue
 			}
 
