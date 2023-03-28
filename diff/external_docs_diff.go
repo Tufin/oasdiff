@@ -1,6 +1,8 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // ExternalDocsDiff describes the changes between a pair of external documentation objects: https://swagger.io/specification/#external-documentation-object
 type ExternalDocsDiff struct {
@@ -48,7 +50,7 @@ func getExternalDocsDiffInternal(config *Config, state *state, docs1, docs2 *ope
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, docs1.Extensions, docs2.Extensions)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, docs1.Description, docs2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), docs1.Description, docs2.Description)
 	result.URLDiff = getValueDiff(docs1.URL, docs2.URL)
 
 	return result

@@ -2,19 +2,20 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // TagsDiff describes the changes between a pair of lists of tag objects: https://swagger.io/specification/#tag-object
 type TagsDiff struct {
-	Added    StringList   `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedTags `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added    utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedTags     `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 func newTagsDiff() *TagsDiff {
 	return &TagsDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedTags{},
 	}
 }

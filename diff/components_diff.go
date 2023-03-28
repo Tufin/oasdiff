@@ -1,6 +1,8 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // ComponentsDiff describes the changes between a pair of component objects: https://swagger.io/specification/#components-object
 type ComponentsDiff struct {

@@ -1,6 +1,8 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // ResponseDiff describes the changes between a pair of response objects: https://swagger.io/specification/#response-object
 type ResponseDiff struct {
@@ -50,7 +52,7 @@ func diffResponseValuesInternal(config *Config, state *state, response1, respons
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, response1.Extensions, response2.Extensions)
-	result.DescriptionDiff = getStringRefDiffConditional(config.ExcludeDescription, response1.Description, response2.Description)
+	result.DescriptionDiff = getStringRefDiffConditional(config.IsExcludeDescription(), response1.Description, response2.Description)
 	result.HeadersDiff, err = getHeadersDiff(config, state, response1.Headers, response2.Headers)
 	if err != nil {
 		return nil, err

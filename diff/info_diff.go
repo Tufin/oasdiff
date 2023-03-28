@@ -52,8 +52,8 @@ func getInfoDiffInternal(config *Config, state *state, info1, info2 *openapi3.In
 
 	return &InfoDiff{
 		ExtensionsDiff:     getExtensionsDiff(config, state, info1.Extensions, info2.Extensions),
-		TitleDiff:          getValueDiff(info1.Title, info2.Title),
-		DescriptionDiff:    getValueDiffConditional(config.ExcludeDescription, info1.Description, info2.Description),
+		TitleDiff:          getValueDiffConditional(config.IsExcludeTitle(), info1.Title, info2.Title),
+		DescriptionDiff:    getValueDiffConditional(config.IsExcludeDescription(), info1.Description, info2.Description),
 		TermsOfServiceDiff: getValueDiff(info1.TermsOfService, info2.TermsOfService),
 		ContactDiff:        getContactDiff(config, state, info1.Contact, info2.Contact),
 		LicenseDiff:        getLicenseDiff(config, state, info1.License, info2.License),

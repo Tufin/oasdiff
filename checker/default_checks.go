@@ -32,7 +32,8 @@ func ValidateIncludeChecks(includeChecks utils.StringList) utils.StringList {
 			result = append(result, s)
 		}
 	}
-	return result
+
+	return result.Sort()
 }
 
 func includedChecks(includeChecks utils.StringList) []BackwardCompatibilityCheck {
