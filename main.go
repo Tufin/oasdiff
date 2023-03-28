@@ -22,7 +22,7 @@ var base, revision, filter, filterExtension, format, lang, warnIgnoreFile, errIg
 var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, prefix string
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking, excludeEndpoints bool
 var deprecationDays int
-var includeChecks utils.StringList
+var includeChecks, excludeElements utils.StringList
 
 const (
 	formatYAML = "yaml"
@@ -39,25 +39,30 @@ func init() {
 	flag.StringVar(&prefix_revision, "prefix-revision", "", "if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison")
 	flag.StringVar(&strip_prefix_base, "strip-prefix-base", "", "if provided, this prefix will be stripped from paths in original (base) spec before comparison")
 	flag.StringVar(&strip_prefix_revision, "strip-prefix-revision", "", "if provided, this prefix will be stripped from paths in revised (revision) spec before comparison")
-	flag.StringVar(&prefix, "prefix", "", "deprecated. use -prefix-revision instead")
+	flag.StringVar(&prefix, "prefix", "", "deprecated. use '-prefix-revision' instead")
 	flag.StringVar(&filter, "filter", "", "if provided, diff will include only paths that match this regular expression")
 	flag.StringVar(&filterExtension, "filter-extension", "", "if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression")
-	flag.BoolVar(&excludeExamples, "exclude-examples", false, "ignore changes to examples")
-	flag.BoolVar(&excludeDescription, "exclude-description", false, "ignore changes to descriptions")
+	flag.BoolVar(&excludeExamples, "exclude-examples", false, "ignore changes to examples (deprecated, use '-exclude-elements examples' instead)")
+	flag.BoolVar(&excludeDescription, "exclude-description", false, "ignore changes to descriptions (deprecated, use '-exclude-elements description' instead)")
 	flag.BoolVar(&summary, "summary", false, "display a summary of the changes instead of the full diff")
 	flag.BoolVar(&breakingOnly, "breaking-only", false, "display breaking changes only (old method)")
 	flag.BoolVar(&checkBreaking, "check-breaking", false, "check for breaking changes (new method)")
-	flag.StringVar(&warnIgnoreFile, "warn-ignore", "", "the configuration file for ignoring warnings with -check-breaking")
-	flag.StringVar(&errIgnoreFile, "err-ignore", "", "the configuration file for ignoring errors with -check-breaking")
+	flag.StringVar(&warnIgnoreFile, "warn-ignore", "", "the configuration file for ignoring warnings with '-check-breaking'")
+	flag.StringVar(&errIgnoreFile, "err-ignore", "", "the configuration file for ignoring errors with '-check-breaking'")
 	flag.IntVar(&deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
 	flag.StringVar(&format, "format", formatYAML, "output format: yaml, json, text or html")
 	flag.StringVar(&lang, "lang", "en", "language for localized breaking changes checks errors")
-	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "exit with return code 1 when any ERR-level breaking changes are found, used together with -check-breaking")
-	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "exit with return code 1 when any WARN-level breaking changes are found, used together with -check-breaking and -fail-on-diff")
+	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "exit with return code 1 when any ERR-level breaking changes are found, used together with '-check-breaking'")
+	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "exit with return code 1 when any WARN-level breaking changes are found, used together with '-check-breaking' and '-fail-on-diff'")
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
-	flag.BoolVar(&excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output")
-	flag.Var(&includeChecks, "include-checks", "comma-seperated list of optional backwards compatibility checks")
+	flag.BoolVar(&excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output (deprecated, use '-exclude-elements endpoints' instead)")
+	flag.Var(&includeChecks, "include-checks", "comma-seperated list of optional breaking-changes checks")
+	flag.Var(&excludeElements, "exclude-elements", "comma-seperated list of elements to exclude from diff")
+}
+
+func isExcludeEndpoints() bool {
+	return excludeEndpoints || excludeElements.Contains("endpoints")
 }
 
 func validateFlags() bool {
@@ -74,8 +79,8 @@ func validateFlags() bool {
 		fmt.Fprintf(os.Stderr, "invalid format. Should be yaml, json text or html\n")
 		return false
 	}
-	if format == "json" && !excludeEndpoints {
-		fmt.Fprintf(os.Stderr, "json format requires the '-exclude-endpoints' flag\n")
+	if format == "json" && !isExcludeEndpoints() {
+		fmt.Fprintf(os.Stderr, "json format requires '-exclude-elements endpoints'\n")
 		return false
 	}
 	if prefix != "" {
@@ -91,9 +96,14 @@ func validateFlags() bool {
 			return false
 		}
 	}
-	invalidChecks := checker.ValidateIncludeChecks(includeChecks)
-	if len(invalidChecks) > 0 {
+
+	if invalidChecks := checker.ValidateIncludeChecks(includeChecks); len(invalidChecks) > 0 {
 		fmt.Fprintf(os.Stderr, "invalid include-checks: %s\n", invalidChecks.String())
+		return false
+	}
+
+	if invalidElements := diff.ValidateExcludeElements(excludeElements); len(invalidElements) > 0 {
+		fmt.Fprintf(os.Stderr, "invalid exclude-elements: %s\n", invalidElements.String())
 		return false
 	}
 
@@ -116,8 +126,6 @@ func main() {
 	loader.IsExternalRefsAllowed = true
 
 	config := diff.NewConfig()
-	config.ExcludeExamples = excludeExamples
-	config.ExcludeDescription = excludeDescription
 	config.PathFilter = filter
 	config.FilterExtension = filterExtension
 	config.PathPrefixBase = prefix_base
@@ -126,7 +134,7 @@ func main() {
 	config.PathStripPrefixRevision = strip_prefix_revision
 	config.BreakingOnly = breakingOnly
 	config.DeprecationDays = deprecationDays
-	config.ExcludeEndpoints = excludeEndpoints
+	config.SetExcludeElements(excludeElements.ToStringSet(), excludeExamples, excludeDescription, excludeEndpoints)
 
 	var diffReport *diff.Diff
 	var err error

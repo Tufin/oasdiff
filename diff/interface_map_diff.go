@@ -1,12 +1,14 @@
 package diff
 
+import "github.com/tufin/oasdiff/utils"
+
 // InterfaceMap is a map of string to interface
 type InterfaceMap map[string]interface{}
 
 // InterfaceMapDiff describes the changes between a pair of InterfaceMap
 type InterfaceMapDiff struct {
-	Added    StringList         `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    utils.StringList   `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedInterfaces `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
@@ -26,13 +28,13 @@ func (diff *InterfaceMapDiff) Empty() bool {
 
 func newInterfaceMapDiff() *InterfaceMapDiff {
 	return &InterfaceMapDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedInterfaces{},
 	}
 }
 
-func getInterfaceMapDiff(map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
+func getInterfaceMapDiff(map1, map2 InterfaceMap, filter utils.StringSet) *InterfaceMapDiff {
 	diff := getInterfaceMapDiffInternal(map1, map2, filter)
 
 	if diff.Empty() {
@@ -42,7 +44,7 @@ func getInterfaceMapDiff(map1, map2 InterfaceMap, filter StringSet) *InterfaceMa
 	return diff
 }
 
-func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter StringSet) *InterfaceMapDiff {
+func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter utils.StringSet) *InterfaceMapDiff {
 
 	result := newInterfaceMapDiff()
 

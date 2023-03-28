@@ -70,8 +70,8 @@ func getPathDiffInternal(config *Config, state *state, pathItem1, pathItem2 *ope
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, pathItem1.Extensions, pathItem2.Extensions)
 	result.RefDiff = getValueDiff(pathItem1.Ref, pathItem2.Ref)
-	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
+	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), pathItem1.Summary, pathItem2.Summary)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), pathItem1.Description, pathItem2.Description)
 
 	result.OperationsDiff, err = getOperationsDiff(config, state, pathItem1, pathItem2)
 	if err != nil {

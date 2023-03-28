@@ -72,7 +72,7 @@ func newEndpointsDiff() *EndpointsDiff {
 
 func getEndpointsDiff(config *Config, state *state, paths1, paths2 openapi3.Paths) (*EndpointsDiff, error) {
 
-	if config.ExcludeEndpoints {
+	if config.IsExcludeEndpoints() {
 		return nil, nil
 	}
 

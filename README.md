@@ -59,17 +59,19 @@ Usage of oasdiff:
   -deprecation-days int
     	minimal number of days required between deprecating a resource and removing it without being considered 'breaking'
   -err-ignore string
-    	the configuration file for ignoring errors with -check-breaking
+    	the configuration file for ignoring errors with '-check-breaking'
   -exclude-description
-    	ignore changes to descriptions
+    	ignore changes to descriptions (deprecated, use '-exclude-elements description' instead)
+  -exclude-elements value
+    	comma-seperated list of elements to exclude from diff
   -exclude-endpoints
-    	exclude endpoints from output
+    	exclude endpoints from output (deprecated, use '-exclude-elements endpoints' instead)
   -exclude-examples
-    	ignore changes to examples
+    	ignore changes to examples (deprecated, use '-exclude-elements examples' instead)
   -fail-on-diff
-    	exit with return code 1 when any ERR-level breaking changes are found, used together with -check-breaking
+    	exit with return code 1 when any ERR-level breaking changes are found, used together with '-check-breaking'
   -fail-on-warns
-    	exit with return code 1 when any WARN-level breaking changes are found, used together with -check-breaking and -fail-on-diff
+    	exit with return code 1 when any WARN-level breaking changes are found, used together with '-check-breaking' and '-fail-on-diff'
   -filter string
     	if provided, diff will include only paths that match this regular expression
   -filter-extension string
@@ -77,13 +79,13 @@ Usage of oasdiff:
   -format string
     	output format: yaml, json, text or html (default "yaml")
   -include-checks value
-    	comma-seperated list of optional backwards compatibility checks
+    	comma-seperated list of optional breaking-changes checks
   -lang string
     	language for localized breaking changes checks errors (default "en")
   -max-circular-dep int
     	maximum allowed number of circular dependencies between objects in OpenAPI specs (default 5)
   -prefix string
-    	deprecated. use -prefix-revision instead
+    	deprecated. use '-prefix-revision' instead
   -prefix-base string
     	if provided, paths in original (base) spec will be prefixed with the given prefix before comparison
   -prefix-revision string
@@ -99,7 +101,7 @@ Usage of oasdiff:
   -version
     	show version and quit
   -warn-ignore string
-    	the configuration file for ignoring warnings with -check-breaking
+    	the configuration file for ignoring warnings with '-check-breaking'
 ```
 All arguments can be passed with one or two leading minus signs.  
 For example, ```-breaking-only``` and ```--breaking-only``` are equivalent.
@@ -174,9 +176,9 @@ Notes:
 1. [OpenAPI Extensions](https://swagger.io/docs/specification/openapi-extensions/) can be defined both at the [path](https://swagger.io/docs/specification/paths-and-operations/) level and at the [operation](https://swagger.io/docs/specification/paths-and-operations/) level. Both are matched and excluded with this flag.
 2. If a path or operation has a matching extension only in one of the specs, but not in the other, it will appear as Added or Deleted.
 
-### Ignore changes to descriptions and examples
+### Ignore changes to description and examples
 ```bash
-oasdiff -exclude-description -exclude-examples -format text -base data/openapi-test1.yaml -revision data/openapi-test3.yaml
+oasdiff -exclude-elements description,examples -format text -base data/openapi-test1.yaml -revision data/openapi-test3.yaml
 ``` 
 
 ### Display change summary
@@ -224,7 +226,7 @@ Service source code: https://github.com/oasdiff/oasdiff-service
 The default output format, YAML, provides a full view of all diff details.  
 Note that no output in the YAML format signifies that the diff is empty, or, in other words, there are no changes.  
 Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
-The JSON format works only with `-exclude-endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
+The JSON format works only with `-exclude-elements endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
 If you wish to include additional details in non-YAML formats, please open an issue.
 
 ## Paths vs. Endpoints
@@ -261,7 +263,7 @@ Some YAML libraries don't support complex mapping keys:
 - python PyYAML: see https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450
 - golang gopkg.in/yaml.v3 fails to unmarshal the oasdiff output. This package offers a solution: https://github.com/tliron/yamlkeys
 
-In such cases, consider using the `-exclude-endpoints` flag and `format json` as a workaround.
+In such cases, consider using `-exclude-elements endpoints` and `-format json` as a workaround.
 
 ## Breaking Changes
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
@@ -422,6 +424,18 @@ oasdiff -base original.yaml -revision new.yaml -strip-prefix-base /api/v1 -strip
 ```
 Note that stripping precedes prepending.
 
+## Excluding Specific Kinds of Changes 
+You can use the `-exclude-elements` flag to exclude certain kinds of changes:
+- Use `-exclude-elements changes` to exclude [Examples](https://swagger.io/specification/#example-object)
+- Use `-exclude-elements description` to exclude description fields
+- Use `-exclude-elements title` to exclude title fields
+- Use `-exclude-elements summary` to exclude summary fields
+- Use `-exclude-elements endpoints` to exclude the [endpoints diff](#paths-vs-endpoints)
+
+You can ignore multiple elements with a comma-seperated list of excluded elements as in [this example](#ignore-changes-to-description-and-examples).  
+Note that [Extensions](https://swagger.io/specification/#specification-extensions) are always excluded from the diff.
+
+
 ## Notes for Go Developers
 ### Embedding oasdiff into your program
 ```go
@@ -437,12 +451,6 @@ diff.Get(&diff.Config{}, spec1, spec2)
 ### OpenAPI References
 oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
 References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [Loader.ResolveRefsIn](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn).
-
-### Excluding Changes to Examples etc.
-Use [configuration](diff/config.go) to exclude certain types of changes:
-- [Examples](https://swagger.io/specification/#example-object) 
-- Descriptions
-- [Extensions](https://swagger.io/specification/#specification-extensions) are excluded by default
 
 ## Requests for enhancements
 1. OpenAPI 3.1 support: see https://github.com/Tufin/oasdiff/issues/52

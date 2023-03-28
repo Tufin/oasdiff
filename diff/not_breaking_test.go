@@ -6,6 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // BC: no change is not breaking
@@ -68,7 +69,7 @@ func TestBreaking_AddedEnum(t *testing.T) {
 func TestBreaking_ModifiedExtension(t *testing.T) {
 	config := diff.Config{
 		BreakingOnly:      true,
-		IncludeExtensions: diff.StringSet{"x-extension-test2": struct{}{}},
+		IncludeExtensions: utils.StringSet{"x-extension-test2": struct{}{}},
 	}
 
 	require.Empty(t, d(t, &config, 1, 3).ExtensionsDiff)

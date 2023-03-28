@@ -2,12 +2,13 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // ContentDiff describes the changes between content properties each containing media type objects: https://swagger.io/specification/#media-type-object
 type ContentDiff struct {
-	MediaTypeAdded    StringList         `json:"mediaTypeAdded,omitempty" yaml:"mediaTypeAdded,omitempty"`
-	MediaTypeDeleted  StringList         `json:"mediaTypeDeleted,omitempty" yaml:"mediaTypeDeleted,omitempty"`
+	MediaTypeAdded    utils.StringList   `json:"mediaTypeAdded,omitempty" yaml:"mediaTypeAdded,omitempty"`
+	MediaTypeDeleted  utils.StringList   `json:"mediaTypeDeleted,omitempty" yaml:"mediaTypeDeleted,omitempty"`
 	MediaTypeModified ModifiedMediaTypes `json:"mediaTypeModified,omitempty" yaml:"mediaTypeModified,omitempty"`
 }
 
@@ -16,8 +17,8 @@ type ModifiedMediaTypes map[string]*MediaTypeDiff
 
 func newContentDiff() *ContentDiff {
 	return &ContentDiff{
-		MediaTypeAdded:    StringList{},
-		MediaTypeDeleted:  StringList{},
+		MediaTypeAdded:    utils.StringList{},
+		MediaTypeDeleted:  utils.StringList{},
 		MediaTypeModified: ModifiedMediaTypes{},
 	}
 }

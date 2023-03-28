@@ -97,7 +97,7 @@ func getRequestBodyDiffInternal(config *Config, state *state, requestBodyRef1, r
 	}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, requestBody1.Extensions, requestBody2.Extensions)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, requestBody1.Description, requestBody2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), requestBody1.Description, requestBody2.Description)
 	result.RequiredDiff = getValueDiff(requestBody1.Required, requestBody2.Required)
 	result.ContentDiff, err = getContentDiff(config, state, requestBody1.Content, requestBody2.Content)
 	if err != nil {

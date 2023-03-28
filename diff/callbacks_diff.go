@@ -4,12 +4,13 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // CallbacksDiff describes the changes between a pair of callback objects: https://swagger.io/specification/#callback-object
 type CallbacksDiff struct {
-	Added    StringList        `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList        `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    utils.StringList  `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList  `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedCallbacks `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
@@ -40,8 +41,8 @@ type ModifiedCallbacks map[string]*PathsDiff
 
 func newCallbacksDiff() *CallbacksDiff {
 	return &CallbacksDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedCallbacks{},
 	}
 }

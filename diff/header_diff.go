@@ -1,6 +1,8 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // HeaderDiff describes the changes between a pair of header objects: https://swagger.io/specification/#header-object
 type HeaderDiff struct {
@@ -65,7 +67,7 @@ func getHeaderDiffInternal(config *Config, state *state, header1, header2 *opena
 	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, header1.Extensions, header2.Extensions)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, header1.Description, header2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), header1.Description, header2.Description)
 	result.DeprecatedDiff = getValueDiff(header1.Deprecated, header2.Deprecated)
 	result.RequiredDiff = getValueDiff(header1.Required, header2.Required)
 
@@ -79,7 +81,7 @@ func getHeaderDiffInternal(config *Config, state *state, header1, header2 *opena
 		return nil, err
 	}
 
-	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, header1.Example, header2.Example)
+	result.ExampleDiff = getValueDiffConditional(config.IsExcludeExamples(), header1.Example, header2.Example)
 
 	result.ContentDiff, err = getContentDiff(config, state, header1.Content, header2.Content)
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // SchemaDiff describes the changes between a pair of schema objects: https://swagger.io/specification/#schema-object
@@ -215,7 +216,7 @@ func (diff *SchemaDiff) removeNonBreakingProperties(state *state, schema1, schem
 	readWriteOnlyMap := getReadWriteOnlyMap(state.direction, schema1, schema2)
 	changedSet := diff.PropertiesDiff.getBreakingSetByDirection(state.direction)
 
-	newList := StringList{}
+	newList := utils.StringList{}
 	for _, property := range *changedSet {
 		if requiredMap[property] && !readWriteOnlyMap[property] {
 			newList = append(newList, property)
@@ -359,12 +360,12 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		return nil, err
 	}
 	result.TypeDiff = getValueDiff(value1.Type, value2.Type)
-	result.TitleDiff = getValueDiff(value1.Title, value2.Title)
+	result.TitleDiff = getValueDiffConditional(config.IsExcludeTitle(), value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), value1.Description, value2.Description)
 	result.EnumDiff = getEnumDiff(config, state, value1.Enum, value2.Enum)
 	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
-	result.ExampleDiff = getValueDiffConditional(config.ExcludeExamples, value1.Example, value2.Example)
+	result.ExampleDiff = getValueDiffConditional(config.IsExcludeExamples(), value1.Example, value2.Example)
 	result.ExternalDocsDiff = getExternalDocsDiff(config, state, value1.ExternalDocs, value2.ExternalDocs)
 	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(value1.AdditionalProperties.Has, value2.AdditionalProperties.Has)
 	result.UniqueItemsDiff = getValueDiff(value1.UniqueItems, value2.UniqueItems)

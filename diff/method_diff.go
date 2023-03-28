@@ -79,8 +79,8 @@ func getMethodDiffInternal(config *Config, state *state, pathItem1, pathItem2 *o
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, pathItem1.Extensions, pathItem2.Extensions)
 	result.TagsDiff = getStringsDiff(pathItem1.Tags, pathItem2.Tags)
-	result.SummaryDiff = getValueDiff(pathItem1.Summary, pathItem2.Summary)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, pathItem1.Description, pathItem2.Description)
+	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), pathItem1.Summary, pathItem2.Summary)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), pathItem1.Description, pathItem2.Description)
 	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)
 	result.ParametersDiff, err = getParametersDiff(config, state, pathItem1.Parameters, pathItem2.Parameters)
 	if err != nil {

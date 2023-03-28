@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // ParametersDiff describes the changes between a pair of lists of parameter objects: https://swagger.io/specification/#parameter-object
@@ -36,7 +37,7 @@ func (parametersDiff *ParametersDiff) removeNonBreaking(params2 openapi3.Paramet
 
 func (parametersDiff *ParametersDiff) removeAddedButNonRequired(params2 openapi3.Parameters) {
 	for location, paramNames := range parametersDiff.Added {
-		newList := StringList{}
+		newList := utils.StringList{}
 		for _, paramName := range paramNames {
 			if param := params2.GetByInAndName(location, paramName); param != nil {
 				if param.Required || param.In == openapi3.ParameterInPath {
@@ -57,7 +58,7 @@ func (parametersDiff *ParametersDiff) removeAddedButNonRequired(params2 openapi3
 var ParamLocations = []string{openapi3.ParameterInPath, openapi3.ParameterInQuery, openapi3.ParameterInHeader, openapi3.ParameterInCookie}
 
 // ParamNamesByLocation maps param location (path, query, header or cookie) to the params in this location
-type ParamNamesByLocation map[string]StringList
+type ParamNamesByLocation map[string]utils.StringList
 
 // ParamDiffByLocation maps param location (path, query, header or cookie) to param diffs in this location
 type ParamDiffByLocation map[string]ParamDiffs
@@ -78,7 +79,7 @@ func (parametersDiff *ParametersDiff) addAddedParam(param *openapi3.Parameter) {
 	if paramNames, ok := parametersDiff.Added[param.In]; ok {
 		parametersDiff.Added[param.In] = append(paramNames, param.Name)
 	} else {
-		parametersDiff.Added[param.In] = StringList{param.Name}
+		parametersDiff.Added[param.In] = utils.StringList{param.Name}
 	}
 }
 
@@ -87,7 +88,7 @@ func (parametersDiff *ParametersDiff) addDeletedParam(param *openapi3.Parameter)
 	if paramNames, ok := parametersDiff.Deleted[param.In]; ok {
 		parametersDiff.Deleted[param.In] = append(paramNames, param.Name)
 	} else {
-		parametersDiff.Deleted[param.In] = StringList{param.Name}
+		parametersDiff.Deleted[param.In] = utils.StringList{param.Name}
 	}
 }
 

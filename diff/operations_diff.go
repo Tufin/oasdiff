@@ -6,12 +6,13 @@ import (
 	"regexp"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // OperationsDiff describes the changes between a pair of operation objects (https://swagger.io/specification/#operation-object) of two path item objects
 type OperationsDiff struct {
-	Added    StringList         `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    utils.StringList   `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedOperations `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
@@ -56,8 +57,8 @@ func (operationsDiff *OperationsDiff) removeNonBreaking(pathItem1 *openapi3.Path
 
 func newOperationsDiff() *OperationsDiff {
 	return &OperationsDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedOperations{},
 	}
 }

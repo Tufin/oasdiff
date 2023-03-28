@@ -2,12 +2,13 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // SchemasDiff describes the changes between a pair of sets of schema objects: https://swagger.io/specification/#schema-object
 type SchemasDiff struct {
-	Added    StringList       `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList       `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedSchemas  `json:"modified,omitempty" yaml:"modified,omitempty"`
 	Base     openapi3.Schemas `json:"-" yaml:"-"`
 	Revision openapi3.Schemas `json:"-" yaml:"-"`
@@ -72,8 +73,8 @@ func (schemasDiff *SchemasDiff) removeNonBreaking(state *state, schemas1 openapi
 
 func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedSchemas{},
 	}
 }
@@ -158,7 +159,7 @@ func diffSchemas(schemas1, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi
 	return added, deleted, other
 }
 
-func (schemasDiff *SchemasDiff) getBreakingSetByDirection(direction direction) *StringList {
+func (schemasDiff *SchemasDiff) getBreakingSetByDirection(direction direction) *utils.StringList {
 	if direction == directionRequest {
 		return &schemasDiff.Added
 	}
