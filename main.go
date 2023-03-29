@@ -57,8 +57,8 @@ func init() {
 	flag.BoolVar(&version, "version", false, "show version and quit")
 	flag.IntVar(&openapi3.CircularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 	flag.BoolVar(&excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output (deprecated, use '-exclude-elements endpoints' instead)")
-	flag.Var(&includeChecks, "include-checks", "comma-seperated list of optional breaking-changes checks")
-	flag.Var(&excludeElements, "exclude-elements", "comma-seperated list of elements to exclude from diff")
+	flag.Var(&includeChecks, "include-checks", "comma-separated list of optional breaking-changes checks")
+	flag.Var(&excludeElements, "exclude-elements", "comma-separated list of elements to exclude from diff")
 }
 
 func isExcludeEndpoints() bool {

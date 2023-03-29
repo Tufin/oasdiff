@@ -63,7 +63,7 @@ Usage of oasdiff:
   -exclude-description
     	ignore changes to descriptions (deprecated, use '-exclude-elements description' instead)
   -exclude-elements value
-    	comma-seperated list of elements to exclude from diff
+    	comma-separated list of elements to exclude from diff
   -exclude-endpoints
     	exclude endpoints from output (deprecated, use '-exclude-elements endpoints' instead)
   -exclude-examples
@@ -79,7 +79,7 @@ Usage of oasdiff:
   -format string
     	output format: yaml, json, text or html (default "yaml")
   -include-checks value
-    	comma-seperated list of optional breaking-changes checks
+    	comma-separated list of optional breaking-changes checks
   -lang string
     	language for localized breaking changes checks errors (default "en")
   -max-circular-dep int
@@ -103,6 +103,7 @@ Usage of oasdiff:
   -warn-ignore string
     	the configuration file for ignoring warnings with '-check-breaking'
 ```
+
 All arguments can be passed with one or two leading minus signs.  
 For example, ```-breaking-only``` and ```--breaking-only``` are equivalent.
 
@@ -432,7 +433,7 @@ You can use the `-exclude-elements` flag to exclude certain kinds of changes:
 - Use `-exclude-elements summary` to exclude summary fields
 - Use `-exclude-elements endpoints` to exclude the [endpoints diff](#paths-vs-endpoints)
 
-You can ignore multiple elements with a comma-seperated list of excluded elements as in [this example](#ignore-changes-to-description-and-examples).  
+You can ignore multiple elements with a comma-separated list of excluded elements as in [this example](#ignore-changes-to-description-and-examples).  
 Note that [Extensions](https://swagger.io/specification/#specification-extensions) are always excluded from the diff.
 
 
