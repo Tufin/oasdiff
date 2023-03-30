@@ -82,7 +82,7 @@ response-property-became-optional: the response property %s became optional for 
 response-property-enum-value-added: added the new '%s' enum value the %s response property for the response status %s
 response-property-enum-value-added-comment: Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.
 response-property-enum-value-removed: removed the '%s' enum value from the %s response property for the response status %s
-esponse-body-max-length-increased: the response's body maxLength was increased from %s to %s
+response-body-max-length-increased: the response's body maxLength was increased from %s to %s
 response-property-max-length-increased: the %s response property's maxLength was increased from %s to %s for the response status %s
 response-body-max-length-unset: the response's body maxLength was unset from %s
 response-property-max-length-unset: the %s response property's maxLength was unset from %s for the response status %s

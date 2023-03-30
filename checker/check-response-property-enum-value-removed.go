@@ -43,7 +43,6 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 									Id:        responsePropertyEnumValueRemovedId,
 									Level:     ERR,
 									Text:      fmt.Sprintf(config.i18n(responsePropertyEnumValueRemovedId), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-									Comment:   config.i18n(responsePropertyEnumValueRemovedId),
 									Operation: operation,
 									Path:      path,
 									Source:    source,
