@@ -20,6 +20,9 @@ new-required-request-parameter: добавлен новый обязательн
 new-required-request-property: добавлено новле обязательное поле запроса %s
 new-required-request-header-property: в заголовке запроса %s добавлено новое обязательное поле %s
 request-body-became-required: тело запроса стало обязательным
+request-body-enum-value-removed: значение перечисления тела запроса удалено %s
+response-property-enum-value-removed: значение перечисления свойства ответа %s удалено %s
+response-mediatype-enum-value-removed: значение перечисления схемы ответа %s удалено %s
 request-header-property-became-required: в заголовке запроса %s поле %s стало обязательным
 request-parameter-became-required: ранее необязательный %s параметр запроса %s стал обязательным
 request-parameter-enum-value-removed: удалено значение enum %s у %s параметра запроса %s
