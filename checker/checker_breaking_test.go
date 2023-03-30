@@ -308,7 +308,7 @@ func TestBreaking_ResponsePropertyEnumRemoved(t *testing.T) {
 		require.Equal(t, checker.ERR, err.Level)
 	}
 	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
+	require.Len(t, errs, 2)
 	require.Equal(t, "response-property-enum-value-removed", errs[0].Id)
 }
 

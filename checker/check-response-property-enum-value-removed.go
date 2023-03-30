@@ -18,39 +18,38 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			if operationItem.ResponsesDiff == nil {
+			if operationItem.ResponsesDiff == nil || operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			if operationItem.ResponsesDiff.Modified == nil {
-				continue
-			}
+
 			source := (*operationsSources)[operationItem.Revision]
-			for _, responseItems := range operationItem.ResponsesDiff.Modified {
-				for _, mediaTypeItem := range responseItems.ContentDiff.MediaTypeModified {
-					if mediaTypeItem.SchemaDiff == nil {
-						continue
-					}
+			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
+				if responseDiff == nil ||
+					responseDiff.ContentDiff == nil ||
+					responseDiff.ContentDiff.MediaTypeModified == nil {
+					continue
+				}
+				for _, mediaTypeDiff := range responseDiff.ContentDiff.MediaTypeModified {
+					CheckModifiedPropertiesDiff(
+						mediaTypeDiff.SchemaDiff,
+						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+							enumDiff := propertyDiff.EnumDiff
+							if enumDiff == nil || enumDiff.Deleted == nil {
+								return
+							}
 
-					if mediaTypeItem.SchemaDiff.PropertiesDiff == nil {
-						continue
-					}
-
-					for property, propertyItem := range mediaTypeItem.SchemaDiff.PropertiesDiff.Modified {
-						if propertyItem.EnumDiff == nil {
-							continue
-						}
-
-						for _, enumVal := range propertyItem.EnumDiff.Deleted {
-							result = append(result, BackwardCompatibilityError{
-								Id:        responsePropertyEnumValueRemovedId,
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-enum-value-removed"), property, ColorizedValue(enumVal)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
-							})
-						}
-					}
+							for _, enumVal := range enumDiff.Deleted {
+								result = append(result, BackwardCompatibilityError{
+									Id:        responsePropertyEnumValueRemovedId,
+									Level:     ERR,
+									Text:      fmt.Sprintf(config.i18n(responsePropertyEnumValueRemovedId), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Comment:   config.i18n(responsePropertyEnumValueRemovedId),
+									Operation: operation,
+									Path:      path,
+									Source:    source,
+								})
+							}
+						})
 				}
 
 			}
