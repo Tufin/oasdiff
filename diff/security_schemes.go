@@ -4,12 +4,13 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // SecuritySchemesDiff describes the changes between a pair of sets of security scheme objects: https://swagger.io/specification/#security-scheme-object
 type SecuritySchemesDiff struct {
-	Added    StringList              `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList              `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    utils.StringList        `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList        `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedSecuritySchemes `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
@@ -38,8 +39,8 @@ type ModifiedSecuritySchemes map[string]*SecuritySchemeDiff
 
 func newSecuritySchemesDiff() *SecuritySchemesDiff {
 	return &SecuritySchemesDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedSecuritySchemes{},
 	}
 }

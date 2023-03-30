@@ -32,8 +32,8 @@ func getExampleDiffInternal(config *Config, state *state, value1, value2 *openap
 	result := ExampleDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
-	result.SummaryDiff = getValueDiff(value1.Summary, value2.Summary)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, value1.Description, value2.Description)
+	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), value1.Summary, value2.Summary)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), value1.Description, value2.Description)
 	result.ValueDiff = getValueDiff(value1.Value, value2.Value)
 	result.ExternalValueDiff = getValueDiff(value1.ExternalValue, value2.ExternalValue)
 

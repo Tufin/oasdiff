@@ -1,6 +1,8 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // TagDiff describes the changes between a pair of tag objects: https://swagger.io/specification/#tag-object
 type TagDiff struct {
@@ -27,7 +29,7 @@ func getTagDiffInternal(config *Config, state *state, tag1, tag2 *openapi3.Tag) 
 	result := TagDiff{}
 
 	result.NameDiff = getValueDiff(tag1.Name, tag2.Name)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, tag1.Description, tag2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), tag1.Description, tag2.Description)
 
 	return &result
 }

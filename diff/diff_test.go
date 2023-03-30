@@ -7,6 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/utils"
 )
 
 const (
@@ -83,8 +84,8 @@ func TestDiff_ModifiedOperation(t *testing.T) {
 	require.NoError(t, err)
 
 	require.Equal(t, &diff.OperationsDiff{
-		Added:    diff.StringList{"GET"},
-		Deleted:  diff.StringList{"POST"},
+		Added:    utils.StringList{"GET"},
+		Deleted:  utils.StringList{"POST"},
 		Modified: diff.ModifiedOperations{},
 	},
 		d.PathsDiff.Modified["/api/test"].OperationsDiff)
@@ -92,7 +93,7 @@ func TestDiff_ModifiedOperation(t *testing.T) {
 
 func TestAddedExtension(t *testing.T) {
 	config := diff.Config{
-		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},
+		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
 	}
 
 	require.Contains(t,
@@ -102,7 +103,7 @@ func TestAddedExtension(t *testing.T) {
 
 func TestDeletedExtension(t *testing.T) {
 	config := diff.Config{
-		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},
+		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
 	}
 
 	require.Contains(t,
@@ -112,7 +113,7 @@ func TestDeletedExtension(t *testing.T) {
 
 func TestModifiedExtension(t *testing.T) {
 	config := diff.Config{
-		IncludeExtensions: diff.StringSet{"x-extension-test2": struct{}{}},
+		IncludeExtensions: utils.StringSet{"x-extension-test2": struct{}{}},
 	}
 
 	require.NotNil(t,
@@ -231,13 +232,13 @@ func TestSchemaDiff_ContentDiff(t *testing.T) {
 
 func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
 	require.Equal(t,
-		diff.StringList([]string{"application/json"}),
+		utils.StringList([]string{"application/json"}),
 		d(t, diff.NewConfig(), 5, 1).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInHeader]["user"].ContentDiff.MediaTypeAdded)
 }
 
 func TestSchemaDiff_MediaTypeDeleted(t *testing.T) {
 	require.Equal(t,
-		diff.StringList([]string{"application/json"}),
+		utils.StringList([]string{"application/json"}),
 		d(t, diff.NewConfig(), 1, 5).PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInHeader]["user"].ContentDiff.MediaTypeDeleted)
 }
 
@@ -309,7 +310,7 @@ func TestResponseDeleted(t *testing.T) {
 
 func TestResponseDescriptionModified(t *testing.T) {
 	config := diff.Config{
-		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},
+		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
 	}
 
 	require.Equal(t,
@@ -343,7 +344,7 @@ func TestServerDeleted(t *testing.T) {
 
 func TestServerModified(t *testing.T) {
 	config := diff.Config{
-		IncludeExtensions: diff.StringSet{"x-extension-test": struct{}{}},
+		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
 	}
 
 	require.Contains(t,

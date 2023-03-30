@@ -1,6 +1,8 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // ContactDiff describes the changes between a pair of contact objects: https://swagger.io/specification/#contact-object
 type ContactDiff struct {

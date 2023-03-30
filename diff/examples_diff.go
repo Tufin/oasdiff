@@ -4,12 +4,13 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // ExamplesDiff describes the changes between a pair of sets of example objects: https://swagger.io/specification/#example-object
 type ExamplesDiff struct {
-	Added    StringList       `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList       `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedExamples `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
@@ -29,8 +30,8 @@ func (diff *ExamplesDiff) Empty() bool {
 
 func newExamplessDiff() *ExamplesDiff {
 	return &ExamplesDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedExamples{},
 	}
 }
@@ -51,7 +52,7 @@ func getExamplesDiff(config *Config, state *state, examples1, examples2 openapi3
 
 func getExamplesDiffInternal(config *Config, state *state, examples1, examples2 openapi3.Examples) (*ExamplesDiff, error) {
 
-	if config.ExcludeExamples {
+	if config.IsExcludeExamples() {
 		return nil, nil
 	}
 

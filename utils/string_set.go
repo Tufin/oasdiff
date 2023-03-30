@@ -1,4 +1,4 @@
-package diff
+package utils
 
 // StringSet is a set of string values
 type StringSet map[string]struct{}

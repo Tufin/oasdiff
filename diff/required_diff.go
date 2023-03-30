@@ -2,6 +2,7 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // RequiredPropertiesDiff describes the changes between a pair of lists of required properties
@@ -42,14 +43,14 @@ func (diff *RequiredPropertiesDiff) removeReadOnly(state *state, schema1, schema
 		// readonly properties are only valid for responses
 		return
 	}
-	added := make(StringList, 0)
+	added := make(utils.StringList, 0)
 	for _, v := range diff.Added {
 		if p, ok := schema2.Properties[v]; ok && !p.Value.ReadOnly {
 			added = append(added, v)
 		}
 	}
 	diff.Added = added
-	deleted := make(StringList, 0)
+	deleted := make(utils.StringList, 0)
 	for _, v := range diff.Deleted {
 		if p, ok := schema1.Properties[v]; ok && !p.Value.ReadOnly {
 			deleted = append(deleted, v)
@@ -63,14 +64,14 @@ func (diff *RequiredPropertiesDiff) removeWriteOnly(state *state, schema1, schem
 		// writeOnly properties are only valid for requests
 		return
 	}
-	added := make(StringList, 0)
+	added := make(utils.StringList, 0)
 	for _, v := range diff.Added {
 		if p, ok := schema2.Properties[v]; ok && !p.Value.WriteOnly {
 			added = append(added, v)
 		}
 	}
 	diff.Added = added
-	deleted := make(StringList, 0)
+	deleted := make(utils.StringList, 0)
 	for _, v := range diff.Deleted {
 		if p, ok := schema1.Properties[v]; ok && !p.Value.WriteOnly {
 			deleted = append(deleted, v)
@@ -112,7 +113,7 @@ func (diff *RequiredPropertiesDiff) removeSunsetProperties(state *state, schema1
 		return
 	}
 
-	deleted := make(StringList, 0)
+	deleted := make(utils.StringList, 0)
 	for _, property := range diff.Deleted {
 		// if property was sunset then making it optional is not breaking
 		if propDeleted(property, schema1, schema2) && propSunsetAllowed(property, schema1) {
@@ -141,7 +142,7 @@ func getRequiredPropertiesDiff(config *Config, state *state, schema1, schema2 *o
 	return diff
 }
 
-func getRequiredPropertiesDiffInternal(strings1, strings2 StringList) *RequiredPropertiesDiff {
+func getRequiredPropertiesDiffInternal(strings1, strings2 utils.StringList) *RequiredPropertiesDiff {
 	if stringsDiff := getStringsDiff(strings1, strings2); stringsDiff != nil {
 		return &RequiredPropertiesDiff{
 			StringsDiff: *stringsDiff,

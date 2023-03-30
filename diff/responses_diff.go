@@ -4,12 +4,13 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // ResponsesDiff describes the changes between a pair of sets of response objects: https://swagger.io/specification/#responses-object
 type ResponsesDiff struct {
-	Added    StringList        `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList        `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    utils.StringList  `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList  `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedResponses `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
@@ -38,8 +39,8 @@ type ModifiedResponses map[string]*ResponseDiff
 
 func newResponsesDiff() *ResponsesDiff {
 	return &ResponsesDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedResponses{},
 	}
 }

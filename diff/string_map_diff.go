@@ -1,10 +1,12 @@
 package diff
 
+import "github.com/tufin/oasdiff/utils"
+
 // StringMapDiff describes the changes between a pair of string maps
 type StringMapDiff struct {
-	Added    StringList   `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedKeys `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added    utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedKeys     `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // ModifiedKeys maps keys to their respective diffs
@@ -12,8 +14,8 @@ type ModifiedKeys map[string]*ValueDiff
 
 func newStringMapDiffDiff() *StringMapDiff {
 	return &StringMapDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedKeys{},
 	}
 }
@@ -29,7 +31,7 @@ func (diff *StringMapDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-func getStringMapDiff(strings1, strings2 StringMap) *StringMapDiff {
+func getStringMapDiff(strings1, strings2 utils.StringMap) *StringMapDiff {
 	diff := getStringMapDiffInternal(strings1, strings2)
 
 	if diff.Empty() {
@@ -39,7 +41,7 @@ func getStringMapDiff(strings1, strings2 StringMap) *StringMapDiff {
 	return diff
 }
 
-func getStringMapDiffInternal(strings1, strings2 StringMap) *StringMapDiff {
+func getStringMapDiffInternal(strings1, strings2 utils.StringMap) *StringMapDiff {
 	result := newStringMapDiffDiff()
 
 	for k1, v1 := range strings1 {

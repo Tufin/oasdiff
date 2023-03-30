@@ -1,6 +1,8 @@
 package diff
 
-import "github.com/getkin/kin-openapi/openapi3"
+import (
+	"github.com/getkin/kin-openapi/openapi3"
+)
 
 // SecuritySchemeDiff describes the changes between a pair of security scheme objects: https://swagger.io/specification/#security-scheme-object
 type SecuritySchemeDiff struct {
@@ -49,7 +51,7 @@ func getSecuritySchemeDiffInternal(config *Config, state *state, scheme1, scheme
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, scheme1.Extensions, scheme2.Extensions)
 	result.TypeDiff = getValueDiff(scheme1.Type, scheme2.Type)
-	result.DescriptionDiff = getValueDiffConditional(config.ExcludeDescription, scheme1.Description, scheme2.Description)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), scheme1.Description, scheme2.Description)
 	result.NameDiff = getValueDiff(scheme1.Name, scheme2.Name)
 	result.InDiff = getValueDiff(scheme1.In, scheme2.In)
 	result.SchemeDiff = getValueDiff(scheme1.Scheme, scheme2.Scheme)

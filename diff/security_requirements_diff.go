@@ -4,12 +4,13 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // SecurityRequirementsDiff describes the changes between a pair of sets of security requirement objects: https://swagger.io/specification/#security-requirement-object
 type SecurityRequirementsDiff struct {
-	Added    StringList                   `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  StringList                   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    utils.StringList             `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList             `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedSecurityRequirements `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
@@ -29,8 +30,8 @@ type ModifiedSecurityRequirements map[string]SecurityScopesDiff
 
 func newSecurityRequirementsDiff() *SecurityRequirementsDiff {
 	return &SecurityRequirementsDiff{
-		Added:    StringList{},
-		Deleted:  StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
 		Modified: ModifiedSecurityRequirements{},
 	}
 }
@@ -87,8 +88,8 @@ func findSecurityRequirement(securityRequirement1 openapi3.SecurityRequirement, 
 	return nil
 }
 
-func getSecuritySchemes(securityRequirement openapi3.SecurityRequirement) StringSet {
-	result := StringSet{}
+func getSecuritySchemes(securityRequirement openapi3.SecurityRequirement) utils.StringSet {
+	result := utils.StringSet{}
 	for name := range securityRequirement {
 		result.Add(name)
 	}

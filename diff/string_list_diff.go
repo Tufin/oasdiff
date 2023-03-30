@@ -1,15 +1,17 @@
 package diff
 
+import "github.com/tufin/oasdiff/utils"
+
 // StringsDiff describes the changes between a pair of lists of strings
 type StringsDiff struct {
-	Added   StringList `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added   utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted utils.StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 }
 
 func newStringsDiff() *StringsDiff {
 	return &StringsDiff{
-		Added:   StringList{},
-		Deleted: StringList{},
+		Added:   utils.StringList{},
+		Deleted: utils.StringList{},
 	}
 }
 
@@ -23,7 +25,7 @@ func (stringsDiff *StringsDiff) Empty() bool {
 		len(stringsDiff.Deleted) == 0
 }
 
-func getStringsDiff(strings1, strings2 StringList) *StringsDiff {
+func getStringsDiff(strings1, strings2 utils.StringList) *StringsDiff {
 	diff := getStringsDiffInternal(strings1, strings2)
 
 	if diff.Empty() {
@@ -33,7 +35,7 @@ func getStringsDiff(strings1, strings2 StringList) *StringsDiff {
 	return diff
 }
 
-func getStringsDiffInternal(strings1, strings2 StringList) *StringsDiff {
+func getStringsDiffInternal(strings1, strings2 utils.StringList) *StringsDiff {
 	result := newStringsDiff()
 
 	s1 := strings1.ToStringSet()

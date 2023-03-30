@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	id = "api-operation-id-removed"
+	apiOperationRemovedCheckId = "api-operation-id-removed"
 )
 
 func APIOperationIdRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
@@ -30,9 +30,9 @@ func APIOperationIdRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 			}
 
 			result = append(result, BackwardCompatibilityError{
-				Id:        id,
+				Id:        apiOperationRemovedCheckId,
 				Level:     ERR,
-				Text:      fmt.Sprintf(config.i18n(id), ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID)),
+				Text:      fmt.Sprintf(config.i18n(apiOperationRemovedCheckId), ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID)),
 				Operation: operation,
 				Path:      path,
 				Source:    source,
