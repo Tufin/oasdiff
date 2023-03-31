@@ -338,8 +338,8 @@ This method allows adding new entries to enums used in responses which is very u
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
-### Optional Backwards Compatibility Checks
-You can use the `-include-checks` flag to include the following optional backwards compatibility checks:
+### Optional Breaking-Changes Checks
+You can use the `-include-checks` flag to include the following optional checks:
 - response-non-success-status-removed
 - api-operation-id-removed
 - api-tag-removed
@@ -347,10 +347,16 @@ You can use the `-include-checks` flag to include the following optional backwar
 - response-mediatype-enum-value-removed
 - request-body-enum-value-removed
 
+For example:
+```
+oasdiff -include-checks response-non-success-status-removed -check-breaking -base data/openapi-test1.yaml -revision data/openapi-test3.yaml
+```
+
+
 ### Advantages of the New Breaking Changes Method 
 - output is human readable
 - supports localization for error messages and ignored changes
-- checks can be modified by developers using oasdiff as library with their own specific checks by adding/removing checks from the slice of checks
+- [checks can be customized by developers](#customizing-breaking-changes-checks)
 - fewer false-positive errors by design
 - improved support for type changes: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
 - allows removal of responses with non-success codes (e.g., 503, 504, 403)
@@ -451,6 +457,10 @@ diff.Get(&diff.Config{}, spec1, spec2)
 - [diff](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-Get)
 - [breaking changes](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-GetPathsDiff)
 - [oasdiff command-line](main.go)
+
+### Customizing Breaking-Changes Checks
+If you encounter a change that isn't considered breaking by oasdiff and you would like to consider it as a breaking-change you may add an [optional breaking-changes check](#optional-breaking-changes-checks).  
+Here's an example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
 
 
 ### OpenAPI References
