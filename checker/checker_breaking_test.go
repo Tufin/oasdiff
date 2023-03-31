@@ -273,7 +273,7 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	require.Equal(t, "api-operation-id-removed", errs[0].Id)
 }
 
-// BC: removing/updating an enum in request body (optional)
+// BC: removing/updating an enum in request body is breaking (optional)
 func TestBreaking_RequestBodyEnumRemoved(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum.yaml")
 	require.NoError(t, err)
@@ -295,7 +295,7 @@ func TestBreaking_RequestBodyEnumRemoved(t *testing.T) {
 	require.Equal(t, "request-body-enum-value-removed", errs[0].Id)
 }
 
-// BC: removing/updating a property enum in response (optional)
+// BC: removing/updating a property enum in response is breaking (optional)
 func TestBreaking_ResponsePropertyEnumRemoved(t *testing.T) {
 	s1 := l(t, 704)
 	s2 := l(t, 703)
