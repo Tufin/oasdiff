@@ -224,6 +224,23 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	require.Equal(t, checker.WARN, errs[0].Level)
 }
 
+// BC: deleting a required property within another property in request is breaking with warn
+func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("request-property-items.yaml"))
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("request-property-items-2.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-property-removed", errs[0].Id)
+	require.Equal(t, checker.WARN, errs[0].Level)
+}
+
 // BC: adding a new required property in response body is not breaking
 func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile(getReqPropFile("response-new-base.json"))
