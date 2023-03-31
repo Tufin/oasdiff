@@ -54,15 +54,16 @@ func (methodDiff *MethodDiff) removeNonBreaking(config *Config, pathItem2 *opena
 	methodDiff.ExternalDocsDiff = nil
 }
 
-func getMethodDiff(config *Config, state *state, pathItem1, pathItem2 *openapi3.Operation) (*MethodDiff, error) {
-	diff, err := getMethodDiffInternal(config, state, pathItem1, pathItem2)
+func getMethodDiff(config *Config, state *state, operation1, operation2 *openapi3.Operation, pathParamsMap PathParamsMap) (*MethodDiff, error) {
+
+	diff, err := getMethodDiffInternal(config, state, operation1, operation2, pathParamsMap)
 
 	if err != nil {
 		return nil, err
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(config, pathItem2)
+		diff.removeNonBreaking(config, operation2)
 	}
 
 	if diff.Empty() {
@@ -72,41 +73,41 @@ func getMethodDiff(config *Config, state *state, pathItem1, pathItem2 *openapi3.
 	return diff, nil
 }
 
-func getMethodDiffInternal(config *Config, state *state, pathItem1, pathItem2 *openapi3.Operation) (*MethodDiff, error) {
+func getMethodDiffInternal(config *Config, state *state, operation1, operation2 *openapi3.Operation, pathParamsMap PathParamsMap) (*MethodDiff, error) {
 
 	result := newMethodDiff()
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, pathItem1.Extensions, pathItem2.Extensions)
-	result.TagsDiff = getStringsDiff(pathItem1.Tags, pathItem2.Tags)
-	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), pathItem1.Summary, pathItem2.Summary)
-	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), pathItem1.Description, pathItem2.Description)
-	result.OperationIDDiff = getValueDiff(pathItem1.OperationID, pathItem2.OperationID)
-	result.ParametersDiff, err = getParametersDiff(config, state, pathItem1.Parameters, pathItem2.Parameters)
+	result.ExtensionsDiff = getExtensionsDiff(config, state, operation1.Extensions, operation2.Extensions)
+	result.TagsDiff = getStringsDiff(operation1.Tags, operation2.Tags)
+	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), operation1.Summary, operation2.Summary)
+	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), operation1.Description, operation2.Description)
+	result.OperationIDDiff = getValueDiff(operation1.OperationID, operation2.OperationID)
+	result.ParametersDiff, err = getParametersDiff(config, state, operation1.Parameters, operation2.Parameters, pathParamsMap)
 	if err != nil {
 		return nil, err
 	}
 
-	result.RequestBodyDiff, err = getRequestBodyDiff(config, state, pathItem1.RequestBody, pathItem2.RequestBody)
+	result.RequestBodyDiff, err = getRequestBodyDiff(config, state, operation1.RequestBody, operation2.RequestBody)
 	if err != nil {
 		return nil, err
 	}
 
-	result.ResponsesDiff, err = getResponsesDiff(config, state, pathItem1.Responses, pathItem2.Responses)
+	result.ResponsesDiff, err = getResponsesDiff(config, state, operation1.Responses, operation2.Responses)
 	if err != nil {
 		return nil, err
 	}
 
-	result.CallbacksDiff, err = getCallbacksDiff(config, state, pathItem1.Callbacks, pathItem2.Callbacks)
+	result.CallbacksDiff, err = getCallbacksDiff(config, state, operation1.Callbacks, operation2.Callbacks)
 	if err != nil {
 		return nil, err
 	}
-	result.DeprecatedDiff = getValueDiff(pathItem1.Deprecated, pathItem2.Deprecated)
-	result.SecurityDiff = getSecurityRequirementsDiff(config, state, pathItem1.Security, pathItem2.Security)
-	result.ServersDiff = getServersDiff(config, state, pathItem1.Servers, pathItem2.Servers)
-	result.ExternalDocsDiff = getExternalDocsDiff(config, state, pathItem1.ExternalDocs, pathItem2.ExternalDocs)
-	result.Base = pathItem1
-	result.Revision = pathItem2
+	result.DeprecatedDiff = getValueDiff(operation1.Deprecated, operation2.Deprecated)
+	result.SecurityDiff = getSecurityRequirementsDiff(config, state, operation1.Security, operation2.Security)
+	result.ServersDiff = getServersDiff(config, state, operation1.Servers, operation2.Servers)
+	result.ExternalDocsDiff = getExternalDocsDiff(config, state, operation1.ExternalDocs, operation2.ExternalDocs)
+	result.Base = operation1
+	result.Revision = operation2
 
 	return result, nil
 }

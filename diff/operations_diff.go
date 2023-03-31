@@ -66,18 +66,19 @@ func newOperationsDiff() *OperationsDiff {
 // ModifiedOperations is a map of HTTP methods to their respective diffs
 type ModifiedOperations map[string]*MethodDiff
 
-func getOperationsDiff(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
-	if err := filterOperations(config.FilterExtension, pathItem1, pathItem2); err != nil {
+func getOperationsDiff(config *Config, state *state, pathItemPair *pathItemPair) (*OperationsDiff, error) {
+
+	if err := filterOperations(config.FilterExtension, pathItemPair); err != nil {
 		return nil, err
 	}
 
-	diff, err := getOperationsDiffInternal(config, state, pathItem1, pathItem2)
+	diff, err := getOperationsDiffInternal(config, state, pathItemPair)
 	if err != nil {
 		return nil, err
 	}
 
 	if config.BreakingOnly {
-		diff.removeNonBreaking(pathItem1)
+		diff.removeNonBreaking(pathItemPair.PathItem1)
 	}
 
 	if diff.Empty() {
@@ -99,13 +100,13 @@ var operations = []string{
 	http.MethodTrace,
 }
 
-func getOperationsDiffInternal(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) (*OperationsDiff, error) {
+func getOperationsDiffInternal(config *Config, state *state, pathItemPair *pathItemPair) (*OperationsDiff, error) {
 
 	result := newOperationsDiff()
 	var err error
 
 	for _, op := range operations {
-		err = result.diffOperation(config, state, pathItem1.GetOperation(op), pathItem2.GetOperation(op), op)
+		err = result.diffOperation(config, state, pathItemPair.PathItem1.GetOperation(op), pathItemPair.PathItem2.GetOperation(op), op, pathItemPair.PathParamsMap)
 		if err != nil {
 			return nil, err
 		}
@@ -114,7 +115,7 @@ func getOperationsDiffInternal(config *Config, state *state, pathItem1, pathItem
 	return result, nil
 }
 
-func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state, operation1, operation2 *openapi3.Operation, method string) error {
+func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state, operation1, operation2 *openapi3.Operation, method string, pathParamsMap PathParamsMap) error {
 	if operation1 == nil && operation2 == nil {
 		return nil
 	}
@@ -129,7 +130,7 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state
 		return nil
 	}
 
-	diff, err := getMethodDiff(config, state, operation1, operation2)
+	diff, err := getMethodDiff(config, state, operation1, operation2, pathParamsMap)
 	if err != nil {
 		return err
 	}
@@ -141,16 +142,16 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state
 	return nil
 }
 
-func filterOperations(filterExtension string, pathItem1, pathItem2 *openapi3.PathItem) error {
+func filterOperations(filterExtension string, pathItemPair *pathItemPair) error {
 
-	if err := filterOperationsByExtensions(filterExtension, pathItem1, pathItem2); err != nil {
+	if err := filterOperationsByExtensions(filterExtension, pathItemPair); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func filterOperationsByExtensions(filterExtension string, pathItem1, pathItem2 *openapi3.PathItem) error {
+func filterOperationsByExtensions(filterExtension string, pathItemPair *pathItemPair) error {
 	if filterExtension == "" {
 		return nil
 	}
@@ -160,8 +161,8 @@ func filterOperationsByExtensions(filterExtension string, pathItem1, pathItem2 *
 		return fmt.Errorf("failed to compile extension filter regex %q with %w", filterExtension, err)
 	}
 
-	filterOperationsByExtensionInternal(pathItem1, r)
-	filterOperationsByExtensionInternal(pathItem2, r)
+	filterOperationsByExtensionInternal(pathItemPair.PathItem1, r)
+	filterOperationsByExtensionInternal(pathItemPair.PathItem2, r)
 
 	return nil
 }

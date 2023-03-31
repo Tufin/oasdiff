@@ -1,15 +1,11 @@
 package diff
 
-import (
-	"github.com/getkin/kin-openapi/openapi3"
-)
-
 // ModifiedPaths is a map of paths to their respective diffs
 type ModifiedPaths map[string]*PathDiff
 
-func (modifiedPaths ModifiedPaths) addPathDiff(config *Config, state *state, path1 string, pathItem1, pathItem2 *openapi3.PathItem) error {
+func (modifiedPaths ModifiedPaths) addPathDiff(config *Config, state *state, path1 string, pathItemPair *pathItemPair) error {
 
-	diff, err := getPathDiff(config, state, pathItem1, pathItem2)
+	diff, err := getPathDiff(config, state, pathItemPair)
 	if err != nil {
 		return err
 	}

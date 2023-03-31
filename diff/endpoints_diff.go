@@ -137,7 +137,7 @@ func (diff *EndpointsDiff) addDeletedPath(path string, method string) {
 
 func (diff *EndpointsDiff) addModifiedPaths(config *Config, state *state, path string, pathItemPair *pathItemPair) error {
 
-	pathDiff, err := getPathDiff(config, state, pathItemPair.PathItem1, pathItemPair.PathItem2)
+	pathDiff, err := getPathDiff(config, state, pathItemPair)
 	if err != nil {
 		return err
 	}
