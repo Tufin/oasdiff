@@ -342,6 +342,10 @@ If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing
 You can use the `-include-checks` flag to include the following optional backwards compatibility checks:
 - response-non-success-status-removed
 - api-operation-id-removed
+- api-tag-removed
+- response-property-enum-value-removed
+- response-mediatype-enum-value-removed
+- request-body-enum-value-removed
 
 ### Advantages of the New Breaking Changes Method 
 - output is human readable

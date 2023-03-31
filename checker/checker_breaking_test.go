@@ -273,6 +273,45 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	require.Equal(t, "api-operation-id-removed", errs[0].Id)
 }
 
+// BC: removing/updating an enum in request body is breaking (optional)
+func TestBreaking_RequestBodyEnumRemoved(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum.yaml")
+	require.NoError(t, err)
+
+	s2.Spec.Paths["/api/v2/changeOfRequestFieldValueTiedToEnumTest"].Get.RequestBody.Value.Content["application/json"].Schema.Value.Enum = []interface{}{}
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"request-body-enum-value-removed"}), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+
+	require.Len(t, errs, 3)
+	require.Equal(t, "request-body-enum-value-removed", errs[0].Id)
+}
+
+// BC: removing/updating a property enum in response is breaking (optional)
+func TestBreaking_ResponsePropertyEnumRemoved(t *testing.T) {
+	s1 := l(t, 704)
+	s2 := l(t, 703)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"response-property-enum-value-removed"}), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 2)
+	require.Equal(t, "response-property-enum-value-removed", errs[0].Id)
+}
+
 // BC: removing/updating a tag is breaking (optional)
 func TestBreaking_TagRemoved(t *testing.T) {
 	s1 := l(t, 1)
@@ -289,6 +328,25 @@ func TestBreaking_TagRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-tag-removed", errs[0].Id)
+}
+
+// BC: removing/updating a media type enum in response (optional)
+func TestBreaking_ResponseMediaTypeEnumRemoved(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/response-enum.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/response-enum-2.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"response-mediatype-enum-value-removed"}), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-mediatype-enum-value-removed", errs[0].Id)
 }
 
 // BC: removing an existing response with unparseable status is not breaking
