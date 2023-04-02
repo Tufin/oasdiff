@@ -128,6 +128,26 @@ func deleteParam(op *openapi3.Operation, in string, name string) {
 	op.Parameters = result
 }
 
+// BC: renaming a path parameter is not breaking
+func TestBreaking_PathParamRename(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/param-rename/method-base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/param-rename/method-revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{},
+		&load.OpenAPISpecInfo{Spec: s1},
+		&load.OpenAPISpecInfo{Spec: s2},
+	)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+
+	require.Empty(t, errs)
+}
+
 // BC: new required path param is breaking
 func TestBreaking_NewPathParam(t *testing.T) {
 	s1 := l(t, 1)
