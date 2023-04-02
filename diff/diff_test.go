@@ -743,7 +743,10 @@ func TestDiff_PathParamInMethodRenamed(t *testing.T) {
 			Spec: s2,
 		})
 	require.NoError(t, err)
-	require.Empty(t, d)
+
+	dd := d.PathsDiff.Modified["/books/{bookId}"].ParametersDiff.Modified["path"]["bookId"].NameDiff
+	require.Equal(t, "bookId", dd.From)
+	require.Equal(t, "id", dd.To)
 }
 
 func TestDiff_PathParamInOperationRenamed(t *testing.T) {
@@ -763,7 +766,10 @@ func TestDiff_PathParamInOperationRenamed(t *testing.T) {
 			Spec: s2,
 		})
 	require.NoError(t, err)
-	require.Empty(t, d)
+
+	dd := d.PathsDiff.Modified["/books/{bookId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
+	require.Equal(t, "bookId", dd.From)
+	require.Equal(t, "id", dd.To)
 }
 
 func TestDiff_TwoPathParamsRenamed(t *testing.T) {
@@ -783,36 +789,23 @@ func TestDiff_TwoPathParamsRenamed(t *testing.T) {
 			Spec: s2,
 		})
 	require.NoError(t, err)
-	require.Empty(t, d)
+
+	dd := d.PathsDiff.Modified["/books/{bookId}/{libraryId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
+	require.Equal(t, "bookId", dd.From)
+	require.Equal(t, "id", dd.To)
+
+	dd = d.PathsDiff.Modified["/books/{bookId}/{libraryId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["libraryId"].NameDiff
+	require.Equal(t, "libraryId", dd.From)
+	require.Equal(t, "otherId", dd.To)
 }
 
 func TestDiff_TwoPathParamsOneRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/two-base.yaml")
+	s1, err := loader.LoadFromFile("../data/param-rename/one-of-two-base.yaml")
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/two-revision.yaml")
-	require.NoError(t, err)
-
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.OpenAPISpecInfo{
-			Spec: s1,
-		},
-		&load.OpenAPISpecInfo{
-			Spec: s2,
-		})
-	require.NoError(t, err)
-	require.Empty(t, d)
-}
-
-func TestDiff_OneOfTwoPathParamsRenamed(t *testing.T) {
-	loader := openapi3.NewLoader()
-
-	s1, err := loader.LoadFromFile("../data/param-rename/two-base.yaml")
-	require.NoError(t, err)
-
-	s2, err := loader.LoadFromFile("../data/param-rename/two-revision.yaml")
+	s2, err := loader.LoadFromFile("../data/param-rename/one-of-two-revision.yaml")
 	require.NoError(t, err)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
@@ -823,5 +816,8 @@ func TestDiff_OneOfTwoPathParamsRenamed(t *testing.T) {
 			Spec: s2,
 		})
 	require.NoError(t, err)
-	require.Empty(t, d)
+
+	dd := d.PathsDiff.Modified["/books/{bookId}/{libraryId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["libraryId"].NameDiff
+	require.Equal(t, "libraryId", dd.From)
+	require.Equal(t, "otherId", dd.To)
 }
