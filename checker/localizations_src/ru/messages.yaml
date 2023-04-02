@@ -21,6 +21,8 @@ new-required-request-parameter: добавлен новый обязательн
 new-required-request-property: добавлено новле обязательное поле запроса %s
 new-required-request-header-property: в заголовке запроса %s добавлено новое обязательное поле %s
 request-body-became-required: тело запроса стало обязательным
+request-body-enum-value-removed: значение перечисления тела запроса удалено %s
+response-mediatype-enum-value-removed: значение перечисления схемы ответа %s удалено %s
 request-header-property-became-required: в заголовке запроса %s поле %s стало обязательным
 request-parameter-became-required: ранее необязательный %s параметр запроса %s стал обязательным
 request-parameter-enum-value-removed: удалено значение enum %s у %s параметра запроса %s
@@ -79,6 +81,7 @@ response-optional-property-removed: удалено необязательное 
 response-property-became-optional: поле ответа %s стало необязательным для ответа со статусом %s
 response-property-enum-value-added: добавлено новое enum значение %s в поле ответа %s для ответа со статусом %s
 response-property-enum-value-added-comment: Добавление новых значений перечисления в ответ может быть неожиданным для клиентов, вместо этого используйте x-extensible-enum.
+response-property-enum-value-removed: удалено значение перечисления '%s' из свойства ответа %s для статуса ответа %s.
 response-body-max-length-increased: у тела ответа maxLength увеличен с %s до %s
 response-property-max-length-increased: у поля ответа %s maxLength увеличен с %s до %s для ответа со статусом %s
 response-body-max-length-unset: у тела ответа maxLength был удалён, предыдущее значение - %s

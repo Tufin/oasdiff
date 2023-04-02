@@ -21,6 +21,8 @@ new-required-request-parameter: added the new required %s request parameter %s
 new-required-request-property: added the new required request property %s
 new-required-request-header-property: added the new required %s request header's property %s
 request-body-became-required: request body became required
+request-body-enum-value-removed: request body enum value removed %s
+response-mediatype-enum-value-removed: response schema %s enum value removed %s
 request-header-property-became-required: the %s request header's property %s became required
 request-parameter-became-required: the %s request parameter %s became required
 request-parameter-enum-value-removed: removed the enum value %s for the %s request parameter %s
@@ -79,6 +81,7 @@ response-optional-property-removed: removed the optional property %s from the re
 response-property-became-optional: the response property %s became optional for the status %s
 response-property-enum-value-added: added the new '%s' enum value the %s response property for the response status %s
 response-property-enum-value-added-comment: Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.
+response-property-enum-value-removed: removed the '%s' enum value from the %s response property for the response status %s
 response-body-max-length-increased: the response's body maxLength was increased from %s to %s
 response-property-max-length-increased: the %s response property's maxLength was increased from %s to %s for the response status %s
 response-body-max-length-unset: the response's body maxLength was unset from %s
