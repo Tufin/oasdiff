@@ -101,8 +101,8 @@ func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter
 	}
 }
 
-func getParametersDiff(config *Config, state *state, params1, params2 openapi3.Parameters) (*ParametersDiff, error) {
-	diff, err := getParametersDiffInternal(config, state, params1, params2)
+func getParametersDiff(config *Config, state *state, params1, params2 openapi3.Parameters, pathParamsMap PathParamsMap) (*ParametersDiff, error) {
+	diff, err := getParametersDiffInternal(config, state, params1, params2, pathParamsMap)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func getParametersDiff(config *Config, state *state, params1, params2 openapi3.P
 	return diff, nil
 }
 
-func getParametersDiffInternal(config *Config, state *state, params1, params2 openapi3.Parameters) (*ParametersDiff, error) {
+func getParametersDiffInternal(config *Config, state *state, params1, params2 openapi3.Parameters, pathParamsMap PathParamsMap) (*ParametersDiff, error) {
 
 	result := newParametersDiff()
 
@@ -128,7 +128,7 @@ func getParametersDiffInternal(config *Config, state *state, params1, params2 op
 			return nil, err
 		}
 
-		param2, err := findParam(param1, params2)
+		param2, err := findParam(param1, params2, pathParamsMap)
 		if err != nil {
 			return nil, err
 		}
@@ -147,13 +147,14 @@ func getParametersDiffInternal(config *Config, state *state, params1, params2 op
 		}
 	}
 
+	pathParamsMapInversed := pathParamsMap.Inverse()
 	for _, paramRef2 := range params2 {
 		param2, err := derefParam(paramRef2)
 		if err != nil {
 			return nil, err
 		}
 
-		param, err := findParam(param2, params1)
+		param, err := findParam(param2, params1, pathParamsMapInversed)
 		if err != nil {
 			return nil, err
 		}
@@ -174,7 +175,7 @@ func derefParam(ref *openapi3.ParameterRef) (*openapi3.Parameter, error) {
 	return ref.Value, nil
 }
 
-func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openapi3.Parameter, error) {
+func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters, pathParamsMap PathParamsMap) (*openapi3.Parameter, error) {
 	// TODO: optimize with a map
 	for _, paramRef2 := range params2 {
 		param2, err := derefParam(paramRef2)
@@ -182,7 +183,7 @@ func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openap
 			return nil, err
 		}
 
-		equal, err := equalParams(param1, param2)
+		equal, err := equalParams(param1, param2, pathParamsMap)
 		if err != nil {
 			return nil, err
 		}
@@ -195,11 +196,20 @@ func findParam(param1 *openapi3.Parameter, params2 openapi3.Parameters) (*openap
 	return nil, nil
 }
 
-func equalParams(param1 *openapi3.Parameter, param2 *openapi3.Parameter) (bool, error) {
+func equalParams(param1 *openapi3.Parameter, param2 *openapi3.Parameter, pathParamsMap PathParamsMap) (bool, error) {
 	if param1 == nil || param2 == nil {
 		return false, fmt.Errorf("param is nil")
 	}
-	return param1.Name == param2.Name && param1.In == param2.In, nil
+
+	if param1.In != param2.In {
+		return false, nil
+	}
+
+	if param1.In != openapi3.ParameterInPath {
+		return param1.Name == param2.Name, nil
+	}
+
+	return pathParamsMap.find(param1.Name, param2.Name), nil
 }
 
 func (parametersDiff *ParametersDiff) getSummary() *SummaryDetails {

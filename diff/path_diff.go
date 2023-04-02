@@ -41,9 +41,9 @@ func (pathDiff *PathDiff) removeNonBreaking() {
 	pathDiff.ServersDiff = nil
 }
 
-func getPathDiff(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
+func getPathDiff(config *Config, state *state, pathItemPair *pathItemPair) (*PathDiff, error) {
 
-	diff, err := getPathDiffInternal(config, state, pathItem1, pathItem2)
+	diff, err := getPathDiffInternal(config, state, pathItemPair)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,10 @@ func getPathDiff(config *Config, state *state, pathItem1, pathItem2 *openapi3.Pa
 	return diff, nil
 }
 
-func getPathDiffInternal(config *Config, state *state, pathItem1, pathItem2 *openapi3.PathItem) (*PathDiff, error) {
+func getPathDiffInternal(config *Config, state *state, pathItemPair *pathItemPair) (*PathDiff, error) {
+
+	pathItem1 := pathItemPair.PathItem1
+	pathItem2 := pathItemPair.PathItem2
 
 	if pathItem1 == nil || pathItem2 == nil {
 		return nil, fmt.Errorf("path item is nil")
@@ -73,13 +76,13 @@ func getPathDiffInternal(config *Config, state *state, pathItem1, pathItem2 *ope
 	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), pathItem1.Summary, pathItem2.Summary)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), pathItem1.Description, pathItem2.Description)
 
-	result.OperationsDiff, err = getOperationsDiff(config, state, pathItem1, pathItem2)
+	result.OperationsDiff, err = getOperationsDiff(config, state, pathItemPair)
 	if err != nil {
 		return nil, err
 	}
 
 	result.ServersDiff = getServersDiff(config, state, &pathItem1.Servers, &pathItem2.Servers)
-	result.ParametersDiff, err = getParametersDiff(config, state, pathItem1.Parameters, pathItem2.Parameters)
+	result.ParametersDiff, err = getParametersDiff(config, state, pathItem1.Parameters, pathItem2.Parameters, pathItemPair.PathParamsMap)
 	result.Base = pathItem1
 	result.Revision = pathItem2
 	if err != nil {

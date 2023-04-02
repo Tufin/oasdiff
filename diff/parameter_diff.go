@@ -6,6 +6,7 @@ import (
 
 // ParameterDiff describes the changes between a pair of parameter objects: https://swagger.io/specification/#parameter-object
 type ParameterDiff struct {
+	NameDiff            *ValueDiff          `json:"name,omitempty" yaml:"name,omitempty"`
 	ExtensionsDiff      *ExtensionsDiff     `json:"extensions,omitempty" yaml:"extensions,omitempty"`
 	DescriptionDiff     *ValueDiff          `json:"description,omitempty" yaml:"description,omitempty"`
 	StyleDiff           *ValueDiff          `json:"style,omitempty" yaml:"style,omitempty"`
@@ -72,6 +73,7 @@ func getParameterDiffInternal(config *Config, state *state, param1, param2 *open
 	result := ParameterDiff{}
 	var err error
 
+	result.NameDiff = getValueDiff(param1.Name, param2.Name)
 	result.ExtensionsDiff = getExtensionsDiff(config, state, param1.Extensions, param2.Extensions)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), param1.Description, param2.Description)
 	result.StyleDiff = getValueDiff(param1.Style, param2.Style)
