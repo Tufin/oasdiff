@@ -90,7 +90,7 @@ jobs:
         sh scripts/doc_breaking_changes.sh > breaking-changes.md
     - run: git --no-pager diff --exit-code
 
-    - uses: codecov/codecov-action@v2
+    - uses: codecov/codecov-action@v3
       with:
         files: ./coverage.txt
         flags: unittests # optional
