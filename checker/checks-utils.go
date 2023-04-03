@@ -149,6 +149,16 @@ func processDeletedPropertiesDiff(propertyPath string, propertyName string, sche
 			processDeletedPropertiesDiff(fmt.Sprintf("%s/anyOf[%s]", propertyPath, k), "", v, schemaDiff, processor)
 		}
 	}
+
+	if schemaDiff.ItemsDiff != nil && schemaDiff.ItemsDiff.PropertiesDiff != nil {
+		for _, v := range schemaDiff.ItemsDiff.PropertiesDiff.Deleted {
+			processor(propertyPath, v, schemaDiff.Base.Value.Items.Value.Properties[v].Value, schemaDiff)
+		}
+		for k, v := range schemaDiff.ItemsDiff.PropertiesDiff.Modified {
+			processDeletedPropertiesDiff(fmt.Sprintf("%s/%s", propertyPath, k), "", v, schemaDiff, processor)
+		}
+	}
+
 	if schemaDiff.PropertiesDiff != nil {
 		for _, v := range schemaDiff.PropertiesDiff.Deleted {
 			processor(propertyPath, v, schemaDiff.Base.Value.Properties[v].Value, schemaDiff)

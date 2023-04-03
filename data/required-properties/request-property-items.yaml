@@ -1,0 +1,51 @@
+openapi: 3.0.1
+info:
+  title: Test API
+paths:
+  /api/roleMappings:
+    post:
+      summary: Add One Role Mapping 
+      description: "Adds one role mapping to the specified organization in the specified"
+      requestBody:
+        description: The role mapping that you want to create.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleMappingView'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleMappingView'
+components:
+  schemas:
+    RoleAssignment:
+      type: object
+      properties:
+        role:
+          type: string
+          description: RoleAssignment object
+          enum:
+          - OPTION_1
+          - OPTION_2
+          - OPTION_3
+    RoleMappingView:
+      title: Role Mapping
+      required:
+      - otherProp
+      type: object
+      properties:
+        otherProp:
+          maxLength: 200
+          type: string
+          description: Another property in role mapping
+        roleAssignments:
+          uniqueItems: true
+          type: array
+          description: Unique role assignment object.
+          items:
+            $ref: '#/components/schemas/RoleAssignment'
+      description: Mapping settings
