@@ -103,7 +103,7 @@ func getPathsDiffInternal(config *Config, state *state, paths1, paths2 openapi3.
 	}
 
 	for endpoint, pathItemPair := range otherPaths {
-		err := result.addModifiedPath(config, state, endpoint, pathItemPair.PathItem1, pathItemPair.PathItem2)
+		err := result.addModifiedPath(config, state, endpoint, pathItemPair)
 		if err != nil {
 			return nil, err
 		}
@@ -130,8 +130,8 @@ func (pathsDiff *PathsDiff) addDeletedPath(path string) {
 	pathsDiff.Deleted = append(pathsDiff.Deleted, path)
 }
 
-func (pathsDiff *PathsDiff) addModifiedPath(config *Config, state *state, path1 string, pathItem1, pathItem2 *openapi3.PathItem) error {
-	return pathsDiff.Modified.addPathDiff(config, state, path1, pathItem1, pathItem2)
+func (pathsDiff *PathsDiff) addModifiedPath(config *Config, state *state, path1 string, pathItemPair *pathItemPair) error {
+	return pathsDiff.Modified.addPathDiff(config, state, path1, pathItemPair)
 }
 
 func filterPaths(filter, filterExtension string, paths1, paths2 openapi3.Paths) error {

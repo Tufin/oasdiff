@@ -36,7 +36,7 @@ func getComponentsDiffInternal(config *Config, state *state, s1, s2 openapi3.Com
 		return result, err
 	}
 
-	result.ParametersDiff, err = getParametersDiff(config, state, toParameters(s1.Parameters), toParameters(s2.Parameters))
+	result.ParametersDiff, err = getParametersDiff(config, state, toParameters(s1.Parameters), toParameters(s2.Parameters), PathParamsMap{})
 	if err != nil {
 		return result, err
 	}
