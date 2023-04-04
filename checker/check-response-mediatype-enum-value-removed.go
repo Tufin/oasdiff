@@ -26,6 +26,13 @@ func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 			}
 			source := (*operationsSources)[operationItem.Revision]
 			for _, responseItems := range operationItem.ResponsesDiff.Modified {
+				if responseItems.ContentDiff == nil {
+					continue
+				}
+
+				if responseItems.ContentDiff.MediaTypeModified == nil {
+					continue
+				}
 				for mediaType, mediaTypeItem := range responseItems.ContentDiff.MediaTypeModified {
 					if mediaTypeItem.SchemaDiff == nil {
 						continue
