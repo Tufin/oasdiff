@@ -367,7 +367,6 @@ oasdiff -include-checks response-non-success-status-removed -check-breaking -bas
 ### Limitations of the New Breaking Changes Method
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
-- false-positive breaking change error when the path parameter renamed both in path and in parameters section to the same name, this can be mitigated with the checks errors ignore feature
 
 ## Composed Mode
 Composed mode compares two collections of OpenAPI specs instead of a pair of specs in the default mode.
