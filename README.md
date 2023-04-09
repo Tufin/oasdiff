@@ -41,7 +41,7 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 ## Wrappers
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
 - [REST Service](#diff-and-breaking-changes-as-a-service)
-- [Interactive UI](https://www.oasdiff.com)
+- [Online interactive diff](https://www.oasdiff.com/calculator)
 
 ## Usage
 
@@ -210,16 +210,11 @@ Note that the `-base` and `-revision` paths must begin with `/`.
 ## Diff and Breaking-Changes as a Service
 You can use oasdiff as a service like this:
 ```
-curl -X POST -F base=@openapi-test1.yaml -F revision=@openapi-test3.yaml https://api.oasdiff.com/diff
+curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com/diff
 ```
 Or, to see breaking changes:
 ```
-curl -X POST -F base=@openapi-test1.yaml -F revision=@openapi-test3.yaml https://api.oasdiff.com/breaking-changes
-```
-To compare specs over http/s, download them locally first:
-```
-curl -o openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml
-curl -o openapi-test3.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com/breaking-changes
 ```
 Service source code: https://github.com/oasdiff/oasdiff-service
 
