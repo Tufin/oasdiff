@@ -113,7 +113,7 @@ func ExampleGetPathsDiff() {
 	if len(errs) > 0 {
 		fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
 		for _, bcerr := range errs {
-			fmt.Printf("%s\n\n", bcerr.PrettyError(c.Localizer))
+			fmt.Printf("%s\n\n", bcerr.PrettyErrorText(c.Localizer))
 		}
 	}
 

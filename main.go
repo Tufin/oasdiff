@@ -202,19 +202,32 @@ func main() {
 				os.Exit(122)
 			}
 		}
-
-		// pretty output
-		if len(errs) > 0 {
-			fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
-		}
-
 		countWarns := 0
-		for _, bcerr := range errs {
-			if bcerr.Level == checker.WARN {
-				countWarns++
+
+		if format == formatJSON {
+			if err = printJSON(errs); err != nil {
+				fmt.Fprintf(os.Stderr, "failed to print diff JSON with %v\n", err)
+				os.Exit(106)
 			}
-			fmt.Printf("%s\n\n", bcerr.PrettyError(c.Localizer))
+			for _, bcerr := range errs {
+				if bcerr.Level == checker.WARN {
+					countWarns++
+				}
+			}
+		} else {
+			// pretty output
+			if len(errs) > 0 {
+				fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
+			}
+
+			for _, bcerr := range errs {
+				if bcerr.Level == checker.WARN {
+					countWarns++
+				}
+				fmt.Printf("%s\n\n", bcerr.PrettyErrorText(c.Localizer))
+			}
 		}
+
 		countErrs := len(errs) - countWarns
 
 		diffEmpty := countErrs == 0

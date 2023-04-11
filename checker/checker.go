@@ -89,7 +89,7 @@ func IsPipedOutput() bool {
 	return *pipedOutput
 }
 
-func (r *BackwardCompatibilityError) PrettyError(l localizations.Localizer) string {
+func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) string {
 	if IsPipedOutput() {
 		return r.LocalizedError(l)
 	}
