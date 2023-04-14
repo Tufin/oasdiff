@@ -14,10 +14,10 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 
 ## Features 
 - Detect [breaking changes](#breaking-changes)
-- Generate a diff report in YAML, JSON, Text/Markdown or HTML
+- OpenAPI diff report in YAML, JSON, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
-- Compare specs from the file system or over http/s
+- OpenAPI diff of local files system or remove files over http/s
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
@@ -108,14 +108,14 @@ For example, ```-breaking-only``` and ```--breaking-only``` are equivalent.
 
 ## Usage Examples
 
-### YAML diff of local files
+### OpenAPI diff of local files in YAML
 ```bash
 oasdiff -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
 The default output format is YAML.  
 No output means that the diff is empty, or, in other words, there are no changes.
 
-### Text/Markdown diff of local files
+### OpenAPI diff of local files in Text/Markdown 
 ```bash
 oasdiff -format text -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
@@ -123,7 +123,7 @@ The Text/Markdown diff report provides a simplified and partial view of the chan
 To view all details, use the default format: YAML.  
 If you'd like to see additional details in the text/markdown report, please submit a [feature request](https://github.com/Tufin/oasdiff/issues/new?assignees=&labels=&template=feature_request.md&title=).
 
-### HTML diff of local files
+### OpenAPI diff of local files in HTML
 ```bash
 oasdiff -format html -base data/openapi-test1.yaml -revision data/openapi-test2.yaml
 ```
@@ -132,17 +132,17 @@ To view all details, use the default format: YAML.
 If you'd like to see additional details in the HTML report, please submit a [feature request](https://github.com/Tufin/oasdiff/issues/new?assignees=&labels=&template=feature_request.md&title=).
 
 
-### Diff files over http/s
+### OpenAPI diff for remote files over http/s
 ```bash
 oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Check for breaking changes (new method)
+### OpenAPI breaking changes (new method)
 ```bash
 oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Check for breaking changes across multiple specs (new method)
+### OpenAPI breaking changes across multiple specs (new method)
 ```bash
 oasdiff -check-breaking -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
 ```
@@ -152,7 +152,7 @@ oasdiff -check-breaking -composed -base "data/composed/base/*.yaml" -revision "d
 oasdiff -fail-on-diff -check-breaking -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
 ```
 
-### Check for any changes across multiple specs
+### OpenAPI diff across multiple specs
 ```bash
 oasdiff -composed -base "data/composed/base/*.yaml" -revision "data/composed/revision/*.yaml"
 ```
@@ -162,7 +162,7 @@ oasdiff -composed -base "data/composed/base/*.yaml" -revision "data/composed/rev
 oasdiff -fail-on-diff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Display changes to endpoints containing "/api" in the path
+### OpenAPI diff for endpoints containing "/api" in the path
 ```bash
 oasdiff -format text -filter "/api" -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
@@ -206,7 +206,7 @@ docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff -base /data/openapi-tes
 Replace `$(pwd)/data` by the path that contains your files.  
 Note that the `-base` and `-revision` paths must begin with `/`.  
 
-## Diff and Breaking-Changes as a Service
+## OpenAPI Diff and Breaking-Changes as a Service
 You can use oasdiff as a service like this:
 ```
 curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com/diff
