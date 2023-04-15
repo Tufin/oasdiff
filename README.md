@@ -5,7 +5,7 @@
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
 # OpenAPI Diff
-OpenAPI Diff and Breaking Changes
+Command-line tool and go package to compare and detect breaking changes in OpenAPI specs.
 
 ## Try it
 ```
