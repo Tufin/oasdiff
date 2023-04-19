@@ -6,8 +6,31 @@ import (
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/report"
 	"github.com/tufin/oasdiff/utils"
 )
+
+func HandleDiff(diffReport *diff.Diff, format string) *ReturnError {
+	switch format {
+	case FormatYAML:
+		if err := PrintYAML(diffReport); err != nil {
+			return GetErrFailedPrint("diff YAML", err)
+		}
+	case FormatJSON:
+		if err := PrintJSON(diffReport); err != nil {
+			return GetErrFailedPrint("diff JSON", err)
+		}
+	case FormatText:
+		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
+	case FormatHTML:
+		html, err := report.GetHTMLReportAsString(diffReport)
+		if err != nil {
+			return GetErrFailedGenerateHTML(err)
+		}
+		fmt.Printf("%s", html)
+	}
+	return GetErrUnsupportedDiffFormat(format)
+}
 
 func HandleBreakingChanges(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap,
 	includeChecks utils.StringList,

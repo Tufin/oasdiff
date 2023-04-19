@@ -11,7 +11,6 @@ import (
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/internal"
 	"github.com/tufin/oasdiff/load"
-	"github.com/tufin/oasdiff/report"
 	"github.com/tufin/oasdiff/utils"
 )
 
@@ -20,13 +19,6 @@ var prefix_base, prefix_revision, strip_prefix_base, strip_prefix_revision, pref
 var excludeExamples, excludeDescription, summary, breakingOnly, failOnDiff, failOnWarns, version, composed, checkBreaking, excludeEndpoints bool
 var deprecationDays int
 var includeChecks, excludeElements utils.StringList
-
-const (
-	formatYAML = "yaml"
-	formatJSON = "json"
-	formatText = "text"
-	formatHTML = "html"
-)
 
 func init() {
 	flag.StringVar(&base, "base", "", "path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format")
@@ -195,28 +187,7 @@ func main() {
 		exitNormally(diffReport.Empty())
 	}
 
-	switch {
-	case format == formatYAML:
-		if err := internal.PrintYAML(diffReport); err != nil {
-			exitWithError(internal.GetErrFailedPrint("diff YAML", err))
-		}
-	case format == formatJSON:
-		if err := internal.PrintJSON(diffReport); err != nil {
-			exitWithError(internal.GetErrFailedPrint("diff JSON", err))
-		}
-	case format == formatText:
-		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
-	case format == formatHTML:
-		html, err := report.GetHTMLReportAsString(diffReport)
-		if err != nil {
-			exitWithError(internal.GetErrFailedGenerateHTML(err))
-		}
-		fmt.Printf("%s", html)
-	default:
-		exitWithError(internal.GetErrUnsupportedDiffFormat(format))
-	}
-
-	exitNormally(diffReport.Empty())
+	exit(diffReport.Empty(), internal.HandleDiff(diffReport, format))
 }
 
 func exit(diffEmpty bool, err *internal.ReturnError) {
