@@ -5,7 +5,7 @@
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
 # OpenAPI Diff
-Command-line tool and go package to compare and detect breaking changes in OpenAPI specs.
+Command-line and Go package to compare and detect breaking changes in OpenAPI specs.
 
 ## Try it
 ```
@@ -14,7 +14,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 
 ## Features 
 - Detect [breaking changes](#breaking-changes)
-- OpenAPI diff report in YAML, JSON, Text/Markdown or HTML
+- OpenAPI diff in YAML, JSON, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
 - OpenAPI diff of local files system or remove files over http/s
