@@ -3,10 +3,11 @@ package internal
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"reflect"
 )
 
-func PrintJSON(output interface{}) error {
+func printJSON(stdout io.Writer, output interface{}) error {
 	if reflect.ValueOf(output).IsNil() {
 		return nil
 	}
@@ -15,6 +16,6 @@ func PrintJSON(output interface{}) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%s\n", bytes)
+	fmt.Fprintf(stdout, "%s\n", bytes)
 	return nil
 }

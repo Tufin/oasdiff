@@ -2,12 +2,13 @@ package internal
 
 import (
 	"fmt"
+	"io"
 	"reflect"
 
 	"gopkg.in/yaml.v3"
 )
 
-func PrintYAML(output interface{}) error {
+func printYAML(stdout io.Writer, output interface{}) error {
 	if reflect.ValueOf(output).IsNil() {
 		return nil
 	}
@@ -16,6 +17,6 @@ func PrintYAML(output interface{}) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%s", bytes)
+	fmt.Fprintf(stdout, "%s", bytes)
 	return nil
 }

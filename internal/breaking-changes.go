@@ -2,37 +2,16 @@ package internal
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/report"
 	"github.com/tufin/oasdiff/utils"
 )
 
-func HandleDiff(diffReport *diff.Diff, format string) *ReturnError {
-	switch format {
-	case FormatYAML:
-		if err := PrintYAML(diffReport); err != nil {
-			return GetErrFailedPrint("diff YAML", err)
-		}
-	case FormatJSON:
-		if err := PrintJSON(diffReport); err != nil {
-			return GetErrFailedPrint("diff JSON", err)
-		}
-	case FormatText:
-		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
-	case FormatHTML:
-		html, err := report.GetHTMLReportAsString(diffReport)
-		if err != nil {
-			return GetErrFailedGenerateHTML(err)
-		}
-		fmt.Printf("%s", html)
-	}
-	return GetErrUnsupportedDiffFormat(format)
-}
-
-func HandleBreakingChanges(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap,
+func handleBreakingChanges(stdout io.Writer,
+	diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap,
 	includeChecks utils.StringList,
 	format string,
 	failOnWarns bool,
@@ -50,23 +29,23 @@ func HandleBreakingChanges(diffReport *diff.Diff, operationsSources *diff.Operat
 
 	switch format {
 	case FormatYAML:
-		if err := PrintYAML(errs); err != nil {
-			return false, GetErrFailedToPrint("breaking changes YAML", err)
+		if err := printYAML(stdout, errs); err != nil {
+			return false, getErrFailedToPrint("breaking changes YAML", err)
 		}
 	case FormatJSON:
-		if err := PrintJSON(errs); err != nil {
-			return false, GetErrFailedToPrint("breaking changes JSON", err)
+		if err := printJSON(stdout, errs); err != nil {
+			return false, getErrFailedToPrint("breaking changes JSON", err)
 		}
 	case FormatText:
 		if len(errs) > 0 {
-			fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
+			fmt.Fprintf(stdout, c.Localizer.Get("messages.total-errors"), len(errs))
 		}
 
 		for _, bcerr := range errs {
-			fmt.Printf("%s\n\n", bcerr.PrettyErrorText(c.Localizer))
+			fmt.Fprintf(stdout, "%s\n\n", bcerr.PrettyErrorText(c.Localizer))
 		}
 	default:
-		return false, GetErrUnsupportedBreakingChangesFormat(format)
+		return false, getErrUnsupportedBreakingChangesFormat(format)
 	}
 
 	countErrs := len(errs) - errs.CountWarnings()
@@ -91,7 +70,7 @@ func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig,
 		var err error
 		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnoreFile)
 		if err != nil {
-			return nil, GetErrCantProcessIgnoreFile("warn", err)
+			return nil, getErrCantProcessIgnoreFile("warn", err)
 		}
 	}
 
@@ -99,7 +78,7 @@ func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig,
 		var err error
 		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnoreFile)
 		if err != nil {
-			return nil, GetErrCantProcessIgnoreFile("err", err)
+			return nil, getErrCantProcessIgnoreFile("err", err)
 		}
 	}
 
