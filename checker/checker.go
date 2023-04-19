@@ -36,6 +36,16 @@ type BackwardCompatibilityError struct {
 
 type BackwardCompatibilityErrors []BackwardCompatibilityError
 
+func (bcErrors BackwardCompatibilityErrors) CountWarnings() int {
+	result := 0
+	for _, bcerr := range bcErrors {
+		if bcerr.Level == WARN {
+			result++
+		}
+	}
+	return result
+}
+
 func (bcErrors BackwardCompatibilityErrors) Len() int {
 	return len(bcErrors)
 }

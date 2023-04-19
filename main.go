@@ -1,21 +1,18 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
-	"reflect"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/build"
 	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/internal"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
 	"github.com/tufin/oasdiff/utils"
-	"gopkg.in/yaml.v3"
 )
 
 var base, revision, filter, filterExtension, format, lang, warnIgnoreFile, errIgnoreFile string
@@ -50,7 +47,7 @@ func init() {
 	flag.StringVar(&warnIgnoreFile, "warn-ignore", "", "the configuration file for ignoring warnings with '-check-breaking'")
 	flag.StringVar(&errIgnoreFile, "err-ignore", "", "the configuration file for ignoring errors with '-check-breaking'")
 	flag.IntVar(&deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
-	flag.StringVar(&format, "format", formatYAML, "output format: yaml, json, text or html")
+	flag.StringVar(&format, "format", "", "output format: yaml, json, text or html")
 	flag.StringVar(&lang, "lang", "en", "language for localized breaking changes checks errors")
 	flag.BoolVar(&failOnDiff, "fail-on-diff", false, "exit with return code 1 when any ERR-level breaking changes are found, used together with '-check-breaking'")
 	flag.BoolVar(&failOnWarns, "fail-on-warns", false, "exit with return code 1 when any WARN-level breaking changes are found, used together with '-check-breaking' and '-fail-on-diff'")
@@ -65,49 +62,61 @@ func isExcludeEndpoints() bool {
 	return excludeEndpoints || excludeElements.Contains("endpoints")
 }
 
-func validateFlags() bool {
+func validateFormatFlag() *internal.ReturnError {
+	var supportedFormats utils.StringSet
+
+	if checkBreaking {
+		if format == "" {
+			format = "text"
+		}
+		supportedFormats = utils.StringList{"yaml", "json", "text"}.ToStringSet()
+	} else {
+		if format == "" {
+			format = "yaml"
+		}
+		if format == "json" && !isExcludeEndpoints() {
+			return internal.GetErrInvalidFlags(fmt.Errorf("json format requires \"-exclude-elements endpoints\""))
+		}
+		supportedFormats = utils.StringList{"yaml", "json", "text", "html"}.ToStringSet()
+	}
+
+	if !supportedFormats.Contains(format) {
+		return internal.GetErrUnsupportedDiffFormat(format)
+	}
+	return nil
+}
+
+func validateFlags() *internal.ReturnError {
 	if base == "" {
-		fmt.Fprintf(os.Stderr, "please specify the '-base' flag: the path of the original OpenAPI spec in YAML or JSON format\n")
-		return false
+		return internal.GetErrInvalidFlags(fmt.Errorf("please specify the \"-base\" flag: the path of the original OpenAPI spec in YAML or JSON format"))
 	}
 	if revision == "" {
-		fmt.Fprintf(os.Stderr, "please specify the '-revision' flag: the path of the revised OpenAPI spec in YAML or JSON format\n")
-		return false
+		return internal.GetErrInvalidFlags(fmt.Errorf("please specify the \"-revision\" flag: the path of the revised OpenAPI spec in YAML or JSON format"))
 	}
-	supportedFormats := map[string]bool{"yaml": true, "json": true, "text": true, "html": true}
-	if !supportedFormats[format] {
-		fmt.Fprintf(os.Stderr, "invalid format. Should be yaml, json text or html\n")
-		return false
-	}
-	if format == "json" && !isExcludeEndpoints() {
-		fmt.Fprintf(os.Stderr, "json format requires '-exclude-elements endpoints'\n")
-		return false
+	if err := validateFormatFlag(); err != nil {
+		return err
 	}
 	if prefix != "" {
 		if prefix_revision != "" {
-			fmt.Fprintf(os.Stderr, "'-prefix' and '-prefix_revision' can't be used simultaneously\n")
-			return false
+			return internal.GetErrInvalidFlags(fmt.Errorf("\"-prefix\" and \"-prefix_revision\" can't be used simultaneously"))
 		}
 		prefix_revision = prefix
 	}
 	if failOnWarns {
 		if !checkBreaking || !failOnDiff {
-			fmt.Fprintf(os.Stderr, "'-fail-on-warns' is relevant only with '-check-breaking' and '-fail-on-diff'\n")
-			return false
+			return internal.GetErrInvalidFlags(fmt.Errorf("\"-fail-on-warns\" is relevant only with \"-check-breaking\" and \"-fail-on-diff\""))
 		}
 	}
 
 	if invalidChecks := checker.ValidateIncludeChecks(includeChecks); len(invalidChecks) > 0 {
-		fmt.Fprintf(os.Stderr, "invalid include-checks: %s\n", invalidChecks.String())
-		return false
+		return internal.GetErrInvalidFlags(fmt.Errorf("invalid include-checks: %s", invalidChecks.String()))
 	}
 
 	if invalidElements := diff.ValidateExcludeElements(excludeElements); len(invalidElements) > 0 {
-		fmt.Fprintf(os.Stderr, "invalid exclude-elements: %s\n", invalidElements.String())
-		return false
+		return internal.GetErrInvalidFlags(fmt.Errorf("invalid exclude-elements: %s", invalidElements.String()))
 	}
 
-	return true
+	return nil
 }
 
 func main() {
@@ -118,8 +127,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	if !validateFlags() {
-		os.Exit(101)
+	if err := validateFlags(); err != nil {
+		exitWithError(err)
 	}
 
 	loader := openapi3.NewLoader()
@@ -137,7 +146,6 @@ func main() {
 	config.SetExcludeElements(excludeElements.ToStringSet(), excludeExamples, excludeDescription, excludeEndpoints)
 
 	var diffReport *diff.Diff
-	var err error
 	var operationsSources *diff.OperationsSourcesMap
 
 	if checkBreaking {
@@ -149,128 +157,78 @@ func main() {
 	if composed {
 		s1, err := load.FromGlob(loader, base)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to load base spec from %q with %v\n", base, err)
-			os.Exit(102)
+			exitWithError(internal.GetErrFailedToLoadSpec("base", base, err))
 		}
 
 		s2, err := load.FromGlob(loader, revision)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
-			os.Exit(103)
+			exitWithError(internal.GetErrFailedToLoadSpec("revision", revision, err))
 		}
 		diffReport, operationsSources, err = diff.GetPathsDiff(config, s1, s2)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
-			os.Exit(104)
+			exitWithError(internal.GetErrDiffFailed(err))
 		}
 	} else {
 		s1, err := checker.LoadOpenAPISpecInfo(base)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to load base spec from %q with %v\n", base, err)
-			os.Exit(102)
+			exitWithError(internal.GetErrFailedToLoadSpec("base", base, err))
 		}
 
 		s2, err := checker.LoadOpenAPISpecInfo(revision)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to load revision spec from %q with %v\n", revision, err)
-			os.Exit(103)
+			exitWithError(internal.GetErrFailedToLoadSpec("revision", revision, err))
 		}
 		diffReport, operationsSources, err = diff.GetWithOperationsSourcesMap(config, s1, s2)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "diff failed with %v\n", err)
-			os.Exit(104)
+			exitWithError(internal.GetErrDiffFailed(err))
 		}
 	}
 
 	if checkBreaking {
-		c := checker.GetChecks(includeChecks)
-		c.Localizer = *localizations.New(lang, "en")
-		errs := checker.CheckBackwardCompatibility(c, diffReport, operationsSources)
-
-		if warnIgnoreFile != "" {
-			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnoreFile)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "can't process warn ignore file %v\n", err)
-				os.Exit(121)
-			}
-		}
-
-		if errIgnoreFile != "" {
-			errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnoreFile)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "can't process err ignore file %v\n", err)
-				os.Exit(122)
-			}
-		}
-		countWarns := 0
-
-		if format == formatJSON {
-			if err = printJSON(errs); err != nil {
-				fmt.Fprintf(os.Stderr, "failed to print diff JSON with %v\n", err)
-				os.Exit(106)
-			}
-			for _, bcerr := range errs {
-				if bcerr.Level == checker.WARN {
-					countWarns++
-				}
-			}
-		} else {
-			// pretty output
-			if len(errs) > 0 {
-				fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
-			}
-
-			for _, bcerr := range errs {
-				if bcerr.Level == checker.WARN {
-					countWarns++
-				}
-				fmt.Printf("%s\n\n", bcerr.PrettyErrorText(c.Localizer))
-			}
-		}
-
-		countErrs := len(errs) - countWarns
-
-		diffEmpty := countErrs == 0
-		if failOnWarns {
-			diffEmpty = len(errs) == 0
-		}
-		exitNormally(diffEmpty)
+		exit(internal.HandleBreakingChanges(diffReport, operationsSources, includeChecks, format, failOnWarns, lang, warnIgnoreFile, errIgnoreFile))
 	}
 
 	if summary {
-		if err = printYAML(diffReport.GetSummary()); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to print summary with %v\n", err)
-			os.Exit(105)
+		if err := internal.PrintYAML(diffReport.GetSummary()); err != nil {
+			exitWithError(internal.GetErrFailedPrint("summary", err))
 		}
 		exitNormally(diffReport.Empty())
 	}
 
 	switch {
 	case format == formatYAML:
-		if err = printYAML(diffReport); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to print diff YAML with %v\n", err)
-			os.Exit(106)
+		if err := internal.PrintYAML(diffReport); err != nil {
+			exitWithError(internal.GetErrFailedPrint("diff YAML", err))
 		}
 	case format == formatJSON:
-		if err = printJSON(diffReport); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to print diff JSON with %v\n", err)
-			os.Exit(106)
+		if err := internal.PrintJSON(diffReport); err != nil {
+			exitWithError(internal.GetErrFailedPrint("diff JSON", err))
 		}
 	case format == formatText:
 		fmt.Printf("%s", report.GetTextReportAsString(diffReport))
 	case format == formatHTML:
 		html, err := report.GetHTMLReportAsString(diffReport)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to generate HTML diff report with %v\n", err)
-			os.Exit(107)
+			exitWithError(internal.GetErrFailedGenerateHTML(err))
 		}
 		fmt.Printf("%s", html)
 	default:
-		fmt.Fprintf(os.Stderr, "unknown output format %q\n", format)
-		os.Exit(108)
+		exitWithError(internal.GetErrUnsupportedDiffFormat(format))
 	}
 
 	exitNormally(diffReport.Empty())
+}
+
+func exit(diffEmpty bool, err *internal.ReturnError) {
+	if err != nil {
+		exitWithError(err)
+	}
+	exitNormally(diffEmpty)
+}
+
+func exitWithError(err *internal.ReturnError) {
+	fmt.Fprintf(os.Stderr, "%v\n", err.Err)
+	os.Exit(err.Code)
 }
 
 func exitNormally(diffEmpty bool) {
@@ -278,30 +236,4 @@ func exitNormally(diffEmpty bool) {
 		os.Exit(1)
 	}
 	os.Exit(0)
-}
-
-func printYAML(output interface{}) error {
-	if reflect.ValueOf(output).IsNil() {
-		return nil
-	}
-
-	bytes, err := yaml.Marshal(output)
-	if err != nil {
-		return err
-	}
-	fmt.Printf("%s", bytes)
-	return nil
-}
-
-func printJSON(output interface{}) error {
-	if reflect.ValueOf(output).IsNil() {
-		return nil
-	}
-
-	bytes, err := json.MarshalIndent(output, "", "  ")
-	if err != nil {
-		return err
-	}
-	fmt.Printf("%s\n", bytes)
-	return nil
 }
