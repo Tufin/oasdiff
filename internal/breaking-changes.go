@@ -9,15 +9,14 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func handleBreakingChanges(stdout io.Writer,
-	diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, inputFlags *InputFlags) (bool, *ReturnError) {
+func handleBreakingChanges(stdout io.Writer, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, inputFlags *InputFlags) (bool, *ReturnError) {
 
 	c := checker.GetChecks(inputFlags.includeChecks)
 	c.Localizer = *localizations.New(inputFlags.lang, "en")
 
-	errs, err := getBreakingChanges(c, diffReport, operationsSources, inputFlags.warnIgnoreFile, inputFlags.errIgnoreFile)
-	if err != nil {
-		return false, err
+	errs, returnErr := getBreakingChanges(c, diffReport, operationsSources, inputFlags.warnIgnoreFile, inputFlags.errIgnoreFile)
+	if returnErr != nil {
+		return false, returnErr
 	}
 
 	switch inputFlags.format {
@@ -41,21 +40,10 @@ func handleBreakingChanges(stdout io.Writer,
 		return false, getErrUnsupportedBreakingChangesFormat(inputFlags.format)
 	}
 
-	countErrs := len(errs) - errs.CountWarnings()
-
-	diffEmpty := countErrs == 0
-	if inputFlags.failOnWarns {
-		diffEmpty = len(errs) == 0
-	}
-
-	return diffEmpty, nil
+	return errs.IsEmpty(inputFlags.failOnWarns), nil
 }
 
-func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig,
-	diffReport *diff.Diff,
-	operationsSources *diff.OperationsSourcesMap,
-	warnIgnoreFile string,
-	errIgnoreFile string) (checker.BackwardCompatibilityErrors, *ReturnError) {
+func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, warnIgnoreFile string, errIgnoreFile string) (checker.BackwardCompatibilityErrors, *ReturnError) {
 
 	errs := checker.CheckBackwardCompatibility(c, diffReport, operationsSources)
 

@@ -118,8 +118,8 @@ func validateFlags(inputFlags *InputFlags) *ReturnError {
 	if inputFlags.revision == "" {
 		return getErrInvalidFlags(fmt.Errorf("please specify the \"-revision\" flag=the path of the revised OpenAPI spec in YAML or JSON format"))
 	}
-	if err := validateFormatFlag(inputFlags); err != nil {
-		return err
+	if returnErr := validateFormatFlag(inputFlags); returnErr != nil {
+		return returnErr
 	}
 	if inputFlags.prefix != "" {
 		if inputFlags.prefixRevision != "" {

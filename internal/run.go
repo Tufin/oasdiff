@@ -11,20 +11,36 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-func Run(args []string, stdout io.Writer) (bool, bool, *ReturnError) {
+func Run(args []string, stdout io.Writer, stderr io.Writer) int {
+
+	failEmpty, returnErr := runInternal(args, stdout)
+
+	if returnErr != nil {
+		fmt.Fprintf(stderr, "%v\n", returnErr.Err)
+		return returnErr.Code
+	}
+
+	if failEmpty {
+		return 1
+	}
+
+	return 0
+}
+
+func runInternal(args []string, stdout io.Writer) (bool, *ReturnError) {
 
 	inputFlags, returnErr := parseFlags(args)
 	if returnErr != nil {
-		return false, false, returnErr
+		return false, returnErr
 	}
 
 	if inputFlags.version {
 		fmt.Fprintf(stdout, "oasdiff version: %s\n", build.Version)
-		return false, false, nil
+		return false, nil
 	}
 
-	if err := validateFlags(inputFlags); err != nil {
-		return false, false, err
+	if returnErr := validateFlags(inputFlags); returnErr != nil {
+		return false, returnErr
 	}
 
 	openapi3.CircularReferenceCounter = inputFlags.circularReferenceCounter
@@ -55,44 +71,48 @@ func Run(args []string, stdout io.Writer) (bool, bool, *ReturnError) {
 	if inputFlags.composed {
 		s1, err := load.FromGlob(loader, inputFlags.base)
 		if err != nil {
-			return false, false, getErrFailedToLoadSpec("base", inputFlags.base, err)
+			return false, getErrFailedToLoadSpec("base", inputFlags.base, err)
 		}
 
 		s2, err := load.FromGlob(loader, inputFlags.revision)
 		if err != nil {
-			return false, false, getErrFailedToLoadSpec("revision", inputFlags.revision, err)
+			return false, getErrFailedToLoadSpec("revision", inputFlags.revision, err)
 		}
 		diffReport, operationsSources, err = diff.GetPathsDiff(config, s1, s2)
 		if err != nil {
-			return false, false, getErrDiffFailed(err)
+			return false, getErrDiffFailed(err)
 		}
 	} else {
 		s1, err := checker.LoadOpenAPISpecInfo(inputFlags.base)
 		if err != nil {
-			return false, false, getErrFailedToLoadSpec("base", inputFlags.base, err)
+			return false, getErrFailedToLoadSpec("base", inputFlags.base, err)
 		}
 
 		s2, err := checker.LoadOpenAPISpecInfo(inputFlags.revision)
 		if err != nil {
-			return false, false, getErrFailedToLoadSpec("revision", inputFlags.revision, err)
+			return false, getErrFailedToLoadSpec("revision", inputFlags.revision, err)
 		}
 		diffReport, operationsSources, err = diff.GetWithOperationsSourcesMap(config, s1, s2)
 		if err != nil {
-			return false, false, getErrDiffFailed(err)
+			return false, getErrDiffFailed(err)
 		}
 	}
 
 	if inputFlags.checkBreaking {
 		diffEmpty, returnError := handleBreakingChanges(stdout, diffReport, operationsSources, inputFlags)
-		return inputFlags.failOnDiff, diffEmpty, returnError
+		return failEmpty(inputFlags.failOnDiff, diffEmpty), returnError
 	}
 
 	if inputFlags.summary {
 		if err := printYAML(stdout, diffReport.GetSummary()); err != nil {
-			return false, false, getErrFailedPrint("summary", err)
+			return false, getErrFailedPrint("summary", err)
 		}
-		return inputFlags.failOnDiff, diffReport.Empty(), nil
+		return failEmpty(inputFlags.failOnDiff, diffReport.Empty()), nil
 	}
 
-	return inputFlags.failOnDiff, diffReport.Empty(), handleDiff(stdout, diffReport, inputFlags.format)
+	return failEmpty(inputFlags.failOnDiff, diffReport.Empty()), handleDiff(stdout, diffReport, inputFlags.format)
+}
+
+func failEmpty(failOnDiff, diffEmpty bool) bool {
+	return failOnDiff && !diffEmpty
 }
