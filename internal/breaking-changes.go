@@ -7,27 +7,20 @@ import (
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/utils"
 )
 
 func handleBreakingChanges(stdout io.Writer,
-	diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap,
-	includeChecks utils.StringList,
-	format string,
-	failOnWarns bool,
-	lang string,
-	warnIgnoreFile string,
-	errIgnoreFile string) (bool, *ReturnError) {
+	diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, inputFlags *InputFlags) (bool, *ReturnError) {
 
-	c := checker.GetChecks(includeChecks)
-	c.Localizer = *localizations.New(lang, "en")
+	c := checker.GetChecks(inputFlags.includeChecks)
+	c.Localizer = *localizations.New(inputFlags.lang, "en")
 
-	errs, err := getBreakingChanges(c, diffReport, operationsSources, warnIgnoreFile, errIgnoreFile)
+	errs, err := getBreakingChanges(c, diffReport, operationsSources, inputFlags.warnIgnoreFile, inputFlags.errIgnoreFile)
 	if err != nil {
 		return false, err
 	}
 
-	switch format {
+	switch inputFlags.format {
 	case FormatYAML:
 		if err := printYAML(stdout, errs); err != nil {
 			return false, getErrFailedToPrint("breaking changes YAML", err)
@@ -45,13 +38,13 @@ func handleBreakingChanges(stdout io.Writer,
 			fmt.Fprintf(stdout, "%s\n\n", bcerr.PrettyErrorText(c.Localizer))
 		}
 	default:
-		return false, getErrUnsupportedBreakingChangesFormat(format)
+		return false, getErrUnsupportedBreakingChangesFormat(inputFlags.format)
 	}
 
 	countErrs := len(errs) - errs.CountWarnings()
 
 	diffEmpty := countErrs == 0
-	if failOnWarns {
+	if inputFlags.failOnWarns {
 		diffEmpty = len(errs) == 0
 	}
 

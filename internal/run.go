@@ -83,7 +83,7 @@ func Run(args []string, stdout io.Writer) (bool, bool, *ReturnError) {
 	}
 
 	if inputFlags.checkBreaking {
-		diffEmpty, returnError := handleBreakingChanges(stdout, diffReport, operationsSources, inputFlags.includeChecks, inputFlags.format, inputFlags.failOnWarns, inputFlags.lang, inputFlags.warnIgnoreFile, inputFlags.errIgnoreFile)
+		diffEmpty, returnError := handleBreakingChanges(stdout, diffReport, operationsSources, inputFlags)
 		return inputFlags.failOnDiff, diffEmpty, returnError
 	}
 
