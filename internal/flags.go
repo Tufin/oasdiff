@@ -3,6 +3,7 @@ package internal
 import (
 	"flag"
 	"fmt"
+	"io"
 
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
@@ -39,7 +40,7 @@ type InputFlags struct {
 	excludeElements          utils.StringList
 }
 
-func parseFlags(args []string) (*InputFlags, *ReturnError) {
+func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 
 	if len(args) < 1 {
 		return nil, getErrInvalidFlags(fmt.Errorf("empty argument list"))
@@ -66,7 +67,7 @@ func parseFlags(args []string) (*InputFlags, *ReturnError) {
 	flags.StringVar(&inputFlags.warnIgnoreFile, "warn-ignore", "", "the configuration file for ignoring warnings with '-check-breaking'")
 	flags.StringVar(&inputFlags.errIgnoreFile, "err-ignore", "", "the configuration file for ignoring errors with '-check-breaking'")
 	flags.IntVar(&inputFlags.deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
-	flags.StringVar(&inputFlags.format, "format", "", "output format=yaml, json, text or html")
+	flags.StringVar(&inputFlags.format, "format", "", "output format: yaml, json, text or html")
 	flags.StringVar(&inputFlags.lang, "lang", "en", "language for localized breaking changes checks errors")
 	flags.BoolVar(&inputFlags.failOnDiff, "fail-on-diff", false, "exit with return code 1 when any ERR-level breaking changes are found, used together with '-check-breaking'")
 	flags.BoolVar(&inputFlags.failOnWarns, "fail-on-warns", false, "exit with return code 1 when any WARN-level breaking changes are found, used together with '-check-breaking' and '-fail-on-diff'")
@@ -76,8 +77,9 @@ func parseFlags(args []string) (*InputFlags, *ReturnError) {
 	flags.Var(&inputFlags.includeChecks, "include-checks", "comma-separated list of optional breaking-changes checks")
 	flags.Var(&inputFlags.excludeElements, "exclude-elements", "comma-separated list of elements to exclude from diff")
 
+	flags.SetOutput(stdout)
 	if err := flags.Parse(args[1:]); err != nil {
-		return nil, getErrInvalidFlags(err)
+		return nil, getErrParseFlags()
 	}
 
 	return &inputFlags, nil

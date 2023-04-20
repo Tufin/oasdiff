@@ -7,6 +7,13 @@ type ReturnError struct {
 	Code int
 }
 
+func getErrParseFlags() *ReturnError {
+	return &ReturnError{
+		Err:  nil, // don't print an error in this case because flag prints its own errors
+		Code: 100,
+	}
+}
+
 func getErrInvalidFlags(err error) *ReturnError {
 	return &ReturnError{
 		Err:  err,

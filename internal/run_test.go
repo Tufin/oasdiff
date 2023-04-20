@@ -65,26 +65,27 @@ func Test_BreakingChangesText(t *testing.T) {
 }
 
 func Test_BreakingChangesFailOnDiff(t *testing.T) {
-	var stdout bytes.Buffer
-	require.Equal(t, 1, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test1.yaml", "-revision", "../data/openapi-test3.yaml", "-check-breaking", "-fail-on-diff"}, &stdout, io.Discard))
+	require.Equal(t, 1, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test1.yaml", "-revision", "../data/openapi-test3.yaml", "-check-breaking", "-fail-on-diff"}, io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesFailOnWarns(t *testing.T) {
-	var stdout bytes.Buffer
-	require.Equal(t, 1, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test1.yaml", "-revision", "../data/openapi-test3.yaml", "-check-breaking", "-fail-on-diff", "-fail-on-warns"}, &stdout, io.Discard))
+	require.Equal(t, 1, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test1.yaml", "-revision", "../data/openapi-test3.yaml", "-check-breaking", "-fail-on-diff", "-fail-on-warns"}, io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesFailOnWarnsErrsOnly(t *testing.T) {
-	var stdout bytes.Buffer
-	require.Equal(t, 1, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test2.yaml", "-revision", "../data/openapi-test4.yaml", "-check-breaking", "-fail-on-diff", "-fail-on-warns"}, &stdout, io.Discard))
+	require.Equal(t, 1, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test2.yaml", "-revision", "../data/openapi-test4.yaml", "-check-breaking", "-fail-on-diff", "-fail-on-warns"}, io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesFailOnDiffNoDiff(t *testing.T) {
-	var stdout bytes.Buffer
-	require.Zero(t, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test1.yaml", "-revision", "../data/openapi-test1.yaml", "-check-breaking", "-fail-on-diff"}, &stdout, io.Discard))
+	require.Zero(t, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test1.yaml", "-revision", "../data/openapi-test1.yaml", "-check-breaking", "-fail-on-diff"}, io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesFailOnWarnsNoDiff(t *testing.T) {
-	var stdout bytes.Buffer
-	require.Zero(t, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test1.yaml", "-revision", "../data/openapi-test1.yaml", "-check-breaking", "-fail-on-diff", "-fail-on-warns"}, &stdout, io.Discard))
+	require.Zero(t, internal.Run([]string{"oasdiff", "-base", "../data/openapi-test1.yaml", "-revision", "../data/openapi-test1.yaml", "-check-breaking", "-fail-on-diff", "-fail-on-warns"}, io.Discard, io.Discard))
+}
+
+func Test_Help(t *testing.T) {
+	var stderr bytes.Buffer
+	internal.Run([]string{"oasdiff", "-h"}, io.Discard, &stderr)
+	require.Contains(t, stderr.String(), "Usage of oasdiff")
 }
