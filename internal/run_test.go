@@ -94,7 +94,19 @@ func Test_BreakingChangesFailOnWarnsNoDiff(t *testing.T) {
 }
 
 func Test_Help(t *testing.T) {
-	var stderr bytes.Buffer
-	internal.Run(cmdToArgs("oasdiff -h"), io.Discard, &stderr)
-	require.Contains(t, stderr.String(), "Usage of oasdiff")
+	var stdout bytes.Buffer
+	internal.Run(cmdToArgs("oasdiff -help"), &stdout, io.Discard)
+	require.Contains(t, stdout.String(), "Usage of oasdiff")
+}
+
+func Test_HelpShortcut(t *testing.T) {
+	var stdout bytes.Buffer
+	internal.Run(cmdToArgs("oasdiff -h"), &stdout, io.Discard)
+	require.Contains(t, stdout.String(), "Usage of oasdiff")
+}
+
+func Test_Version(t *testing.T) {
+	var stdout bytes.Buffer
+	internal.Run(cmdToArgs("oasdiff -version"), &stdout, io.Discard)
+	require.Contains(t, stdout.String(), "oasdiff version:")
 }

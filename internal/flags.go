@@ -11,6 +11,7 @@ import (
 )
 
 type InputFlags struct {
+	help                     bool
 	base                     string
 	revision                 string
 	composed                 bool
@@ -49,6 +50,7 @@ func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 	flags := flag.NewFlagSet(args[0], flag.ContinueOnError)
 
 	inputFlags := InputFlags{}
+	flags.BoolVar(&inputFlags.help, "help", false, "display help")
 	flags.StringVar(&inputFlags.base, "base", "", "path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format")
 	flags.StringVar(&inputFlags.revision, "revision", "", "path or URL (or a glob in Composed mode) of revised OpenAPI spec in YAML or JSON format")
 	flags.BoolVar(&inputFlags.composed, "composed", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
@@ -80,6 +82,11 @@ func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 	flags.SetOutput(stdout)
 	if err := flags.Parse(args[1:]); err != nil {
 		return nil, getErrParseFlags()
+	}
+
+	if inputFlags.help {
+		flags.Usage()
+		return nil, getErrNone()
 	}
 
 	return &inputFlags, nil

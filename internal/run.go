@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"flag"
 	"fmt"
 	"io"
 
@@ -32,13 +31,9 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 
 func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *ReturnError) {
 
-	inputFlags, returnErr := parseFlags(args, stderr)
+	inputFlags, returnErr := parseFlags(args, stdout)
 
 	if returnErr != nil {
-		if returnErr.Err == flag.ErrHelp {
-			// parseFlags already printed usage in this case so we can exit without an error
-			return false, nil
-		}
 		return false, returnErr
 	}
 
