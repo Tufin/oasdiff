@@ -40,7 +40,7 @@ func Test_BasicDiff(t *testing.T) {
 }
 
 func Test_InvalidFile(t *testing.T) {
-	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff -base ../data/no-file.yaml -revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
+	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff -base no-file -revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
 }
 
 func Test_DiffInvalidFormat(t *testing.T) {
@@ -95,6 +95,14 @@ func Test_BreakingChangesFailOnDiffNoDiff(t *testing.T) {
 
 func Test_BreakingChangesFailOnWarnsNoDiff(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test1.yaml -check-breaking -fail-on-diff -fail-on-warns"), io.Discard, io.Discard))
+}
+
+func Test_BreakingChangesIgnoreFile(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -check-breaking -err-ignore ../data/ignore-err.txt"), io.Discard, io.Discard))
+}
+
+func Test_BreakingChangesInvalidIgnoreFile(t *testing.T) {
+	require.Equal(t, 121, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -check-breaking -err-ignore no-file"), io.Discard, io.Discard))
 }
 
 func Test_Help(t *testing.T) {

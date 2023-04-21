@@ -22,11 +22,11 @@ func handleBreakingChanges(stdout io.Writer, diffReport *diff.Diff, operationsSo
 	switch inputFlags.format {
 	case FormatYAML:
 		if err := printYAML(stdout, errs); err != nil {
-			return false, getErrFailedToPrint("breaking changes YAML", err)
+			return false, getErrFailedPrint("breaking changes YAML", err)
 		}
 	case FormatJSON:
 		if err := printJSON(stdout, errs); err != nil {
-			return false, getErrFailedToPrint("breaking changes JSON", err)
+			return false, getErrFailedPrint("breaking changes JSON", err)
 		}
 	case FormatText:
 		if len(errs) > 0 {

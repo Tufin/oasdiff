@@ -49,13 +49,6 @@ func getErrFailedPrint(what string, err error) *ReturnError {
 	}
 }
 
-func getErrFailedToPrint(what string, err error) *ReturnError {
-	return &ReturnError{
-		Err:  fmt.Errorf("failed to print %s with %v", what, err),
-		Code: 106,
-	}
-}
-
 func getErrFailedGenerateHTML(err error) *ReturnError {
 	return &ReturnError{
 		Err:  fmt.Errorf("failed to generate HTML diff report with %v", err),
