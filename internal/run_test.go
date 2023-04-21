@@ -39,6 +39,10 @@ func Test_BasicDiff(t *testing.T) {
 	require.Nil(t, yaml.Unmarshal(stdout.Bytes(), &bc))
 }
 
+func Test_InvalidFile(t *testing.T) {
+	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff -base ../data/no-file.yaml -revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
+}
+
 func Test_DiffInvalidFormat(t *testing.T) {
 	require.Equal(t, 108, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -format xxx"), io.Discard, io.Discard))
 }
