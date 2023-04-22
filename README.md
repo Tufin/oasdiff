@@ -76,7 +76,9 @@ Usage of oasdiff:
   -filter-extension string
     	if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression
   -format string
-    	output format: yaml, json, text or html (default "yaml")
+    	output format: yaml, json, text or html
+  -help
+    	display help
   -include-checks value
     	comma-separated list of optional breaking-changes checks
   -lang string
