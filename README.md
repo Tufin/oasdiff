@@ -451,7 +451,6 @@ diff.Get(&diff.Config{}, spec1, spec2)
 ### Code Examples
 - [diff](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-Get)
 - [breaking changes](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-GetPathsDiff)
-- [oasdiff command-line](main.go)
 
 ### Customizing Breaking-Changes Checks
 If you encounter a change that isn't considered breaking by oasdiff and you would like to consider it as a breaking-change you may add an [optional breaking-changes check](#optional-breaking-changes-checks).  
