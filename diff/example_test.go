@@ -3,6 +3,7 @@ package diff_test
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
@@ -103,7 +104,7 @@ func ExampleGetPathsDiff() {
 	}
 
 	// process configuration file for ignoring warnings
-	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-warn-example.txt")
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, "../data/ignore-warn-example.txt")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ignore warnings failed with %v", err)
 		return
@@ -113,19 +114,18 @@ func ExampleGetPathsDiff() {
 	if len(errs) > 0 {
 		fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
 		for _, bcerr := range errs {
-			fmt.Printf("%s\n\n", bcerr.PrettyErrorText(c.Localizer))
+			fmt.Printf("%s\n\n", strings.TrimRight(bcerr.PrettyErrorText(c.Localizer), " "))
 		}
 	}
 
-	// Backward compatibility errors (5):
-	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'query' request parameter 'filter' [request-parameter-removed].
-	//
-	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'header' request parameter 'user' [request-parameter-removed].
+	// Output:
+	// Backward compatibility errors (4):
+	// error at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score removed the success response with the status '201' [response-success-status-removed].
 	//
 	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'cookie' request parameter 'test' [request-parameter-removed].
 	//
-	// error at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score removed the success response with the status '201' [response-success-status-removed].
+	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'header' request parameter 'user' [request-parameter-removed].
 	//
-	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/install-command deleted the 'header' request parameter 'network-policies' [request-parameter-removed].
+	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'query' request parameter 'filter' [request-parameter-removed].
 	//
 }

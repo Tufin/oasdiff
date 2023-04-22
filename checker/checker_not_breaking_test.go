@@ -55,23 +55,23 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 func TestBreaking_DeletedTag(t *testing.T) {
 	r := d(t, &diff.Config{}, 1, 5)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-success-status-removed", r[0].Id)
-	require.Equal(t, "response-body-type-changed", r[1].Id)
-	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "optional-response-header-removed", r[3].Id)
-	require.Equal(t, "api-path-removed-without-deprecation", r[4].Id)
-	require.Equal(t, "api-path-removed-without-deprecation", r[5].Id)
+	require.Equal(t, "response-body-type-changed", r[0].Id)
+	require.Equal(t, "response-success-status-removed", r[1].Id)
+	require.Equal(t, "api-path-removed-without-deprecation", r[2].Id)
+	require.Equal(t, "api-path-removed-without-deprecation", r[3].Id)
+	require.Equal(t, "optional-response-header-removed", r[4].Id)
+	require.Equal(t, "request-parameter-removed", r[5].Id)
 }
 
 // BC: adding an enum value is not breaking
 func TestBreaking_AddedEnum(t *testing.T) {
 	r := d(t, &diff.Config{}, 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "request-parameter-removed", r[0].Id)
-	require.Equal(t, "request-parameter-removed", r[1].Id)
+	require.Equal(t, "response-success-status-removed", r[0].Id)
+	require.Equal(t, "response-success-status-removed", r[1].Id)
 	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "response-success-status-removed", r[3].Id)
-	require.Equal(t, "response-success-status-removed", r[4].Id)
+	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "request-parameter-removed", r[4].Id)
 	require.Equal(t, "request-parameter-removed", r[5].Id)
 }
 
@@ -79,11 +79,11 @@ func TestBreaking_AddedEnum(t *testing.T) {
 func TestBreaking_ModifiedExtension(t *testing.T) {
 	r := d(t, &diff.Config{}, 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "request-parameter-removed", r[0].Id)
-	require.Equal(t, "request-parameter-removed", r[1].Id)
+	require.Equal(t, "response-success-status-removed", r[0].Id)
+	require.Equal(t, "response-success-status-removed", r[1].Id)
 	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "response-success-status-removed", r[3].Id)
-	require.Equal(t, "response-success-status-removed", r[4].Id)
+	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "request-parameter-removed", r[4].Id)
 	require.Equal(t, "request-parameter-removed", r[5].Id)
 }
 
@@ -91,11 +91,11 @@ func TestBreaking_ModifiedExtension(t *testing.T) {
 func TestBreaking_Comments(t *testing.T) {
 	r := d(t, &diff.Config{}, 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "request-parameter-removed", r[0].Id)
-	require.Equal(t, "request-parameter-removed", r[1].Id)
+	require.Equal(t, "response-success-status-removed", r[0].Id)
+	require.Equal(t, "response-success-status-removed", r[1].Id)
 	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "response-success-status-removed", r[3].Id)
-	require.Equal(t, "response-success-status-removed", r[4].Id)
+	require.Equal(t, "request-parameter-removed", r[3].Id)
+	require.Equal(t, "request-parameter-removed", r[4].Id)
 	require.Equal(t, "request-parameter-removed", r[5].Id)
 }
 
@@ -149,18 +149,18 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 func TestBreaking_OperationID(t *testing.T) {
 	r := d(t, &diff.Config{}, 3, 1)
 	require.Len(t, r, 3)
-	require.Equal(t, "request-parameter-pattern-added", r[0].Id)
-	require.Equal(t, "request-parameter-max-length-decreased", r[1].Id)
-	require.Equal(t, "request-parameter-enum-value-removed", r[2].Id)
+	require.Equal(t, "request-parameter-max-length-decreased", r[0].Id)
+	require.Equal(t, "request-parameter-enum-value-removed", r[1].Id)
+	require.Equal(t, "request-parameter-pattern-added", r[2].Id)
 }
 
 // BC: changing a link to operation ID is not breaking
 func TestBreaking_LinkOperationID(t *testing.T) {
 	r := d(t, &diff.Config{}, 3, 1)
 	require.Len(t, r, 3)
-	require.Equal(t, "request-parameter-pattern-added", r[0].Id)
-	require.Equal(t, "request-parameter-max-length-decreased", r[1].Id)
-	require.Equal(t, "request-parameter-enum-value-removed", r[2].Id)
+	require.Equal(t, "request-parameter-max-length-decreased", r[0].Id)
+	require.Equal(t, "request-parameter-enum-value-removed", r[1].Id)
+	require.Equal(t, "request-parameter-pattern-added", r[2].Id)
 }
 
 // BC: adding a media-type to response is not breaking

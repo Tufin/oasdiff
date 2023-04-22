@@ -57,12 +57,26 @@ func (bcErrors BackwardCompatibilityErrors) countWarnings() int {
 func (bcErrors BackwardCompatibilityErrors) Len() int {
 	return len(bcErrors)
 }
+
 func (bcErrors BackwardCompatibilityErrors) Less(i, j int) bool {
-	if bcErrors[i].Path == bcErrors[j].Path {
-		return bcErrors[i].Operation < bcErrors[j].Operation
+	iv, jv := bcErrors[i], bcErrors[j]
+
+	switch {
+	case iv.Level != jv.Level:
+		return iv.Level < jv.Level
+	case iv.Path != jv.Path:
+		return iv.Path < jv.Path
+	case iv.Operation != jv.Operation:
+		return iv.Operation < jv.Operation
+	case iv.Id != jv.Id:
+		return iv.Id < jv.Id
+	case iv.Text != jv.Text:
+		return iv.Text < jv.Text
+	default:
+		return iv.Comment < jv.Comment
 	}
-	return bcErrors[i].Path < bcErrors[j].Path
 }
+
 func (bcErrors BackwardCompatibilityErrors) Swap(i, j int) {
 	bcErrors[i], bcErrors[j] = bcErrors[j], bcErrors[i]
 }

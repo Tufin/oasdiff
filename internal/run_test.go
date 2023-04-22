@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/internal"
 	"gopkg.in/yaml.v3"
 )
@@ -97,8 +98,20 @@ func Test_BreakingChangesFailOnWarnsNoDiff(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test1.yaml -check-breaking -fail-on-diff -fail-on-warns"), io.Discard, io.Discard))
 }
 
-func Test_BreakingChangesIgnoreFile(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -check-breaking -err-ignore ../data/ignore-err.txt"), io.Discard, io.Discard))
+func Test_BreakingChangesIgnoreErrs(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -check-breaking -err-ignore ../data/ignore-err-example.txt -format json"), &stdout, io.Discard))
+	bc := checker.BackwardCompatibilityErrors{}
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
+	require.Len(t, bc, 5)
+}
+
+func Test_BreakingChangesIgnoreErrsAndWarns(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -check-breaking -err-ignore ../data/ignore-err-example.txt -warn-ignore ../data/ignore-warn-example.txt -format json"), &stdout, io.Discard))
+	bc := checker.BackwardCompatibilityErrors{}
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
+	require.Len(t, bc, 4)
 }
 
 func Test_BreakingChangesInvalidIgnoreFile(t *testing.T) {
