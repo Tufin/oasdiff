@@ -52,7 +52,7 @@ components:
           type: string
           format: date-time
           readOnly: true
-          pattern: "^+w$"
+          pattern: "^[a-z]+$"
         id:
           type: string
           readOnly: true
