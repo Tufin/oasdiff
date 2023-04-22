@@ -118,6 +118,14 @@ func Test_BreakingChangesInvalidIgnoreFile(t *testing.T) {
 	require.Equal(t, 121, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -check-breaking -err-ignore no-file"), io.Discard, io.Discard))
 }
 
+func Test_ComposedMode(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -composed -base ../data/composed/base/*.yaml -revision ../data/composed/revision/*.yaml -exclude-elements endpoints"), &stdout, io.Discard))
+	var bc interface{}
+	require.NoError(t, yaml.Unmarshal(stdout.Bytes(), &bc))
+	require.Equal(t, map[string]interface{}{"paths": map[string]interface{}{"deleted": []interface{}{"/api/old-test"}}}, bc)
+}
+
 func Test_Help(t *testing.T) {
 	var stdout bytes.Buffer
 	internal.Run(cmdToArgs("oasdiff -help"), &stdout, io.Discard)
