@@ -35,9 +35,34 @@ func Test_InvalidArg(t *testing.T) {
 
 func Test_BasicDiff(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -exclude-elements endpoints"), &stdout, io.Discard))
 	var bc interface{}
 	require.Nil(t, yaml.Unmarshal(stdout.Bytes(), &bc))
+}
+
+func Test_DiffJson(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -format json -exclude-elements endpoints"), &stdout, io.Discard))
+	var bc interface{}
+	require.Nil(t, json.Unmarshal(stdout.Bytes(), &bc))
+}
+
+func Test_DiffHtml(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -format html"), &stdout, io.Discard))
+	require.Contains(t, stdout.String(), `<h3 id="new-endpoints-none">New Endpoints: None</h3>`)
+}
+
+func Test_DiffText(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -format text"), &stdout, io.Discard))
+	require.Contains(t, stdout.String(), `### New Endpoints: None`)
+}
+
+func Test_Summary(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -summary"), &stdout, io.Discard))
+	require.Contains(t, stdout.String(), `diff: true`)
 }
 
 func Test_InvalidFile(t *testing.T) {
