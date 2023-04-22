@@ -17,7 +17,7 @@ func TestIgnore(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Equal(t, 6, len(errs))
 
-	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err.txt")
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt")
 	require.NoError(t, err)
 	require.Equal(t, 5, len(errs))
 }
