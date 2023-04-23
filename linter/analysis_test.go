@@ -10,6 +10,8 @@ import (
 )
 
 func loadFrom(t *testing.T, path string) *load.OpenAPISpecInfo {
+	t.Helper()
+
 	loader := openapi3.NewLoader()
 	oas, err := loader.LoadFromFile(path)
 	require.NoError(t, err)
