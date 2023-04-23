@@ -79,6 +79,7 @@ optional-response-header-removed: удалён ранее необязатель
 response-media-type-removed: удалён media type %s для ответа со статусом %s
 response-optional-property-removed: удалено необязательное поле %s из ответа со статусом %s
 response-property-became-optional: поле ответа %s стало необязательным для ответа со статусом %s
+response-property-became-nullable: поле ответа %s стало обнуляемым для ответа со статусом %s
 response-property-enum-value-added: добавлено новое enum значение %s в поле ответа %s для ответа со статусом %s
 response-property-enum-value-added-comment: Добавление новых значений перечисления в ответ может быть неожиданным для клиентов, вместо этого используйте x-extensible-enum.
 response-property-enum-value-removed: удалено значение перечисления '%s' из свойства ответа %s для статуса ответа %s.
