@@ -9,12 +9,19 @@ import (
 // *** THIS IS A TEMPORARY IMPLEMENTATION ***
 // SHOULD USE ECMA 262, SEE: https://swagger.io/docs/specification/data-models/data-types/#pattern
 
-func RegexCheck(source string, spec *load.OpenAPISpecInfo) []Error {
+func RegexCheck(source string, s *load.OpenAPISpecInfo) []Error {
 
 	result := make([]Error, 0)
 
-	for _, path := range spec.Spec.Paths {
+	if s == nil || s.Spec == nil {
+		return result
+	}
+
+	for _, path := range s.Spec.Paths {
 		for _, parameter := range path.Parameters {
+			if parameter.Value == nil || parameter.Value.Schema == nil {
+				continue
+			}
 			pattern := parameter.Value.Schema.Value.Pattern
 			if pattern != "" {
 				_, err := regexp.Compile(pattern)
@@ -30,5 +37,6 @@ func RegexCheck(source string, spec *load.OpenAPISpecInfo) []Error {
 		}
 
 	}
+
 	return result
 }
