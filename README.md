@@ -23,6 +23,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources)
 - Support [path prefix modification](#path-prefix-modification)
+- OpenAPI [Lint](#lint)
 
 ## Install with Go
 ```bash
@@ -85,6 +86,8 @@ Usage of oasdiff:
     	language for localized breaking changes checks errors (default "en")
   -max-circular-dep int
     	maximum allowed number of circular dependencies between objects in OpenAPI specs (default 5)
+  -no-lint
+    	disable linter
   -prefix string
     	deprecated. use '-prefix-revision' instead
   -prefix-base string
@@ -262,7 +265,7 @@ Some YAML libraries don't support complex mapping keys:
 
 In such cases, consider using `-exclude-elements endpoints` and `-format json` as a workaround.
 
-## Breaking Changes
+## Breaking Changes [Beta]
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
 [See some examples of breaking and non-breaking changes](breaking-changes.md).  
 Notes: 
@@ -388,7 +391,7 @@ Example of the `x-since-date` usage:
 
 Note: Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
 
-## Non-Breaking Removal of Deprecated Resources
+## Non-Breaking Removal of Deprecated Resources [Beta]
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
 As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
 
@@ -441,6 +444,12 @@ You can use the `-exclude-elements` flag to exclude certain kinds of changes:
 You can ignore multiple elements with a comma-separated list of excluded elements as in [this example](#ignore-changes-to-description-and-examples).  
 Note that [Extensions](https://swagger.io/specification/#specification-extensions) are always excluded from the diff.
 
+## Lint [Beta]
+oasdiff performs a lint to validate both specs before running the diff and breaking-changes.
+If errors are found, the diff is aborted and the errors are displayed instead.  
+You can pass `-no-lint` to skip lint validation.
+
+Note: This is a Beta feature, please report issues
 
 ## Notes for Go Developers
 ### Embedding oasdiff into your program
