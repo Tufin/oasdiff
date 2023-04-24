@@ -1,6 +1,8 @@
 package internal
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type ReturnError struct {
 	Err  error
@@ -73,5 +75,12 @@ func getErrCantProcessIgnoreFile(what string, err error) *ReturnError {
 	return &ReturnError{
 		Err:  fmt.Errorf("can't process %s ignore file %v", what, err),
 		Code: 121,
+	}
+}
+
+func getErrLintFailed() *ReturnError {
+	return &ReturnError{
+		Err:  nil,
+		Code: 130,
 	}
 }

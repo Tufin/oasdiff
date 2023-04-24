@@ -39,6 +39,7 @@ type InputFlags struct {
 	excludeEndpoints         bool
 	includeChecks            utils.StringList
 	excludeElements          utils.StringList
+	noLint                   bool
 }
 
 func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
@@ -78,6 +79,7 @@ func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 	flags.BoolVar(&inputFlags.excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output (deprecated, use '-exclude-elements endpoints' instead)")
 	flags.Var(&inputFlags.includeChecks, "include-checks", "comma-separated list of optional breaking-changes checks")
 	flags.Var(&inputFlags.excludeElements, "exclude-elements", "comma-separated list of elements to exclude from diff")
+	flags.BoolVar(&inputFlags.noLint, "no-lint", false, "disable linter")
 
 	flags.SetOutput(stdout)
 	if err := flags.Parse(args[1:]); err != nil {

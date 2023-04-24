@@ -153,18 +153,30 @@ func Test_ComposedMode(t *testing.T) {
 
 func Test_Help(t *testing.T) {
 	var stdout bytes.Buffer
-	internal.Run(cmdToArgs("oasdiff -help"), &stdout, io.Discard)
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -help"), &stdout, io.Discard))
 	require.Contains(t, stdout.String(), "Usage of oasdiff")
 }
 
 func Test_HelpShortcut(t *testing.T) {
 	var stdout bytes.Buffer
-	internal.Run(cmdToArgs("oasdiff -h"), &stdout, io.Discard)
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff -h"), &stdout, io.Discard))
 	require.Contains(t, stdout.String(), "Usage of oasdiff")
 }
 
 func Test_Version(t *testing.T) {
 	var stdout bytes.Buffer
-	internal.Run(cmdToArgs("oasdiff -version"), &stdout, io.Discard)
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -version"), &stdout, io.Discard))
 	require.Contains(t, stdout.String(), "oasdiff version:")
+}
+
+func Test_LintFailed(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Equal(t, 130, internal.Run(cmdToArgs("oasdiff -base ../data/lint/openapi-invalid-regex.yaml -revision ../data/openapi-test3.yaml"), &stdout, io.Discard))
+	var errs interface{}
+	require.NoError(t, yaml.Unmarshal(stdout.Bytes(), &errs))
+	require.Len(t, errs, 1)
+}
+
+func Test_NoLint(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test3.yaml -revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
 }
