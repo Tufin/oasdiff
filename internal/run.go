@@ -8,6 +8,7 @@ import (
 	"github.com/tufin/oasdiff/build"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/lint"
 	"github.com/tufin/oasdiff/load"
 )
 
@@ -86,15 +87,16 @@ func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *Retu
 			return false, getErrDiffFailed(err)
 		}
 	} else {
-		s1, err := checker.LoadOpenAPISpecInfo(inputFlags.base)
-		if err != nil {
-			return false, getErrFailedToLoadSpec("base", inputFlags.base, err)
+		s1, returnErr := linter(stdout, inputFlags.base, "base", inputFlags.noLint)
+		if returnErr != nil {
+			return false, returnErr
+		}
+		s2, returnErr := linter(stdout, inputFlags.revision, "revision", inputFlags.noLint)
+		if returnErr != nil {
+			return false, returnErr
 		}
 
-		s2, err := checker.LoadOpenAPISpecInfo(inputFlags.revision)
-		if err != nil {
-			return false, getErrFailedToLoadSpec("revision", inputFlags.revision, err)
-		}
+		var err error
 		diffReport, operationsSources, err = diff.GetWithOperationsSourcesMap(config, s1, s2)
 		if err != nil {
 			return false, getErrDiffFailed(err)
@@ -114,6 +116,26 @@ func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *Retu
 	}
 
 	return failEmpty(inputFlags.failOnDiff, diffReport.Empty()), handleDiff(stdout, diffReport, inputFlags.format)
+}
+
+func linter(stdout io.Writer, source string, name string, noLint bool) (*load.OpenAPISpecInfo, *ReturnError) {
+
+	s, err := checker.LoadOpenAPISpecInfo(source)
+	if err != nil {
+		return nil, getErrFailedToLoadSpec(name, source, err)
+	}
+
+	if noLint {
+		return s, nil
+	}
+
+	errs := lint.Run(*lint.DefaultConfig(), source, s)
+	if len(errs) > 0 {
+		printYAML(stdout, errs)
+		return nil, getErrLintFailed()
+	}
+
+	return s, nil
 }
 
 func failEmpty(failOnDiff, diffEmpty bool) bool {
