@@ -11,4 +11,8 @@ paths:
           content:
             application/json:
               schema:
-                type: string
+                type: object
+                properties:
+                  name:
+                    type: string
+                    nullable: true

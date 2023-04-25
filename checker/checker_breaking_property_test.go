@@ -120,11 +120,11 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 }
 
 // BC: changing a response property to nullable is breaking
-func TestBreaking_RespBodyPropertyNullable(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/base.yaml")
+func TestBreaking_RespBodyDeepPropertyNullable(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/base-property.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/revision.yaml")
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/revision-property.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -134,6 +134,38 @@ func TestBreaking_RespBodyPropertyNullable(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, "response-property-became-nullable", errs[0].Id)
 }
+
+// BC: changing an embedded reponse property to nullable is breaking
+func TestBreaking_RespBodyEmbeddedPropertyNullable(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/base-embedded-property.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/revision-embedded-property.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "response-property-became-nullable", errs[0].Id)
+}
+
+// // BC: changing an allOf reponse property to nullable is breaking
+// func TestBreaking_RespBodyAllOfPropertyNullable(t *testing.T) {
+// 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/base-allof.yaml")
+// 	require.NoError(t, err)
+
+// 	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/revision-allof.yaml")
+// 	require.NoError(t, err)
+
+// 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+// 	require.NoError(t, err)
+// 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+// 	require.NotEmpty(t, errs)
+// 	require.Len(t, errs, 1)
+// 	require.Equal(t, "response-property-became-nullable", errs[0].Id)
+// }
 
 // BC: changing a required property in response body to optional and also deleting it is breaking
 func TestBreaking_RespBodyDeleteAndDisableRequiredProperty(t *testing.T) {

@@ -36,19 +36,6 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 						continue
 					}
 
-					if mediaTypeDiff.SchemaDiff.NullableDiff != nil {
-						if mediaTypeDiff.SchemaDiff.NullableDiff.From == false {
-							result = append(result, BackwardCompatibilityError{
-								Id:        "response-property-became-nullable",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-became-nullable"), ColorizedValue("xxx"), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
-							})
-						}
-					}
-
 					CheckModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
@@ -62,9 +49,8 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 
 							result = append(result, BackwardCompatibilityError{
 								Id:        responsePropertyBecameNullableId,
-								Level:     WARN,
+								Level:     ERR,
 								Text:      fmt.Sprintf(config.i18n(responsePropertyBecameNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Comment:   config.i18n("response-required-property-became-nullable"),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
