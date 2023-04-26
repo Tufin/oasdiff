@@ -7,6 +7,7 @@ import (
 )
 
 const responsePropertyBecameNullableId = "response-property-became-nullable"
+const responseBodyBecameNullableId = "response-body-became-nullable"
 
 func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
@@ -36,6 +37,17 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 						continue
 					}
 
+					if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
+						result = append(result, BackwardCompatibilityError{
+							Id:        responseBodyBecameNullableId,
+							Level:     ERR,
+							Text:      config.i18n(responseBodyBecameNullableId),
+							Operation: operation,
+							Path:      path,
+							Source:    source,
+						})
+					}
+
 					CheckModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
@@ -43,7 +55,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 							if nullableDiff == nil {
 								return
 							}
-							if nullableDiff.From != false {
+							if nullableDiff.To != true {
 								return
 							}
 
