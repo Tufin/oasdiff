@@ -70,7 +70,7 @@ func TestBreaking_MinLengthSmaller(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.NotEmpty(t, errs)
+	require.Equal(t, "response-body-min-length-decreased", errs[0].Id)
 }
 
 // BC: increasing max length in request is not breaking
