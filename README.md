@@ -13,7 +13,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 ```
 
 ## Features 
-- Detect [breaking changes](#breaking-changes)
+- Detect [breaking changes](#breaking-changes-beta)
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
@@ -21,9 +21,9 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources)
+- Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources-beta)
 - Support [path prefix modification](#path-prefix-modification)
-- OpenAPI [Lint](#lint)
+- OpenAPI [Lint](#lint-beta)
 
 ## Install with Go
 ```bash
@@ -41,13 +41,10 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
 ## Wrappers
 - [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
-- [Cloud Service](#diff-and-breaking-changes-as-a-service)
+- [Cloud Service](#openapi-diff-and-breaking-changes-as-a-service)
 
 ## Usage
-
-```oasdiff -help```
 ```
-Usage of oasdiff:
   -base string
     	path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format
   -breaking-only
