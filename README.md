@@ -24,6 +24,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources-beta)
 - Support [path prefix modification](#path-prefix-modification)
 - OpenAPI [Lint](#lint-beta)
+- [Extend Breaking-Changes with Custom Checks](CUSTOMIZING-CHECKS.md)
 
 ## Install with Go
 ```bash
@@ -264,7 +265,7 @@ In such cases, consider using `-exclude-elements endpoints` and `-format json` a
 
 ## Breaking Changes [Beta]
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
-[See some examples of breaking and non-breaking changes](breaking-changes.md).  
+[See some examples of breaking and non-breaking changes](BREAKING-CHANGES.md).  
 Notes: 
 1. This is a Beta feature, please report issues
 2. There are two different methods for detecting breaking changes (see below)
