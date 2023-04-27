@@ -461,7 +461,7 @@ diff.Get(&diff.Config{}, spec1, spec2)
 
 ### Customizing Breaking-Changes Checks
 If you encounter a change that isn't considered breaking by oasdiff and you would like to consider it as a breaking-change you may add an [optional breaking-changes check](#optional-breaking-changes-checks).  
-Here's an example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
+For more information, see [this guide](CUSTOMIZING-CHECKS.md) and this example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
 
 
 ### OpenAPI References
