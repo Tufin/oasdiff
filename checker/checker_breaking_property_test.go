@@ -135,6 +135,20 @@ func TestBreaking_ReqBodyBecameEnum(t *testing.T) {
 	require.Equal(t, "request-body-became-enum", errs[0].Id)
 }
 
+// BC: adding an enum value to request body is not breaking
+func TestBreaking_ReqBodyEnumValueAdded(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum-revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Empty(t, errs)
+}
+
 // BC: changing a request property to enum is breaking
 func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-property-base.yaml")
