@@ -32,11 +32,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 					continue
 				}
 
-				if mediaTypeDiff.SchemaDiff.EnumDiff == nil {
-					continue
-				}
-
-				if mediaTypeDiff.SchemaDiff.EnumDiff.EnumAdded {
+				if mediaTypeDiff.SchemaDiff.EnumDiff != nil && mediaTypeDiff.SchemaDiff.EnumDiff.EnumAdded {
 					result = append(result, BackwardCompatibilityError{
 						Id:        requestBodyBecameEnumId,
 						Level:     ERR,
@@ -50,30 +46,21 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 				CheckModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-						requiredDiff := propertyDiff.RequiredDiff
-						if requiredDiff == nil {
+						enumDiff := propertyDiff.EnumDiff
+						if enumDiff == nil {
 							return
 						}
-						for _, changedRequiredPropertyName := range requiredDiff.Added {
-							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
-								continue
-							}
-							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
-								continue
-							}
-							if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
-								// it is a new property, checked by the new-required-request-property check
-								return
-							}
-							result = append(result, BackwardCompatibilityError{
-								Id:        requestPropertyBecameEnumId,
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
-							})
+						if !enumDiff.EnumAdded {
+							return
 						}
+						result = append(result, BackwardCompatibilityError{
+							Id:        requestPropertyBecameEnumId,
+							Level:     ERR,
+							Text:      fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), ColorizedValue(propertyFullName(propertyPath))),
+							Operation: operation,
+							Path:      path,
+							Source:    source,
+						})
 					})
 			}
 		}
