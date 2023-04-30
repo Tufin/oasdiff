@@ -119,12 +119,12 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	require.Equal(t, "response-property-became-optional", errs[0].Id)
 }
 
-// BC: changing a request property to enum is breaking
+// BC: changing a request body to enum is breaking
 func TestBreaking_ReqBodyBecameEnum(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enum/base-body.yaml")
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-no-enum.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enum/revision-body.yaml")
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)

@@ -6,8 +6,10 @@ import (
 
 // EnumDiff describes the changes between a pair of enums
 type EnumDiff struct {
-	Added   EnumValues `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted EnumValues `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	EnumAdded   bool       `json:"enumAdded,omitempty" yaml:"enumAdded,omitempty"`
+	EnumDeleted bool       `json:"enumDeleted,omitempty" yaml:"enumDeleted,omitempty"`
+	Added       EnumValues `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted     EnumValues `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 }
 
 // EnumValues is a list of enum values
@@ -57,6 +59,14 @@ func getEnumDiff(config *Config, state *state, enum1, enum2 EnumValues) *EnumDif
 func getEnumDiffInternal(enum1, enum2 EnumValues) *EnumDiff {
 
 	diff := newEnumDiff()
+
+	if enum1 == nil && enum2 != nil {
+		diff.EnumAdded = true
+	}
+
+	if enum1 != nil && enum2 == nil {
+		diff.EnumDeleted = true
+	}
 
 	for _, v1 := range enum1 {
 		if !findValue(v1, enum2) {
