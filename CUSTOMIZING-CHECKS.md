@@ -4,7 +4,7 @@
 1. Add a unit test for your scenario in one of the test files under [checker](checker) with a comment "BC: \<use-case\> is breaking"
 2. Add any acompanying OpenAPI specs under [data](data)
 
-## Localized Backwards Compatibility Messages
+## Localized Messages
 1. Add localized texts under [checker/localizations_src](checker/localizations_src) (you can use Google Translate for Russian)
 2. Update [localization source file](checker/localizations/localizations.go):
     ```
