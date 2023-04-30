@@ -3,7 +3,7 @@
 1. Use oasdiff 
    - [run from the command-line](README.md#usage-examples)
    - embed it in your CI pipeline to check how your OpenAPI spec is evolving and whether any breaking-changes were introduced
-   - [use the interactive oasdiff calculator](https://www.oasdiff.com/diff-calculator)
+   - [use the interactive oasdiff calculator](https://www.oasdiff.com/diff-calculator/)
    - [use the oasdiff web service](README.md#openapi-diff-and-breaking-changes-as-a-service)
 2. Give oasdiff another star
 3. Improve the [documentation](README.md)
