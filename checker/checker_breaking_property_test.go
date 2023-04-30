@@ -245,7 +245,7 @@ func TestBreaking_RespBodyPropertyNullable(t *testing.T) {
 	require.Equal(t, "response-property-became-nullable", errs[0].Id)
 }
 
-// BC: changing an embedded reponse property to nullable is breaking
+// BC: changing an embedded response property to nullable is breaking
 func TestBreaking_RespBodyEmbeddedPropertyNullable(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/nullable/base-embedded-property.yaml")
 	require.NoError(t, err)
