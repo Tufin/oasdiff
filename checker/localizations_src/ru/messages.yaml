@@ -21,13 +21,13 @@ new-required-request-parameter: добавлен новый обязательн
 new-required-request-property: добавлено новле обязательное поле запроса %s
 new-required-request-header-property: в заголовке запроса %s добавлено новое обязательное поле %s
 request-body-became-required: тело запроса стало обязательным
-request-body-became-enum: request body was restricted to a list of enum values
+request-body-became-enum: тело запроса было ограничено списком значений перечисления
 request-body-enum-value-removed: значение перечисления тела запроса удалено %s
 response-mediatype-enum-value-removed: значение перечисления схемы ответа %s удалено %s
 request-header-property-became-required: в заголовке запроса %s поле %s стало обязательным
-request-header-property-became-enum: the %s request header's property %s was restricted to a list of enum values
+request-header-property-became-enum: свойство %s заголовка запроса %s было ограничено списком значений перечисления
 request-parameter-became-required: ранее необязательный %s параметр запроса %s стал обязательным
-request-parameter-became-enum: the %s request parameter %s was restricted to a list of enum values
+request-parameter-became-enum: заголовок запроса %s поле %s было ограничено списком значений перечисления
 request-parameter-enum-value-removed: удалено значение enum %s у %s параметра запроса %s
 pattern-changed-warn-comment: Это предупреждение, потому что сложно автоматически проанализировать, является ли новый шаблон надмножеством предыдущего шаблона (например, изменен с '[0-9]+' на '[0-9]*').
 request-parameter-x-extensible-enum-value-removed: удалено из x-extensible-enum значение %s у %s параметра запроса %s
@@ -47,7 +47,7 @@ request-parameter-min-set-comment: Это предупреждение, пото
 request-parameter-type-changed: в %s параметре запроса %s, type/format изменился с %s/%s на %s/%s
 new-request-path-parameter: добален новый path параметр запроса %s
 request-property-became-required: поле запроса %s стало обязательным
-request-property-became-enum: request property %s was restricted to a list of enum values
+request-property-became-enum: свойство запроса %s было ограничено списком значений перечисления
 request-property-enum-value-removed: удалено enum значение %s у поля запроса %s
 request-body-max-decreased: значение max у тела запроса уменьшено до %s
 request-property-max-decreased: значение max у поля запроса %s уменьшено до %s
