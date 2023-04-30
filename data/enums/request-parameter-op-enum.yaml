@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: My API
+  version: '0.1'
+paths:
+  /books/{bookId}:
+    get:
+      summary: get book details
+      description: get details for a book
+      parameters:
+        - in: path
+          name: bookId
+          description: book ID
+          schema:
+            title: ID
+            type: string
+            enum:
+              - VALUE_1
+              - VALUE_2
+              - VALUE_3  
+      responses:
+        '200':
+          description: successfully retrieved book details

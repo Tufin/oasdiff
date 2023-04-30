@@ -149,7 +149,7 @@ func TestBreaking_ReqBodyEnumValueAdded(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: changing a request body type is breaking, but adding enum simultaneously is ignored
+// BC: changing a request body type and changing it to enum simultaneously is breaking
 func TestBreaking_ReqBodyBecameEnumAndTypeChanged(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-no-enum.yaml")
 	require.NoError(t, err)
@@ -160,15 +160,17 @@ func TestBreaking_ReqBodyBecameEnumAndTypeChanged(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.Equal(t, "request-body-type-changed", errs[0].Id)
+	require.Len(t, errs, 2)
+	require.Equal(t, "request-body-became-enum", errs[0].Id)
+	require.Equal(t, "request-body-type-changed", errs[1].Id)
 }
 
 // BC: changing a request property to enum is breaking
 func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-property-base.yaml")
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-property-no-enum.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-property-revision.yaml")
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-property-enum.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -177,6 +179,22 @@ func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-property-became-enum", errs[0].Id)
+}
+
+// BC: changing an operation's request parameter to enum is breaking
+func TestBreaking_ReqParameterOperationBecameEnum(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-parameter-op-no-enum.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-parameter-op-enum.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-became-enum", errs[0].Id)
 }
 
 // BC: changing a response body to nullable is breaking

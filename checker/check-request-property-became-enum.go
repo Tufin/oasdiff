@@ -34,29 +34,20 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 
 				schemaDiff := mediaTypeDiff.SchemaDiff
 
-				if !schemaDiff.TypeDiff.Empty() {
-					// type changed will trigger another kind of breaking-change
-				} else {
-					if schemaDiff.EnumDiff != nil && schemaDiff.EnumDiff.EnumAdded {
-						result = append(result, BackwardCompatibilityError{
-							Id:        requestBodyBecameEnumId,
-							Level:     ERR,
-							Text:      config.i18n(requestBodyBecameEnumId),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
-						})
-					}
+				if schemaDiff.EnumDiff != nil && schemaDiff.EnumDiff.EnumAdded {
+					result = append(result, BackwardCompatibilityError{
+						Id:        requestBodyBecameEnumId,
+						Level:     ERR,
+						Text:      config.i18n(requestBodyBecameEnumId),
+						Operation: operation,
+						Path:      path,
+						Source:    source,
+					})
 				}
 
 				CheckModifiedPropertiesDiff(
 					schemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-
-						if !propertyDiff.TypeDiff.Empty() {
-							// type changed will trigger another kind of breaking-change
-							return
-						}
 
 						if enumDiff := propertyDiff.EnumDiff; enumDiff == nil || !enumDiff.EnumAdded {
 							return
