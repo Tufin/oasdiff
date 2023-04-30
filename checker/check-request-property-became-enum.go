@@ -7,7 +7,6 @@ import (
 )
 
 const requestPropertyBecameEnumId = "request-property-became-enum"
-const requestBodyBecameEnumId = "request-body-became-enum"
 
 func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
@@ -32,21 +31,8 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 					continue
 				}
 
-				schemaDiff := mediaTypeDiff.SchemaDiff
-
-				if schemaDiff.EnumDiff != nil && schemaDiff.EnumDiff.EnumAdded {
-					result = append(result, BackwardCompatibilityError{
-						Id:        requestBodyBecameEnumId,
-						Level:     ERR,
-						Text:      config.i18n(requestBodyBecameEnumId),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
-					})
-				}
-
 				CheckModifiedPropertiesDiff(
-					schemaDiff,
+					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 
 						if enumDiff := propertyDiff.EnumDiff; enumDiff == nil || !enumDiff.EnumAdded {
@@ -56,7 +42,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 						result = append(result, BackwardCompatibilityError{
 							Id:        requestPropertyBecameEnumId,
 							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), ColorizedValue(propertyFullName(propertyPath))),
+							Text:      fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 							Operation: operation,
 							Path:      path,
 							Source:    source,

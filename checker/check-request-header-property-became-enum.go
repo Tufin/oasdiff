@@ -57,7 +57,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, BackwardCompatibilityError{
 								Id:        requestHeaderPropertyBecameEnumId,
 								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName), ColorizedValue(propertyPath)),
+								Text:      fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation: operation,
 								Path:      path,
 								Source:    source,
