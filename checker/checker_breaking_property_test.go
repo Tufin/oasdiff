@@ -149,6 +149,20 @@ func TestBreaking_ReqBodyEnumValueAdded(t *testing.T) {
 	require.Empty(t, errs)
 }
 
+// BC: changing a request body type is breaking, but adding enum simultaneously is ignored
+func TestBreaking_ReqBodyBecameEnumAndTypeChanged(t *testing.T) {
+	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-no-enum.yaml")
+	require.NoError(t, err)
+
+	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum-int.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Equal(t, "request-body-type-changed", errs[0].Id)
+}
+
 // BC: changing a request property to enum is breaking
 func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
 	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-property-base.yaml")
