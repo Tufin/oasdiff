@@ -287,7 +287,7 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 }
 
 // BC: reducing max in response is not breaking
-func TestBreaking_MaxSmallerInReponse(t *testing.T) {
+func TestBreaking_MaxSmallerInResponse(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
