@@ -11,7 +11,7 @@ const (
 	LEVEL_WARN  = 1
 )
 
-type Check func(string, *load.OpenAPISpecInfo) []Error
+type Check func(string, *load.OpenAPISpecInfo) []*Error
 
 type Error struct {
 	Id      string `json:"id,omitempty" yaml:"id,omitempty"`
@@ -21,7 +21,7 @@ type Error struct {
 	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
 }
 
-type Errors []Error
+type Errors []*Error
 
 func (e Errors) Len() int {
 	return len(e)
