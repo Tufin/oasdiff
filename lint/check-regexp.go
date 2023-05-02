@@ -67,7 +67,9 @@ func checkParameters(parameters openapi3.Parameters, source string) []*Error {
 			result = append(result, checkSchemaRef(parameter.Value.Schema, source)...)
 		}
 		for _, mediaType := range parameter.Value.Content {
-			result = append(result, checkSchemaRef(mediaType.Schema, source)...)
+			if mediaType.Schema != nil {
+				result = append(result, checkSchemaRef(mediaType.Schema, source)...)
+			}
 		}
 	}
 	return result
