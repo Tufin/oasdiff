@@ -18,5 +18,5 @@ func TestRegexCheck_Embedded(t *testing.T) {
 
 	const source = "../data/lint/openapi-invalid-regex-embedded.yaml"
 	require.Len(t, lint.Run(*lint.NewConfig([]lint.Check{lint.RegexCheck}),
-		source, loadFrom(t, source)), 1)
+		source, loadFrom(t, source)), 7)
 }

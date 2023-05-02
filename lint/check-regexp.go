@@ -34,16 +34,16 @@ func checkOperations(operations map[string]*openapi3.Operation, source string) [
 
 		if op.RequestBody != nil {
 			for _, mediaType := range op.RequestBody.Value.Content {
-				result = append(result, checkSchema(mediaType.Schema, source)...)
+				result = append(result, checkSchemaRef(mediaType.Schema, source)...)
 			}
 		}
 
 		for _, response := range op.Responses {
 			for _, mediaType := range response.Value.Content {
-				result = append(result, checkSchema(mediaType.Schema, source)...)
+				result = append(result, checkSchemaRef(mediaType.Schema, source)...)
 			}
 			for _, header := range response.Value.Headers {
-				result = append(result, checkSchema(header.Value.Schema, source)...)
+				result = append(result, checkSchemaRef(header.Value.Schema, source)...)
 			}
 		}
 
@@ -64,24 +64,48 @@ func checkParameters(parameters openapi3.Parameters, source string) []*Error {
 			continue
 		}
 		if parameter.Value.Schema != nil {
-			result = append(result, checkSchema(parameter.Value.Schema, source)...)
+			result = append(result, checkSchemaRef(parameter.Value.Schema, source)...)
 		}
 		for _, mediaType := range parameter.Value.Content {
-			result = append(result, checkSchema(mediaType.Schema, source)...)
+			result = append(result, checkSchemaRef(mediaType.Schema, source)...)
 		}
 	}
 	return result
 }
 
-func checkSchema(schema *openapi3.SchemaRef, source string) []*Error {
+func checkSchema(schema *openapi3.Schema, source string) []*Error {
 	result := make([]*Error, 0)
-	if err := checkRegex(schema.Value.Pattern, source); err != nil {
+
+	if err := checkRegex(schema.Pattern, source); err != nil {
 		result = append(result, err)
 	}
-	for _, schema := range schema.Value.Properties {
-		result = append(result, checkSchema(schema, source)...)
+
+	for _, subSchema := range schema.OneOf {
+		result = append(result, checkSchemaRef(subSchema, source)...)
+	}
+	for _, subSchema := range schema.AnyOf {
+		result = append(result, checkSchemaRef(subSchema, source)...)
+	}
+	for _, subSchema := range schema.AllOf {
+		result = append(result, checkSchemaRef(subSchema, source)...)
+	}
+	if schema.Not != nil {
+		result = append(result, checkSchemaRef(schema.Not, source)...)
+	}
+	if schema.Items != nil {
+		result = append(result, checkSchemaRef(schema.Items, source)...)
+	}
+	for _, subSchema := range schema.Properties {
+		result = append(result, checkSchemaRef(subSchema, source)...)
+	}
+	if schema.AdditionalProperties.Schema != nil {
+		result = append(result, checkSchemaRef(schema.AdditionalProperties.Schema, source)...)
 	}
 	return result
+}
+
+func checkSchemaRef(schema *openapi3.SchemaRef, source string) []*Error {
+	return checkSchema(schema.Value, source)
 }
 
 func checkRegex(pattern string, source string) *Error {
