@@ -19,7 +19,7 @@ func newRegexCtx(source string) *regexCtx {
 	}
 }
 
-func (context *regexCtx) test(pattern string) error {
+func (context *regexCtx) validate(pattern string) error {
 	if result, ok := context.cache[pattern]; ok {
 		return result
 	}
@@ -138,7 +138,7 @@ func checkRegex(pattern string, context *regexCtx) *Error {
 		return nil
 	}
 
-	if err := context.test(pattern); err != nil {
+	if err := context.validate(pattern); err != nil {
 		return &Error{
 			Id:     "invalid-regex-pattern",
 			Level:  LEVEL_ERROR,
