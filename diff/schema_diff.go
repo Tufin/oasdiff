@@ -331,13 +331,13 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 
 	// mark visited schema references to avoid infinite loops
 	if schema1.Ref != "" {
-		state.visitedSchemasBase.add(schema1.Ref)
-		defer state.visitedSchemasBase.remove(schema1.Ref)
+		state.visitedSchemasBase.Add(schema1.Ref)
+		defer state.visitedSchemasBase.Remove(schema1.Ref)
 	}
 
 	if schema2.Ref != "" {
-		state.visitedSchemasRevision.add(schema2.Ref)
-		defer state.visitedSchemasRevision.remove(schema2.Ref)
+		state.visitedSchemasRevision.Add(schema2.Ref)
+		defer state.visitedSchemasRevision.Remove(schema2.Ref)
 	}
 
 	result := SchemaDiff{}
