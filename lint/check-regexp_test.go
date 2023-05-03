@@ -10,13 +10,17 @@ import (
 func TestRegexCheck(t *testing.T) {
 
 	const source = "../data/lint/openapi-invalid-regex.yaml"
-	require.Len(t, lint.Run(*lint.NewConfig([]lint.Check{lint.RegexCheck}),
-		source, loadFrom(t, source)), 1)
+	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.RegexCheck}), source, loadFrom(t, source))
+	require.Len(t, errs, 1)
+	require.Equal(t, "invalid-regex-pattern", errs[0].Id)
 }
 
 func TestRegexCheck_Embedded(t *testing.T) {
 
 	const source = "../data/lint/openapi-invalid-regex-embedded.yaml"
-	require.Len(t, lint.Run(*lint.NewConfig([]lint.Check{lint.RegexCheck}),
-		source, loadFrom(t, source)), 7)
+	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.RegexCheck}), source, loadFrom(t, source))
+	require.Len(t, errs, 7)
+	for i := range errs {
+		require.Equal(t, "invalid-regex-pattern", errs[i].Id)
+	}
 }
