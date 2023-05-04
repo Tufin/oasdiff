@@ -17,5 +17,6 @@ func DefaultConfig() *Config {
 func defaultChecks() []Check {
 	return []Check{
 		RegexCheck,
+		PathParamsCheck,
 	}
 }
