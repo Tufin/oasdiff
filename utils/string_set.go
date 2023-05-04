@@ -43,3 +43,11 @@ func (stringSet StringSet) Equals(other StringSet) bool {
 func (stringSet StringSet) Empty() bool {
 	return len(stringSet) == 0
 }
+
+func (stringSet StringSet) Copy() StringSet {
+	result := make(StringSet, len(stringSet))
+	for k := range stringSet {
+		result.Add(k)
+	}
+	return result
+}

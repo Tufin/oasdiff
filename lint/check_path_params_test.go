@@ -7,9 +7,19 @@ import (
 	"github.com/tufin/oasdiff/lint"
 )
 
-func TestPathParam(t *testing.T) {
+func TestPathParam_Missing(t *testing.T) {
 
 	const source = "../data/openapi-test2.yaml"
 	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.PathParamsCheck}), source, loadFrom(t, source))
 	require.Len(t, errs, 2)
+	for _, err := range errs {
+		require.Equal(t, "path-param-missing", err.Id)
+	}
+}
+
+func TestPathParam_OK(t *testing.T) {
+
+	const source = "../data/param-rename/method-base.yaml"
+	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.PathParamsCheck}), source, loadFrom(t, source))
+	require.Empty(t, errs)
 }

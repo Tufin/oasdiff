@@ -112,7 +112,7 @@ func Test_BreakingChangesFailOnWarns(t *testing.T) {
 }
 
 func Test_BreakingChangesFailOnWarnsErrsOnly(t *testing.T) {
-	require.Equal(t, 1, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test2.yaml -revision ../data/openapi-test4.yaml -check-breaking -fail-on-diff -fail-on-warns"), io.Discard, io.Discard))
+	require.Equal(t, 1, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test2.yaml -revision ../data/openapi-test4.yaml -check-breaking -fail-on-diff -fail-on-warns -no-lint"), io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesFailOnDiffNoDiff(t *testing.T) {
