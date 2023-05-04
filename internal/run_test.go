@@ -171,7 +171,7 @@ func Test_Version(t *testing.T) {
 
 func Test_LintFailed(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Equal(t, 130, internal.Run(cmdToArgs("oasdiff -base ../data/lint/openapi-invalid-regex.yaml -revision ../data/openapi-test3.yaml"), &stdout, io.Discard))
+	require.Equal(t, 130, internal.Run(cmdToArgs("oasdiff -base ../data/lint/regex/openapi-invalid-regex.yaml -revision ../data/openapi-test3.yaml"), &stdout, io.Discard))
 	var errs interface{}
 	require.NoError(t, yaml.Unmarshal(stdout.Bytes(), &errs))
 	require.Len(t, errs, 1)

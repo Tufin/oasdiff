@@ -34,6 +34,16 @@ func (stringSet StringSet) Minus(other StringSet) StringSet {
 	return result
 }
 
+func (stringSet StringSet) Plus(other StringSet) StringSet {
+	result := stringSet.Copy()
+
+	for s := range other {
+		result.Add(s)
+	}
+
+	return result
+}
+
 func (stringSet StringSet) Equals(other StringSet) bool {
 	return stringSet.Minus(other).Empty() &&
 		other.Minus(stringSet).Empty()

@@ -41,33 +41,41 @@ func getPathParamsFromURL(path string) utils.StringSet {
 	return utils.StringList(pathParams).ToStringSet()
 }
 
-func (context *pathParamsCtx) checkOperation(pathParamsFromURL, pathParams utils.StringSet, path string, method string, op *openapi3.Operation, source string) []*Error {
+func (context *pathParamsCtx) checkOperation(pathParamsFromURL, pathParams utils.StringSet, path, method string, op *openapi3.Operation, source string) []*Error {
 	result := make([]*Error, 0)
 
-	opParams := pathParams.Copy()
+	opParams := utils.StringSet{}
 	for _, parameter := range op.Parameters {
 		if parameter.Value.In == openapi3.ParameterInPath {
 			opParams.Add(parameter.Value.Name)
 		}
 	}
 
-	for param := range opParams.Minus(pathParamsFromURL) {
+	for param := range pathParams.Plus(opParams).Minus(pathParamsFromURL) {
+
 		result = append(result, &Error{
 			Id:     "path-param-extra",
 			Level:  LEVEL_ERROR,
-			Text:   fmt.Sprintf("path parameter %q appears in the parameters section of the operation or path but is missing in the URL: %s %s", param, method, path),
+			Text:   getParamMissingText(opParams, param, method, path),
 			Source: source,
 		})
 	}
 
-	for param := range pathParamsFromURL.Minus(opParams) {
+	for param := range pathParamsFromURL.Minus(pathParams).Minus(opParams) {
 		result = append(result, &Error{
 			Id:     "path-param-missing",
-			Level:  LEVEL_ERROR,
+			Level:  LEVEL_WARN,
 			Text:   fmt.Sprintf("path parameter %q appears in the URL path but is missing from the parameters section of the operation and path: %s %s", param, method, path),
 			Source: source,
 		})
 	}
 
 	return result
+}
+
+func getParamMissingText(opParams utils.StringSet, param, method, path string) string {
+	if opParams.Contains(param) {
+		return fmt.Sprintf("path parameter %q appears in the parameters section of the operation but is missing in the URL: %s %s", param, method, path)
+	}
+	return fmt.Sprintf("path parameter %q appears in the parameters section of the path but is missing in the URL: %s %s", param, method, path)
 }
