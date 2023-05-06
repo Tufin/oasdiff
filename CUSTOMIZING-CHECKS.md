@@ -19,9 +19,10 @@
 
 ## Documentation
 1. Optionally, add additional unit tests and comment them with "BC: \<use-case\> is breaking" or "BC: \<use-case\> is not breaking"
-2. Update [BREAKING-CHANGES.md](BREAKING-CHANGES.md):
+2. Update [BREAKING-CHANGES-EXAMPLES.md](BREAKING-CHANGES-EXAMPLES.md):
     ```
     ./scripts/test.sh
     ```
-3. Make sure that [BREAKING-CHANGES.md](BREAKING-CHANGES.md) was updated with your use-cases
+3. Make sure that [BREAKING-CHANGES-EXAMPLES.md](BREAKING-CHANGES-EXAMPLES.md) was updated with your use-cases
+4. If your check is optional, also add it to [this list of optional checks](https://github.com/Tufin/oasdiff#optional-breaking-changes-checks)
 
