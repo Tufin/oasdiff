@@ -218,7 +218,7 @@ curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com
 Service source code: https://github.com/oasdiff/oasdiff-service
 
 ## Output Formats
-The default output format, YAML, provides a full view of all diff details.  
+The default diff output format, YAML, provides a full view of all diff details.  
 Note that no output in the YAML format signifies that the diff is empty, or, in other words, there are no changes.  
 Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
 The JSON format works only with `-exclude-elements endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
