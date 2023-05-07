@@ -89,7 +89,7 @@ The original implementation with the `-breaking-only` flag is still supported bu
 ### Advantages of the New Breaking Changes Method 
 - output is human readable
 - supports localization for error messages and ignored changes
-- [checks can be customized by developers](#customizing-breaking-changes-checks)
+- checks can be customized by developers
 - fewer false-positive errors by design
 - improved support for type changes: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
 - allows removal of responses with non-success codes (e.g., 503, 504, 403)
