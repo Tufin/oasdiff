@@ -1,20 +1,8 @@
 ## Breaking Changes [Beta]
 Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
 [See some examples of breaking and non-breaking changes](BREAKING-CHANGES-EXAMPLES.md).  
-Notes: 
-1. This is a Beta feature, please report issues
-2. There are two different methods for detecting breaking changes (see below)
 
-
-### Old Method
-The original implementation with the `-breaking-only` flag.
-While this method is still supported, the new one will eventually replace it.
-
-### New Method
-An improved implementation for detecting breaking changes with the `-check-breaking` flag.
-This method works differently from the old one: it is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
-
-To use it, run oasdiff with the `-check-breaking` flag, e.g.:
+To detect breaking-changes between two specs run oasdiff with the `-check-breaking` flag:
 ```
 oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
@@ -26,8 +14,11 @@ There are two levels of breaking changes:
 To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` flag.  
 To exit with return code 1 even if only WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` flags.
 
+### Output Formats
+The default output format is human-readable text.  
+You can specify the `-format` flag to output breaking-changes in json or yaml.
 
-### Stability Level
+### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
 The new Breaking Changes method provides this feature through the `x-stability-level` extension.  
 There are four stability levels: `draft`->`alpha`->`beta`->`stable`.  
@@ -70,6 +61,9 @@ This method allows adding new entries to enums used in responses which is very u
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
+### Deprecating APIs
+OASDiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
+
 ### Optional Breaking-Changes Checks
 You can use the `-include-checks` flag to include the following optional checks:
 - response-non-success-status-removed
@@ -83,6 +77,13 @@ For example:
 ```
 oasdiff -include-checks response-non-success-status-removed -check-breaking -base data/openapi-test1.yaml -revision data/openapi-test3.yaml
 ```
+
+### Customizing Breaking-Changes Checks
+If you encounter a change that isn't considered breaking by oasdiff and you would like to consider it as a breaking-change you may add an [optional breaking-changes check](#optional-breaking-changes-checks).  
+For more information, see [this guide](CUSTOMIZING-CHECKS.md) and this example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
+
+## Old Breaking-Changes Method
+The original implementation with the `-breaking-only` flag is still supported but the new method with `check-breaking` will eventually replace it.
 
 
 ### Advantages of the New Breaking Changes Method 
@@ -99,8 +100,4 @@ oasdiff -include-checks response-non-success-status-removed -check-breaking -bas
 ### Limitations of the New Breaking Changes Method
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
-
-## Customizing Breaking-Changes Checks
-If you encounter a change that isn't considered breaking by oasdiff and you would like to consider it as a breaking-change you may add an [optional breaking-changes check](#optional-breaking-changes-checks).  
-For more information, see [this guide](CUSTOMIZING-CHECKS.md) and this example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
 
