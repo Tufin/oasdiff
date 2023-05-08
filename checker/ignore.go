@@ -8,6 +8,24 @@ import (
 	"github.com/TwiN/go-color"
 )
 
+func ignoreLinePath(ignoreLine string) string {
+	ignoreComponents := strings.Fields(ignoreLine)
+	pathIndex := -1
+
+	for i, component := range ignoreComponents {
+		if strings.HasPrefix(component, "/") {
+			pathIndex = i
+			break
+		}
+	}
+
+	if pathIndex == -1 {
+		return ""
+	}
+
+	return ignoreComponents[pathIndex]
+}
+
 func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompatibilityError, ignoreFile string) ([]BackwardCompatibilityError, error) {
 	result := make([]BackwardCompatibilityError, 0)
 
@@ -21,6 +39,12 @@ func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompati
 	ignoredErrs := make([]bool, len(errs))
 	for ignoreScanner.Scan() {
 		ignoreLine := strings.ToLower(ignoreScanner.Text())
+
+		ignorePath := ignoreLinePath(ignoreLine)
+		if ignorePath == "" {
+			continue
+		}
+
 		for errIndex, err := range errs {
 			if err.Level != level {
 				continue
@@ -29,7 +53,8 @@ func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompati
 			uncolorizedText := strings.ReplaceAll(err.Text, color.Bold, "")
 			uncolorizedText = strings.ReplaceAll(uncolorizedText, color.Reset, "")
 
-			if strings.Contains(ignoreLine, strings.ToLower(err.Operation+" "+err.Path)) &&
+			if ignorePath == strings.ToLower(err.Path) &&
+				strings.Contains(ignoreLine, strings.ToLower(err.Operation+" "+err.Path)) &&
 				strings.Contains(ignoreLine, strings.ToLower(uncolorizedText)) {
 				ignoredErrs[errIndex] = true
 			}

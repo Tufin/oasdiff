@@ -1,0 +1,1 @@
+get /resource/newest api path removed without deprecation
