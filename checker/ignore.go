@@ -32,7 +32,6 @@ func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompati
 			if strings.Contains(ignoreLine, strings.ToLower(err.Operation+" "+err.Path)) &&
 				strings.Contains(ignoreLine, strings.ToLower(uncolorizedText)) {
 				ignoredErrs[errIndex] = true
-				break
 			}
 		}
 	}
