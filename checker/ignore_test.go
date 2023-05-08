@@ -35,3 +35,17 @@ func TestIgnoreSubpath(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, 0, len(errs))
 }
+
+func TestIgnoreOverlappingMessages(t *testing.T) {
+	s1 := l(t, 8)
+	s2 := l(t, 9)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Equal(t, 1, len(errs))
+
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example-2.txt")
+	require.NoError(t, err)
+	require.Equal(t, 0, len(errs))
+}
