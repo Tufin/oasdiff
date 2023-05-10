@@ -92,7 +92,10 @@ func getPathsDiffInternal(config *Config, state *state, paths1, paths2 openapi3.
 
 	result := newPathsDiff()
 
-	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1, paths2, config)
+	paths1Mod := rewritePrefix(paths1, config.PathStripPrefixBase, config.PathPrefixBase)
+	paths2Mod := rewritePrefix(paths2, config.PathStripPrefixRevision, config.PathPrefixRevision)
+
+	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(paths1Mod, paths2Mod)
 
 	for endpoint := range addedPaths {
 		result.addAddedPath(endpoint)
@@ -108,8 +111,8 @@ func getPathsDiffInternal(config *Config, state *state, paths1, paths2 openapi3.
 			return nil, err
 		}
 	}
-	result.Base = paths1
-	result.Revision = paths2
+	result.Base = paths1Mod
+	result.Revision = paths2Mod
 
 	return result, nil
 }
