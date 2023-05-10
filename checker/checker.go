@@ -379,12 +379,14 @@ func (diffBC *BCDiff) AddRequestPropertiesDiff(path string, operation string, me
 // LoadOpenAPISpecInfoFromFile loads a LoadOpenAPISpecInfoFromFile from a local file path
 func LoadOpenAPISpecInfoFromFile(location string) (*load.OpenAPISpecInfo, error) {
 	loader := openapi3.NewLoader()
+	loader.IsExternalRefsAllowed = true
 	s, err := loader.LoadFromFile(location)
 	return &load.OpenAPISpecInfo{Spec: s, Url: location}, err
 }
 
 func LoadOpenAPISpecInfo(location string) (*load.OpenAPISpecInfo, error) {
 	loader := openapi3.NewLoader()
+	loader.IsExternalRefsAllowed = true
 	s, err := load.From(loader, location)
 	return &load.OpenAPISpecInfo{Spec: s, Url: location}, err
 }
