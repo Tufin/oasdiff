@@ -14,7 +14,7 @@ import (
 )
 
 func cmdToArgs(cmd string) []string {
-	return strings.Split(cmd, " ")
+	return strings.Fields(cmd)
 }
 
 func Test_NoArgs(t *testing.T) {
@@ -167,4 +167,8 @@ func Test_Version(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff -version"), &stdout, io.Discard))
 	require.Contains(t, stdout.String(), "oasdiff version:")
+}
+
+func Test_StripPrefixBase(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -check-breaking -base ../data/simple.yaml -revision ../data/simple.yaml -strip-prefix-base /partner-api"), io.Discard, io.Discard))
 }

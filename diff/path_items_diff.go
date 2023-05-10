@@ -14,13 +14,7 @@ type pathItemPair struct {
 
 type pathItemPairs map[string]*pathItemPair
 
-func getPathItemsDiff(paths1, paths2 openapi3.Paths, config *Config) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
-	return getPathItemsDiffInternal(
-		rewritePrefix(paths1, config.PathStripPrefixBase, config.PathPrefixBase),
-		rewritePrefix(paths2, config.PathStripPrefixRevision, config.PathPrefixRevision))
-}
-
-func getPathItemsDiffInternal(paths1, paths2 openapi3.Paths) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
+func getPathItemsDiff(paths1, paths2 openapi3.Paths) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
 
 	added := openapi3.Paths{}
 	deleted := openapi3.Paths{}
