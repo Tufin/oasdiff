@@ -165,10 +165,10 @@ func TestBreaking_LinkOperationID(t *testing.T) {
 
 // BC: adding a media-type to response is not breaking
 func TestBreaking_ResponseAddMediaType(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/response-media-type-revision.yaml")
+	s1, err := open("../data/response-media-type-revision.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/response-media-type-base.yaml")
+	s2, err := open("../data/response-media-type-base.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -232,10 +232,10 @@ func TestBreaking_DeprecatedSchema(t *testing.T) {
 
 // BC: changing servers is not breaking
 func TestBreaking_Servers(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/servers/baseswagger.json")
+	s1, err := open("../data/servers/baseswagger.json")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/servers/revisionswagger.json")
+	s2, err := open("../data/servers/revisionswagger.json")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)

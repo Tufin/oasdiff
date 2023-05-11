@@ -152,3 +152,24 @@ func validateFlags(inputFlags *InputFlags) *ReturnError {
 
 	return nil
 }
+
+func generateConfig(inputFlags *InputFlags) *diff.Config {
+	config := diff.NewConfig()
+	config.PathFilter = inputFlags.filter
+	config.FilterExtension = inputFlags.filterExtension
+	config.PathPrefixBase = inputFlags.prefixBase
+	config.PathPrefixRevision = inputFlags.prefixRevision
+	config.PathStripPrefixBase = inputFlags.stripPrefixBase
+	config.PathStripPrefixRevision = inputFlags.strip_prefix_revision
+	config.BreakingOnly = inputFlags.breakingOnly
+	config.DeprecationDays = inputFlags.deprecationDays
+	config.SetExcludeElements(inputFlags.excludeElements.ToStringSet(), inputFlags.excludeExamples, inputFlags.excludeDescription, inputFlags.excludeEndpoints)
+
+	if inputFlags.checkBreaking {
+		config.IncludeExtensions.Add(checker.XStabilityLevelExtension)
+		config.IncludeExtensions.Add(diff.SunsetExtension)
+		config.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
+	}
+
+	return config
+}

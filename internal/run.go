@@ -48,57 +48,23 @@ func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *Retu
 
 	openapi3.CircularReferenceCounter = inputFlags.circularReferenceCounter
 
-	loader := openapi3.NewLoader()
-	loader.IsExternalRefsAllowed = true
-
-	config := diff.NewConfig()
-	config.PathFilter = inputFlags.filter
-	config.FilterExtension = inputFlags.filterExtension
-	config.PathPrefixBase = inputFlags.prefixBase
-	config.PathPrefixRevision = inputFlags.prefixRevision
-	config.PathStripPrefixBase = inputFlags.stripPrefixBase
-	config.PathStripPrefixRevision = inputFlags.strip_prefix_revision
-	config.BreakingOnly = inputFlags.breakingOnly
-	config.DeprecationDays = inputFlags.deprecationDays
-	config.SetExcludeElements(inputFlags.excludeElements.ToStringSet(), inputFlags.excludeExamples, inputFlags.excludeDescription, inputFlags.excludeEndpoints)
+	config := generateConfig(inputFlags)
 
 	var diffReport *diff.Diff
 	var operationsSources *diff.OperationsSourcesMap
 
-	if inputFlags.checkBreaking {
-		config.IncludeExtensions.Add(checker.XStabilityLevelExtension)
-		config.IncludeExtensions.Add(diff.SunsetExtension)
-		config.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
-	}
+	loader := openapi3.NewLoader()
+	loader.IsExternalRefsAllowed = true
 
 	if inputFlags.composed {
-		s1, err := load.FromGlob(loader, inputFlags.base)
-		if err != nil {
-			return false, getErrFailedToLoadSpec("base", inputFlags.base, err)
-		}
-
-		s2, err := load.FromGlob(loader, inputFlags.revision)
-		if err != nil {
-			return false, getErrFailedToLoadSpec("revision", inputFlags.revision, err)
-		}
-		diffReport, operationsSources, err = diff.GetPathsDiff(config, s1, s2)
-		if err != nil {
-			return false, getErrDiffFailed(err)
+		var err *ReturnError
+		if diffReport, operationsSources, err = composedDiff(loader, inputFlags.base, inputFlags.revision, config); err != nil {
+			return false, err
 		}
 	} else {
-		s1, returnErr := open(stdout, inputFlags.base, "base")
-		if returnErr != nil {
-			return false, returnErr
-		}
-		s2, returnErr := open(stdout, inputFlags.revision, "revision")
-		if returnErr != nil {
-			return false, returnErr
-		}
-
-		var err error
-		diffReport, operationsSources, err = diff.GetWithOperationsSourcesMap(config, s1, s2)
-		if err != nil {
-			return false, getErrDiffFailed(err)
+		var err *ReturnError
+		if diffReport, operationsSources, err = normalDiff(loader, inputFlags.base, inputFlags.revision, config); err != nil {
+			return false, err
 		}
 	}
 
@@ -117,14 +83,40 @@ func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *Retu
 	return failEmpty(inputFlags.failOnDiff, diffReport.Empty()), handleDiff(stdout, diffReport, inputFlags.format)
 }
 
-func open(stdout io.Writer, source string, name string) (*load.OpenAPISpecInfo, *ReturnError) {
-
-	s, err := checker.LoadOpenAPISpecInfo(source)
+func normalDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
+	s1, err := checker.LoadOpenAPISpecInfo(loader, base)
 	if err != nil {
-		return nil, getErrFailedToLoadSpec(name, source, err)
+		return nil, nil, getErrFailedToLoadSpec("base", base, err)
+	}
+	s2, err := checker.LoadOpenAPISpecInfo(loader, revision)
+	if err != nil {
+		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
 	}
 
-	return s, nil
+	diffReport, operationsSources, err := diff.GetWithOperationsSourcesMap(config, s1, s2)
+	if err != nil {
+		return nil, nil, getErrDiffFailed(err)
+	}
+
+	return diffReport, operationsSources, nil
+}
+
+func composedDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
+	s1, err := load.FromGlob(loader, base)
+	if err != nil {
+		return nil, nil, getErrFailedToLoadSpec("base", base, err)
+	}
+
+	s2, err := load.FromGlob(loader, revision)
+	if err != nil {
+		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
+	}
+	diffReport, operationsSources, err := diff.GetPathsDiff(config, s1, s2)
+	if err != nil {
+		return nil, nil, getErrDiffFailed(err)
+	}
+
+	return diffReport, operationsSources, nil
 }
 
 func failEmpty(failOnDiff, diffEmpty bool) bool {
