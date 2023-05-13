@@ -37,6 +37,7 @@ type InputFlags struct {
 	version                  bool
 	circularReferenceCounter int
 	excludeEndpoints         bool
+	matchPathParams          bool
 	includeChecks            utils.StringList
 	excludeElements          utils.StringList
 }
@@ -76,6 +77,7 @@ func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 	flags.BoolVar(&inputFlags.version, "version", false, "show version and quit")
 	flags.IntVar(&inputFlags.circularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 	flags.BoolVar(&inputFlags.excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output (deprecated, use '-exclude-elements endpoints' instead)")
+	flags.BoolVar(&inputFlags.matchPathParams, "match-path-params", false, "include path parameter names in endpoint matching")
 	flags.Var(&inputFlags.includeChecks, "include-checks", "comma-separated list of optional breaking-changes checks")
 	flags.Var(&inputFlags.excludeElements, "exclude-elements", "comma-separated list of elements to exclude from diff")
 
@@ -163,6 +165,7 @@ func generateConfig(inputFlags *InputFlags) *diff.Config {
 	config.PathStripPrefixRevision = inputFlags.strip_prefix_revision
 	config.BreakingOnly = inputFlags.breakingOnly
 	config.DeprecationDays = inputFlags.deprecationDays
+	config.MatchPathParams = inputFlags.matchPathParams
 	config.SetExcludeElements(inputFlags.excludeElements.ToStringSet(), inputFlags.excludeExamples, inputFlags.excludeDescription, inputFlags.excludeEndpoints)
 
 	if inputFlags.checkBreaking {
