@@ -270,7 +270,7 @@ This can be useful when your APIs are defined across multiple files, for example
 Notes: 
 1. Composed mode compares only [paths and endpoints](#paths-vs-endpoints), other resources are compared only if referenced from the paths or endpoints.
 2. Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
-3. Learn more about how oasdiff [matched endpoints to each other](MATCHING-ENDPOINTS.md)
+3. Learn more about how oasdiff [matches endpoints to each other](MATCHING-ENDPOINTS.md)
 
 ## Path Prefix Modification
 Sometimes paths prefixes need to be modified, for example, to create a new version:
