@@ -22,8 +22,10 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - [API deprecation](API-DEPRECATION.md)
-- Support [path prefix modification](#path-prefix-modification)
-- [Extend Breaking-Changes with Custom Checks](CUSTOMIZING-CHECKS.md)
+- [Path prefix modification](#path-prefix-modification)
+- [Support path parameter reanaming](#path-parameter-reanaming)
+- [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
+
 
 ## Install with Go
 ```bash
@@ -265,24 +267,10 @@ Composed mode compares two collections of OpenAPI specs instead of a pair of spe
 The collections are specified using a [glob](https://en.wikipedia.org/wiki/Glob_(programming)).
 This can be useful when your APIs are defined across multiple files, for example, when multiple services, each one with its own spec, are exposed behind an API gateway, and you want to check changes across all the specs at once.
 
-This mode is a little different from a regular comparison of two specs to each-other:
-- compares only [paths and endpoints](#paths-vs-endpoints), other resources are compared only if referenced from the paths or endpoints
-- compares each path/endpoint in 'base' to its equivalent in 'revision'
-- if any endpoint appears more than once in 'base' or 'revision', then we use the endpoint with the most recent `x-since-date` value
-- the `x-since-date` extension should be set on Path or Operation level
-- `x-since-date` extensions set on the Operation level override the value set on Path level
-- if an endpoint doesn't have `the x-since-date` extension, its value is set to the default: "2000-01-01"
-- duplicate endpoints with the same x-since-date value will trigger an error
-- the format of the `x-since-date` is the RFC3339 full-date format
-
-Example of the `x-since-date` usage:
-   ```
-   /api/test:
-    get:
-     x-since-date: "2023-01-11"
-   ```
-
-Note: Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
+Notes: 
+1. Composed mode compares only [paths and endpoints](#paths-vs-endpoints), other resources are compared only if referenced from the paths or endpoints.
+2. Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
+3. Learn more about how oasdiff [matched endpoints to each other](MATCHING-ENDPOINTS.md)
 
 ## Path Prefix Modification
 Sometimes paths prefixes need to be modified, for example, to create a new version:
@@ -299,6 +287,10 @@ or
 oasdiff -base original.yaml -revision new.yaml -strip-prefix-base /api/v1 -strip-prefix-revision /api/v2
 ```
 Note that stripping precedes prepending.
+
+## Path Parameter Reanaming
+Sometimes developers decide to change names of path parameters, for example, in order to follow a certain naming convention.  
+See [this](MATCHING-ENDPOINTS.md) to learn more about how oasdiff supports path parameter renaming.
 
 ## Excluding Specific Kinds of Changes 
 You can use the `-exclude-elements` flag to exclude certain kinds of changes:

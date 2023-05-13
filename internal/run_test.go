@@ -172,3 +172,11 @@ func Test_Version(t *testing.T) {
 func Test_StripPrefixBase(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff -check-breaking -base ../data/simple.yaml -revision ../data/simple.yaml -strip-prefix-base /partner-api"), io.Discard, io.Discard))
 }
+
+func Test_DuplicatePathsFail(t *testing.T) {
+	require.NotZero(t, internal.Run(cmdToArgs("oasdiff -base ../data/duplicate_endpoints/base.yaml -revision ../data/duplicate_endpoints/revision.yaml -check-breaking"), io.Discard, io.Discard))
+}
+
+func Test_DuplicatePathsOK(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/duplicate_endpoints/base.yaml -revision ../data/duplicate_endpoints/revision.yaml -check-breaking -match-path-params"), io.Discard, io.Discard))
+}
