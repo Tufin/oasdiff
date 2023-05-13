@@ -23,7 +23,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - [API deprecation](API-DEPRECATION.md)
 - [Path prefix modification](#path-prefix-modification)
-- [Support path parameter reanaming](#path-parameter-reanaming)
+- [Support path parameter renaming](#path-parameter-reanaming)
 - [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
 
 
