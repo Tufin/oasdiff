@@ -83,6 +83,8 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
     	comma-separated list of optional breaking-changes checks
   -lang string
     	language for localized breaking changes checks errors (default "en")
+  -match-path-params
+    	include path parameter names in endpoint matching
   -max-circular-dep int
     	maximum allowed number of circular dependencies between objects in OpenAPI specs (default 5)
   -prefix string
