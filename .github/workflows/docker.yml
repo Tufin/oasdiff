@@ -37,7 +37,7 @@ jobs:
           push: true
           context: ./
           file: ./Dockerfile
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}, ${{ secrets.DOCKER_HUB_USERNAME }}/oasdiff:latest
           labels: ${{ steps.meta.outputs.labels }}
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
 
@@ -48,8 +48,8 @@ jobs:
           push: true
           context: ./
           file: ./Dockerfile
-          tags: ${{ steps.meta.outputs.tags }}, stable
-          labels: ${{ steps.meta.outputs.labels }}, stable
+          tags: ${{ steps.meta.outputs.tags }}, ${{ secrets.DOCKER_HUB_USERNAME }}/oasdiff:stable
+          labels: ${{ steps.meta.outputs.labels }}
         if: github.ref != 'refs/heads/main' && github.event_name != 'pull_request'
 
       - name: Image digest
