@@ -37,7 +37,7 @@ jobs:
           push: true
           context: ./
           file: ./Dockerfile
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: tufin/oasdiff:main, tufin/oasdiff:latest
           labels: ${{ steps.meta.outputs.labels }}
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
 
@@ -48,7 +48,7 @@ jobs:
           push: true
           context: ./
           file: ./Dockerfile
-          tags: tufin/oasdiff:${{ github.ref_name }}, tufin/oasdiff:stable
+          tags: tufin/oasdiff:${{ github.ref_name }}, tufin/oasdiff:stable, tufin/oasdiff:latest
           labels: ${{ steps.meta.outputs.labels }}
         if: github.ref != 'refs/heads/main' && github.event_name != 'pull_request'
 
