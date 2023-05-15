@@ -34,6 +34,7 @@ jobs:
         id: docker_build_main
         uses: docker/build-push-action@v4
         with:
+          push: true
           context: ./
           file: ./Dockerfile
           tags: ${{ steps.meta.outputs.tags }}
@@ -44,6 +45,7 @@ jobs:
         id: docker_build_tag
         uses: docker/build-push-action@v4
         with:
+          push: true
           context: ./
           file: ./Dockerfile
           tags: ${{ steps.meta.outputs.tags }}, stable
