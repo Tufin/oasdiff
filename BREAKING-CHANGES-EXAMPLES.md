@@ -58,6 +58,7 @@ These examples are automatically generated from unit tests.
 [removing/updating a tag is breaking (optional)](checker/checker_breaking_test.go?plain=1#L335)  
 [removing/updating an enum in request body is breaking (optional)](checker/checker_breaking_test.go?plain=1#L296)  
 [removing/updating an operation id is breaking (optional)](checker/checker_breaking_test.go?plain=1#L278)  
+[setting the default value of an optional request parameter is breaking](checker/checker_breaking_test.go?plain=1#L549)  
 
 ## Examples of non-breaking changes
 [adding a media-type to response is not breaking](checker/checker_not_breaking_test.go?plain=1#L166)  
@@ -103,7 +104,7 @@ These examples are automatically generated from unit tests.
 [increasing max length in request is not breaking](checker/checker_breaking_min_max_test.go?plain=1#L76)  
 [increasing min items in response is not breaking](checker/checker_breaking_min_max_test.go?plain=1#L250)  
 [modifying a pattern to ".*"" in a schema is not breaking](checker/checker_breaking_test.go?plain=1#L517)  
-[modifying the default value of a required request parameter is not breaking](checker/checker_breaking_test.go?plain=1#L547)  
+[modifying the default value of a required request parameter is not breaking](checker/checker_breaking_test.go?plain=1#L567)  
 [new optional header param is not breaking](checker/checker_not_breaking_test.go?plain=1#L102)  
 [new optional property in request header is not breaking](checker/checker_breaking_property_test.go?plain=1#L38)  
 [new required response header param is not breaking](checker/checker_not_breaking_test.go?plain=1#L134)  
