@@ -42,7 +42,7 @@ brew install oasdiff
 Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
 ## Wrappers
-- [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
+- [GitHub Action](https://github.com/oasdiff/oasdiff-action)
 - [Cloud Service](#openapi-diff-and-breaking-changes-as-a-service)
 
 ## Usage
