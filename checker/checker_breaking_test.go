@@ -541,7 +541,27 @@ func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-default-value-changed", errs[0].Id)
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'X' to 'Y'", errs[0].Text)
+}
+
+// BC: setting the default value of an optional request parameter is breaking
+func TestBreaking_SettingRequiredOptionalParamDefaultValue(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = nil
+	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
+
+	// By default, OpenAPI treats all request parameters as optional
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-default-value-changed", errs[0].Id)
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'undefined' to 'Y'", errs[0].Text)
 }
 
 // BC: modifying the default value of a required request parameter is not breaking

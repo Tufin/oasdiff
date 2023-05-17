@@ -26,6 +26,10 @@ func ColorizedValue(arg interface{}) string {
 }
 
 func interfaceToString(arg interface{}) string {
+	if arg == nil {
+		return "undefined"
+	}
+
 	argString, ok := arg.(string)
 	if ok {
 		return argString
