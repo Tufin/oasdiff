@@ -17,7 +17,7 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
-- OpenAPI diff of local files system or remove files over http/s
+- OpenAPI diff of local files system or remote files over http/s
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
