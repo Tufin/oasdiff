@@ -296,7 +296,7 @@ See [this](MATCHING-ENDPOINTS.md) to learn more about how oasdiff supports path 
 
 ## Excluding Specific Kinds of Changes 
 You can use the `-exclude-elements` flag to exclude certain kinds of changes:
-- Use `-exclude-elements changes` to exclude [Examples](https://swagger.io/specification/#example-object)
+- Use `-exclude-elements examples` to exclude [Examples](https://swagger.io/specification/#example-object)
 - Use `-exclude-elements description` to exclude description fields
 - Use `-exclude-elements title` to exclude title fields
 - Use `-exclude-elements summary` to exclude summary fields

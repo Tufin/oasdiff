@@ -103,7 +103,7 @@ These examples are automatically generated from unit tests.
 [deprecating an operation without a deprecation policy and without specifying sunset date is not breaking](checker/checker_deprecation_test.go?plain=1#L93)  
 [increasing max length in request is not breaking](checker/checker_breaking_min_max_test.go?plain=1#L76)  
 [increasing min items in response is not breaking](checker/checker_breaking_min_max_test.go?plain=1#L250)  
-[modifying a pattern to ".*"" in a schema is not breaking](checker/checker_breaking_test.go?plain=1#L517)  
+[modifying a pattern to ".*" in a schema is not breaking](checker/checker_breaking_test.go?plain=1#L517)  
 [modifying the default value of a required request parameter is not breaking](checker/checker_breaking_test.go?plain=1#L567)  
 [new optional header param is not breaking](checker/checker_not_breaking_test.go?plain=1#L102)  
 [new optional property in request header is not breaking](checker/checker_breaking_property_test.go?plain=1#L38)  

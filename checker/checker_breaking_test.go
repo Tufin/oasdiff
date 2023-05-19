@@ -514,7 +514,7 @@ func TestBreaking_ModifyParameterPattern(t *testing.T) {
 	require.Equal(t, "request-parameter-pattern-changed", errs[0].Id)
 }
 
-// BC: modifying a pattern to ".*"" in a schema is not breaking
+// BC: modifying a pattern to ".*" in a schema is not breaking
 func TestBreaking_ModifyPatternToAnyString(t *testing.T) {
 	s1, err := open("../data/pattern-base.yaml")
 	require.NoError(t, err)
