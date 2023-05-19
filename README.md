@@ -23,7 +23,9 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - [API deprecation](API-DEPRECATION.md)
 - [Path prefix modification](#path-prefix-modification)
-- [Support path parameter renaming](#path-parameter-reanaming)
+- [Path parameter renaming](#path-parameter-reanaming)
+- [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
+- [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
 
 
@@ -304,6 +306,11 @@ You can use the `-exclude-elements` flag to exclude certain kinds of changes:
 
 You can ignore multiple elements with a comma-separated list of excluded elements as in [this example](#ignore-changes-to-description-and-examples).  
 Note that [Extensions](https://swagger.io/specification/#specification-extensions) are always excluded from the diff.
+
+## Excluding Specific Endpoints
+You can filter endpoints in two ways:
+1. By path name: use the `-filter` option to exclude paths that don't match the given regular expression, see [example](#openapi-diff-for-endpoints-containing-api-in-the-path)
+2. By extension: use the `-filter-extension` option to exclude paths and operations with an OpenAPI Extension matching the given regular expression, see [example](#exclude-paths-and-operations-with-extension-x-beta)
 
 ## Notes for Go Developers
 ### Embedding oasdiff into your program
