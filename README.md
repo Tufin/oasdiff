@@ -16,7 +16,6 @@ Command-line and Go package to compare and detect breaking changes in OpenAPI sp
 ```
 docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
-
 ## Features 
 - Detect [breaking changes](BREAKING-CHANGES.md)
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
