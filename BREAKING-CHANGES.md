@@ -1,6 +1,6 @@
 ## Breaking Changes [Beta]
-Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
-[See some examples of breaking and non-breaking changes](BREAKING-CHANGES-EXAMPLES.md).  
+A breaking change is a change to a component, such as a server, that could break a dependent component, such as a client, for example deleting an endpoint. 
+When working with OpenAPI, breaking-changes can be caught by monitoring changes to the specification.
 
 To detect breaking-changes between two specs run oasdiff with the `-check-breaking` flag:
 ```
@@ -81,6 +81,10 @@ oasdiff -include-checks response-non-success-status-removed -check-breaking -bas
 ### Customizing Breaking-Changes Checks
 If you encounter a change that isn't considered breaking by oasdiff and you would like to consider it as a breaking-change you may add an [optional breaking-changes check](#optional-breaking-changes-checks).  
 For more information, see [this guide](CUSTOMIZING-CHECKS.md) and this example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
+
+### Examples
+[Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  
+This document is automatically generated from oasdiff unit tests.
 
 ## Old Breaking-Changes Method
 The original implementation with the `-breaking-only` flag is still supported but the new method with `check-breaking` will eventually replace it.
