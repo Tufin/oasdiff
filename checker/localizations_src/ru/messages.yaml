@@ -47,6 +47,8 @@ request-parameter-min-set-comment: Это предупреждение, пото
 request-parameter-type-changed: в %s параметре запроса %s, type/format изменился с %s/%s на %s/%s
 new-request-path-parameter: добален новый path параметр запроса %s
 request-property-became-required: поле запроса %s стало обязательным
+request-property-became-not-nullable: свойство запроса %s стало недействительным
+request-body-became-not-nullable: тело запроса стало недействительным
 request-property-became-enum: свойство запроса %s было ограничено списком значений перечисления
 request-property-enum-value-removed: удалено enum значение %s у поля запроса %s
 request-body-max-decreased: значение max у тела запроса уменьшено до %s
