@@ -17,7 +17,6 @@ These examples are automatically generated from unit tests.
 [changing an existing property in request body items to required is breaking](checker/checker_breaking_property_test.go?plain=1#L595)  
 [changing an existing property in request body to enum is breaking](checker/checker_breaking_property_test.go?plain=1#L168)  
 [changing an existing property in request body to required is breaking](checker/checker_breaking_property_test.go?plain=1#L320)  
-[changing an existing property in request body to required is breaking](checker/checker_breaking_property_test.go?plain=1#L579)  
 [changing an existing property in request header to enum is breaking](checker/checker_breaking_property_test.go?plain=1#L200)  
 [changing an existing property in request header to required is breaking](checker/checker_breaking_property_test.go?plain=1#L56)  
 [changing an existing property in response body to optional is breaking](checker/checker_breaking_property_test.go?plain=1#L106)  
