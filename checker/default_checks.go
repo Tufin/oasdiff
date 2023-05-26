@@ -62,6 +62,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		RequestHeaderPropertyBecameEnumCheck,
 		ResponsePropertyBecameOptionalCheck,
 		ResponsePropertyBecameNullableCheck,
+		RequestPropertyBecameNotNullableCheck,
 		RequestBodyBecameRequiredCheck,
 		RequestBodyBecameEnumCheck,
 		ResponseHeaderBecameOptional,

@@ -229,6 +229,22 @@ func TestBreaking_RespBodyNullable(t *testing.T) {
 	require.Equal(t, "response-body-became-nullable", errs[0].Id)
 }
 
+// BC: changing a request property to not nullable is breaking
+func TestBreaking_ReqBodyPropertyNotNullable(t *testing.T) {
+	s1, err := open("../data/nullable/base-req.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/nullable/revision-req.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-property-became-not-nullable", errs[0].Id)
+}
+
 // BC: changing a response property to nullable is breaking
 func TestBreaking_RespBodyPropertyNullable(t *testing.T) {
 	s1, err := open("../data/nullable/base-property.yaml")
