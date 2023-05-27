@@ -86,11 +86,10 @@ For more information, see [this guide](CUSTOMIZING-CHECKS.md) and this example o
 [Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  
 This document is automatically generated from oasdiff unit tests.
 
-## Old Breaking-Changes Method
-The original implementation with the `-breaking-only` flag is still supported but the new method with `check-breaking` will eventually replace it.
+## Check-Breaking vs. Breaking-Only
+The original breaking-changes implementation with the `-breaking-only` flag is still supported but the new method with `-check-breaking` will eventually replace it.
 
-
-### Advantages of the New Breaking Changes Method 
+### Advantages of the Check-Breking Method 
 - output is human readable
 - supports localization for error messages and ignored changes
 - checks can be customized by developers
@@ -101,7 +100,7 @@ The original implementation with the `-breaking-only` flag is still supported bu
 - easier to extend and customize
 - will continue to be improved
 
-### Limitations of the New Breaking Changes Method
+### Limitations of the Check-Breking Method
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
 

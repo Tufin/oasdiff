@@ -56,9 +56,9 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
   -base string
     	path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format
   -breaking-only
-    	display breaking changes only (old method)
+    	display breaking changes only (deprecated, use 'check-breaking' instead)
   -check-breaking
-    	check for breaking changes (new method)
+    	check for breaking changes
   -composed
     	work in 'composed' mode, compare paths in all specs matching base and revision globs
   -deprecation-days int
