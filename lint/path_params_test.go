@@ -48,6 +48,7 @@ func TestPathParam_Duplicate(t *testing.T) {
 	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.PathParamsCheck}), source, loadFrom(t, source))
 	require.Len(t, errs, 1)
 	require.Equal(t, "path-param-duplicate", errs[0].Id)
+	require.Equal(t, "path parameter \"bookId\" is defined both in path and in operation: GET /books/{bookId}", errs[0].Text)
 }
 
 func TestPathParam_NotRequired(t *testing.T) {
@@ -55,4 +56,5 @@ func TestPathParam_NotRequired(t *testing.T) {
 	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.PathParamsCheck}), source, loadFrom(t, source))
 	require.Len(t, errs, 1)
 	require.Equal(t, "path-param-not-required", errs[0].Id)
+	require.Equal(t, "path parameter \"bookId\" should have required=true: GET /books/{bookId}", errs[0].Text)
 }

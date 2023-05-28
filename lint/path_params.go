@@ -37,7 +37,7 @@ func PathParamsCheck(source string, s *load.OpenAPISpecInfo) []*Error {
 		}
 
 		for method, op := range pathItem.Operations() {
-			result = append(result, checkOperationParams(pathParamsFromURL, pathParams, path, method, op, source)...)
+			result = append(result, checkOperationPathParams(pathParamsFromURL, pathParams, path, method, op, source)...)
 		}
 	}
 
@@ -49,7 +49,7 @@ func getPathParamsFromURL(path string) utils.StringSet {
 	return utils.StringList(pathParams).ToStringSet()
 }
 
-func checkOperationParams(pathParamsFromURL, pathParams utils.StringSet, path, method string, op *openapi3.Operation, source string) []*Error {
+func checkOperationPathParams(pathParamsFromURL, pathParams utils.StringSet, path, method string, op *openapi3.Operation, source string) []*Error {
 	result := make([]*Error, 0)
 
 	opParams := utils.StringSet{}
@@ -62,7 +62,7 @@ func checkOperationParams(pathParamsFromURL, pathParams utils.StringSet, path, m
 			result = append(result, &Error{
 				Id:     "path-param-not-required",
 				Level:  LEVEL_ERROR,
-				Text:   fmt.Sprintf("path parameter %q should have required=true: %s %s", parameter.Value.Name, path, method),
+				Text:   fmt.Sprintf("path parameter %q should have required=true: %s %s", parameter.Value.Name, method, path),
 				Source: source,
 			})
 		}
