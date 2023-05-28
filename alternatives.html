@@ -1,0 +1,93 @@
+<html>
+<head>
+	<title>HTML Table Generator</title> 
+	<style>
+		table {
+			border:1px solid #b3adad;
+			border-collapse:collapse;
+			padding:5px;
+		}
+		table th {
+			border:1px solid #b3adad;
+			padding:5px;
+			background: #f0f0f0;
+			color: #313030;
+		}
+		table td {
+			border:1px solid #b3adad;
+			text-align:left;
+			padding:5px;
+			background: #ffffff;
+			color: #313030;
+		}
+	</style>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>Tool</th>
+				<th>Stack</th>
+				<th>Breaking Changes</th>
+				<th>Diff</th>
+                <th>Output</th>
+                <th>Compare Multiple Files</th>
+                <th>Deprecation</th>
+                <th>Configurable Ignore</th>
+                <th>Stability Levels</th>
+                <th>Localization</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Tufin/oasdiff<br><span id="docs-internal-guid-15810a79-7fff-af1f-a7d2-d01349cdc0c4" style="font-style: normal; text-align: start; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); white-space: pre-wrap;"><p dir="ltr" style="line-height: 1.2; margin-top: 0pt; margin-bottom: 0pt;"></p></span></td>
+				<td>Golang</td>
+				<td>Full</td>
+				<td>Deep</td>
+                <td>json<br/>yaml<br/>text<br/>markdown<br/>html<br/></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+			</tr>
+			<tr>
+				<td><font color="#313030"><span style="caret-color: rgb(49, 48, 48);">OpenAPITools/openapi-diff<br></span></font></td>
+				<td>Java</td>
+				<td>Partial: doesn't specify the exact breaking-changes</td>
+				<td>Shallow</td>
+                <td>json<br/>text<br/>markdown<br/>html<br/></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+			</tr>
+			<tr>
+				<td>Atlassian/<span style="font-size: 1em; font-style: normal; text-align: inherit;">openapi-diff</span><br></td>
+				<td>Typescript</td>
+				<td>Partial: only catches a small subset of breaking-changes</td>
+				<td>Shallow</td>
+                <td>json<br/></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+			</tr>
+			<tr>
+				<td>opticdev/<span style="font-size: 1em; font-style: normal; text-align: inherit;">optic</span><br></td>
+				<td>Typescript</td>
+				<td>Yes</td>
+                <td>Deep</td>
+				<td>json<br/>text<br/>html<br/></td>
+                <td>No<br/></td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
