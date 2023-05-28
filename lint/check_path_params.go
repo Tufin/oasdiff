@@ -8,8 +8,6 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
-type pathParamsCtx struct{}
-
 func PathParamsCheck(source string, s *load.OpenAPISpecInfo) []*Error {
 	result := make([]*Error, 0)
 
@@ -27,9 +25,8 @@ func PathParamsCheck(source string, s *load.OpenAPISpecInfo) []*Error {
 			}
 		}
 
-		context := pathParamsCtx{}
 		for method, op := range pathItem.Operations() {
-			result = append(result, context.checkOperation(pathParamsFromURL, pathParams, path, method, op, source)...)
+			result = append(result, checkOperationParams(pathParamsFromURL, pathParams, path, method, op, source)...)
 		}
 	}
 
@@ -41,7 +38,7 @@ func getPathParamsFromURL(path string) utils.StringSet {
 	return utils.StringList(pathParams).ToStringSet()
 }
 
-func (context *pathParamsCtx) checkOperation(pathParamsFromURL, pathParams utils.StringSet, path, method string, op *openapi3.Operation, source string) []*Error {
+func checkOperationParams(pathParamsFromURL, pathParams utils.StringSet, path, method string, op *openapi3.Operation, source string) []*Error {
 	result := make([]*Error, 0)
 
 	opParams := utils.StringSet{}
