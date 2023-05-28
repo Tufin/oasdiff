@@ -4,11 +4,13 @@ info:
   version: '0.1'
 paths:
   /books/{bookId}:
-    parameters:
-      - in: path
-        name: bookId
-        required: true
     get:
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            default: xxx
       responses:
         '200':
           description: ok

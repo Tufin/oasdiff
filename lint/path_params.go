@@ -8,8 +8,6 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
-type pathParamsCtx struct{}
-
 func PathParamsCheck(source string, s *load.OpenAPISpecInfo) []*Error {
 	result := make([]*Error, 0)
 
@@ -22,14 +20,24 @@ func PathParamsCheck(source string, s *load.OpenAPISpecInfo) []*Error {
 
 		pathParams := utils.StringSet{}
 		for _, parameter := range pathItem.Parameters {
-			if parameter.Value.In == openapi3.ParameterInPath {
-				pathParams.Add(parameter.Value.Name)
+			if parameter.Value.In != openapi3.ParameterInPath {
+				continue
 			}
+
+			if !parameter.Value.Required {
+				result = append(result, &Error{
+					Id:     "path-param-not-required",
+					Level:  LEVEL_ERROR,
+					Text:   fmt.Sprintf("path parameter %q should have required=true: %s", parameter.Value.Name, path),
+					Source: source,
+				})
+			}
+
+			pathParams.Add(parameter.Value.Name)
 		}
 
-		context := pathParamsCtx{}
 		for method, op := range pathItem.Operations() {
-			result = append(result, context.checkOperation(pathParamsFromURL, pathParams, path, method, op, source)...)
+			result = append(result, checkOperationPathParams(pathParamsFromURL, pathParams, path, method, op, source)...)
 		}
 	}
 
@@ -41,14 +49,25 @@ func getPathParamsFromURL(path string) utils.StringSet {
 	return utils.StringList(pathParams).ToStringSet()
 }
 
-func (context *pathParamsCtx) checkOperation(pathParamsFromURL, pathParams utils.StringSet, path, method string, op *openapi3.Operation, source string) []*Error {
+func checkOperationPathParams(pathParamsFromURL, pathParams utils.StringSet, path, method string, op *openapi3.Operation, source string) []*Error {
 	result := make([]*Error, 0)
 
 	opParams := utils.StringSet{}
 	for _, parameter := range op.Parameters {
-		if parameter.Value.In == openapi3.ParameterInPath {
-			opParams.Add(parameter.Value.Name)
+		if parameter.Value.In != openapi3.ParameterInPath {
+			continue
 		}
+
+		if !parameter.Value.Required {
+			result = append(result, &Error{
+				Id:     "path-param-not-required",
+				Level:  LEVEL_ERROR,
+				Text:   fmt.Sprintf("path parameter %q should have required=true: %s %s", parameter.Value.Name, method, path),
+				Source: source,
+			})
+		}
+
+		opParams.Add(parameter.Value.Name)
 	}
 
 	for param := range pathParams.Plus(opParams).Minus(pathParamsFromURL) {

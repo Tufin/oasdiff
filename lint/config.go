@@ -18,5 +18,6 @@ func defaultChecks() []Check {
 	return []Check{
 		RegexCheck,
 		PathParamsCheck,
+		RequiredParamsCheck,
 	}
 }

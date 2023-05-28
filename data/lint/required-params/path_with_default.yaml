@@ -8,6 +8,8 @@ paths:
       - in: path
         name: bookId
         required: true
+        schema:
+          default: xxx
     get:
       responses:
         '200':

@@ -7,10 +7,12 @@ paths:
     parameters:
       - in: path
         name: bookId
+        required: true
     get:
       parameters:
         - in: path
           name: bookId
+          required: true
       responses:
         '200':
           description: ok
