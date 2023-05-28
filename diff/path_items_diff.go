@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 type pathItemPair struct {
@@ -67,9 +68,9 @@ findNormalizedEndpoint finds a corresponding path ignoring differences in templa
 This implementation is based on Paths.Find in openapi3
 */
 func findNormalizedEndpoint(key string, paths openapi3.Paths) (*openapi3.PathItem, PathParamsMap, bool) {
-	normalizedPath, expected, pathParams1 := normalizeTemplatedPath(key)
+	normalizedPath, expected, pathParams1 := utils.NormalizeTemplatedPath(key)
 	for path, pathItem := range paths {
-		pathNormalized, got, pathParams2 := normalizeTemplatedPath(path)
+		pathNormalized, got, pathParams2 := utils.NormalizeTemplatedPath(path)
 		if got == expected && pathNormalized == normalizedPath {
 			if pathParamsMap, ok := NewPathParamsMap(pathParams1, pathParams2); ok {
 				return pathItem, pathParamsMap, true
@@ -77,66 +78,4 @@ func findNormalizedEndpoint(key string, paths openapi3.Paths) (*openapi3.PathIte
 		}
 	}
 	return nil, nil, false
-}
-
-/*
-normalizeTemplatedPath converts a path to its normalized form, without parameter names
-
-For example:
-/person/{personName} -> /person/{}
-
-Return values:
-1. The normalized path
-2. Number of params
-3. List of param names
-
-This implementation is based on Paths.normalizeTemplatedPath in openapi3
-*/
-func normalizeTemplatedPath(path string) (string, uint, []string) {
-	if strings.IndexByte(path, '{') < 0 {
-		return path, 0, nil
-	}
-
-	var buffTpl strings.Builder
-	buffTpl.Grow(len(path))
-
-	var (
-		cc         rune
-		count      uint
-		isVariable bool
-		vars       = []string{}
-		buffVar    strings.Builder
-	)
-	for i, c := range path {
-		if isVariable {
-			if c == '}' {
-				// End path variable
-				isVariable = false
-
-				vars = append(vars, buffVar.String())
-				buffVar = strings.Builder{}
-
-				// First append possible '*' before this character
-				// The character '}' will be appended
-				if i > 0 && cc == '*' {
-					buffTpl.WriteRune(cc)
-				}
-			} else {
-				buffVar.WriteRune(c)
-				continue
-			}
-
-		} else if c == '{' {
-			// Begin path variable
-			isVariable = true
-
-			// The character '{' will be appended
-			count++
-		}
-
-		// Append the character
-		buffTpl.WriteRune(c)
-		cc = c
-	}
-	return buffTpl.String(), count, vars
 }
