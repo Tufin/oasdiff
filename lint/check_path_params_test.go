@@ -40,4 +40,12 @@ func TestPathParam_PathMissing(t *testing.T) {
 	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.PathParamsCheck}), source, loadFrom(t, source))
 	require.Len(t, errs, 1)
 	require.Equal(t, "path-param-missing", errs[0].Id)
+	require.Equal(t, "path parameter \"bookId\" appears in the parameters section of the path but is missing in the URL: GET /books", errs[0].Text)
+}
+
+func TestPathParam_Duplicate(t *testing.T) {
+	const source = "../data/lint/path-params/duplicate.yaml"
+	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.PathParamsCheck}), source, loadFrom(t, source))
+	require.Len(t, errs, 1)
+	require.Equal(t, "path-param-duplicate", errs[0].Id)
 }

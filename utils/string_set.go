@@ -44,6 +44,18 @@ func (stringSet StringSet) Plus(other StringSet) StringSet {
 	return result
 }
 
+func (stringSet StringSet) Intersection(other StringSet) StringSet {
+	result := StringSet{}
+
+	for s := range stringSet {
+		if other.Contains(s) {
+			result.Add(s)
+		}
+	}
+
+	return result
+}
+
 func (stringSet StringSet) Equals(other StringSet) bool {
 	return stringSet.Minus(other).Empty() &&
 		other.Minus(stringSet).Empty()

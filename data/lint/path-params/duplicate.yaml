@@ -1,0 +1,16 @@
+openapi: 3.0.0
+info:
+  title: My API
+  version: '0.1'
+paths:
+  /books/{bookId}:
+    parameters:
+      - in: path
+        name: bookId
+    get:
+      parameters:
+        - in: path
+          name: bookId
+      responses:
+        '200':
+          description: ok
