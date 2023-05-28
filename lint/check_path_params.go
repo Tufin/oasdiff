@@ -64,7 +64,7 @@ func (context *pathParamsCtx) checkOperation(pathParamsFromURL, pathParams utils
 		result = append(result, &Error{
 			Id:     "path-param-missing",
 			Level:  LEVEL_WARN,
-			Text:   fmt.Sprintf("path parameter %q appears in the URL path but is missing from the parameters section of the path %s and operation %s", param, path, method),
+			Text:   fmt.Sprintf("path parameter %q appears in the URL path but is missing from the parameters section of the path and operation: %s %s", param, method, path),
 			Source: source,
 		})
 	}
@@ -73,7 +73,7 @@ func (context *pathParamsCtx) checkOperation(pathParamsFromURL, pathParams utils
 		result = append(result, &Error{
 			Id:     "path-param-duplicate",
 			Level:  LEVEL_WARN,
-			Text:   fmt.Sprintf("path parameter %q is defined both in path %s and in operation %s", param, path, method),
+			Text:   fmt.Sprintf("path parameter %q is defined both in path and in operation: %s %s", param, method, path),
 			Source: source,
 		})
 	}
