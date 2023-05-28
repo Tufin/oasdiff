@@ -7,7 +7,6 @@ paths:
     parameters:
       - in: path
         name: bookId
-        required: true
     get:
       responses:
         '200':

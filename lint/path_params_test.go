@@ -49,3 +49,10 @@ func TestPathParam_Duplicate(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, "path-param-duplicate", errs[0].Id)
 }
+
+func TestPathParam_NotRequired(t *testing.T) {
+	const source = "../data/lint/path-params/not-required.yaml"
+	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.PathParamsCheck}), source, loadFrom(t, source))
+	require.Len(t, errs, 1)
+	require.Equal(t, "path-param-not-required", errs[0].Id)
+}
