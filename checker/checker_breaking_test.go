@@ -295,10 +295,10 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 
 // BC: removing/updating an enum in request body is breaking (optional)
 func TestBreaking_RequestBodyEnumRemoved(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum.yaml")
+	s1, err := open("../data/enums/request-body-enum.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/request-body-enum.yaml")
+	s2, err := open("../data/enums/request-body-enum.yaml")
 	require.NoError(t, err)
 
 	s2.Spec.Paths["/api/v2/changeOfRequestFieldValueTiedToEnumTest"].Get.RequestBody.Value.Content["application/json"].Schema.Value.Enum = []interface{}{}
@@ -352,10 +352,10 @@ func TestBreaking_TagRemoved(t *testing.T) {
 
 // BC: removing/updating a media type enum in response (optional)
 func TestBreaking_ResponseMediaTypeEnumRemoved(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/response-enum.yaml")
+	s1, err := open("../data/enums/response-enum.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/enums/response-enum-2.yaml")
+	s2, err := open("../data/enums/response-enum-2.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -422,10 +422,10 @@ func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
 
 // BC: deleting a media-type from response is breaking
 func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/response-media-type-base.yaml")
+	s1, err := open("../data/response-media-type-base.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/response-media-type-revision.yaml")
+	s2, err := open("../data/response-media-type-revision.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -438,10 +438,10 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 
 // BC: deleting a pattern from a schema is not breaking
 func TestBreaking_DeletePatten(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base.yaml")
+	s1, err := open("../data/pattern-base.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-revision.yaml")
+	s2, err := open("../data/pattern-revision.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -452,10 +452,10 @@ func TestBreaking_DeletePatten(t *testing.T) {
 
 // BC: adding a pattern to a schema is breaking
 func TestBreaking_AddPattern(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-revision.yaml")
+	s1, err := open("../data/pattern-revision.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base.yaml")
+	s2, err := open("../data/pattern-base.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -468,10 +468,10 @@ func TestBreaking_AddPattern(t *testing.T) {
 
 // BC: adding a pattern to a schema is breaking for recursive properties
 func TestBreaking_AddPatternRecursive(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-revision-recursive.yaml")
+	s1, err := open("../data/pattern-revision-recursive.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base-recursive.yaml")
+	s2, err := open("../data/pattern-base-recursive.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -484,10 +484,10 @@ func TestBreaking_AddPatternRecursive(t *testing.T) {
 
 // BC: modifying a pattern in a schema is breaking
 func TestBreaking_ModifyPattern(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base.yaml")
+	s1, err := open("../data/pattern-base.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-modified-not-anystring.yaml")
+	s2, err := open("../data/pattern-modified-not-anystring.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -500,10 +500,10 @@ func TestBreaking_ModifyPattern(t *testing.T) {
 
 // BC: modifying a pattern in request parameter is breaking
 func TestBreaking_ModifyParameterPattern(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-parameter-base.yaml")
+	s1, err := open("../data/pattern-parameter-base.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-parameter-modified-not-anystring.yaml")
+	s2, err := open("../data/pattern-parameter-modified-not-anystring.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -514,12 +514,12 @@ func TestBreaking_ModifyParameterPattern(t *testing.T) {
 	require.Equal(t, "request-parameter-pattern-changed", errs[0].Id)
 }
 
-// BC: modifying a pattern to ".*"" in a schema is not breaking
+// BC: modifying a pattern to ".*" in a schema is not breaking
 func TestBreaking_ModifyPatternToAnyString(t *testing.T) {
-	s1, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-base.yaml")
+	s1, err := open("../data/pattern-base.yaml")
 	require.NoError(t, err)
 
-	s2, err := checker.LoadOpenAPISpecInfoFromFile("../data/pattern-modified.yaml")
+	s2, err := open("../data/pattern-modified.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
@@ -541,7 +541,27 @@ func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-default-value-changed", errs[0].Id)
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'X' to 'Y'", errs[0].Text)
+}
+
+// BC: setting the default value of an optional request parameter is breaking
+func TestBreaking_SettingRequiredOptionalParamDefaultValue(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = nil
+	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
+
+	// By default, OpenAPI treats all request parameters as optional
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-default-value-changed", errs[0].Id)
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'undefined' to 'Y'", errs[0].Text)
 }
 
 // BC: modifying the default value of a required request parameter is not breaking

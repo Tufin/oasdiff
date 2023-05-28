@@ -15,20 +15,14 @@ type pathItemPair struct {
 
 type pathItemPairs map[string]*pathItemPair
 
-func getPathItemsDiff(paths1, paths2 openapi3.Paths, config *Config) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
-	return getPathItemsDiffInternal(
-		rewritePrefix(paths1, config.PathStripPrefixBase, config.PathPrefixBase),
-		rewritePrefix(paths2, config.PathStripPrefixRevision, config.PathPrefixRevision))
-}
-
-func getPathItemsDiffInternal(paths1, paths2 openapi3.Paths) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
+func getPathItemsDiff(config *Config, paths1, paths2 openapi3.Paths) (openapi3.Paths, openapi3.Paths, pathItemPairs) {
 
 	added := openapi3.Paths{}
 	deleted := openapi3.Paths{}
 	other := pathItemPairs{}
 
 	for endpoint1, pathItem1 := range paths1 {
-		if pathItem2, pathParamsMap, ok := findEndpoint(endpoint1, paths2); ok {
+		if pathItem2, pathParamsMap, ok := findEndpoint(config, endpoint1, paths2); ok {
 			other[endpoint1] = &pathItemPair{
 				PathItem1:     pathItem1,
 				PathItem2:     pathItem2,
@@ -40,7 +34,7 @@ func getPathItemsDiffInternal(paths1, paths2 openapi3.Paths) (openapi3.Paths, op
 	}
 
 	for endpoint2, pathItem2 := range paths2 {
-		if _, _, ok := findEndpoint(endpoint2, paths1); !ok {
+		if _, _, ok := findEndpoint(config, endpoint2, paths1); !ok {
 			added[endpoint2] = pathItem2
 		}
 	}
@@ -56,9 +50,13 @@ func rewritePrefix(paths openapi3.Paths, strip, prepend string) openapi3.Paths {
 	return result
 }
 
-func findEndpoint(endpoint string, paths openapi3.Paths) (*openapi3.PathItem, PathParamsMap, bool) {
+func findEndpoint(config *Config, endpoint string, paths openapi3.Paths) (*openapi3.PathItem, PathParamsMap, bool) {
 	if pathItem, ok := paths[endpoint]; ok {
 		return pathItem, PathParamsMap{}, true
+	}
+
+	if config.MatchPathParams {
+		return nil, nil, false
 	}
 
 	return findNormalizedEndpoint(endpoint, paths)

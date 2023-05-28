@@ -24,3 +24,10 @@ func TestRegexCheck_Embedded(t *testing.T) {
 		require.Equal(t, "invalid-regex-pattern", errs[i].Id)
 	}
 }
+
+func TestRegexCheck_Circular(t *testing.T) {
+
+	const source = "../data/circular2.yaml"
+	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.RegexCheck}), source, loadFrom(t, source))
+	require.Empty(t, errs)
+}

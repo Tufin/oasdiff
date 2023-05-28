@@ -1,0 +1,3 @@
+- handle Not and AdditionalProps in schema recursion funcs like processModifiedPropertiesDiff etc.
+- remove redundant code for body can be done through CheckModifiedPropertiesDiff etc.
+- review Russian messages

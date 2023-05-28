@@ -1,0 +1,3 @@
+API get /health api path removed without deprecation
+get /health/live api path removed without deprecation
+get /health/ready api path removed without deprecation

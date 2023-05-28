@@ -1,30 +1,37 @@
+# OpenAPI Diff
+
 [![CI](https://github.com/Tufin/oasdiff/workflows/go/badge.svg)](https://github.com/Tufin/oasdiff/actions)
 [![codecov](https://codecov.io/gh/tufin/oasdiff/branch/main/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/tufin/oasdiff)
 [![Go Report Card](https://goreportcard.com/badge/github.com/tufin/oasdiff)](https://goreportcard.com/report/github.com/tufin/oasdiff)
 [![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
-# OpenAPI Diff
+![breaking](logo/fragile-50.png "Breaking")
+
 Command-line and Go package to compare and detect breaking changes in OpenAPI specs.
+
+---
 
 ## Try it
 ```
 docker run --rm -t tufin/oasdiff -format text -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
-
 ## Features 
-- Detect [breaking changes](#breaking-changes-beta)
+- Detect [breaking changes](BREAKING-CHANGES.md)
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
-- OpenAPI diff of local files system or remove files over http/s
+- OpenAPI diff of local files system or remote files over http/s
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- Allow [non-breaking removal of deprecated resources](#non-breaking-removal-of-deprecated-resources-beta)
-- Support [path prefix modification](#path-prefix-modification)
-- OpenAPI [Lint](#lint-beta)
-- [Extend Breaking-Changes with Custom Checks](CUSTOMIZING-CHECKS.md)
+- [API deprecation](API-DEPRECATION.md)
+- [Path prefix modification](#path-prefix-modification)
+- [Path parameter renaming](#path-parameter-reanaming)
+- [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
+- [Excluding endpoints](#excluding-specific-endpoints)
+- [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
+
 
 ## Install with Go
 ```bash
@@ -41,7 +48,7 @@ brew install oasdiff
 Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
 ## Wrappers
-- [GitHub Action](https://github.com/marketplace/actions/openapi-spec-diff)
+- [GitHub Action](https://github.com/oasdiff/oasdiff-action)
 - [Cloud Service](#openapi-diff-and-breaking-changes-as-a-service)
 
 ## Usage
@@ -49,9 +56,9 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
   -base string
     	path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format
   -breaking-only
-    	display breaking changes only (old method)
+    	display breaking changes only (deprecated, use 'check-breaking' instead)
   -check-breaking
-    	check for breaking changes (new method)
+    	check for breaking changes
   -composed
     	work in 'composed' mode, compare paths in all specs matching base and revision globs
   -deprecation-days int
@@ -82,10 +89,10 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
     	comma-separated list of optional breaking-changes checks
   -lang string
     	language for localized breaking changes checks errors (default "en")
+  -match-path-params
+    	include path parameter names in endpoint matching
   -max-circular-dep int
     	maximum allowed number of circular dependencies between objects in OpenAPI specs (default 5)
-  -no-lint
-    	disable linter
   -prefix string
     	deprecated. use '-prefix-revision' instead
   -prefix-base string
@@ -221,7 +228,7 @@ curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com
 Service source code: https://github.com/oasdiff/oasdiff-service
 
 ## Output Formats
-The default output format, YAML, provides a full view of all diff details.  
+The default diff output format, YAML, provides a full view of all diff details.  
 Note that no output in the YAML format signifies that the diff is empty, or, in other words, there are no changes.  
 Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
 The JSON format works only with `-exclude-elements endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
@@ -263,157 +270,15 @@ Some YAML libraries don't support complex mapping keys:
 
 In such cases, consider using `-exclude-elements endpoints` and `-format json` as a workaround.
 
-## Breaking Changes [Beta]
-Breaking changes are changes that could break a client that is relying on the OpenAPI specification.  
-[See some examples of breaking and non-breaking changes](BREAKING-CHANGES.md).  
-Notes: 
-1. This is a Beta feature, please report issues
-2. There are two different methods for detecting breaking changes (see below)
-
-
-### Old Method
-The original implementation with the `-breaking-only` flag.
-While this method is still supported, the new one will eventually replace it.
-
-### New Method
-An improved implementation for detecting breaking changes with the `-check-breaking` flag.
-This method works differently from the old one: it is more accurate, generates nicer human-readable output, and is easier to maintain and extend.
-
-To use it, run oasdiff with the `-check-breaking` flag, e.g.:
-```
-oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-There are two levels of breaking changes:
-- `WARN` - Warning are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
-- `ERR` - Errors are definite breaking changes which should be avoided
-
-To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` flag.  
-To exit with return code 1 even if only WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` flags.
-
-
-### Stability Level
-When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
-The new Breaking Changes method provides this feature through the `x-stability-level` extension.  
-There are four stability levels: `draft`->`alpha`->`beta`->`stable`.  
-APIs with the levels `draft` or `alpha` can be changed freely without triggering a breaking-change error.  
-Stability level may be increased, but not decreased, like this: `draft`->`alpha`->`beta`->`stable`.  
-APIs with no stability level will trigger breaking changes errors upon relevant change.  
-APIs with no stability level can be changed to any stability level.  
-
-Example:
-   ```
-   /api/test:
-    post:
-     x-stability-level: "alpha"
-   ```
-
-### Ignoring Specific Breaking Changes
-Sometimes, you may want to ignore certain breaking changes.  
-The new Breaking Changes method allows you define breaking changes that you want to ignore in a configuration file.  
-You can specify the configuration file name in the oasdiff command-line with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.  
-Each line in the configuration file should contain two parts:
-1. method and path
-2. description of the breaking change
-
-For example:
-```
-GET /api/{domain}/{project}/badges/security-score removed the success response with the status '200'
-```
-
-The line may contain additional info, like this:
-```
- - 12.01.2023 In the GET /api/{domain}/{project}/badges/security-score, we removed the success response with the status '200'
-```
-
-The configuration files can be of any text type, e.g., Markdown, so you can use them to document breaking changes and other important changes.
-
-### Breaking Changes to Enum Values
-The new Breaking Changes method support rules for enum changes using the `x-extensible-enum` extension.  
-This method allows adding new entries to enums used in responses which is very usable in many cases but requires clients to support a fallback to default logic when they receive an unknown value.
-`x-extensible-enum` was introduced by [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community. Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is a more explicit way to do it.  
-In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
-If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
-
-### Optional Breaking-Changes Checks
-You can use the `-include-checks` flag to include the following optional checks:
-- response-non-success-status-removed
-- api-operation-id-removed
-- api-tag-removed
-- response-property-enum-value-removed
-- response-mediatype-enum-value-removed
-- request-body-enum-value-removed
-
-For example:
-```
-oasdiff -include-checks response-non-success-status-removed -check-breaking -base data/openapi-test1.yaml -revision data/openapi-test3.yaml
-```
-
-
-### Advantages of the New Breaking Changes Method 
-- output is human readable
-- supports localization for error messages and ignored changes
-- [checks can be customized by developers](#customizing-breaking-changes-checks)
-- fewer false-positive errors by design
-- improved support for type changes: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
-- allows removal of responses with non-success codes (e.g., 503, 504, 403)
-- allows adding new content-type to request
-- easier to extend and customize
-- will continue to be improved
-
-### Limitations of the New Breaking Changes Method
-- no checks for `context` instead of `schema` for request parameters
-- no checks for `callback`s
-
 ## Composed Mode
 Composed mode compares two collections of OpenAPI specs instead of a pair of specs in the default mode.
 The collections are specified using a [glob](https://en.wikipedia.org/wiki/Glob_(programming)).
 This can be useful when your APIs are defined across multiple files, for example, when multiple services, each one with its own spec, are exposed behind an API gateway, and you want to check changes across all the specs at once.
 
-This mode is a little different from a regular comparison of two specs to each-other:
-- compares only [paths and endpoints](#paths-vs-endpoints), other resources are compared only if referenced from the paths or endpoints
-- compares each path/endpoint in 'base' to its equivalent in 'revision'
-- if any endpoint appears more than once in 'base' or 'revision', then we use the endpoint with the most recent `x-since-date` value
-- the `x-since-date` extension should be set on Path or Operation level
-- `x-since-date` extensions set on the Operation level override the value set on Path level
-- if an endpoint doesn't have `the x-since-date` extension, its value is set to the default: "2000-01-01"
-- duplicate endpoints with the same x-since-date value will trigger an error
-- the format of the `x-since-date` is the RFC3339 full-date format
-
-Example of the `x-since-date` usage:
-   ```
-   /api/test:
-    get:
-     x-since-date: "2023-01-11"
-   ```
-
-Note: Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
-
-## Non-Breaking Removal of Deprecated Resources [Beta]
-Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
-As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
-
-OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and other object types as deprecated.  
-Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource **is** considered a breaking change.
-
-oasdiff allows you to gracefully remove a resource without getting the ```breaking-change``` warning, as follows:
-1. First, the resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed
-   ```
-   /api/test:
-    get:
-     deprecated: true
-     x-sunset: "2022-08-10"
-   ```
-2. At the sunset date or anytime later, the resource can be removed without triggering a ```breaking-change``` warning. An earlier removal will be considered a breaking change.
-
-In addition, oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it with the ```deprecation-days``` flag.  
-For example, the following command requires any deprecation to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
-```
-oasdiff -deprecation-days=30 -breaking-only -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
-```
-
-Setting deprecation-days to 0 is equivalent to the default which allows non-breaking deprecation regardless of the sunset date.  
-Note: this is a Beta feature. Please report issues.
+Notes: 
+1. Composed mode compares only [paths and endpoints](#paths-vs-endpoints), other resources are compared only if referenced from the paths or endpoints.
+2. Composed mode doesn't support [Path Prefix Modification](#path-prefix-modification) 
+3. Learn more about how oasdiff [matches endpoints to each other](MATCHING-ENDPOINTS.md)
 
 ## Path Prefix Modification
 Sometimes paths prefixes need to be modified, for example, to create a new version:
@@ -431,9 +296,13 @@ oasdiff -base original.yaml -revision new.yaml -strip-prefix-base /api/v1 -strip
 ```
 Note that stripping precedes prepending.
 
+## Path Parameter Reanaming
+Sometimes developers decide to change names of path parameters, for example, in order to follow a certain naming convention.  
+See [this](MATCHING-ENDPOINTS.md) to learn more about how oasdiff supports path parameter renaming.
+
 ## Excluding Specific Kinds of Changes 
 You can use the `-exclude-elements` flag to exclude certain kinds of changes:
-- Use `-exclude-elements changes` to exclude [Examples](https://swagger.io/specification/#example-object)
+- Use `-exclude-elements examples` to exclude [Examples](https://swagger.io/specification/#example-object)
 - Use `-exclude-elements description` to exclude description fields
 - Use `-exclude-elements title` to exclude title fields
 - Use `-exclude-elements summary` to exclude summary fields
@@ -442,12 +311,10 @@ You can use the `-exclude-elements` flag to exclude certain kinds of changes:
 You can ignore multiple elements with a comma-separated list of excluded elements as in [this example](#ignore-changes-to-description-and-examples).  
 Note that [Extensions](https://swagger.io/specification/#specification-extensions) are always excluded from the diff.
 
-## Lint [Beta]
-oasdiff performs a lint to validate both specs before running the diff and breaking-changes.
-If errors are found, the diff is aborted and the errors are displayed instead.  
-You can pass `-no-lint` to skip lint validation.
-
-Note: This is a Beta feature, please report issues
+## Excluding Specific Endpoints
+You can filter endpoints in two ways:
+1. By path name: use the `-filter` option to exclude paths that don't match the given regular expression, see [example](#openapi-diff-for-endpoints-containing-api-in-the-path)
+2. By extension: use the `-filter-extension` option to exclude paths and operations with an OpenAPI Extension matching the given regular expression, see [example](#exclude-paths-and-operations-with-extension-x-beta)
 
 ## Notes for Go Developers
 ### Embedding oasdiff into your program
@@ -458,10 +325,6 @@ diff.Get(&diff.Config{}, spec1, spec2)
 ### Code Examples
 - [diff](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-Get)
 - [breaking changes](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-GetPathsDiff)
-
-### Customizing Breaking-Changes Checks
-If you encounter a change that isn't considered breaking by oasdiff and you would like to consider it as a breaking-change you may add an [optional breaking-changes check](#optional-breaking-changes-checks).  
-For more information, see [this guide](CUSTOMIZING-CHECKS.md) and this example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
 
 
 ### OpenAPI References

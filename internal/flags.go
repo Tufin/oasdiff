@@ -37,9 +37,9 @@ type InputFlags struct {
 	version                  bool
 	circularReferenceCounter int
 	excludeEndpoints         bool
+	matchPathParams          bool
 	includeChecks            utils.StringList
 	excludeElements          utils.StringList
-	noLint                   bool
 }
 
 func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
@@ -65,8 +65,8 @@ func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 	flags.BoolVar(&inputFlags.excludeExamples, "exclude-examples", false, "ignore changes to examples (deprecated, use '-exclude-elements examples' instead)")
 	flags.BoolVar(&inputFlags.excludeDescription, "exclude-description", false, "ignore changes to descriptions (deprecated, use '-exclude-elements description' instead)")
 	flags.BoolVar(&inputFlags.summary, "summary", false, "display a summary of the changes instead of the full diff")
-	flags.BoolVar(&inputFlags.breakingOnly, "breaking-only", false, "display breaking changes only (old method)")
-	flags.BoolVar(&inputFlags.checkBreaking, "check-breaking", false, "check for breaking changes (new method)")
+	flags.BoolVar(&inputFlags.breakingOnly, "breaking-only", false, "display breaking changes only (deprecated, use 'check-breaking' instead)")
+	flags.BoolVar(&inputFlags.checkBreaking, "check-breaking", false, "check for breaking changes")
 	flags.StringVar(&inputFlags.warnIgnoreFile, "warn-ignore", "", "the configuration file for ignoring warnings with '-check-breaking'")
 	flags.StringVar(&inputFlags.errIgnoreFile, "err-ignore", "", "the configuration file for ignoring errors with '-check-breaking'")
 	flags.IntVar(&inputFlags.deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
@@ -77,9 +77,9 @@ func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 	flags.BoolVar(&inputFlags.version, "version", false, "show version and quit")
 	flags.IntVar(&inputFlags.circularReferenceCounter, "max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 	flags.BoolVar(&inputFlags.excludeEndpoints, "exclude-endpoints", false, "exclude endpoints from output (deprecated, use '-exclude-elements endpoints' instead)")
+	flags.BoolVar(&inputFlags.matchPathParams, "match-path-params", false, "include path parameter names in endpoint matching")
 	flags.Var(&inputFlags.includeChecks, "include-checks", "comma-separated list of optional breaking-changes checks")
 	flags.Var(&inputFlags.excludeElements, "exclude-elements", "comma-separated list of elements to exclude from diff")
-	flags.BoolVar(&inputFlags.noLint, "no-lint", false, "disable linter")
 
 	flags.SetOutput(stdout)
 	if err := flags.Parse(args[1:]); err != nil {
@@ -153,4 +153,26 @@ func validateFlags(inputFlags *InputFlags) *ReturnError {
 	}
 
 	return nil
+}
+
+func generateConfig(inputFlags *InputFlags) *diff.Config {
+	config := diff.NewConfig()
+	config.PathFilter = inputFlags.filter
+	config.FilterExtension = inputFlags.filterExtension
+	config.PathPrefixBase = inputFlags.prefixBase
+	config.PathPrefixRevision = inputFlags.prefixRevision
+	config.PathStripPrefixBase = inputFlags.stripPrefixBase
+	config.PathStripPrefixRevision = inputFlags.strip_prefix_revision
+	config.BreakingOnly = inputFlags.breakingOnly
+	config.DeprecationDays = inputFlags.deprecationDays
+	config.MatchPathParams = inputFlags.matchPathParams
+	config.SetExcludeElements(inputFlags.excludeElements.ToStringSet(), inputFlags.excludeExamples, inputFlags.excludeDescription, inputFlags.excludeEndpoints)
+
+	if inputFlags.checkBreaking {
+		config.IncludeExtensions.Add(checker.XStabilityLevelExtension)
+		config.IncludeExtensions.Add(diff.SunsetExtension)
+		config.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
+	}
+
+	return config
 }

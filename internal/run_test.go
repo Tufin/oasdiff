@@ -14,7 +14,7 @@ import (
 )
 
 func cmdToArgs(cmd string) []string {
-	return strings.Split(cmd, " ")
+	return strings.Fields(cmd)
 }
 
 func Test_NoArgs(t *testing.T) {
@@ -112,7 +112,7 @@ func Test_BreakingChangesFailOnWarns(t *testing.T) {
 }
 
 func Test_BreakingChangesFailOnWarnsErrsOnly(t *testing.T) {
-	require.Equal(t, 1, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test2.yaml -revision ../data/openapi-test4.yaml -check-breaking -fail-on-diff -fail-on-warns -no-lint"), io.Discard, io.Discard))
+	require.Equal(t, 1, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test2.yaml -revision ../data/openapi-test4.yaml -check-breaking -fail-on-diff -fail-on-warns"), io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesFailOnDiffNoDiff(t *testing.T) {
@@ -169,14 +169,14 @@ func Test_Version(t *testing.T) {
 	require.Contains(t, stdout.String(), "oasdiff version:")
 }
 
-func Test_LintFailed(t *testing.T) {
-	var stdout bytes.Buffer
-	require.Equal(t, 130, internal.Run(cmdToArgs("oasdiff -base ../data/lint/regex/openapi-invalid-regex.yaml -revision ../data/openapi-test3.yaml"), &stdout, io.Discard))
-	var errs interface{}
-	require.NoError(t, yaml.Unmarshal(stdout.Bytes(), &errs))
-	require.Len(t, errs, 1)
+func Test_StripPrefixBase(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -check-breaking -base ../data/simple.yaml -revision ../data/simple.yaml -strip-prefix-base /partner-api"), io.Discard, io.Discard))
 }
 
-func Test_NoLint(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test3.yaml -revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
+func Test_DuplicatePathsFail(t *testing.T) {
+	require.NotZero(t, internal.Run(cmdToArgs("oasdiff -base ../data/duplicate_endpoints/base.yaml -revision ../data/duplicate_endpoints/revision.yaml -check-breaking"), io.Discard, io.Discard))
+}
+
+func Test_DuplicatePathsOK(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/duplicate_endpoints/base.yaml -revision ../data/duplicate_endpoints/revision.yaml -check-breaking -match-path-params"), io.Discard, io.Discard))
 }
