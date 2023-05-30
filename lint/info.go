@@ -7,6 +7,8 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
+// InfoCheck based on REQUIRED fields (Version and Info) from swagger docs,
+// see: https://swagger.io/docs/specification/api-general-info/
 func InfoCheck(source string, spec *load.OpenAPISpecInfo) []*Error {
 
 	result := make([]*Error, 0)
