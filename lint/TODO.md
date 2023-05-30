@@ -7,4 +7,3 @@
 6. Schema or content keyword. They are mutually exclusive
 7. Query string parameters may only have a name and no value
 8. non-existing properties marked as required
-9. warn if an info -> version does not exist
