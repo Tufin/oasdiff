@@ -11,15 +11,18 @@ import (
 
 func handleBreakingChanges(stdout io.Writer, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, inputFlags *InputFlags) (bool, *ReturnError) {
 	var c checker.BackwardCompatibilityCheckConfig
+	var level checker.Level
 	if inputFlags.checkBreaking {
 		c = checker.GetChecks(inputFlags.includeChecks)
+		level = checker.WARN
 	} else {
 		c = checker.GetAllChecks()
+		level = checker.INFO
 	}
 
 	c.Localizer = *localizations.New(inputFlags.lang, "en")
 
-	errs, returnErr := getBreakingChanges(c, diffReport, operationsSources, inputFlags.warnIgnoreFile, inputFlags.errIgnoreFile)
+	errs, returnErr := getBreakingChanges(c, diffReport, operationsSources, inputFlags.warnIgnoreFile, inputFlags.errIgnoreFile, level)
 	if returnErr != nil {
 		return false, returnErr
 	}
@@ -48,7 +51,7 @@ func handleBreakingChanges(stdout io.Writer, diffReport *diff.Diff, operationsSo
 	return errs.IsEmpty(inputFlags.failOnWarns), nil
 }
 
-func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, warnIgnoreFile string, errIgnoreFile string) (checker.BackwardCompatibilityErrors, *ReturnError) {
+func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, warnIgnoreFile string, errIgnoreFile string, level checker.Level) (checker.BackwardCompatibilityErrors, *ReturnError) {
 
 	errs := checker.CheckBackwardCompatibility(c, diffReport, operationsSources)
 
@@ -68,5 +71,12 @@ func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig, diffReport *
 		}
 	}
 
-	return errs, nil
+	levelFilteredErrs := make(checker.BackwardCompatibilityErrors, 0)
+	for _, err := range errs {
+		if err.Level <= level {
+			levelFilteredErrs = append(levelFilteredErrs, err)
+		}
+	}
+
+	return levelFilteredErrs, nil
 }

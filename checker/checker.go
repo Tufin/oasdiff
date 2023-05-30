@@ -14,10 +14,12 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
+type Level int
+
 const (
-	ERR  = 0
-	WARN = 1
-	INFO = 2
+	ERR  Level = 0
+	WARN Level = 1
+	INFO Level = 2
 )
 
 const (
@@ -29,7 +31,7 @@ type BackwardCompatibilityError struct {
 	Id          string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text        string `json:"text,omitempty" yaml:"text,omitempty"`
 	Comment     string `json:"comment,omitempty" yaml:"comment,omitempty"`
-	Level       int    `json:"level" yaml:"level"`
+	Level       Level  `json:"level" yaml:"level"`
 	Operation   string `json:"operation,omitempty" yaml:"operation,omitempty"`
 	OperationId string `json:"operationId,omitempty" yaml:"operationId,omitempty"`
 	Path        string `json:"path,omitempty" yaml:"path,omitempty"`

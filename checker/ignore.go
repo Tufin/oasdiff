@@ -26,7 +26,7 @@ func ignoreLinePath(ignoreLine string) string {
 	return ignoreComponents[pathIndex]
 }
 
-func ProcessIgnoredBackwardCompatibilityErrors(level int, errs []BackwardCompatibilityError, ignoreFile string) ([]BackwardCompatibilityError, error) {
+func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs []BackwardCompatibilityError, ignoreFile string) ([]BackwardCompatibilityError, error) {
 	result := make([]BackwardCompatibilityError, 0)
 
 	ignore, err := os.Open(ignoreFile)
