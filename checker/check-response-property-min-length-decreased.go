@@ -34,12 +34,13 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 							minLengthDiff.To != nil {
 							if IsDecreasedValue(minLengthDiff) {
 								result = append(result, BackwardCompatibilityError{
-									Id:        "response-body-min-length-decreased",
-									Level:     ERR,
-									Text:      fmt.Sprintf(config.i18n("response-body-min-length-decreased"), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          "response-body-min-length-decreased",
+									Level:       ERR,
+									Text:        fmt.Sprintf(config.i18n("response-body-min-length-decreased"), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 						}
@@ -65,12 +66,13 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-property-min-length-decreased",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-min-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-property-min-length-decreased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-property-min-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

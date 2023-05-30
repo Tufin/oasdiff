@@ -42,12 +42,13 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 							continue
 						}
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-property-became-required",
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(changedRequiredPropertyName)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-property-became-required",
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(changedRequiredPropertyName)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 				}
@@ -71,12 +72,13 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 								return
 							}
 							result = append(result, BackwardCompatibilityError{
-								Id:        "request-property-became-required",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "request-property-became-required",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					})

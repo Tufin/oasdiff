@@ -68,7 +68,7 @@ func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *Retu
 		}
 	}
 
-	if inputFlags.checkBreaking {
+	if inputFlags.checkBreaking || inputFlags.changelog {
 		diffEmpty, returnError := handleBreakingChanges(stdout, diffReport, operationsSources, inputFlags)
 		return failEmpty(inputFlags.failOnDiff, diffEmpty), returnError
 	}

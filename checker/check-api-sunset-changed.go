@@ -28,12 +28,13 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			if operationDiff.ExtensionsDiff != nil && operationDiff.ExtensionsDiff.Deleted != nil {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "sunset-deleted",
-					Level:     ERR,
-					Text:      config.i18n("sunset-deleted"),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          "sunset-deleted",
+					Level:       ERR,
+					Text:        config.i18n("sunset-deleted"),
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      source,
 				})
 			}
 
@@ -46,12 +47,13 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "api-deprecated-sunset-parse",
-					Level:     ERR,
-					Text:      "api sunset date can't be parsed for deprecated API",
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          "api-deprecated-sunset-parse",
+					Level:       ERR,
+					Text:        "api sunset date can't be parsed for deprecated API",
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      source,
 				})
 				continue
 			}
@@ -59,12 +61,13 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			baseDate, err := diff.GetSunsetDate(opBase.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "api-deprecated-sunset-parse",
-					Level:     ERR,
-					Text:      "api sunset date can't be parsed for deprecated API",
-					Operation: operation,
-					Path:      path,
-					Source:    (*operationsSources)[opBase],
+					Id:          "api-deprecated-sunset-parse",
+					Level:       ERR,
+					Text:        "api sunset date can't be parsed for deprecated API",
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      (*operationsSources)[opBase],
 				})
 				continue
 			}
@@ -75,12 +78,13 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "parsing-error",
-					Level:     ERR,
-					Text:      fmt.Sprintf("parsing error %s", err.Error()),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          "parsing-error",
+					Level:       ERR,
+					Text:        fmt.Sprintf("parsing error %s", err.Error()),
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      source,
 				})
 				continue
 			}
@@ -90,12 +94,13 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			if baseDate.After(date) && days < deprecationDays {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "api-sunset-date-changed-too-small",
-					Level:     ERR,
-					Text:      fmt.Sprintf(config.i18n("api-sunset-date-changed-too-small"), baseDate, date, baseDate, deprecationDays),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          "api-sunset-date-changed-too-small",
+					Level:       ERR,
+					Text:        fmt.Sprintf(config.i18n("api-sunset-date-changed-too-small"), baseDate, date, baseDate, deprecationDays),
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      source,
 				})
 			}
 		}

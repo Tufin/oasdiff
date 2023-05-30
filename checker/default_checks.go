@@ -10,9 +10,16 @@ func GetDefaultChecks() BackwardCompatibilityCheckConfig {
 }
 
 func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
+	return getBackwardCompatibilityCheckConfig(append(defaultChecks(), includedChecks(includeChecks)...))
+}
 
+func GetAllChecks() BackwardCompatibilityCheckConfig {
+	return getBackwardCompatibilityCheckConfig(allChecks())
+}
+
+func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck) BackwardCompatibilityCheckConfig {
 	return BackwardCompatibilityCheckConfig{
-		Checks:              append(defaultChecks(), includedChecks(includeChecks)...),
+		Checks:              checks,
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
 		Localizer:           *localizations.New("en", "en"),
@@ -26,6 +33,8 @@ var optionalChecks = map[string]BackwardCompatibilityCheck{
 	"response-property-enum-value-removed":  ResponseParameterEnumValueRemovedCheck,
 	"response-mediatype-enum-value-removed": ResponseMediaTypeEnumValueRemovedCheck,
 	"request-body-enum-value-removed":       RequestBodyEnumValueRemovedCheck,
+	"api-path-added":                        APIAddedCheck,
+	"api-path-deprecated":                   APIDeprecatedCheck,
 }
 
 func ValidateIncludeChecks(includeChecks utils.StringList) utils.StringList {
@@ -113,4 +122,12 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyMinDecreasedCheck,
 		RequestParameterDefaultValueChanged,
 	}
+}
+
+func allChecks() []BackwardCompatibilityCheck {
+	checks := defaultChecks()
+	for _, v := range optionalChecks {
+		checks = append(checks, v)
+	}
+	return checks
 }

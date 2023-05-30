@@ -10,8 +10,13 @@ import (
 )
 
 func handleBreakingChanges(stdout io.Writer, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, inputFlags *InputFlags) (bool, *ReturnError) {
+	var c checker.BackwardCompatibilityCheckConfig
+	if inputFlags.checkBreaking {
+		c = checker.GetChecks(inputFlags.includeChecks)
+	} else {
+		c = checker.GetAllChecks()
+	}
 
-	c := checker.GetChecks(inputFlags.includeChecks)
 	c.Localizer = *localizations.New(inputFlags.lang, "en")
 
 	errs, returnErr := getBreakingChanges(c, diffReport, operationsSources, inputFlags.warnIgnoreFile, inputFlags.errIgnoreFile)

@@ -31,12 +31,13 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						minItemsDiff.To != nil {
 						if IsIncreasedValue(minItemsDiff) {
 							result = append(result, BackwardCompatibilityError{
-								Id:        "request-body-min-items-increased",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("request-body-min-items-increased"), ColorizedValue(minItemsDiff.To)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "request-body-min-items-increased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("request-body-min-items-increased"), ColorizedValue(minItemsDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					}
@@ -61,12 +62,13 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						}
 
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-property-min-items-increased",
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n("request-property-min-items-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-property-min-items-increased",
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n("request-property-min-items-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					})
 			}

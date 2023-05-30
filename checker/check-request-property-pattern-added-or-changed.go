@@ -39,23 +39,25 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 
 						if patternDiff.From == "" {
 							result = append(result, BackwardCompatibilityError{
-								Id:        "request-property-pattern-added",
-								Level:     WARN,
-								Text:      fmt.Sprintf(config.i18n("request-property-pattern-added"), patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Comment:   config.i18n("pattern-changed-warn-comment"),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "request-property-pattern-added",
+								Level:       WARN,
+								Text:        fmt.Sprintf(config.i18n("request-property-pattern-added"), patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Comment:     config.i18n("pattern-changed-warn-comment"),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						} else {
 							result = append(result, BackwardCompatibilityError{
-								Id:        "request-property-pattern-changed",
-								Level:     WARN,
-								Text:      fmt.Sprintf(config.i18n("request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
-								Comment:   config.i18n("pattern-changed-warn-comment"),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "request-property-pattern-changed",
+								Level:       WARN,
+								Text:        fmt.Sprintf(config.i18n("request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
+								Comment:     config.i18n("pattern-changed-warn-comment"),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					})

@@ -70,12 +70,13 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					}
 
 					result = append(result, BackwardCompatibilityError{
-						Id:        "request-parameter-type-changed",
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n("request-parameter-type-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "request-parameter-type-changed",
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n("request-parameter-type-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

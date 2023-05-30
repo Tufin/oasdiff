@@ -37,12 +37,13 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 
 					if paramDiff.SchemaDiff.EnumDiff != nil && paramDiff.SchemaDiff.EnumDiff.EnumAdded {
 						result = append(result, BackwardCompatibilityError{
-							Id:        requestHeaderPropertyBecameEnumId,
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          requestHeaderPropertyBecameEnumId,
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 
@@ -55,12 +56,13 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        requestHeaderPropertyBecameEnumId,
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          requestHeaderPropertyBecameEnumId,
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

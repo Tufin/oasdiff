@@ -27,6 +27,7 @@ type InputFlags struct {
 	summary                  bool
 	breakingOnly             bool
 	checkBreaking            bool
+	changelog                bool
 	warnIgnoreFile           string
 	errIgnoreFile            string
 	deprecationDays          int
@@ -67,6 +68,7 @@ func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 	flags.BoolVar(&inputFlags.summary, "summary", false, "display a summary of the changes instead of the full diff")
 	flags.BoolVar(&inputFlags.breakingOnly, "breaking-only", false, "display breaking changes only (deprecated, use 'check-breaking' instead)")
 	flags.BoolVar(&inputFlags.checkBreaking, "check-breaking", false, "check for breaking changes")
+	flags.BoolVar(&inputFlags.changelog, "changelog", false, "output changelog")
 	flags.StringVar(&inputFlags.warnIgnoreFile, "warn-ignore", "", "the configuration file for ignoring warnings with '-check-breaking'")
 	flags.StringVar(&inputFlags.errIgnoreFile, "err-ignore", "", "the configuration file for ignoring errors with '-check-breaking'")
 	flags.IntVar(&inputFlags.deprecationDays, "deprecation-days", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
@@ -101,7 +103,7 @@ func isExcludeEndpoints(inputFlags *InputFlags) bool {
 func validateFormatFlag(inputFlags *InputFlags) *ReturnError {
 	var supportedFormats utils.StringSet
 
-	if inputFlags.checkBreaking {
+	if inputFlags.checkBreaking || inputFlags.changelog {
 		if inputFlags.format == "" {
 			inputFlags.format = "text"
 		}
@@ -144,6 +146,14 @@ func validateFlags(inputFlags *InputFlags) *ReturnError {
 		}
 	}
 
+	if inputFlags.checkBreaking && inputFlags.changelog {
+		return getErrInvalidFlags(fmt.Errorf("\"check-breaking\" and \"changelog\" cannot be used simultaneously"))
+	}
+
+	if len(inputFlags.includeChecks) > 0 && !inputFlags.checkBreaking {
+		return getErrInvalidFlags(fmt.Errorf("\"include-checks\" is relevant only with \"-check-breaking\""))
+	}
+
 	if invalidChecks := checker.ValidateIncludeChecks(inputFlags.includeChecks); len(invalidChecks) > 0 {
 		return getErrInvalidFlags(fmt.Errorf("invalid include-checks=%s", inputFlags.includeChecks))
 	}
@@ -168,7 +178,7 @@ func generateConfig(inputFlags *InputFlags) *diff.Config {
 	config.MatchPathParams = inputFlags.matchPathParams
 	config.SetExcludeElements(inputFlags.excludeElements.ToStringSet(), inputFlags.excludeExamples, inputFlags.excludeDescription, inputFlags.excludeEndpoints)
 
-	if inputFlags.checkBreaking {
+	if inputFlags.checkBreaking || inputFlags.changelog {
 		config.IncludeExtensions.Add(checker.XStabilityLevelExtension)
 		config.IncludeExtensions.Add(diff.SunsetExtension)
 		config.IncludeExtensions.Add(checker.XExtensibleEnumExtension)

@@ -30,13 +30,14 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 					if maxLengthDiff.From == nil &&
 						maxLengthDiff.To != nil {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-body-max-length-set",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-body-max-length-set"), ColorizedValue(maxLengthDiff.To)),
-							Comment:   config.i18n("request-body-max-length-set-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-body-max-length-set",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-body-max-length-set"), ColorizedValue(maxLengthDiff.To)),
+							Comment:     config.i18n("request-body-max-length-set-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 				}
@@ -57,13 +58,14 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						}
 
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-property-max-length-set",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-property-max-length-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
-							Comment:   config.i18n("request-property-max-length-set-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-property-max-length-set",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-property-max-length-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+							Comment:     config.i18n("request-property-max-length-set-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					})
 			}

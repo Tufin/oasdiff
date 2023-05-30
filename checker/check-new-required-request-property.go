@@ -32,12 +32,13 @@ func NewRequiredRequestPropertyCheck(diffReport *diff.Diff, operationsSources *d
 							slices.Contains(parent.Revision.Value.Required, propertyName) {
 							source := (*operationsSources)[operationItem.Revision]
 							result = append(result, BackwardCompatibilityError{
-								Id:        "new-required-request-property",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("new-required-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "new-required-request-property",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("new-required-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					})

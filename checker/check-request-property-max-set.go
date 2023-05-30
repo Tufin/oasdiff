@@ -30,13 +30,14 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					if maxDiff.From == nil &&
 						maxDiff.To != nil {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-body-max-set",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-body-max-set"), ColorizedValue(maxDiff.To)),
-							Comment:   config.i18n("request-body-max-set-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-body-max-set",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-body-max-set"), ColorizedValue(maxDiff.To)),
+							Comment:     config.i18n("request-body-max-set-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 				}
@@ -57,13 +58,14 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						}
 
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-property-max-set",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-property-max-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
-							Comment:   config.i18n("request-property-max-set-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-property-max-set",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-property-max-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+							Comment:     config.i18n("request-property-max-set-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					})
 			}

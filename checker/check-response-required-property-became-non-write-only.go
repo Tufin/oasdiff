@@ -55,13 +55,14 @@ func ResponseRequiredPropertyBecameNonWriteOnlyCheck(diffReport *diff.Diff, oper
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-required-property-became-not-write-only",
-								Level:     WARN,
-								Text:      fmt.Sprintf(config.i18n("response-required-property-became-not-write-only"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Comment:   config.i18n("response-required-property-became-not-write-only-comment"),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-required-property-became-not-write-only",
+								Level:       WARN,
+								Text:        fmt.Sprintf(config.i18n("response-required-property-became-not-write-only"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Comment:     config.i18n("response-required-property-became-not-write-only-comment"),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

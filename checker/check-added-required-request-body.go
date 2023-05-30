@@ -21,12 +21,13 @@ func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *dif
 				operationItem.Revision.RequestBody.Value.Required {
 				source := (*operationsSources)[operationItem.Revision]
 				result = append(result, BackwardCompatibilityError{
-					Id:        "added-required-request-body",
-					Level:     ERR,
-					Text:      config.i18n("added-required-request-body"),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          "added-required-request-body",
+					Level:       ERR,
+					Text:        config.i18n("added-required-request-body"),
+					Operation:   operation,
+					OperationId: operationItem.Revision.OperationID,
+					Path:        path,
+					Source:      source,
 				})
 			}
 		}

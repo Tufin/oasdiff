@@ -27,12 +27,13 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 				for _, paramName := range paramItems {
 					source := (*operationsSources)[operationItem.Revision]
 					result = append(result, BackwardCompatibilityError{
-						Id:        "new-request-path-parameter",
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n("new-request-path-parameter"), ColorizedValue(paramName)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "new-request-path-parameter",
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n("new-request-path-parameter"), ColorizedValue(paramName)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

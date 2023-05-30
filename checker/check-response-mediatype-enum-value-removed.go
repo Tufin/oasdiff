@@ -45,12 +45,13 @@ func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 
 					for _, enumVal := range enumDiff.Deleted {
 						result = append(result, BackwardCompatibilityError{
-							Id:        responseMediatypeEnumValueRemovedId,
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n(responseMediatypeEnumValueRemovedId), mediaType, ColorizedValue(enumVal)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          responseMediatypeEnumValueRemovedId,
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n(responseMediatypeEnumValueRemovedId), mediaType, ColorizedValue(enumVal)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 

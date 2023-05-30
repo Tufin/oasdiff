@@ -34,12 +34,13 @@ func RequestParameterBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 
 					source := (*operationsSources)[operationItem.Revision]
 					result = append(result, BackwardCompatibilityError{
-						Id:        "request-parameter-became-required",
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n("request-parameter-became-required"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "request-parameter-became-required",
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n("request-parameter-became-required"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

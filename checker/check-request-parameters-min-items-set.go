@@ -35,13 +35,14 @@ func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *
 
 					source := (*operationsSources)[operationItem.Revision]
 					result = append(result, BackwardCompatibilityError{
-						Id:        "request-parameter-min-items-set",
-						Level:     WARN,
-						Text:      fmt.Sprintf(config.i18n("request-parameter-min-items-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
-						Comment:   config.i18n("request-parameter-min-items-set-comment"),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "request-parameter-min-items-set",
+						Level:       WARN,
+						Text:        fmt.Sprintf(config.i18n("request-parameter-min-items-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
+						Comment:     config.i18n("request-parameter-min-items-set-comment"),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

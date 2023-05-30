@@ -34,12 +34,13 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 							minItemsDiff.To != nil {
 							if IsDecreasedValue(minItemsDiff) {
 								result = append(result, BackwardCompatibilityError{
-									Id:        "response-body-min-items-decreased",
-									Level:     ERR,
-									Text:      fmt.Sprintf(config.i18n("response-body-min-items-decreased"), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          "response-body-min-items-decreased",
+									Level:       ERR,
+									Text:        fmt.Sprintf(config.i18n("response-body-min-items-decreased"), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 						}
@@ -65,12 +66,13 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-property-min-items-decreased",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-min-items-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-property-min-items-decreased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-property-min-items-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

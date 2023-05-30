@@ -40,12 +40,13 @@ func RequestParameterMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSou
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, BackwardCompatibilityError{
-						Id:        "request-parameter-min-items-increased",
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n("request-parameter-min-items-increased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "request-parameter-min-items-increased",
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n("request-parameter-min-items-increased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

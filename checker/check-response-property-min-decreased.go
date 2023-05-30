@@ -34,12 +34,13 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 							minDiff.To != nil {
 							if IsDecreasedValue(minDiff) {
 								result = append(result, BackwardCompatibilityError{
-									Id:        "response-body-min-decreased",
-									Level:     ERR,
-									Text:      fmt.Sprintf(config.i18n("response-body-min-decreased"), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          "response-body-min-decreased",
+									Level:       ERR,
+									Text:        fmt.Sprintf(config.i18n("response-body-min-decreased"), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 						}
@@ -65,12 +66,13 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-property-min-decreased",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-min-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-property-min-decreased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-property-min-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

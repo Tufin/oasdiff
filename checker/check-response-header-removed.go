@@ -35,21 +35,23 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 					required := responseDiff.Base.Headers[headerName].Value.Required
 					if required {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "required-response-header-removed",
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n("required-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "required-response-header-removed",
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n("required-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					} else {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "optional-response-header-removed",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("optional-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "optional-response-header-removed",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("optional-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 				}

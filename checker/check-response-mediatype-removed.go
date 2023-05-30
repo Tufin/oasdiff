@@ -32,12 +32,13 @@ func ResponseMediaTypeRemoved(diffReport *diff.Diff, operationsSources *diff.Ope
 				}
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeDeleted {
 					result = append(result, BackwardCompatibilityError{
-						Id:        "response-media-type-removed",
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n("response-media-type-removed"), ColorizedValue(mediaType), ColorizedValue(responseStatus)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "response-media-type-removed",
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n("response-media-type-removed"), ColorizedValue(mediaType), ColorizedValue(responseStatus)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

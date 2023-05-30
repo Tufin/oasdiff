@@ -44,12 +44,13 @@ func RequestParameterDefaultValueChanged(diffReport *diff.Diff, operationsSource
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, BackwardCompatibilityError{
-						Id:        "request-parameter-default-value-changed",
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n("request-parameter-default-value-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "request-parameter-default-value-changed",
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n("request-parameter-default-value-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}
