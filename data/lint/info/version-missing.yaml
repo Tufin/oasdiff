@@ -1,0 +1,21 @@
+openapi: 3.0.1
+info:
+  title: Test API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /partner-api/test/some-method:
+    get:
+      tags:
+        - Test
+      responses:
+        "200":
+          description: Success
+  /partner-api/test/another-method:
+    get:
+      tags:
+        - Test
+      responses:
+        "200":
+          description: Success
