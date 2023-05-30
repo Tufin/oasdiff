@@ -188,7 +188,9 @@ func TestBreaking_DeprecatedOperation(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.Empty(t, errs)
+	require.Len(t, errs, 1)
+	// non-breaking change detected
+	require.Equal(t, errs[0].Level, checker.INFO)
 }
 
 // BC: deprecating a parameter is not breaking
