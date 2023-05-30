@@ -34,7 +34,6 @@ var optionalChecks = map[string]BackwardCompatibilityCheck{
 	"response-mediatype-enum-value-removed": ResponseMediaTypeEnumValueRemovedCheck,
 	"request-body-enum-value-removed":       RequestBodyEnumValueRemovedCheck,
 	"api-path-added":                        APIAddedCheck,
-	"api-path-deprecated":                   APIDeprecatedCheck,
 }
 
 func ValidateIncludeChecks(includeChecks utils.StringList) utils.StringList {

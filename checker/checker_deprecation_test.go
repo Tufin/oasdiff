@@ -10,6 +10,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
@@ -22,8 +23,17 @@ func getDeprecationFile(file string) string {
 	return fmt.Sprintf("../data/deprecation/%s", file)
 }
 
+func singleCheckConfig(c checker.BackwardCompatibilityCheck) checker.BackwardCompatibilityCheckConfig {
+	return checker.BackwardCompatibilityCheckConfig{
+		Checks:              []checker.BackwardCompatibilityCheck{c},
+		MinSunsetBetaDays:   31,
+		MinSunsetStableDays: 180,
+		Localizer:           *localizations.New("en", "en"),
+	}
+}
+
 // BC: deleting an operation before sunset date is breaking
-func TestBreaking_DeprecationEarlySunset(t *testing.T) {
+func TestBreaking_RemoveBeforeSunset(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
@@ -33,7 +43,7 @@ func TestBreaking_DeprecationEarlySunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-removed-before-sunset", errs[0].Id)
@@ -49,7 +59,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NoError(t, err)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
@@ -67,7 +77,7 @@ func TestBreaking_DeprecationPast(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -82,7 +92,7 @@ func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	c := checker.GetDefaultChecks()
+	c := singleCheckConfig(checker.APIDeprecationCheck)
 	c.MinSunsetStableDays = 10
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 	require.NotEmpty(t, errs)
@@ -101,7 +111,7 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -120,7 +130,7 @@ func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -136,8 +146,10 @@ func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.NotEmpty(t, errs)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
+	require.Len(t, errs, 2)
+	require.Equal(t, errs[0].Id, "api-path-removed-without-deprecation")
+	require.Equal(t, errs[1].Id, "api-path-removed-without-deprecation")
 }
 
 // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for draft level
@@ -153,7 +165,7 @@ func TestBreaking_DeprecationForDraft(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -172,7 +184,7 @@ func TestBreaking_RemovedPathForDraft(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -190,8 +202,10 @@ func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.NotEmpty(t, errs)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
+	require.Len(t, errs, 2)
+	require.Equal(t, errs[0].Id, "api-path-removed-without-deprecation")
+	require.Equal(t, errs[1].Id, "api-path-removed-without-deprecation")
 }
 
 func toJson(t *testing.T, value string) json.RawMessage {
@@ -212,7 +226,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	c := checker.GetDefaultChecks()
+	c := singleCheckConfig(checker.APIDeprecationCheck)
 	c.MinSunsetStableDays = 10
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 	require.NotEmpty(t, errs)
@@ -233,10 +247,12 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	c := checker.GetDefaultChecks()
+	c := singleCheckConfig(checker.APIDeprecationCheck)
 	c.MinSunsetStableDays = 10
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
-	require.Empty(t, errs)
+	require.Len(t, errs, 1)
+	// only a non-breaking change detected
+	require.Equal(t, errs[0].Level, checker.INFO)
 }
 
 // BC: deleting a path after sunset date of all contained operations is not breaking
@@ -250,7 +266,7 @@ func TestBreaking_DeprecationPathPast(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -265,7 +281,7 @@ func TestBreaking_DeprecationPathMixed(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-path-removed-before-sunset", errs[0].Id)
@@ -282,8 +298,48 @@ func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-path-removed-before-sunset", errs[0].Id)
+}
+
+// CL: path operations that became deprecated are detected
+func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
+	s1, err := open("../data/deprecation/base.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/deprecation/deprecated-future.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+
+	require.Equal(t, "api-path-deprecated", errs[0].Id)
+	require.Equal(t, "GET", errs[0].Operation)
+	require.Equal(t, "/api/test", errs[0].Path)
+}
+
+// CL: path operations that was re-activated are detected
+func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
+	s1, err := open("../data/deprecation/deprecated-future.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/deprecation/base.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+
+	require.Equal(t, "api-path-reactivated", errs[0].Id)
+	require.Equal(t, "GET", errs[0].Operation)
+	require.Equal(t, "/api/test", errs[0].Path)
 }
