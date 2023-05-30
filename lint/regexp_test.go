@@ -13,6 +13,8 @@ func TestRegexCheck(t *testing.T) {
 	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.RegexCheck}), source, loadFrom(t, source))
 	require.Len(t, errs, 1)
 	require.Equal(t, "invalid-regex-pattern", errs[0].Id)
+	require.Equal(t, lint.LEVEL_ERROR, errs[0].Level)
+	require.Equal(t, source, errs[0].Source)
 }
 
 func TestRegexCheck_Embedded(t *testing.T) {
@@ -22,6 +24,8 @@ func TestRegexCheck_Embedded(t *testing.T) {
 	require.Len(t, errs, 7)
 	for i := range errs {
 		require.Equal(t, "invalid-regex-pattern", errs[i].Id)
+		require.Equal(t, lint.LEVEL_ERROR, errs[i].Level)
+		require.Equal(t, source, errs[i].Source)
 	}
 }
 

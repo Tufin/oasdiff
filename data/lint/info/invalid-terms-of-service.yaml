@@ -2,6 +2,7 @@ openapi: 3.0.1
 info:
   title: Test API
   version: v1
+  termsOfService: "bla"
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
