@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func NewRequiredRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -28,18 +28,23 @@ func NewRequiredRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSo
 				for _, paramName := range paramItems {
 					for _, param := range operationItem.Revision.Parameters {
 						if param.Value.Name == paramName {
-							if param.Value.Required {
-								source := (*operationsSources)[operationItem.Revision]
-								result = append(result, BackwardCompatibilityError{
-									Id:          "new-required-request-parameter",
-									Level:       ERR,
-									Text:        fmt.Sprintf(config.i18n("new-required-request-parameter"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      source,
-								})
+							id := "new-required-request-parameter"
+							level := ERR
+							if !param.Value.Required {
+								id = "new-optional-request-parameter"
+								level = INFO
 							}
+							source := (*operationsSources)[operationItem.Revision]
+							result = append(result, BackwardCompatibilityError{
+								Id:          id,
+								Level:       level,
+								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+
 							break
 						}
 					}

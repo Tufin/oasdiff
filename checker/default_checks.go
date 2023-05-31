@@ -78,7 +78,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponseSuccessStatusRemoved,
 		ResponseMediaTypeRemoved,
 		NewRequestPathParameterCheck,
-		NewRequiredRequestNonPathParameterCheck,
+		NewRequestNonPathParameterCheck,
 		NewRequiredRequestHeaderPropertyCheck,
 		ResponseRequiredPropertyRemovedCheck,
 		UncheckedRequestAllOfWarnCheck,
