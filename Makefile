@@ -19,7 +19,6 @@ deps:  ## Download go module dependencies
 	go mod download
 	go mod tidy
 
-
 .PHONY: lint
 lint: ## Run linter
 	golangci-lint run
