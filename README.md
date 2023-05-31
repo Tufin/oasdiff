@@ -6,7 +6,13 @@
 [![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
-![breaking](logo/fragile-50.png "Breaking")
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="logo/Title.svg" alt="oasdiff Logo">
+    <source media="(prefers-color-scheme: light)" srcset="logo/TitleLight.svg" alt="oasdiff Logo">
+    <img width=350 src="logo/Title.svg" alt="oasdiff Logo">
+  </picture>
+</div>
 
 Command-line and Go package to compare and detect breaking changes in OpenAPI specs.
 
@@ -337,4 +343,4 @@ References are normally resolved automatically when you load the spec. In other 
 If you have other ideas, please [let us know](https://github.com/Tufin/oasdiff/discussions/new?category=ideas).
 
 ## Credits
-This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi) 
+This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi).
