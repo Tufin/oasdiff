@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/tufin/oasdiff/diff"
@@ -49,6 +50,10 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					CheckModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+							if propertyDiff == nil || propertyDiff.Revision == nil || propertyDiff.Revision.Value == nil {
+								return
+							}
+
 							if propertyDiff.Revision.Value.ReadOnly {
 								return
 							}
