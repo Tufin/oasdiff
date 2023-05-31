@@ -587,8 +587,8 @@ func TestBreaking_ModifyRequiredRequiredParamDefaultValue(t *testing.T) {
 func TestBreaking_SchemaRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
-	s1.Spec.Paths =  map[string]*openapi3.PathItem{};
-	s2.Spec.Paths =  map[string]*openapi3.PathItem{};
+	s1.Spec.Paths = map[string]*openapi3.PathItem{}
+	s2.Spec.Paths = map[string]*openapi3.PathItem{}
 
 	for k := range s2.Spec.Components.Schemas {
 		delete(s2.Spec.Components.Schemas, k)
@@ -596,7 +596,7 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)
-	checks := checker.GetChecks(utils.StringList{"api-schema-removed"});
+	checks := checker.GetChecks(utils.StringList{"api-schema-removed"})
 	errs := checker.CheckBackwardCompatibility(checks, d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.Level)
