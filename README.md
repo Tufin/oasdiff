@@ -1,4 +1,3 @@
-# OpenAPI Diff
 
 [![CI](https://github.com/Tufin/oasdiff/workflows/go/badge.svg)](https://github.com/Tufin/oasdiff/actions)
 [![codecov](https://codecov.io/gh/tufin/oasdiff/branch/main/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/tufin/oasdiff)
@@ -6,17 +5,12 @@
 [![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 
-<div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="logo/Title.svg" alt="oasdiff Logo">
-    <source media="(prefers-color-scheme: light)" srcset="logo/TitleLight.svg" alt="oasdiff Logo">
-    <img width=350 src="logo/Title.svg" alt="oasdiff Logo">
-  </picture>
-</div>
+![image](https://github.com/yonatanmgr/oasdiff/assets/31913495/4fc67b8f-a7d6-4417-bebe-9ab2c7935a1e)
+
+# OpenAPI Diff
 
 Command-line and Go package to compare and detect breaking changes in OpenAPI specs.
 
----
 
 ## Try it
 ```
