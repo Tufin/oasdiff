@@ -69,6 +69,7 @@ You can use the `-include-checks` flag to include the following optional checks:
 - response-non-success-status-removed
 - api-operation-id-removed
 - api-tag-removed
+- api-schema-removed
 - response-property-enum-value-removed
 - response-mediatype-enum-value-removed
 - request-body-enum-value-removed
