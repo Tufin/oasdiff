@@ -14,14 +14,14 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 		return result
 	}
 
-	for _, pathItem := range diffReport.ComponentsDiff.SchemasDiff.Deleted {
+	for _, deletedSchema := range diffReport.ComponentsDiff.SchemasDiff.Deleted {
 		result = append(result, BackwardCompatibilityError{
 			Id:        apiSchemasRemovedCheckId,
 			Level:     ERR,
 			Text:      config.i18n(apiSchemasRemovedCheckId),
-			Operation: "",
-			Path:      pathItem,
-			Source:    "",
+			Operation: "Unknown",
+			Path:      deletedSchema,
+			Source:    "components.schemas." + deletedSchema,
 		})
 	}
 	return result
