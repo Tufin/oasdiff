@@ -5,10 +5,10 @@ import (
 )
 
 const (
-	apiSchemasRemovedCheckId = "api-model-removed"
+	apiSchemasRemovedCheckId = "api-schema-removed"
 )
 
-func APIOperationSchemasRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.ComponentsDiff.SchemasDiff == nil {
 		return result
