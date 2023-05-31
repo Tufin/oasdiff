@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/tufin/oasdiff/diff"
