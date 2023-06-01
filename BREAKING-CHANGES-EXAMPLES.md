@@ -56,6 +56,7 @@ These examples are automatically generated from unit tests.
 [removing an existing required response header is breaking as error](checker/checker_breaking_test.go?plain=1#L223)  
 [removing an existing response with non-successful status is breaking (optional)](checker/checker_breaking_test.go?plain=1#L260)  
 [removing an existing response with successful status is breaking](checker/checker_breaking_test.go?plain=1#L242)  
+[removing an schema object from components is breaking (optional)](checker/checker_breaking_test.go?plain=1#L586)  
 [removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not alpha stability level](checker/checker_deprecation_test.go?plain=1#L127)  
 [removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not draft stability level](checker/checker_deprecation_test.go?plain=1#L179)  
 [removing/updating a property enum in response is breaking (optional)](checker/checker_breaking_test.go?plain=1#L318)  
