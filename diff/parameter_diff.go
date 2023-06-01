@@ -106,7 +106,7 @@ func getParameterDiffInternal(config *Config, state *state, param1, param2 *open
 
 // Patch applies the patch to a parameter
 func (diff *ParameterDiff) Patch(parameter *openapi3.Parameter) error {
-	
+
 	if err := diff.DescriptionDiff.patchString(&parameter.Description); err != nil {
 		return err
 	}
