@@ -15,7 +15,7 @@ Steps to reproduce the behavior:
 1. Run `oasdiff  <flags> -base <spec1> -revision <spec2>`
 2. With <spec1-URL> or attachment 
 3. And <spec2-URL> or attachment
-4. Recieve <snippet of incorrect diff>
+4. Receive <snippet of incorrect diff>
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
