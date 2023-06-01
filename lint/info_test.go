@@ -42,7 +42,7 @@ func TestInfo_InvalidTOS(t *testing.T) {
 	const source = "../data/lint/info/invalid-terms-of-service.yaml"
 	errs := lint.Run(*lint.NewConfig([]lint.Check{lint.InfoCheck}), source, loadFrom(t, source))
 	require.Len(t, errs, 1)
-	require.Equal(t, "info-invalud-terms-of-service", errs[0].Id)
+	require.Equal(t, "info-invalid-terms-of-service", errs[0].Id)
 	require.Equal(t, lint.LEVEL_ERROR, errs[0].Level)
 	require.Equal(t, "terms of service must be in the format of a URL: bla", errs[0].Text)
 	require.Equal(t, source, errs[0].Source)

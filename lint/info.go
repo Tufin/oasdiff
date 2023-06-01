@@ -48,7 +48,7 @@ func InfoCheck(source string, spec *load.OpenAPISpecInfo) []*Error {
 	if tos := spec.Spec.Info.TermsOfService; tos != "" {
 		if _, err := url.ParseRequestURI(tos); err != nil {
 			result = append(result, &Error{
-				Id:     "info-invalud-terms-of-service",
+				Id:     "info-invalid-terms-of-service",
 				Level:  LEVEL_ERROR,
 				Text:   fmt.Sprintf("terms of service must be in the format of a URL: %s", tos),
 				Source: source,
