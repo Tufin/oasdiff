@@ -1,6 +1,8 @@
 package checker
 
 import (
+	"fmt"
+
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -18,10 +20,10 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 		result = append(result, BackwardCompatibilityError{
 			Id:        apiSchemasRemovedCheckId,
 			Level:     ERR,
-			Text:      config.i18n(apiSchemasRemovedCheckId),
-			Operation: "Unknown",
-			Path:      deletedSchema,
-			Source:    "components.schemas." + deletedSchema,
+			Text:      fmt.Sprintf(config.i18n(apiSchemasRemovedCheckId), ColorizedValue(deletedSchema)),
+			Operation: "N/A",
+			Path:      "",
+			Source:    "components.schemas." + deletedSchema, // TODO: get the file name
 		})
 	}
 	return result
