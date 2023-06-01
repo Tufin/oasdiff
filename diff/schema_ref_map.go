@@ -31,17 +31,6 @@ func (schemaRefMap schemaRefMap) delete(ref string) {
 	}
 }
 
-func (schemaRefMapOrig schemaRefMap) copy() schemaRefMap {
-	result := schemaRefMap{}
-	for k, v := range schemaRefMapOrig {
-		result[k] = &refWithCount{
-			schemaRef: v.schemaRef,
-			count:     v.count,
-		}
-	}
-	return result
-}
-
 func toSchemaRefMap(schemaRefs openapi3.SchemaRefs, filter schemaRefsFilter) schemaRefMap {
 	result := schemaRefMap{}
 	for _, schemaRef := range schemaRefs {
