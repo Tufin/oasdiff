@@ -22,6 +22,10 @@ deps:  ## Download go module dependencies
 .PHONY: lint
 lint: ## Run linter
 	golangci-lint run
+	
+.PHONY: localize
+localize: ## Run localizer
+	go generate go-localize -input localizations_src -output localizations 
 
 .PHONY: devtools
 devtools:  ## Install dev tools
