@@ -7,8 +7,6 @@
 
 ![image](https://github.com/yonatanmgr/oasdiff/assets/31913495/4fc67b8f-a7d6-4417-bebe-9ab2c7935a1e)
 
-# OpenAPI Diff
-
 Command-line and Go package to compare and detect breaking changes in OpenAPI specs.
 
 
