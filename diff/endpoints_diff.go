@@ -118,7 +118,9 @@ func getEndpointsDiffInternal(config *Config, state *state, paths1, paths2 opena
 	}
 
 	for path, pathItemPair := range otherPaths {
-		result.addModifiedPaths(config, state, path, pathItemPair)
+		if err := result.addModifiedPaths(config, state, path, pathItemPair); err != nil {
+			return nil, err
+		}
 	}
 
 	return result, nil

@@ -77,10 +77,3 @@ func getErrCantProcessIgnoreFile(what string, err error) *ReturnError {
 		Code: 121,
 	}
 }
-
-func getErrLintFailed() *ReturnError {
-	return &ReturnError{
-		Err:  nil,
-		Code: 130,
-	}
-}
