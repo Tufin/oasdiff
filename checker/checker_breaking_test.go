@@ -603,5 +603,7 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 	}
 	require.NotEmpty(t, errs)
 	require.Equal(t, "api-schema-removed", errs[0].Id)
+	require.Equal(t, "removed the schema 'network-policies' from openapi components", errs[0].Text)
 	require.Equal(t, "api-schema-removed", errs[1].Id)
+	require.Equal(t, "removed the schema 'rules' from openapi components", errs[1].Text)
 }
