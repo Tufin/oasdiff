@@ -63,6 +63,9 @@ jobs:
     - run: go fmt ./...
     - run: git --no-pager diff --exit-code
 
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v3
+
     - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
     
       env:
