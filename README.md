@@ -55,6 +55,8 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
     	path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format
   -breaking-only
     	display breaking changes only (deprecated, use 'check-breaking' instead)
+  -changelog
+    	output changelog
   -check-breaking
     	check for breaking changes
   -composed
