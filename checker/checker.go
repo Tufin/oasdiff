@@ -94,6 +94,8 @@ func (r *BackwardCompatibilityError) Error() string {
 		levelName = "error"
 	case WARN:
 		levelName = "warning"
+	case INFO:
+		levelName = "info"
 	default:
 		levelName = "issue"
 	}
@@ -107,6 +109,8 @@ func (r *BackwardCompatibilityError) LocalizedError(l localizations.Localizer) s
 		levelName = "error"
 	case WARN:
 		levelName = "warning"
+	case INFO:
+		levelName = "info"
 	default:
 		levelName = "issue"
 	}
@@ -136,6 +140,8 @@ func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) 
 		levelName = color.InRed("error")
 	case WARN:
 		levelName = color.InPurple("warning")
+	case INFO:
+		levelName = color.InBlue("info")
 	default:
 		levelName = color.InGray("issue")
 	}
