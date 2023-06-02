@@ -177,19 +177,18 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: deprecating an operation is not breaking
+// CL: deprecating an operation with sunset greater than min
 func TestBreaking_DeprecatedOperation(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
 	s2.Spec.Paths[installCommandPath].Get.Deprecated = true
-	s2.Spec.Paths[installCommandPath].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(200).String())
+	s2.Spec.Paths[installCommandPath].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(180).String())
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	// non-breaking change detected
 	require.Equal(t, errs[0].Level, checker.INFO)
 }
 
