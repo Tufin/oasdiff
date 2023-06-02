@@ -9,9 +9,9 @@ request-property-pattern-added: "added the pattern '%s' for the request property
 request-property-pattern-changed: "changed the pattern for the request property %s from '%s' to '%s'"
 api-deprecated-sunset-parse: api sunset date can't be parsed for deprecated API
 api-sunset-date-too-small: "api sunset date %s is too small, must be at least %d days from now"
-api-path-added: api path added
-api-path-deprecated: api path deprecated
-api-path-reactivated: api path reactivated
+endpoint-added: endpoint added
+endpoint-deprecated: endpoint deprecated
+endpoint-reactivated: endpoint reactivated
 api-path-removed-without-deprecation: api path removed without deprecation
 api-path-removed-before-sunset: api path removed before the sunset date %s
 api-removed-without-deprecation: api removed without deprecation

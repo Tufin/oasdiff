@@ -13,9 +13,9 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 
 	appendErr := func(path, opName string, opConfig *openapi3.Operation) {
 		result = append(result, BackwardCompatibilityError{
-			Id:          "api-path-added",
+			Id:          "endpoint-added",
 			Level:       INFO,
-			Text:        config.i18n("api-path-added"),
+			Text:        config.i18n("endpoint-added"),
 			Operation:   opName,
 			OperationId: opConfig.OperationID,
 			Path:        path,

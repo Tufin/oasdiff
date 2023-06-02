@@ -319,7 +319,7 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
-	require.Equal(t, "api-path-deprecated", errs[0].Id)
+	require.Equal(t, "endpoint-deprecated", errs[0].Id)
 	require.Equal(t, "GET", errs[0].Operation)
 	require.Equal(t, "/api/test", errs[0].Path)
 }
@@ -339,7 +339,7 @@ func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
-	require.Equal(t, "api-path-reactivated", errs[0].Id)
+	require.Equal(t, "endpoint-reactivated", errs[0].Id)
 	require.Equal(t, "GET", errs[0].Operation)
 	require.Equal(t, "/api/test", errs[0].Path)
 }

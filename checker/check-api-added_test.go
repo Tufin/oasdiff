@@ -23,11 +23,11 @@ func TestApiAdded_DetectsNewPathsAndNewOperations(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
 
-	require.Equal(t, "api-path-added", errs[0].Id)
+	require.Equal(t, "endpoint-added", errs[0].Id)
 	require.Equal(t, "POST", errs[0].Operation)
 	require.Equal(t, "/api/test2", errs[0].Path)
 
-	require.Equal(t, "api-path-added", errs[1].Id)
+	require.Equal(t, "endpoint-added", errs[1].Id)
 	require.Equal(t, "GET", errs[1].Operation)
 	require.Equal(t, "/api/test3", errs[1].Path)
 }
@@ -47,7 +47,7 @@ func TestApiAdded_DetectsModifiedPathsWithPathParam(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
-	require.Equal(t, "api-path-added", errs[0].Id)
+	require.Equal(t, "endpoint-added", errs[0].Id)
 	require.Equal(t, "POST", errs[0].Operation)
 	require.Equal(t, "/api/test/{id}", errs[0].Path)
 }

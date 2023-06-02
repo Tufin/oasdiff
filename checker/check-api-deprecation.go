@@ -29,9 +29,9 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			if operationDiff.DeprecatedDiff.To == nil || operationDiff.DeprecatedDiff.To == false {
 				// not breaking changes
 				result = append(result, BackwardCompatibilityError{
-					Id:          "api-path-reactivated",
+					Id:          "endpoint-reactivated",
 					Level:       INFO,
-					Text:        config.i18n("api-path-reactivated"),
+					Text:        config.i18n("endpoint-reactivated"),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -89,9 +89,9 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			// not breaking changes
 			result = append(result, BackwardCompatibilityError{
-				Id:          "api-path-deprecated",
+				Id:          "endpoint-deprecated",
 				Level:       INFO,
-				Text:        config.i18n("api-path-deprecated"),
+				Text:        config.i18n("endpoint-deprecated"),
 				Operation:   operation,
 				OperationId: op.OperationID,
 				Path:        path,
