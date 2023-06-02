@@ -63,7 +63,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-sunset-parse", errs[0].Id)
+	require.Equal(t, "api-path-sunset-parse", errs[0].Id)
 }
 
 // BC: deleting an operation after sunset date is not breaking

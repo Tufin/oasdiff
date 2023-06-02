@@ -141,7 +141,7 @@ func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) 
 	case WARN:
 		levelName = color.InPurple("warning")
 	case INFO:
-		levelName = color.InBlue("info")
+		levelName = color.InCyan("info")
 	default:
 		levelName = color.InGray("issue")
 	}

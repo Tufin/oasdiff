@@ -7,8 +7,8 @@ request-parameter-pattern-added: "added the pattern '%s' for the %s request para
 request-parameter-pattern-changed: "changed the pattern for the %s request parameter %s from '%s' to '%s'"
 request-property-pattern-added: "added the pattern '%s' for the request property %s"
 request-property-pattern-changed: "changed the pattern for the request property %s from '%s' to '%s'"
-api-deprecated-sunset-parse: api sunset date can't be parsed for deprecated API
-api-sunset-date-too-small: "api sunset date %s is too small, must be at least %d days from now"
+api-deprecated-sunset-parse: "api sunset date '%s' can't be parsed for deprecated API: %v"
+api-sunset-date-too-small: "api sunset date '%s' is too small, must be at least %d days from now"
 endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated

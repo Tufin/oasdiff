@@ -44,12 +44,12 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			opBase := pathItem.Base.Operations()[operation]
 
-			date, err := diff.GetSunsetDate(op.Extensions)
+			rawDate, date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
 					Id:          "api-deprecated-sunset-parse",
 					Level:       ERR,
-					Text:        "api sunset date can't be parsed for deprecated API",
+					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -58,12 +58,12 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				continue
 			}
 
-			baseDate, err := diff.GetSunsetDate(opBase.Extensions)
+			rawDate, baseDate, err := diff.GetSunsetDate(opBase.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
 					Id:          "api-deprecated-sunset-parse",
 					Level:       ERR,
-					Text:        "api sunset date can't be parsed for deprecated API",
+					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
