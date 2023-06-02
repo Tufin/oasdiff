@@ -123,3 +123,8 @@ These examples are automatically generated from unit tests.
 [removing the path without a deprecation policy and without specifying sunset date is not breaking for alpha level](checker/checker_deprecation_test.go?plain=1#L118)  
 [removing the path without a deprecation policy and without specifying sunset date is not breaking for draft level](checker/checker_deprecation_test.go?plain=1#L172)  
 [renaming a path parameter is not breaking](checker/checker_breaking_test.go?plain=1#L131)  
+
+## Examples of info-level changes for changelog
+[new paths or path operations](checker/check-api-added_test.go?plain=1#L11)  
+[path operations that became deprecated](checker/checker_deprecation_test.go?plain=1#L307)  
+[path operations that were re-activated](checker/checker_deprecation_test.go?plain=1#L327)  

@@ -304,7 +304,7 @@ func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
 	require.Equal(t, "api-path-removed-before-sunset", errs[0].Id)
 }
 
-// CL: path operations that became deprecated are detected
+// CL: path operations that became deprecated
 func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 	s1, err := open("../data/deprecation/base.yaml")
 	require.NoError(t, err)
@@ -324,7 +324,7 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 	require.Equal(t, "/api/test", errs[0].Path)
 }
 
-// CL: path operations that was re-activated are detected
+// CL: path operations that were re-activated
 func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	s1, err := open("../data/deprecation/deprecated-future.yaml")
 	require.NoError(t, err)
