@@ -38,12 +38,13 @@ func ResponseHeaderBecameOptional(diffReport *diff.Diff, operationsSources *diff
 					}
 
 					result = append(result, BackwardCompatibilityError{
-						Id:        "response-header-became-optional",
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n("response-header-became-optional"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "response-header-became-optional",
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n("response-header-became-optional"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

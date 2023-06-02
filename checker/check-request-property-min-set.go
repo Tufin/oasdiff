@@ -30,13 +30,14 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					if minDiff.From == nil &&
 						minDiff.To != nil {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-body-min-set",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-body-min-set"), ColorizedValue(minDiff.To)),
-							Comment:   config.i18n("request-body-min-set-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-body-min-set",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-body-min-set"), ColorizedValue(minDiff.To)),
+							Comment:     config.i18n("request-body-min-set-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 				}
@@ -57,13 +58,14 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						}
 
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-property-min-set",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-property-min-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
-							Comment:   config.i18n("request-property-min-set-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-property-min-set",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-property-min-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+							Comment:     config.i18n("request-property-min-set-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					})
 			}

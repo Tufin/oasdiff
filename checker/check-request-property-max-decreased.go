@@ -31,12 +31,13 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						maxDiff.To != nil {
 						if IsDecreasedValue(maxDiff) {
 							result = append(result, BackwardCompatibilityError{
-								Id:        "request-body-max-decreased",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("request-body-max-decreased"), ColorizedValue(maxDiff.To)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "request-body-max-decreased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("request-body-max-decreased"), ColorizedValue(maxDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					}
@@ -61,12 +62,13 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						}
 
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-property-max-decreased",
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n("request-property-max-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-property-max-decreased",
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n("request-property-max-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					})
 			}

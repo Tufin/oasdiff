@@ -40,12 +40,13 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 						}
 
 						result = append(result, BackwardCompatibilityError{
-							Id:        requestPropertyBecameEnumId,
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          requestPropertyBecameEnumId,
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					})
 			}

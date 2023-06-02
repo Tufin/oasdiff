@@ -42,12 +42,13 @@ func ResponseRequiredPropertyRemovedCheck(diffReport *diff.Diff, operationsSourc
 								return
 							}
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-required-property-removed",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-required-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-required-property-removed",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-required-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

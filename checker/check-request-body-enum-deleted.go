@@ -42,12 +42,13 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 				}
 				for _, enumVal := range enumDiff.Deleted {
 					result = append(result, BackwardCompatibilityError{
-						Id:        requestBodyEnumRemovedId,
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n(requestBodyEnumRemovedId), ColorizedValue(enumVal)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          requestBodyEnumRemovedId,
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n(requestBodyEnumRemovedId), ColorizedValue(enumVal)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

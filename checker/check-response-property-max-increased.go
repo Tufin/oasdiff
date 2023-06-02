@@ -34,12 +34,13 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 							maxDiff.To != nil {
 							if IsIncreasedValue(maxDiff) {
 								result = append(result, BackwardCompatibilityError{
-									Id:        "response-body-max-increased",
-									Level:     ERR,
-									Text:      fmt.Sprintf(config.i18n("response-body-max-increased"), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          "response-body-max-increased",
+									Level:       ERR,
+									Text:        fmt.Sprintf(config.i18n("response-body-max-increased"), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 						}
@@ -65,12 +66,13 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-property-max-increased",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-max-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-property-max-increased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-property-max-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

@@ -45,12 +45,13 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-property-became-optional",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-became-optional"), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-property-became-optional",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-property-became-optional"), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					}
@@ -74,12 +75,13 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 									continue
 								}
 								result = append(result, BackwardCompatibilityError{
-									Id:        "response-property-became-optional",
-									Level:     ERR,
-									Text:      fmt.Sprintf(config.i18n("response-property-became-optional"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          "response-property-became-optional",
+									Level:       ERR,
+									Text:        fmt.Sprintf(config.i18n("response-property-became-optional"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 						})

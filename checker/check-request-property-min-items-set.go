@@ -30,13 +30,14 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 					if minItemsDiff.From == nil &&
 						minItemsDiff.To != nil {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-body-min-items-set",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-body-min-items-set"), ColorizedValue(minItemsDiff.To)),
-							Comment:   config.i18n("request-body-min-items-set-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-body-min-items-set",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-body-min-items-set"), ColorizedValue(minItemsDiff.To)),
+							Comment:     config.i18n("request-body-min-items-set-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 				}
@@ -57,13 +58,14 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						}
 
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-property-min-items-set",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-property-min-items-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
-							Comment:   config.i18n("request-property-min-items-set-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-property-min-items-set",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-property-min-items-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Comment:     config.i18n("request-property-min-items-set-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					})
 			}

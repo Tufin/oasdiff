@@ -30,12 +30,13 @@ func RequestPropertyRemovedCheck(diffReport *diff.Diff, operationsSources *diff.
 						if !propertyItem.ReadOnly {
 							source := (*operationsSources)[operationItem.Revision]
 							result = append(result, BackwardCompatibilityError{
-								Id:        "request-property-removed",
-								Level:     WARN,
-								Text:      fmt.Sprintf(config.i18n("request-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "request-property-removed",
+								Level:       WARN,
+								Text:        fmt.Sprintf(config.i18n("request-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					})

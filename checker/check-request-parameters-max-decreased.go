@@ -40,12 +40,13 @@ func RequestParameterMaxDecreasedCheck(diffReport *diff.Diff, operationsSources 
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, BackwardCompatibilityError{
-						Id:        "request-parameter-max-decreased",
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n("request-parameter-max-decreased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "request-parameter-max-decreased",
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n("request-parameter-max-decreased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

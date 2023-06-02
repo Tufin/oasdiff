@@ -34,12 +34,13 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 							maxLengthDiff.To != nil {
 							if IsIncreasedValue(maxLengthDiff) {
 								result = append(result, BackwardCompatibilityError{
-									Id:        "response-body-max-length-increased",
-									Level:     ERR,
-									Text:      fmt.Sprintf(config.i18n("response-body-max-length-increased"), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          "response-body-max-length-increased",
+									Level:       ERR,
+									Text:        fmt.Sprintf(config.i18n("response-body-max-length-increased"), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 						}
@@ -65,12 +66,13 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-property-max-length-increased",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-max-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-property-max-length-increased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-property-max-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

@@ -40,23 +40,25 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 
 					if patternDiff.From == "" {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-parameter-pattern-added",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-parameter-pattern-added"), patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
-							Comment:   config.i18n("pattern-changed-warn-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-parameter-pattern-added",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-parameter-pattern-added"), patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Comment:     config.i18n("pattern-changed-warn-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					} else {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-parameter-pattern-changed",
-							Level:     WARN,
-							Text:      fmt.Sprintf(config.i18n("request-parameter-pattern-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
-							Comment:   config.i18n("pattern-changed-warn-comment"),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-parameter-pattern-changed",
+							Level:       WARN,
+							Text:        fmt.Sprintf(config.i18n("request-parameter-pattern-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
+							Comment:     config.i18n("pattern-changed-warn-comment"),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 				}

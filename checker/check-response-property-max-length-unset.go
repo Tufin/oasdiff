@@ -33,12 +33,13 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 						if maxLengthDiff.From != nil &&
 							maxLengthDiff.To == nil {
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-body-max-length-unset",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-body-max-length-unset"), ColorizedValue(maxLengthDiff.From)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-body-max-length-unset",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-body-max-length-unset"), ColorizedValue(maxLengthDiff.From)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					}
@@ -59,12 +60,13 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        "response-property-max-length-unset",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("response-property-max-length-unset"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "response-property-max-length-unset",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("response-property-max-length-unset"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

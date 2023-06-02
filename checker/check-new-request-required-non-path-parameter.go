@@ -31,12 +31,13 @@ func NewRequiredRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSo
 							if param.Value.Required {
 								source := (*operationsSources)[operationItem.Revision]
 								result = append(result, BackwardCompatibilityError{
-									Id:        "new-required-request-parameter",
-									Level:     ERR,
-									Text:      fmt.Sprintf(config.i18n("new-required-request-parameter"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          "new-required-request-parameter",
+									Level:       ERR,
+									Text:        fmt.Sprintf(config.i18n("new-required-request-parameter"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 							break

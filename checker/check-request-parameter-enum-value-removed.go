@@ -34,12 +34,13 @@ func RequestParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSour
 					}
 					for _, enumVal := range enumDiff.Deleted {
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-parameter-enum-value-removed",
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n("request-parameter-enum-value-removed"), enumVal, ColorizedValue(paramLocation), ColorizedValue(paramName)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-parameter-enum-value-removed",
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n("request-parameter-enum-value-removed"), enumVal, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 				}

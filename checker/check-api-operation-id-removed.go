@@ -30,12 +30,13 @@ func APIOperationIdRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 			}
 
 			result = append(result, BackwardCompatibilityError{
-				Id:        apiOperationRemovedCheckId,
-				Level:     ERR,
-				Text:      fmt.Sprintf(config.i18n(apiOperationRemovedCheckId), ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID)),
-				Operation: operation,
-				Path:      path,
-				Source:    source,
+				Id:          apiOperationRemovedCheckId,
+				Level:       ERR,
+				Text:        fmt.Sprintf(config.i18n(apiOperationRemovedCheckId), ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID)),
+				Operation:   operation,
+				OperationId: op.OperationID,
+				Path:        path,
+				Source:      source,
 			})
 		}
 	}

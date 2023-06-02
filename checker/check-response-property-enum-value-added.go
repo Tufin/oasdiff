@@ -41,13 +41,14 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 
 							for _, enumVal := range enumDiff.Added {
 								result = append(result, BackwardCompatibilityError{
-									Id:        "response-property-enum-value-added",
-									Level:     WARN,
-									Text:      fmt.Sprintf(config.i18n("response-property-enum-value-added"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-									Comment:   config.i18n("response-property-enum-value-added-comment"),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          "response-property-enum-value-added",
+									Level:       WARN,
+									Text:        fmt.Sprintf(config.i18n("response-property-enum-value-added"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Comment:     config.i18n("response-property-enum-value-added-comment"),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 						})

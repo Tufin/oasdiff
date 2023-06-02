@@ -39,12 +39,13 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 
 					if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
 						result = append(result, BackwardCompatibilityError{
-							Id:        responseBodyBecameNullableId,
-							Level:     ERR,
-							Text:      config.i18n(responseBodyBecameNullableId),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          responseBodyBecameNullableId,
+							Level:       ERR,
+							Text:        config.i18n(responseBodyBecameNullableId),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					}
 
@@ -60,12 +61,13 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:        responsePropertyBecameNullableId,
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n(responsePropertyBecameNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          responsePropertyBecameNullableId,
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n(responsePropertyBecameNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						})
 				}

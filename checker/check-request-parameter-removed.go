@@ -23,12 +23,13 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 				for _, paramName := range paramItems {
 					source := (*operationsSources)[operationItem.Revision]
 					result = append(result, BackwardCompatibilityError{
-						Id:        "request-parameter-removed",
-						Level:     WARN,
-						Text:      fmt.Sprintf(config.i18n("request-parameter-removed"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          "request-parameter-removed",
+						Level:       WARN,
+						Text:        fmt.Sprintf(config.i18n("request-parameter-removed"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}

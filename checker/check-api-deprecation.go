@@ -27,18 +27,29 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			}
 
 			if operationDiff.DeprecatedDiff.To == nil || operationDiff.DeprecatedDiff.To == false {
+				// not breaking changes
+				result = append(result, BackwardCompatibilityError{
+					Id:          "endpoint-reactivated",
+					Level:       INFO,
+					Text:        config.i18n("endpoint-reactivated"),
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      source,
+				})
 				continue
 			}
 
 			date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "api-deprecated-sunset-parse",
-					Level:     ERR,
-					Text:      config.i18n("api-deprecated-sunset-parse"),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          "api-deprecated-sunset-parse",
+					Level:       ERR,
+					Text:        config.i18n("api-deprecated-sunset-parse"),
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      source,
 				})
 				continue
 			}
@@ -49,12 +60,13 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "parsing-error",
-					Level:     ERR,
-					Text:      fmt.Sprintf("parsing error %s", err.Error()),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          "parsing-error",
+					Level:       ERR,
+					Text:        fmt.Sprintf("parsing error %s", err.Error()),
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      source,
 				})
 				continue
 			}
@@ -64,14 +76,27 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			if days < deprecationDays {
 				result = append(result, BackwardCompatibilityError{
-					Id:        "api-sunset-date-too-small",
-					Level:     ERR,
-					Text:      fmt.Sprintf(config.i18n("api-sunset-date-too-small"), date, deprecationDays),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          "api-sunset-date-too-small",
+					Level:       ERR,
+					Text:        fmt.Sprintf(config.i18n("api-sunset-date-too-small"), date, deprecationDays),
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      source,
 				})
+				continue
 			}
+
+			// not breaking changes
+			result = append(result, BackwardCompatibilityError{
+				Id:          "endpoint-deprecated",
+				Level:       INFO,
+				Text:        config.i18n("endpoint-deprecated"),
+				Operation:   operation,
+				OperationId: op.OperationID,
+				Path:        path,
+				Source:      source,
+			})
 		}
 	}
 

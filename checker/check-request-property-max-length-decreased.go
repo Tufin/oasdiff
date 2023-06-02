@@ -31,12 +31,13 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 						maxLengthDiff.To != nil {
 						if IsDecreasedValue(maxLengthDiff) {
 							result = append(result, BackwardCompatibilityError{
-								Id:        "request-body-max-length-decreased",
-								Level:     ERR,
-								Text:      fmt.Sprintf(config.i18n("request-body-max-length-decreased"), ColorizedValue(maxLengthDiff.To)),
-								Operation: operation,
-								Path:      path,
-								Source:    source,
+								Id:          "request-body-max-length-decreased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("request-body-max-length-decreased"), ColorizedValue(maxLengthDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					}
@@ -61,12 +62,13 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 						}
 
 						result = append(result, BackwardCompatibilityError{
-							Id:        "request-property-max-length-decreased",
-							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n("request-property-max-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
-							Operation: operation,
-							Path:      path,
-							Source:    source,
+							Id:          "request-property-max-length-decreased",
+							Level:       ERR,
+							Text:        fmt.Sprintf(config.i18n("request-property-max-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
 						})
 					})
 			}

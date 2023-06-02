@@ -35,12 +35,13 @@ func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.O
 					continue
 				}
 				result = append(result, BackwardCompatibilityError{
-					Id:        requestBodyBecameEnumId,
-					Level:     ERR,
-					Text:      config.i18n(requestBodyBecameEnumId),
-					Operation: operation,
-					Path:      path,
-					Source:    source,
+					Id:          requestBodyBecameEnumId,
+					Level:       ERR,
+					Text:        config.i18n(requestBodyBecameEnumId),
+					Operation:   operation,
+					OperationId: operationItem.Revision.OperationID,
+					Path:        path,
+					Source:      source,
 				})
 			}
 		}

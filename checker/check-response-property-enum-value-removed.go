@@ -40,12 +40,13 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 
 							for _, enumVal := range enumDiff.Deleted {
 								result = append(result, BackwardCompatibilityError{
-									Id:        responsePropertyEnumValueRemovedId,
-									Level:     ERR,
-									Text:      fmt.Sprintf(config.i18n(responsePropertyEnumValueRemovedId), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-									Operation: operation,
-									Path:      path,
-									Source:    source,
+									Id:          responsePropertyEnumValueRemovedId,
+									Level:       ERR,
+									Text:        fmt.Sprintf(config.i18n(responsePropertyEnumValueRemovedId), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      source,
 								})
 							}
 						})

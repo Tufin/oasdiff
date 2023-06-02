@@ -36,12 +36,13 @@ func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *d
 					}
 
 					result = append(result, BackwardCompatibilityError{
-						Id:        requestParameterBecameEnumId,
-						Level:     ERR,
-						Text:      fmt.Sprintf(config.i18n(requestParameterBecameEnumId), ColorizedValue(paramLocation), ColorizedValue(paramName)),
-						Operation: operation,
-						Path:      path,
-						Source:    source,
+						Id:          requestParameterBecameEnumId,
+						Level:       ERR,
+						Text:        fmt.Sprintf(config.i18n(requestParameterBecameEnumId), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
 					})
 				}
 			}
