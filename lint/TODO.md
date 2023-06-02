@@ -8,4 +8,10 @@ For example, if type is string, then default can be "foo" but cannot be 1.
 4. ERROR - Schema or content keyword. They are mutually exclusive, see: schema vs content: https://swagger.io/docs/specification/describing-parameters/ 
 5. ERROR - non-existing properties as part of required list
 6. ERROR - Bad refs
-7. ERROR - Schema validation
+7. ERROR - yaml/json schema validation
+8. ERROR - Enhance Info checks:
+   - Info/Contact/URL: The URL pointing to the contact information. This MUST be in the form of a URL.
+   - Info/License/URL: The email address of the contact person/organization This MUST be in the form of an email address.
+   - Info/Terms Of Service: A URL to the Terms of Service for the API. This MUST be in the form of a URL.
+9. ERROR - jsonSchemaDialect: The default value for the $schema keyword within Schema Objects contained within this OAS document. This MUST be in the form of a URI.
+10. ERROR - In case a Path Item Object field appears both in the defined object and the referenced object, the behavior is undefined. See the rules for resolving Relative References.
