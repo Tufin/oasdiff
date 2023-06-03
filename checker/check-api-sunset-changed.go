@@ -73,7 +73,6 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			}
 
 			days := date.DaysSince(civil.DateOf(time.Now()))
-			deprecationDays := config.MinSunsetStableDays
 
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
@@ -88,9 +87,8 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				})
 				continue
 			}
-			if stability == "beta" {
-				deprecationDays = config.MinSunsetBetaDays
-			}
+
+			deprecationDays := getDeperacationDays(config, stability)
 
 			if baseDate.After(date) && days < deprecationDays {
 				result = append(result, BackwardCompatibilityError{
@@ -107,4 +105,12 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 	}
 
 	return result
+}
+
+func getDeperacationDays(config BackwardCompatibilityCheckConfig, stability string) int {
+	if stability == "beta" {
+		return config.MinSunsetBetaDays
+	}
+
+	return config.MinSunsetStableDays
 }
