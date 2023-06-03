@@ -8,6 +8,11 @@ import (
 // StringList is a list of string values
 type StringList []string
 
+// Empty indicates whether a change was found in this element
+func (stringList *StringList) Empty() bool {
+	return stringList == nil || len(*stringList) == 0
+}
+
 func (stringList *StringList) String() string {
 	return strings.Join(*stringList, ", ")
 }

@@ -16,6 +16,11 @@ type InterfaceMapDiff struct {
 type ModifiedInterfaces map[string]*ValueDiff
 
 // Empty indicates whether a change was found in this element
+func (modifiedInterfaces ModifiedInterfaces) Empty() bool {
+	return len(modifiedInterfaces) == 0
+}
+
+// Empty indicates whether a change was found in this element
 func (diff *InterfaceMapDiff) Empty() bool {
 	if diff == nil {
 		return true

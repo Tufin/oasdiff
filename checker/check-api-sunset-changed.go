@@ -26,7 +26,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				continue
 			}
 
-			if operationDiff.ExtensionsDiff != nil && operationDiff.ExtensionsDiff.Deleted != nil {
+			if operationDiff.ExtensionsDiff != nil && !operationDiff.ExtensionsDiff.Deleted.Empty() {
 				result = append(result, BackwardCompatibilityError{
 					Id:          "sunset-deleted",
 					Level:       ERR,
@@ -38,7 +38,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				})
 			}
 
-			if operationDiff.ExtensionsDiff == nil || operationDiff.ExtensionsDiff.Modified == nil {
+			if operationDiff.ExtensionsDiff == nil || operationDiff.ExtensionsDiff.Modified.Empty() {
 				continue
 			}
 
