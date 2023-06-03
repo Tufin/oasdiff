@@ -16,7 +16,7 @@ func TestApiAdded_DetectsNewPathsAndNewOperations(t *testing.T) {
 	s2, err := open("../data/new_endpoints/revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibility(checker.GetAllChecks(), d, osm)
@@ -40,7 +40,7 @@ func TestApiAdded_DetectsModifiedPathsWithPathParam(t *testing.T) {
 	s2, err := open("../data/new_endpoints/revision_with_path_param.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibility(checker.GetAllChecks(), d, osm)

@@ -8,8 +8,6 @@ import (
 	"cloud.google.com/go/civil"
 )
 
-const SunsetExtension = "x-sunset"
-
 func GetSunsetDate(Extensions map[string]interface{}) (string, civil.Date, error) {
 	sunset, ok := Extensions[SunsetExtension].(string)
 	if !ok {

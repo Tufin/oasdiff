@@ -179,9 +179,7 @@ func generateConfig(inputFlags *InputFlags) *diff.Config {
 	config.SetExcludeElements(inputFlags.excludeElements.ToStringSet(), inputFlags.excludeExamples, inputFlags.excludeDescription, inputFlags.excludeEndpoints)
 
 	if inputFlags.checkBreaking || inputFlags.changelog {
-		config.IncludeExtensions.Add(checker.XStabilityLevelExtension)
-		config.IncludeExtensions.Add(diff.SunsetExtension)
-		config.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
+		config.WithCheckBreaking()
 	}
 
 	return config

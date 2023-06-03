@@ -22,11 +22,6 @@ const (
 	INFO Level = 2
 )
 
-const (
-	XStabilityLevelExtension = "x-stability-level"
-	XExtensibleEnumExtension = "x-extensible-enum"
-)
-
 type BackwardCompatibilityError struct {
 	Id          string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text        string `json:"text,omitempty" yaml:"text,omitempty"`
@@ -304,14 +299,14 @@ func newParsingError(result []BackwardCompatibilityError,
 }
 
 func getStabilityLevel(i map[string]interface{}) (string, error) {
-	if i == nil || i[XStabilityLevelExtension] == nil {
+	if i == nil || i[diff.XStabilityLevelExtension] == nil {
 		return "", nil
 	}
 	var stabilityLevel string
 
-	stabilityLevel, ok := i[XStabilityLevelExtension].(string)
+	stabilityLevel, ok := i[diff.XStabilityLevelExtension].(string)
 	if !ok {
-		jsonStability, ok := i[XStabilityLevelExtension].(json.RawMessage)
+		jsonStability, ok := i[diff.XStabilityLevelExtension].(json.RawMessage)
 		if !ok {
 			return "", fmt.Errorf("unparseable x-stability-level")
 		}
