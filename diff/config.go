@@ -82,3 +82,17 @@ func (config *Config) IsExcludeSummary() bool {
 func ValidateExcludeElements(input utils.StringList) utils.StringList {
 	return input.ToStringSet().Minus(excludeDiffOptions).ToStringList().Sort()
 }
+
+const (
+	SunsetExtension          = "x-sunset"
+	XStabilityLevelExtension = "x-stability-level"
+	XExtensibleEnumExtension = "x-extensible-enum"
+)
+
+func (config *Config) WithCheckBreaking() *Config {
+	config.IncludeExtensions.Add(XStabilityLevelExtension)
+	config.IncludeExtensions.Add(SunsetExtension)
+	config.IncludeExtensions.Add(XExtensibleEnumExtension)
+
+	return config
+}

@@ -36,9 +36,13 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) []checker.BackwardCompatib
 	return errs
 }
 
+func getConfig() *diff.Config {
+	return diff.NewConfig().WithCheckBreaking()
+}
+
 // BC: deleting a path is breaking
 func TestBreaking_DeletedPath(t *testing.T) {
-	errs := d(t, &diff.Config{}, 1, 701)
+	errs := d(t, getConfig(), 1, 701)
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-path-removed-without-deprecation", errs[0].Id)
 }
@@ -50,7 +54,7 @@ func TestBreaking_DeletedOp(t *testing.T) {
 
 	s1.Spec.Paths[installCommandPath].Put = openapi3.NewOperation()
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -67,7 +71,7 @@ func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
 		Value: openapi3.NewRequestBody().WithRequired(true),
 	}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -88,7 +92,7 @@ func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 		Value: openapi3.NewRequestBody().WithRequired(true),
 	}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -98,7 +102,7 @@ func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 
 // BC: deleting an enum value is breaking
 func TestBreaking_DeletedEnum(t *testing.T) {
-	errs := d(t, &diff.Config{}, 702, 1)
+	errs := d(t, getConfig(), 702, 1)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-parameter-enum-value-removed", errs[0].Id)
@@ -106,7 +110,7 @@ func TestBreaking_DeletedEnum(t *testing.T) {
 
 // BC: added an enum value to response breaking
 func TestBreaking_AddedResponseEnum(t *testing.T) {
-	errs := d(t, &diff.Config{}, 703, 704)
+	errs := d(t, getConfig(), 703, 704)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
 	require.Equal(t, "response-property-enum-value-added", errs[0].Id)
@@ -138,7 +142,7 @@ func TestBreaking_PathParamRename(t *testing.T) {
 	s2, err := loader.LoadFromFile("../data/param-rename/method-revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{},
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(),
 		&load.OpenAPISpecInfo{Spec: s1},
 		&load.OpenAPISpecInfo{Spec: s2},
 	)
@@ -156,7 +160,7 @@ func TestBreaking_NewPathParam(t *testing.T) {
 	deleteParam(s1.Spec.Paths[installCommandPath].Get, openapi3.ParameterInPath, "project")
 	// note: path params are always required
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 
@@ -172,7 +176,7 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	deleteParam(s1.Spec.Paths[installCommandPath].Get, openapi3.ParameterInHeader, "network-policies")
 	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -188,7 +192,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = false
 	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -212,7 +216,7 @@ func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = true
 	s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = false
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -228,7 +232,7 @@ func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = true
 	delete(s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers, "X-RateLimit-Limit")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	for _, err := range errs {
@@ -246,7 +250,7 @@ func TestBreaking_ResponseSuccessStatusRemoved(t *testing.T) {
 
 	delete(s2.Spec.Paths[securityScorePath].Get.Responses, "200")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	for _, err := range errs {
@@ -264,7 +268,7 @@ func TestBreaking_ResponseNonSuccessStatusRemoved(t *testing.T) {
 
 	delete(s2.Spec.Paths[securityScorePath].Get.Responses, "400")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"response-non-success-status-removed"}), d, osm)
 	for _, err := range errs {
@@ -282,7 +286,7 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 
 	s2.Spec.Paths[securityScorePath].Get.OperationID = "newOperationId"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-operation-id-removed"}), d, osm)
 	for _, err := range errs {
@@ -303,7 +307,7 @@ func TestBreaking_RequestBodyEnumRemoved(t *testing.T) {
 
 	s2.Spec.Paths["/api/v2/changeOfRequestFieldValueTiedToEnumTest"].Get.RequestBody.Value.Content["application/json"].Schema.Value.Enum = []interface{}{}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"request-body-enum-value-removed"}), d, osm)
@@ -320,7 +324,7 @@ func TestBreaking_ResponsePropertyEnumRemoved(t *testing.T) {
 	s1 := l(t, 704)
 	s2 := l(t, 703)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"response-property-enum-value-removed"}), d, osm)
@@ -339,7 +343,7 @@ func TestBreaking_TagRemoved(t *testing.T) {
 
 	s2.Spec.Paths[securityScorePath].Get.Tags[0] = "newTag"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-tag-removed"}), d, osm)
 	for _, err := range errs {
@@ -358,7 +362,7 @@ func TestBreaking_ResponseMediaTypeEnumRemoved(t *testing.T) {
 	s2, err := open("../data/enums/response-enum-2.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"response-mediatype-enum-value-removed"}), d, osm)
 	for _, err := range errs {
@@ -376,7 +380,7 @@ func TestBreaking_ResponseUnparseableStatusRemoved(t *testing.T) {
 
 	delete(s2.Spec.Paths[installCommandPath].Get.Responses, "default")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	for _, err := range errs {
@@ -392,7 +396,7 @@ func TestBreaking_ResponseErrorStatusRemoved(t *testing.T) {
 
 	delete(s2.Spec.Paths[securityScorePath].Get.Responses, "400")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	for _, err := range errs {
@@ -409,7 +413,7 @@ func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
 	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = false
 	delete(s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers, "X-RateLimit-Limit")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	for _, err := range errs {
@@ -428,7 +432,7 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 	s2, err := open("../data/response-media-type-revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -444,7 +448,7 @@ func TestBreaking_DeletePatten(t *testing.T) {
 	s2, err := open("../data/pattern-revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -458,7 +462,7 @@ func TestBreaking_AddPattern(t *testing.T) {
 	s2, err := open("../data/pattern-base.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -474,7 +478,7 @@ func TestBreaking_AddPatternRecursive(t *testing.T) {
 	s2, err := open("../data/pattern-base-recursive.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -490,7 +494,7 @@ func TestBreaking_ModifyPattern(t *testing.T) {
 	s2, err := open("../data/pattern-modified-not-anystring.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -506,7 +510,7 @@ func TestBreaking_ModifyParameterPattern(t *testing.T) {
 	s2, err := open("../data/pattern-parameter-modified-not-anystring.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -522,7 +526,7 @@ func TestBreaking_ModifyPatternToAnyString(t *testing.T) {
 	s2, err := open("../data/pattern-modified.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -538,7 +542,7 @@ func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
 
 	// By default, OpenAPI treats all request parameters as optional
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
@@ -556,7 +560,7 @@ func TestBreaking_SettingRequiredOptionalParamDefaultValue(t *testing.T) {
 
 	// By default, OpenAPI treats all request parameters as optional
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
@@ -577,7 +581,7 @@ func TestBreaking_ModifyRequiredRequiredParamDefaultValue(t *testing.T) {
 	paramRevision.Required = true
 	paramRevision.Schema.Value.Default = "Y"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -594,7 +598,7 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 		delete(s2.Spec.Components.Schemas, k)
 	}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(&diff.Config{}, &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	checks := checker.GetChecks(utils.StringList{"api-schema-removed"})
 	errs := checker.CheckBackwardCompatibility(checks, d, osm)

@@ -26,7 +26,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				continue
 			}
 
-			if operationDiff.ExtensionsDiff != nil && operationDiff.ExtensionsDiff.Deleted != nil {
+			if operationDiff.ExtensionsDiff != nil && !operationDiff.ExtensionsDiff.Deleted.Empty() {
 				result = append(result, BackwardCompatibilityError{
 					Id:          "sunset-deleted",
 					Level:       ERR,
@@ -38,18 +38,18 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				})
 			}
 
-			if operationDiff.ExtensionsDiff == nil || operationDiff.ExtensionsDiff.Modified == nil {
+			if operationDiff.ExtensionsDiff == nil || operationDiff.ExtensionsDiff.Modified.Empty() {
 				continue
 			}
 
 			opBase := pathItem.Base.Operations()[operation]
 
-			date, err := diff.GetSunsetDate(op.Extensions)
+			rawDate, date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
 					Id:          "api-deprecated-sunset-parse",
 					Level:       ERR,
-					Text:        "api sunset date can't be parsed for deprecated API",
+					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -58,12 +58,12 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				continue
 			}
 
-			baseDate, err := diff.GetSunsetDate(opBase.Extensions)
+			rawDate, baseDate, err := diff.GetSunsetDate(opBase.Extensions)
 			if err != nil {
 				result = append(result, BackwardCompatibilityError{
 					Id:          "api-deprecated-sunset-parse",
 					Level:       ERR,
-					Text:        "api sunset date can't be parsed for deprecated API",
+					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -73,7 +73,6 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			}
 
 			days := date.DaysSince(civil.DateOf(time.Now()))
-			deprecationDays := config.MinSunsetStableDays
 
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
@@ -88,9 +87,8 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				})
 				continue
 			}
-			if stability == "beta" {
-				deprecationDays = config.MinSunsetBetaDays
-			}
+
+			deprecationDays := getDeperacationDays(config, stability)
 
 			if baseDate.After(date) && days < deprecationDays {
 				result = append(result, BackwardCompatibilityError{
@@ -107,4 +105,12 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 	}
 
 	return result
+}
+
+func getDeperacationDays(config BackwardCompatibilityCheckConfig, stability string) int {
+	if stability == "beta" {
+		return config.MinSunsetBetaDays
+	}
+
+	return config.MinSunsetStableDays
 }

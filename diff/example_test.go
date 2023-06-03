@@ -77,10 +77,7 @@ func ExampleGetPathsDiff() {
 		return
 	}
 
-	diffConfig := diff.NewConfig()
-	diffConfig.IncludeExtensions.Add(checker.XStabilityLevelExtension)
-	diffConfig.IncludeExtensions.Add(diff.SunsetExtension)
-	diffConfig.IncludeExtensions.Add(checker.XExtensibleEnumExtension)
+	diffConfig := diff.NewConfig().WithCheckBreaking()
 
 	diffRes, operationsSources, err := diff.GetPathsDiff(diffConfig,
 		[]load.OpenAPISpecInfo{*s1},
