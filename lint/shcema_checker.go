@@ -89,13 +89,7 @@ func checkParameters(parameters openapi3.Parameters, s *state) []*Error {
 func checkSchema(schema *openapi3.Schema, s *state) []*Error {
 	result := make([]*Error, 0)
 
-	if err := checkRegex(schema.Pattern, s); err != nil {
-		result = append(result, err)
-	}
-
-	if err := checkRequireProperties(schema, s); err != nil {
-		result = append(result, err)
-	}
+	result = append(result, runCheckers(schema, s)...)
 
 	for _, subSchema := range schema.OneOf {
 		result = append(result, checkSchemaRef(subSchema, s)...)
@@ -132,4 +126,18 @@ func checkSchemaRef(schema *openapi3.SchemaRef, s *state) []*Error {
 	}
 
 	return checkSchema(schema.Value, s)
+}
+
+func runCheckers(schema *openapi3.Schema, s *state) []*Error {
+	result := make([]*Error, 0)
+
+	if err := checkRegex(schema.Pattern, s); err != nil {
+		result = append(result, err)
+	}
+
+	if err := checkRequireProperties(schema, s); err != nil {
+		result = append(result, err)
+	}
+
+	return result
 }

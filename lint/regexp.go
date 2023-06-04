@@ -9,7 +9,7 @@ func checkRegex(pattern string, s *state) *Error {
 		return nil
 	}
 
-	if err := s.validate(pattern); err != nil {
+	if err := validate(s.cache, pattern); err != nil {
 		return &Error{
 			Id:     "invalid-regex-pattern",
 			Level:  LEVEL_ERROR,
@@ -23,11 +23,11 @@ func checkRegex(pattern string, s *state) *Error {
 
 // *** THIS IS A TEMPORARY IMPLEMENTATION ***
 // SHOULD USE ECMA 262, SEE: https://swagger.io/docs/specification/data-models/data-types/#pattern
-func (s *state) validate(pattern string) error {
-	if result, ok := s.cache[pattern]; ok {
+func validate(cache map[string]error, pattern string) error {
+	if result, ok := cache[pattern]; ok {
 		return result
 	}
 	_, err := regexp.Compile(pattern)
-	s.cache[pattern] = err
+	cache[pattern] = err
 	return err
 }
