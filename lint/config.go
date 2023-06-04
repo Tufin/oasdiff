@@ -16,7 +16,7 @@ func DefaultConfig() *Config {
 
 func defaultChecks() []Check {
 	return []Check{
-		RegexCheck,
+		SchemaCheck,
 		PathParamsCheck,
 		RequiredParamsCheck,
 		InfoCheck,

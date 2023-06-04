@@ -1,0 +1,36 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/home4984/API/1.0.0
+info:
+  version: "1.0.0"
+  title: home-iot-api
+  description: The API for the EatBacon IOT project
+paths:
+  /devices:
+    post:
+      tags:
+        - Device
+      operationId: register
+      responses:
+        '200':
+          description: successfully registered device
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExampleRequestView'
+components:
+  schemas:
+    ExampleRequestView:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ExampleRequestView'
+      - type: object
+        properties:
+          id:
+            type: string
+            writeOnly: true
+          IPAddress:
+            type: string
