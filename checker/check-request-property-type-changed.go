@@ -84,7 +84,7 @@ func fillEmptyTypeAndFormatDiffs(typeDiff *diff.ValueDiff, schemaDiff *diff.Sche
 func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
 	return (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
 		!(typeDiff.From == "integer" && typeDiff.To == "number") &&
-		!(typeDiff.To == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
+		!(typeDiff.To == "string" && !isJsonMediaType(mediaType) && mediaType != "application/xml")) &&
 		(formatDiff == nil || formatDiff != nil && formatDiff.To != nil && formatDiff.To != "" &&
 			!(schemaDiff.Revision.Value.Type == "string" &&
 				(formatDiff.From == "date" && formatDiff.To == "date-time" ||

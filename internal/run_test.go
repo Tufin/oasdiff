@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"os"
 	"strings"
 	"testing"
 
@@ -180,8 +179,4 @@ func Test_DuplicatePathsFail(t *testing.T) {
 
 func Test_DuplicatePathsOK(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/duplicate_endpoints/base.yaml -revision ../data/duplicate_endpoints/revision.yaml -check-breaking -match-path-params"), io.Discard, io.Discard))
-}
-
-func Test(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../1 -revision ../2 -check-breaking"), os.Stdout, io.Discard))
 }
