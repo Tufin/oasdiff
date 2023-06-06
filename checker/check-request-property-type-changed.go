@@ -82,17 +82,14 @@ func fillEmptyTypeAndFormatDiffs(typeDiff *diff.ValueDiff, schemaDiff *diff.Sche
 }
 
 func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
-	return (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
-		!(typeDiff.From == "integer" && typeDiff.To == "number") &&
-		!(typeDiff.To == "string" && !isJsonMediaType(mediaType) && mediaType != "application/xml")) &&
-		(formatDiff == nil || formatDiff != nil && formatDiff.To != nil && formatDiff.To != "" &&
-			!(schemaDiff.Revision.Value.Type == "string" &&
-				(formatDiff.From == "date" && formatDiff.To == "date-time" ||
-					formatDiff.From == "time" && formatDiff.To == "date-time")) &&
-			!(schemaDiff.Revision.Value.Type == "number" &&
-				(formatDiff.From == "float" && formatDiff.To == "double")) &&
-			!(schemaDiff.Revision.Value.Type == "integer" &&
-				(formatDiff.From == "int32" && formatDiff.To == "int64" ||
-					formatDiff.From == "int32" && formatDiff.To == "bigint" ||
-					formatDiff.From == "int64" && formatDiff.To == "bigint")))
+
+	if typeDiff != nil {
+		return !isTypeContained(typeDiff.To, typeDiff.From, mediaType)
+	}
+
+	if formatDiff != nil {
+		return !isFormatContained(schemaDiff.Revision.Value.Type, formatDiff.To, formatDiff.From)
+	}
+
+	return false
 }

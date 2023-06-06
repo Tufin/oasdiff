@@ -9,12 +9,14 @@ import (
 )
 
 // BC: changing response's body schema type from string to number is breaking
-func TestBreaking_TypeStringToNumber(t *testing.T) {
-	s1, err := open("../data/type-change/simple.yaml")
+func TestBreaking_RespTypeStringToNumber(t *testing.T) {
+	file := "../data/type-change/simple-response.yaml"
+
+	s1, err := open(file)
 	require.NoError(t, err)
 	s1.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "string"
 
-	s2, err := open("../data/type-change/simple.yaml")
+	s2, err := open(file)
 	require.NoError(t, err)
 	s2.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "number"
 
@@ -27,12 +29,14 @@ func TestBreaking_TypeStringToNumber(t *testing.T) {
 }
 
 // BC: changing response's body schema type from number to string is breaking
-func TestBreaking_TypeNumberToString(t *testing.T) {
-	s1, err := open("../data/type-change/simple.yaml")
+func TestBreaking_RespTypeNumberToString(t *testing.T) {
+	file := "../data/type-change/simple-response.yaml"
+
+	s1, err := open(file)
 	require.NoError(t, err)
 	s1.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "number"
 
-	s2, err := open("../data/type-change/simple.yaml")
+	s2, err := open(file)
 	require.NoError(t, err)
 	s2.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "string"
 
@@ -45,12 +49,14 @@ func TestBreaking_TypeNumberToString(t *testing.T) {
 }
 
 // BC: changing response's body schema type from number to integer is not breaking
-func TestBreaking_TypeNumberToInteger(t *testing.T) {
-	s1, err := open("../data/type-change/simple.yaml")
+func TestBreaking_RespTypeNumberToInteger(t *testing.T) {
+	file := "../data/type-change/simple-response.yaml"
+
+	s1, err := open(file)
 	require.NoError(t, err)
 	s1.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "number"
 
-	s2, err := open("../data/type-change/simple.yaml")
+	s2, err := open(file)
 	require.NoError(t, err)
 	s2.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "integer"
 
@@ -61,12 +67,14 @@ func TestBreaking_TypeNumberToInteger(t *testing.T) {
 }
 
 // BC: changing response's body schema type from integer to number is breaking
-func TestBreaking_TypeIntegerToNumber(t *testing.T) {
-	s1, err := open("../data/type-change/simple.yaml")
+func TestBreaking_RespTypeIntegerToNumber(t *testing.T) {
+	file := "../data/type-change/simple-response.yaml"
+
+	s1, err := open(file)
 	require.NoError(t, err)
 	s1.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "integer"
 
-	s2, err := open("../data/type-change/simple.yaml")
+	s2, err := open(file)
 	require.NoError(t, err)
 	s2.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "number"
 
@@ -79,12 +87,14 @@ func TestBreaking_TypeIntegerToNumber(t *testing.T) {
 }
 
 // BC: changing response's body schema type from number/none to integer/int32 is not breaking
-func TestBreaking_TypeNumberToInt32(t *testing.T) {
-	s1, err := open("../data/type-change/simple.yaml")
+func TestBreaking_RespTypeNumberToInt32(t *testing.T) {
+	file := "../data/type-change/simple-response.yaml"
+
+	s1, err := open(file)
 	require.NoError(t, err)
 	s1.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "number"
 
-	s2, err := open("../data/type-change/simple.yaml")
+	s2, err := open(file)
 	require.NoError(t, err)
 	s2.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Type = "integer"
 	s2.Spec.Paths["/test"].Get.Responses["200"].Value.Content["application/json"].Schema.Value.Format = "int32"
@@ -97,10 +107,10 @@ func TestBreaking_TypeNumberToInt32(t *testing.T) {
 
 // BC: changing response's embedded property schema type from string/none to integer/int32 is breaking
 func TestBreaking_RespTypeChanged(t *testing.T) {
-	s1, err := open("../data/type-change/base.yaml")
+	s1, err := open("../data/type-change/base-response.yaml")
 	require.NoError(t, err)
 
-	s2, err := open("../data/type-change/revision.yaml")
+	s2, err := open("../data/type-change/revision-response.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)

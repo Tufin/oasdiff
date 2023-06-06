@@ -85,33 +85,35 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 func breakingTypeFormatChangedInResponseProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
 
 	if typeDiff != nil {
-		return !isTypeOK(typeDiff, mediaType)
+		return !isTypeContained(typeDiff.From, typeDiff.To, mediaType)
 	}
 
 	if formatDiff != nil {
-		return !isFormatOK(schemaDiff, formatDiff)
+		return !isFormatContained(schemaDiff.Revision.Value.Type, formatDiff.From, formatDiff.To)
 	}
 
 	return false
 }
 
-func isTypeOK(typeDiff *diff.ValueDiff, mediaType string) bool {
-	return (typeDiff.From == "number" && typeDiff.To == "integer") ||
-		(typeDiff.From == "string" && !isJsonMediaType(mediaType) && mediaType != "application/xml") // string can change to anything, unless it's json or xml
+// isTypeContained checks if type2 is contained in type1
+func isTypeContained(type1, type2 interface{}, mediaType string) bool {
+	return (type1 == "number" && type2 == "integer") ||
+		(type1 == "string" && !isJsonMediaType(mediaType) && mediaType != "application/xml") // string can change to anything, unless it's json or xml
 }
 
-func isFormatOK(schemaDiff *diff.SchemaDiff, formatDiff *diff.ValueDiff) bool {
+// isFormatContained checks if format2 is contained in format1
+func isFormatContained(schemaType string, format1, format2 interface{}) bool {
 
-	switch schemaDiff.Revision.Value.Type {
+	switch schemaType {
 	case "number":
-		return formatDiff.From == "double" && formatDiff.To == "float"
+		return format1 == "double" && format2 == "float"
 	case "integer":
-		return (formatDiff.From == "int64" && formatDiff.To == "int32") ||
-			(formatDiff.From == "bigint" && formatDiff.To == "int32") ||
-			(formatDiff.From == "bigint" && formatDiff.To == "int64")
+		return (format1 == "int64" && format2 == "int32") ||
+			(format1 == "bigint" && format2 == "int32") ||
+			(format1 == "bigint" && format2 == "int64")
 	case "string":
-		return (formatDiff.From == "date-time" && formatDiff.To == "date" ||
-			formatDiff.From == "date-time" && formatDiff.To == "time")
+		return (format1 == "date-time" && format2 == "date" ||
+			format1 == "date-time" && format2 == "time")
 	}
 
 	return false
