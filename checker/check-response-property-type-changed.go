@@ -84,46 +84,34 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 func breakingTypeFormatChangedInResponseProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
 
-	// return (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
-	// 	!(typeDiff.To == "integer" && typeDiff.From == "number") &&
-	// 	!(typeDiff.From == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
-	// 	(formatDiff == nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
-	// 		!(schemaDiff.Revision.Value.Type == "number" &&
-	// 			(formatDiff.To == "float" && formatDiff.From == "double")) &&
-	// 		!(schemaDiff.Revision.Value.Type == "integer" &&
-	// 			(formatDiff.To == "int32" && formatDiff.From == "int64" ||
-	// 				formatDiff.To == "int32" && formatDiff.From == "bigint" ||
-	// 				formatDiff.To == "int64" && formatDiff.From == "bigint")))
-
-	if typeDiff == nil && formatDiff == nil {
-		return false
-	}
-
-	if typeDiff == nil {
-		return !isFormatOK(schemaDiff, formatDiff)
-	}
-
-	if formatDiff == nil {
+	if typeDiff != nil {
 		return !isTypeOK(typeDiff, mediaType)
 	}
 
-	return !isTypeOK(typeDiff, mediaType) && !isFormatOK(schemaDiff, formatDiff)
+	if formatDiff != nil {
+		return !isFormatOK(schemaDiff, formatDiff)
+	}
+
+	return false
 }
 
 func isTypeOK(typeDiff *diff.ValueDiff, mediaType string) bool {
-	return (typeDiff.To == "integer" && typeDiff.From == "number") ||
-		(typeDiff.From == "string" && !isJsonMediaType(mediaType) && mediaType != "application/xml")
+	return (typeDiff.From == "number" && typeDiff.To == "integer") ||
+		(typeDiff.From == "string" && !isJsonMediaType(mediaType) && mediaType != "application/xml") // string can change to anything, unless it's json or xml
 }
 
 func isFormatOK(schemaDiff *diff.SchemaDiff, formatDiff *diff.ValueDiff) bool {
 
 	switch schemaDiff.Revision.Value.Type {
 	case "number":
-		return formatDiff.To == "float" && formatDiff.From == "double"
+		return formatDiff.From == "double" && formatDiff.To == "float"
 	case "integer":
-		return (formatDiff.To == "int32" && formatDiff.From == "int64") ||
-			(formatDiff.To == "int32" && formatDiff.From == "bigint") ||
-			(formatDiff.To == "int64" && formatDiff.From == "bigint")
+		return (formatDiff.From == "int64" && formatDiff.To == "int32") ||
+			(formatDiff.From == "bigint" && formatDiff.To == "int32") ||
+			(formatDiff.From == "bigint" && formatDiff.To == "int64")
+	case "string":
+		return (formatDiff.From == "date-time" && formatDiff.To == "date" ||
+			formatDiff.From == "date-time" && formatDiff.To == "time")
 	}
 
 	return false
