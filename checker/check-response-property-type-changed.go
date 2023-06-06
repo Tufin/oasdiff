@@ -2,6 +2,7 @@ package checker
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/tufin/oasdiff/diff"
 )
@@ -82,14 +83,43 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 }
 
 func breakingTypeFormatChangedInResponseProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
-	return (typeDiff != nil || formatDiff != nil) && (typeDiff == nil || typeDiff != nil &&
-		!(typeDiff.To == "integer" && typeDiff.From == "number") &&
-		!(typeDiff.From == "string" && mediaType != "application/json" && mediaType != "application/xml")) &&
-		(formatDiff == nil || formatDiff != nil && formatDiff.From != nil && formatDiff.From != "" &&
-			!(schemaDiff.Revision.Value.Type == "number" &&
-				(formatDiff.To == "float" && formatDiff.From == "double")) &&
-			!(schemaDiff.Revision.Value.Type == "integer" &&
-				(formatDiff.To == "int32" && formatDiff.From == "int64" ||
-					formatDiff.To == "int32" && formatDiff.From == "bigint" ||
-					formatDiff.To == "int64" && formatDiff.From == "bigint")))
+
+	if typeDiff != nil {
+		return !isTypeContained(typeDiff.From, typeDiff.To, mediaType)
+	}
+
+	if formatDiff != nil {
+		return !isFormatContained(schemaDiff.Revision.Value.Type, formatDiff.From, formatDiff.To)
+	}
+
+	return false
+}
+
+// isTypeContained checks if type2 is contained in type1
+func isTypeContained(type1, type2 interface{}, mediaType string) bool {
+	return (type1 == "number" && type2 == "integer") ||
+		(type1 == "string" && !isJsonMediaType(mediaType) && mediaType != "application/xml") // string can change to anything, unless it's json or xml
+}
+
+// isFormatContained checks if format2 is contained in format1
+func isFormatContained(schemaType string, format1, format2 interface{}) bool {
+
+	switch schemaType {
+	case "number":
+		return format1 == "double" && format2 == "float"
+	case "integer":
+		return (format1 == "int64" && format2 == "int32") ||
+			(format1 == "bigint" && format2 == "int32") ||
+			(format1 == "bigint" && format2 == "int64")
+	case "string":
+		return (format1 == "date-time" && format2 == "date" ||
+			format1 == "date-time" && format2 == "time")
+	}
+
+	return false
+}
+
+func isJsonMediaType(mediaType string) bool {
+	return mediaType == "application/json" ||
+		(strings.HasPrefix(mediaType, "application/vnd.") && strings.HasSuffix(mediaType, "+json"))
 }

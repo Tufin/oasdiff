@@ -1,0 +1,41 @@
+openapi: 3.0.1
+info:
+  title: Test
+  version: "2.0"
+servers:
+- url: http://localhost:8080
+tags:
+- name: Tests
+  description: Test tag.
+paths:
+  /api/atlas/v2/changeOfResponseArrayFieldTest:
+    get:
+      tags:
+      - Tests
+      summary: This is a test
+      description: Test description.
+      operationId: getTest
+      parameters:
+      - name: new
+        in: query
+        description: Test param
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.atlas.2023-01-01+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChangeOfResponseArrayFieldTestView'
+components:
+  schemas:
+    ChangeOfResponseArrayFieldTestView:
+      type: object
+      properties:
+        testField:
+          type: integer
+          description: A nested view
+          format: int32
