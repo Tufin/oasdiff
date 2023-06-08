@@ -123,6 +123,27 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 		"network-policies")
 }
 
+// BC: changing an existing header param from optional to required is breaking
+func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = false
+	s2.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
+
+	d, err := diff.Get(&diff.Config{
+		BreakingOnly: true,
+	}, s1, s2)
+	require.NoError(t, err)
+
+	require.Equal(t,
+		&diff.ValueDiff{
+			From: false,
+			To:   true,
+		},
+		d.PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInHeader]["network-policies"].RequiredDiff)
+}
+
 // BC: changing an existing response header from required to optional is breaking
 func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
