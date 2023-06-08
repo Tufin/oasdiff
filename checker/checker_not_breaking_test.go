@@ -123,8 +123,10 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.Empty(t, errs)
+	changes := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.NotEmpty(t, changes)
+	require.Equal(t, "request-parameter-became-optional", changes[0].Id)
+	require.Empty(t, checker.RemoveInfoLevelDiffs(changes))
 }
 
 func deleteResponseHeader(response *openapi3.Response, name string) {

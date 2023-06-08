@@ -176,6 +176,16 @@ func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffRep
 	return result
 }
 
+func RemoveInfoLevelDiffs(changes BackwardCompatibilityErrors) BackwardCompatibilityErrors {
+	result := make(BackwardCompatibilityErrors, 0)
+	for _, change := range changes {
+		if change.Level != INFO {
+			result = append(result, change)
+		}
+	}
+	return result
+}
+
 func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []BackwardCompatibilityError, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
 	if diffReport.PathsDiff == nil {
 		return result
