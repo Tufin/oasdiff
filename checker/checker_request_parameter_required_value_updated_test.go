@@ -10,7 +10,7 @@ import (
 )
 
 // BC: changing an existing header param from optional to required is breaking
-func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
+func TestBreaking_HeaderParamBecameRequired(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -19,7 +19,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.RequestParameterRequiredValueUpdatedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
@@ -34,7 +34,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 }
 
 // CL: changing an existing header param from required to optional is not breaking
-func TestBreaking_HeaderParamOptionalEnabled(t *testing.T) {
+func TestBreaking_HeaderParamBecameOptional(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -43,7 +43,7 @@ func TestBreaking_HeaderParamOptionalEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterRequiredValueUpdatedCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{

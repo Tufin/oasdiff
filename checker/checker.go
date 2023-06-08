@@ -159,6 +159,10 @@ func (c *BackwardCompatibilityCheckConfig) i18n(messageID string) string {
 }
 
 func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) BackwardCompatibilityErrors {
+	return CheckBackwardCompatibilityUntilLevel(config, diffReport, operationsSources, WARN)
+}
+
+func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) BackwardCompatibilityErrors {
 	result := make(BackwardCompatibilityErrors, 0)
 
 	if diffReport == nil {
@@ -172,18 +176,15 @@ func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffRep
 		result = append(result, errs...)
 	}
 
-	sort.Sort(result)
-	return result
-}
-
-func RemoveInfoLevelDiffs(changes BackwardCompatibilityErrors) BackwardCompatibilityErrors {
-	result := make(BackwardCompatibilityErrors, 0)
-	for _, change := range changes {
-		if change.Level != INFO {
-			result = append(result, change)
+	filteredResult := make(BackwardCompatibilityErrors, 0)
+	for _, change := range result {
+		if change.Level <= level {
+			filteredResult = append(filteredResult, change)
 		}
 	}
-	return result
+
+	sort.Sort(filteredResult)
+	return filteredResult
 }
 
 func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []BackwardCompatibilityError, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {

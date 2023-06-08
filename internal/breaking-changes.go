@@ -53,7 +53,7 @@ func handleBreakingChanges(stdout io.Writer, diffReport *diff.Diff, operationsSo
 
 func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, warnIgnoreFile string, errIgnoreFile string, level checker.Level) (checker.BackwardCompatibilityErrors, *ReturnError) {
 
-	errs := checker.CheckBackwardCompatibility(c, diffReport, operationsSources)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(c, diffReport, operationsSources, level)
 
 	if warnIgnoreFile != "" {
 		var err error
@@ -71,12 +71,5 @@ func getBreakingChanges(c checker.BackwardCompatibilityCheckConfig, diffReport *
 		}
 	}
 
-	levelFilteredErrs := make(checker.BackwardCompatibilityErrors, 0)
-	for _, err := range errs {
-		if err.Level <= level {
-			levelFilteredErrs = append(levelFilteredErrs, err)
-		}
-	}
-
-	return levelFilteredErrs, nil
+	return errs, nil
 }
