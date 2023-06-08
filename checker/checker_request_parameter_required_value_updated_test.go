@@ -33,7 +33,7 @@ func TestBreaking_HeaderParamBecameRequired(t *testing.T) {
 		}}, errs)
 }
 
-// CL: changing an existing header param from required to optional is not breaking
+// CL: changing an existing header param from required to optional
 func TestBreaking_HeaderParamBecameOptional(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)

@@ -113,7 +113,7 @@ func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: changing an existing header param to optional is not breaking
+// CL: changing an existing header param to optional
 func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)

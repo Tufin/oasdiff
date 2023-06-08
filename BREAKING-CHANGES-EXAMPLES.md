@@ -88,7 +88,6 @@ These examples are automatically generated from unit tests.
 [both max lengths in request are nil is not breaking](checker/checker_breaking_min_max_test.go?plain=1#L178)  
 [both max lengths in response are nil is not breaking](checker/checker_breaking_min_max_test.go?plain=1#L192)  
 [changing a link to operation ID is not breaking](checker/checker_not_breaking_test.go?plain=1#L159)  
-[changing an existing header param to optional is not breaking](checker/checker_not_breaking_test.go?plain=1#L116)  
 [changing an existing property in request body to optional is not breaking](checker/checker_breaking_property_test.go?plain=1#L322)  
 [changing an existing property in request header to optional is not breaking](checker/checker_breaking_property_test.go?plain=1#L82)  
 [changing an existing property in response body to required is not breaking](checker/checker_breaking_property_test.go?plain=1#L308)  
@@ -136,7 +135,8 @@ These examples are automatically generated from unit tests.
 [renaming a path parameter is not breaking](checker/checker_breaking_test.go?plain=1#L135)  
 
 ## Examples of info-level changes for changelog
-[changing an existing header param from required to optional is not breaking](checker/checker_request_parameter_required_value_updated_test.go?plain=1#L36)  
+[changing an existing header param from required to optional](checker/checker_request_parameter_required_value_updated_test.go?plain=1#L36)  
+[changing an existing header param to optional](checker/checker_not_breaking_test.go?plain=1#L116)  
 [deprecating an operation with sunset greater than min](checker/checker_not_breaking_test.go?plain=1#L182)  
 [new paths or path operations](checker/check-api-added_test.go?plain=1#L11)  
 [path operations that became deprecated](checker/checker_deprecation_test.go?plain=1#L324)  
