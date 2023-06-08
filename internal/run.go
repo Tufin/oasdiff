@@ -6,7 +6,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/build"
-	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
@@ -84,11 +83,11 @@ func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *Retu
 }
 
 func normalDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
-	s1, err := checker.LoadOpenAPISpecInfo(loader, base)
+	s1, err := load.LoadSpecInfo(loader, base)
 	if err != nil {
 		return nil, nil, getErrFailedToLoadSpec("base", base, err)
 	}
-	s2, err := checker.LoadOpenAPISpecInfo(loader, revision)
+	s2, err := load.LoadSpecInfo(loader, revision)
 	if err != nil {
 		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
 	}

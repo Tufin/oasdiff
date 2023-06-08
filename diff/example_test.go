@@ -65,13 +65,13 @@ func ExampleGetPathsDiff() {
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
 
-	s1, err := checker.LoadOpenAPISpecInfo(loader, "../data/openapi-test1.yaml")
+	s1, err := load.LoadSpecInfo(loader, "../data/openapi-test1.yaml")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load spec with %v", err)
 		return
 	}
 
-	s2, err := checker.LoadOpenAPISpecInfo(loader, "../data/openapi-test3.yaml")
+	s2, err := load.LoadSpecInfo(loader, "../data/openapi-test3.yaml")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load spec with %v", err)
 		return
@@ -80,8 +80,8 @@ func ExampleGetPathsDiff() {
 	diffConfig := diff.NewConfig().WithCheckBreaking()
 
 	diffRes, operationsSources, err := diff.GetPathsDiff(diffConfig,
-		[]load.OpenAPISpecInfo{*s1},
-		[]load.OpenAPISpecInfo{*s2},
+		[]load.SpecInfo{*s1},
+		[]load.SpecInfo{*s2},
 	)
 
 	if err != nil {

@@ -11,7 +11,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 type Level int
@@ -389,15 +388,4 @@ func (diffBC *BCDiff) AddRequestPropertiesDiff(path string, operation string, me
 		mediaTypeBCDiff.SchemaDiff.PropertiesDiff = &diff.SchemasDiff{}
 	}
 	return mediaTypeBCDiff.SchemaDiff.PropertiesDiff
-}
-
-// LoadOpenAPISpecInfoFromFile loads a LoadOpenAPISpecInfoFromFile from a local file path
-func LoadOpenAPISpecInfoFromFile(loader load.Loader, location string) (*load.OpenAPISpecInfo, error) {
-	s, err := loader.LoadFromFile(location)
-	return &load.OpenAPISpecInfo{Spec: s, Url: location}, err
-}
-
-func LoadOpenAPISpecInfo(loader load.Loader, location string) (*load.OpenAPISpecInfo, error) {
-	s, err := load.From(loader, location)
-	return &load.OpenAPISpecInfo{Spec: s, Url: location}, err
 }

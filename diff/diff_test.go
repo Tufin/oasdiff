@@ -736,10 +736,10 @@ func TestDiff_PathParamInMethodRenamed(t *testing.T) {
 	require.NoError(t, err)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.OpenAPISpecInfo{
+		&load.SpecInfo{
 			Spec: s1,
 		},
-		&load.OpenAPISpecInfo{
+		&load.SpecInfo{
 			Spec: s2,
 		})
 	require.NoError(t, err)
@@ -759,10 +759,10 @@ func TestDiff_PathParamInOperationRenamed(t *testing.T) {
 	require.NoError(t, err)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.OpenAPISpecInfo{
+		&load.SpecInfo{
 			Spec: s1,
 		},
-		&load.OpenAPISpecInfo{
+		&load.SpecInfo{
 			Spec: s2,
 		})
 	require.NoError(t, err)
@@ -782,10 +782,10 @@ func TestDiff_TwoPathParamsRenamed(t *testing.T) {
 	require.NoError(t, err)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.OpenAPISpecInfo{
+		&load.SpecInfo{
 			Spec: s1,
 		},
-		&load.OpenAPISpecInfo{
+		&load.SpecInfo{
 			Spec: s2,
 		})
 	require.NoError(t, err)
@@ -809,10 +809,10 @@ func TestDiff_TwoPathParamsOneRenamed(t *testing.T) {
 	require.NoError(t, err)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.OpenAPISpecInfo{
+		&load.SpecInfo{
 			Spec: s1,
 		},
-		&load.OpenAPISpecInfo{
+		&load.SpecInfo{
 			Spec: s2,
 		})
 	require.NoError(t, err)

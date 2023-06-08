@@ -15,8 +15,8 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-func open(file string) (*load.OpenAPISpecInfo, error) {
-	return checker.LoadOpenAPISpecInfoFromFile(openapi3.NewLoader(), file)
+func open(file string) (*load.SpecInfo, error) {
+	return load.LoadSpecInfoFromFile(openapi3.NewLoader(), file)
 }
 
 func getDeprecationFile(file string) string {
