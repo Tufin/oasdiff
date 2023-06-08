@@ -9,13 +9,13 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-func loadFrom(t *testing.T, path string) *load.OpenAPISpecInfo {
+func loadFrom(t *testing.T, path string) *load.SpecInfo {
 	t.Helper()
 
 	loader := openapi3.NewLoader()
 	oas, err := loader.LoadFromFile(path)
 	require.NoError(t, err)
-	return &load.OpenAPISpecInfo{Spec: oas, Url: path}
+	return &load.SpecInfo{Spec: oas, Url: path}
 }
 
 func TestRun(t *testing.T) {

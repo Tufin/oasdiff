@@ -18,12 +18,12 @@ const (
 	installCommandPath     = "/api/{domain}/{project}/install-command"
 )
 
-func l(t *testing.T, v int) load.OpenAPISpecInfo {
+func l(t *testing.T, v int) load.SpecInfo {
 	t.Helper()
 	loader := openapi3.NewLoader()
 	oas, err := loader.LoadFromFile(fmt.Sprintf("../data/openapi-test%d.yaml", v))
 	require.NoError(t, err)
-	return load.OpenAPISpecInfo{Spec: oas, Url: fmt.Sprintf("../data/openapi-test%d.yaml", v)}
+	return load.SpecInfo{Spec: oas, Url: fmt.Sprintf("../data/openapi-test%d.yaml", v)}
 }
 
 func d(t *testing.T, config *diff.Config, v1, v2 int) []checker.BackwardCompatibilityError {
@@ -143,8 +143,8 @@ func TestBreaking_PathParamRename(t *testing.T) {
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(),
-		&load.OpenAPISpecInfo{Spec: s1},
-		&load.OpenAPISpecInfo{Spec: s2},
+		&load.SpecInfo{Spec: s1},
+		&load.SpecInfo{Spec: s2},
 	)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)

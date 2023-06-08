@@ -7,7 +7,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-func RequiredParamsCheck(source string, s *load.OpenAPISpecInfo) []*Error {
+func RequiredParamsCheck(source string, s *load.SpecInfo) []*Error {
 	result := make([]*Error, 0)
 
 	if s == nil || s.Spec == nil {

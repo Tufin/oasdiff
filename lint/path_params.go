@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
-func PathParamsCheck(source string, s *load.OpenAPISpecInfo) []*Error {
+func PathParamsCheck(source string, s *load.SpecInfo) []*Error {
 	result := make([]*Error, 0)
 
 	if s == nil || s.Spec == nil {

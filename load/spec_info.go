@@ -5,35 +5,36 @@ import (
 	"github.com/yargevad/filepathx"
 )
 
-type OpenAPISpecInfo struct {
+type SpecInfo struct {
 	Url  string
 	Spec *openapi3.T
 }
 
-// LoadOpenAPISpecInfoFromFile loads a LoadOpenAPISpecInfoFromFile from a local file path
-func LoadOpenAPISpecInfoFromFile(loader Loader, location string) (*OpenAPISpecInfo, error) {
+// LoadSpecInfoFromFile creates a SpecInfo from a local file path
+func LoadSpecInfoFromFile(loader Loader, location string) (*SpecInfo, error) {
 	s, err := loader.LoadFromFile(location)
-	return &OpenAPISpecInfo{Spec: s, Url: location}, err
+	return &SpecInfo{Spec: s, Url: location}, err
 }
 
-func LoadOpenAPISpecInfo(loader Loader, location string) (*OpenAPISpecInfo, error) {
+// LoadSpecInfo creates a SpecInfo from a local file path or a URL
+func LoadSpecInfo(loader Loader, location string) (*SpecInfo, error) {
 	s, err := From(loader, location)
-	return &OpenAPISpecInfo{Spec: s, Url: location}, err
+	return &SpecInfo{Spec: s, Url: location}, err
 }
 
-// FromGlob is a convenience function that opens OpenAPI specs from local files matching the specified glob parameter
-func FromGlob(loader Loader, glob string) ([]OpenAPISpecInfo, error) {
+// FromGlob creates SpecInfo specs from local files matching the specified glob parameter
+func FromGlob(loader Loader, glob string) ([]SpecInfo, error) {
 	files, err := filepathx.Glob(glob)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]OpenAPISpecInfo, 0)
+	result := make([]SpecInfo, 0)
 	for _, file := range files {
 		spec, err := loader.LoadFromFile(file)
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, OpenAPISpecInfo{Url: file, Spec: spec})
+		result = append(result, SpecInfo{Url: file, Spec: spec})
 	}
 
 	return result, nil

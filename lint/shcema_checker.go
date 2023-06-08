@@ -20,7 +20,7 @@ func newState(source string) *state {
 	}
 }
 
-func SchemaCheck(source string, spec *load.OpenAPISpecInfo) []*Error {
+func SchemaCheck(source string, spec *load.SpecInfo) []*Error {
 	result := make([]*Error, 0)
 
 	if spec == nil || spec.Spec == nil {

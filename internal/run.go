@@ -83,11 +83,11 @@ func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *Retu
 }
 
 func normalDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
-	s1, err := load.LoadOpenAPISpecInfo(loader, base)
+	s1, err := load.LoadSpecInfo(loader, base)
 	if err != nil {
 		return nil, nil, getErrFailedToLoadSpec("base", base, err)
 	}
-	s2, err := load.LoadOpenAPISpecInfo(loader, revision)
+	s2, err := load.LoadSpecInfo(loader, revision)
 	if err != nil {
 		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
 	}

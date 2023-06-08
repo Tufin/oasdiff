@@ -11,7 +11,7 @@ const (
 	LEVEL_WARN  = 1
 )
 
-type Check func(string, *load.OpenAPISpecInfo) []*Error
+type Check func(string, *load.SpecInfo) []*Error
 
 type Error struct {
 	Id      string `json:"id,omitempty" yaml:"id,omitempty"`
@@ -48,7 +48,7 @@ func (e Errors) Swap(i, j int) {
 	e[i], e[j] = e[j], e[i]
 }
 
-func Run(config Config, source string, spec *load.OpenAPISpecInfo) Errors {
+func Run(config Config, source string, spec *load.SpecInfo) Errors {
 	result := make(Errors, 0)
 
 	if spec == nil {

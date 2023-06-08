@@ -80,17 +80,17 @@ Note that GetWithOperationsSourcesMap expects OpenAPI References (https://swagge
 References are normally resolved automatically when you load the spec.
 In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn.
 */
-func GetWithOperationsSourcesMap(config *Config, s1, s2 *load.OpenAPISpecInfo) (*Diff, *OperationsSourcesMap, error) {
+func GetWithOperationsSourcesMap(config *Config, s1, s2 *load.SpecInfo) (*Diff, *OperationsSourcesMap, error) {
 	diff, err := getDiff(config, newState(), s1.Spec, s2.Spec)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	_, operationsSources1, err := mergedPaths([]load.OpenAPISpecInfo{*s1}, config.MatchPathParams)
+	_, operationsSources1, err := mergedPaths([]load.SpecInfo{*s1}, config.MatchPathParams)
 	if err != nil {
 		return nil, nil, err
 	}
-	_, operationsSources2, err := mergedPaths([]load.OpenAPISpecInfo{*s2}, config.MatchPathParams)
+	_, operationsSources2, err := mergedPaths([]load.SpecInfo{*s2}, config.MatchPathParams)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -115,7 +115,7 @@ Note that Get expects OpenAPI References (https://swagger.io/docs/specification/
 References are normally resolved automatically when you load the spec.
 In other cases you can resolve refs using https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn.
 */
-func GetPathsDiff(config *Config, s1, s2 []load.OpenAPISpecInfo) (*Diff, *OperationsSourcesMap, error) {
+func GetPathsDiff(config *Config, s1, s2 []load.SpecInfo) (*Diff, *OperationsSourcesMap, error) {
 	state := newState()
 	result := newDiff()
 	var err error
@@ -155,7 +155,7 @@ func getPathItem(paths openapi3.Paths, path string, matchPathParams bool) *opena
 	return paths.Find(path)
 }
 
-func mergedPaths(s1 []load.OpenAPISpecInfo, matchPathParams bool) (*openapi3.Paths, *OperationsSourcesMap, error) {
+func mergedPaths(s1 []load.SpecInfo, matchPathParams bool) (*openapi3.Paths, *OperationsSourcesMap, error) {
 	result := make(openapi3.Paths, 0)
 	operationsSources := make(OperationsSourcesMap)
 	for _, s := range s1 {
