@@ -31,6 +31,7 @@ response-mediatype-enum-value-removed: значение перечисления
 request-header-property-became-required: в заголовке запроса %s поле %s стало обязательным
 request-header-property-became-enum: свойство %s заголовка запроса %s было ограничено списком значений перечисления
 request-parameter-became-required: ранее необязательный %s параметр запроса %s стал обязательным
+request-parameter-became-optional: ранее необязательный параметр запроса %s %s теперь является необязательным
 request-parameter-became-enum: заголовок запроса %s поле %s было ограничено списком значений перечисления
 request-parameter-enum-value-removed: удалено значение enum %s у %s параметра запроса %s
 pattern-changed-warn-comment: Это предупреждение, потому что сложно автоматически проанализировать, является ли новый шаблон надмножеством предыдущего шаблона (например, изменен с '[0-9]+' на '[0-9]*').

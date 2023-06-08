@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -28,15 +28,20 @@ func RequestParameterBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 					if requiredDiff == nil {
 						continue
 					}
+
+					id := "request-parameter-became-required"
+					level := ERR
+
 					if requiredDiff.To != true {
-						continue
+						id = "request-parameter-became-optional"
+						level = INFO
 					}
 
 					source := (*operationsSources)[operationItem.Revision]
 					result = append(result, BackwardCompatibilityError{
-						Id:          "request-parameter-became-required",
-						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-became-required"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Id:          id,
+						Level:       level,
+						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

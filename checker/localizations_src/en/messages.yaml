@@ -31,6 +31,7 @@ response-mediatype-enum-value-removed: response schema %s enum value removed %s
 request-header-property-became-required: the %s request header's property %s became required
 request-header-property-became-enum: the %s request header's property %s was restricted to a list of enum values
 request-parameter-became-required: the %s request parameter %s became required
+request-parameter-became-optional: the %s request parameter %s became optional
 request-parameter-became-enum: the %s request parameter %s was restricted to a list of enum values
 request-parameter-enum-value-removed: removed the enum value %s for the %s request parameter %s
 pattern-changed-warn-comment: "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')"
