@@ -249,7 +249,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	require.NoError(t, err)
 	c := singleCheckConfig(checker.APIDeprecationCheck)
 	c.MinSunsetStableDays = 10
-	errs := checker.CheckBackwardCompatibility(c, d, osm)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(c, d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	// only a non-breaking change detected
 	require.Equal(t, errs[0].Level, checker.INFO)
@@ -332,7 +332,7 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIDeprecationCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
@@ -352,7 +352,7 @@ func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIDeprecationCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
