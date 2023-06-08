@@ -31,3 +31,9 @@ localize: ## Run localizer
 devtools:  ## Install dev tools
 	@echo "==> Installing dev tools..."
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin $(GOLANGCILINT_VERSION)
+
+.PHONY: link-git-hooks
+link-git-hooks: ## Install git hooks
+	@echo "==> Installing all git hooks..."
+	find .git/hooks -type l -exec rm {} \;
+	find .githooks -type f -exec ln -sf ../../{} .git/hooks/ \;
