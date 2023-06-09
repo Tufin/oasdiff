@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+STAGED_GO_FILES=$(git diff --cached --name-only | grep ".go$")
+
+echo "Running pre-commit hook"
+
+make localize
+
+for FILE in ${STAGED_GO_FILES}
+do
+    gofmt -w -s "${FILE}"
+    goimports -w "${FILE}"
+    git add "${FILE}"
+done
+
+set -o errexit
+make test
+set +o errexit
