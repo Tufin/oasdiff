@@ -2,17 +2,17 @@ package internal
 
 import "github.com/spf13/cobra"
 
-func getBreakingChangesCmd() *cobra.Command {
+func getChangelogCmd() *cobra.Command {
 
 	return &cobra.Command{
-		Use:   `breaking-changes`,
-		Short: "Display breaking-changes",
+		Use:   `changelog`,
+		Short: "Display changelog",
 		Args:  cobra.ExactArgs(1),
-		Run:   getBreakingChanges,
+		Run:   getChangeLog,
 	}
 }
 
-func getBreakingChanges(cmd *cobra.Command, args []string) {
+func getChangeLog(cmd *cobra.Command, args []string) {
 
 	failEmpty, returnErr := runDiffInternal(cmd, args)
 	exit(failEmpty, returnErr, cmd.ErrOrStderr())

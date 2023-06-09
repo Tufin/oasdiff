@@ -3,121 +3,49 @@ package internal
 import (
 	"fmt"
 	"io"
+	"os"
 
-	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/build"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
+	"github.com/spf13/cobra"
 )
 
 func Run(args []string, stdout io.Writer, stderr io.Writer) int {
-
-	failEmpty, returnErr := runInternal(args, stdout, stderr)
-
-	if returnErr != nil {
-		if returnErr.Err != nil {
-			fmt.Fprintf(stderr, "%v\n", returnErr.Err)
-		}
-		return returnErr.Code
+	rootCmd := &cobra.Command{
+		Use:   `oasdiff`,
+		Short: "Compare and detect breaking changes in OpenAPI specs",
 	}
 
-	if failEmpty {
-		return 1
+	rootCmd.SetOut(stdout)
+	rootCmd.SetErr(stderr)
+
+	rootCmd.AddCommand(
+		getDiffCmd(),
+		getChangelogCmd(),
+		getLintCmd(),
+		getBreakingChangesCmd(),
+	)
+
+	rootCmd.PersistentFlags().StringP("version", "v", "", "show version and quit")
+
+	if err := rootCmd.Execute(); err != nil {
+		// TODO: handle err
+		println(err.Error())
 	}
 
 	return 0
 }
 
-func runInternal(args []string, stdout io.Writer, stderr io.Writer) (bool, *ReturnError) {
-
-	inputFlags, returnErr := parseFlags(args, stdout)
+func exit(failEmpty bool, returnErr *ReturnError, stderr io.Writer) {
 
 	if returnErr != nil {
-		return false, returnErr
-	}
-
-	if inputFlags.version {
-		fmt.Fprintf(stdout, "oasdiff version: %s\n", build.Version)
-		return false, nil
-	}
-
-	if returnErr := validateFlags(inputFlags); returnErr != nil {
-		return false, returnErr
-	}
-
-	openapi3.CircularReferenceCounter = inputFlags.circularReferenceCounter
-
-	config := generateConfig(inputFlags)
-
-	var diffReport *diff.Diff
-	var operationsSources *diff.OperationsSourcesMap
-
-	loader := openapi3.NewLoader()
-	loader.IsExternalRefsAllowed = true
-
-	if inputFlags.composed {
-		var err *ReturnError
-		if diffReport, operationsSources, err = composedDiff(loader, inputFlags.base, inputFlags.revision, config); err != nil {
-			return false, err
+		if returnErr.Err != nil {
+			fmt.Fprintf(stderr, "%v\n", returnErr.Err)
 		}
-	} else {
-		var err *ReturnError
-		if diffReport, operationsSources, err = normalDiff(loader, inputFlags.base, inputFlags.revision, config); err != nil {
-			return false, err
-		}
+		os.Exit(returnErr.Code)
 	}
 
-	if inputFlags.checkBreaking || inputFlags.changelog {
-		diffEmpty, returnError := handleBreakingChanges(stdout, diffReport, operationsSources, inputFlags)
-		return failEmpty(inputFlags.failOnDiff, diffEmpty), returnError
+	if failEmpty {
+		os.Exit(1)
 	}
 
-	if inputFlags.summary {
-		if err := printYAML(stdout, diffReport.GetSummary()); err != nil {
-			return false, getErrFailedPrint("summary", err)
-		}
-		return failEmpty(inputFlags.failOnDiff, diffReport.Empty()), nil
-	}
-
-	return failEmpty(inputFlags.failOnDiff, diffReport.Empty()), handleDiff(stdout, diffReport, inputFlags.format)
-}
-
-func normalDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
-	s1, err := load.LoadSpecInfo(loader, base)
-	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("base", base, err)
-	}
-	s2, err := load.LoadSpecInfo(loader, revision)
-	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
-	}
-
-	diffReport, operationsSources, err := diff.GetWithOperationsSourcesMap(config, s1, s2)
-	if err != nil {
-		return nil, nil, getErrDiffFailed(err)
-	}
-
-	return diffReport, operationsSources, nil
-}
-
-func composedDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
-	s1, err := load.FromGlob(loader, base)
-	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("base", base, err)
-	}
-
-	s2, err := load.FromGlob(loader, revision)
-	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
-	}
-	diffReport, operationsSources, err := diff.GetPathsDiff(config, s1, s2)
-	if err != nil {
-		return nil, nil, getErrDiffFailed(err)
-	}
-
-	return diffReport, operationsSources, nil
-}
-
-func failEmpty(failOnDiff, diffEmpty bool) bool {
-	return failOnDiff && !diffEmpty
+	os.Exit(0)
 }
