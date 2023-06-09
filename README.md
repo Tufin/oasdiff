@@ -48,6 +48,7 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 ## Wrappers
 - [GitHub Action](https://github.com/oasdiff/oasdiff-action)
 - [Cloud Service](#openapi-diff-and-breaking-changes-as-a-service)
+- Get notified when an API provider breaks the API you using: [join the discussion](https://github.com/Tufin/oasdiff/discussions/291)
 
 ## Usage
 ```
