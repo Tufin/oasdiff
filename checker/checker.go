@@ -151,7 +151,7 @@ type BackwardCompatibilityCheckConfig struct {
 	MinSunsetBetaDays   int
 	MinSunsetStableDays int
 	Localizer           localizations.Localizer
-	OverridenLevels     map[string]Level
+	LogLevelOverrides   map[string]Level
 }
 
 func (c *BackwardCompatibilityCheckConfig) i18n(messageID string) string {
@@ -159,7 +159,7 @@ func (c *BackwardCompatibilityCheckConfig) i18n(messageID string) string {
 }
 
 func (c *BackwardCompatibilityCheckConfig) getLogLevel(checkerId string, defaultLevel Level) Level {
-	if level, ok := c.OverridenLevels[checkerId]; ok {
+	if level, ok := c.LogLevelOverrides[checkerId]; ok {
 		return level
 	}
 	return defaultLevel
