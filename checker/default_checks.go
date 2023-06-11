@@ -10,7 +10,7 @@ func GetDefaultChecks() BackwardCompatibilityCheckConfig {
 }
 
 func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
-	return getBackwardCompatibilityCheckConfig(defaultChecks(), LevelOverrides(includeChecks))
+	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks))
 }
 
 func LevelOverrides(includeChecks utils.StringList) map[string]Level {
