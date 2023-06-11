@@ -150,7 +150,7 @@ func validateFlags(inputFlags *InputFlags) *ReturnError {
 		return getErrInvalidFlags(fmt.Errorf("\"check-breaking\" and \"changelog\" cannot be used simultaneously"))
 	}
 
-	if len(inputFlags.includeChecks) > 0 && !inputFlags.checkBreaking {
+	if len(inputFlags.includeChecks) > 0 && !(inputFlags.checkBreaking || inputFlags.changelog) {
 		return getErrInvalidFlags(fmt.Errorf("\"include-checks\" is relevant only with \"-check-breaking\""))
 	}
 

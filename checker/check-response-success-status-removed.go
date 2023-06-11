@@ -49,7 +49,7 @@ func ResponseSuccessRemoved(diffReport *diff.Diff, operationsSources *diff.Opera
 				if filter(status) {
 					result = append(result, BackwardCompatibilityError{
 						Id:          id,
-						Level:       ERR,
+						Level:       config.getLogLevel(id),
 						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

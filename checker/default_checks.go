@@ -10,16 +10,25 @@ func GetDefaultChecks() BackwardCompatibilityCheckConfig {
 }
 
 func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
-	return getBackwardCompatibilityCheckConfig(append(defaultChecks(), includedChecks(includeChecks)...))
+	return getBackwardCompatibilityCheckConfig(defaultChecks(), LevelOverrides(includeChecks))
 }
 
-func GetAllChecks() BackwardCompatibilityCheckConfig {
-	return getBackwardCompatibilityCheckConfig(allChecks())
+func LevelOverrides(includeChecks utils.StringList) map[string]Level {
+	result := map[string]Level{}
+	for _, s := range includeChecks {
+		result[s] = ERR
+	}
+	return result
 }
 
-func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck) BackwardCompatibilityCheckConfig {
+func GetAllChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
+	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks))
+}
+
+func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, levelOverrides map[string]Level) BackwardCompatibilityCheckConfig {
 	return BackwardCompatibilityCheckConfig{
 		Checks:              checks,
+		OverridenLevels:     levelOverrides,
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
 		Localizer:           *localizations.New("en", "en"),
