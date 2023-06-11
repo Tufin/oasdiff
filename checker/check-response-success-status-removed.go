@@ -12,7 +12,7 @@ func ResponseSuccessStatusRemoved(diffReport *diff.Diff, operationsSources *diff
 		return status >= 200 && status <= 299
 	}
 
-	return ResponseSuccessRemoved(diffReport, operationsSources, config, success, "response-success-status-removed")
+	return ResponseSuccessRemoved(diffReport, operationsSources, config, success, "response-success-status-removed", ERR)
 }
 
 func ResponseNonSuccessStatusRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
@@ -20,10 +20,10 @@ func ResponseNonSuccessStatusRemoved(diffReport *diff.Diff, operationsSources *d
 		return status < 200 || status > 299
 	}
 
-	return ResponseSuccessRemoved(diffReport, operationsSources, config, notSuccess, "response-non-success-status-removed")
+	return ResponseSuccessRemoved(diffReport, operationsSources, config, notSuccess, "response-non-success-status-removed", INFO)
 }
 
-func ResponseSuccessRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig, filter func(int) bool, id string) []BackwardCompatibilityError {
+func ResponseSuccessRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig, filter func(int) bool, id string, defaultLevel Level) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -49,7 +49,7 @@ func ResponseSuccessRemoved(diffReport *diff.Diff, operationsSources *diff.Opera
 				if filter(status) {
 					result = append(result, BackwardCompatibilityError{
 						Id:          id,
-						Level:       config.getLogLevel(id),
+						Level:       config.getLogLevel(id, defaultLevel),
 						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

@@ -43,7 +43,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 				for _, enumVal := range enumDiff.Deleted {
 					result = append(result, BackwardCompatibilityError{
 						Id:          requestBodyEnumRemovedId,
-						Level:       ERR,
+						Level:       config.getLogLevel(requestBodyBecameEnumId, INFO),
 						Text:        fmt.Sprintf(config.i18n(requestBodyEnumRemovedId), ColorizedValue(enumVal)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

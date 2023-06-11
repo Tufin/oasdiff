@@ -32,7 +32,7 @@ func APITagRemovedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 			for _, tag := range operationItem.TagsDiff.Deleted {
 				result = append(result, BackwardCompatibilityError{
 					Id:          apiTagRemovedCheckId,
-					Level:       ERR,
+					Level:       config.getLogLevel(apiTagRemovedCheckId, INFO),
 					Text:        fmt.Sprintf(config.i18n(apiTagRemovedCheckId), ColorizedValue(tag)),
 					Operation:   operation,
 					OperationId: op.OperationID,
