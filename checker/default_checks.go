@@ -28,7 +28,7 @@ func GetAllChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConf
 func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, levelOverrides map[string]Level) BackwardCompatibilityCheckConfig {
 	return BackwardCompatibilityCheckConfig{
 		Checks:              checks,
-		OverridenLevels:     levelOverrides,
+		LogLevelOverrides:   levelOverrides,
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
 		Localizer:           *localizations.New("en", "en"),
@@ -54,14 +54,6 @@ func ValidateIncludeChecks(includeChecks utils.StringList) utils.StringList {
 	}
 
 	return result.Sort()
-}
-
-func includedChecks(includeChecks utils.StringList) []BackwardCompatibilityCheck {
-	result := []BackwardCompatibilityCheck{}
-	for _, s := range includeChecks {
-		result = append(result, optionalChecks[s])
-	}
-	return result
 }
 
 func defaultChecks() []BackwardCompatibilityCheck {
