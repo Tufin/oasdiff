@@ -19,12 +19,12 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 
 	rootCmd.AddCommand(
 		getDiffCmd(),
+		getBreakingChangesCmd(),
 		getChangelogCmd(),
 		getLintCmd(),
-		getBreakingChangesCmd(),
 	)
 
-	rootCmd.PersistentFlags().StringP("version", "v", "", "show version and quit")
+	rootCmd.Flags().StringP("version", "v", "", "show version and quit")
 
 	if err := rootCmd.Execute(); err != nil {
 		// TODO: handle err

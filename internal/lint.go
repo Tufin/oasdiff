@@ -14,6 +14,6 @@ func getLintCmd() *cobra.Command {
 
 func getLint(cmd *cobra.Command, args []string) {
 
-	failEmpty, returnErr := runDiffInternal(cmd, args)
-	exit(failEmpty, returnErr, cmd.ErrOrStderr())
+	// failEmpty, returnErr := runDiff(cmd, args)
+	// exit(failEmpty, returnErr, cmd.ErrOrStderr())
 }

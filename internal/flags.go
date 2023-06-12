@@ -10,6 +10,9 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
+type Flags interface {
+}
+
 type InputFlags struct {
 	help                     bool
 	base                     string
@@ -18,7 +21,7 @@ type InputFlags struct {
 	prefixBase               string
 	prefixRevision           string
 	stripPrefixBase          string
-	strip_prefix_revision    string
+	stripPrefixRevision      string
 	prefix                   string
 	filter                   string
 	filterExtension          string
@@ -59,7 +62,7 @@ func parseFlags(args []string, stdout io.Writer) (*InputFlags, *ReturnError) {
 	flags.StringVar(&inputFlags.prefixBase, "prefix-base", "", "if provided, paths in original (base) spec will be prefixed with the given prefix before comparison")
 	flags.StringVar(&inputFlags.prefixRevision, "prefix-revision", "", "if provided, paths in revised (revision) spec will be prefixed with the given prefix before comparison")
 	flags.StringVar(&inputFlags.stripPrefixBase, "strip-prefix-base", "", "if provided, this prefix will be stripped from paths in original (base) spec before comparison")
-	flags.StringVar(&inputFlags.strip_prefix_revision, "strip-prefix-revision", "", "if provided, this prefix will be stripped from paths in revised (revision) spec before comparison")
+	flags.StringVar(&inputFlags.stripPrefixRevision, "strip-prefix-revision", "", "if provided, this prefix will be stripped from paths in revised (revision) spec before comparison")
 	flags.StringVar(&inputFlags.prefix, "prefix", "", "deprecated. use '-prefix-revision' instead")
 	flags.StringVar(&inputFlags.filter, "filter", "", "if provided, diff will include only paths that match this regular expression")
 	flags.StringVar(&inputFlags.filterExtension, "filter-extension", "", "if provided, diff will exclude paths and operations with an OpenAPI Extension matching this regular expression")
@@ -172,7 +175,7 @@ func generateConfig(inputFlags *InputFlags) *diff.Config {
 	config.PathPrefixBase = inputFlags.prefixBase
 	config.PathPrefixRevision = inputFlags.prefixRevision
 	config.PathStripPrefixBase = inputFlags.stripPrefixBase
-	config.PathStripPrefixRevision = inputFlags.strip_prefix_revision
+	config.PathStripPrefixRevision = inputFlags.stripPrefixRevision
 	config.BreakingOnly = inputFlags.breakingOnly
 	config.DeprecationDays = inputFlags.deprecationDays
 	config.MatchPathParams = inputFlags.matchPathParams
