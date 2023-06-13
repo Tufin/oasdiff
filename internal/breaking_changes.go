@@ -3,14 +3,13 @@ package internal
 import (
 	"io"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/checker"
 )
 
 func getBreakingChangesCmd() *cobra.Command {
 
-	flags := BreakingChangesFlags{}
+	flags := ChangelogFlags{}
 
 	cmd := cobra.Command{
 		Use:   "breaking",
@@ -42,43 +41,17 @@ func getBreakingChangesCmd() *cobra.Command {
 	cmd.PersistentFlags().BoolVarP(&flags.matchPathParams, "match-path-params", "", false, "include path parameter names in endpoint matching")
 
 	// specific for breaking-changes
+	cmd.PersistentFlags().VarP(&flags.failOn, "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
 	// level
 	// err-ignore
 	// warn-ignore
 	// info-ignore
 	// deprecation-days
 	// lang
-	// fail-on-errs
-	// fail-on-warns
 	cmd.PersistentFlags().StringSliceVarP(&flags.includeChecks, "include-checks", "", nil, "comma-separated list of optional breaking-changes checks")
 	return &cmd
 }
 
-func runBreakingChanges(flags *BreakingChangesFlags, stdout io.Writer) (bool, *ReturnError) {
-
-	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
-
-	config := flags.toConfig()
-
-	var diffReport *diff.Diff
-	var operationsSources *diff.OperationsSourcesMap
-
-	loader := openapi3.NewLoader()
-	loader.IsExternalRefsAllowed = true
-
-	if flags.composed {
-		var err *ReturnError
-		if diffReport, operationsSources, err = composedDiff(loader, flags.base, flags.revision, config); err != nil {
-			return false, err
-		}
-	} else {
-		var err *ReturnError
-		if diffReport, operationsSources, err = normalDiff(loader, flags.base, flags.revision, config); err != nil {
-			return false, err
-		}
-	}
-
-	diffEmpty, returnError := handleBreakingChanges(stdout, diffReport, operationsSources, flags)
-
-	return failEmpty(flags.isFailOnDiff(), diffEmpty), returnError
+func runBreakingChanges(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnError) {
+	return getChangelog(flags, stdout, checker.WARN)
 }

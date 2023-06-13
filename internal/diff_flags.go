@@ -26,11 +26,7 @@ type DiffFlags struct {
 	excludeElements          []string
 }
 
-func (flags *DiffFlags) isFailOnDiff() bool {
-	return flags.failOnDiff
-}
-
-func (flags *DiffFlags) isExcludeEndpoints() bool {
+func (flags *DiffFlags) getExcludeEndpoints() bool {
 	return slices.Contains(flags.excludeElements, "endpoints")
 }
 
@@ -58,7 +54,7 @@ func (flags *DiffFlags) validate() *ReturnError {
 	if !slices.Contains([]string{"yaml", "json", "text", "html"}, flags.format) {
 		return getErrUnsupportedDiffFormat(flags.format)
 	}
-	if flags.format == "json" && !flags.isExcludeEndpoints() {
+	if flags.format == "json" && !flags.getExcludeEndpoints() {
 		return getErrInvalidFlags(fmt.Errorf("json format requires \"-exclude-elements endpoints\""))
 	}
 	if invalidElements := diff.ValidateExcludeElements(flags.excludeElements); len(invalidElements) > 0 {

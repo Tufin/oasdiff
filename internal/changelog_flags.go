@@ -9,7 +9,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type BreakingChangesFlags struct {
+type ChangelogFlags struct {
 	base                     string
 	revision                 string
 	composed                 bool
@@ -24,21 +24,13 @@ type BreakingChangesFlags struct {
 	matchPathParams          bool
 	excludeElements          []string
 	includeChecks            []string
-
-	// specific breaking-changes
-	failOnErrs  bool
-	failOnWarns bool
+	failOn                   checker.Level
+	lang                     string
+	errIgnoreFile            string
+	warnIgnoreFile           string
 }
 
-func (flags *BreakingChangesFlags) isFailOnDiff() bool {
-	return flags.failOnErrs || flags.failOnWarns
-}
-
-func (flags *BreakingChangesFlags) isExcludeEndpoints() bool {
-	return slices.Contains(flags.excludeElements, "endpoints")
-}
-
-func (flags *BreakingChangesFlags) toConfig() *diff.Config {
+func (flags *ChangelogFlags) toConfig() *diff.Config {
 	config := diff.NewConfig()
 	config.PathFilter = flags.matchPath
 	config.FilterExtension = flags.filterExtension
@@ -52,7 +44,7 @@ func (flags *BreakingChangesFlags) toConfig() *diff.Config {
 	return config
 }
 
-func (flags *BreakingChangesFlags) validate() *ReturnError {
+func (flags *ChangelogFlags) validate() *ReturnError {
 	if flags.base == "" {
 		return getErrInvalidFlags(fmt.Errorf("please specify the \"-base\" flag=the path of the original OpenAPI spec in YAML or JSON format"))
 	}

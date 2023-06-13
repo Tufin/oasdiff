@@ -13,14 +13,6 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-type Level int
-
-const (
-	ERR  Level = 0
-	WARN Level = 1
-	INFO Level = 2
-)
-
 type BackwardCompatibilityError struct {
 	Id          string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text        string `json:"text,omitempty" yaml:"text,omitempty"`
@@ -34,22 +26,13 @@ type BackwardCompatibilityError struct {
 
 type BackwardCompatibilityErrors []BackwardCompatibilityError
 
-func (bcErrors BackwardCompatibilityErrors) IsEmpty(includeWarns bool) bool {
-	if includeWarns {
-		return len(bcErrors) == 0
-	}
-
-	return len(bcErrors) == bcErrors.countWarnings()
-}
-
-func (bcErrors BackwardCompatibilityErrors) countWarnings() int {
-	result := 0
-	for _, bcerr := range bcErrors {
-		if bcerr.Level == WARN {
-			result++
+func (errs BackwardCompatibilityErrors) HasLevelOrHigher(level Level) bool {
+	for _, e := range errs {
+		if e.Level.HigherOrEqual(level) {
+			return true
 		}
 	}
-	return result
+	return false
 }
 
 func (bcErrors BackwardCompatibilityErrors) Len() int {
@@ -177,7 +160,7 @@ func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfi
 
 	filteredResult := make(BackwardCompatibilityErrors, 0)
 	for _, change := range result {
-		if change.Level <= level {
+		if change.Level.HigherOrEqual(level) {
 			filteredResult = append(filteredResult, change)
 		}
 	}
