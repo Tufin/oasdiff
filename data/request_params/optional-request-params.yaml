@@ -1,0 +1,47 @@
+info:
+  title: Tufin
+  version: 1.0.0
+openapi: 3.0.3
+paths:
+  /api/test1:
+    get:
+      operationId: getTest
+      parameters:
+        - in: header
+          name: X-NewRequestHeaderParam
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+    post:
+      responses:
+        201:
+          description: OK
+
+  /api/test2:
+    get:
+      operationId: getTest
+      parameters:
+        - in: query
+          name: newQueryParam
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+
+  /api/test3:
+    get:
+      operationId: getTest
+      parameters:
+        - in: cookie
+          name: csrf-token
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
