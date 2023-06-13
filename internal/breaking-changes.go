@@ -12,12 +12,12 @@ import (
 func handleBreakingChanges(stdout io.Writer, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, inputFlags *InputFlags) (bool, *ReturnError) {
 	var c checker.BackwardCompatibilityCheckConfig
 	var level checker.Level
+
+	c = checker.GetAllChecks(inputFlags.includeChecks)
+	// establish up to what level to log the changes
+	level = checker.INFO
 	if inputFlags.checkBreaking {
-		c = checker.GetChecks(inputFlags.includeChecks)
 		level = checker.WARN
-	} else {
-		c = checker.GetAllChecks()
-		level = checker.INFO
 	}
 
 	c.Localizer = *localizations.New(inputFlags.lang, "en")
