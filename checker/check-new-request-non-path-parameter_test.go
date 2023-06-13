@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: new header, query and cookie request params are detected
+// CL: new header, query and cookie request params
 func TestNewRequestNonPathParameter_DetectsNewPathsAndNewOperations(t *testing.T) {
 	s1, err := open("../data/request_params/base.yaml")
 	require.NoError(t, err)
@@ -32,10 +32,12 @@ func TestNewRequestNonPathParameter_DetectsNewPathsAndNewOperations(t *testing.T
 	require.Equal(t, "new-optional-request-parameter", errs[1].Id)
 	require.Equal(t, "GET", errs[1].Operation)
 	require.Equal(t, "/api/test2", errs[1].Path)
+	require.Equal(t, checker.INFO, errs[1].Level)
 	require.Contains(t, errs[1].Text, "newQueryParam")
 
 	require.Equal(t, "new-optional-request-parameter", errs[2].Id)
 	require.Equal(t, "GET", errs[2].Operation)
 	require.Equal(t, "/api/test3", errs[2].Path)
+	require.Equal(t, checker.INFO, errs[2].Level)
 	require.Contains(t, errs[2].Text, "csrf-token")
 }

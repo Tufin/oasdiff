@@ -138,7 +138,7 @@ These examples are automatically generated from unit tests.
 [changing an existing header param from required to optional](checker/checker_request_parameter_required_value_updated_test.go?plain=1#L36)  
 [changing an existing header param to optional](checker/checker_not_breaking_test.go?plain=1#L116)  
 [deprecating an operation with sunset greater than min](checker/checker_not_breaking_test.go?plain=1#L182)  
-[new header, query and cookie request params are detected](checker/check-new-request-non-path-parameter_test.go?plain=1#L11)  
+[new header, query and cookie request params](checker/check-new-request-non-path-parameter_test.go?plain=1#L11)  
 [new paths or path operations](checker/check-api-added_test.go?plain=1#L11)  
 [path operations that became deprecated](checker/checker_deprecation_test.go?plain=1#L324)  
 [path operations that were re-activated](checker/checker_deprecation_test.go?plain=1#L344)  
