@@ -75,7 +75,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyBecameOptionalCheck,
 		ResponsePropertyBecameNullableCheck,
 		RequestPropertyBecameNotNullableCheck,
-		RequestBodyBecameRequiredCheck,
+		RequestBodyRequiredUpdatedCheck,
 		RequestBodyBecameEnumCheck,
 		ResponseHeaderBecameOptional,
 		ResponseHeaderRemoved,

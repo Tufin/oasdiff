@@ -12,6 +12,17 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
+func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *diff.OperationsSourcesMap, changeId string) {
+	// Check no breaking change is detected
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Empty(t, errs)
+	// Check changelog captures the change
+	errs = checker.CheckBackwardCompatibilityUntilLevel(checker.GetDefaultChecks(), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.INFO, errs[0].Level)
+	require.Equal(t, changeId, errs[0].Id)
+}
+
 // BC: no change is not breaking
 func TestBreaking_Same(t *testing.T) {
 	require.Empty(t, d(t, &diff.Config{BreakingOnly: true}, 1, 1))
@@ -47,8 +58,7 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.Empty(t, errs)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "request-body-became-optional")
 }
 
 // BC: deleting a tag is not breaking

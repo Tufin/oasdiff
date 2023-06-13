@@ -4,7 +4,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestBodyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -17,19 +17,28 @@ func RequestBodyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *di
 			if operationItem.RequestBodyDiff == nil {
 				continue
 			}
-			if operationItem.RequestBodyDiff.RequiredDiff != nil &&
-				operationItem.RequestBodyDiff.RequiredDiff.To == true {
-				source := (*operationsSources)[operationItem.Revision]
-				result = append(result, BackwardCompatibilityError{
-					Id:          "request-body-became-required",
-					Level:       ERR,
-					Text:        config.i18n("request-body-became-required"),
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      source,
-				})
+			if operationItem.RequestBodyDiff.RequiredDiff == nil {
+				continue
 			}
+
+			source := (*operationsSources)[operationItem.Revision]
+
+			id := "request-body-became-optional"
+			logLevel := INFO
+			if operationItem.RequestBodyDiff.RequiredDiff.To == true {
+				id = "request-body-became-required"
+				logLevel = ERR
+			}
+
+			result = append(result, BackwardCompatibilityError{
+				Id:          id,
+				Level:       logLevel,
+				Text:        config.i18n(id),
+				Operation:   operation,
+				OperationId: operationItem.Revision.OperationID,
+				Path:        path,
+				Source:      source,
+			})
 		}
 	}
 	return result
