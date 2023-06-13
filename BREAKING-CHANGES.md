@@ -2,7 +2,7 @@
 A breaking change is a change to a component, such as a server, that could break a dependent component, such as a client, for example deleting an endpoint. 
 When working with OpenAPI, breaking-changes can be caught by monitoring changes to the specification.
 
-**oasiff detects over 100 kinds of breaking changes**
+**oasdiff detects over 100 kinds of breaking changes**
 
 To detect breaking-changes between two specs run oasdiff with the `-check-breaking` flag:
 ```
