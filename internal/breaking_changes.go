@@ -40,6 +40,9 @@ func getBreakingChangesCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in 'revision' spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.matchPathParams, "match-path-params", "", false, "include path parameter names in endpoint matching")
 
+	cmd.MarkPersistentFlagRequired("base")
+	cmd.MarkPersistentFlagRequired("revision")
+
 	// specific for breaking-changes
 	cmd.PersistentFlags().VarP(&flags.failOn, "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
 	// level

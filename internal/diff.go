@@ -43,6 +43,9 @@ func getDiffCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in 'revision' spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.matchPathParams, "match-path-params", "", false, "include path parameter names in endpoint matching")
 
+	cmd.MarkPersistentFlagRequired("base")
+	cmd.MarkPersistentFlagRequired("revision")
+
 	return &cmd
 }
 
@@ -73,13 +76,16 @@ func runDiff(flags *DiffFlags, stdout io.Writer) (bool, *ReturnError) {
 		if err := printYAML(stdout, diffReport.GetSummary()); err != nil {
 			return false, getErrFailedPrint("summary", err)
 		}
-		return failEmpty(flags.failOnDiff, diffReport.Empty()), nil
+	} else {
+		if err := outputDiff(stdout, diffReport, flags.format); err != nil {
+			return false, err
+		}
 	}
 
-	return failEmpty(flags.failOnDiff, diffReport.Empty()), handleDiff(stdout, diffReport, flags.format)
+	return flags.failOnDiff && !diffReport.Empty(), nil
 }
 
-func handleDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {
+func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {
 	switch format {
 	case FormatYAML:
 		if err := printYAML(stdout, diffReport); err != nil {
@@ -138,8 +144,4 @@ func composedDiff(loader load.Loader, base, revision string, config *diff.Config
 	}
 
 	return diffReport, operationsSources, nil
-}
-
-func failEmpty(failOnDiff, diffEmpty bool) bool {
-	return failOnDiff && !diffEmpty
 }

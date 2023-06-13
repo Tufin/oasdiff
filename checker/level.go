@@ -1,6 +1,9 @@
 package checker
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Level int
 
@@ -11,41 +14,47 @@ const (
 	NONE Level = 0
 )
 
-func (level Level) IsValid() bool {
-	return level != NONE
+type LevelArg string
+
+const (
+	LevelERR  LevelArg = "ERR"
+	LevelWARN LevelArg = "WARN"
+	LevelINFO LevelArg = "INFO"
+)
+
+// String is used both by fmt.Print and by Cobra in help text
+func (level *LevelArg) String() string {
+	return string(*level)
+}
+
+// Set must have pointer receiver so it doesn't change the value of a copy
+func (level *LevelArg) Set(v string) error {
+	switch v {
+	case "ERR", "WARN", "INFO":
+		*level = LevelArg(v)
+		return nil
+	default:
+		return errors.New(`must be one of "ERR", "WARN", or "INFO"`)
+	}
+}
+
+// Type is only used in help text
+func (level *LevelArg) Type() string {
+	return "level"
 }
 
 func (level Level) HigherOrEqual(other Level) bool {
 	return level >= other
 }
 
-func (level *Level) Set(levelStr string) error {
-	switch levelStr {
-	case "ERR":
-		*level = ERR
-	case "WARN":
-		*level = WARN
-	case "INFO":
-		*level = INFO
-	default:
-		*level = NONE
-		return fmt.Errorf("invalid level: %s", levelStr)
-	}
-	return nil
-}
-
-func (level Level) String() string {
+func (level LevelArg) ToLevel() (Level, error) {
 	switch level {
-	case ERR:
-		return "ERR"
-	case WARN:
-		return "WARN"
-	case INFO:
-		return "INFO"
+	case "ERR":
+		return ERR, nil
+	case "WARN":
+		return WARN, nil
+	case "INFO":
+		return INFO, nil
 	}
-	return "NONE"
-}
-
-func (level Level) Type() string {
-	return "int64"
+	return INFO, fmt.Errorf("invalid level %s", level)
 }

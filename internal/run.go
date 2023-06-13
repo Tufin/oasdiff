@@ -27,8 +27,8 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 	rootCmd.Flags().StringP("version", "v", "", "show version and quit")
 
 	if err := rootCmd.Execute(); err != nil {
-		// TODO: handle err
-		println(err.Error())
+		fmt.Fprintf(stderr, "%v\n", err)
+		return 101
 	}
 
 	return 0

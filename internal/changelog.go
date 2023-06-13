@@ -44,6 +44,9 @@ func getChangelogCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in 'revision' spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.matchPathParams, "match-path-params", "", false, "include path parameter names in endpoint matching")
 
+	cmd.MarkPersistentFlagRequired("base")
+	cmd.MarkPersistentFlagRequired("revision")
+
 	// specific for breaking-changes
 	cmd.PersistentFlags().VarP(&flags.failOn, "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
 	// level
@@ -95,12 +98,16 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 		return false, returnErr
 	}
 
-	if returnErr := output(bcConfig, flags.format, stdout, errs); returnErr != nil {
+	if returnErr := outputChangelog(bcConfig, flags.format, stdout, errs); returnErr != nil {
 		return false, returnErr
 	}
 
-	if flags.failOn.IsValid() {
-		return errs.HasLevelOrHigher(flags.failOn), nil
+	if flags.failOn != "" {
+		level, err := flags.failOn.ToLevel()
+		if err != nil {
+			return false, getErrInvalidFlags(fmt.Errorf("invalid fail-on value %s", flags.failOn))
+		}
+		return errs.HasLevelOrHigher(level), nil
 	}
 
 	return false, nil
@@ -127,7 +134,7 @@ func filterIgnored(errs checker.BackwardCompatibilityErrors, warnIgnoreFile stri
 	return errs, nil
 }
 
-func output(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.BackwardCompatibilityErrors) *ReturnError {
+func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.BackwardCompatibilityErrors) *ReturnError {
 	switch format {
 	case FormatYAML:
 		if err := printYAML(stdout, errs); err != nil {
