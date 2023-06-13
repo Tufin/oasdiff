@@ -14,7 +14,7 @@ func handleBreakingChanges(stdout io.Writer, diffReport *diff.Diff, operationsSo
 	var level checker.Level
 
 	c = checker.GetAllChecks(inputFlags.includeChecks)
-	// Stablish up to what level to log the changes
+	// establish up to what level to log the changes
 	level = checker.INFO
 	if inputFlags.checkBreaking {
 		level = checker.WARN
