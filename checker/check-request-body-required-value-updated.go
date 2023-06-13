@@ -4,7 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+<<<<<<< HEAD
 func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+=======
+func RequestBodyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+>>>>>>> d44c3f7 (Rename file)
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -17,6 +21,7 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 			if operationItem.RequestBodyDiff == nil {
 				continue
 			}
+<<<<<<< HEAD
 			if operationItem.RequestBodyDiff.RequiredDiff == nil {
 				continue
 			}
@@ -39,6 +44,21 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 				Path:        path,
 				Source:      source,
 			})
+=======
+			if operationItem.RequestBodyDiff.RequiredDiff != nil &&
+				operationItem.RequestBodyDiff.RequiredDiff.To == true {
+				source := (*operationsSources)[operationItem.Revision]
+				result = append(result, BackwardCompatibilityError{
+					Id:          "request-body-became-required",
+					Level:       ERR,
+					Text:        config.i18n("request-body-became-required"),
+					Operation:   operation,
+					OperationId: operationItem.Revision.OperationID,
+					Path:        path,
+					Source:      source,
+				})
+			}
+>>>>>>> d44c3f7 (Rename file)
 		}
 	}
 	return result
