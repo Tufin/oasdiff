@@ -17,7 +17,9 @@ api-path-removed-before-sunset: api path removed before the sunset date %s
 api-removed-without-deprecation: api removed without deprecation
 api-removed-before-sunset: api removed before the sunset date %s
 api-operation-id-removed: api operation id %s removed and replaced with %s
+api-operation-id-added: api operation id %s was added
 api-tag-removed: api tag %s removed
+api-tag-added: api tag %s added
 api-schema-removed: removed the schema %s from openapi components 
 sunset-deleted: api sunset date deleted, but deprecated=true kept
 api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %d days from now
@@ -113,6 +115,8 @@ response-required-property-became-not-write-only-comment: It is valid only if th
 response-required-property-removed: removed the required property %s from the response with the %s status
 response-success-status-removed: removed the success response with the status %s
 response-non-success-status-removed: removed the non-success response with the status %s
+response-success-status-added: added the success response with the status %s
+response-non-success-status-added: added the non-success response with the status %s
 request-allOf-modified: modified allOf for the request property %s
 request-allOf-modified-comment: It is a warning because it is very difficult to check that allOf changed correctly without breaking changes
 response-body-max-increased: the response's body max was increased from %s to %s
