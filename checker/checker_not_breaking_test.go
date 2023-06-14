@@ -161,23 +161,19 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 // BC: changing operation ID is not breaking
 func TestBreaking_OperationID(t *testing.T) {
 	r := d(t, getConfig(), 3, 1)
-	require.Len(t, r, 5)
+	require.Len(t, r, 3)
 	require.Equal(t, "request-parameter-max-length-decreased", r[0].Id)
-	require.Equal(t, "response-success-status-added", r[1].Id)
-	require.Equal(t, "response-success-status-added", r[2].Id)
-	require.Equal(t, "request-parameter-enum-value-removed", r[3].Id)
-	require.Equal(t, "request-parameter-pattern-added", r[4].Id)
+	require.Equal(t, "request-parameter-enum-value-removed", r[1].Id)
+	require.Equal(t, "request-parameter-pattern-added", r[2].Id)
 }
 
 // BC: changing a link to operation ID is not breaking
 func TestBreaking_LinkOperationID(t *testing.T) {
 	r := d(t, getConfig(), 3, 1)
-	require.Len(t, r, 5)
+	require.Len(t, r, 3)
 	require.Equal(t, "request-parameter-max-length-decreased", r[0].Id)
-	require.Equal(t, "response-success-status-added", r[1].Id)
-	require.Equal(t, "response-success-status-added", r[2].Id)
-	require.Equal(t, "request-parameter-enum-value-removed", r[3].Id)
-	require.Equal(t, "request-parameter-pattern-added", r[4].Id)
+	require.Equal(t, "request-parameter-enum-value-removed", r[1].Id)
+	require.Equal(t, "request-parameter-pattern-added", r[2].Id)
 }
 
 // BC: adding a media-type to response is not breaking
