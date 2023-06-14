@@ -17,68 +17,64 @@ func cmdToArgs(cmd string) []string {
 	return strings.Fields(cmd)
 }
 
-func Test_NoArgs(t *testing.T) {
-	require.Equal(t, 101, internal.Run([]string{}, io.Discard, io.Discard))
-}
-
-func Test_OneArg(t *testing.T) {
-	require.Equal(t, 101, internal.Run(cmdToArgs("oasdiff"), io.Discard, io.Discard))
+func Test_InvalidCmd(t *testing.T) {
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff invalid"), io.Discard, io.Discard))
 }
 
 func Test_NoRevision(t *testing.T) {
-	require.Equal(t, 101, internal.Run(cmdToArgs("oasdiff -base base.yaml"), io.Discard, io.Discard))
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff -b base.yaml"), io.Discard, io.Discard))
 }
 
 func Test_InvalidArg(t *testing.T) {
-	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff -base data/openapi-test1.yaml -revision data/openapi-test1.yaml -deprecation-days 23s"), io.Discard, io.Discard))
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff -b data/openapi-test1.yaml -r data/openapi-test1.yaml --invalid"), io.Discard, io.Discard))
 }
 
 func Test_BasicDiff(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -exclude-elements endpoints"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff -b ../data/openapi-test1.yaml -r ../data/openapi-test3.yaml --exclude-elements endpoints"), &stdout, io.Discard))
 	var bc interface{}
 	require.Nil(t, yaml.Unmarshal(stdout.Bytes(), &bc))
 }
 
 func Test_DiffJson(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -format json -exclude-elements endpoints"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff -b ../data/openapi-test1.yaml -r ../data/openapi-test3.yaml -f json --exclude-elements endpoints"), &stdout, io.Discard))
 	var bc interface{}
 	require.Nil(t, json.Unmarshal(stdout.Bytes(), &bc))
 }
 
 func Test_DiffHtml(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -format html"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff -b ../data/openapi-test1.yaml -r ../data/openapi-test3.yaml -f html"), &stdout, io.Discard))
 	require.Contains(t, stdout.String(), `<h3 id="new-endpoints-none">New Endpoints: None</h3>`)
 }
 
 func Test_DiffText(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -format text"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff -b ../data/openapi-test1.yaml -r ../data/openapi-test3.yaml -f text"), &stdout, io.Discard))
 	require.Contains(t, stdout.String(), `### New Endpoints: None`)
 }
 
 func Test_Summary(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -summary"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff summary -b ../data/openapi-test1.yaml -r ../data/openapi-test3.yaml"), &stdout, io.Discard))
 	require.Contains(t, stdout.String(), `diff: true`)
 }
 
 func Test_InvalidFile(t *testing.T) {
-	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff -base no-file -revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
+	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff diff --base no-file --revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
 }
 
 func Test_DiffInvalidFormat(t *testing.T) {
-	require.Equal(t, 108, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -format xxx"), io.Discard, io.Discard))
+	require.Equal(t, 108, internal.Run(cmdToArgs("oasdiff diff --base ../data/openapi-test1.yaml --revision ../data/openapi-test3.yaml -format xxx"), io.Discard, io.Discard))
 }
 
 func Test_BasicBreakingChanges(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -check-breaking"), io.Discard, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking --base ../data/openapi-test1.yaml --revision ../data/openapi-test3.yaml"), io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesInvalidFormat(t *testing.T) {
-	require.Equal(t, 108, internal.Run(cmdToArgs("oasdiff -base ../data/openapi-test1.yaml -revision ../data/openapi-test3.yaml -check-breaking -format html"), io.Discard, io.Discard))
+	require.Equal(t, 108, internal.Run(cmdToArgs("oasdiff breaking --base ../data/openapi-test1.yaml --revision ../data/openapi-test3.yaml -format html"), io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesYaml(t *testing.T) {

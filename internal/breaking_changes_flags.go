@@ -3,12 +3,13 @@ package internal
 import (
 	"fmt"
 
+	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/utils"
 	"golang.org/x/exp/slices"
 )
 
-type DiffFlags struct {
+type BreakingChangesFlags struct {
 	base                     string
 	revision                 string
 	composed                 bool
@@ -19,17 +20,17 @@ type DiffFlags struct {
 	matchPath                string
 	filterExtension          string
 	format                   string
-	failOnDiff               bool
 	circularReferenceCounter int
 	matchPathParams          bool
 	excludeElements          []string
+	includeChecks            []string
+	failOn                   checker.Level
+	lang                     string
+	errIgnoreFile            string
+	warnIgnoreFile           string
 }
 
-func (flags *DiffFlags) getExcludeEndpoints() bool {
-	return slices.Contains(flags.excludeElements, "endpoints")
-}
-
-func (flags *DiffFlags) toConfig() *diff.Config {
+func (flags *BreakingChangesFlags) toConfig() *diff.Config {
 	config := diff.NewConfig()
 	config.PathFilter = flags.matchPath
 	config.FilterExtension = flags.filterExtension
@@ -43,18 +44,20 @@ func (flags *DiffFlags) toConfig() *diff.Config {
 	return config
 }
 
-func (flags *DiffFlags) validate() *ReturnError {
+func (flags *BreakingChangesFlags) validate() *ReturnError {
 	if flags.base == "" {
 		return getErrInvalidFlags(fmt.Errorf("please specify the \"-base\" flag=the path of the original OpenAPI spec in YAML or JSON format"))
 	}
 	if flags.revision == "" {
 		return getErrInvalidFlags(fmt.Errorf("please specify the \"-revision\" flag=the path of the revised OpenAPI spec in YAML or JSON format"))
 	}
-	if !slices.Contains([]string{"yaml", "json", "text", "html"}, flags.format) {
+
+	if !slices.Contains([]string{"yaml", "json", "text"}, flags.format) {
 		return getErrUnsupportedDiffFormat(flags.format)
 	}
-	if flags.format == "json" && !flags.getExcludeEndpoints() {
-		return getErrInvalidFlags(fmt.Errorf("json format requires \"-exclude-elements endpoints\""))
+
+	if invalidChecks := checker.ValidateIncludeChecks(flags.includeChecks); len(invalidChecks) > 0 {
+		return getErrInvalidFlags(fmt.Errorf("invalid include-checks=%s", flags.includeChecks))
 	}
 	if invalidElements := diff.ValidateExcludeElements(flags.excludeElements); len(invalidElements) > 0 {
 		return getErrInvalidFlags(fmt.Errorf("invalid exclude-elements=%s", flags.excludeElements))

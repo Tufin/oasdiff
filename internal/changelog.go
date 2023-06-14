@@ -18,18 +18,26 @@ func getChangelogCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "changelog",
 		Short: "Display changelog",
-		PreRun: func(cmd *cobra.Command, args []string) {
-			if returnErr := flags.validate(); returnErr != nil {
-				exit(false, returnErr, cmd.ErrOrStderr())
+		// PreRun: func(cmd *cobra.Command, args []string) {
+		// 	if returnErr := flags.validate(); returnErr != nil {
+		// 		exit(false, returnErr, cmd.ErrOrStderr())
+		// 	}
+		// },
+		RunE: func(cmd *cobra.Command, args []string) error {
+			failEmpty, err := runChangelog(&flags, cmd.OutOrStdout())
+			if err != nil {
+				setReturnValue(cmd, err.Code)
+				return err.error
 			}
-		},
-		Run: func(cmd *cobra.Command, args []string) {
-			failEmpty, returnErr := runChangelog(&flags, cmd.OutOrStdout())
-			exit(failEmpty, returnErr, cmd.ErrOrStderr())
+
+			if failEmpty {
+				setReturnValue(cmd, 1)
+			}
+
+			return nil
 		},
 	}
 
-	// common
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	cmd.PersistentFlags().StringVarP(&flags.base, "base", "b", "", "path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format")
 	cmd.PersistentFlags().StringVarP(&flags.revision, "revision", "r", "", "path or URL (or a glob in Composed mode) of revised OpenAPI spec in YAML or JSON format")
@@ -47,7 +55,6 @@ func getChangelogCmd() *cobra.Command {
 	cmd.MarkPersistentFlagRequired("base")
 	cmd.MarkPersistentFlagRequired("revision")
 
-	// specific for breaking-changes
 	cmd.PersistentFlags().VarP(&flags.failOn, "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
 	// level
 	// err-ignore

@@ -1,9 +1,8 @@
 package internal
 
 import (
-	"fmt"
 	"io"
-	"os"
+	"strconv"
 
 	"github.com/spf13/cobra"
 )
@@ -14,11 +13,13 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 		Short: "Compare and detect breaking changes in OpenAPI specs",
 	}
 
+	rootCmd.SetArgs(args[1:])
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
 
 	rootCmd.AddCommand(
 		getDiffCmd(),
+		getSummaryCmd(),
 		getBreakingChangesCmd(),
 		getChangelogCmd(),
 		getLintCmd(),
@@ -27,25 +28,35 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 	rootCmd.Flags().StringP("version", "v", "", "show version and quit")
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(stderr, "%v\n", err)
-		return 101
+		return getReturnValue(rootCmd)
 	}
 
-	return 0
+	return getReturnValue(rootCmd)
 }
 
-func exit(failEmpty bool, returnErr *ReturnError, stderr io.Writer) {
-
-	if returnErr != nil {
-		if returnErr.Err != nil {
-			fmt.Fprintf(stderr, "%v\n", returnErr.Err)
-		}
-		os.Exit(returnErr.Code)
+func setReturnValue(cmd *cobra.Command, code int) {
+	if cmd.Root().Annotations == nil {
+		cmd.Root().Annotations = map[string]string{}
 	}
 
-	if failEmpty {
-		os.Exit(1)
+	cmd.Root().Annotations["return"] = strconv.Itoa(code)
+}
+
+func getReturnValue(cmd *cobra.Command) int {
+	if cmd.Root().Annotations == nil {
+		return 0
 	}
 
-	os.Exit(0)
+	codeStr := cmd.Root().Annotations["return"]
+	if codeStr == "" {
+		return 0
+	}
+
+	code, err := strconv.Atoi(codeStr)
+	if err != nil {
+		// TODO: catch err
+		return 0
+	}
+
+	return code
 }
