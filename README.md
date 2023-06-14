@@ -29,6 +29,8 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
 - [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
+- Display a user-friendly changelog of all important API changes
+- Localization: display breaking-changes and changelog messages in English or Russian (please submit an issue if you want to add another language)
 
 
 ## Install with Go
