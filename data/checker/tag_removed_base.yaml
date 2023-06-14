@@ -8,7 +8,8 @@ paths:
   /api/v1.0/groups:
     post:
       tags:
-       - Group
+        - Test
+      operationId: createOneGroup
       requestBody:
         content:
           application/json:

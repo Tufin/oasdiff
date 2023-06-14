@@ -244,7 +244,7 @@ func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 }
 
 // BC: removing an existing response with successful status is breaking
-func TestBreaking_ResponseSuccessStatusRemoved(t *testing.T) {
+func TestBreaking_ResponseSuccessStatusUpdated(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -262,7 +262,7 @@ func TestBreaking_ResponseSuccessStatusRemoved(t *testing.T) {
 }
 
 // BC: removing an existing response with non-successful status is breaking (optional)
-func TestBreaking_ResponseNonSuccessStatusRemoved(t *testing.T) {
+func TestBreaking_ResponseNonSuccessStatusUpdated(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
