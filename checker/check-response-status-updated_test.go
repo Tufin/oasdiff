@@ -10,7 +10,7 @@ import (
 
 // CL: Adding a success response status is detected
 func TestResponseSuccessStatusAdded(t *testing.T) {
-	s1, err := open("../data/checker/response_status_base.yaml")
+	s1, _ := open("../data/checker/response_status_base.yaml")
 	s2, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
 
@@ -37,7 +37,7 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 
 // CL: Adding a response non-success status is detected
 func TestResponseNonSuccessStatusAdded(t *testing.T) {
-	s1, err := open("../data/checker/response_status_base.yaml")
+	s1, _ := open("../data/checker/response_status_base.yaml")
 	s2, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
 
@@ -64,7 +64,7 @@ func TestResponseNonSuccessStatusAdded(t *testing.T) {
 
 // CL: Removing a non-success status is detected
 func TestResponseNonSuccessStatusRemoved(t *testing.T) {
-	s1, err := open("../data/checker/response_status_base.yaml")
+	s1, _ := open("../data/checker/response_status_base.yaml")
 	s2, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
 
@@ -91,7 +91,7 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 
 // CL: Removing a success status is detected and is breaking
 func TestResponseSuccessStatusRemoved(t *testing.T) {
-	s1, err := open("../data/checker/response_status_base.yaml")
+	s1, _ := open("../data/checker/response_status_base.yaml")
 	s2, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
 

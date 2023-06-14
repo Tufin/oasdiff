@@ -10,7 +10,7 @@ import (
 
 // CL: Removing an existing operation id is detected
 func TestOperationIdRemoved(t *testing.T) {
-	s1, err := open("../data/checker/operation_id_removed_base.yaml")
+	s1, _ := open("../data/checker/operation_id_removed_base.yaml")
 	s2, err := open("../data/checker/operation_id_removed_base.yaml")
 	require.NoError(t, err)
 
@@ -35,7 +35,7 @@ func TestOperationIdRemoved(t *testing.T) {
 
 // CL: Updating an existing operation id is detected
 func TestOperationIdUpdated(t *testing.T) {
-	s1, err := open("../data/checker/operation_id_removed_base.yaml")
+	s1, _ := open("../data/checker/operation_id_removed_base.yaml")
 	s2, err := open("../data/checker/operation_id_removed_base.yaml")
 	require.NoError(t, err)
 
@@ -60,7 +60,7 @@ func TestOperationIdUpdated(t *testing.T) {
 
 // CL: Adding a new operation id is detected
 func TestOperationIdAdded(t *testing.T) {
-	s1, err := open("../data/checker/operation_id_added_base.yaml")
+	s1, _ := open("../data/checker/operation_id_added_base.yaml")
 	s2, err := open("../data/checker/operation_id_added_base.yaml")
 	require.Empty(t, err)
 
