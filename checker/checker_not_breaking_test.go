@@ -280,3 +280,15 @@ func TestBreaking_OperationIdAdded(t *testing.T) {
 	require.NoError(t, err)
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-added")
 }
+
+// BC: adding a opeartion ID is not breaking with "operation-id-removed" check
+func TestBreaking_OperationIdAdded(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths[securityScorePath].Get.OperationID = ""
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	require.NoError(t, err)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-added")
+}
