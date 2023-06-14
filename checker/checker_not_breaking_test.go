@@ -282,7 +282,7 @@ func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-tag-added")
 }
 
-// BC: adding a opeartion ID is not breaking with "operation-id-removed" check
+// BC: adding an operation ID is not breaking with "api-operation-id-removed" check
 func TestBreaking_OperationIdAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
