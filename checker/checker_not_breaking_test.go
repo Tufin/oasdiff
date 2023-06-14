@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/utils"
 )
 
 func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *diff.OperationsSourcesMap, changeId string) {
@@ -280,11 +279,7 @@ func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
 	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-tag-removed"}), d, osm)
-	for _, err := range errs {
-		require.Equal(t, checker.ERR, err.Level)
-	}
-	require.Empty(t, errs)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-tag-added")
 }
 
 // BC: adding a opeartion ID is not breaking with "operation-id-removed" check
