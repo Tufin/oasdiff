@@ -40,7 +40,7 @@ func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, le
 
 var optionalChecks = map[string]BackwardCompatibilityCheck{
 	"response-non-success-status-removed":   ResponseNonSuccessStatusRemoved,
-	"api-operation-id-removed":              APIOperationIdRemovedCheck,
+	"api-operation-id-removed":              APIOperationIdUpdatedCheck,
 	"api-tag-removed":                       APITagRemovedCheck,
 	"api-schema-removed":                    APIComponentsSchemaRemovedCheck,
 	"response-property-enum-value-removed":  ResponseParameterEnumValueRemovedCheck,
