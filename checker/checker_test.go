@@ -9,38 +9,38 @@ import (
 
 func TestIsEmpty_EmptyIncludeWarns(t *testing.T) {
 	bcErrors := checker.BackwardCompatibilityErrors{}
-	require.True(t, bcErrors.IsEmpty(true))
+	require.False(t, bcErrors.HasLevelOrHigher(checker.WARN))
 }
 
 func TestIsEmpty_EmptyExcludeWarns(t *testing.T) {
 	bcErrors := checker.BackwardCompatibilityErrors{}
-	require.True(t, bcErrors.IsEmpty(false))
+	require.False(t, bcErrors.HasLevelOrHigher(checker.ERR))
 }
 
 func TestIsEmpty_OneErrIncludeWarns(t *testing.T) {
 	bcErrors := checker.BackwardCompatibilityErrors{
 		checker.BackwardCompatibilityError{Level: checker.ERR},
 	}
-	require.False(t, bcErrors.IsEmpty(true))
+	require.True(t, bcErrors.HasLevelOrHigher(checker.WARN))
 }
 
 func TestIsEmpty_OneErrExcludeWarns(t *testing.T) {
 	bcErrors := checker.BackwardCompatibilityErrors{
 		checker.BackwardCompatibilityError{Level: checker.ERR},
 	}
-	require.False(t, bcErrors.IsEmpty(false))
+	require.True(t, bcErrors.HasLevelOrHigher(checker.ERR))
 }
 
 func TestIsEmpty_OneWarnIncludeWarns(t *testing.T) {
 	bcErrors := checker.BackwardCompatibilityErrors{
 		checker.BackwardCompatibilityError{Level: checker.WARN},
 	}
-	require.False(t, bcErrors.IsEmpty(true))
+	require.True(t, bcErrors.HasLevelOrHigher(checker.WARN))
 }
 
 func TestIsEmpty_OneWarnExcludeWarns(t *testing.T) {
 	bcErrors := checker.BackwardCompatibilityErrors{
 		checker.BackwardCompatibilityError{Level: checker.WARN},
 	}
-	require.True(t, bcErrors.IsEmpty(false))
+	require.False(t, bcErrors.HasLevelOrHigher(checker.ERR))
 }

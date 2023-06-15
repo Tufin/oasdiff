@@ -18,16 +18,11 @@ func getDiffCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "diff",
 		Short: "Generate a diff report",
-		// PreRun: func(cmd *cobra.Command, args []string) {
-		// 	if returnErr := flags.validate(); returnErr != nil {
-		// 		exit(false, returnErr, cmd.ErrOrStderr())
-		// 	}
-		// },
 		RunE: func(cmd *cobra.Command, args []string) error {
 			failEmpty, err := runDiff(&flags, cmd.OutOrStdout())
 			if err != nil {
 				setReturnValue(cmd, err.Code)
-				return err.error
+				return err
 			}
 
 			if failEmpty {
@@ -38,11 +33,14 @@ func getDiffCmd() *cobra.Command {
 		},
 	}
 
+	// var excludeElements = newEnum(diff.ExcludeDiffOptions, "")
+
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	cmd.PersistentFlags().StringVarP(&flags.base, "base", "b", "", "path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format")
 	cmd.PersistentFlags().StringVarP(&flags.revision, "revision", "r", "", "path or URL (or a glob in Composed mode) of revised OpenAPI spec in YAML or JSON format")
 	cmd.PersistentFlags().StringVarP(&flags.format, "format", "f", "yaml", "output format: yaml, json, text or html")
-	cmd.PersistentFlags().StringSliceVarP(&flags.excludeElements, "exclude-elements", "", nil, "comma-separated list of elements to exclude from diff")
+	// cmd.PersistentFlags().StringSliceVarP(&flags.excludeElements, "exclude-elements", "", nil, "comma-separated list of elements to exclude from diff")
+	cmd.PersistentFlags().VarP(newStringSliceValue([]string{}, &flags.excludeElements), "exclude-elements", "", "comma-separated list of elements to exclude from diff")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")

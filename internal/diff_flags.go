@@ -1,11 +1,7 @@
 package internal
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/utils"
-	"golang.org/x/exp/slices"
 )
 
 type DiffFlags struct {
@@ -26,7 +22,8 @@ type DiffFlags struct {
 }
 
 func (flags *DiffFlags) getExcludeEndpoints() bool {
-	return slices.Contains(flags.excludeElements, "endpoints")
+	// return slices.Contains(flags.excludeElements, "endpoints")
+	return false
 }
 
 func (flags *DiffFlags) toConfig() *diff.Config {
@@ -38,27 +35,18 @@ func (flags *DiffFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.MatchPathParams = flags.matchPathParams
-	config.SetExcludeElements(utils.StringList(flags.excludeElements).ToStringSet(), false, false, false)
+	// config.SetExcludeElements(*flags.excludeElements.value)
 
 	return config
 }
 
-func (flags *DiffFlags) validate() *ReturnError {
-	if flags.base == "" {
-		return getErrInvalidFlags(fmt.Errorf("please specify the \"-base\" flag=the path of the original OpenAPI spec in YAML or JSON format"))
-	}
-	if flags.revision == "" {
-		return getErrInvalidFlags(fmt.Errorf("please specify the \"-revision\" flag=the path of the revised OpenAPI spec in YAML or JSON format"))
-	}
-	if !slices.Contains([]string{"yaml", "json", "text", "html"}, flags.format) {
-		return getErrUnsupportedDiffFormat(flags.format)
-	}
-	if flags.format == "json" && !flags.getExcludeEndpoints() {
-		return getErrInvalidFlags(fmt.Errorf("json format requires \"-exclude-elements endpoints\""))
-	}
-	if invalidElements := diff.ValidateExcludeElements(flags.excludeElements); len(invalidElements) > 0 {
-		return getErrInvalidFlags(fmt.Errorf("invalid exclude-elements=%s", flags.excludeElements))
-	}
+// func (flags *DiffFlags) validate() *ReturnError {
+// 	if flags.format == "json" && !flags.getExcludeEndpoints() {
+// 		return getErrInvalidFlags(fmt.Errorf("json format requires \"-exclude-elements endpoints\""))
+// 	}
+// 	if invalidElements := diff.ValidateExcludeElements(flags.excludeElements); len(invalidElements) > 0 {
+// 		return getErrInvalidFlags(fmt.Errorf("invalid exclude-elements=%s", flags.excludeElements))
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

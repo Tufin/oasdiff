@@ -14,16 +14,11 @@ func getBreakingChangesCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "breaking",
 		Short: "Display breaking-changes",
-		// PreRun: func(cmd *cobra.Command, args []string) {
-		// 	if returnErr := flags.validate(); returnErr != nil {
-		// 		exit(false, returnErr, cmd.ErrOrStderr())
-		// 	}
-		// },
 		RunE: func(cmd *cobra.Command, args []string) error {
 			failEmpty, err := runBreakingChanges(&flags, cmd.OutOrStdout())
 			if err != nil {
 				setReturnValue(cmd, err.Code)
-				return err.error
+				return err
 			}
 
 			if failEmpty {

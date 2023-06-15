@@ -20,19 +20,19 @@ type Config struct {
 }
 
 const (
-	excludeExamplesOption    = "examples"
-	excludeDescriptionOption = "description"
-	excludeEndpointsOption   = "endpoints"
-	excludeTitleOption       = "title"
-	excludeSummaryOption     = "summary"
+	ExcludeExamplesOption    = "examples"
+	ExcludeDescriptionOption = "description"
+	ExcludeEndpointsOption   = "endpoints"
+	ExcludeTitleOption       = "title"
+	ExcludeSummaryOption     = "summary"
 )
 
-var excludeDiffOptions = utils.StringSet{
-	excludeExamplesOption:    {},
-	excludeDescriptionOption: {},
-	excludeEndpointsOption:   {},
-	excludeTitleOption:       {},
-	excludeSummaryOption:     {},
+var ExcludeDiffOptions = []string{
+	ExcludeExamplesOption,
+	ExcludeDescriptionOption,
+	ExcludeEndpointsOption,
+	ExcludeTitleOption,
+	ExcludeSummaryOption,
 }
 
 // NewConfig returns a default configuration
@@ -44,43 +44,28 @@ func NewConfig() *Config {
 	}
 }
 
-func (config *Config) SetExcludeElements(excludeElements utils.StringSet, excludeExamples, excludeDescription, excludeEndpoints bool) {
-	config.ExcludeElements = excludeElements
-
-	// backwards compatibility for deprecated flags
-	if excludeExamples {
-		config.ExcludeElements.Add(excludeExamplesOption)
-	}
-	if excludeDescription {
-		config.ExcludeElements.Add(excludeDescriptionOption)
-	}
-	if excludeEndpoints {
-		config.ExcludeElements.Add(excludeEndpointsOption)
-	}
+func (config *Config) SetExcludeElements(excludeElements []string) {
+	config.ExcludeElements = utils.StringList(excludeElements).ToStringSet()
 }
 
 func (config *Config) IsExcludeExamples() bool {
-	return config.ExcludeElements.Contains(excludeExamplesOption)
+	return config.ExcludeElements.Contains(ExcludeExamplesOption)
 }
 
 func (config *Config) IsExcludeDescription() bool {
-	return config.ExcludeElements.Contains(excludeDescriptionOption)
+	return config.ExcludeElements.Contains(ExcludeDescriptionOption)
 }
 
 func (config *Config) IsExcludeEndpoints() bool {
-	return config.ExcludeElements.Contains(excludeEndpointsOption)
+	return config.ExcludeElements.Contains(ExcludeEndpointsOption)
 }
 
 func (config *Config) IsExcludeTitle() bool {
-	return config.ExcludeElements.Contains(excludeTitleOption)
+	return config.ExcludeElements.Contains(ExcludeTitleOption)
 }
 
 func (config *Config) IsExcludeSummary() bool {
-	return config.ExcludeElements.Contains(excludeSummaryOption)
-}
-
-func ValidateExcludeElements(input utils.StringList) utils.StringList {
-	return input.ToStringSet().Minus(excludeDiffOptions).ToStringList().Sort()
+	return config.ExcludeElements.Contains(ExcludeSummaryOption)
 }
 
 const (

@@ -14,16 +14,11 @@ func getSummaryCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "summary",
 		Short: "Generate a diff summary",
-		// PreRun: func(cmd *cobra.Command, args []string) {
-		// 	if returnErr := flags.validate(); returnErr != nil {
-		// 		exit(false, returnErr, cmd.ErrOrStderr())
-		// 	}
-		// },
 		RunE: func(cmd *cobra.Command, args []string) error {
 			failEmpty, err := runSummary(&flags, cmd.OutOrStdout())
 			if err != nil {
 				setReturnValue(cmd, err.Code)
-				return err.error
+				return err
 			}
 
 			if failEmpty {
@@ -38,7 +33,7 @@ func getSummaryCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.base, "base", "b", "", "path or URL (or a glob in Composed mode) of original OpenAPI spec in YAML or JSON format")
 	cmd.PersistentFlags().StringVarP(&flags.revision, "revision", "r", "", "path or URL (or a glob in Composed mode) of revised OpenAPI spec in YAML or JSON format")
 	cmd.PersistentFlags().StringVarP(&flags.format, "format", "f", "yaml", "output format: yaml or json")
-	cmd.PersistentFlags().StringSliceVarP(&flags.excludeElements, "exclude-elements", "", nil, "comma-separated list of elements to exclude from diff")
+	// cmd.PersistentFlags().StringSliceVarP(&flags.excludeElements, "exclude-elements", "", nil, "comma-separated list of elements to exclude from diff")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")

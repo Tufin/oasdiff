@@ -18,16 +18,11 @@ func getChangelogCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "changelog",
 		Short: "Display changelog",
-		// PreRun: func(cmd *cobra.Command, args []string) {
-		// 	if returnErr := flags.validate(); returnErr != nil {
-		// 		exit(false, returnErr, cmd.ErrOrStderr())
-		// 	}
-		// },
 		RunE: func(cmd *cobra.Command, args []string) error {
 			failEmpty, err := runChangelog(&flags, cmd.OutOrStdout())
 			if err != nil {
 				setReturnValue(cmd, err.Code)
-				return err.error
+				return err
 			}
 
 			if failEmpty {
@@ -56,6 +51,7 @@ func getChangelogCmd() *cobra.Command {
 	cmd.MarkPersistentFlagRequired("revision")
 
 	cmd.PersistentFlags().VarP(&flags.failOn, "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
+	cmd.PersistentFlags().VarP(&flags.lang, "lang", "", "exit with return code 1 when output includes errors with this level or higher")
 	// level
 	// err-ignore
 	// warn-ignore
@@ -95,7 +91,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 	}
 
 	bcConfig := checker.GetChecks(flags.includeChecks)
-	bcConfig.Localizer = *localizations.New(flags.lang, "en")
+	bcConfig.Localizer = *localizations.New(flags.lang.String(), "en")
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffReport, operationsSources, level),
