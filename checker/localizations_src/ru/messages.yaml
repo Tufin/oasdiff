@@ -114,6 +114,7 @@ response-property-type-changed: у поля type/format изменился с %s
 response-required-property-became-not-write-only: обязательное поле ответа %s перестало быть write-only для ответа со статусом %s
 response-required-property-became-not-write-only-comment: Изменение допустимо только в том случае, если свойство ВСЕГДА возвращалось ДО изменения спецификации.
 response-required-property-removed: удалено обязательное поле ответа %s из ответа со статусом %s
+response-required-property-added: добавил требуемое свойство %s в ответ со статусом %s
 response-success-status-removed: удален успешный (2xx) статус ответа %s
 response-non-success-status-removed: удален неуспешный (не 2xx) статус ответа %s
 request-allOf-modified: изменено allOf для поля запроса %s

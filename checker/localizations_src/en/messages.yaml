@@ -114,6 +114,7 @@ response-property-type-changed: the response's property type/format changed from
 response-required-property-became-not-write-only: the response required property %s became not write-only for the status %s
 response-required-property-became-not-write-only-comment: It is valid only if the property was always returned before the specification has been changed
 response-required-property-removed: removed the required property %s from the response with the %s status
+response-required-property-added: added the required property %s to the response with the %s status
 response-success-status-removed: removed the success response with the status %s
 response-non-success-status-removed: removed the non-success response with the status %s
 response-success-status-added: added the success response with the status %s
