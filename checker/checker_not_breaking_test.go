@@ -190,8 +190,8 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.Empty(t, errs)
+
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "response-media-type-added")
 }
 
 // CL: deprecating an operation with sunset greater than min
