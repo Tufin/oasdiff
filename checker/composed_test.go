@@ -11,6 +11,8 @@ import (
 )
 
 func loadFrom(t *testing.T, prefix string, v int) load.SpecInfo {
+	t.Helper()
+	
 	path := fmt.Sprintf(prefix+"spec%d.yaml", v)
 	loader := openapi3.NewLoader()
 	oas, err := loader.LoadFromFile(path)

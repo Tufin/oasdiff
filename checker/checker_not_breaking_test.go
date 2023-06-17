@@ -12,6 +12,8 @@ import (
 )
 
 func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *diff.OperationsSourcesMap, changeId string) {
+	t.Helper()
+
 	// Check no breaking change is detected
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)

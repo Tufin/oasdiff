@@ -11,6 +11,8 @@ import (
 )
 
 func l(t *testing.T, v int) *openapi3.T {
+	t.Helper()
+	
 	loader := openapi3.NewLoader()
 	oas, err := loader.LoadFromFile(fmt.Sprintf("../data/openapi-test%d.yaml", v))
 	require.NoError(t, err)
@@ -18,6 +20,8 @@ func l(t *testing.T, v int) *openapi3.T {
 }
 
 func d(t *testing.T, config *diff.Config, v1, v2 int) *diff.Diff {
+	t.Helper()
+	
 	d, err := diff.Get(config, l(t, v1), l(t, v2))
 	require.NoError(t, err)
 	return d
