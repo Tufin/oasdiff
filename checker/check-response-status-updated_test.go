@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Adding a success response status is detected
+// CL: Adding a success response status
 func TestResponseSuccessStatusAdded(t *testing.T) {
 	s1, _ := open("../data/checker/response_status_base.yaml")
 	s2, err := open("../data/checker/response_status_base.yaml")
@@ -35,7 +35,7 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 	}, errs)
 }
 
-// CL: Adding a response non-success status is detected
+// CL: Adding a non-success response status
 func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	s1, _ := open("../data/checker/response_status_base.yaml")
 	s2, err := open("../data/checker/response_status_base.yaml")
@@ -62,7 +62,7 @@ func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	}, errs)
 }
 
-// CL: Removing a non-success status is detected
+// CL: Removing a non-success response status
 func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	s1, _ := open("../data/checker/response_status_base.yaml")
 	s2, err := open("../data/checker/response_status_base.yaml")
@@ -89,7 +89,7 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	}, errs)
 }
 
-// CL: Removing a success status is detected and is breaking
+// BC: Removing a success status is breaking
 func TestResponseSuccessStatusRemoved(t *testing.T) {
 	s1, _ := open("../data/checker/response_status_base.yaml")
 	s2, err := open("../data/checker/response_status_base.yaml")

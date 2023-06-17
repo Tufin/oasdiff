@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Adding a new tag is detecteds
+// CL: Adding a new tag
 func TestTagAdded(t *testing.T) {
 	s1, _ := open("../data/checker/tag_added_base.yaml")
 	s2, err := open("../data/checker/tag_added_base.yaml")
@@ -33,7 +33,7 @@ func TestTagAdded(t *testing.T) {
 		}}, errs)
 }
 
-// CL: Removing an existing tag is detected
+// CL: Removing an existing tag
 func TestTagRemoved(t *testing.T) {
 	s1, _ := open("../data/checker/tag_removed_base.yaml")
 	s2, err := open("../data/checker/tag_removed_base.yaml")
@@ -59,7 +59,7 @@ func TestTagRemoved(t *testing.T) {
 		}}, errs)
 }
 
-// CL: Updating an existing tag is detected
+// CL: Updating an existing tag
 func TestTagUpdated(t *testing.T) {
 	s1, _ := open("../data/checker/tag_removed_base.yaml")
 	s2, err := open("../data/checker/tag_removed_base.yaml")
