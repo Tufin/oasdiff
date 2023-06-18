@@ -16,7 +16,7 @@ type Config struct {
 	BreakingOnly            bool
 	DeprecationDays         int
 	ExcludeElements         utils.StringSet
-	MatchPathParams         bool
+	IncludePathParams       bool
 }
 
 const (

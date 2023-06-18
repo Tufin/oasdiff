@@ -57,7 +57,7 @@ func getReturnValue(cmd *cobra.Command) int {
 
 	code, err := strconv.Atoi(codeStr)
 	if err != nil {
-		// TODO: catch err
+		// this shouldn't happen
 		return 0
 	}
 

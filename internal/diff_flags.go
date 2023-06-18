@@ -17,7 +17,7 @@ type DiffFlags struct {
 	format                   string
 	failOnDiff               bool
 	circularReferenceCounter int
-	matchPathParams          bool
+	includePathParams        bool
 	excludeElements          []string
 }
 
@@ -29,7 +29,7 @@ func (flags *DiffFlags) toConfig() *diff.Config {
 	config.PathPrefixRevision = flags.prefixRevision
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
-	config.MatchPathParams = flags.matchPathParams
+	config.IncludePathParams = flags.includePathParams
 	config.SetExcludeElements(flags.excludeElements)
 
 	return config

@@ -19,7 +19,7 @@ type BreakingChangesFlags struct {
 	filterExtension          string
 	format                   string
 	circularReferenceCounter int
-	matchPathParams          bool
+	includePathParams        bool
 	excludeElements          []string
 	includeChecks            []string
 	failOn                   checker.Level
@@ -36,7 +36,7 @@ func (flags *BreakingChangesFlags) toConfig() *diff.Config {
 	config.PathPrefixRevision = flags.prefixRevision
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
-	config.MatchPathParams = flags.matchPathParams
+	config.IncludePathParams = flags.includePathParams
 	// config.SetExcludeElements(utils.StringList(flags.excludeElements).ToStringSet(), false, false, false)
 
 	return config

@@ -86,11 +86,11 @@ func GetWithOperationsSourcesMap(config *Config, s1, s2 *load.SpecInfo) (*Diff, 
 		return nil, nil, err
 	}
 
-	_, operationsSources1, err := mergedPaths([]load.SpecInfo{*s1}, config.MatchPathParams)
+	_, operationsSources1, err := mergedPaths([]load.SpecInfo{*s1}, config.IncludePathParams)
 	if err != nil {
 		return nil, nil, err
 	}
-	_, operationsSources2, err := mergedPaths([]load.SpecInfo{*s2}, config.MatchPathParams)
+	_, operationsSources2, err := mergedPaths([]load.SpecInfo{*s2}, config.IncludePathParams)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -119,11 +119,11 @@ func GetPathsDiff(config *Config, s1, s2 []load.SpecInfo) (*Diff, *OperationsSou
 	state := newState()
 	result := newDiff()
 	var err error
-	paths1, operationsSources1, err := mergedPaths(s1, config.MatchPathParams)
+	paths1, operationsSources1, err := mergedPaths(s1, config.IncludePathParams)
 	if err != nil {
 		return nil, nil, err
 	}
-	paths2, operationsSources2, err := mergedPaths(s2, config.MatchPathParams)
+	paths2, operationsSources2, err := mergedPaths(s2, config.IncludePathParams)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -147,21 +147,21 @@ func GetPathsDiff(config *Config, s1, s2 []load.SpecInfo) (*Diff, *OperationsSou
 	return result, &operationsSources, nil
 }
 
-func getPathItem(paths openapi3.Paths, path string, matchPathParams bool) *openapi3.PathItem {
-	if matchPathParams {
+func getPathItem(paths openapi3.Paths, path string, includePathParams bool) *openapi3.PathItem {
+	if includePathParams {
 		return paths[path]
 	}
 
 	return paths.Find(path)
 }
 
-func mergedPaths(s1 []load.SpecInfo, matchPathParams bool) (*openapi3.Paths, *OperationsSourcesMap, error) {
+func mergedPaths(s1 []load.SpecInfo, includePathParams bool) (*openapi3.Paths, *OperationsSourcesMap, error) {
 	result := make(openapi3.Paths, 0)
 	operationsSources := make(OperationsSourcesMap)
 	for _, s := range s1 {
 		for path, pathItem := range s.Spec.Paths {
 
-			p := getPathItem(result, path, matchPathParams)
+			p := getPathItem(result, path, includePathParams)
 			if p == nil {
 				result[path] = pathItem
 				for _, opItem := range pathItem.Operations() {
