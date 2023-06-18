@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/spf13/cobra"
+	"github.com/tufin/oasdiff/build"
 )
 
 func Run(args []string, stdout io.Writer, stderr io.Writer) int {
@@ -16,6 +17,7 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 	rootCmd.SetArgs(args[1:])
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
+	rootCmd.Version = build.Version
 
 	rootCmd.AddCommand(
 		getDiffCmd(),
@@ -24,8 +26,6 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 		getChangelogCmd(),
 		getLintCmd(),
 	)
-
-	rootCmd.Flags().StringP("version", "v", "", "show version and quit")
 
 	if err := rootCmd.Execute(); err != nil {
 		if ret := getReturnValue(rootCmd); ret != 0 {

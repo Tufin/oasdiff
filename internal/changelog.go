@@ -55,9 +55,9 @@ func getChangelogCmd() *cobra.Command {
 
 	cmd.PersistentFlags().VarP(&flags.failOn, "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
 	cmd.PersistentFlags().VarP(&flags.lang, "lang", "", "language for localized output")
+	cmd.PersistentFlags().StringVarP(&flags.errIgnoreFile, "err-ignore", "", "", "configuration file for ignoring errors")
+	cmd.PersistentFlags().StringVarP(&flags.warnIgnoreFile, "warn-ignore", "", "", "configuration file for ignoring warnings")
 	// level
-	// err-ignore
-	// warn-ignore
 	// info-ignore
 	// deprecation-days
 	// lang

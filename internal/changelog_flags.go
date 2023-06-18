@@ -37,7 +37,7 @@ func (flags *ChangelogFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
-	// config.SetExcludeElements(utils.StringList(flags.excludeElements).ToStringSet(), false, false, false)
+	config.SetExcludeElements(flags.excludeElements)
 
 	return config
 }
