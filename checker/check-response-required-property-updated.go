@@ -68,7 +68,7 @@ func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							if propertyItem.WriteOnly {
 								comment = "This is a non breaking change because the property is write only."
 							}
-							if !slices.Contains(parent.Base.Value.Required, propertyName) {
+							if !slices.Contains(parent.Revision.Value.Required, propertyName) {
 								// Covered by response-optional-property-added
 								return
 							}
