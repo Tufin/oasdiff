@@ -28,7 +28,7 @@ type BackwardCompatibilityErrors []BackwardCompatibilityError
 
 func (errs BackwardCompatibilityErrors) HasLevelOrHigher(level Level) bool {
 	for _, e := range errs {
-		if e.Level.HigherOrEqual(level) {
+		if e.Level >= level {
 			return true
 		}
 	}
@@ -44,7 +44,7 @@ func (bcErrors BackwardCompatibilityErrors) Less(i, j int) bool {
 
 	switch {
 	case iv.Level != jv.Level:
-		return iv.Level < jv.Level
+		return iv.Level > jv.Level
 	case iv.Path != jv.Path:
 		return iv.Path < jv.Path
 	case iv.Operation != jv.Operation:
@@ -160,7 +160,7 @@ func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfi
 
 	filteredResult := make(BackwardCompatibilityErrors, 0)
 	for _, change := range result {
-		if change.Level.HigherOrEqual(level) {
+		if change.Level >= level {
 			filteredResult = append(filteredResult, change)
 		}
 	}

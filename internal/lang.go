@@ -5,8 +5,9 @@ import "errors"
 type Lang string
 
 const (
-	LangEn Lang = "en"
-	LangRu Lang = "ru"
+	LangDefault Lang = LangEn
+	LangEn      Lang = "en"
+	LangRu      Lang = "ru"
 )
 
 // String is used both by fmt.Print and by Cobra in help text
@@ -21,7 +22,7 @@ func (lang *Lang) Set(v string) error {
 		*lang = Lang(v)
 		return nil
 	default:
-		return errors.New(`must be one of "en", or "ru"`)
+		return errors.New(`must be "en" or "ru"`)
 	}
 }
 

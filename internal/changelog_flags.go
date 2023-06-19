@@ -22,7 +22,7 @@ type ChangelogFlags struct {
 	includePathParams        bool
 	excludeElements          []string
 	includeChecks            []string
-	failOn                   checker.LevelArg
+	failOn                   Level
 	lang                     Lang
 	errIgnoreFile            string
 	warnIgnoreFile           string

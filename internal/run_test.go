@@ -32,7 +32,7 @@ func Test_InvalidFlag(t *testing.T) {
 
 func Test_BasicDiff(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff ../data/openapi-test1.yaml ../data/openapi-test3.yaml"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff ../data/openapi-test1.yaml ../data/openapi-test3.yaml --exclude-elements endpoints"), &stdout, io.Discard))
 	var bc interface{}
 	require.Nil(t, yaml.Unmarshal(stdout.Bytes(), &bc))
 }

@@ -94,7 +94,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 	}
 
 	bcConfig := checker.GetChecks(flags.includeChecks)
-	bcConfig.Localizer = *localizations.New(flags.lang.String(), "en")
+	bcConfig.Localizer = *localizations.New(flags.lang.String(), string(LangDefault))
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffReport, operationsSources, level),
@@ -109,7 +109,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 	}
 
 	if flags.failOn != "" {
-		level, err := flags.failOn.ToLevel()
+		level, err := checker.NewLevel(flags.failOn.String())
 		if err != nil {
 			return false, getErrInvalidFlags(fmt.Errorf("invalid fail-on value %s", flags.failOn))
 		}
