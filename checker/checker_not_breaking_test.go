@@ -44,7 +44,11 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	require.Empty(t, errs)
 }
 
+<<<<<<< HEAD
 // CL: changing an existing request body from required to optional
+=======
+// CL: changing an existing request body from required to optional is not breaking
+>>>>>>> 9b30cba (Update comments to CL)
 func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -258,7 +262,26 @@ func TestBreaking_Servers(t *testing.T) {
 	require.Empty(t, errs)
 }
 
+<<<<<<< HEAD
 // CL: adding a tag
+=======
+// BC: adding a tag is not breaking
+func TestBreaking_TagAdded(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.Empty(t, errs)
+}
+
+// CL: adding a tag is not breaking with "api-tag-removed" check
+>>>>>>> 9b30cba (Update comments to CL)
 func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -269,7 +292,7 @@ func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-tag-added")
 }
 
-// BC: adding an operation ID is not breaking with "api-operation-id-removed" check
+// CL: adding an operation ID is not breaking with "api-operation-id-removed" check
 func TestBreaking_OperationIdAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
