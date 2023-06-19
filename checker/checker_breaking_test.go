@@ -288,7 +288,14 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-removed")
+
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-operation-id-removed"}), d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, "api-operation-id-removed", errs[0].Id)
 }
 
 // BC: removing/updating an enum in request body is breaking (optional)
