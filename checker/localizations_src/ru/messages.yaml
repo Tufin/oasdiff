@@ -126,3 +126,20 @@ response-body-min-decreased: у тела ответа min уменьшено с 
 response-property-min-decreased: для поля ответа %s min уменьшен с %s до %s для ответа со статусом %s
 response-success-status-added: добавлен ответ об успехе со статусом %s
 response-non-success-status-added: добавлен ответ об отсутствии успеха со статусом %s
+api-security-added: к API была добавлена безопасность %s
+api-security-removed: из API была удалена безопасность %s
+api-security-updated: в безопасности эндпоинта %s произошло обновление с %s на %s
+api-global-security-added: к API была добавлена глобальная безопасность %s
+api-global-security-removed: из API была удалена глобальная безопасность %s
+api-global-security-updated: в глобальной безопасности %s произошло обновление с %s на %s
+api-global-security-scope-removed: из глобальной схемы безопасности %s была удалена область безопасности %s
+api-global-security-scope-added: к глобальной схеме безопасности %s была добавлена область безопасности %s
+api-security-scope-removed: из схемы безопасности эндпоинта %s была удалена область безопасности %s
+api-security-scope-added: к схеме безопасности эндпоинта %s была добавлена область безопасности %s
+api-security-component-type-changed: тип компонента схемы безопасности %s был изменен с %s на %s
+api-security-component-oauth-url-changed: URL OAuth в компоненте схемы безопасности %s был изменен с %s на %s
+api-security-component-added: была добавлена компонента схемы безопасности %s
+api-security-component-removed: была удалена компонента схемы безопасности %s
+api-security-component-oauth-scope-added: к компоненте схемы безопасности %s была добавлена область OAuth %s
+api-security-component-oauth-scope-removed: из компоненты схемы безопасности %s была удалена область OAuth %s
+api-security-component-oauth-scope-changed: в компоненте схемы безопасности %s область OAuth %s была обновлена с %s на %s

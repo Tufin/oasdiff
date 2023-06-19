@@ -126,3 +126,20 @@ response-body-max-increased: the response's body max was increased from %s to %s
 response-property-max-increased: the %s response property's max was increased from %s to %s for the response status %s
 response-body-min-decreased: the response's body min was decreased from %s to %s
 response-property-min-decreased: the %s response property's min was decreased from %s to %s for the response status %s
+api-security-added: the endpoint security %s was added to the API
+api-security-removed: the endpoint security %s was removed from the API
+api-security-updated: the endpoint security %s was updated from %s to %s
+api-global-security-added: the security %s was added to the API
+api-global-security-removed: the security %s was removed from the API
+api-global-security-updated: the security %s was updated from %s to %s
+api-global-security-scope-removed: the security scope %s was removed from the global security scheme %s
+api-global-security-scope-added: the security scope %s was added to the global security scheme %s
+api-security-scope-removed: the security scope %s was removed from the endpoint's security scheme %s
+api-security-scope-added: the security scope %s was added to the endpoint's security scheme %s
+api-security-component-type-changed: the component security schema %s type changed from %s to %s
+api-security-component-oauth-url-changed: the component security schema %s oauth url changed from %s to %s
+api-security-component-added: the component security schema %s was added
+api-security-component-removed: the component security schema %s was removed
+api-security-component-oauth-scope-added: the component security schema %s oauth scope %s was added
+api-security-component-oauth-scope-removed: the component security schema %s oauth scope %s was removed
+api-security-component-oauth-scope-changed: the component security schema %s oauth scope %s was updated from %s to %s

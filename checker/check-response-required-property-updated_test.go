@@ -56,7 +56,7 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 // 		}}, errs)
 // }
 
-// CL: Deleting an existent property that was required in response body is detected
+// CL: Removing an existent property that was required in response body is detected
 func TestResponseRequiredPropertyRemoved(t *testing.T) {
 	s1, _ := open("../data/checker/response_required_property_added_revision.yaml")
 	s2, err := open("../data/checker/response_required_property_added_base.yaml")

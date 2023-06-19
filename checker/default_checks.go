@@ -125,6 +125,8 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyMaxIncreasedCheck,
 		ResponsePropertyMinDecreasedCheck,
 		RequestParameterDefaultValueChanged,
+		APIComponentsSecurityUpdatedCheck,
+		APISecurityUpdatedCheck,
 	}
 }
 
