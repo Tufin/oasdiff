@@ -42,10 +42,8 @@ func getDiffCmd() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	// cmd.PersistentFlags().StringVarP(&flags.base, "base", "b", "", "path or URL (or a glob in composed mode) of original OpenAPI spec in YAML or JSON format")
-	// cmd.PersistentFlags().StringVarP(&flags.revision, "revision", "r", "", "path or URL (or a glob in composed mode) of revised OpenAPI spec in YAML or JSON format")
 	cmd.PersistentFlags().StringVarP(&flags.format, "format", "f", "yaml", "output format: yaml, json, text or html")
-	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "", "comma-separated list of elements to exclude from diff")
+	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
@@ -56,9 +54,6 @@ func getDiffCmd() *cobra.Command {
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
 	cmd.PersistentFlags().BoolVarP(&flags.failOnDiff, "fail-on-diff", "", false, "exit with return code 1 when any change is found")
 
-	// cmd.MarkPersistentFlagRequired("base")
-	// cmd.MarkPersistentFlagRequired("revision")
-
 	return &cmd
 }
 
@@ -66,23 +61,9 @@ func runDiff(flags *DiffFlags, stdout io.Writer) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
 
-	config := flags.toConfig()
-
-	var diffReport *diff.Diff
-
-	loader := openapi3.NewLoader()
-	loader.IsExternalRefsAllowed = true
-
-	if flags.composed {
-		var err *ReturnError
-		if diffReport, _, err = composedDiff(loader, flags.base, flags.revision, config); err != nil {
-			return false, err
-		}
-	} else {
-		var err *ReturnError
-		if diffReport, _, err = normalDiff(loader, flags.base, flags.revision, config); err != nil {
-			return false, err
-		}
+	diffReport, _, err := calcDiff(flags)
+	if err != nil {
+		return false, err
 	}
 
 	if err := outputDiff(stdout, diffReport, flags.format); err != nil {
@@ -115,6 +96,18 @@ func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnE
 	}
 
 	return nil
+}
+
+func calcDiff(flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
+
+	loader := openapi3.NewLoader()
+	loader.IsExternalRefsAllowed = true
+
+	if flags.getComposed() {
+		return composedDiff(loader, flags.getBase(), flags.getRevision(), flags.toConfig())
+	}
+
+	return normalDiff(loader, flags.getBase(), flags.getRevision(), flags.toConfig())
 }
 
 func normalDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {

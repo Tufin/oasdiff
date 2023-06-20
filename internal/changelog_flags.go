@@ -1,9 +1,6 @@
 package internal
 
 import (
-	"fmt"
-
-	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -42,14 +39,14 @@ func (flags *ChangelogFlags) toConfig() *diff.Config {
 	return config
 }
 
-func (flags *ChangelogFlags) validate() *ReturnError {
+func (flags *ChangelogFlags) getComposed() bool {
+	return flags.composed
+}
 
-	if invalidChecks := checker.ValidateIncludeChecks(flags.includeChecks); len(invalidChecks) > 0 {
-		return getErrInvalidFlags(fmt.Errorf("invalid include-checks=%s", flags.includeChecks))
-	}
-	// if invalidElements := diff.ValidateExcludeElements(flags.excludeElements); len(invalidElements) > 0 {
-	// 	return getErrInvalidFlags(fmt.Errorf("invalid exclude-elements=%s", flags.excludeElements))
-	// }
+func (flags *ChangelogFlags) getBase() string {
+	return flags.base
+}
 
-	return nil
+func (flags *ChangelogFlags) getRevision() string {
+	return flags.revision
 }

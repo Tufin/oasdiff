@@ -36,15 +36,15 @@ var optionalChecks = map[string]BackwardCompatibilityCheck{
 	"request-body-enum-value-removed":       RequestBodyEnumValueRemovedCheck,
 }
 
-func ValidateIncludeChecks(includeChecks utils.StringList) utils.StringList {
-	result := utils.StringList{}
-	for _, s := range includeChecks {
-		if _, ok := optionalChecks[s]; !ok {
-			result = append(result, s)
-		}
+func GetOptionalChecks() []string {
+	result := make([]string, len(optionalChecks))
+	i := 0
+	for key := range optionalChecks {
+		result[i] = key
+		i++
 	}
 
-	return result.Sort()
+	return result
 }
 
 func includedChecks(includeChecks utils.StringList) []BackwardCompatibilityCheck {

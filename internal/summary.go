@@ -14,6 +14,7 @@ func getSummaryCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "summary original-spec revised-spec [flags]",
 		Short: "Generate a diff summary",
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			flags.base = args[0]
@@ -56,23 +57,9 @@ func runSummary(flags *DiffFlags, stdout io.Writer) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
 
-	config := flags.toConfig()
-
-	var diffReport *diff.Diff
-
-	loader := openapi3.NewLoader()
-	loader.IsExternalRefsAllowed = true
-
-	if flags.composed {
-		var err *ReturnError
-		if diffReport, _, err = composedDiff(loader, flags.base, flags.revision, config); err != nil {
-			return false, err
-		}
-	} else {
-		var err *ReturnError
-		if diffReport, _, err = normalDiff(loader, flags.base, flags.revision, config); err != nil {
-			return false, err
-		}
+	diffReport, _, err := calcDiff(flags)
+	if err != nil {
+		return false, err
 	}
 
 	if err := outputSummary(stdout, diffReport, flags.format); err != nil {

@@ -50,10 +50,13 @@ func writeAsCSV(vals []string) (string, error) {
 	return strings.TrimSuffix(b.String(), "\n"), nil
 }
 
-func checkAllowedValues(values []string, allowedValues []string) error {
-	if notAllowed := utils.StringList(values).ToStringSet().Minus(utils.StringList(allowedValues).ToStringSet()); !notAllowed.Empty() {
-		allowed, _ := writeAsCSV(allowedValues)
-		return fmt.Errorf("must be list of: %s", allowed)
+func checkAllowedValues(values []string, allowed []string) error {
+	if notAllowed := utils.StringList(values).ToStringSet().Minus(utils.StringList(allowed).ToStringSet()); !notAllowed.Empty() {
+		verb := "are"
+		if len(notAllowed) == 1 {
+			verb = "is"
+		}
+		return fmt.Errorf("%s %s not one of the allowed values: %s", strings.Join(notAllowed.ToStringList(), ","), verb, strings.Join(allowed, ","))
 	}
 	return nil
 }

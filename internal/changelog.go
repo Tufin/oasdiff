@@ -43,7 +43,7 @@ func getChangelogCmd() *cobra.Command {
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	cmd.PersistentFlags().StringVarP(&flags.format, "format", "f", "text", "output format: yaml, json, text")
-	cmd.PersistentFlags().StringSliceVarP(&flags.excludeElements, "exclude-elements", "", nil, "comma-separated list of elements to exclude from diff")
+	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
@@ -61,7 +61,6 @@ func getChangelogCmd() *cobra.Command {
 	// info-ignore
 	// deprecation-days
 	// lang
-	cmd.PersistentFlags().StringSliceVarP(&flags.includeChecks, "include-checks", "", nil, "comma-separated list of optional breaking-changes checks")
 	return &cmd
 }
 
@@ -73,24 +72,9 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 
 	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
 
-	diffConfig := flags.toConfig()
-
-	var diffReport *diff.Diff
-	var operationsSources *diff.OperationsSourcesMap
-
-	loader := openapi3.NewLoader()
-	loader.IsExternalRefsAllowed = true
-
-	if flags.composed {
-		var err *ReturnError
-		if diffReport, operationsSources, err = composedDiff(loader, flags.base, flags.revision, diffConfig); err != nil {
-			return false, err
-		}
-	} else {
-		var err *ReturnError
-		if diffReport, operationsSources, err = normalDiff(loader, flags.base, flags.revision, diffConfig); err != nil {
-			return false, err
-		}
+	diffReport, operationsSources, err := calcDiff(flags)
+	if err != nil {
+		return false, err
 	}
 
 	bcConfig := checker.GetChecks(flags.includeChecks)
