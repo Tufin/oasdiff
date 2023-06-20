@@ -151,6 +151,8 @@ These examples are automatically generated from unit tests.
 [Adding a security scope to an API endpoint security](checker/check-api-security-updated_test.go?plain=1#L174)  
 [Adding a success response status](checker/check-response-status-updated_test.go?plain=1#L11)  
 [Adding an optional write-only property to a response](checker/check-response-optional-property-updated_test.go?plain=1#L36)  
+[Changing a response property schema type](checker/check-response-property-type-changed_test.go?plain=1#L36)  
+[Changing a response schema type](checker/check-response-property-type-changed_test.go?plain=1#L11)  
 [Changing request header parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L63)  
 [Changing request path parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L11)  
 [Changing request query parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L37)  
