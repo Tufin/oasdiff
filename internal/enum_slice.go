@@ -17,11 +17,11 @@ type enumSliceValue struct {
 }
 
 func newEnumSliceValue(allowedValues []string, val []string, p *[]string) *enumSliceValue {
-	esv := new(enumSliceValue)
-	esv.allowedValues = allowedValues
-	esv.value = p
-	*esv.value = val
-	return esv
+	result := new(enumSliceValue)
+	result.allowedValues = allowedValues
+	result.value = p
+	*result.value = val
+	return result
 }
 
 func readAsCSV(val string) ([]string, error) {
@@ -56,6 +56,7 @@ func checkAllowedValues(values []string, allowed []string) error {
 		if len(notAllowed) == 1 {
 			verb = "is"
 		}
+		// TODO: find a better way to document the options
 		return fmt.Errorf("%s %s not one of the allowed values: %s", strings.Join(notAllowed.ToStringList(), ","), verb, strings.Join(allowed, ","))
 	}
 	return nil

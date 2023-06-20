@@ -13,7 +13,7 @@ func getBreakingChangesCmd() *cobra.Command {
 	flags := ChangelogFlags{}
 
 	cmd := cobra.Command{
-		Use:   "breaking original-spec revised-spec [flags]",
+		Use:   "breaking base-spec revised-spec [flags]",
 		Short: "Display breaking-changes",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -44,14 +44,14 @@ func getBreakingChangesCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
-	cmd.PersistentFlags().StringVarP(&flags.prefixBase, "prefix-base", "", "", "add this prefix to paths in 'base' spec before comparison")
-	cmd.PersistentFlags().StringVarP(&flags.prefixRevision, "prefix-revision", "", "", "add this prefix to paths in 'revision' spec before comparison")
-	cmd.PersistentFlags().StringVarP(&flags.stripPrefixBase, "strip-prefix-base", "", "", "strip this prefix from paths in 'base' spec before comparison")
-	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in 'revision' spec before comparison")
+	cmd.PersistentFlags().StringVarP(&flags.prefixBase, "prefix-base", "", "", "add this prefix to paths in base-spec before comparison")
+	cmd.PersistentFlags().StringVarP(&flags.prefixRevision, "prefix-revision", "", "", "add this prefix to paths in revised-spec before comparison")
+	cmd.PersistentFlags().StringVarP(&flags.stripPrefixBase, "strip-prefix-base", "", "", "strip this prefix from paths in base-spec before comparison")
+	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
 
-	cmd.PersistentFlags().VarP(&flags.failOn, "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
-	cmd.PersistentFlags().VarP(&flags.lang, "lang", "", "language for localized output")
+	cmd.PersistentFlags().VarP(newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, "", &flags.failOn), "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
+	cmd.PersistentFlags().VarP(newEnumValue([]string{LangEn, LangRu}, LangEn, &flags.lang), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().StringVarP(&flags.errIgnoreFile, "err-ignore", "", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().StringVarP(&flags.warnIgnoreFile, "warn-ignore", "", "", "configuration file for ignoring warnings")
 	// level

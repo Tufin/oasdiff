@@ -67,7 +67,7 @@ func Test_InvalidFile(t *testing.T) {
 }
 
 func Test_DiffInvalidFormat(t *testing.T) {
-	require.Equal(t, 108, internal.Run(cmdToArgs("oasdiff diff ../data/openapi-test1.yaml ../data/openapi-test3.yaml --format xxx"), io.Discard, io.Discard))
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff ../data/openapi-test1.yaml ../data/openapi-test3.yaml --format xxx"), io.Discard, io.Discard))
 }
 
 func Test_BasicBreakingChanges(t *testing.T) {

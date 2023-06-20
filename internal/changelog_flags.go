@@ -19,10 +19,11 @@ type ChangelogFlags struct {
 	includePathParams        bool
 	excludeElements          []string
 	includeChecks            []string
-	failOn                   Level
-	lang                     Lang
+	failOn                   string
+	lang                     string
 	errIgnoreFile            string
 	warnIgnoreFile           string
+	deprecationDays          int
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
@@ -35,6 +36,7 @@ func (flags *ChangelogFlags) toConfig() *diff.Config {
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
 	config.SetExcludeElements(flags.excludeElements)
+	config.DeprecationDays = flags.deprecationDays
 
 	return config
 }
