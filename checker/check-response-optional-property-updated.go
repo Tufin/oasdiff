@@ -8,7 +8,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func ResponseOptionalPropertyRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -32,25 +32,52 @@ func ResponseOptionalPropertyRemovedCheck(diffReport *diff.Diff, operationsSourc
 
 				modifiedMediaTypes := responseDiff.ContentDiff.MediaTypeModified
 				for _, mediaTypeDiff := range modifiedMediaTypes {
+					comment := ""
 					CheckDeletedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
+							level := WARN
 							if propertyItem.WriteOnly {
-								return
+								level = INFO
+								comment = "This is a non breaking change because the property is write only"
 							}
 							if slices.Contains(parent.Base.Value.Required, propertyName) {
+								// covered by response-required-property-removed
 								return
 							}
 							result = append(result, BackwardCompatibilityError{
 								Id:          "response-optional-property-removed",
-								Level:       WARN,
+								Level:       level,
 								Text:        fmt.Sprintf(config.i18n("response-optional-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
 								Source:      source,
+								Comment:     comment,
 							})
 						})
+					CheckAddedPropertiesDiff(
+						mediaTypeDiff.SchemaDiff,
+						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
+							if propertyItem.WriteOnly {
+								comment = "The property is write only"
+							}
+							if slices.Contains(parent.Base.Value.Required, propertyName) {
+								// covered by response-required-property-added
+								return
+							}
+							result = append(result, BackwardCompatibilityError{
+								Id:          "response-optional-property-added",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("response-optional-property-added"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+								Comment:     comment,
+							})
+						})
+
 				}
 			}
 		}
