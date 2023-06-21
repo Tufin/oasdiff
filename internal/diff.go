@@ -61,6 +61,10 @@ func runDiff(flags *DiffFlags, stdout io.Writer) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
 
+	if flags.format == FormatJSON {
+		flags.excludeElements = append(flags.excludeElements, diff.ExcludeEndpointsOption)
+	}
+
 	diffReport, _, err := calcDiff(flags)
 	if err != nil {
 		return false, err

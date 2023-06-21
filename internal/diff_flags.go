@@ -46,11 +46,3 @@ func (flags *DiffFlags) getBase() string {
 func (flags *DiffFlags) getRevision() string {
 	return flags.revision
 }
-
-// func (flags *DiffFlags) validate() *ReturnError {
-// 	if flags.format == "json" && !flags.getExcludeEndpoints() {
-// 		return getErrInvalidFlags(fmt.Errorf("json format requires \"-exclude-elements endpoints\""))
-// 	}
-
-// 	return nil
-// }
