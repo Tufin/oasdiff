@@ -52,14 +52,9 @@ func getChangelogCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixBase, "strip-prefix-base", "", "", "strip this prefix from paths in base-spec before comparison")
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
-
-	cmd.PersistentFlags().VarP(newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, "", &flags.failOn), "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
 	cmd.PersistentFlags().VarP(newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
-	cmd.PersistentFlags().StringVarP(&flags.errIgnoreFile, "err-ignore", "", "", "configuration file for ignoring errors")
-	cmd.PersistentFlags().StringVarP(&flags.warnIgnoreFile, "warn-ignore", "", "", "configuration file for ignoring warnings")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDays, "deprecation-days", "", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
-	// level
-	// info-ignore
+
 	return &cmd
 }
 
