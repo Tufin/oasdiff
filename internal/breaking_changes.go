@@ -42,7 +42,7 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 		},
 	}
 
-	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "compare two sets of specs using globs")
+	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	cmd.PersistentFlags().VarP(newEnumValue([]string{FormatYAML, FormatJSON, FormatText}, FormatText, &flags.format), "format", "f", "output format: yaml, json, or text")
 	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "e", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "p", "", "include only paths that match this regular expression")
