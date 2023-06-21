@@ -71,7 +71,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 		return false, err
 	}
 
-	bcConfig := checker.GetChecks(flags.includeChecks)
+	bcConfig := checker.GetAllChecks(flags.includeChecks)
 	bcConfig.Localizer = *localizations.New(flags.lang, LangDefault)
 
 	errs, returnErr := filterIgnored(

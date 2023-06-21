@@ -70,6 +70,17 @@ func Test_DiffInvalidFormat(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff ../data/openapi-test1.yaml ../data/openapi-test3.yaml --format xxx"), io.Discard, io.Discard))
 }
 
+func Test_BreakingChangesIncludeChecks(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/run_test/breaking_changes_include_checks_base.yaml -revision ../data/run_test/breaking_changes_include_checks_revision.yaml -check-breaking -include-checks response-non-success-status-removed,api-tag-removed -format json"), &stdout, io.Discard))
+	bc := checker.BackwardCompatibilityErrors{}
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
+	require.Len(t, bc, 2)
+	for _, c := range bc {
+		require.Equal(t, c.Level, checker.ERR)
+	}
+}
+
 func Test_BasicBreakingChanges(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml"), io.Discard, io.Discard))
 }
@@ -176,4 +187,23 @@ func Test_DuplicatePathsFail(t *testing.T) {
 
 func Test_DuplicatePathsOK(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/duplicate_endpoints/base.yaml ../data/duplicate_endpoints/revision.yaml --include-path-params"), io.Discard, io.Discard))
+}
+
+func Test_Changelog(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/run_test/changelog_base.yaml -revision ../data/run_test/changelog_revision.yaml -changelog -format json"), &stdout, io.Discard))
+	cl := checker.BackwardCompatibilityErrors{}
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
+	require.Len(t, cl, 1)
+}
+
+func Test_BreakingChangesChangelogOptionalCheckersAreInfoLevel(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/run_test/changelog_include_checks_base.yaml -revision ../data/run_test/changelog_include_checks_revision.yaml -changelog -format json"), &stdout, io.Discard))
+	cl := checker.BackwardCompatibilityErrors{}
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
+	require.Len(t, cl, 2)
+	for _, c := range cl {
+		require.Equal(t, c.Level, checker.INFO)
+	}
 }

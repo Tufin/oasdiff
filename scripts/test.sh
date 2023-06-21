@@ -9,5 +9,4 @@ go fmt ./...
 # update breaking-changes examples doc
 ./scripts/doc_breaking_changes.sh > BREAKING-CHANGES-EXAMPLES.md
 
-# check if any changes need to be pushed
-git diff --exit-code --name-only
+git add "BREAKING-CHANGES-EXAMPLES.md"

@@ -4,8 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/tufin/oasdiff)](https://goreportcard.com/report/github.com/tufin/oasdiff)
 [![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
-
-![image](https://github.com/yonatanmgr/oasdiff/assets/31913495/4fc67b8f-a7d6-4417-bebe-9ab2c7935a1e)
+[![Slack](https://img.shields.io/badge/slack-&#64;oasdiff-green.svg?logo=slack)](https://join.slack.com/t/oasdiff/shared_invite/zt-1wvo7wois-ttncNBmyjyRXqBzyg~P6oA)
 
 Command-line and Go package to compare and detect breaking changes in OpenAPI specs.
 
@@ -29,6 +28,8 @@ docker run --rm -t tufin/oasdiff -format text -base https://raw.githubuserconten
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
 - [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
+- Display a user-friendly changelog of all important API changes
+- Localization: display breaking-changes and changelog messages in English or Russian (please submit an issue if you want to add another language)
 
 
 ## Install with Go
@@ -48,6 +49,7 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 ## Wrappers
 - [GitHub Action](https://github.com/oasdiff/oasdiff-action)
 - [Cloud Service](#openapi-diff-and-breaking-changes-as-a-service)
+- Get notified when an API provider breaks the API you using: [join the discussion](https://github.com/Tufin/oasdiff/discussions/291)
 
 ## Usage
 ```

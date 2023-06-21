@@ -10,16 +10,28 @@ func GetDefaultChecks() BackwardCompatibilityCheckConfig {
 }
 
 func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
-	return getBackwardCompatibilityCheckConfig(append(defaultChecks(), includedChecks(includeChecks)...))
+	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks))
 }
 
-func GetAllChecks() BackwardCompatibilityCheckConfig {
-	return getBackwardCompatibilityCheckConfig(allChecks())
+func LevelOverrides(includeChecks utils.StringList) map[string]Level {
+	result := map[string]Level{}
+	for _, s := range includeChecks {
+		// if the checker was explicitly included with the `-include-checks`,
+		// it means that it's output is considered a breaking change,
+		// so the returned level should overwritten to ERR.
+		result[s] = ERR
+	}
+	return result
 }
 
-func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck) BackwardCompatibilityCheckConfig {
+func GetAllChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
+	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks))
+}
+
+func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, levelOverrides map[string]Level) BackwardCompatibilityCheckConfig {
 	return BackwardCompatibilityCheckConfig{
 		Checks:              checks,
+		LogLevelOverrides:   levelOverrides,
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
 		Localizer:           *localizations.New("en", "en"),
@@ -27,9 +39,9 @@ func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck) Ba
 }
 
 var optionalChecks = map[string]BackwardCompatibilityCheck{
-	"response-non-success-status-removed":   ResponseNonSuccessStatusRemoved,
-	"api-operation-id-removed":              APIOperationIdRemovedCheck,
-	"api-tag-removed":                       APITagRemovedCheck,
+	"response-non-success-status-removed":   ResponseNonSuccessStatusUpdated,
+	"api-operation-id-removed":              APIOperationIdUpdatedCheck,
+	"api-tag-removed":                       APITagUpdatedCheck,
 	"api-schema-removed":                    APIComponentsSchemaRemovedCheck,
 	"response-property-enum-value-removed":  ResponseParameterEnumValueRemovedCheck,
 	"response-mediatype-enum-value-removed": ResponseMediaTypeEnumValueRemovedCheck,
@@ -44,14 +56,6 @@ func GetOptionalChecks() []string {
 		i++
 	}
 
-	return result
-}
-
-func includedChecks(includeChecks utils.StringList) []BackwardCompatibilityCheck {
-	result := []BackwardCompatibilityCheck{}
-	for _, s := range includeChecks {
-		result = append(result, optionalChecks[s])
-	}
 	return result
 }
 
@@ -71,14 +75,14 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyBecameOptionalCheck,
 		ResponsePropertyBecameNullableCheck,
 		RequestPropertyBecameNotNullableCheck,
-		RequestBodyBecameRequiredCheck,
+		RequestBodyRequiredUpdatedCheck,
 		RequestBodyBecameEnumCheck,
 		ResponseHeaderBecameOptional,
 		ResponseHeaderRemoved,
-		ResponseSuccessStatusRemoved,
+		ResponseSuccessStatusUpdated,
 		ResponseMediaTypeRemoved,
 		NewRequestPathParameterCheck,
-		NewRequiredRequestNonPathParameterCheck,
+		NewRequestNonPathParameterCheck,
 		NewRequiredRequestHeaderPropertyCheck,
 		ResponseRequiredPropertyRemovedCheck,
 		UncheckedRequestAllOfWarnCheck,

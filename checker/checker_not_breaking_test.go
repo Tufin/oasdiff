@@ -9,8 +9,20 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/utils"
 )
+
+func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *diff.OperationsSourcesMap, changeId string) {
+	t.Helper()
+
+	// Check no breaking change is detected
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Empty(t, errs)
+	// Check changelog captures the change
+	errs = checker.CheckBackwardCompatibilityUntilLevel(checker.GetDefaultChecks(), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.INFO, errs[0].Level)
+	require.Equal(t, changeId, errs[0].Id)
+}
 
 // BC: no change is not breaking
 func TestBreaking_Same(t *testing.T) {
@@ -32,7 +44,7 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: changing an existing request body from required to optional is not breaking
+// CL: changing an existing request body from required to optional
 func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -47,8 +59,7 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.Empty(t, errs)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "request-body-became-optional")
 }
 
 // BC: deleting a tag is not breaking
@@ -247,22 +258,7 @@ func TestBreaking_Servers(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: adding a tag is not breaking
-func TestBreaking_TagAdded(t *testing.T) {
-	s1 := l(t, 1)
-	s2 := l(t, 1)
-
-	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	for _, err := range errs {
-		require.Equal(t, checker.ERR, err.Level)
-	}
-	require.Empty(t, errs)
-}
-
-// BC: adding a tag is not breaking with "api-tag-removed" check
+// CL: adding a tag
 func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -270,9 +266,17 @@ func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
 	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-tag-removed"}), d, osm)
-	for _, err := range errs {
-		require.Equal(t, checker.ERR, err.Level)
-	}
-	require.Empty(t, errs)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-tag-added")
+}
+
+// CL: adding an operation ID
+func TestBreaking_OperationIdAdded(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths[securityScorePath].Get.OperationID = ""
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	require.NoError(t, err)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-added")
 }
