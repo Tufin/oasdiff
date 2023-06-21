@@ -72,7 +72,7 @@ func Test_DiffInvalidFormat(t *testing.T) {
 
 func Test_BreakingChangesIncludeChecks(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/run_test/breaking_changes_include_checks_base.yaml -revision ../data/run_test/breaking_changes_include_checks_revision.yaml -check-breaking -include-checks response-non-success-status-removed,api-tag-removed -format json"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/run_test/breaking_changes_include_checks_base.yaml ../data/run_test/breaking_changes_include_checks_revision.yaml --include-checks response-non-success-status-removed,api-tag-removed --format json"), &stdout, io.Discard))
 	bc := checker.BackwardCompatibilityErrors{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
 	require.Len(t, bc, 2)
@@ -86,7 +86,7 @@ func Test_BasicBreakingChanges(t *testing.T) {
 }
 
 func Test_BreakingChangesInvalidFormat(t *testing.T) {
-	require.Equal(t, 109, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --format html"), io.Discard, io.Discard))
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --format html"), io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesYaml(t *testing.T) {
