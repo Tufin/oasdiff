@@ -37,6 +37,15 @@ func (v *enumValue) Set(s string) error {
 
 func listOf(options []string) string {
 	l := len(options)
+	if l == 0 {
+		return "empty"
+	}
+	if l == 1 {
+		return options[0]
+	}
+	if l == 2 {
+		return options[0] + " or " + options[1]
+	}
 	return strings.Join(options[:l-1], ", ") + ", or " + options[l-1]
 }
 

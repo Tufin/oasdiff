@@ -42,7 +42,7 @@ func getChangelogCmd() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	cmd.PersistentFlags().StringVarP(&flags.format, "format", "f", "text", "output format: yaml, json, text")
+	cmd.PersistentFlags().VarP(newEnumValue([]string{FormatYAML, FormatJSON, FormatText}, FormatText, &flags.format), "format", "f", "output format: yaml, json, or text")
 	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
@@ -54,7 +54,7 @@ func getChangelogCmd() *cobra.Command {
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
 
 	cmd.PersistentFlags().VarP(newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, "", &flags.failOn), "fail-on", "", "exit with return code 1 when output includes errors with this level or higher")
-	cmd.PersistentFlags().VarP(newEnumValue([]string{LangEn, LangRu}, LangEn, &flags.lang), "lang", "l", "language for localized output")
+	cmd.PersistentFlags().VarP(newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().StringVarP(&flags.errIgnoreFile, "err-ignore", "", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().StringVarP(&flags.warnIgnoreFile, "warn-ignore", "", "", "configuration file for ignoring warnings")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDays, "deprecation-days", "", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")

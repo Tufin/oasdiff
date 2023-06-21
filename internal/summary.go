@@ -38,7 +38,7 @@ func getSummaryCmd() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	cmd.PersistentFlags().StringVarP(&flags.format, "format", "f", "yaml", "output format: yaml or json")
+	cmd.PersistentFlags().VarP(newEnumValue([]string{FormatYAML, FormatJSON}, FormatYAML, &flags.format), "format", "f", "output format: yaml or json")
 	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
