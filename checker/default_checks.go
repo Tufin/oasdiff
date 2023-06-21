@@ -39,9 +39,9 @@ func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, le
 }
 
 var optionalChecks = map[string]BackwardCompatibilityCheck{
-	"response-non-success-status-removed":   ResponseNonSuccessStatusRemoved,
-	"api-operation-id-removed":              APIOperationIdRemovedCheck,
-	"api-tag-removed":                       APITagRemovedCheck,
+	"response-non-success-status-removed":   ResponseNonSuccessStatusUpdated,
+	"api-operation-id-removed":              APIOperationIdUpdatedCheck,
+	"api-tag-removed":                       APITagUpdatedCheck,
 	"api-schema-removed":                    APIComponentsSchemaRemovedCheck,
 	"response-property-enum-value-removed":  ResponseParameterEnumValueRemovedCheck,
 	"response-mediatype-enum-value-removed": ResponseMediaTypeEnumValueRemovedCheck,
@@ -75,11 +75,11 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyBecameOptionalCheck,
 		ResponsePropertyBecameNullableCheck,
 		RequestPropertyBecameNotNullableCheck,
-		RequestBodyBecameRequiredCheck,
+		RequestBodyRequiredUpdatedCheck,
 		RequestBodyBecameEnumCheck,
 		ResponseHeaderBecameOptional,
 		ResponseHeaderRemoved,
-		ResponseSuccessStatusRemoved,
+		ResponseSuccessStatusUpdated,
 		ResponseMediaTypeRemoved,
 		NewRequestPathParameterCheck,
 		NewRequestNonPathParameterCheck,

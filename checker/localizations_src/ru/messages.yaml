@@ -18,6 +18,8 @@ api-removed-without-deprecation: API удалён без deprecation
 api-removed-before-sunset: API удалёг до даты sunset %s
 api-operation-id-removed: Идентификатор операции API %s удален и заменен на %s
 api-tag-removed: Тег API %s удален
+api-operation-id-added: добавлен идентификатор операции API %s
+api-tag-added: тег API %s добавлен
 api-schema-removed: удалена схема %s из компонентов openapi
 sunset-deleted: удалена дата sunset date у API, но сохранён deprecated=true
 api-sunset-date-changed-too-small: дата sunset у API изменена на более раннюю с %s на %s, новая дата sunset должна быть либо не раньше %s, либо, как минимум, %d дней от текущего дня
@@ -26,6 +28,7 @@ new-optional-request-parameter: добавлен новый необязател
 new-required-request-property: добавлено новле обязательное поле запроса %s
 new-required-request-header-property: в заголовке запроса %s добавлено новое обязательное поле %s
 request-body-became-required: тело запроса стало обязательным
+request-body-became-optional: тело запроса стало необязательным
 request-body-became-enum: тело запроса было ограничено списком значений перечисления
 request-body-enum-value-removed: значение перечисления тела запроса удалено %s
 response-mediatype-enum-value-removed: значение перечисления схемы ответа %s удалено %s
@@ -119,3 +122,5 @@ response-body-max-increased: у тела ответа max увеличен с %s
 response-property-max-increased: у поля ответа %s max увеличен с %s до %s для ответа со статусом %s
 response-body-min-decreased: у тела ответа min уменьшено с %s до %s
 response-property-min-decreased: для поля ответа %s min уменьшен с %s до %s для ответа со статусом %s
+response-success-status-added: добавлен ответ об успехе со статусом %s
+response-non-success-status-added: добавлен ответ об отсутствии успеха со статусом %s
