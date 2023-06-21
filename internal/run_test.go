@@ -191,7 +191,7 @@ func Test_DuplicatePathsOK(t *testing.T) {
 
 func Test_Changelog(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/run_test/changelog_base.yaml -revision ../data/run_test/changelog_revision.yaml -changelog -format json"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_base.yaml ../data/run_test/changelog_revision.yaml --format json"), &stdout, io.Discard))
 	cl := checker.BackwardCompatibilityErrors{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 1)
@@ -199,7 +199,7 @@ func Test_Changelog(t *testing.T) {
 
 func Test_BreakingChangesChangelogOptionalCheckersAreInfoLevel(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff -base ../data/run_test/changelog_include_checks_base.yaml -revision ../data/run_test/changelog_include_checks_revision.yaml -changelog -format json"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_include_checks_base.yaml ../data/run_test/changelog_include_checks_revision.yaml --format json"), &stdout, io.Discard))
 	cl := checker.BackwardCompatibilityErrors{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 2)

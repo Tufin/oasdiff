@@ -16,9 +16,13 @@ func getChangelogCmd() *cobra.Command {
 	flags := ChangelogFlags{}
 
 	cmd := cobra.Command{
-		Use:   "changelog base-spec revised-spec [flags]",
+		Use:   "changelog base revision [flags]",
 		Short: "Display changelog",
-		Args:  cobra.ExactArgs(2),
+		Long: `Display a changelog between base and revision specs.
+Base and revision can be a path to a file or a URL.
+In 'composed' mode, base and revision can be a glob and oasdiff will compare mathcing endpoints between the two sets of files.
+`,
+		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			flags.base = args[0]
@@ -43,8 +47,8 @@ func getChangelogCmd() *cobra.Command {
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	cmd.PersistentFlags().VarP(newEnumValue([]string{FormatYAML, FormatJSON, FormatText}, FormatText, &flags.format), "format", "f", "output format: yaml, json, or text")
-	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "", "comma-separated list of elements to exclude")
-	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "", "", "include only paths that match this regular expression")
+	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "e", "comma-separated list of elements to exclude")
+	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 	cmd.PersistentFlags().StringVarP(&flags.prefixBase, "prefix-base", "", "", "add this prefix to paths in base-spec before comparison")
@@ -53,7 +57,7 @@ func getChangelogCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
 	cmd.PersistentFlags().VarP(newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
-	cmd.PersistentFlags().IntVarP(&flags.deprecationDays, "deprecation-days", "", 0, "minimal number of days required between deprecating a resource and removing it without being considered 'breaking'")
+	cmd.PersistentFlags().IntVarP(&flags.deprecationDays, "deprecation-days", "d", 0, "minimal number of days required between deprecating a resource and removing it")
 
 	return &cmd
 }

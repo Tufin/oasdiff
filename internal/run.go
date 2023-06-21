@@ -10,8 +10,8 @@ import (
 
 func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 	rootCmd := &cobra.Command{
-		Use:   `oasdiff`,
-		Short: "Compare and detect breaking changes in OpenAPI specs",
+		Use:   "oasdiff",
+		Short: "OpenAPI specification diff",
 	}
 
 	rootCmd.SetArgs(args[1:])
