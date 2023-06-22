@@ -161,6 +161,8 @@ These examples are automatically generated from unit tests.
 [Removing a new oauth security scope](checker/check-components-security-updated_test.go?plain=1#L132)  
 [Removing a new security component](checker/check-components-security-updated_test.go?plain=1#L84)  
 [Removing a new security to the API endpoint](checker/check-api-security-updated_test.go?plain=1#L128)  
+[Changing optional response property to required](checker/check-response-optional-property-updated_test.go?plain=1#L11)  
+[Changing required response property to optional](checker/check-response-property-became-optional_test.go?plain=1#L11)  
 [Removing a non-success response status](checker/check-response-status-updated_test.go?plain=1#L65)  
 [Removing a security scope from an API endpoint security](checker/check-api-security-updated_test.go?plain=1#L151)  
 [Removing a security scope from an API global security](checker/check-api-security-updated_test.go?plain=1#L57)  
