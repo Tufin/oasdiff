@@ -44,11 +44,7 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-<<<<<<< HEAD
 // CL: changing an existing request body from required to optional
-=======
-// CL: changing an existing request body from required to optional is not breaking
->>>>>>> 9b30cba (Update comments to CL)
 func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -190,8 +186,8 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "response-media-type-added")
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Empty(t, errs)
 }
 
 // CL: deprecating an operation with sunset greater than min
@@ -262,9 +258,6 @@ func TestBreaking_Servers(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-<<<<<<< HEAD
-// CL: adding a tag
-=======
 // BC: adding a tag is not breaking
 func TestBreaking_TagAdded(t *testing.T) {
 	s1 := l(t, 1)
@@ -281,7 +274,6 @@ func TestBreaking_TagAdded(t *testing.T) {
 }
 
 // CL: adding a tag is not breaking with "api-tag-removed" check
->>>>>>> 9b30cba (Update comments to CL)
 func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
