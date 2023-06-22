@@ -165,7 +165,7 @@ These examples are automatically generated from unit tests.
 [Removing a non-success response status](checker/check-response-status-updated_test.go?plain=1#L65)  
 [Removing a security scope from an API endpoint security](checker/check-api-security-updated_test.go?plain=1#L151)  
 [Removing a security scope from an API global security](checker/check-api-security-updated_test.go?plain=1#L57)  
-[Removing an existent property that was required in response body is detected](checker/check-response-required-property-updated_test.go?plain=1#L59)  
+[Removing an existent property that was required in response body is detected](checker/check-response-required-property-updated_test.go?plain=1#L34)  
 [Removing an existing operation id](checker/check-api-operation-id-updated_test.go?plain=1#L11)  
 [Removing an existing tag](checker/check-api-tag-updated_test.go?plain=1#L36)  
 [Removing an optional write-only property from a response](checker/check-response-optional-property-updated_test.go?plain=1#L11)  
