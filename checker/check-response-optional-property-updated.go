@@ -32,49 +32,48 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 
 				modifiedMediaTypes := responseDiff.ContentDiff.MediaTypeModified
 				for _, mediaTypeDiff := range modifiedMediaTypes {
-					comment := ""
 					CheckDeletedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 							level := WARN
+							id := "response-optional-property-removed"
 							if propertyItem.WriteOnly {
 								level = INFO
-								comment = "This is a non breaking change because the property is write only"
+								id = "response-optional-write-only-property-removed"
 							}
 							if slices.Contains(parent.Base.Value.Required, propertyName) {
 								// covered by response-required-property-removed
 								return
 							}
 							result = append(result, BackwardCompatibilityError{
-								Id:          "response-optional-property-removed",
+								Id:          id,
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n("response-optional-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
 								Source:      source,
-								Comment:     comment,
 							})
 						})
 					CheckAddedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
+							id := "response-optional-property-added"
 							if propertyItem.WriteOnly {
-								comment = "The property is write only"
+								id = "response-optional-write-only-property-added"
 							}
 							if slices.Contains(parent.Base.Value.Required, propertyName) {
 								// covered by response-required-property-added
 								return
 							}
 							result = append(result, BackwardCompatibilityError{
-								Id:          "response-optional-property-added",
+								Id:          id,
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("response-optional-property-added"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
 								Source:      source,
-								Comment:     comment,
 							})
 						})
 

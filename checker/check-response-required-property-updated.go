@@ -9,8 +9,10 @@ import (
 )
 
 const (
-	ResponseRequiredPropertyRemovedCheckId = "response-required-property-removed"
-	ResponseRequiredPropertyAddedCheckId   = "response-required-property-added"
+	ResponseRequiredPropertyRemovedCheckId          = "response-required-property-removed"
+	ResponseRequiredWriteOnlyPropertyRemovedCheckId = "response-required-write-only-property-removed"
+	ResponseRequiredPropertyAddedCheckId            = "response-required-property-added"
+	ResponseRequiredWriteOnlyPropertyAddedCheckId   = "response-required-write-only-property-added"
 )
 
 func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
@@ -41,46 +43,44 @@ func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 							level := ERR
-							comment := ""
+							id := ResponseRequiredPropertyRemovedCheckId
 							if propertyItem.WriteOnly {
 								level = INFO
-								comment = "This is a non breaking change because the property is write only."
+								id = ResponseRequiredWriteOnlyPropertyRemovedCheckId
 							}
 							if !slices.Contains(parent.Base.Value.Required, propertyName) {
 								// Covered by response-optional-property-removed
 								return
 							}
 							result = append(result, BackwardCompatibilityError{
-								Id:          "response-required-property-removed",
+								Id:          id,
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n("response-required-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
 								Source:      source,
-								Comment:     comment,
 							})
 						})
 					CheckAddedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
-							comment := ""
+							id := ResponseRequiredPropertyAddedCheckId
 							if propertyItem.WriteOnly {
-								comment = "This is a non breaking change because the property is write only."
+								id = ResponseRequiredWriteOnlyPropertyAddedCheckId
 							}
 							if !slices.Contains(parent.Revision.Value.Required, propertyName) {
 								// Covered by response-optional-property-added
 								return
 							}
 							result = append(result, BackwardCompatibilityError{
-								Id:          "response-required-property-added",
+								Id:          id,
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("response-required-property-added"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
 								Source:      source,
-								Comment:     comment,
 							})
 						})
 				}

@@ -144,3 +144,7 @@ api-security-component-oauth-scope-added: the component security schema %s oauth
 api-security-component-oauth-scope-removed: the component security schema %s oauth scope %s was removed
 api-security-component-oauth-scope-changed: the component security schema %s oauth scope %s was updated from %s to %s
 response-optional-property-added: added the optional property %s to the response with the %s status
+response-optional-write-only-property-added: added the optional write-only property %s to the response with the %s status
+response-optional-write-only-property-removed: removed the optional write-only property %s from the response with the %s status
+response-required-write-only-property-added: added the required write-only property %s to the response with the %s status
+response-required-write-only-property-removed: removed the required write-only property %s from the response with the %s status

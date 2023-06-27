@@ -73,14 +73,13 @@ func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
-			Id:          "response-optional-property-removed",
-			Text:        "removed the optional property 'data/id' from the response with the '200' status",
+			Id:          "response-optional-write-only-property-removed",
+			Text:        "removed the optional write-only property 'data/id' from the response with the '200' status",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/api/v1.0/groups",
 			Source:      "../data/checker/response_optional_property_removed_revision.yaml",
 			OperationId: "createOneGroup",
-			Comment:     "This is a non breaking change because the property is write only",
 		},
 	}, errs)
 }
@@ -100,9 +99,8 @@ func TestResponseOptionalWriteOnlyPropertyAddedCheck(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
-			Id:          "response-optional-property-added",
-			Text:        "added the optional property 'data/id' to the response with the '200' status",
-			Comment:     "The property is write only",
+			Id:          "response-optional-write-only-property-added",
+			Text:        "added the optional write-only property 'data/id' to the response with the '200' status",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/api/v1.0/groups",

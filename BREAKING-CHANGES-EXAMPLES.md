@@ -171,6 +171,7 @@ These examples are automatically generated from unit tests.
 [Removing an optional write-only property from a response](checker/check-response-optional-property-updated_test.go?plain=1#L11)  
 [Updating an existing operation id](checker/check-api-operation-id-updated_test.go?plain=1#L36)  
 [Updating an existing tag](checker/check-api-tag-updated_test.go?plain=1#L62)  
+[adding a required write-only property to response body is detected](checker/check-response-required-property-updated_test.go?plain=1#L58)  
 [changing an existing header param from required to optional](checker/checker_request_parameter_required_value_updated_test.go?plain=1#L36)  
 [changing an existing header param to optional](checker/checker_not_breaking_test.go?plain=1#L127)  
 [changing an existing request body from required to optional](checker/checker_not_breaking_test.go?plain=1#L47)  
@@ -181,3 +182,4 @@ These examples are automatically generated from unit tests.
 [new paths or path operations](checker/check-api-added_test.go?plain=1#L11)  
 [path operations that became deprecated](checker/checker_deprecation_test.go?plain=1#L324)  
 [path operations that were re-activated](checker/checker_deprecation_test.go?plain=1#L344)  
+[removing a required write-only property that was required in response body is detected](checker/check-response-required-property-updated_test.go?plain=1#L84)  
