@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -35,26 +35,26 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 					}
 
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
-						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
-							id := "response-property-became-optional"
-							level := ERR
+						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
+							comment := ""
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
-								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
+								// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
-								id = "response-property-became-optional-write-only"
-								level = INFO
+								comment = "the property is write only"
+
 							}
 
 							result = append(result, BackwardCompatibilityError{
-								Id:          id,
-								Level:       level,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
+								Id:          "response-property-became-required",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("response-property-became-required"), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
 								Source:      source,
+								Comment:     comment,
 							})
 						}
 					}
@@ -66,29 +66,27 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							if requiredDiff == nil {
 								return
 							}
-							for _, changedRequiredPropertyName := range requiredDiff.Deleted {
-								level := ERR
-								id := "response-property-became-optional"
-
+							for _, changedRequiredPropertyName := range requiredDiff.Added {
+								comment := ""
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
 									continue
 								}
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
-									level = INFO
-									id = "response-property-became-optional-write-only"
+									comment = "the property is write only"
 								}
 								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
-									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
+									// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
 									continue
 								}
 								result = append(result, BackwardCompatibilityError{
-									Id:          id,
-									Level:       level,
-									Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
+									Id:          "response-property-became-required",
+									Level:       INFO,
+									Text:        fmt.Sprintf(config.i18n("response-property-became-required"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
 									Source:      source,
+									Comment:     comment,
 								})
 							}
 						})
