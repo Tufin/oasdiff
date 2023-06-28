@@ -9,51 +9,51 @@ import (
 )
 
 // CL: Changing required response property to optional
-func TestResponsePropertyBecameOptionalCheck(t *testing.T) {
-	s1, err := open("../data/checker/response_property_became_optional_base.yaml")
+func TestResponsePropertyBecameRequiredlCheck(t *testing.T) {
+	s1, err := open("../data/checker/response_property_became_optional_revision.yaml")
 	require.Empty(t, err)
-	s2, err := open("../data/checker/response_property_became_optional_revision.yaml")
+	s2, err := open("../data/checker/response_property_became_optional_base.yaml")
 	require.Empty(t, err)
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyBecameOptionalCheck), d, osm, checker.ERR)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyBecameRequiredCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
-			Id:          "response-property-became-optional",
+			Id:          "response-property-became-required",
 			Text:        "the response property 'data/name' became optional for the status '200'",
 			Comment:     "",
-			Level:       checker.ERR,
+			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_property_became_optional_revision.yaml",
+			Source:      "../data/checker/response_property_became_optional_base.yaml",
 			OperationId: "createOneGroup",
 		},
 	}, errs)
 }
 
-// CL: Changing write-only required response property to optional
-func TestResponseWriteOnlyPropertyBecameOptionalCheck(t *testing.T) {
-	s1, err := open("../data/checker/response_property_became_optional_base.yaml")
+// CL: Changing required response property to optional
+func TestResponseWriteOnlyPropertyBecameRequiredCheck(t *testing.T) {
+	s1, err := open("../data/checker/response_property_became_optional_revision.yaml")
 	require.Empty(t, err)
-	s2, err := open("../data/checker/response_property_became_optional_revision.yaml")
+	s2, err := open("../data/checker/response_property_became_optional_base.yaml")
 	require.Empty(t, err)
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["name"].Value.WriteOnly = true
 
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyBecameOptionalCheck), d, osm, checker.ERR)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyBecameRequiredCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
-			Id:          "response-property-became-optional",
+			Id:          "response-property-became-required",
 			Text:        "the response property 'data/name' became optional for the status '200'",
 			Comment:     "",
-			Level:       checker.ERR,
+			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_property_became_optional_revision.yaml",
+			Source:      "../data/checker/response_property_became_optional_base.yaml",
 			OperationId: "createOneGroup",
 		},
 	}, errs)
