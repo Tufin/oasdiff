@@ -129,9 +129,8 @@ response-non-success-status-added: добавлен ответ об отсутс
 api-security-added: к API была добавлена безопасность %s
 api-security-removed: из API была удалена безопасность %s
 api-security-updated: в безопасности эндпоинта %s произошло обновление с %s на %s
-api-global-security-added: к API была добавлена глобальная безопасность %s
-api-global-security-removed: из API была удалена глобальная безопасность %s
-api-global-security-updated: в глобальной безопасности %s произошло обновление с %s на %s
+api-global-security-added: схема безопасности %s была добавлена к API
+api-global-security-removed: схема безопасности %s была удалена из API
 api-global-security-scope-removed: из глобальной схемы безопасности %s была удалена область безопасности %s
 api-global-security-scope-added: к глобальной схеме безопасности %s была добавлена область безопасности %s
 api-security-scope-removed: из схемы безопасности эндпоинта %s была удалена область безопасности %s

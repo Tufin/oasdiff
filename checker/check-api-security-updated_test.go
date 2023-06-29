@@ -21,7 +21,7 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-global-security-added",
-			Text:        "the security 'petstore_auth' was added to the API",
+			Text:        "the security scheme 'petstore_auth' was added to the API",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
@@ -44,7 +44,7 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-global-security-removed",
-			Text:        "the security 'petstore_auth' was removed from the API",
+			Text:        "the security scheme 'petstore_auth' was removed from the API",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
