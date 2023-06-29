@@ -6,7 +6,12 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponseMediaTypeRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+const (
+	ResponseMediaTypeUpdatedId = "response-media-type-removed"
+	ResponseMediaTypeAddedId   = "response-media-type-added"
+)
+
+func ResponseMediaTypeUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
 	result := make([]BackwardCompatibilityError, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -32,9 +37,20 @@ func ResponseMediaTypeRemoved(diffReport *diff.Diff, operationsSources *diff.Ope
 				}
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeDeleted {
 					result = append(result, BackwardCompatibilityError{
-						Id:          "response-media-type-removed",
+						Id:          ResponseMediaTypeUpdatedId,
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("response-media-type-removed"), ColorizedValue(mediaType), ColorizedValue(responseStatus)),
+						Text:        fmt.Sprintf(config.i18n(ResponseMediaTypeUpdatedId), ColorizedValue(mediaType), ColorizedValue(responseStatus)),
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      source,
+					})
+				}
+				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeAdded {
+					result = append(result, BackwardCompatibilityError{
+						Id:          ResponseMediaTypeAddedId,
+						Level:       INFO,
+						Text:        fmt.Sprintf(config.i18n(ResponseMediaTypeAddedId), ColorizedValue(mediaType), ColorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

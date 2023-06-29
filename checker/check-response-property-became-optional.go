@@ -37,7 +37,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
-								// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
+								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
@@ -71,7 +71,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 									continue
 								}
 								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
-									// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
+									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 									continue
 								}
 								result = append(result, BackwardCompatibilityError{

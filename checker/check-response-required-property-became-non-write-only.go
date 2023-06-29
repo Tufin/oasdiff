@@ -46,7 +46,7 @@ func ResponseRequiredPropertyBecameNonWriteOnlyCheck(diffReport *diff.Diff, oper
 								return
 							}
 							if parent.Revision.Value.Properties[propertyName] == nil {
-								// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
+								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								return
 							}
 							if !slices.Contains(parent.Base.Value.Required, propertyName) {

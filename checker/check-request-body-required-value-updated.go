@@ -17,6 +17,7 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 			if operationItem.RequestBodyDiff == nil {
 				continue
 			}
+
 			if operationItem.RequestBodyDiff.RequiredDiff == nil {
 				continue
 			}

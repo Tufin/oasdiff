@@ -80,11 +80,11 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponseHeaderBecameOptional,
 		ResponseHeaderRemoved,
 		ResponseSuccessStatusUpdated,
-		ResponseMediaTypeRemoved,
+		ResponseMediaTypeUpdated,
 		NewRequestPathParameterCheck,
 		NewRequestNonPathParameterCheck,
 		NewRequiredRequestHeaderPropertyCheck,
-		ResponseRequiredPropertyRemovedCheck,
+		ResponseRequiredPropertyUpdatedCheck,
 		UncheckedRequestAllOfWarnCheck,
 		UncheckedResponseAllOfWarnCheck,
 		RequestPropertyRemovedCheck,
@@ -125,6 +125,8 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyMaxIncreasedCheck,
 		ResponsePropertyMinDecreasedCheck,
 		RequestParameterDefaultValueChanged,
+		APIComponentsSecurityUpdatedCheck,
+		APISecurityUpdatedCheck,
 	}
 }
 

@@ -296,6 +296,7 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "api-operation-id-removed", errs[0].Id)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-removed")
 }
 
 // BC: removing/updating an enum in request body is breaking (optional)

@@ -258,8 +258,8 @@ func TestBreaking_Servers(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// CL: adding a tag
-func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
+// BC: adding a tag is not breaking
+func TestBreaking_TagAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -269,7 +269,7 @@ func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-tag-added")
 }
 
-// CL: adding an operation ID
+// BC: adding an operation ID is not breaking
 func TestBreaking_OperationIdAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -279,4 +279,17 @@ func TestBreaking_OperationIdAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-added")
+}
+
+// BC: adding a required property to response is not breaking
+func TestBreaking_RequiredResponsePropertyAdded(t *testing.T) {
+	s1, err := open("../data/checker/response_required_property_added_base.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/checker/response_required_property_added_revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "response-required-property-added")
 }
