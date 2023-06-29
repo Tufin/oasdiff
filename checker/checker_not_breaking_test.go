@@ -266,25 +266,10 @@ func TestBreaking_TagAdded(t *testing.T) {
 	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	for _, err := range errs {
-		require.Equal(t, checker.ERR, err.Level)
-	}
-	require.Empty(t, errs)
-}
-
-// BC: adding a tag is not breaking with "api-tag-removed" check
-func TestBreaking_TagAddedWithCustomCheck(t *testing.T) {
-	s1 := l(t, 1)
-	s2 := l(t, 1)
-
-	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
-	require.NoError(t, err)
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-tag-added")
 }
 
-// BC: adding an operation ID is not breaking with "api-operation-id-removed" check
+// BC: adding an operation ID is not breaking
 func TestBreaking_OperationIdAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -296,7 +281,7 @@ func TestBreaking_OperationIdAdded(t *testing.T) {
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-added")
 }
 
-// BC: adding a required property to response is not breaking with "response-required-property-removed" check
+// BC: adding a required property to response is not breaking
 func TestBreaking_RequiredResponsePropertyAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_required_property_added_base.yaml")
 	require.NoError(t, err)
