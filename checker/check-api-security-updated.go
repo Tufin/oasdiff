@@ -29,8 +29,8 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 			Level:       INFO,
 			Text:        fmt.Sprintf(config.i18n(APIGlobalSecurityAddedCheckId), ColorizedValue(addedSecurity)),
 			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
+			Path:        "",
+			Source:      "security." + addedSecurity,
 			OperationId: "N/A",
 		})
 	}
@@ -41,8 +41,8 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 			Level:       INFO,
 			Text:        fmt.Sprintf(config.i18n(APIGlobalSecurityRemovedCheckId), ColorizedValue(removedSecurity)),
 			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
+			Path:        "",
+			Source:      "security." + removedSecurity,
 			OperationId: "N/A",
 		})
 	}
@@ -55,8 +55,8 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 					Level:       INFO,
 					Text:        fmt.Sprintf(config.i18n(APIGlobalSecurityScopeAddedId), ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
 					Operation:   "N/A",
-					Path:        "N/A",
-					Source:      "N/A",
+					Path:        "",
+					Source:      "security.scopes." + addedScope,
 					OperationId: "N/A",
 				})
 			}
@@ -66,8 +66,8 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 					Level:       INFO,
 					Text:        fmt.Sprintf(config.i18n(APIGlobalSecurityScopeRemovedId), ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
 					Operation:   "N/A",
-					Path:        "N/A",
-					Source:      "N/A",
+					Path:        "",
+					Source:      "security.scopes." + deletedScope,
 					OperationId: "N/A",
 				})
 			}

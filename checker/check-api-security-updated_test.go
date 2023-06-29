@@ -25,8 +25,8 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
+			Path:        "",
+			Source:      "security.petstore_auth",
 			OperationId: "N/A",
 		}}, errs)
 }
@@ -48,8 +48,8 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
+			Path:        "",
+			Source:      "security.petstore_auth",
 			OperationId: "N/A",
 		}}, errs)
 }
@@ -72,8 +72,8 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
+			Path:        "",
+			Source:      "security.scopes.read:pets",
 			OperationId: "N/A",
 		}}, errs)
 }
@@ -96,8 +96,8 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
+			Path:        "",
+			Source:      "security.scopes.read:pets",
 			OperationId: "N/A",
 		}}, errs)
 }
