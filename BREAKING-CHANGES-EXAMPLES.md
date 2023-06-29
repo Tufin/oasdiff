@@ -157,7 +157,7 @@ These examples are automatically generated from unit tests.
 [Changing request query parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L37)  
 [Changing security component oauth's url](checker/check-components-security-updated_test.go?plain=1#L11)  
 [Changing security component type](checker/check-components-security-updated_test.go?plain=1#L36)  
-[Removing a global security to the API](checker/check-api-security-updated_test.go?plain=1#L34)  
+[Removing a global security from the API](checker/check-api-security-updated_test.go?plain=1#L34)  
 [Removing a new media type to response](checker/check-response-mediatype-updated_test.go?plain=1#L35)  
 [Removing a new oauth security scope](checker/check-components-security-updated_test.go?plain=1#L132)  
 [Removing a new security component](checker/check-components-security-updated_test.go?plain=1#L84)  
