@@ -31,7 +31,7 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 		}}, errs)
 }
 
-// CL: Removing a global security to the API
+// CL: Removing a global security from the API
 func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 	s1, _ := open("../data/checker/api_security_global_added_revision.yaml")
 	s2, err := open("../data/checker/api_security_global_added_base.yaml")
