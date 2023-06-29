@@ -126,9 +126,9 @@ response-body-min-decreased: у тела ответа min уменьшено с 
 response-property-min-decreased: для поля ответа %s min уменьшен с %s до %s для ответа со статусом %s
 response-success-status-added: добавлен ответ об успехе со статусом %s
 response-non-success-status-added: добавлен ответ об отсутствии успеха со статусом %s
-api-security-added: к API была добавлена безопасность %s
-api-security-removed: из API была удалена безопасность %s
-api-security-updated: в безопасности эндпоинта %s произошло обновление с %s на %s
+api-security-added: схема безопасности точки доступа %s была добавлена к API
+api-security-removed: схема безопасности точки доступа %s была удалена из API
+api-security-updated: схема безопасности точки доступа %s была обновлена с %s на %s
 api-global-security-added: схема безопасности %s была добавлена к API
 api-global-security-removed: схема безопасности %s была удалена из API
 api-global-security-scope-removed: из глобальной схемы безопасности %s была удалена область безопасности %s

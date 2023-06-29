@@ -115,7 +115,7 @@ func TestAPISecurityAdded(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-added",
-			Text:        "the endpoint security 'petstore_auth' was added to the API",
+			Text:        "the endpoint scheme security 'petstore_auth' was added to the API",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -138,7 +138,7 @@ func TestAPISecurityDeleted(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-removed",
-			Text:        "the endpoint security 'petstore_auth' was removed from the API",
+			Text:        "the endpoint scheme security 'petstore_auth' was removed from the API",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",

@@ -126,9 +126,9 @@ response-body-max-increased: the response's body max was increased from %s to %s
 response-property-max-increased: the %s response property's max was increased from %s to %s for the response status %s
 response-body-min-decreased: the response's body min was decreased from %s to %s
 response-property-min-decreased: the %s response property's min was decreased from %s to %s for the response status %s
-api-security-added: the endpoint security %s was added to the API
-api-security-removed: the endpoint security %s was removed from the API
-api-security-updated: the endpoint security %s was updated from %s to %s
+api-security-added: the endpoint scheme security %s was added to the API
+api-security-removed: the endpoint scheme security %s was removed from the API
+api-security-updated: the endpoint scheme security %s was updated from %s to %s
 api-global-security-added: the security scheme %s was added to the API
 api-global-security-removed: the security scheme %s was removed from the API
 api-global-security-scope-removed: the security scope %s was removed from the global security scheme %s
