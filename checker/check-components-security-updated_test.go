@@ -23,7 +23,7 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-component-oauth-url-changed",
-			Text:        "the component security schema 'petstore_auth' oauth url changed from 'http://example.org/api/oauth/dialog' to 'http://example.new.org/api/oauth/dialog'",
+			Text:        "the component security scheme 'petstore_auth' oauth url changed from 'http://example.org/api/oauth/dialog' to 'http://example.new.org/api/oauth/dialog'",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
@@ -48,7 +48,7 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-component-type-changed",
-			Text:        "the component security schema 'petstore_auth' type changed from 'oauth2' to 'http'",
+			Text:        "the component security scheme 'petstore_auth' type changed from 'oauth2' to 'http'",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
@@ -71,7 +71,7 @@ func TestComponentSecurityAdded(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-component-added",
-			Text:        "the component security schema 'BasicAuth' was added",
+			Text:        "the component security scheme 'BasicAuth' was added",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
@@ -94,7 +94,7 @@ func TestComponentSecurityRemoved(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-component-removed",
-			Text:        "the component security schema 'BasicAuth' was removed",
+			Text:        "the component security scheme 'BasicAuth' was removed",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
@@ -119,7 +119,7 @@ func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-component-oauth-scope-added",
-			Text:        "the component security schema 'petstore_auth' oauth scope 'admin:pets' was added",
+			Text:        "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was added",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
@@ -145,7 +145,7 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-component-oauth-scope-removed",
-			Text:        "the component security schema 'petstore_auth' oauth scope 'admin:pets' was removed",
+			Text:        "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was removed",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",
@@ -170,7 +170,7 @@ func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 	require.Equal(t, checker.BackwardCompatibilityErrors{
 		{
 			Id:          "api-security-component-oauth-scope-changed",
-			Text:        "the component security schema 'petstore_auth' oauth scope 'read:pets' was updated from 'read your pets' to 'grants access to pets (deprecated)'",
+			Text:        "the component security scheme 'petstore_auth' oauth scope 'read:pets' was updated from 'read your pets' to 'grants access to pets (deprecated)'",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "N/A",

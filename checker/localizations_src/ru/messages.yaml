@@ -136,12 +136,12 @@ api-global-security-scope-added: к глобальной схеме безопа
 api-security-scope-removed: из схемы безопасности эндпоинта %s была удалена область безопасности %s
 api-security-scope-added: к схеме безопасности эндпоинта %s была добавлена область безопасности %s
 api-security-component-type-changed: тип компонента схемы безопасности %s был изменен с %s на %s
-api-security-component-oauth-url-changed: URL OAuth в компоненте схемы безопасности %s был изменен с %s на %s
-api-security-component-added: была добавлена компонента схемы безопасности %s
-api-security-component-removed: была удалена компонента схемы безопасности %s
-api-security-component-oauth-scope-added: к компоненте схемы безопасности %s была добавлена область OAuth %s
-api-security-component-oauth-scope-removed: из компоненты схемы безопасности %s была удалена область OAuth %s
-api-security-component-oauth-scope-changed: в компоненте схемы безопасности %s область OAuth %s была обновлена с %s на %s
+api-security-component-oauth-url-changed: URL OAuth компонента схемы безопасности %s был изменен с %s на %s
+api-security-component-added: компонент схемы безопасности %s был добавлен
+api-security-component-removed: компонент схемы безопасности %s был удален
+api-security-component-oauth-scope-added: добавлено разрешение OAuth %s для компонента схемы безопасности %s
+api-security-component-oauth-scope-removed: удалено разрешение OAuth %s для компонента схемы безопасности %s
+api-security-component-oauth-scope-changed: разрешение OAuth %s для компонента схемы безопасности %s было обновлено с %s на %s
 response-optional-property-added: добавлено необязательное свойство %s в ответе со статусом %s
 response-optional-write-only-property-added: добавлено необязательное свойство только для записи %s в ответе со статусом %s
 response-optional-write-only-property-removed: удалено необязательное свойство только для записи %s из ответа со статусом %s
