@@ -27,7 +27,7 @@ type ChangelogFlags struct {
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
-	config := diff.NewConfig()
+	config := diff.NewConfig().WithCheckBreaking()
 	config.PathFilter = flags.matchPath
 	config.FilterExtension = flags.filterExtension
 	config.PathPrefixBase = flags.prefixBase
