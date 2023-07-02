@@ -4,21 +4,21 @@ When working with OpenAPI, breaking-changes can be caught by monitoring changes 
 
 **oasdiff detects over 100 kinds of breaking changes**
 
-To detect breaking-changes between two specs run oasdiff with the `-check-breaking` flag:
+To detect breaking-changes between two specs run oasdiff with the `breaking` command:
 ```
-oasdiff -check-breaking -base https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml -revision https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 There are two levels of breaking changes:
 - `WARN` - Warning are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
 - `ERR` - Errors are definite breaking changes which should be avoided
 
-To exit with return code 1 when any ERR-level breaking changes are found, add the `-fail-on-diff` flag.  
-To exit with return code 1 even if only WARN-level breaking changes are found, add the `-fail-on-diff` and `-fail-on-warns` flags.
+To exit with return code 1 when any ERR-level breaking changes are found, add the `--fail-on ERR` flag.  
+To exit with return code 1 even if only WARN-level breaking changes are found, add the `--fail-on WARN` flag.
 
 ### Output Formats
 The default output format is human-readable text.  
-You can specify the `-format` flag to output breaking-changes in json or yaml.
+You can specify the `--format` flag to output breaking-changes in json or yaml.
 
 ### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
@@ -39,7 +39,7 @@ Example:
 ### Ignoring Specific Breaking Changes
 Sometimes, you may want to ignore certain breaking changes.  
 The new Breaking Changes method allows you define breaking changes that you want to ignore in a configuration file.  
-You can specify the configuration file name in the oasdiff command-line with the `-warn-ignore` flag for WARNINGS or the `-err-ignore` flag for ERRORS.  
+You can specify the configuration file name in the oasdiff command-line with the `--warn-ignore` flag for WARNINGS or the `--err-ignore` flag for ERRORS.  
 Each line in the configuration file should contain two parts:
 1. method and path (the first field in the line beginning with slash)
 2. description of the breaking change
@@ -78,7 +78,7 @@ You can use the `-include-checks` flag to include the following optional checks:
 
 For example:
 ```
-oasdiff -include-checks response-non-success-status-removed -check-breaking -base data/openapi-test1.yaml -revision data/openapi-test3.yaml
+oasdiff breaking data/openapi-test1.yaml data/openapi-test3.yaml --include-checks response-non-success-status-removed
 ```
 
 ### Customizing Breaking-Changes Checks
@@ -89,21 +89,7 @@ For more information, see [this guide](CUSTOMIZING-CHECKS.md) and this example o
 [Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  
 This document is automatically generated from oasdiff unit tests.
 
-## Check-Breaking vs. Breaking-Only
-The original breaking-changes implementation with the `-breaking-only` flag is still supported but the new method with `-check-breaking` will eventually replace it.
-
-### Advantages of the Check-Breking Method 
-- output is human readable
-- supports localization for error messages and ignored changes
-- checks can be customized by developers
-- fewer false-positive errors by design
-- improved support for type changes: allows changing integer->number for json/xml properties, allows changing parameters (e.g. query/header/path) to type string from number/integer/etc.
-- allows removal of responses with non-success codes (e.g., 503, 504, 403)
-- allows adding new content-type to request
-- easier to extend and customize
-- will continue to be improved
-
-### Limitations of the Check-Breking Method
+### Known Limitations
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
 

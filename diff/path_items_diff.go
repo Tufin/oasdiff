@@ -55,7 +55,7 @@ func findEndpoint(config *Config, endpoint string, paths openapi3.Paths) (*opena
 		return pathItem, PathParamsMap{}, true
 	}
 
-	if config.MatchPathParams {
+	if config.IncludePathParams {
 		return nil, nil, false
 	}
 
