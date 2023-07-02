@@ -51,7 +51,7 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 ## Wrappers
 - [GitHub Action](https://github.com/oasdiff/oasdiff-action)
 - [Cloud Service](#openapi-diff-and-breaking-changes-as-a-service)
-- Get notified when an API provider breaks the API you using: [join the discussion](https://github.com/Tufin/oasdiff/discussions/291)
+- [OpenAPI Sync: Get notified when an API provider breaks the API](https://github.com/oasdiff/sync/)
 
 ## Usage Examples
 
@@ -81,7 +81,7 @@ If you'd like to see additional details in the HTML report, please submit a [fea
 
 ### OpenAPI diff for remote files over http/s
 ```bash
-oasdiff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
+oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
 ```
 
 ### Breaking changes
