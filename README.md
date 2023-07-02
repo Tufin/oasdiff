@@ -210,7 +210,7 @@ Some YAML libraries don't support complex mapping keys:
 - python PyYAML: see https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450
 - golang gopkg.in/yaml.v3 fails to unmarshal the oasdiff output. This package offers a solution: https://github.com/tliron/yamlkeys
 
-In such cases, consider using `-exclude-elements endpoints` and `-format json` as a workaround.
+When using output format `json`, oasdiff excludes `endpoints` automatically.
 
 ## Composed Mode
 Composed mode compares two collections of OpenAPI specs instead of a pair of specs in the default mode.

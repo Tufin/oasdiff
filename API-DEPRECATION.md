@@ -15,10 +15,10 @@ oasdiff allows you to gracefully remove a resource without getting the ```breaki
    ```
 2. At the sunset date or anytime later, the resource can be removed without triggering a ```breaking-change``` warning. An earlier removal will be considered a breaking change.
 
-In addition, oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it with the ```deprecation-days``` flag.  
+In addition, oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it with the ```--deprecation-days``` flag.  
 For example, the following command requires any deprecation to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
 ```
-oasdiff -deprecation-days=30 -breaking-only -base data/deprecation/base.yaml -revision data/deprecation/deprecated-past.yaml
+oasdiff breaking data/deprecation/base.yaml data/deprecation/deprecated-past.yaml --deprecation-days=30 
 ```
 
 Setting deprecation-days to 0 is equivalent to the default which allows non-breaking deprecation regardless of the sunset date.  

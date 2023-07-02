@@ -67,7 +67,7 @@ If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing
 OASDiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
 
 ### Optional Breaking-Changes Checks
-You can use the `-include-checks` flag to include the following optional checks:
+You can use the `--include-checks` flag to include the following optional checks:
 - response-non-success-status-removed
 - api-operation-id-removed
 - api-tag-removed
