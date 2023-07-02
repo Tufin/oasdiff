@@ -77,7 +77,7 @@ To view all details, use the default format: YAML.
 If you'd like to see additional details in the HTML report, please submit a [feature request](https://github.com/Tufin/oasdiff/issues/new?assignees=&labels=&template=feature_request.md&title=).
 
 
-### OpenAPI Diff for remote files over http/s
+### OpenAPI diff for remote files over http/s
 ```bash
 oasdiff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
 ```
@@ -97,12 +97,12 @@ oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/opena
 oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c
 ```
 
-### Get breaking changes and fail with exit code 1 if any ERR-level changes are found
+### Fail with exit code 1 if any ERR-level breaking changes are found
 ```bash
 oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c -o ERR
 ```
 
-### Get OpenAPI diff and fail with exit code 1 if any change is found
+### Fail with exit code 1 if any change is found
 ```bash
 oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text -o
 ```
