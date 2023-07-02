@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - 'main'
-      - '256-command-line-with-sub-commands'
     tags:
       - 'v*'
 jobs:
