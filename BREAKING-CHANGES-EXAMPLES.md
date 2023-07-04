@@ -155,6 +155,7 @@ These examples are automatically generated from unit tests.
 [Changing request path parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L11)  
 [Changing request query parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L37)  
 [Changing required response property to optional](checker/check-response-property-became-optional_test.go?plain=1#L11)  
+[Changing required response write-only property to optional](checker/check-response-property-became-required_test.go?plain=1#L35)  
 [Changing security component oauth's url](checker/check-components-security-updated_test.go?plain=1#L11)  
 [Changing security component type](checker/check-components-security-updated_test.go?plain=1#L36)  
 [Changing write-only required response property to optional](checker/check-response-property-became-optional_test.go?plain=1#L35)  

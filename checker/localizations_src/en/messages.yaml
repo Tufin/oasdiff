@@ -148,3 +148,5 @@ response-optional-write-only-property-removed: removed the optional write-only p
 response-required-write-only-property-added: added the required write-only property %s to the response with the %s status
 response-required-write-only-property-removed: removed the required write-only property %s from the response with the %s status
 response-write-only-property-became-optional: the response write-only property %s became optional for the status %s
+response-property-became-required: the response property %s became required for the status %s
+response-write-only-property-became-required: the response write-only property %s became required for the status %s
