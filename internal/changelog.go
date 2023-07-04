@@ -137,7 +137,10 @@ func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format str
 		}
 	case FormatText:
 		if len(errs) > 0 {
-			fmt.Fprintf(stdout, config.Localizer.Get("messages.total-errors"), len(errs))
+			infoCount := getLevelCount(errs, checker.INFO)
+			warnCount := getLevelCount(errs, checker.WARN)
+			errCount := getLevelCount(errs, checker.ERR)
+			fmt.Fprintf(stdout, config.Localizer.Get("messages.total-changes"), len(errs), infoCount, warnCount, errCount)
 		}
 
 		for _, bcerr := range errs {
@@ -148,4 +151,14 @@ func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format str
 	}
 
 	return nil
+}
+
+func getLevelCount(errs checker.BackwardCompatibilityErrors, level checker.Level) int {
+	count := 0
+	for _, err := range errs {
+		if err.Level == level {
+			count++
+		}
+	}
+	return count
 }

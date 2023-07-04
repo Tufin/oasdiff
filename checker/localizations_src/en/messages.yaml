@@ -3,6 +3,7 @@ in: in
 added-required-request-body: added required request body
 request-parameter-removed: deleted the %s request parameter %s
 total-errors: "Backward compatibility errors (%d):\\n"
+total-changes: "Total API changes (%d):\\n    [info (%d)| error (%d)| warning (%d)]\\n"
 request-parameter-pattern-added: "added the pattern '%s' for the %s request parameter %s"
 request-parameter-pattern-changed: "changed the pattern for the %s request parameter %s from '%s' to '%s'"
 request-property-pattern-added: "added the pattern '%s' for the request property %s"

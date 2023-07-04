@@ -3,6 +3,7 @@ in: в
 added-required-request-body: добавлено обязательное тело запроса
 request-parameter-removed: удалён %s параметр запроса %s
 total-errors: "Ошибки обратной совместимости (всего: %d):\\n"
+total-changes: "Всего изменений в API (%d):\\n [информация (%d)| ошибка (%d)| предупреждение (%d)]\\n"
 request-parameter-pattern-added: добавлен pattern '%s' у %s параметра запроса %s
 request-parameter-pattern-changed: изменён pattern у %s параметра запроса %s со значения '%s' на значение '%s'
 request-property-pattern-added: добавлен pattern '%s' у поля запроса %s
