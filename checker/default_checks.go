@@ -16,7 +16,7 @@ func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig 
 func LevelOverrides(includeChecks utils.StringList) map[string]Level {
 	result := map[string]Level{}
 	for _, s := range includeChecks {
-		// if the checker was explicitly included with the `-include-checks`,
+		// if the checker was explicitly included with the `--include-checks`,
 		// it means that it's output is considered a breaking change,
 		// so the returned level should overwritten to ERR.
 		result[s] = ERR
