@@ -55,3 +55,18 @@ func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) 
 	}
 	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", levelName, color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
 }
+
+func (r *BackwardCompatibilityError) Error() string {
+	var levelName string
+	switch r.Level {
+	case ERR:
+		levelName = "error"
+	case WARN:
+		levelName = "warning"
+	case INFO:
+		levelName = "info"
+	default:
+		levelName = "issue"
+	}
+	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]. %s", levelName, r.Source, r.Operation, r.Path, r.Text, r.Id, r.Comment)
+}

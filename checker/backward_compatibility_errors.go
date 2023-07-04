@@ -1,7 +1,5 @@
 package checker
 
-import "fmt"
-
 type BackwardCompatibilityErrors []BackwardCompatibilityError
 
 func (errs BackwardCompatibilityErrors) HasLevelOrHigher(level Level) bool {
@@ -38,19 +36,4 @@ func (bcErrors BackwardCompatibilityErrors) Less(i, j int) bool {
 
 func (bcErrors BackwardCompatibilityErrors) Swap(i, j int) {
 	bcErrors[i], bcErrors[j] = bcErrors[j], bcErrors[i]
-}
-
-func (r *BackwardCompatibilityError) Error() string {
-	var levelName string
-	switch r.Level {
-	case ERR:
-		levelName = "error"
-	case WARN:
-		levelName = "warning"
-	case INFO:
-		levelName = "info"
-	default:
-		levelName = "issue"
-	}
-	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]. %s", levelName, r.Source, r.Operation, r.Path, r.Text, r.Id, r.Comment)
 }
