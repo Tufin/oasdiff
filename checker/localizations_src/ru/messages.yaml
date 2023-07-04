@@ -147,3 +147,4 @@ response-optional-write-only-property-added: добавлено необязат
 response-optional-write-only-property-removed: удалено необязательное свойство только для записи %s из ответа со статусом %s
 response-required-write-only-property-added: добавлено обязательное свойство только для записи %s в ответе со статусом %s
 response-required-write-only-property-removed: удалено обязательное свойство только для записи %s из ответа со статусом %s
+response-write-only-property-became-optional: свойство только для записи %s перестало быть обязательным для ответа со статусом %s

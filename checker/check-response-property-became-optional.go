@@ -43,7 +43,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
-								id = "response-property-became-optional-write-only"
+								id = "response-write-only-property-became-optional"
 								level = INFO
 							}
 
@@ -75,7 +75,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								}
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
 									level = INFO
-									id = "response-property-became-optional-write-only"
+									id = "response-write-only-property-became-optional"
 								}
 								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
 									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
