@@ -18,18 +18,17 @@ func TestAddNewMediaType(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseMediaTypeUpdated), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-media-type-added",
-			Text:        "added the media type 'application/xml' for the response with the status '200'",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/add_new_media_type_revision.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "response-media-type-added",
+		Text:        "added the media type 'application/xml' for the response with the status '200'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/add_new_media_type_revision.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: Removing a new media type to response
@@ -42,16 +41,15 @@ func TestDeleteNewMediaType(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseMediaTypeUpdated), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-media-type-removed",
-			Text:        "removed the media type 'application/xml' for the response with the status '200'",
-			Comment:     "",
-			Level:       checker.ERR,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/add_new_media_type_base.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "response-media-type-removed",
+		Text:        "removed the media type 'application/xml' for the response with the status '200'",
+		Comment:     "",
+		Level:       checker.ERR,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/add_new_media_type_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }

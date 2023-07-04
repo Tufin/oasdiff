@@ -15,8 +15,8 @@ const (
 	ResponseRequiredWriteOnlyPropertyAddedCheckId   = "response-required-write-only-property-added"
 )
 
-func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}

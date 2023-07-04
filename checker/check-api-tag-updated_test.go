@@ -19,18 +19,17 @@ func TestTagAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APITagUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-tag-added",
-			Text:        "api tag 'newTag' added",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/tag_added_base.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-tag-added",
+		Text:        "api tag 'newTag' added",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/tag_added_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: Removing an existing tag
@@ -46,17 +45,16 @@ func TestTagRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APITagUpdatedCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-tag-removed",
-			Text:        "api tag 'Test' removed",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/tag_removed_base.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-tag-removed",
+		Text:        "api tag 'Test' removed",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/tag_removed_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: Updating an existing tag
@@ -73,8 +71,8 @@ func TestTagUpdated(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
 	for cl := range errs {
-		require.Equal(t, checker.INFO, errs[cl].Level)
-		if errs[cl].Id == "api-tag-removed" {
+		require.Equal(t, checker.INFO, errs[cl].GetLevel())
+		if errs[cl].GetId() == "api-tag-removed" {
 			require.Equal(t, checker.BackwardCompatibilityError{
 				Id:          "api-tag-removed",
 				Text:        "api tag 'Test' removed",
@@ -87,7 +85,7 @@ func TestTagUpdated(t *testing.T) {
 			}, errs[cl])
 		}
 
-		if errs[cl].Id == "api-tag-added" {
+		if errs[cl].GetId() == "api-tag-added" {
 			require.Equal(t, checker.BackwardCompatibilityError{
 				Id:          "api-tag-added",
 				Text:        "api tag 'newTag' added",

@@ -11,8 +11,8 @@ const (
 	APITagAddedCheckId   = "api-tag-added"
 )
 
-func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}

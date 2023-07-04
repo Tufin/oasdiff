@@ -17,21 +17,18 @@ const (
 	APIGlobalSecurityScopeRemovedId = "api-global-security-scope-removed"
 )
 
-func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 	if diffReport.SecurityDiff == nil {
 		return result
 	}
 
 	for _, addedSecurity := range diffReport.SecurityDiff.Added {
-		result = append(result, BackwardCompatibilityError{
-			Id:          APIGlobalSecurityAddedCheckId,
-			Level:       INFO,
-			Text:        fmt.Sprintf(config.i18n(APIGlobalSecurityAddedCheckId), ColorizedValue(addedSecurity)),
-			Operation:   "N/A",
-			Path:        "",
-			Source:      "security." + addedSecurity,
-			OperationId: "N/A",
+		result = append(result, BackwardCompatibilityComponentError{
+			Id:     APIGlobalSecurityAddedCheckId,
+			Level:  INFO,
+			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityAddedCheckId), ColorizedValue(addedSecurity)),
+			Source: "security." + addedSecurity,
 		})
 	}
 
@@ -78,8 +75,8 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 }
 
-func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 
 	result = append(result, checkGlobalSecurity(diffReport, operationsSources, config)...)
 

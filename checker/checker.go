@@ -11,7 +11,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError
+type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors
 
 var pipedOutput *bool
 
@@ -25,12 +25,12 @@ func IsPipedOutput() bool {
 	return *pipedOutput
 }
 
-func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) BackwardCompatibilityErrors {
+func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) IBackwardCompatibilityErrors {
 	return CheckBackwardCompatibilityUntilLevel(config, diffReport, operationsSources, WARN)
 }
 
-func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) BackwardCompatibilityErrors {
-	result := make(BackwardCompatibilityErrors, 0)
+func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 
 	if diffReport == nil {
 		return result
@@ -43,9 +43,9 @@ func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfi
 		result = append(result, errs...)
 	}
 
-	filteredResult := make(BackwardCompatibilityErrors, 0)
+	filteredResult := make(IBackwardCompatibilityErrors, 0)
 	for _, change := range result {
-		if change.Level >= level {
+		if change.GetLevel() >= level {
 			filteredResult = append(filteredResult, change)
 		}
 	}
@@ -54,7 +54,7 @@ func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfi
 	return filteredResult
 }
 
-func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []BackwardCompatibilityError, operationsSources *diff.OperationsSourcesMap) []BackwardCompatibilityError {
+func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result IBackwardCompatibilityErrors, operationsSources *diff.OperationsSourcesMap) IBackwardCompatibilityErrors {
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -158,12 +158,12 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result []Backward
 	return result
 }
 
-func newParsingError(result []BackwardCompatibilityError,
+func newParsingError(result IBackwardCompatibilityErrors,
 	err error,
 	operation string,
 	operationItem *openapi3.Operation,
 	path string,
-	source string) []BackwardCompatibilityError {
+	source string) IBackwardCompatibilityErrors {
 	result = append(result, BackwardCompatibilityError{
 		Id:          "parsing-error",
 		Level:       ERR,

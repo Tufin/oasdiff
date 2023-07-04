@@ -19,18 +19,17 @@ func TestOperationIdRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-operation-id-removed",
-			Text:        "api operation id 'createOneGroup' removed and replaced with ''",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/operation_id_removed_base.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-operation-id-removed",
+		Text:        "api operation id 'createOneGroup' removed and replaced with ''",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/operation_id_removed_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: Updating an existing operation id
@@ -44,18 +43,17 @@ func TestOperationIdUpdated(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-operation-id-removed",
-			Text:        "api operation id 'createOneGroup' removed and replaced with 'newOperationId'",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/operation_id_removed_base.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-operation-id-removed",
+		Text:        "api operation id 'createOneGroup' removed and replaced with 'newOperationId'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/operation_id_removed_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: Adding a new operation id
@@ -69,16 +67,15 @@ func TestOperationIdAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig().WithCheckBreaking(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-operation-id-added",
-			Text:        "api operation id 'NewOperationId' was added",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/operation_id_added_base.yaml",
-			OperationId: "NewOperationId",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-operation-id-added",
+		Text:        "api operation id 'NewOperationId' was added",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/operation_id_added_base.yaml",
+		OperationId: "NewOperationId",
+	}, errs[0])
 }

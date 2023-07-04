@@ -9,8 +9,8 @@ import (
 const requestPropertyBecameNotNullableId = "request-property-became-not-nullable"
 const requestBodyBecameNotNullableId = "request-body-became-not-nullable"
 
-func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}

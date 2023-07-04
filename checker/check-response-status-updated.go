@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponseSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func ResponseSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
 	success := func(status int) bool {
 		return status >= 200 && status <= 299
 	}
@@ -16,7 +16,7 @@ func ResponseSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff
 	return ResponseStatusUpdated(diffReport, operationsSources, config, success, "response-success-status-removed", ERR)
 }
 
-func ResponseNonSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
+func ResponseNonSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
 	notSuccess := func(status int) bool {
 		return status < 200 || status > 299
 	}
@@ -24,8 +24,8 @@ func ResponseNonSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *d
 	return ResponseStatusUpdated(diffReport, operationsSources, config, notSuccess, "response-non-success-status-removed", INFO)
 }
 
-func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig, filter func(int) bool, id string, defaultLevel Level) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig, filter func(int) bool, id string, defaultLevel Level) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}

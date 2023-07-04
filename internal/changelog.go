@@ -104,7 +104,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 	return false, nil
 }
 
-func filterIgnored(errs checker.BackwardCompatibilityErrors, warnIgnoreFile string, errIgnoreFile string) (checker.BackwardCompatibilityErrors, *ReturnError) {
+func filterIgnored(errs checker.IBackwardCompatibilityErrors, warnIgnoreFile string, errIgnoreFile string) (checker.IBackwardCompatibilityErrors, *ReturnError) {
 
 	if warnIgnoreFile != "" {
 		var err error
@@ -125,7 +125,7 @@ func filterIgnored(errs checker.BackwardCompatibilityErrors, warnIgnoreFile stri
 	return errs, nil
 }
 
-func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.BackwardCompatibilityErrors) *ReturnError {
+func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.IBackwardCompatibilityErrors) *ReturnError {
 	switch format {
 	case FormatYAML:
 		if err := printYAML(stdout, errs); err != nil {

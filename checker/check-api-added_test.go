@@ -23,13 +23,17 @@ func TestApiAdded_DetectsNewPathsAndNewOperations(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
 
-	require.Equal(t, "endpoint-added", errs[0].Id)
-	require.Equal(t, "POST", errs[0].Operation)
-	require.Equal(t, "/api/test2", errs[0].Path)
+	require.IsType(t, checker.BackwardCompatibilityError{}, errs[0])
+	e0 := errs[0].(checker.BackwardCompatibilityError)
+	require.Equal(t, "endpoint-added", e0.Id)
+	require.Equal(t, "POST", e0.Operation)
+	require.Equal(t, "/api/test2", e0.Path)
 
-	require.Equal(t, "endpoint-added", errs[1].Id)
-	require.Equal(t, "GET", errs[1].Operation)
-	require.Equal(t, "/api/test3", errs[1].Path)
+	require.IsType(t, checker.BackwardCompatibilityError{}, errs[1])
+	e1 := errs[1].(checker.BackwardCompatibilityError)
+	require.Equal(t, "endpoint-added", e1.Id)
+	require.Equal(t, "GET", e1.Operation)
+	require.Equal(t, "/api/test3", e1.Path)
 }
 
 // CL: new paths or path operations
@@ -47,7 +51,9 @@ func TestApiAdded_DetectsModifiedPathsWithPathParam(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
-	require.Equal(t, "endpoint-added", errs[0].Id)
-	require.Equal(t, "POST", errs[0].Operation)
-	require.Equal(t, "/api/test/{id}", errs[0].Path)
+	require.IsType(t, checker.BackwardCompatibilityError{}, errs[0])
+	e0 := errs[0].(checker.BackwardCompatibilityError)
+	require.Equal(t, "endpoint-added", e0.Id)
+	require.Equal(t, "POST", e0.Operation)
+	require.Equal(t, "/api/test/{id}", e0.Path)
 }

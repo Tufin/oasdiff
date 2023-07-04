@@ -17,8 +17,8 @@ const (
 	APIComponentSecurityOauthScopeUpdated         = "api-security-component-oauth-scope-changed"
 )
 
-func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config BackwardCompatibilityCheckConfig, updatedSecurityName string) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config BackwardCompatibilityCheckConfig, updatedSecurityName string) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 
 	if updatedSecurity.OAuthFlowsDiff == nil {
 		return result
@@ -94,8 +94,8 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Backward
 	return result
 }
 
-func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
+	result := make(IBackwardCompatibilityErrors, 0)
 	if diffReport.ComponentsDiff.SecuritySchemesDiff == nil {
 		return result
 	}

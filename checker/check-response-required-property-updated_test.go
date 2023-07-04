@@ -17,18 +17,18 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-required-property-added",
-			Text:        "added the required property 'data/new' to the response with the '200' status",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_required_property_added_revision.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+
+		Id:          "response-required-property-added",
+		Text:        "added the required property 'data/new' to the response with the '200' status",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_required_property_added_revision.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: Removing an existent property that was required in response body is detected
@@ -41,18 +41,17 @@ func TestResponseRequiredPropertyRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-required-property-removed",
-			Text:        "removed the required property 'data/new' from the response with the '200' status",
-			Comment:     "",
-			Level:       checker.ERR,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_required_property_added_base.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "response-required-property-removed",
+		Text:        "removed the required property 'data/new' from the response with the '200' status",
+		Comment:     "",
+		Level:       checker.ERR,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_required_property_added_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: adding a required write-only property to response body is detected
@@ -67,18 +66,18 @@ func TestResponseRequiredWriteOnlyPropertyAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-required-write-only-property-added",
-			Text:        "added the required write-only property 'data/new' to the response with the '200' status",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_required_property_added_revision.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+
+		Id:          "response-required-write-only-property-added",
+		Text:        "added the required write-only property 'data/new' to the response with the '200' status",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_required_property_added_revision.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: removing a required write-only property that was required in response body is detected
@@ -92,16 +91,15 @@ func TestResponseRequiredWriteOnlyPropertyRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-required-write-only-property-removed",
-			Text:        "removed the required write-only property 'data/new' from the response with the '200' status",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_required_property_added_base.yaml",
-			OperationId: "createOneGroup",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "response-required-write-only-property-removed",
+		Text:        "removed the required write-only property 'data/new' from the response with the '200' status",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_required_property_added_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }

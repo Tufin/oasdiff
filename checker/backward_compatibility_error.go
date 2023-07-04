@@ -2,6 +2,7 @@ package checker
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/TwiN/go-color"
 	"github.com/tufin/oasdiff/checker/localizations"
@@ -18,7 +19,46 @@ type BackwardCompatibilityError struct {
 	Source      string `json:"source,omitempty" yaml:"source,omitempty"`
 }
 
-func (r *BackwardCompatibilityError) LocalizedError(l localizations.Localizer) string {
+func (r BackwardCompatibilityError) getUncolorizedText() string {
+	uncolorizedText := strings.ReplaceAll(r.Text, color.Bold, "")
+	return strings.ReplaceAll(uncolorizedText, color.Reset, "")
+}
+
+func (r BackwardCompatibilityError) MatchIgnore(ignorePath, ignoreLine string) bool {
+	return ignorePath == strings.ToLower(r.Path) &&
+		strings.Contains(ignoreLine, strings.ToLower(r.Operation+" "+r.Path)) &&
+		strings.Contains(ignoreLine, strings.ToLower(r.getUncolorizedText()))
+}
+
+func (r BackwardCompatibilityError) GetId() string {
+	return r.Id
+}
+
+func (r BackwardCompatibilityError) GetText() string {
+	return r.Text
+}
+
+func (r BackwardCompatibilityError) GetComment() string {
+	return r.Comment
+}
+
+func (r BackwardCompatibilityError) GetLevel() Level {
+	return r.Level
+}
+
+func (r BackwardCompatibilityError) GetOperation() string {
+	return r.Operation
+}
+
+func (r BackwardCompatibilityError) GetOperationId() string {
+	return r.OperationId
+}
+
+func (r BackwardCompatibilityError) GetPath() string {
+	return r.Path
+}
+
+func (r BackwardCompatibilityError) LocalizedError(l localizations.Localizer) string {
 	var levelName string
 	switch r.Level {
 	case ERR:
@@ -33,7 +73,7 @@ func (r *BackwardCompatibilityError) LocalizedError(l localizations.Localizer) s
 	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", levelName, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Operation, r.Path, r.Text, r.Id, r.Comment)
 }
 
-func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) string {
+func (r BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) string {
 	if IsPipedOutput() {
 		return r.LocalizedError(l)
 	}
@@ -56,7 +96,7 @@ func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) 
 	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", levelName, color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
 }
 
-func (r *BackwardCompatibilityError) Error() string {
+func (r BackwardCompatibilityError) Error() string {
 	var levelName string
 	switch r.Level {
 	case ERR:

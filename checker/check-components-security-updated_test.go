@@ -19,18 +19,17 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-security-component-oauth-url-changed",
-			Text:        "the component security scheme 'petstore_auth' oauth url changed from 'http://example.org/api/oauth/dialog' to 'http://example.new.org/api/oauth/dialog'",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
-			OperationId: "N/A",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-security-component-oauth-url-changed",
+		Text:        "the component security scheme 'petstore_auth' oauth url changed from 'http://example.org/api/oauth/dialog' to 'http://example.new.org/api/oauth/dialog'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "N/A",
+		Path:        "N/A",
+		Source:      "N/A",
+		OperationId: "N/A",
+	}, errs[0])
 }
 
 // CL: Changing security component type
@@ -44,18 +43,17 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-security-component-type-changed",
-			Text:        "the component security scheme 'petstore_auth' type changed from 'oauth2' to 'http'",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
-			OperationId: "N/A",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-security-component-type-changed",
+		Text:        "the component security scheme 'petstore_auth' type changed from 'oauth2' to 'http'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "N/A",
+		Path:        "N/A",
+		Source:      "N/A",
+		OperationId: "N/A",
+	}, errs[0])
 }
 
 // CL: Adding a new security component
@@ -67,18 +65,17 @@ func TestComponentSecurityAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-security-component-added",
-			Text:        "the component security scheme 'BasicAuth' was added",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
-			OperationId: "N/A",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-security-component-added",
+		Text:        "the component security scheme 'BasicAuth' was added",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "N/A",
+		Path:        "N/A",
+		Source:      "N/A",
+		OperationId: "N/A",
+	}, errs[0])
 }
 
 // CL: Removing a new security component
@@ -90,18 +87,17 @@ func TestComponentSecurityRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-security-component-removed",
-			Text:        "the component security scheme 'BasicAuth' was removed",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
-			OperationId: "N/A",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-security-component-removed",
+		Text:        "the component security scheme 'BasicAuth' was removed",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "N/A",
+		Path:        "N/A",
+		Source:      "N/A",
+		OperationId: "N/A",
+	}, errs[0])
 }
 
 // CL: Adding a new oauth security scope
@@ -115,18 +111,17 @@ func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-security-component-oauth-scope-added",
-			Text:        "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was added",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
-			OperationId: "N/A",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-security-component-oauth-scope-added",
+		Text:        "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was added",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "N/A",
+		Path:        "N/A",
+		Source:      "N/A",
+		OperationId: "N/A",
+	}, errs[0])
 }
 
 // CL: Removing a new oauth security scope
@@ -141,18 +136,17 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-security-component-oauth-scope-removed",
-			Text:        "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was removed",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
-			OperationId: "N/A",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-security-component-oauth-scope-removed",
+		Text:        "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was removed",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "N/A",
+		Path:        "N/A",
+		Source:      "N/A",
+		OperationId: "N/A",
+	}, errs[0])
 }
 
 // CL: Removing a new oauth security scope
@@ -166,16 +160,15 @@ func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "api-security-component-oauth-scope-changed",
-			Text:        "the component security scheme 'petstore_auth' oauth scope 'read:pets' was updated from 'read your pets' to 'grants access to pets (deprecated)'",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "N/A",
-			Path:        "N/A",
-			Source:      "N/A",
-			OperationId: "N/A",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "api-security-component-oauth-scope-changed",
+		Text:        "the component security scheme 'petstore_auth' oauth scope 'read:pets' was updated from 'read your pets' to 'grants access to pets (deprecated)'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "N/A",
+		Path:        "N/A",
+		Source:      "N/A",
+		OperationId: "N/A",
+	}, errs[0])
 }

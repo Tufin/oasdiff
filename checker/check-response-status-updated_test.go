@@ -20,19 +20,17 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseSuccessStatusUpdated), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-success-status-added",
-			Text:        "added the success response with the status '201'",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_status_base.yaml",
-			OperationId: "createOneGroup",
-		},
-	}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "response-success-status-added",
+		Text:        "added the success response with the status '201'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_status_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: Adding a non-success response status
@@ -47,19 +45,17 @@ func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseNonSuccessStatusUpdated), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-non-success-status-added",
-			Text:        "added the non-success response with the status '400'",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_status_base.yaml",
-			OperationId: "createOneGroup",
-		},
-	}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "response-non-success-status-added",
+		Text:        "added the non-success response with the status '400'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_status_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // CL: Removing a non-success response status
@@ -75,18 +71,16 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseNonSuccessStatusUpdated), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-non-success-status-removed",
-			Text:        "removed the non-success response with the status '409'",
-			Comment:     "",
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_status_base.yaml",
-			OperationId: "createOneGroup",
-		},
-	}, errs)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "response-non-success-status-removed",
+		Text:        "removed the non-success response with the status '409'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_status_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
 // BC: Removing a success status is breaking
@@ -102,16 +96,14 @@ func TestResponseSuccessStatusRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseSuccessStatusUpdated), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:          "response-success-status-removed",
-			Text:        "removed the success response with the status '200'",
-			Comment:     "",
-			Level:       checker.ERR,
-			Operation:   "POST",
-			Path:        "/api/v1.0/groups",
-			Source:      "../data/checker/response_status_base.yaml",
-			OperationId: "createOneGroup",
-		},
-	}, errs)
+	require.Equal(t, checker.BackwardCompatibilityError{
+		Id:          "response-success-status-removed",
+		Text:        "removed the success response with the status '200'",
+		Comment:     "",
+		Level:       checker.ERR,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_status_base.yaml",
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
