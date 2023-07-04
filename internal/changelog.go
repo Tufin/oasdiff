@@ -140,6 +140,7 @@ func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format str
 			infoCount := getLevelCount(errs, checker.INFO)
 			warnCount := getLevelCount(errs, checker.WARN)
 			errCount := getLevelCount(errs, checker.ERR)
+
 			fmt.Fprintf(
 				stdout,
 				config.Localizer.Get("messages.total-changes"),
