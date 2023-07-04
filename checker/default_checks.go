@@ -46,6 +46,7 @@ var optionalChecks = map[string]BackwardCompatibilityCheck{
 	"response-property-enum-value-removed":  ResponseParameterEnumValueRemovedCheck,
 	"response-mediatype-enum-value-removed": ResponseMediaTypeEnumValueRemovedCheck,
 	"request-body-enum-value-removed":       RequestBodyEnumValueRemovedCheck,
+	"endpoint-added":                        APIAddedCheck,
 }
 
 func GetOptionalChecks() []string {

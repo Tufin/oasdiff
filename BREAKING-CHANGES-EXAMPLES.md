@@ -3,6 +3,7 @@ These examples are automatically generated from unit tests.
 ## Examples of breaking changes
 [Removing a success status is breaking](checker/check-response-status-updated_test.go?plain=1#L92)  
 [adding a new required property in request body is breaking](checker/checker_breaking_property_test.go?plain=1#L352)  
+[adding a path is breaking (optional)](checker/checker_breaking_test.go?plain=1#L617)  
 [adding a pattern to a schema is breaking for recursive properties](checker/checker_breaking_test.go?plain=1#L475)  
 [adding a pattern to a schema is breaking](checker/checker_breaking_test.go?plain=1#L459)  
 [adding a required request body is breaking](checker/checker_breaking_test.go?plain=1#L65)  

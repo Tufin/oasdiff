@@ -613,3 +613,17 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 	require.Equal(t, "api-schema-removed", errs[1].Id)
 	require.Equal(t, "removed the schema 'rules' from openapi components", errs[1].Text)
 }
+
+// BC: adding a path is breaking (optional)
+func TestBreaking_AddedPath(t *testing.T) {
+	s1 := l(t, 701)
+	s2 := l(t, 1)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	require.NoError(t, err)
+	checks := checker.GetChecks(utils.StringList{"endpoint-added"})
+	errs := checker.CheckBackwardCompatibility(checks, d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.Level)
+	}
+}

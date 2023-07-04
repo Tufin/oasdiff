@@ -75,6 +75,7 @@ You can use the `--include-checks` flag to include the following optional checks
 - response-property-enum-value-removed
 - response-mediatype-enum-value-removed
 - request-body-enum-value-removed
+- endpoint-added
 
 For example:
 ```
