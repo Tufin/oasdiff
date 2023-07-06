@@ -66,10 +66,10 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 }
 
 func runChangelog(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnError) {
-	return getChangelog(flags, stdout, checker.INFO)
+	return getChangelog(flags, stdout, checker.INFO, getChangelogTitle)
 }
 
-func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
+func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level, getOutputTitle GetOutputTitle) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
 
@@ -89,7 +89,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 		return false, returnErr
 	}
 
-	if returnErr := outputChangelog(bcConfig, flags.format, stdout, errs); returnErr != nil {
+	if returnErr := outputChangelog(bcConfig, flags.format, stdout, errs, getOutputTitle); returnErr != nil {
 		return false, returnErr
 	}
 
@@ -125,7 +125,26 @@ func filterIgnored(errs checker.BackwardCompatibilityErrors, warnIgnoreFile stri
 	return errs, nil
 }
 
-func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.BackwardCompatibilityErrors) *ReturnError {
+func getChangelogTitle(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string {
+	infoCount := getLevelCount(errs, checker.INFO)
+	warnCount := getLevelCount(errs, checker.WARN)
+	errCount := getLevelCount(errs, checker.ERR)
+
+	return fmt.Sprintf(
+		config.Localizer.Get("messages.total-changes"),
+		len(errs),
+		errCount,
+		checker.PrettyLevelText(checker.ERR),
+		warnCount,
+		checker.PrettyLevelText(checker.WARN),
+		infoCount,
+		checker.PrettyLevelText(checker.INFO),
+	)
+}
+
+type GetOutputTitle func(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string
+
+func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.BackwardCompatibilityErrors, getOutputTitle GetOutputTitle) *ReturnError {
 	switch format {
 	case FormatYAML:
 		if err := printYAML(stdout, errs); err != nil {
@@ -137,21 +156,7 @@ func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format str
 		}
 	case FormatText:
 		if len(errs) > 0 {
-			infoCount := getLevelCount(errs, checker.INFO)
-			warnCount := getLevelCount(errs, checker.WARN)
-			errCount := getLevelCount(errs, checker.ERR)
-
-			fmt.Fprintf(
-				stdout,
-				config.Localizer.Get("messages.total-changes"),
-				len(errs),
-				checker.PrettyLevelText(checker.INFO),
-				infoCount,
-				checker.PrettyLevelText(checker.ERR),
-				errCount,
-				checker.PrettyLevelText(checker.WARN),
-				warnCount,
-			)
+			fmt.Fprint(stdout, getOutputTitle(config, errs))
 		}
 
 		for _, bcerr := range errs {

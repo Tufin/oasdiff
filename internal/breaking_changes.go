@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/spf13/cobra"
@@ -64,5 +65,19 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 }
 
 func runBreakingChanges(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnError) {
-	return getChangelog(flags, stdout, checker.WARN)
+	return getChangelog(flags, stdout, checker.WARN, getBreakingChangesTitle)
+}
+
+func getBreakingChangesTitle(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string {
+	warnCount := getLevelCount(errs, checker.WARN)
+	errCount := getLevelCount(errs, checker.ERR)
+
+	return fmt.Sprintf(
+		config.Localizer.Get("messages.total-errors"),
+		len(errs),
+		errCount,
+		checker.PrettyLevelText(checker.ERR),
+		warnCount,
+		checker.PrettyLevelText(checker.WARN),
+	)
 }
