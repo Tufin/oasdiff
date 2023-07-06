@@ -66,10 +66,10 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 }
 
 func runChangelog(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnError) {
-	return getChangelog(flags, stdout, checker.INFO)
+	return getChangelog(flags, stdout, checker.INFO, getChangelogTitle)
 }
 
-func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
+func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level, getOutputTitle GetOutputTitle) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
 
@@ -89,7 +89,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level) 
 		return false, returnErr
 	}
 
-	if returnErr := outputChangelog(bcConfig, flags.format, stdout, errs); returnErr != nil {
+	if returnErr := outputChangelog(bcConfig, flags.format, stdout, errs, getOutputTitle); returnErr != nil {
 		return false, returnErr
 	}
 
@@ -125,7 +125,24 @@ func filterIgnored(errs checker.BackwardCompatibilityErrors, warnIgnoreFile stri
 	return errs, nil
 }
 
-func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.BackwardCompatibilityErrors) *ReturnError {
+func getChangelogTitle(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string {
+	count := errs.GetLevelCount()
+
+	return fmt.Sprintf(
+		config.Localizer.Get("messages.total-changes"),
+		len(errs),
+		count[checker.ERR],
+		checker.PrettyLevelText(checker.ERR),
+		count[checker.WARN],
+		checker.PrettyLevelText(checker.WARN),
+		count[checker.INFO],
+		checker.PrettyLevelText(checker.INFO),
+	)
+}
+
+type GetOutputTitle func(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string
+
+func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.BackwardCompatibilityErrors, getOutputTitle GetOutputTitle) *ReturnError {
 	switch format {
 	case FormatYAML:
 		if err := printYAML(stdout, errs); err != nil {
@@ -137,7 +154,7 @@ func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format str
 		}
 	case FormatText:
 		if len(errs) > 0 {
-			fmt.Fprintf(stdout, config.Localizer.Get("messages.total-errors"), len(errs))
+			fmt.Fprint(stdout, getOutputTitle(config, errs))
 		}
 
 		for _, bcerr := range errs {

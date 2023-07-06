@@ -35,6 +35,14 @@ func (errs BackwardCompatibilityErrors) HasLevelOrHigher(level Level) bool {
 	return false
 }
 
+func (errs BackwardCompatibilityErrors) GetLevelCount() map[Level]int {
+	counts := map[Level]int{}
+	for _, err := range errs {
+		counts[err.Level] = counts[err.Level] + 1
+	}
+	return counts
+}
+
 func (bcErrors BackwardCompatibilityErrors) Len() int {
 	return len(bcErrors)
 }
@@ -106,13 +114,9 @@ func IsPipedOutput() bool {
 	return *pipedOutput
 }
 
-func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) string {
-	if IsPipedOutput() {
-		return r.LocalizedError(l)
-	}
-
+func PrettyLevelText(level Level) string {
 	var levelName string
-	switch r.Level {
+	switch level {
 	case ERR:
 		levelName = color.InRed("error")
 	case WARN:
@@ -122,6 +126,16 @@ func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) 
 	default:
 		levelName = color.InGray("issue")
 	}
+
+	return levelName
+}
+
+func (r *BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) string {
+	if IsPipedOutput() {
+		return r.LocalizedError(l)
+	}
+
+	levelName := PrettyLevelText(r.Level)
 	comment := ""
 	if r.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", r.Comment)
