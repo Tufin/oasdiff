@@ -33,39 +33,30 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 	}
 
 	for _, removedSecurity := range diffReport.SecurityDiff.Deleted {
-		result = append(result, BackwardCompatibilityError{
-			Id:          APIGlobalSecurityRemovedCheckId,
-			Level:       INFO,
-			Text:        fmt.Sprintf(config.i18n(APIGlobalSecurityRemovedCheckId), ColorizedValue(removedSecurity)),
-			Operation:   "N/A",
-			Path:        "",
-			Source:      "security." + removedSecurity,
-			OperationId: "N/A",
+		result = append(result, BackwardCompatibilityComponentError{
+			Id:     APIGlobalSecurityRemovedCheckId,
+			Level:  INFO,
+			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityRemovedCheckId), ColorizedValue(removedSecurity)),
+			Source: "security." + removedSecurity,
 		})
 	}
 
 	for _, updatedSecurity := range diffReport.SecurityDiff.Modified {
 		for securitySchemeName, updatedSecuritySchemeScopes := range updatedSecurity {
 			for _, addedScope := range updatedSecuritySchemeScopes.Added {
-				result = append(result, BackwardCompatibilityError{
-					Id:          APIGlobalSecurityScopeAddedId,
-					Level:       INFO,
-					Text:        fmt.Sprintf(config.i18n(APIGlobalSecurityScopeAddedId), ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
-					Operation:   "N/A",
-					Path:        "",
-					Source:      "security.scopes." + addedScope,
-					OperationId: "N/A",
+				result = append(result, BackwardCompatibilityComponentError{
+					Id:     APIGlobalSecurityScopeAddedId,
+					Level:  INFO,
+					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeAddedId), ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
+					Source: "security.scopes." + addedScope,
 				})
 			}
 			for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
-				result = append(result, BackwardCompatibilityError{
-					Id:          APIGlobalSecurityScopeRemovedId,
-					Level:       INFO,
-					Text:        fmt.Sprintf(config.i18n(APIGlobalSecurityScopeRemovedId), ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
-					Operation:   "N/A",
-					Path:        "",
-					Source:      "security.scopes." + deletedScope,
-					OperationId: "N/A",
+				result = append(result, BackwardCompatibilityComponentError{
+					Id:     APIGlobalSecurityScopeRemovedId,
+					Level:  INFO,
+					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeRemovedId), ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
+					Source: "security.scopes." + deletedScope,
 				})
 			}
 		}

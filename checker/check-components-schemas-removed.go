@@ -17,13 +17,11 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 	}
 
 	for _, deletedSchema := range diffReport.ComponentsDiff.SchemasDiff.Deleted {
-		result = append(result, BackwardCompatibilityError{
-			Id:        apiSchemasRemovedCheckId,
-			Level:     config.getLogLevel(apiSchemasRemovedCheckId, INFO),
-			Text:      fmt.Sprintf(config.i18n(apiSchemasRemovedCheckId), ColorizedValue(deletedSchema)),
-			Operation: "N/A",
-			Path:      "",
-			Source:    "components.schemas." + deletedSchema, // TODO: get the file name
+		result = append(result, BackwardCompatibilityComponentError{
+			Id:     apiSchemasRemovedCheckId,
+			Level:  config.getLogLevel(apiSchemasRemovedCheckId, INFO),
+			Text:   fmt.Sprintf(config.i18n(apiSchemasRemovedCheckId), ColorizedValue(deletedSchema)),
+			Source: "components.schemas." + deletedSchema, // TODO: get the file name
 		})
 	}
 	return result

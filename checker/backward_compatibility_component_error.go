@@ -2,7 +2,6 @@ package checker
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/TwiN/go-color"
 	"github.com/tufin/oasdiff/checker/localizations"
@@ -14,11 +13,6 @@ type BackwardCompatibilityComponentError struct {
 	Comment string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level   Level  `json:"level" yaml:"level"`
 	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
-}
-
-func (r BackwardCompatibilityComponentError) getUncolorizedText() string {
-	uncolorizedText := strings.ReplaceAll(r.Text, color.Bold, "")
-	return strings.ReplaceAll(uncolorizedText, color.Reset, "")
 }
 
 func (r BackwardCompatibilityComponentError) MatchIgnore(ignorePath, ignoreLine string) bool {
@@ -65,7 +59,7 @@ func (r BackwardCompatibilityComponentError) LocalizedError(l localizations.Loca
 	default:
 		levelName = "issue"
 	}
-	return fmt.Sprintf("%s %s %s, %s %s [%s]. %s", levelName, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, r.Id, r.Comment)
+	return fmt.Sprintf("%s %s %s, %s components %s [%s]. %s", levelName, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, r.Id, r.Comment)
 }
 
 func (r BackwardCompatibilityComponentError) PrettyErrorText(l localizations.Localizer) string {

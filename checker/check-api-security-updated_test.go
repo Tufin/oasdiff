@@ -37,15 +37,12 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
-		Id:          "api-global-security-removed",
-		Text:        "the security scheme 'petstore_auth' was removed from the API",
-		Comment:     "",
-		Level:       checker.INFO,
-		Operation:   "N/A",
-		Path:        "",
-		Source:      "security.petstore_auth",
-		OperationId: "N/A",
+	require.Equal(t, checker.BackwardCompatibilityComponentError{
+		Id:      "api-global-security-removed",
+		Text:    "the security scheme 'petstore_auth' was removed from the API",
+		Comment: "",
+		Level:   checker.INFO,
+		Source:  "security.petstore_auth",
 	}, errs[0])
 }
 
@@ -60,15 +57,12 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
-		Id:          "api-global-security-scope-removed",
-		Text:        "the security scope 'read:pets' was removed from the global security scheme 'petstore_auth'",
-		Comment:     "",
-		Level:       checker.INFO,
-		Operation:   "N/A",
-		Path:        "",
-		Source:      "security.scopes.read:pets",
-		OperationId: "N/A",
+	require.Equal(t, checker.BackwardCompatibilityComponentError{
+		Id:      "api-global-security-scope-removed",
+		Text:    "the security scope 'read:pets' was removed from the global security scheme 'petstore_auth'",
+		Comment: "",
+		Level:   checker.INFO,
+		Source:  "security.scopes.read:pets",
 	}, errs[0])
 }
 
@@ -83,15 +77,12 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.BackwardCompatibilityComponentError{
 		Id:          "api-global-security-scope-added",
 		Text:        "the security scope 'read:pets' was added to the global security scheme 'petstore_auth'",
 		Comment:     "",
 		Level:       checker.INFO,
-		Operation:   "N/A",
-		Path:        "",
 		Source:      "security.scopes.read:pets",
-		OperationId: "N/A",
 	}, errs[0])
 }
 
