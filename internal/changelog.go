@@ -126,18 +126,16 @@ func filterIgnored(errs checker.BackwardCompatibilityErrors, warnIgnoreFile stri
 }
 
 func getChangelogTitle(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string {
-	infoCount := getLevelCount(errs, checker.INFO)
-	warnCount := getLevelCount(errs, checker.WARN)
-	errCount := getLevelCount(errs, checker.ERR)
+	count := errs.GetLevelCount()
 
 	return fmt.Sprintf(
 		config.Localizer.Get("messages.total-changes"),
 		len(errs),
-		errCount,
+		count[checker.ERR],
 		checker.PrettyLevelText(checker.ERR),
-		warnCount,
+		count[checker.WARN],
 		checker.PrettyLevelText(checker.WARN),
-		infoCount,
+		count[checker.INFO],
 		checker.PrettyLevelText(checker.INFO),
 	)
 }
@@ -167,14 +165,4 @@ func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format str
 	}
 
 	return nil
-}
-
-func getLevelCount(errs checker.BackwardCompatibilityErrors, level checker.Level) int {
-	count := 0
-	for _, err := range errs {
-		if err.Level == level {
-			count++
-		}
-	}
-	return count
 }
