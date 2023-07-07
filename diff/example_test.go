@@ -109,14 +109,15 @@ func ExampleGetPathsDiff() {
 
 	// pretty print breaking changes errors
 	if len(errs) > 0 {
-		fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs))
+		count := errs.GetLevelCount()
+		fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs), count[checker.ERR], "error", count[checker.WARN], "warning")
 		for _, bcerr := range errs {
 			fmt.Printf("%s\n\n", strings.TrimRight(bcerr.PrettyErrorText(c.Localizer), " "))
 		}
 	}
 
 	// Output:
-	// Backward compatibility errors (4):
+	// 4 breaking changes: 1 error, 3 warning
 	// error at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score removed the success response with the status '201' [response-success-status-removed].
 	//
 	// warning at ../data/openapi-test3.yaml, in API GET /api/{domain}/{project}/badges/security-score deleted the 'cookie' request parameter 'test' [request-parameter-removed].

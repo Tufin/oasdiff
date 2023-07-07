@@ -163,7 +163,8 @@ var localizations = map[string]string{
 	"en.messages.response-write-only-property-became-optional":             "the response write-only property %s became optional for the status %s",
 	"en.messages.response-write-only-property-became-required":             "the response write-only property %s became required for the status %s",
 	"en.messages.sunset-deleted":                                           "api sunset date deleted, but deprecated=true kept",
-	"en.messages.total-errors":                                             "Backward compatibility errors (%d):\n",
+	"en.messages.total-changes":                                            "%d changes: %d %s, %d %s, %d %s\n",
+	"en.messages.total-errors":                                             "%d breaking changes: %d %s, %d %s\n",
 	"ru.messages.added-required-request-body":                              "добавлено обязательное тело запроса",
 	"ru.messages.api-deprecated-sunset-parse":                              "API deprecated без валидно парсящейся '%s' даты sunset: %v",
 	"ru.messages.api-global-security-added":                                "схема безопасности %s была добавлена к API",
@@ -315,7 +316,8 @@ var localizations = map[string]string{
 	"ru.messages.response-write-only-property-became-optional":             "свойство только для записи %s перестало быть обязательным для ответа со статусом %s",
 	"ru.messages.response-write-only-property-became-required":             "свойство только для записи %s перестало быть необязательным для ответа со статусом %s",
 	"ru.messages.sunset-deleted":                                           "удалена дата sunset date у API, но сохранён deprecated=true",
-	"ru.messages.total-errors":                                             "Ошибки обратной совместимости (всего: %d):\n",
+	"ru.messages.total-changes":                                            "%d изменений: %d %s, %d %s, %d %s\n",
+	"ru.messages.total-errors":                                             "%d критические изменения: %d %s, %d %s\n",
 }
 
 type Replacements map[string]interface{}
