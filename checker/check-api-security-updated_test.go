@@ -78,11 +78,11 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.BackwardCompatibilityComponentError{
-		Id:          "api-global-security-scope-added",
-		Text:        "the security scope 'read:pets' was added to the global security scheme 'petstore_auth'",
-		Comment:     "",
-		Level:       checker.INFO,
-		Source:      "security.scopes.read:pets",
+		Id:      "api-global-security-scope-added",
+		Text:    "the security scope 'read:pets' was added to the global security scheme 'petstore_auth'",
+		Comment: "",
+		Level:   checker.INFO,
+		Source:  "security.scopes.read:pets",
 	}, errs[0])
 }
 
