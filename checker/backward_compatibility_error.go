@@ -78,17 +78,7 @@ func (r BackwardCompatibilityError) PrettyErrorText(l localizations.Localizer) s
 		return r.LocalizedError(l)
 	}
 
-	var levelName string
-	switch r.Level {
-	case ERR:
-		levelName = color.InRed("error")
-	case WARN:
-		levelName = color.InPurple("warning")
-	case INFO:
-		levelName = color.InCyan("info")
-	default:
-		levelName = color.InGray("issue")
-	}
+	levelName := PrettyLevelText(r.Level)
 	comment := ""
 	if r.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", r.Comment)

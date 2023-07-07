@@ -62,13 +62,9 @@ func (r BackwardCompatibilityComponentError) LocalizedError(l localizations.Loca
 	return fmt.Sprintf("%s %s %s, %s components %s [%s]. %s", levelName, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, r.Id, r.Comment)
 }
 
-func (r BackwardCompatibilityComponentError) PrettyErrorText(l localizations.Localizer) string {
-	if IsPipedOutput() {
-		return r.LocalizedError(l)
-	}
-
+func PrettyLevelText(level Level) string {
 	var levelName string
-	switch r.Level {
+	switch level {
 	case ERR:
 		levelName = color.InRed("error")
 	case WARN:
@@ -78,6 +74,16 @@ func (r BackwardCompatibilityComponentError) PrettyErrorText(l localizations.Loc
 	default:
 		levelName = color.InGray("issue")
 	}
+
+	return levelName
+}
+
+func (r BackwardCompatibilityComponentError) PrettyErrorText(l localizations.Localizer) string {
+	if IsPipedOutput() {
+		return r.LocalizedError(l)
+	}
+
+	levelName := PrettyLevelText(r.Level)
 	comment := ""
 	if r.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", r.Comment)

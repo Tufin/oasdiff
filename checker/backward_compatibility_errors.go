@@ -11,6 +11,15 @@ func (errs IBackwardCompatibilityErrors) HasLevelOrHigher(level Level) bool {
 	return false
 }
 
+func (errs IBackwardCompatibilityErrors) GetLevelCount() map[Level]int {
+	counts := map[Level]int{}
+	for _, err := range errs {
+		level := err.GetLevel()
+		counts[level] = counts[level] + 1
+	}
+	return counts
+}
+
 func (bcErrors IBackwardCompatibilityErrors) Len() int {
 	return len(bcErrors)
 }
