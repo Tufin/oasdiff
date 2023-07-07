@@ -154,7 +154,7 @@ func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format str
 		}
 	case FormatText:
 		if len(errs) > 0 {
-			fmt.Fprintf(stdout, config.Localizer.Get("messages.total-errors"), len(errs))
+			fmt.Fprint(stdout, getOutputTitle(config, errs))
 		}
 
 		for _, bcerr := range errs {
