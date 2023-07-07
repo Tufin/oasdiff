@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -35,7 +35,7 @@ func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *d
 								level = INFO
 							}
 							source := (*operationsSources)[operationItem.Revision]
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
 								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName)),

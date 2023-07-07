@@ -9,8 +9,8 @@ import (
 const requestPropertyBecameNotNullableId = "request-property-became-not-nullable"
 const requestBodyBecameNotNullableId = "request-body-became-not-nullable"
 
-func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -33,7 +33,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 				}
 
 				if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.From == true {
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:        requestBodyBecameNotNullableId,
 						Level:     ERR,
 						Text:      config.i18n(requestBodyBecameNotNullableId),
@@ -54,7 +54,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							return
 						}
 
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:        requestPropertyBecameNotNullableId,
 							Level:     ERR,
 							Text:      fmt.Sprintf(config.i18n(requestPropertyBecameNotNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName))),

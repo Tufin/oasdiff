@@ -19,7 +19,7 @@ func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "response-optional-property-removed",
 		Text:        "removed the optional property 'data/id' from the response with the '200' status",
 		Comment:     "",
@@ -43,7 +43,7 @@ func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyUpdatedCheck), d, osm, checker.INFO)
 
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "response-optional-property-added",
 		Text:        "added the optional property 'data/id' to the response with the '200' status",
 		Comment:     "",
@@ -67,7 +67,7 @@ func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "response-optional-write-only-property-removed",
 		Text:        "removed the optional write-only property 'data/id' from the response with the '200' status",
 		Level:       checker.INFO,
@@ -91,7 +91,7 @@ func TestResponseOptionalWriteOnlyPropertyAddedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyUpdatedCheck), d, osm, checker.INFO)
 
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "response-optional-write-only-property-added",
 		Text:        "added the optional write-only property 'data/id' to the response with the '200' status",
 		Level:       checker.INFO,

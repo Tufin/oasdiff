@@ -20,7 +20,7 @@ func TestTagAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APITagUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "api-tag-added",
 		Text:        "api tag 'newTag' added",
 		Comment:     "",
@@ -45,7 +45,7 @@ func TestTagRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APITagUpdatedCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "api-tag-removed",
 		Text:        "api tag 'Test' removed",
 		Comment:     "",
@@ -73,7 +73,7 @@ func TestTagUpdated(t *testing.T) {
 	for cl := range errs {
 		require.Equal(t, checker.INFO, errs[cl].GetLevel())
 		if errs[cl].GetId() == "api-tag-removed" {
-			require.Equal(t, checker.BackwardCompatibilityError{
+			require.Equal(t, checker.ApiChange{
 				Id:          "api-tag-removed",
 				Text:        "api tag 'Test' removed",
 				Comment:     "",
@@ -86,7 +86,7 @@ func TestTagUpdated(t *testing.T) {
 		}
 
 		if errs[cl].GetId() == "api-tag-added" {
-			require.Equal(t, checker.BackwardCompatibilityError{
+			require.Equal(t, checker.ApiChange{
 				Id:          "api-tag-added",
 				Text:        "api tag 'newTag' added",
 				Comment:     "",

@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -30,7 +30,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 					if maxDiff.From != nil &&
 						maxDiff.To != nil {
 						if IsDecreasedValue(maxDiff) {
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "request-body-max-decreased",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("request-body-max-decreased"), ColorizedValue(maxDiff.To)),
@@ -61,7 +61,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							return
 						}
 
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          "request-property-max-decreased",
 							Level:       ERR,
 							Text:        fmt.Sprintf(config.i18n("request-property-max-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),

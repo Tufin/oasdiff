@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -29,7 +29,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					minDiff := mediaTypeDiff.SchemaDiff.MinDiff
 					if minDiff.From == nil &&
 						minDiff.To != nil {
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          "request-body-min-set",
 							Level:       WARN,
 							Text:        fmt.Sprintf(config.i18n("request-body-min-set"), ColorizedValue(minDiff.To)),
@@ -57,7 +57,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 							return
 						}
 
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          "request-property-min-set",
 							Level:       WARN,
 							Text:        fmt.Sprintf(config.i18n("request-property-min-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),

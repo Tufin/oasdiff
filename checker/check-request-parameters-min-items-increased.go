@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func RequestParameterMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -39,7 +39,7 @@ func RequestParameterMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSou
 
 					source := (*operationsSources)[operationItem.Revision]
 
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:          "request-parameter-min-items-increased",
 						Level:       ERR,
 						Text:        fmt.Sprintf(config.i18n("request-parameter-min-items-increased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),

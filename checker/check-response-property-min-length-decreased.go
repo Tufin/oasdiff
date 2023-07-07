@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -33,7 +33,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 						if minLengthDiff.From != nil &&
 							minLengthDiff.To != nil {
 							if IsDecreasedValue(minLengthDiff) {
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          "response-body-min-length-decreased",
 									Level:       ERR,
 									Text:        fmt.Sprintf(config.i18n("response-body-min-length-decreased"), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
@@ -65,7 +65,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 								return
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "response-property-min-length-decreased",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("response-property-min-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To), ColorizedValue(responseStatus)),

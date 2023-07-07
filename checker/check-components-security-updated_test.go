@@ -20,7 +20,7 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityComponentError{
+	require.Equal(t, checker.ComponentChange{
 		Id:      "api-security-component-oauth-url-changed",
 		Text:    "the component security scheme 'petstore_auth' oauth url changed from 'http://example.org/api/oauth/dialog' to 'http://example.new.org/api/oauth/dialog'",
 		Comment: "",
@@ -41,7 +41,7 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityComponentError{
+	require.Equal(t, checker.ComponentChange{
 		Id:      "api-security-component-type-changed",
 		Text:    "the component security scheme 'petstore_auth' type changed from 'oauth2' to 'http'",
 		Comment: "",
@@ -60,7 +60,7 @@ func TestComponentSecurityAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityComponentError{
+	require.Equal(t, checker.ComponentChange{
 		Id:      "api-security-component-added",
 		Text:    "the component security scheme 'BasicAuth' was added",
 		Comment: "",
@@ -79,7 +79,7 @@ func TestComponentSecurityRemoved(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityComponentError{
+	require.Equal(t, checker.ComponentChange{
 		Id:      "api-security-component-removed",
 		Text:    "the component security scheme 'BasicAuth' was removed",
 		Comment: "",
@@ -100,7 +100,7 @@ func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityComponentError{
+	require.Equal(t, checker.ComponentChange{
 		Id:      "api-security-component-oauth-scope-added",
 		Text:    "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was added",
 		Comment: "",
@@ -122,7 +122,7 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityComponentError{
+	require.Equal(t, checker.ComponentChange{
 		Id:      "api-security-component-oauth-scope-removed",
 		Text:    "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was removed",
 		Comment: "",
@@ -143,7 +143,7 @@ func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityComponentError{
+	require.Equal(t, checker.ComponentChange{
 		Id:      "api-security-component-oauth-scope-changed",
 		Text:    "the component security scheme 'petstore_auth' oauth scope 'read:pets' was updated from 'read your pets' to 'grants access to pets (deprecated)'",
 		Comment: "",

@@ -8,8 +8,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -45,7 +45,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								// covered by response-required-property-removed
 								return
 							}
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
 								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
@@ -66,7 +66,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								// covered by response-required-property-added
 								return
 							}
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
 								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),

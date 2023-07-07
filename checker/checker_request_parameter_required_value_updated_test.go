@@ -21,7 +21,7 @@ func TestBreaking_HeaderParamBecameRequired(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.RequestParameterRequiredValueUpdatedCheck), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:        "request-parameter-became-required",
 		Text:      "the 'header' request parameter 'network-policies' became required",
 		Comment:   "",
@@ -44,7 +44,7 @@ func TestBreaking_HeaderParamBecameOptional(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterRequiredValueUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:        "request-parameter-became-optional",
 		Text:      "the 'header' request parameter 'network-policies' became optional",
 		Comment:   "",

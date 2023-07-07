@@ -11,8 +11,8 @@ const (
 	ResponseMediaTypeAddedId   = "response-media-type-added"
 )
 
-func ResponseMediaTypeUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func ResponseMediaTypeUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -36,7 +36,7 @@ func ResponseMediaTypeUpdated(diffReport *diff.Diff, operationsSources *diff.Ope
 					continue
 				}
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeDeleted {
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:          ResponseMediaTypeUpdatedId,
 						Level:       ERR,
 						Text:        fmt.Sprintf(config.i18n(ResponseMediaTypeUpdatedId), ColorizedValue(mediaType), ColorizedValue(responseStatus)),
@@ -47,7 +47,7 @@ func ResponseMediaTypeUpdated(diffReport *diff.Diff, operationsSources *diff.Ope
 					})
 				}
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeAdded {
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:          ResponseMediaTypeAddedId,
 						Level:       INFO,
 						Text:        fmt.Sprintf(config.i18n(ResponseMediaTypeAddedId), ColorizedValue(mediaType), ColorizedValue(responseStatus)),

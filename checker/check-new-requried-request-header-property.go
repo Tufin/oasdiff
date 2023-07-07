@@ -8,8 +8,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -41,7 +41,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 								return
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "new-required-request-header-property",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("new-required-request-header-property"), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),

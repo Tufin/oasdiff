@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -40,7 +40,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							for _, enumVal := range enumDiff.Added {
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          "response-property-enum-value-added",
 									Level:       WARN,
 									Text:        fmt.Sprintf(config.i18n("response-property-enum-value-added"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),

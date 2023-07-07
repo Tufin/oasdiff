@@ -8,8 +8,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func NewRequiredRequestPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func NewRequiredRequestPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -31,7 +31,7 @@ func NewRequiredRequestPropertyCheck(diffReport *diff.Diff, operationsSources *d
 						if !propertyItem.ReadOnly &&
 							slices.Contains(parent.Revision.Value.Required, propertyName) {
 							source := (*operationsSources)[operationItem.Revision]
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "new-required-request-property",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("new-required-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),

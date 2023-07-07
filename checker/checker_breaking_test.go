@@ -26,7 +26,7 @@ func l(t *testing.T, v int) load.SpecInfo {
 	return load.SpecInfo{Spec: oas, Url: fmt.Sprintf("../data/openapi-test%d.yaml", v)}
 }
 
-func d(t *testing.T, config *diff.Config, v1, v2 int) checker.IBackwardCompatibilityErrors {
+func d(t *testing.T, config *diff.Config, v1, v2 int) checker.Changes {
 	t.Helper()
 	l1 := l(t, v1)
 	l2 := l(t, v2)
@@ -197,7 +197,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t,
-		checker.BackwardCompatibilityError{
+		checker.ApiChange{
 			Id:        "request-parameter-became-required",
 			Text:      "the 'header' request parameter 'network-policies' became required",
 			Comment:   "",

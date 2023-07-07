@@ -2,7 +2,7 @@ package checker
 
 import "github.com/tufin/oasdiff/checker/localizations"
 
-type BackwardCompatibilityCheckConfig struct {
+type Config struct {
 	Checks              []BackwardCompatibilityCheck
 	MinSunsetBetaDays   int
 	MinSunsetStableDays int
@@ -10,11 +10,11 @@ type BackwardCompatibilityCheckConfig struct {
 	LogLevelOverrides   map[string]Level
 }
 
-func (c *BackwardCompatibilityCheckConfig) i18n(messageID string) string {
+func (c *Config) i18n(messageID string) string {
 	return c.Localizer.Get("messages." + messageID)
 }
 
-func (c *BackwardCompatibilityCheckConfig) getLogLevel(checkerId string, defaultLevel Level) Level {
+func (c *Config) getLogLevel(checkerId string, defaultLevel Level) Level {
 	if level, ok := c.LogLevelOverrides[checkerId]; ok {
 		return level
 	}

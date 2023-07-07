@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -38,7 +38,7 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 						source := (*operationsSources)[operationItem.Revision]
 
 						if patternDiff.From == "" {
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "request-property-pattern-added",
 								Level:       WARN,
 								Text:        fmt.Sprintf(config.i18n("request-property-pattern-added"), patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
@@ -49,7 +49,7 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 								Source:      source,
 							})
 						} else {
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "request-property-pattern-changed",
 								Level:       WARN,
 								Text:        fmt.Sprintf(config.i18n("request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),

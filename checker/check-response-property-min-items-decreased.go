@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -33,7 +33,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 						if minItemsDiff.From != nil &&
 							minItemsDiff.To != nil {
 							if IsDecreasedValue(minItemsDiff) {
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          "response-body-min-items-decreased",
 									Level:       ERR,
 									Text:        fmt.Sprintf(config.i18n("response-body-min-items-decreased"), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
@@ -65,7 +65,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 								return
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "response-property-min-items-decreased",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("response-property-min-items-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To), ColorizedValue(responseStatus)),

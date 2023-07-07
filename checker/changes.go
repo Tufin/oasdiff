@@ -1,9 +1,9 @@
 package checker
 
-type IBackwardCompatibilityErrors []IBackwardCompatibilityError
+type Changes []Change
 
-func (errs IBackwardCompatibilityErrors) HasLevelOrHigher(level Level) bool {
-	for _, e := range errs {
+func (changes Changes) HasLevelOrHigher(level Level) bool {
+	for _, e := range changes {
 		if e.GetLevel() >= level {
 			return true
 		}
@@ -11,22 +11,22 @@ func (errs IBackwardCompatibilityErrors) HasLevelOrHigher(level Level) bool {
 	return false
 }
 
-func (errs IBackwardCompatibilityErrors) GetLevelCount() map[Level]int {
+func (changes Changes) GetLevelCount() map[Level]int {
 	counts := map[Level]int{}
-	for _, err := range errs {
+	for _, err := range changes {
 		level := err.GetLevel()
 		counts[level] = counts[level] + 1
 	}
 	return counts
 }
 
-func (bcErrors IBackwardCompatibilityErrors) Len() int {
-	return len(bcErrors)
+func (changes Changes) Len() int {
+	return len(changes)
 }
 
-func (bcErrors IBackwardCompatibilityErrors) Less(i, j int) bool {
+func (changes Changes) Less(i, j int) bool {
 
-	iv, jv := bcErrors[i], bcErrors[j]
+	iv, jv := changes[i], changes[j]
 
 	switch {
 	case iv.GetLevel() != jv.GetLevel():
@@ -44,6 +44,6 @@ func (bcErrors IBackwardCompatibilityErrors) Less(i, j int) bool {
 	}
 }
 
-func (bcErrors IBackwardCompatibilityErrors) Swap(i, j int) {
-	bcErrors[i], bcErrors[j] = bcErrors[j], bcErrors[i]
+func (changes Changes) Swap(i, j int) {
+	changes[i], changes[j] = changes[j], changes[i]
 }

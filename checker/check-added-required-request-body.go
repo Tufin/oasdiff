@@ -4,8 +4,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -20,7 +20,7 @@ func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *dif
 			if operationItem.RequestBodyDiff.Added &&
 				operationItem.Revision.RequestBody.Value.Required {
 				source := (*operationsSources)[operationItem.Revision]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "added-required-request-body",
 					Level:       ERR,
 					Text:        config.i18n("added-required-request-body"),

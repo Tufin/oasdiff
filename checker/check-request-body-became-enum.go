@@ -6,8 +6,8 @@ import (
 
 const requestBodyBecameEnumId = "request-body-became-enum"
 
-func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -34,7 +34,7 @@ func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.O
 				if schemaDiff := mediaTypeDiff.SchemaDiff; schemaDiff.EnumDiff == nil || !schemaDiff.EnumDiff.EnumAdded {
 					continue
 				}
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          requestBodyBecameEnumId,
 					Level:       ERR,
 					Text:        config.i18n(requestBodyBecameEnumId),

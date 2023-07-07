@@ -73,7 +73,7 @@ func Test_DiffInvalidFormat(t *testing.T) {
 func Test_BreakingChangesIncludeChecks(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/run_test/breaking_changes_include_checks_base.yaml ../data/run_test/breaking_changes_include_checks_revision.yaml --include-checks response-non-success-status-removed,api-tag-removed --format json"), &stdout, io.Discard))
-	bc := []checker.BackwardCompatibilityError{}
+	bc := []checker.ApiChange{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
 	require.Len(t, bc, 2)
 	for _, c := range bc {
@@ -134,7 +134,7 @@ func Test_BreakingChangesFailOnWarnsNoDiff(t *testing.T) {
 func Test_BreakingChangesIgnoreErrs(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --err-ignore ../data/ignore-err-example.txt --format json"), &stdout, io.Discard))
-	bc := []checker.BackwardCompatibilityError{}
+	bc := []checker.ApiChange{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
 	require.Len(t, bc, 5)
 }
@@ -142,7 +142,7 @@ func Test_BreakingChangesIgnoreErrs(t *testing.T) {
 func Test_BreakingChangesIgnoreErrsAndWarns(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --err-ignore ../data/ignore-err-example.txt --warn-ignore ../data/ignore-warn-example.txt --format json"), &stdout, io.Discard))
-	bc := []checker.BackwardCompatibilityError{}
+	bc := []checker.ApiChange{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
 	require.Len(t, bc, 4)
 }
@@ -192,7 +192,7 @@ func Test_DuplicatePathsOK(t *testing.T) {
 func Test_Changelog(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_base.yaml ../data/run_test/changelog_revision.yaml --format json"), &stdout, io.Discard))
-	cl := []checker.BackwardCompatibilityError{}
+	cl := []checker.ApiChange{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 1)
 }
@@ -200,7 +200,7 @@ func Test_Changelog(t *testing.T) {
 func Test_BreakingChangesChangelogOptionalCheckersAreInfoLevel(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_include_checks_base.yaml ../data/run_test/changelog_include_checks_revision.yaml --format json"), &stdout, io.Discard))
-	cl := []checker.BackwardCompatibilityError{}
+	cl := []checker.ApiChange{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 2)
 	for _, c := range cl {
@@ -211,7 +211,7 @@ func Test_BreakingChangesChangelogOptionalCheckersAreInfoLevel(t *testing.T) {
 func Test_BreakingChangesChangelogOptionalCheckersAreErrorLevelWhenSpecified(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_include_checks_base.yaml ../data/run_test/changelog_include_checks_revision.yaml --format json --include-checks api-tag-removed,response-non-success-status-removed"), &stdout, io.Discard))
-	cl := []checker.BackwardCompatibilityError{}
+	cl := []checker.ApiChange{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 2)
 	for _, c := range cl {

@@ -17,8 +17,8 @@ const (
 	APIComponentSecurityOauthScopeUpdated         = "api-security-component-oauth-scope-changed"
 )
 
-func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config BackwardCompatibilityCheckConfig, updatedSecurityName string) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, updatedSecurityName string) Changes {
+	result := make(Changes, 0)
 
 	if updatedSecurity.OAuthFlowsDiff == nil {
 		return result
@@ -29,7 +29,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Backward
 	}
 
 	if urlDiff := updatedSecurity.OAuthFlowsDiff.ImplicitDiff.AuthorizationURLDiff; urlDiff != nil {
-		result = append(result, BackwardCompatibilityComponentError{
+		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityComponentOauthUrlUpdated,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityComponentOauthUrlUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(urlDiff.From), ColorizedValue(urlDiff.To)),
@@ -38,7 +38,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Backward
 	}
 
 	if tokenDiff := updatedSecurity.OAuthFlowsDiff.ImplicitDiff.TokenURLDiff; tokenDiff != nil {
-		result = append(result, BackwardCompatibilityComponentError{
+		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityOauthTokenUrlUpdated,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityOauthTokenUrlUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(tokenDiff.From), ColorizedValue(tokenDiff.To)),
@@ -48,7 +48,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Backward
 
 	if scopesDiff := updatedSecurity.OAuthFlowsDiff.ImplicitDiff.ScopesDiff; scopesDiff != nil {
 		for _, addedScope := range scopesDiff.Added {
-			result = append(result, BackwardCompatibilityComponentError{
+			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeAdded,
 				Level:  INFO,
 				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeAdded), ColorizedValue(updatedSecurityName), ColorizedValue(addedScope)),
@@ -57,7 +57,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Backward
 		}
 
 		for _, removedScope := range scopesDiff.Deleted {
-			result = append(result, BackwardCompatibilityComponentError{
+			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeRemoved,
 				Level:  INFO,
 				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeRemoved), ColorizedValue(updatedSecurityName), ColorizedValue(removedScope)),
@@ -66,7 +66,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Backward
 		}
 
 		for name, modifiedScope := range scopesDiff.Modified {
-			result = append(result, BackwardCompatibilityComponentError{
+			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeUpdated,
 				Level:  INFO,
 				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(name), ColorizedValue(modifiedScope.From), ColorizedValue(modifiedScope.To)),
@@ -79,14 +79,14 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Backward
 	return result
 }
 
-func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.ComponentsDiff.SecuritySchemesDiff == nil {
 		return result
 	}
 
 	for _, updatedSecurity := range diffReport.ComponentsDiff.SecuritySchemesDiff.Added {
-		result = append(result, BackwardCompatibilityComponentError{
+		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityAddedCheckId,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityAddedCheckId), ColorizedValue(updatedSecurity)),
@@ -95,7 +95,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 	}
 
 	for _, updatedSecurity := range diffReport.ComponentsDiff.SecuritySchemesDiff.Deleted {
-		result = append(result, BackwardCompatibilityComponentError{
+		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityRemovedCheckId,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityRemovedCheckId), ColorizedValue(updatedSecurity)),
@@ -107,7 +107,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 		result = append(result, checkOAuthUpdates(updatedSecurity, config, updatedSecurityName)...)
 
 		if updatedSecurity.TypeDiff != nil {
-			result = append(result, BackwardCompatibilityComponentError{
+			result = append(result, ComponentChange{
 				Id:     APIComponentsSecurityTyepUpdated,
 				Level:  INFO,
 				Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityTyepUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(updatedSecurity.TypeDiff.From), ColorizedValue(updatedSecurity.TypeDiff.To)),

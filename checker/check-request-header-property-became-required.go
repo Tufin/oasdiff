@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -47,7 +47,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								continue
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "request-header-property-became-required",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("request-header-property-became-required"), ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
@@ -73,7 +73,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
 									continue
 								}
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          "request-header-property-became-required",
 									Level:       ERR,
 									Text:        fmt.Sprintf(config.i18n("request-header-property-became-required"), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),

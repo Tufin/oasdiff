@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -41,7 +41,7 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
 							continue
 						}
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          "request-property-became-required",
 							Level:       ERR,
 							Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(changedRequiredPropertyName)),
@@ -71,7 +71,7 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 								// it is a new property, checked by the new-required-request-property check
 								return
 							}
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "request-property-became-required",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),

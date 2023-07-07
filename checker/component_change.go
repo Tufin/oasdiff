@@ -7,7 +7,7 @@ import (
 	"github.com/tufin/oasdiff/checker/localizations"
 )
 
-type BackwardCompatibilityComponentError struct {
+type ComponentChange struct {
 	Id      string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text    string `json:"text,omitempty" yaml:"text,omitempty"`
 	Comment string `json:"comment,omitempty" yaml:"comment,omitempty"`
@@ -15,39 +15,39 @@ type BackwardCompatibilityComponentError struct {
 	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
 }
 
-func (r BackwardCompatibilityComponentError) MatchIgnore(ignorePath, ignoreLine string) bool {
+func (r ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
 	return false
 }
 
-func (r BackwardCompatibilityComponentError) GetId() string {
+func (r ComponentChange) GetId() string {
 	return r.Id
 }
 
-func (r BackwardCompatibilityComponentError) GetText() string {
+func (r ComponentChange) GetText() string {
 	return r.Text
 }
 
-func (r BackwardCompatibilityComponentError) GetComment() string {
+func (r ComponentChange) GetComment() string {
 	return r.Comment
 }
 
-func (r BackwardCompatibilityComponentError) GetLevel() Level {
+func (r ComponentChange) GetLevel() Level {
 	return r.Level
 }
 
-func (r BackwardCompatibilityComponentError) GetOperation() string {
+func (r ComponentChange) GetOperation() string {
 	return ""
 }
 
-func (r BackwardCompatibilityComponentError) GetOperationId() string {
+func (r ComponentChange) GetOperationId() string {
 	return ""
 }
 
-func (r BackwardCompatibilityComponentError) GetPath() string {
+func (r ComponentChange) GetPath() string {
 	return ""
 }
 
-func (r BackwardCompatibilityComponentError) LocalizedError(l localizations.Localizer) string {
+func (r ComponentChange) LocalizedError(l localizations.Localizer) string {
 	var levelName string
 	switch r.Level {
 	case ERR:
@@ -78,7 +78,7 @@ func PrettyLevelText(level Level) string {
 	return levelName
 }
 
-func (r BackwardCompatibilityComponentError) PrettyErrorText(l localizations.Localizer) string {
+func (r ComponentChange) PrettyErrorText(l localizations.Localizer) string {
 	if IsPipedOutput() {
 		return r.LocalizedError(l)
 	}
@@ -91,7 +91,7 @@ func (r BackwardCompatibilityComponentError) PrettyErrorText(l localizations.Loc
 	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s components\n\t\t%s%s", levelName, color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, comment)
 }
 
-func (r BackwardCompatibilityComponentError) Error() string {
+func (r ComponentChange) Error() string {
 	var levelName string
 	switch r.Level {
 	case ERR:

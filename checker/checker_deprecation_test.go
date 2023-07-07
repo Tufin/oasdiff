@@ -23,8 +23,8 @@ func getDeprecationFile(file string) string {
 	return fmt.Sprintf("../data/deprecation/%s", file)
 }
 
-func singleCheckConfig(c checker.BackwardCompatibilityCheck) checker.BackwardCompatibilityCheckConfig {
-	return checker.BackwardCompatibilityCheckConfig{
+func singleCheckConfig(c checker.BackwardCompatibilityCheck) checker.Config {
+	return checker.Config{
 		Checks:              []checker.BackwardCompatibilityCheck{c},
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
@@ -336,8 +336,8 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
-	require.IsType(t, checker.BackwardCompatibilityError{}, errs[0])
-	e0 := errs[0].(checker.BackwardCompatibilityError)
+	require.IsType(t, checker.ApiChange{}, errs[0])
+	e0 := errs[0].(checker.ApiChange)
 	require.Equal(t, "endpoint-deprecated", e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
@@ -358,8 +358,8 @@ func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
-	require.IsType(t, checker.BackwardCompatibilityError{}, errs[0])
-	e0 := errs[0].(checker.BackwardCompatibilityError)
+	require.IsType(t, checker.ApiChange{}, errs[0])
+	e0 := errs[0].(checker.ApiChange)
 	require.Equal(t, "endpoint-reactivated", e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)

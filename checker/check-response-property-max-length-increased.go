@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -33,7 +33,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 						if maxLengthDiff.From != nil &&
 							maxLengthDiff.To != nil {
 							if IsIncreasedValue(maxLengthDiff) {
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          "response-body-max-length-increased",
 									Level:       ERR,
 									Text:        fmt.Sprintf(config.i18n("response-body-max-length-increased"), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
@@ -65,7 +65,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 								return
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "response-property-max-length-increased",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("response-property-max-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To), ColorizedValue(responseStatus)),

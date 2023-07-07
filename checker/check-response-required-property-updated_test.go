@@ -18,7 +18,7 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 
 		Id:          "response-required-property-added",
 		Text:        "added the required property 'data/new' to the response with the '200' status",
@@ -42,7 +42,7 @@ func TestResponseRequiredPropertyRemoved(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "response-required-property-removed",
 		Text:        "removed the required property 'data/new' from the response with the '200' status",
 		Comment:     "",
@@ -67,7 +67,7 @@ func TestResponseRequiredWriteOnlyPropertyAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 
 		Id:          "response-required-write-only-property-added",
 		Text:        "added the required write-only property 'data/new' to the response with the '200' status",
@@ -92,7 +92,7 @@ func TestResponseRequiredWriteOnlyPropertyRemoved(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "response-required-write-only-property-removed",
 		Text:        "removed the required write-only property 'data/new' from the response with the '200' status",
 		Comment:     "",

@@ -5,11 +5,11 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
-func GetDefaultChecks() BackwardCompatibilityCheckConfig {
+func GetDefaultChecks() Config {
 	return GetChecks(utils.StringList{})
 }
 
-func GetChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
+func GetChecks(includeChecks utils.StringList) Config {
 	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks))
 }
 
@@ -24,12 +24,12 @@ func LevelOverrides(includeChecks utils.StringList) map[string]Level {
 	return result
 }
 
-func GetAllChecks(includeChecks utils.StringList) BackwardCompatibilityCheckConfig {
+func GetAllChecks(includeChecks utils.StringList) Config {
 	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks))
 }
 
-func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, levelOverrides map[string]Level) BackwardCompatibilityCheckConfig {
-	return BackwardCompatibilityCheckConfig{
+func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, levelOverrides map[string]Level) Config {
+	return Config{
 		Checks:              checks,
 		LogLevelOverrides:   levelOverrides,
 		MinSunsetBetaDays:   31,

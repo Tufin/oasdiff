@@ -19,7 +19,7 @@ func TestResponseSchemaTypeChangedCheck(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyTypeChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "response-body-type-changed",
 		Text:        "the response's body type/format changed from 'string'/'none' to 'object'/'none' for status '200'",
 		Comment:     "",
@@ -44,7 +44,7 @@ func TestResponsePropertyTypeChangedCheck(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyTypeChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.BackwardCompatibilityError{
+	require.Equal(t, checker.ApiChange{
 		Id:          "response-property-type-changed",
 		Text:        "the response's property type/format changed from 'string'/'none' to 'integer'/'none' for status '200'",
 		Comment:     "",

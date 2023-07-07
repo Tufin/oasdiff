@@ -2,7 +2,7 @@ package checker
 
 import "github.com/tufin/oasdiff/checker/localizations"
 
-type IBackwardCompatibilityError interface {
+type Change interface {
 	GetId() string
 	GetText() string
 	GetComment() string

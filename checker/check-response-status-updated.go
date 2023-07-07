@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponseSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
+func ResponseSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	success := func(status int) bool {
 		return status >= 200 && status <= 299
 	}
@@ -16,7 +16,7 @@ func ResponseSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff
 	return ResponseStatusUpdated(diffReport, operationsSources, config, success, "response-success-status-removed", ERR)
 }
 
-func ResponseNonSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
+func ResponseNonSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	notSuccess := func(status int) bool {
 		return status < 200 || status > 299
 	}
@@ -24,8 +24,8 @@ func ResponseNonSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *d
 	return ResponseStatusUpdated(diffReport, operationsSources, config, notSuccess, "response-non-success-status-removed", INFO)
 }
 
-func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig, filter func(int) bool, id string, defaultLevel Level) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config, filter func(int) bool, id string, defaultLevel Level) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -48,7 +48,7 @@ func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				}
 
 				if filter(status) {
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:          id,
 						Level:       config.getLogLevel(id, defaultLevel),
 						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(responseStatus)),
@@ -70,7 +70,7 @@ func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				}
 
 				if filter(status) {
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:          addedId,
 						Level:       config.getLogLevel(addedId, defaultLevel),
 						Text:        fmt.Sprintf(config.i18n(addedId), ColorizedValue(responseStatus)),

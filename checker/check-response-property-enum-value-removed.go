@@ -8,8 +8,8 @@ import (
 
 const responsePropertyEnumValueRemovedId = "response-property-enum-value-removed"
 
-func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -39,7 +39,7 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 							}
 
 							for _, enumVal := range enumDiff.Deleted {
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          responsePropertyEnumValueRemovedId,
 									Level:       config.getLogLevel(responsePropertyEnumValueRemovedId, INFO),
 									Text:        fmt.Sprintf(config.i18n(responsePropertyEnumValueRemovedId), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),

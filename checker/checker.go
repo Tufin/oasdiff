@@ -11,7 +11,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors
+type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes
 
 var pipedOutput *bool
 
@@ -25,12 +25,12 @@ func IsPipedOutput() bool {
 	return *pipedOutput
 }
 
-func CheckBackwardCompatibility(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) IBackwardCompatibilityErrors {
+func CheckBackwardCompatibility(config Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) Changes {
 	return CheckBackwardCompatibilityUntilLevel(config, diffReport, operationsSources, WARN)
 }
 
-func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfig, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func CheckBackwardCompatibilityUntilLevel(config Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) Changes {
+	result := make(Changes, 0)
 
 	if diffReport == nil {
 		return result
@@ -43,7 +43,7 @@ func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfi
 		result = append(result, errs...)
 	}
 
-	filteredResult := make(IBackwardCompatibilityErrors, 0)
+	filteredResult := make(Changes, 0)
 	for _, change := range result {
 		if change.GetLevel() >= level {
 			filteredResult = append(filteredResult, change)
@@ -54,7 +54,7 @@ func CheckBackwardCompatibilityUntilLevel(config BackwardCompatibilityCheckConfi
 	return filteredResult
 }
 
-func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result IBackwardCompatibilityErrors, operationsSources *diff.OperationsSourcesMap) IBackwardCompatibilityErrors {
+func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, operationsSources *diff.OperationsSourcesMap) Changes {
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -109,7 +109,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result IBackwardC
 			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].Extensions)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "parsing-error",
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
@@ -123,7 +123,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result IBackwardC
 			revisionStability, err := getStabilityLevel(pathDiff.Revision.Operations()[operation].Extensions)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "parsing-error",
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
@@ -139,7 +139,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result IBackwardC
 				baseStability == "beta" && revisionStability != "beta" && revisionStability != "stable" ||
 				baseStability == "alpha" && revisionStability != "alpha" && revisionStability != "beta" && revisionStability != "stable" ||
 				revisionStability == "" && baseStability != "" {
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-stability-decreased",
 					Level:       ERR,
 					Text:        fmt.Sprintf("stability level decreased from '%s' to '%s'", baseStability, revisionStability),
@@ -158,13 +158,13 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result IBackwardC
 	return result
 }
 
-func newParsingError(result IBackwardCompatibilityErrors,
+func newParsingError(result Changes,
 	err error,
 	operation string,
 	operationItem *openapi3.Operation,
 	path string,
-	source string) IBackwardCompatibilityErrors {
-	result = append(result, BackwardCompatibilityError{
+	source string) Changes {
+	result = append(result, ApiChange{
 		Id:          "parsing-error",
 		Level:       ERR,
 		Text:        fmt.Sprintf("parsing error %s", err.Error()),

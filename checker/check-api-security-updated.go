@@ -17,14 +17,14 @@ const (
 	APIGlobalSecurityScopeRemovedId = "api-global-security-scope-removed"
 )
 
-func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.SecurityDiff == nil {
 		return result
 	}
 
 	for _, addedSecurity := range diffReport.SecurityDiff.Added {
-		result = append(result, BackwardCompatibilityComponentError{
+		result = append(result, ComponentChange{
 			Id:     APIGlobalSecurityAddedCheckId,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityAddedCheckId), ColorizedValue(addedSecurity)),
@@ -33,7 +33,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 	}
 
 	for _, removedSecurity := range diffReport.SecurityDiff.Deleted {
-		result = append(result, BackwardCompatibilityComponentError{
+		result = append(result, ComponentChange{
 			Id:     APIGlobalSecurityRemovedCheckId,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityRemovedCheckId), ColorizedValue(removedSecurity)),
@@ -44,7 +44,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 	for _, updatedSecurity := range diffReport.SecurityDiff.Modified {
 		for securitySchemeName, updatedSecuritySchemeScopes := range updatedSecurity {
 			for _, addedScope := range updatedSecuritySchemeScopes.Added {
-				result = append(result, BackwardCompatibilityComponentError{
+				result = append(result, ComponentChange{
 					Id:     APIGlobalSecurityScopeAddedId,
 					Level:  INFO,
 					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeAddedId), ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
@@ -52,7 +52,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 				})
 			}
 			for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
-				result = append(result, BackwardCompatibilityComponentError{
+				result = append(result, ComponentChange{
 					Id:     APIGlobalSecurityScopeRemovedId,
 					Level:  INFO,
 					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeRemovedId), ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
@@ -66,8 +66,8 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 }
 
-func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 
 	result = append(result, checkGlobalSecurity(diffReport, operationsSources, config)...)
 
@@ -91,7 +91,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				if addedSecurity == "" {
 					continue
 				}
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          APISecurityAddedCheckId,
 					Level:       INFO,
 					Text:        fmt.Sprintf(config.i18n(APISecurityAddedCheckId), ColorizedValue(addedSecurity)),
@@ -106,7 +106,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				if deletedSecurity == "" {
 					continue
 				}
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          APISecurityRemovedCheckId,
 					Level:       INFO,
 					Text:        fmt.Sprintf(config.i18n(APISecurityRemovedCheckId), ColorizedValue(deletedSecurity)),
@@ -123,7 +123,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				}
 				for securitySchemeName, updatedSecuritySchemeScopes := range updatedSecurity {
 					for _, addedScope := range updatedSecuritySchemeScopes.Added {
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          APISecurityScopeAddedId,
 							Level:       INFO,
 							Text:        fmt.Sprintf(config.i18n(APISecurityScopeAddedId), ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
@@ -134,7 +134,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 						})
 					}
 					for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          APISecurityScopeRemovedId,
 							Level:       INFO,
 							Text:        fmt.Sprintf(config.i18n(APISecurityScopeRemovedId), ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),

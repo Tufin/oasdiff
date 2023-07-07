@@ -5,14 +5,14 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors {
-	result := make(IBackwardCompatibilityErrors, 0)
+func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
 
 	appendErr := func(path, opName string, opConfig *openapi3.Operation) {
-		result = append(result, BackwardCompatibilityError{
+		result = append(result, ApiChange{
 			Id:          "endpoint-added",
 			Level:       INFO,
 			Text:        config.i18n("endpoint-added"),
