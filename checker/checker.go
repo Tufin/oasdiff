@@ -12,16 +12,6 @@ import (
 )
 
 type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) IBackwardCompatibilityErrors
-=======
-
-func (errs BackwardCompatibilityErrors) HasLevelOrHigher(level Level) bool {
-	for _, e := range errs {
-		if e.Level >= level {
-			return true
-		}
-	}
-	return false
-
 
 var pipedOutput *bool
 

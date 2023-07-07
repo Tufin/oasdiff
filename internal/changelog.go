@@ -140,9 +140,9 @@ func getChangelogTitle(config checker.BackwardCompatibilityCheckConfig, errs che
 	)
 }
 
-type GetOutputTitle func(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string
+type GetOutputTitle func(config checker.BackwardCompatibilityCheckConfig, errs checker.IBackwardCompatibilityErrors) string
 
-func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.IBackwardCompatibilityErrors) *ReturnError {
+func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.IBackwardCompatibilityErrors, getOutputTitle GetOutputTitle) *ReturnError {
 	switch format {
 	case FormatYAML:
 		if err := printYAML(stdout, errs); err != nil {

@@ -68,7 +68,7 @@ func runBreakingChanges(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnE
 	return getChangelog(flags, stdout, checker.WARN, getBreakingChangesTitle)
 }
 
-func getBreakingChangesTitle(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string {
+func getBreakingChangesTitle(config checker.BackwardCompatibilityCheckConfig, errs checker.IBackwardCompatibilityErrors) string {
 	count := errs.GetLevelCount()
 
 	return fmt.Sprintf(

@@ -211,10 +211,10 @@ func Test_BreakingChangesChangelogOptionalCheckersAreInfoLevel(t *testing.T) {
 func Test_BreakingChangesChangelogOptionalCheckersAreErrorLevelWhenSpecified(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_include_checks_base.yaml ../data/run_test/changelog_include_checks_revision.yaml --format json --include-checks api-tag-removed,response-non-success-status-removed"), &stdout, io.Discard))
-	cl := checker.BackwardCompatibilityErrors{}
+	cl := []checker.BackwardCompatibilityError{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 2)
 	for _, c := range cl {
-		require.Equal(t, c.Level, checker.ERR)
+		require.Equal(t, c.GetLevel(), checker.ERR)
 	}
 }
