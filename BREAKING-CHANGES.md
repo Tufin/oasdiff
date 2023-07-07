@@ -10,7 +10,7 @@ oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/opena
 ```
 
 There are two levels of breaking changes:
-- `WARN` - Warning are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
+- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
 - `ERR` - Errors are definite breaking changes which should be avoided
 
 To exit with return code 1 when any ERR-level breaking changes are found, add the `--fail-on ERR` flag.  
