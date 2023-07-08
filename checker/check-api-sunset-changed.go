@@ -8,8 +8,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -27,7 +27,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			}
 
 			if operationDiff.ExtensionsDiff != nil && !operationDiff.ExtensionsDiff.Deleted.Empty() {
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "sunset-deleted",
 					Level:       ERR,
 					Text:        config.i18n("sunset-deleted"),
@@ -46,7 +46,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			rawDate, date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-deprecated-sunset-parse",
 					Level:       ERR,
 					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
@@ -60,7 +60,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			rawDate, baseDate, err := diff.GetSunsetDate(opBase.Extensions)
 			if err != nil {
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-deprecated-sunset-parse",
 					Level:       ERR,
 					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
@@ -76,7 +76,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "parsing-error",
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
@@ -91,7 +91,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			deprecationDays := getDeperacationDays(config, stability)
 
 			if baseDate.After(date) && days < deprecationDays {
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-sunset-date-changed-too-small",
 					Level:       ERR,
 					Text:        fmt.Sprintf(config.i18n("api-sunset-date-changed-too-small"), baseDate, date, baseDate, deprecationDays),
@@ -107,7 +107,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 	return result
 }
 
-func getDeperacationDays(config BackwardCompatibilityCheckConfig, stability string) int {
+func getDeperacationDays(config Config, stability string) int {
 	if stability == "beta" {
 		return config.MinSunsetBetaDays
 	}

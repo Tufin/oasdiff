@@ -8,8 +8,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -22,7 +22,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			op := diffReport.PathsDiff.Base[path].Operations()[operation]
 			if !op.Deprecated {
 				source := "original_source=" + (*operationsSources)[op]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-path-removed-without-deprecation",
 					Level:       ERR,
 					Text:        config.i18n("api-path-removed-without-deprecation"),
@@ -36,7 +36,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			rawDate, date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
 				source := "original_source=" + (*operationsSources)[op]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-path-sunset-parse",
 					Level:       ERR,
 					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
@@ -49,7 +49,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			}
 			if !civil.DateOf(time.Now()).After(date) {
 				source := (*operationsSources)[op]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-path-removed-before-sunset",
 					Level:       ERR,
 					Text:        fmt.Sprintf(config.i18n("api-path-removed-before-sunset"), date),
@@ -70,7 +70,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			op := pathItem.Base.Operations()[operation]
 			if !op.Deprecated {
 				source := (*operationsSources)[op]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-removed-without-deprecation",
 					Level:       ERR,
 					Text:        config.i18n("api-removed-without-deprecation"),
@@ -84,7 +84,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			rawDate, date, err := diff.GetSunsetDate(op.Extensions)
 			if err != nil {
 				source := (*operationsSources)[op]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-path-sunset-parse",
 					Level:       ERR,
 					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
@@ -97,7 +97,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			}
 			if !civil.DateOf(time.Now()).After(date) {
 				source := (*operationsSources)[op]
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          "api-removed-before-sunset",
 					Level:       ERR,
 					Text:        fmt.Sprintf(config.i18n("api-removed-before-sunset"), date),

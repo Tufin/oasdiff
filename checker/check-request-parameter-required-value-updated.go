@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -38,7 +38,7 @@ func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operations
 					}
 
 					source := (*operationsSources)[operationItem.Revision]
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:          id,
 						Level:       level,
 						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName)),

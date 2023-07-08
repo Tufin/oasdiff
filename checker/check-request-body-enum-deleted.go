@@ -8,8 +8,8 @@ import (
 
 const requestBodyEnumRemovedId = "request-body-enum-value-removed"
 
-func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -41,7 +41,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 					continue
 				}
 				for _, enumVal := range enumDiff.Deleted {
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:          requestBodyEnumRemovedId,
 						Level:       config.getLogLevel(requestBodyEnumRemovedId, INFO),
 						Text:        fmt.Sprintf(config.i18n(requestBodyEnumRemovedId), ColorizedValue(enumVal)),

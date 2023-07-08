@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -69,7 +69,7 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 						formatDiff = &diff.ValueDiff{From: paramDiff.Revision.Schema.Value.Format, To: paramDiff.Revision.Schema.Value.Format}
 					}
 
-					result = append(result, BackwardCompatibilityError{
+					result = append(result, ApiChange{
 						Id:          "request-parameter-type-changed",
 						Level:       ERR,
 						Text:        fmt.Sprintf(config.i18n("request-parameter-type-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),

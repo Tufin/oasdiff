@@ -11,8 +11,8 @@ const (
 	apiOperationAddCheckId     = "api-operation-id-added"
 )
 
-func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -40,7 +40,7 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 				text = fmt.Sprintf(config.i18n(id), ColorizedValue(operationItem.Revision.OperationID))
 			}
 
-			result = append(result, BackwardCompatibilityError{
+			result = append(result, ApiChange{
 				Id:          id,
 				Level:       config.getLogLevel(id, level),
 				Text:        text,

@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -34,7 +34,7 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 					}
 					required := responseDiff.Base.Headers[headerName].Value.Required
 					if required {
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          "required-response-header-removed",
 							Level:       ERR,
 							Text:        fmt.Sprintf(config.i18n("required-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
@@ -44,7 +44,7 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 							Source:      source,
 						})
 					} else {
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          "optional-response-header-removed",
 							Level:       WARN,
 							Text:        fmt.Sprintf(config.i18n("optional-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),

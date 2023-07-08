@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -29,7 +29,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 					maxLengthDiff := mediaTypeDiff.SchemaDiff.MaxLengthDiff
 					if maxLengthDiff.From == nil &&
 						maxLengthDiff.To != nil {
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          "request-body-max-length-set",
 							Level:       WARN,
 							Text:        fmt.Sprintf(config.i18n("request-body-max-length-set"), ColorizedValue(maxLengthDiff.To)),
@@ -57,7 +57,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 							return
 						}
 
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          "request-property-max-length-set",
 							Level:       WARN,
 							Text:        fmt.Sprintf(config.i18n("request-property-max-length-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),

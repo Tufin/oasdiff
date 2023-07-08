@@ -7,8 +7,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func RequestPropertyRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -29,7 +29,7 @@ func RequestPropertyRemovedCheck(diffReport *diff.Diff, operationsSources *diff.
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 						if !propertyItem.ReadOnly {
 							source := (*operationsSources)[operationItem.Revision]
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "request-property-removed",
 								Level:       WARN,
 								Text:        fmt.Sprintf(config.i18n("request-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName))),

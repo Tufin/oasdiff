@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -32,7 +32,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 						minItemsDiff := mediaTypeDiff.SchemaDiff.MinItemsDiff
 						if minItemsDiff.From != nil &&
 							minItemsDiff.To == nil {
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "response-body-min-items-unset",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("response-body-min-items-unset"), ColorizedValue(minItemsDiff.From)),
@@ -59,7 +59,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 								return
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "response-property-min-items-unset",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("response-property-min-items-unset"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),

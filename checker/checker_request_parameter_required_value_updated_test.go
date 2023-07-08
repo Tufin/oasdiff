@@ -20,17 +20,16 @@ func TestBreaking_HeaderParamBecameRequired(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.RequestParameterRequiredValueUpdatedCheck), d, osm)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:        "request-parameter-became-required",
-			Text:      "the 'header' request parameter 'network-policies' became required",
-			Comment:   "",
-			Level:     checker.ERR,
-			Operation: "GET",
-			Path:      "/api/{domain}/{project}/install-command",
-			Source:    "../data/openapi-test1.yaml",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:        "request-parameter-became-required",
+		Text:      "the 'header' request parameter 'network-policies' became required",
+		Comment:   "",
+		Level:     checker.ERR,
+		Operation: "GET",
+		Path:      "/api/{domain}/{project}/install-command",
+		Source:    "../data/openapi-test1.yaml",
+	}, errs[0])
 }
 
 // CL: changing an existing header param from required to optional
@@ -44,15 +43,14 @@ func TestBreaking_HeaderParamBecameOptional(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterRequiredValueUpdatedCheck), d, osm, checker.INFO)
-	require.NotEmpty(t, errs)
-	require.Equal(t, checker.BackwardCompatibilityErrors{
-		{
-			Id:        "request-parameter-became-optional",
-			Text:      "the 'header' request parameter 'network-policies' became optional",
-			Comment:   "",
-			Level:     checker.INFO,
-			Operation: "GET",
-			Path:      "/api/{domain}/{project}/install-command",
-			Source:    "../data/openapi-test1.yaml",
-		}}, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:        "request-parameter-became-optional",
+		Text:      "the 'header' request parameter 'network-policies' became optional",
+		Comment:   "",
+		Level:     checker.INFO,
+		Operation: "GET",
+		Path:      "/api/{domain}/{project}/install-command",
+		Source:    "../data/openapi-test1.yaml",
+	}, errs[0])
 }

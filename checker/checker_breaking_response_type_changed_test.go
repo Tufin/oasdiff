@@ -24,8 +24,8 @@ func TestBreaking_RespTypeStringToNumber(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-type-changed", errs[0].Id)
-	require.Equal(t, "the response's body type/format changed from 'string'/'none' to 'number'/'none' for status '200'", errs[0].Text)
+	require.Equal(t, "response-body-type-changed", errs[0].GetId())
+	require.Equal(t, "the response's body type/format changed from 'string'/'none' to 'number'/'none' for status '200'", errs[0].GetText())
 }
 
 // BC: changing response's body schema type from number to string is breaking
@@ -44,8 +44,8 @@ func TestBreaking_RespTypeNumberToString(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-type-changed", errs[0].Id)
-	require.Equal(t, "the response's body type/format changed from 'number'/'none' to 'string'/'none' for status '200'", errs[0].Text)
+	require.Equal(t, "response-body-type-changed", errs[0].GetId())
+	require.Equal(t, "the response's body type/format changed from 'number'/'none' to 'string'/'none' for status '200'", errs[0].GetText())
 }
 
 // BC: changing response's body schema type from number to integer is not breaking
@@ -82,8 +82,8 @@ func TestBreaking_RespTypeIntegerToNumber(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-type-changed", errs[0].Id)
-	require.Equal(t, "the response's body type/format changed from 'integer'/'none' to 'number'/'none' for status '200'", errs[0].Text)
+	require.Equal(t, "response-body-type-changed", errs[0].GetId())
+	require.Equal(t, "the response's body type/format changed from 'integer'/'none' to 'number'/'none' for status '200'", errs[0].GetText())
 }
 
 // BC: changing response's body schema type from number/none to integer/int32 is not breaking
@@ -117,6 +117,6 @@ func TestBreaking_RespTypeChanged(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-property-type-changed", errs[0].Id)
-	require.Equal(t, "the response's property type/format changed from 'string'/'none' to 'integer'/'int32' for status '200'", errs[0].Text)
+	require.Equal(t, "response-property-type-changed", errs[0].GetId())
+	require.Equal(t, "the response's property type/format changed from 'string'/'none' to 'integer'/'int32' for status '200'", errs[0].GetText())
 }

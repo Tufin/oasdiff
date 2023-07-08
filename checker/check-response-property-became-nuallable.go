@@ -9,8 +9,8 @@ import (
 const responsePropertyBecameNullableId = "response-property-became-nullable"
 const responseBodyBecameNullableId = "response-body-became-nullable"
 
-func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -38,7 +38,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 					}
 
 					if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
-						result = append(result, BackwardCompatibilityError{
+						result = append(result, ApiChange{
 							Id:          responseBodyBecameNullableId,
 							Level:       ERR,
 							Text:        config.i18n(responseBodyBecameNullableId),
@@ -60,7 +60,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 								return
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          responsePropertyBecameNullableId,
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n(responsePropertyBecameNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
