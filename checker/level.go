@@ -23,3 +23,16 @@ func NewLevel(level string) (Level, error) {
 	}
 	return INFO, fmt.Errorf("invalid level %s", level)
 }
+
+func (level Level) String() string {
+	switch level {
+	case ERR:
+		return "error"
+	case WARN:
+		return "warning"
+	case INFO:
+		return "info"
+	default:
+		return "issue"
+	}
+}

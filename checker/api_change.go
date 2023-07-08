@@ -59,18 +59,7 @@ func (r ApiChange) GetPath() string {
 }
 
 func (r ApiChange) LocalizedError(l localizations.Localizer) string {
-	var levelName string
-	switch r.Level {
-	case ERR:
-		levelName = "error"
-	case WARN:
-		levelName = "warning"
-	case INFO:
-		levelName = "info"
-	default:
-		levelName = "issue"
-	}
-	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", levelName, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Operation, r.Path, r.Text, r.Id, r.Comment)
+	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", r.Level, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Operation, r.Path, r.Text, r.Id, r.Comment)
 }
 
 func (r ApiChange) PrettyErrorText(l localizations.Localizer) string {
@@ -87,16 +76,5 @@ func (r ApiChange) PrettyErrorText(l localizations.Localizer) string {
 }
 
 func (r ApiChange) Error() string {
-	var levelName string
-	switch r.Level {
-	case ERR:
-		levelName = "error"
-	case WARN:
-		levelName = "warning"
-	case INFO:
-		levelName = "info"
-	default:
-		levelName = "issue"
-	}
-	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]. %s", levelName, r.Source, r.Operation, r.Path, r.Text, r.Id, r.Comment)
+	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]. %s", r.Level, r.Source, r.Operation, r.Path, r.Text, r.Id, r.Comment)
 }

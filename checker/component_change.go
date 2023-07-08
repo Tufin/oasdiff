@@ -48,34 +48,21 @@ func (r ComponentChange) GetPath() string {
 }
 
 func (r ComponentChange) LocalizedError(l localizations.Localizer) string {
-	var levelName string
-	switch r.Level {
-	case ERR:
-		levelName = "error"
-	case WARN:
-		levelName = "warning"
-	case INFO:
-		levelName = "info"
-	default:
-		levelName = "issue"
-	}
-	return fmt.Sprintf("%s %s %s, %s components %s [%s]. %s", levelName, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, r.Id, r.Comment)
+	return fmt.Sprintf("%s %s %s, %s components %s [%s]. %s", r.Level, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, r.Id, r.Comment)
 }
 
 func PrettyLevelText(level Level) string {
-	var levelName string
+	levelName := level.String()
 	switch level {
 	case ERR:
-		levelName = color.InRed("error")
+		return color.InRed(levelName)
 	case WARN:
-		levelName = color.InPurple("warning")
+		return color.InPurple(levelName)
 	case INFO:
-		levelName = color.InCyan("info")
+		return color.InCyan(levelName)
 	default:
-		levelName = color.InGray("issue")
+		return color.InGray(levelName)
 	}
-
-	return levelName
 }
 
 func (r ComponentChange) PrettyErrorText(l localizations.Localizer) string {
@@ -92,16 +79,5 @@ func (r ComponentChange) PrettyErrorText(l localizations.Localizer) string {
 }
 
 func (r ComponentChange) Error() string {
-	var levelName string
-	switch r.Level {
-	case ERR:
-		levelName = "error"
-	case WARN:
-		levelName = "warning"
-	case INFO:
-		levelName = "info"
-	default:
-		levelName = "issue"
-	}
-	return fmt.Sprintf("%s at %s, in components %s [%s]. %s", levelName, r.Source, r.Text, r.Id, r.Comment)
+	return fmt.Sprintf("%s at %s, in components %s [%s]. %s", r.Level.String(), r.Source, r.Text, r.Id, r.Comment)
 }
