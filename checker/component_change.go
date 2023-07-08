@@ -16,54 +16,54 @@ type ComponentChange struct {
 	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
 }
 
-func (r ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
+func (ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
 	return false
 }
 
-func (r ComponentChange) GetId() string {
-	return r.Id
+func (c ComponentChange) GetId() string {
+	return c.Id
 }
 
-func (r ComponentChange) GetText() string {
-	return r.Text
+func (c ComponentChange) GetText() string {
+	return c.Text
 }
 
-func (r ComponentChange) GetComment() string {
-	return r.Comment
+func (c ComponentChange) GetComment() string {
+	return c.Comment
 }
 
-func (r ComponentChange) GetLevel() Level {
-	return r.Level
+func (c ComponentChange) GetLevel() Level {
+	return c.Level
 }
 
-func (r ComponentChange) GetOperation() string {
+func (ComponentChange) GetOperation() string {
 	return ""
 }
 
-func (r ComponentChange) GetOperationId() string {
+func (ComponentChange) GetOperationId() string {
 	return ""
 }
 
-func (r ComponentChange) GetPath() string {
+func (ComponentChange) GetPath() string {
 	return ""
 }
 
-func (r ComponentChange) LocalizedError(l localizations.Localizer) string {
-	return fmt.Sprintf("%s %s %s, %s components %s [%s]. %s", r.Level, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, r.Id, r.Comment)
+func (c ComponentChange) LocalizedError(l localizations.Localizer) string {
+	return fmt.Sprintf("%s, %s components %s [%s]. %s", c.Level, l.Get("messages.in"), c.Text, c.Id, c.Comment)
 }
 
-func (r ComponentChange) PrettyErrorText(l localizations.Localizer) string {
+func (c ComponentChange) PrettyErrorText(l localizations.Localizer) string {
 	if IsPipedOutput() {
-		return r.LocalizedError(l)
+		return c.LocalizedError(l)
 	}
 
 	comment := ""
-	if r.Comment != "" {
-		comment = fmt.Sprintf("\n\t\t%s", r.Comment)
+	if c.Comment != "" {
+		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s components\n\t\t%s%s", r.Level.PrettyString(), color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, comment)
+	return fmt.Sprintf("%s\t[%s] \t\n\t%s components\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l.Get("messages.in"), c.Text, comment)
 }
 
-func (r ComponentChange) Error() string {
-	return fmt.Sprintf("%s at %s, in components %s [%s]. %s", r.Level.String(), r.Source, r.Text, r.Id, r.Comment)
+func (c ComponentChange) Error() string {
+	return fmt.Sprintf("%s, in components %s [%s]. %s", c.Level.String(), c.Text, c.Id, c.Comment)
 }

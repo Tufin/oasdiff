@@ -33,7 +33,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			Id:     APIComponentsSecurityComponentOauthUrlUpdated,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityComponentOauthUrlUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(urlDiff.From), ColorizedValue(urlDiff.To)),
-			Source: "N/A",
+			Source: "",
 		})
 	}
 
@@ -42,7 +42,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			Id:     APIComponentsSecurityOauthTokenUrlUpdated,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityOauthTokenUrlUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(tokenDiff.From), ColorizedValue(tokenDiff.To)),
-			Source: "N/A",
+			Source: "",
 		})
 	}
 
@@ -52,7 +52,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 				Id:     APIComponentSecurityOauthScopeAdded,
 				Level:  INFO,
 				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeAdded), ColorizedValue(updatedSecurityName), ColorizedValue(addedScope)),
-				Source: "N/A",
+				Source: "",
 			})
 		}
 
@@ -61,7 +61,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 				Id:     APIComponentSecurityOauthScopeRemoved,
 				Level:  INFO,
 				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeRemoved), ColorizedValue(updatedSecurityName), ColorizedValue(removedScope)),
-				Source: "N/A",
+				Source: "",
 			})
 		}
 
@@ -70,7 +70,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 				Id:     APIComponentSecurityOauthScopeUpdated,
 				Level:  INFO,
 				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(name), ColorizedValue(modifiedScope.From), ColorizedValue(modifiedScope.To)),
-				Source: "N/A",
+				Source: "",
 			})
 		}
 
@@ -90,7 +90,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 			Id:     APIComponentsSecurityAddedCheckId,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityAddedCheckId), ColorizedValue(updatedSecurity)),
-			Source: "N/A",
+			Source: "",
 		})
 	}
 
@@ -99,7 +99,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 			Id:     APIComponentsSecurityRemovedCheckId,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityRemovedCheckId), ColorizedValue(updatedSecurity)),
-			Source: "N/A",
+			Source: "",
 		})
 	}
 
@@ -111,7 +111,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 				Id:     APIComponentsSecurityTyepUpdated,
 				Level:  INFO,
 				Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityTyepUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(updatedSecurity.TypeDiff.From), ColorizedValue(updatedSecurity.TypeDiff.To)),
-				Source: "N/A",
+				Source: "",
 			})
 		}
 	}

@@ -21,7 +21,7 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 			Id:     apiSchemasRemovedCheckId,
 			Level:  config.getLogLevel(apiSchemasRemovedCheckId, INFO),
 			Text:   fmt.Sprintf(config.i18n(apiSchemasRemovedCheckId), ColorizedValue(deletedSchema)),
-			Source: "components.schemas." + deletedSchema, // TODO: get the file name
+			Source: "", // TODO: get the file name
 		})
 	}
 	return result

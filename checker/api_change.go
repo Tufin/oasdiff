@@ -20,61 +20,61 @@ type ApiChange struct {
 	Source      string `json:"source,omitempty" yaml:"source,omitempty"`
 }
 
-func (r ApiChange) getUncolorizedText() string {
-	uncolorizedText := strings.ReplaceAll(r.Text, color.Bold, "")
+func (c ApiChange) getUncolorizedText() string {
+	uncolorizedText := strings.ReplaceAll(c.Text, color.Bold, "")
 	return strings.ReplaceAll(uncolorizedText, color.Reset, "")
 }
 
-func (r ApiChange) MatchIgnore(ignorePath, ignoreLine string) bool {
-	return ignorePath == strings.ToLower(r.Path) &&
-		strings.Contains(ignoreLine, strings.ToLower(r.Operation+" "+r.Path)) &&
-		strings.Contains(ignoreLine, strings.ToLower(r.getUncolorizedText()))
+func (c ApiChange) MatchIgnore(ignorePath, ignoreLine string) bool {
+	return ignorePath == strings.ToLower(c.Path) &&
+		strings.Contains(ignoreLine, strings.ToLower(c.Operation+" "+c.Path)) &&
+		strings.Contains(ignoreLine, strings.ToLower(c.getUncolorizedText()))
 }
 
-func (r ApiChange) GetId() string {
-	return r.Id
+func (c ApiChange) GetId() string {
+	return c.Id
 }
 
-func (r ApiChange) GetText() string {
-	return r.Text
+func (c ApiChange) GetText() string {
+	return c.Text
 }
 
-func (r ApiChange) GetComment() string {
-	return r.Comment
+func (c ApiChange) GetComment() string {
+	return c.Comment
 }
 
-func (r ApiChange) GetLevel() Level {
-	return r.Level
+func (c ApiChange) GetLevel() Level {
+	return c.Level
 }
 
-func (r ApiChange) GetOperation() string {
-	return r.Operation
+func (c ApiChange) GetOperation() string {
+	return c.Operation
 }
 
-func (r ApiChange) GetOperationId() string {
-	return r.OperationId
+func (c ApiChange) GetOperationId() string {
+	return c.OperationId
 }
 
-func (r ApiChange) GetPath() string {
-	return r.Path
+func (c ApiChange) GetPath() string {
+	return c.Path
 }
 
-func (r ApiChange) LocalizedError(l localizations.Localizer) string {
-	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", r.Level, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Operation, r.Path, r.Text, r.Id, r.Comment)
+func (c ApiChange) LocalizedError(l localizations.Localizer) string {
+	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", c.Level, l.Get("messages.at"), c.Source, l.Get("messages.in"), c.Operation, c.Path, c.Text, c.Id, c.Comment)
 }
 
-func (r ApiChange) PrettyErrorText(l localizations.Localizer) string {
+func (c ApiChange) PrettyErrorText(l localizations.Localizer) string {
 	if IsPipedOutput() {
-		return r.LocalizedError(l)
+		return c.LocalizedError(l)
 	}
 
 	comment := ""
-	if r.Comment != "" {
-		comment = fmt.Sprintf("\n\t\t%s", r.Comment)
+	if c.Comment != "" {
+		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", r.Level.PrettyString(), color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
+	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l.Get("messages.at"), c.Source, l.Get("messages.in"), color.InGreen(c.Operation), color.InGreen(c.Path), c.Text, comment)
 }
 
-func (r ApiChange) Error() string {
-	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]. %s", r.Level, r.Source, r.Operation, r.Path, r.Text, r.Id, r.Comment)
+func (c ApiChange) Error() string {
+	return fmt.Sprintf("%s at %s, in API %s %s %s [%s]. %s", c.Level, c.Source, c.Operation, c.Path, c.Text, c.Id, c.Comment)
 }

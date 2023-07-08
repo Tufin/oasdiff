@@ -24,39 +24,39 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 	}
 
 	for _, addedSecurity := range diffReport.SecurityDiff.Added {
-		result = append(result, ComponentChange{
+		result = append(result, SecurityChange{
 			Id:     APIGlobalSecurityAddedCheckId,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityAddedCheckId), ColorizedValue(addedSecurity)),
-			Source: "security." + addedSecurity,
+			Source: "",
 		})
 	}
 
 	for _, removedSecurity := range diffReport.SecurityDiff.Deleted {
-		result = append(result, ComponentChange{
+		result = append(result, SecurityChange{
 			Id:     APIGlobalSecurityRemovedCheckId,
 			Level:  INFO,
 			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityRemovedCheckId), ColorizedValue(removedSecurity)),
-			Source: "security." + removedSecurity,
+			Source: "",
 		})
 	}
 
 	for _, updatedSecurity := range diffReport.SecurityDiff.Modified {
 		for securitySchemeName, updatedSecuritySchemeScopes := range updatedSecurity {
 			for _, addedScope := range updatedSecuritySchemeScopes.Added {
-				result = append(result, ComponentChange{
+				result = append(result, SecurityChange{
 					Id:     APIGlobalSecurityScopeAddedId,
 					Level:  INFO,
 					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeAddedId), ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
-					Source: "security.scopes." + addedScope,
+					Source: "",
 				})
 			}
 			for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
-				result = append(result, ComponentChange{
+				result = append(result, SecurityChange{
 					Id:     APIGlobalSecurityScopeRemovedId,
 					Level:  INFO,
 					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeRemovedId), ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
-					Source: "security.scopes." + deletedScope,
+					Source: "",
 				})
 			}
 		}

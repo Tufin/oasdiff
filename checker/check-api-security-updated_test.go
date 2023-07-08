@@ -18,12 +18,12 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.ComponentChange{
+	require.Equal(t, checker.SecurityChange{
 		Id:      "api-global-security-added",
 		Text:    "the security scheme 'petstore_auth' was added to the API",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "security.petstore_auth",
+		Source:  "",
 	}, errs[0])
 }
 
@@ -37,12 +37,12 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.ComponentChange{
+	require.Equal(t, checker.SecurityChange{
 		Id:      "api-global-security-removed",
 		Text:    "the security scheme 'petstore_auth' was removed from the API",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "security.petstore_auth",
+		Source:  "",
 	}, errs[0])
 }
 
@@ -57,12 +57,12 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.ComponentChange{
+	require.Equal(t, checker.SecurityChange{
 		Id:      "api-global-security-scope-removed",
 		Text:    "the security scope 'read:pets' was removed from the global security scheme 'petstore_auth'",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "security.scopes.read:pets",
+		Source:  "",
 	}, errs[0])
 }
 
@@ -77,12 +77,12 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.ComponentChange{
+	require.Equal(t, checker.SecurityChange{
 		Id:      "api-global-security-scope-added",
 		Text:    "the security scope 'read:pets' was added to the global security scheme 'petstore_auth'",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "security.scopes.read:pets",
+		Source:  "",
 	}, errs[0])
 }
 
