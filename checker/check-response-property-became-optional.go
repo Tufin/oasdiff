@@ -48,10 +48,10 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							result = append(result, ApiChange{
-								Id:          id,
-								Level:       level,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
-								Source:      source,
+								Id:     id,
+								Level:  level,
+								Text:   fmt.Sprintf(config.i18n(id), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
+								Source: source,
 							})
 						}
 					}
