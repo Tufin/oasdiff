@@ -67,12 +67,11 @@ func (r ApiChange) PrettyErrorText(l localizations.Localizer) string {
 		return r.LocalizedError(l)
 	}
 
-	levelName := PrettyLevelText(r.Level)
 	comment := ""
 	if r.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", r.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", levelName, color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
+	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", r.Level.PrettyString(), color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), color.InGreen(r.Operation), color.InGreen(r.Path), r.Text, comment)
 }
 
 func (r ApiChange) Error() string {

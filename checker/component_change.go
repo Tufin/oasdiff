@@ -51,31 +51,16 @@ func (r ComponentChange) LocalizedError(l localizations.Localizer) string {
 	return fmt.Sprintf("%s %s %s, %s components %s [%s]. %s", r.Level, l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, r.Id, r.Comment)
 }
 
-func PrettyLevelText(level Level) string {
-	levelName := level.String()
-	switch level {
-	case ERR:
-		return color.InRed(levelName)
-	case WARN:
-		return color.InPurple(levelName)
-	case INFO:
-		return color.InCyan(levelName)
-	default:
-		return color.InGray(levelName)
-	}
-}
-
 func (r ComponentChange) PrettyErrorText(l localizations.Localizer) string {
 	if IsPipedOutput() {
 		return r.LocalizedError(l)
 	}
 
-	levelName := PrettyLevelText(r.Level)
 	comment := ""
 	if r.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", r.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s components\n\t\t%s%s", levelName, color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, comment)
+	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s components\n\t\t%s%s", r.Level.PrettyString(), color.InYellow(r.Id), l.Get("messages.at"), r.Source, l.Get("messages.in"), r.Text, comment)
 }
 
 func (r ComponentChange) Error() string {

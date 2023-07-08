@@ -2,6 +2,8 @@ package checker
 
 import (
 	"fmt"
+
+	"github.com/TwiN/go-color"
 )
 
 type Level int
@@ -34,5 +36,23 @@ func (level Level) String() string {
 		return "info"
 	default:
 		return "issue"
+	}
+}
+
+func (level Level) PrettyString() string {
+	if IsPipedOutput() {
+		return level.String()
+	}
+
+	levelName := level.String()
+	switch level {
+	case ERR:
+		return color.InRed(levelName)
+	case WARN:
+		return color.InPurple(levelName)
+	case INFO:
+		return color.InCyan(levelName)
+	default:
+		return color.InGray(levelName)
 	}
 }

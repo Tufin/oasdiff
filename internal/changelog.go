@@ -132,11 +132,11 @@ func getChangelogTitle(config checker.Config, errs checker.Changes) string {
 		config.Localizer.Get("messages.total-changes"),
 		len(errs),
 		count[checker.ERR],
-		checker.PrettyLevelText(checker.ERR),
+		checker.ERR.PrettyString(),
 		count[checker.WARN],
-		checker.PrettyLevelText(checker.WARN),
+		checker.WARN.PrettyString(),
 		count[checker.INFO],
-		checker.PrettyLevelText(checker.INFO),
+		checker.INFO.PrettyString(),
 	)
 }
 
