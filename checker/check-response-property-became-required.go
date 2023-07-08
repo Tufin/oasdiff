@@ -11,8 +11,8 @@ const (
 	ResponseWriteOnlyPropertyBecameRequiredCheck = "response-write-only-property-became-required"
 )
 
-func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -50,7 +50,7 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 								id = ResponseWriteOnlyPropertyBecameRequiredCheck
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
 								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
@@ -81,7 +81,7 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 									// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
 									continue
 								}
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          id,
 									Level:       INFO,
 									Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
