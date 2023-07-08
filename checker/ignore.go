@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"os"
 	"strings"
-
-	"github.com/TwiN/go-color"
 )
 
 func ignoreLinePath(ignoreLine string) string {
@@ -26,8 +24,8 @@ func ignoreLinePath(ignoreLine string) string {
 	return ignoreComponents[pathIndex]
 }
 
-func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs []BackwardCompatibilityError, ignoreFile string) ([]BackwardCompatibilityError, error) {
-	result := make([]BackwardCompatibilityError, 0)
+func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs Changes, ignoreFile string) (Changes, error) {
+	result := make(Changes, 0)
 
 	ignore, err := os.Open(ignoreFile)
 	if err != nil {
@@ -46,16 +44,11 @@ func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs []BackwardCompa
 		}
 
 		for errIndex, err := range errs {
-			if err.Level != level {
+			if err.GetLevel() != level {
 				continue
 			}
 
-			uncolorizedText := strings.ReplaceAll(err.Text, color.Bold, "")
-			uncolorizedText = strings.ReplaceAll(uncolorizedText, color.Reset, "")
-
-			if ignorePath == strings.ToLower(err.Path) &&
-				strings.Contains(ignoreLine, strings.ToLower(err.Operation+" "+err.Path)) &&
-				strings.Contains(ignoreLine, strings.ToLower(uncolorizedText)) {
+			if err.MatchIgnore(ignorePath, ignoreLine) {
 				ignoredErrs[errIndex] = true
 			}
 		}

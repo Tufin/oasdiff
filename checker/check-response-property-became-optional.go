@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -44,7 +44,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "response-property-became-optional",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("response-property-became-optional"), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
@@ -74,7 +74,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 									continue
 								}
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          "response-property-became-optional",
 									Level:       ERR,
 									Text:        fmt.Sprintf(config.i18n("response-property-became-optional"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),

@@ -48,5 +48,7 @@ func TestIgnoreOnlyIncludedSubpaths(t *testing.T) {
 	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example-3.txt")
 	require.NoError(t, err)
 	require.Equal(t, 1, len(errs))
-	require.Contains(t, errs[0].Path, "/resource/new") //see that new breaking change was kept even though it is a substring of newest
+	require.IsType(t, checker.ApiChange{}, errs[0])
+	e0 := errs[0].(checker.ApiChange)
+	require.Contains(t, e0.Path, "/resource/new") //see that new breaking change was kept even though it is a substring of newest
 }

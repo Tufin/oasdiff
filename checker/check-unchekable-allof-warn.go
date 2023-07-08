@@ -6,8 +6,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -31,7 +31,7 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 					func(propertyPath string, propertyName string, allOfDiff *diff.SchemaListDiff, parent *diff.SchemaDiff) {
 						if allOfDiff.Added > 0 && allOfDiff.Deleted > 0 {
 							source := (*operationsSources)[operationItem.Revision]
-							result = append(result, BackwardCompatibilityError{
+							result = append(result, ApiChange{
 								Id:          "request-allOf-modified",
 								Level:       WARN,
 								Text:        fmt.Sprintf(config.i18n("request-allOf-modified"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
@@ -49,8 +49,8 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 	return result
 }
 
-func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -78,7 +78,7 @@ func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *d
 						func(propertyPath string, propertyName string, allOfDiff *diff.SchemaListDiff, parent *diff.SchemaDiff) {
 							if allOfDiff.Added > 0 && allOfDiff.Deleted > 0 {
 								source := (*operationsSources)[operationItem.Revision]
-								result = append(result, BackwardCompatibilityError{
+								result = append(result, ApiChange{
 									Id:          "response-allOf-modified",
 									Level:       WARN,
 									Text:        fmt.Sprintf("modified allOf for the response property %s for status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),

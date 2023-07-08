@@ -68,15 +68,15 @@ func runBreakingChanges(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnE
 	return getChangelog(flags, stdout, checker.WARN, getBreakingChangesTitle)
 }
 
-func getBreakingChangesTitle(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string {
+func getBreakingChangesTitle(config checker.Config, errs checker.Changes) string {
 	count := errs.GetLevelCount()
 
 	return fmt.Sprintf(
 		config.Localizer.Get("messages.total-errors"),
 		len(errs),
 		count[checker.ERR],
-		checker.PrettyLevelText(checker.ERR),
+		checker.ERR.PrettyString(),
 		count[checker.WARN],
-		checker.PrettyLevelText(checker.WARN),
+		checker.WARN.PrettyString(),
 	)
 }

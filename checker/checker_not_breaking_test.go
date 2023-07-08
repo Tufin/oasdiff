@@ -20,8 +20,8 @@ func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *di
 	// Check changelog captures the change
 	errs = checker.CheckBackwardCompatibilityUntilLevel(checker.GetDefaultChecks(), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.INFO, errs[0].Level)
-	require.Equal(t, changeId, errs[0].Id)
+	require.Equal(t, checker.INFO, errs[0].GetLevel())
+	require.Equal(t, changeId, errs[0].GetId())
 }
 
 // BC: no change is not breaking
@@ -66,48 +66,48 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 func TestBreaking_DeletedTag(t *testing.T) {
 	r := d(t, getConfig(), 1, 5)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-body-type-changed", r[0].Id)
-	require.Equal(t, "response-success-status-removed", r[1].Id)
-	require.Equal(t, "api-path-removed-without-deprecation", r[2].Id)
-	require.Equal(t, "api-path-removed-without-deprecation", r[3].Id)
-	require.Equal(t, "optional-response-header-removed", r[4].Id)
-	require.Equal(t, "request-parameter-removed", r[5].Id)
+	require.Equal(t, "response-body-type-changed", r[0].GetId())
+	require.Equal(t, "response-success-status-removed", r[1].GetId())
+	require.Equal(t, "api-path-removed-without-deprecation", r[2].GetId())
+	require.Equal(t, "api-path-removed-without-deprecation", r[3].GetId())
+	require.Equal(t, "optional-response-header-removed", r[4].GetId())
+	require.Equal(t, "request-parameter-removed", r[5].GetId())
 }
 
 // BC: adding an enum value is not breaking
 func TestBreaking_AddedEnum(t *testing.T) {
 	r := d(t, getConfig(), 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-success-status-removed", r[0].Id)
-	require.Equal(t, "response-success-status-removed", r[1].Id)
-	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "request-parameter-removed", r[3].Id)
-	require.Equal(t, "request-parameter-removed", r[4].Id)
-	require.Equal(t, "request-parameter-removed", r[5].Id)
+	require.Equal(t, "response-success-status-removed", r[0].GetId())
+	require.Equal(t, "response-success-status-removed", r[1].GetId())
+	require.Equal(t, "request-parameter-removed", r[2].GetId())
+	require.Equal(t, "request-parameter-removed", r[3].GetId())
+	require.Equal(t, "request-parameter-removed", r[4].GetId())
+	require.Equal(t, "request-parameter-removed", r[5].GetId())
 }
 
 // BC: changing extensions is not breaking
 func TestBreaking_ModifiedExtension(t *testing.T) {
 	r := d(t, getConfig(), 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-success-status-removed", r[0].Id)
-	require.Equal(t, "response-success-status-removed", r[1].Id)
-	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "request-parameter-removed", r[3].Id)
-	require.Equal(t, "request-parameter-removed", r[4].Id)
-	require.Equal(t, "request-parameter-removed", r[5].Id)
+	require.Equal(t, "response-success-status-removed", r[0].GetId())
+	require.Equal(t, "response-success-status-removed", r[1].GetId())
+	require.Equal(t, "request-parameter-removed", r[2].GetId())
+	require.Equal(t, "request-parameter-removed", r[3].GetId())
+	require.Equal(t, "request-parameter-removed", r[4].GetId())
+	require.Equal(t, "request-parameter-removed", r[5].GetId())
 }
 
 // BC: changing comments is not breaking
 func TestBreaking_Comments(t *testing.T) {
 	r := d(t, getConfig(), 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-success-status-removed", r[0].Id)
-	require.Equal(t, "response-success-status-removed", r[1].Id)
-	require.Equal(t, "request-parameter-removed", r[2].Id)
-	require.Equal(t, "request-parameter-removed", r[3].Id)
-	require.Equal(t, "request-parameter-removed", r[4].Id)
-	require.Equal(t, "request-parameter-removed", r[5].Id)
+	require.Equal(t, "response-success-status-removed", r[0].GetId())
+	require.Equal(t, "response-success-status-removed", r[1].GetId())
+	require.Equal(t, "request-parameter-removed", r[2].GetId())
+	require.Equal(t, "request-parameter-removed", r[3].GetId())
+	require.Equal(t, "request-parameter-removed", r[4].GetId())
+	require.Equal(t, "request-parameter-removed", r[5].GetId())
 }
 
 // BC: new optional header param is not breaking
@@ -136,7 +136,7 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	require.NoError(t, err)
 	changes := checker.CheckBackwardCompatibilityUntilLevel(checker.GetDefaultChecks(), d, osm, checker.INFO)
 	require.NotEmpty(t, changes)
-	require.Equal(t, "request-parameter-became-optional", changes[0].Id)
+	require.Equal(t, "request-parameter-became-optional", changes[0].GetId())
 	require.Len(t, changes, 1)
 }
 
@@ -162,18 +162,18 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 func TestBreaking_OperationID(t *testing.T) {
 	r := d(t, getConfig(), 3, 1)
 	require.Len(t, r, 3)
-	require.Equal(t, "request-parameter-max-length-decreased", r[0].Id)
-	require.Equal(t, "request-parameter-enum-value-removed", r[1].Id)
-	require.Equal(t, "request-parameter-pattern-added", r[2].Id)
+	require.Equal(t, "request-parameter-max-length-decreased", r[0].GetId())
+	require.Equal(t, "request-parameter-enum-value-removed", r[1].GetId())
+	require.Equal(t, "request-parameter-pattern-added", r[2].GetId())
 }
 
 // BC: changing a link to operation ID is not breaking
 func TestBreaking_LinkOperationID(t *testing.T) {
 	r := d(t, getConfig(), 3, 1)
 	require.Len(t, r, 3)
-	require.Equal(t, "request-parameter-max-length-decreased", r[0].Id)
-	require.Equal(t, "request-parameter-enum-value-removed", r[1].Id)
-	require.Equal(t, "request-parameter-pattern-added", r[2].Id)
+	require.Equal(t, "request-parameter-max-length-decreased", r[0].GetId())
+	require.Equal(t, "request-parameter-enum-value-removed", r[1].GetId())
+	require.Equal(t, "request-parameter-pattern-added", r[2].GetId())
 }
 
 // BC: adding a media-type to response is not breaking
@@ -202,7 +202,7 @@ func TestBreaking_DeprecatedOperation(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(checker.GetDefaultChecks(), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, errs[0].Level, checker.INFO)
+	require.Equal(t, errs[0].GetLevel(), checker.INFO)
 }
 
 // BC: deprecating a parameter is not breaking

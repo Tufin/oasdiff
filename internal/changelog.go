@@ -104,7 +104,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level, 
 	return false, nil
 }
 
-func filterIgnored(errs checker.BackwardCompatibilityErrors, warnIgnoreFile string, errIgnoreFile string) (checker.BackwardCompatibilityErrors, *ReturnError) {
+func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile string) (checker.Changes, *ReturnError) {
 
 	if warnIgnoreFile != "" {
 		var err error
@@ -125,24 +125,24 @@ func filterIgnored(errs checker.BackwardCompatibilityErrors, warnIgnoreFile stri
 	return errs, nil
 }
 
-func getChangelogTitle(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string {
+func getChangelogTitle(config checker.Config, errs checker.Changes) string {
 	count := errs.GetLevelCount()
 
 	return fmt.Sprintf(
 		config.Localizer.Get("messages.total-changes"),
 		len(errs),
 		count[checker.ERR],
-		checker.PrettyLevelText(checker.ERR),
+		checker.ERR.PrettyString(),
 		count[checker.WARN],
-		checker.PrettyLevelText(checker.WARN),
+		checker.WARN.PrettyString(),
 		count[checker.INFO],
-		checker.PrettyLevelText(checker.INFO),
+		checker.INFO.PrettyString(),
 	)
 }
 
-type GetOutputTitle func(config checker.BackwardCompatibilityCheckConfig, errs checker.BackwardCompatibilityErrors) string
+type GetOutputTitle func(config checker.Config, errs checker.Changes) string
 
-func outputChangelog(config checker.BackwardCompatibilityCheckConfig, format string, stdout io.Writer, errs checker.BackwardCompatibilityErrors, getOutputTitle GetOutputTitle) *ReturnError {
+func outputChangelog(config checker.Config, format string, stdout io.Writer, errs checker.Changes, getOutputTitle GetOutputTitle) *ReturnError {
 	switch format {
 	case FormatYAML:
 		if err := printYAML(stdout, errs); err != nil {

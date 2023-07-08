@@ -25,7 +25,7 @@ func TestBreaking_RequestMaxLengthSmaller(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-max-length-decreased", errs[0].Id)
+	require.Equal(t, "request-parameter-max-length-decreased", errs[0].GetId())
 }
 
 // BC: reducing max length in response is not breaking
@@ -70,7 +70,7 @@ func TestBreaking_MinLengthSmaller(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.Equal(t, "response-body-min-length-decreased", errs[0].Id)
+	require.Equal(t, "response-body-min-length-decreased", errs[0].GetId())
 }
 
 // BC: increasing max length in request is not breaking
@@ -122,7 +122,7 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-max-length-set", errs[0].Id)
+	require.Equal(t, "request-parameter-max-length-set", errs[0].GetId())
 }
 
 // BC: changing max length in response from nil to any value is not breaking
@@ -172,7 +172,7 @@ func TestBreaking_ResponseMaxLengthToNil(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-max-length-unset", errs[0].Id)
+	require.Equal(t, "response-body-max-length-unset", errs[0].GetId())
 }
 
 // BC: both max lengths in request are nil is not breaking
@@ -230,7 +230,7 @@ func TestBreaking_ResponseMinItemsSmaller(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-min-items-decreased", errs[0].Id)
+	require.Equal(t, "response-body-min-items-decreased", errs[0].GetId())
 }
 
 // BC: increasing min items in request is breaking

@@ -4,8 +4,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -31,7 +31,7 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 				logLevel = ERR
 			}
 
-			result = append(result, BackwardCompatibilityError{
+			result = append(result, ApiChange{
 				Id:          id,
 				Level:       logLevel,
 				Text:        config.i18n(id),

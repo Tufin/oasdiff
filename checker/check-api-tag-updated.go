@@ -11,8 +11,8 @@ const (
 	APITagAddedCheckId   = "api-tag-added"
 )
 
-func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config BackwardCompatibilityCheckConfig) []BackwardCompatibilityError {
-	result := make([]BackwardCompatibilityError, 0)
+func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -31,7 +31,7 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 			}
 
 			for _, tag := range operationItem.TagsDiff.Deleted {
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          APITagRemovedCheckId,
 					Level:       config.getLogLevel(APITagRemovedCheckId, INFO),
 					Text:        fmt.Sprintf(config.i18n(APITagRemovedCheckId), ColorizedValue(tag)),
@@ -44,7 +44,7 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 			}
 
 			for _, tag := range operationItem.TagsDiff.Added {
-				result = append(result, BackwardCompatibilityError{
+				result = append(result, ApiChange{
 					Id:          APITagAddedCheckId,
 					Level:       config.getLogLevel(APITagAddedCheckId, INFO),
 					Text:        fmt.Sprintf(config.i18n(APITagAddedCheckId), ColorizedValue(tag)),
