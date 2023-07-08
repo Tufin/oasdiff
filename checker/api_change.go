@@ -8,6 +8,7 @@ import (
 	"github.com/tufin/oasdiff/checker/localizations"
 )
 
+// ApiChange represnts a change in the Paths Section of an OpenAPI spec
 type ApiChange struct {
 	Id          string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text        string `json:"text,omitempty" yaml:"text,omitempty"`

@@ -7,6 +7,7 @@ import (
 	"github.com/tufin/oasdiff/checker/localizations"
 )
 
+// ComponentChange represnts a change in the Components Section: https://swagger.io/docs/specification/components/
 type ComponentChange struct {
 	Id      string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text    string `json:"text,omitempty" yaml:"text,omitempty"`
