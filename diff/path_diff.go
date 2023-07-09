@@ -28,28 +28,11 @@ func (pathDiff *PathDiff) Empty() bool {
 	return pathDiff == nil || *pathDiff == PathDiff{Base: pathDiff.Base, Revision: pathDiff.Revision}
 }
 
-func (pathDiff *PathDiff) removeNonBreaking() {
-
-	if pathDiff.Empty() {
-		return
-	}
-
-	pathDiff.ExtensionsDiff = nil
-	pathDiff.RefDiff = nil
-	pathDiff.SummaryDiff = nil
-	pathDiff.DescriptionDiff = nil
-	pathDiff.ServersDiff = nil
-}
-
 func getPathDiff(config *Config, state *state, pathItemPair *pathItemPair) (*PathDiff, error) {
 
 	diff, err := getPathDiffInternal(config, state, pathItemPair)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

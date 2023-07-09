@@ -21,25 +21,10 @@ func (diff *LinkDiff) Empty() bool {
 	return diff == nil || *diff == LinkDiff{}
 }
 
-func (diff *LinkDiff) removeNonBreaking() {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.ExtensionsDiff = nil
-	diff.OperationIDDiff = nil
-	diff.DescriptionDiff = nil
-}
-
 func getLinkDiff(config *Config, state *state, link1, link2 *openapi3.Link) (*LinkDiff, error) {
 	diff, err := getLinkDiffInternal(config, state, link1, link2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

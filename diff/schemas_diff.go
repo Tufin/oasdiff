@@ -54,23 +54,6 @@ func (schemasDiff *SchemasDiff) removeSunset(schemas1 openapi3.Schemas) {
 	schemasDiff.Deleted = deleted
 }
 
-func (schemasDiff *SchemasDiff) removeNonBreaking(state *state, schemas1 openapi3.Schemas) {
-
-	if schemasDiff.Empty() {
-		return
-	}
-
-	switch state.direction {
-	case directionRequest:
-		// In request: deleting properties is non-breaking (for client)
-		schemasDiff.Deleted = nil
-	case directionResponse:
-		// In response: adding properties is non-breaking (for client)
-		schemasDiff.Added = nil
-		schemasDiff.removeSunset(schemas1)
-	}
-}
-
 func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
 		Added:    utils.StringList{},
@@ -90,10 +73,6 @@ func getSchemasDiff(config *Config, state *state, schemas1, schemas2 openapi3.Sc
 	diff, err := getSchemasDiffInternal(config, state, schemas1, schemas2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking(state, schemas1)
 	}
 
 	if diff.Empty() {
@@ -157,13 +136,6 @@ func diffSchemas(schemas1, schemas2 openapi3.Schemas) (openapi3.Schemas, openapi
 	}
 
 	return added, deleted, other
-}
-
-func (schemasDiff *SchemasDiff) getBreakingSetByDirection(direction direction) *utils.StringList {
-	if direction == directionRequest {
-		return &schemasDiff.Added
-	}
-	return &schemasDiff.Deleted
 }
 
 func (schemasDiff *SchemasDiff) addAddedSchema(schema string) {

@@ -32,22 +32,9 @@ func (enumDiff *EnumDiff) Empty() bool {
 		len(enumDiff.Deleted) == 0
 }
 
-func (enumDiff *EnumDiff) removeNonBreaking() {
-
-	if enumDiff.Empty() {
-		return
-	}
-
-	enumDiff.Added = nil
-}
-
 func getEnumDiff(config *Config, state *state, enum1, enum2 EnumValues) *EnumDiff {
 
 	diff := getEnumDiffInternal(enum1, enum2)
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
-	}
 
 	if diff.Empty() {
 		return nil

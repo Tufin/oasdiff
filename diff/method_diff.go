@@ -36,34 +36,12 @@ func (methodDiff *MethodDiff) Empty() bool {
 	return *methodDiff == MethodDiff{Base: methodDiff.Base, Revision: methodDiff.Revision}
 }
 
-func (methodDiff *MethodDiff) removeNonBreaking(config *Config, pathItem2 *openapi3.Operation) {
-
-	if methodDiff.Empty() {
-		return
-	}
-
-	methodDiff.ExtensionsDiff = nil
-	methodDiff.TagsDiff = nil
-	methodDiff.SummaryDiff = nil
-	methodDiff.DescriptionDiff = nil
-	methodDiff.OperationIDDiff = nil
-	if DeprecationPeriodSufficient(config.DeprecationDays, pathItem2.Extensions) {
-		methodDiff.DeprecatedDiff = nil
-	}
-	methodDiff.ServersDiff = nil
-	methodDiff.ExternalDocsDiff = nil
-}
-
 func getMethodDiff(config *Config, state *state, operation1, operation2 *openapi3.Operation, pathParamsMap PathParamsMap) (*MethodDiff, error) {
 
 	diff, err := getMethodDiffInternal(config, state, operation1, operation2, pathParamsMap)
 
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking(config, operation2)
 	}
 
 	if diff.Empty() {

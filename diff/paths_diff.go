@@ -48,16 +48,6 @@ func (pathsDiff *PathsDiff) removeSunset(paths1 openapi3.Paths) {
 	pathsDiff.Deleted = deleted
 }
 
-func (pathsDiff *PathsDiff) removeNonBreaking(paths1 openapi3.Paths) {
-
-	if pathsDiff.Empty() {
-		return
-	}
-
-	pathsDiff.removeSunset(paths1)
-	pathsDiff.Added = nil
-}
-
 func newPathsDiff() *PathsDiff {
 	return &PathsDiff{
 		Added:    []string{},
@@ -75,10 +65,6 @@ func getPathsDiff(config *Config, state *state, paths1, paths2 openapi3.Paths) (
 	diff, err := getPathsDiffInternal(config, state, paths1, paths2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking(paths1)
 	}
 
 	if diff.Empty() {

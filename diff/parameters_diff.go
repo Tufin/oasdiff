@@ -25,35 +25,6 @@ func (parametersDiff *ParametersDiff) Empty() bool {
 		len(parametersDiff.Modified) == 0
 }
 
-func (parametersDiff *ParametersDiff) removeNonBreaking(params2 openapi3.Parameters) {
-
-	if parametersDiff.Empty() {
-		return
-	}
-
-	// TODO: handle sunset
-	parametersDiff.removeAddedButNonRequired(params2)
-}
-
-func (parametersDiff *ParametersDiff) removeAddedButNonRequired(params2 openapi3.Parameters) {
-	for location, paramNames := range parametersDiff.Added {
-		newList := utils.StringList{}
-		for _, paramName := range paramNames {
-			if param := params2.GetByInAndName(location, paramName); param != nil {
-				if param.Required || param.In == openapi3.ParameterInPath {
-					newList = append(newList, paramName)
-				}
-			}
-		}
-
-		if len(newList) > 0 {
-			parametersDiff.Added[location] = newList
-		} else {
-			delete(parametersDiff.Added, location)
-		}
-	}
-}
-
 // ParamLocations are the four possible locations of parameters: path, query, header or cookie
 var ParamLocations = []string{openapi3.ParameterInPath, openapi3.ParameterInQuery, openapi3.ParameterInHeader, openapi3.ParameterInCookie}
 
@@ -105,10 +76,6 @@ func getParametersDiff(config *Config, state *state, params1, params2 openapi3.P
 	diff, err := getParametersDiffInternal(config, state, params1, params2, pathParamsMap)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking(params2)
 	}
 
 	if diff.Empty() {

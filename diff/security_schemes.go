@@ -25,15 +25,6 @@ func (diff *SecuritySchemesDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-func (diff *SecuritySchemesDiff) removeNonBreaking() {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.Added = nil
-}
-
 // ModifiedSecuritySchemes is map of security schemes to their respective diffs
 type ModifiedSecuritySchemes map[string]*SecuritySchemeDiff
 
@@ -49,10 +40,6 @@ func getSecuritySchemesDiff(config *Config, state *state, securitySchemes1, secu
 	diff, err := getSecuritySchemesDiffInternal(config, state, securitySchemes1, securitySchemes2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {
