@@ -33,7 +33,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				})
 				continue
 			}
-			rawDate, date, err := diff.GetSunsetDate(op.Extensions)
+			rawDate, date, err := getSunsetDate(op.Extensions)
 			if err != nil {
 				source := "original_source=" + (*operationsSources)[op]
 				result = append(result, ApiChange{
@@ -81,7 +81,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				})
 				continue
 			}
-			rawDate, date, err := diff.GetSunsetDate(op.Extensions)
+			rawDate, date, err := getSunsetDate(op.Extensions)
 			if err != nil {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{

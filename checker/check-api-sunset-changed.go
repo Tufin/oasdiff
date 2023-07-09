@@ -44,7 +44,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			opBase := pathItem.Base.Operations()[operation]
 
-			rawDate, date, err := diff.GetSunsetDate(op.Extensions)
+			rawDate, date, err := getSunsetDate(op.Extensions)
 			if err != nil {
 				result = append(result, ApiChange{
 					Id:          "api-deprecated-sunset-parse",
@@ -58,7 +58,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				continue
 			}
 
-			rawDate, baseDate, err := diff.GetSunsetDate(opBase.Extensions)
+			rawDate, baseDate, err := getSunsetDate(opBase.Extensions)
 			if err != nil {
 				result = append(result, ApiChange{
 					Id:          "api-deprecated-sunset-parse",

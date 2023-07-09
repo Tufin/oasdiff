@@ -1,4 +1,4 @@
-package diff
+package checker
 
 import (
 	"encoding/json"
@@ -6,12 +6,13 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
+	"github.com/tufin/oasdiff/diff"
 )
 
-func GetSunsetDate(Extensions map[string]interface{}) (string, civil.Date, error) {
-	sunset, ok := Extensions[SunsetExtension].(string)
+func getSunsetDate(Extensions map[string]interface{}) (string, civil.Date, error) {
+	sunset, ok := Extensions[diff.SunsetExtension].(string)
 	if !ok {
-		sunsetJson, ok := Extensions[SunsetExtension].(json.RawMessage)
+		sunsetJson, ok := Extensions[diff.SunsetExtension].(json.RawMessage)
 		if !ok {
 			return "", civil.Date{}, errors.New("sunset header not found")
 		}
