@@ -1,0 +1,24 @@
+openapi: 3.0.3
+info:
+  title: Test
+  version: "0.1"
+paths:
+  '/test':
+    get:
+      summary: Test Get with anyOf #1
+      responses:
+        '200':
+          description: Success
+          content:
+            'application/json':
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      prop1:
+                        type: string
+                        description: Some description
+                  - type: object
+                    properties:
+                      prop2:
+                        type: string

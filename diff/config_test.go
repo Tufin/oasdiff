@@ -9,7 +9,6 @@ import (
 
 func TestConfig_Default(t *testing.T) {
 	c := diff.NewConfig()
-	c.SetExcludeElements([]string{})
 	require.False(t, c.IsExcludeExamples())
 	require.False(t, c.IsExcludeDescription())
 	require.False(t, c.IsExcludeEndpoints())
@@ -18,8 +17,7 @@ func TestConfig_Default(t *testing.T) {
 }
 
 func TestConfig_ExcludeElements(t *testing.T) {
-	c := diff.NewConfig()
-	c.SetExcludeElements(diff.ExcludeDiffOptions)
+	c := diff.NewConfig().WithExcludeElements(diff.ExcludeDiffOptions)
 	require.True(t, c.IsExcludeExamples())
 	require.True(t, c.IsExcludeDescription())
 	require.True(t, c.IsExcludeEndpoints())

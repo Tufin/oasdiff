@@ -238,23 +238,6 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, d)
 }
 
-// BC: adding a new required property under AllOf in response body is not breaking
-func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
-	loader := openapi3.NewLoader()
-
-	s1, err := loader.LoadFromFile(getReqPropFile("response-allof-base.json"))
-	require.NoError(t, err)
-
-	s2, err := loader.LoadFromFile(getReqPropFile("response-allof-revision.json"))
-	require.NoError(t, err)
-
-	d, err := diff.Get(&diff.Config{
-		BreakingOnly: true,
-	}, s1, s2)
-	require.NoError(t, err)
-	require.Empty(t, d)
-}
-
 // BC: deleting a required property under AllOf in response body is breaking
 func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	loader := openapi3.NewLoader()

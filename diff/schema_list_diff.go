@@ -2,7 +2,6 @@ package diff
 
 import (
 	"fmt"
-	"reflect"
 
 	"github.com/getkin/kin-openapi/openapi3"
 )
@@ -117,12 +116,12 @@ func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRef
 // getSchemaListsRefsDiff compares schemas by their syntax
 func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SchemaListDiff, error) {
 
-	added, err := getGroupDifference(schemaRefs2, schemaRefs1, filter)
+	added, err := getGroupDifference(config, state, schemaRefs2, schemaRefs1, filter)
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
 
-	deleted, err := getGroupDifference(schemaRefs1, schemaRefs2, filter)
+	deleted, err := getGroupDifference(config, state, schemaRefs1, schemaRefs2, filter)
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
@@ -148,7 +147,7 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 	}, nil
 }
 
-func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) ([]int, error) {
+func getGroupDifference(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) ([]int, error) {
 
 	notContained := []int{}
 	matched := map[int]struct{}{}
@@ -158,7 +157,9 @@ func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter sch
 			continue
 		}
 
-		if found, index2 := findIndenticalSchema(schemaRef1, schemaRefs2, matched, filter); !found {
+		if found, index2, err := findIndenticalSchema(config, state, schemaRef1, schemaRefs2, matched, filter); err != nil {
+			return nil, err
+		} else if !found {
 			notContained = append(notContained, index1)
 		} else {
 			matched[index2] = struct{}{}
@@ -167,7 +168,7 @@ func getGroupDifference(schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter sch
 	return notContained, nil
 }
 
-func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs, matched map[int]struct{}, filter schemaRefsFilter) (bool, int) {
+func findIndenticalSchema(config *Config, state *state, schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.SchemaRefs, matched map[int]struct{}, filter schemaRefsFilter) (bool, int, error) {
 	for index2, schemaRef2 := range schemasRefs2 {
 		if !filter(schemaRef1) {
 			continue
@@ -176,13 +177,14 @@ func findIndenticalSchema(schemaRef1 *openapi3.SchemaRef, schemasRefs2 openapi3.
 			continue
 		}
 
-		// compare with DeepEqual rather than SchemaDiff to ensure an exact syntactical match
-		if reflect.DeepEqual(schemaRef1, schemaRef2) {
-			return true, index2
+		if schemaDiff, err := getSchemaDiff(config, state, schemaRef1, schemaRef2); err != nil {
+			return false, 0, err
+		} else if schemaDiff.Empty() {
+			return true, index2, nil
 		}
 	}
 
-	return false, 0
+	return false, 0, nil
 }
 
 func alreadyMatched(index int, matched map[int]struct{}) bool {
