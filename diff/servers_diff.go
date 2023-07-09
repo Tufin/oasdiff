@@ -26,15 +26,6 @@ func (diff *ServersDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-func (diff *ServersDiff) removeNonBreaking() {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.Added = nil
-}
-
 func newServersDiff() *ServersDiff {
 	return &ServersDiff{
 		Added:    utils.StringList{},
@@ -45,10 +36,6 @@ func newServersDiff() *ServersDiff {
 
 func getServersDiff(config *Config, state *state, pServers1, pServers2 *openapi3.Servers) *ServersDiff {
 	diff := getServersDiffInternal(config, state, pServers1, pServers2)
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
-	}
 
 	if diff.Empty() {
 		return nil

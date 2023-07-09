@@ -35,33 +35,6 @@ func (diff *EndpointsDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-// removeSunset removes deleted endpoints that were deleted after a sufficient deprecation period
-func (diff *EndpointsDiff) removeSunset(paths1 openapi3.Paths) {
-
-	if paths1 == nil {
-		return
-	}
-
-	deleted := Endpoints{}
-	for _, endpoint := range diff.Deleted {
-		operation := paths1[endpoint.Path].GetOperation(endpoint.Method)
-		if !SunsetAllowed(operation.Deprecated, operation.Extensions) {
-			deleted = append(deleted, endpoint)
-		}
-	}
-	diff.Deleted = deleted
-}
-
-func (diff *EndpointsDiff) removeNonBreaking(paths1 openapi3.Paths) {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.removeSunset(paths1)
-	diff.Added = nil
-}
-
 func newEndpointsDiff() *EndpointsDiff {
 	return &EndpointsDiff{
 		Added:    Endpoints{},
@@ -83,10 +56,6 @@ func getEndpointsDiff(config *Config, state *state, paths1, paths2 openapi3.Path
 	diff, err := getEndpointsDiffInternal(config, state, paths1, paths2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking(paths1)
 	}
 
 	if diff.Empty() {

@@ -28,37 +28,10 @@ func (diff *ParameterDiff) Empty() bool {
 	return diff == nil || *diff == ParameterDiff{Base: diff.Base, Revision: diff.Revision}
 }
 
-func (diff *ParameterDiff) removeNonBreaking(config *Config, param2 *openapi3.Parameter) {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.ExtensionsDiff = nil
-	diff.DescriptionDiff = nil
-	diff.ExampleDiff = nil
-	diff.ExamplesDiff = nil
-	if DeprecationPeriodSufficient(config.DeprecationDays, param2.Extensions) {
-		diff.DeprecatedDiff = nil
-	}
-
-	if !diff.RequiredDiff.CompareWithDefault(false, true, false) {
-		diff.RequiredDiff = nil
-	}
-
-	// TODO: diff.ExplodeDiff is breaking only if type is array or object
-	// diff.AllowEmptyValueDiff.CompareWithDefault(true, false, false) || // TODO: only if this is a query param
-	// diff.AllowReservedDiff.CompareWithDefault(true, false, false) || // TODO: only if this id a query param
-}
-
 func getParameterDiff(config *Config, state *state, param1, param2 *openapi3.Parameter) (*ParameterDiff, error) {
 	diff, err := getParameterDiffInternal(config, state, param1, param2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking(config, param2)
 	}
 
 	if diff.Empty() {

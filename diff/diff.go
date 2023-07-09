@@ -42,22 +42,6 @@ func (diff *Diff) Empty() bool {
 	return diff == nil || *diff == Diff{}
 }
 
-func (diff *Diff) removeNonBreaking() {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.ExtensionsDiff = nil
-	diff.OpenAPIDiff = nil
-	diff.InfoDiff = nil
-	diff.ServersDiff = nil
-	diff.TagsDiff = nil
-	diff.ExternalDocsDiff = nil
-
-	diff.ComponentsDiff.removeNonBreaking()
-}
-
 /*
 Get calculates the diff between a pair of OpenAPI objects.
 
@@ -248,10 +232,6 @@ func getDiff(config *Config, state *state, s1, s2 *openapi3.T) (*Diff, error) {
 	diff, err := getDiffInternal(config, state, s1, s2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

@@ -23,15 +23,6 @@ func (requestBodiesDiff *RequestBodiesDiff) Empty() bool {
 		len(requestBodiesDiff.Modified) == 0
 }
 
-func (requestBodiesDiff *RequestBodiesDiff) removeNonBreaking() {
-
-	if requestBodiesDiff.Empty() {
-		return
-	}
-
-	requestBodiesDiff.Added = nil
-}
-
 // ModifiedRequestBodies is map of requestBody names to their respective diffs
 type ModifiedRequestBodies map[string]*RequestBodyDiff
 
@@ -47,10 +38,6 @@ func getRequestBodiesDiff(config *Config, state *state, requestBodies1, requestB
 	diff, err := getRequestBodiesDiffInternal(config, state, requestBodies1, requestBodies2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

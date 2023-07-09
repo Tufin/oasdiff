@@ -19,22 +19,8 @@ func (diff *ServerDiff) Empty() bool {
 	return diff == nil || *diff == ServerDiff{}
 }
 
-func (diff *ServerDiff) removeNonBreaking() {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.ExtensionsDiff = nil
-	diff.DescriptionDiff = nil
-}
-
 func getServerDiff(config *Config, state *state, value1, value2 *openapi3.Server) *ServerDiff {
 	diff := getServerDiffInternal(config, state, value1, value2)
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
-	}
 
 	if diff.Empty() {
 		return nil

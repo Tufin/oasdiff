@@ -20,25 +20,10 @@ func (diff *MediaTypeDiff) Empty() bool {
 	return diff == nil || *diff == MediaTypeDiff{}
 }
 
-func (diff *MediaTypeDiff) removeNonBreaking() {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.ExtensionsDiff = nil
-	diff.ExampleDiff = nil
-	diff.ExampleDiff = nil
-}
-
 func getMediaTypeDiff(config *Config, state *state, mediaType1 *openapi3.MediaType, mediaType2 *openapi3.MediaType) (*MediaTypeDiff, error) {
 	diff, err := getMediaTypeDiffInternal(config, state, mediaType1, mediaType2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

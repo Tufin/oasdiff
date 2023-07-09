@@ -20,24 +20,10 @@ func (diff *ResponseDiff) Empty() bool {
 	return diff == nil || *diff == ResponseDiff{Base: diff.Base, Revision: diff.Revision}
 }
 
-func (diff *ResponseDiff) removeNonBreaking() {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.ExtensionsDiff = nil
-	diff.DescriptionDiff = nil
-}
-
 func diffResponseValues(config *Config, state *state, response1, response2 *openapi3.Response) (*ResponseDiff, error) {
 	diff, err := diffResponseValuesInternal(config, state, response1, response2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {

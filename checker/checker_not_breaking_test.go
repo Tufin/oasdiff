@@ -26,7 +26,13 @@ func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *di
 
 // BC: no change is not breaking
 func TestBreaking_Same(t *testing.T) {
-	require.Empty(t, d(t, &diff.Config{BreakingOnly: true}, 1, 1))
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Empty(t, errs)
 }
 
 // BC: adding an optional request body is not breaking

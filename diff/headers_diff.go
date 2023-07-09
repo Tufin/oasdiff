@@ -25,23 +25,6 @@ func (headersDiff *HeadersDiff) Empty() bool {
 		len(headersDiff.Modified) == 0
 }
 
-func (headersDiff *HeadersDiff) removeNonBreaking(state *state) {
-
-	if headersDiff.Empty() {
-		return
-	}
-
-	// TODO: handle sunset
-	switch state.direction {
-	case directionRequest:
-		// In request: deleting headers is non-breaking (for client)
-		headersDiff.Deleted = nil
-	case directionResponse:
-		// In response: adding headers is non-breaking (for client)
-		headersDiff.Added = nil
-	}
-}
-
 // ModifiedHeaders is map of header names to their respective diffs
 type ModifiedHeaders map[string]*HeaderDiff
 
@@ -57,10 +40,6 @@ func getHeadersDiff(config *Config, state *state, headers1, headers2 openapi3.He
 	diff, err := getHeadersDiffInternal(config, state, headers1, headers2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking(state)
 	}
 
 	if diff.Empty() {

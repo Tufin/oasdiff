@@ -86,20 +86,3 @@ func derefComponents(components *openapi3.Components) openapi3.Components {
 
 	return *components
 }
-
-func (diff *ComponentsDiff) removeNonBreaking() {
-
-	if diff == nil {
-		return
-	}
-
-	diff.SchemasDiff = nil
-	diff.ParametersDiff = nil
-	diff.HeadersDiff = nil
-	diff.RequestBodiesDiff = nil
-	diff.ResponsesDiff = nil
-	diff.SecuritySchemesDiff = nil
-	diff.ExamplesDiff = nil
-	diff.LinksDiff = nil
-	diff.CallbacksDiff = nil
-}

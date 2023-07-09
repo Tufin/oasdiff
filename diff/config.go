@@ -13,7 +13,6 @@ type Config struct {
 	PathPrefixRevision      string
 	PathStripPrefixBase     string
 	PathStripPrefixRevision string
-	BreakingOnly            bool
 	DeprecationDays         int
 	ExcludeElements         utils.StringSet
 	IncludePathParams       bool
@@ -39,7 +38,6 @@ var ExcludeDiffOptions = []string{
 func NewConfig() *Config {
 	return &Config{
 		IncludeExtensions: utils.StringSet{},
-		BreakingOnly:      false,
 		ExcludeElements:   utils.StringSet{},
 	}
 }

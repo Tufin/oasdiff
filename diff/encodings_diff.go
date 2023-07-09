@@ -26,15 +26,6 @@ func (diff *EncodingsDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-func (diff *EncodingsDiff) removeNonBreaking() {
-
-	if diff.Empty() {
-		return
-	}
-
-	diff.Added = nil
-}
-
 func newEncodingsDiff() *EncodingsDiff {
 	return &EncodingsDiff{
 		Added:    utils.StringList{},
@@ -47,10 +38,6 @@ func getEncodingsDiff(config *Config, state *state, encodings1, encodings2 map[s
 	diff, err := getEncodingsDiffInternal(config, state, encodings1, encodings2)
 	if err != nil {
 		return nil, err
-	}
-
-	if config.BreakingOnly {
-		diff.removeNonBreaking()
 	}
 
 	if diff.Empty() {
