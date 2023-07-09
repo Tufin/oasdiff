@@ -27,7 +27,7 @@ type ChangelogFlags struct {
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
-	config := diff.NewConfig().WithCheckBreaking()
+	config := diff.NewConfig().WithCheckBreaking().WithExcludeElements(flags.excludeElements)
 	config.PathFilter = flags.matchPath
 	config.FilterExtension = flags.filterExtension
 	config.PathPrefixBase = flags.prefixBase
@@ -35,7 +35,6 @@ func (flags *ChangelogFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
-	config.SetExcludeElements(flags.excludeElements)
 	config.DeprecationDays = flags.deprecationDays
 
 	return config

@@ -22,7 +22,7 @@ type DiffFlags struct {
 }
 
 func (flags *DiffFlags) toConfig() *diff.Config {
-	config := diff.NewConfig()
+	config := diff.NewConfig().WithExcludeElements(flags.excludeElements)
 	config.PathFilter = flags.matchPath
 	config.FilterExtension = flags.filterExtension
 	config.PathPrefixBase = flags.prefixBase
@@ -30,7 +30,6 @@ func (flags *DiffFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
-	config.SetExcludeElements(flags.excludeElements)
 
 	return config
 }

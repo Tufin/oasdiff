@@ -101,3 +101,37 @@ func TestOneOf_MultiRefs(t *testing.T) {
 	require.Equal(t, "bark", dd.PathsDiff.Modified["/pets"].OperationsDiff.Modified["GET"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Modified["#/components/schemas/Dog"].PropertiesDiff.Added[0])
 	require.Equal(t, "name", dd.PathsDiff.Modified["/pets"].OperationsDiff.Modified["GET"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff.Modified["#/components/schemas/Dog"].PropertiesDiff.Deleted[0])
 }
+
+func TestAnyOf_IncludeDescriptions(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getXOfFile("anyof-base-openapi.yml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getXOfFile("anyof-rev-openapi.yml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
+	require.Equal(t, 2, anyOfDiff.Added)
+	require.Equal(t, 1, anyOfDiff.Deleted)
+	require.Empty(t, anyOfDiff.Modified)
+}
+
+func TestAnyOf_ExcludeDescriptions(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getXOfFile("anyof-base-openapi.yml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getXOfFile("anyof-rev-openapi.yml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(diff.NewConfig().WithExcludeElements([]string{diff.ExcludeDescriptionOption}), s1, s2)
+	require.NoError(t, err)
+	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
+	require.Equal(t, 1, anyOfDiff.Added)
+	require.Equal(t, 0, anyOfDiff.Deleted)
+	require.Empty(t, anyOfDiff.Modified)
+}

@@ -44,8 +44,9 @@ func NewConfig() *Config {
 	}
 }
 
-func (config *Config) SetExcludeElements(excludeElements []string) {
+func (config *Config) WithExcludeElements(excludeElements []string) *Config {
 	config.ExcludeElements = utils.StringList(excludeElements).ToStringSet()
+	return config
 }
 
 func (config *Config) IsExcludeExamples() bool {
