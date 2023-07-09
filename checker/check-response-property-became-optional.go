@@ -6,6 +6,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponsePropertyBecameOptionalCheckId        = "response-property-became-optional"
+	ResponseWriteOnlyPropertyBecameOptionalCheck = "response-write-only-property-became-optional"
+)
+
 func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -36,22 +41,25 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
-							id := "response-property-became-optional"
+							id := ResponsePropertyBecameOptionalCheckId
 							level := ERR
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
-								id = "response-write-only-property-became-optional"
+								id = ResponseWriteOnlyPropertyBecameOptionalCheck
 								level = INFO
 							}
 
 							result = append(result, ApiChange{
-								Id:     id,
-								Level:  level,
-								Text:   fmt.Sprintf(config.i18n(id), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
-								Source: source,
+								Id:          id,
+								Level:       level,
+								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
 						}
 					}
@@ -65,14 +73,14 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Deleted {
 								level := ERR
-								id := "response-property-became-optional"
+								id := ResponsePropertyBecameOptionalCheckId
 
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
 									continue
 								}
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
 									level = INFO
-									id = "response-write-only-property-became-optional"
+									id = ResponseWriteOnlyPropertyBecameOptionalCheck
 								}
 								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
 									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
