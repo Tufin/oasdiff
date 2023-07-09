@@ -28,26 +28,6 @@ func (pathsDiff *PathsDiff) Empty() bool {
 		len(pathsDiff.Modified) == 0
 }
 
-// removeSunset removes deleted paths that were deleted after a sufficient deprecation period for all contained operations
-func (pathsDiff *PathsDiff) removeSunset(paths1 openapi3.Paths) {
-
-	if paths1 == nil {
-		return
-	}
-
-	deleted := []string{}
-	for _, path := range pathsDiff.Deleted {
-		pathItem := paths1[path]
-		for _, operation := range pathItem.Operations() {
-			if !SunsetAllowed(operation.Deprecated, operation.Extensions) {
-				deleted = append(deleted, path)
-				break
-			}
-		}
-	}
-	pathsDiff.Deleted = deleted
-}
-
 func newPathsDiff() *PathsDiff {
 	return &PathsDiff{
 		Added:    []string{},

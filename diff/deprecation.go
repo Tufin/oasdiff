@@ -28,33 +28,3 @@ func GetSunsetDate(Extensions map[string]interface{}) (string, civil.Date, error
 
 	return sunset, civil.Date{}, errors.New("failed to parse sunset date")
 }
-
-// SunsetAllowed checks if an element can be deleted after deprecation period
-func SunsetAllowed(deprecated bool, Extensions map[string]interface{}) bool {
-
-	if !deprecated {
-		return false
-	}
-
-	_, date, err := GetSunsetDate(Extensions)
-	if err != nil {
-		return false
-	}
-
-	return civil.DateOf(time.Now()).After(date)
-}
-
-func DeprecationPeriodSufficient(deprecationDays int, Extensions map[string]interface{}) bool {
-	if deprecationDays == 0 {
-		return true
-	}
-
-	_, date, err := GetSunsetDate(Extensions)
-	if err != nil {
-		return false
-	}
-
-	days := date.DaysSince(civil.DateOf(time.Now()))
-
-	return days >= deprecationDays
-}

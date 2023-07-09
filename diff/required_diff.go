@@ -19,30 +19,6 @@ func (diff *RequiredPropertiesDiff) Empty() bool {
 	return diff.StringsDiff.Empty()
 }
 
-func propDeleted(property string, schema1, schema2 *openapi3.Schema) bool {
-	if schema1 == nil || schema2 == nil {
-		return false
-	}
-
-	_, ok1 := schema1.Properties[property]
-	_, ok2 := schema2.Properties[property]
-
-	return ok1 && !ok2
-}
-
-func propSunsetAllowed(property string, schema1 *openapi3.Schema) bool {
-	if schema1 == nil {
-		return false
-	}
-
-	schemaRef, ok := schema1.Properties[property]
-	if !ok || schemaRef == nil || schemaRef.Value == nil {
-		return false
-	}
-
-	return SunsetAllowed(schemaRef.Value.Deprecated, schemaRef.Value.Extensions)
-}
-
 func getRequiredPropertiesDiff(config *Config, state *state, schema1, schema2 *openapi3.Schema) *RequiredPropertiesDiff {
 	diff := getRequiredPropertiesDiffInternal(schema1.Required, schema2.Required)
 

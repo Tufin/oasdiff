@@ -25,35 +25,6 @@ func (schemasDiff *SchemasDiff) Empty() bool {
 		len(schemasDiff.Modified) == 0
 }
 
-// removeSunset removes deleted properties that were deleted after a sufficient deprecation period
-func (schemasDiff *SchemasDiff) removeSunset(schemas1 openapi3.Schemas) {
-
-	if schemasDiff == nil {
-		return
-	}
-
-	deleted := []string{}
-	for _, schemaName := range schemasDiff.Deleted {
-		schemaRef := schemas1[schemaName]
-
-		if schemaRef == nil {
-			deleted = append(deleted, schemaName)
-			continue
-		}
-
-		schema := schemaRef.Value
-		if schema == nil {
-			deleted = append(deleted, schemaName)
-			continue
-		}
-
-		if !SunsetAllowed(schema.Deprecated, schema.Extensions) {
-			deleted = append(deleted, schemaName)
-		}
-	}
-	schemasDiff.Deleted = deleted
-}
-
 func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
 		Added:    utils.StringList{},
