@@ -58,28 +58,6 @@ func (diff *SchemaDiff) Empty() bool {
 	return diff == nil || *diff == SchemaDiff{Base: diff.Base, Revision: diff.Revision}
 }
 
-func getReadWriteOnlyMap(direction direction, schema1, schema2 *openapi3.SchemaRef) map[string]bool {
-	result := map[string]bool{}
-
-	if schema1 == nil || schema1.Value == nil ||
-		schema2 == nil || schema2.Value == nil {
-		return result
-	}
-
-	switch direction {
-	case directionRequest:
-		for prop, schema := range schema2.Value.Properties {
-			result[prop] = schema.Value.ReadOnly
-		}
-	case directionResponse:
-		for prop, schema := range schema1.Value.Properties {
-			result[prop] = schema.Value.WriteOnly
-		}
-	}
-
-	return result
-}
-
 func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
 
 	if diff, ok := state.cache.get(state.direction, schema1, schema2); ok {
