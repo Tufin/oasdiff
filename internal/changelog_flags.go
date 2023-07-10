@@ -24,6 +24,8 @@ type ChangelogFlags struct {
 	errIgnoreFile            string
 	warnIgnoreFile           string
 	deprecationDays          int
+	deprecationDaysBeta      int
+	deprecationDaysStable    int
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
