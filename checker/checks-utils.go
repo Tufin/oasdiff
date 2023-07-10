@@ -81,6 +81,12 @@ func processModifiedPropertiesDiff(propertyPath string, propertyName string, sch
 		}
 	}
 
+	if schemaDiff.OneOfDiff != nil {
+		for k, v := range schemaDiff.OneOfDiff.Modified {
+			processModifiedPropertiesDiff(fmt.Sprintf("%s/oneOf[%s]", propertyPath, k), "", v, schemaDiff, processor)
+		}
+	}
+
 	if schemaDiff.ItemsDiff != nil {
 		processModifiedPropertiesDiff(fmt.Sprintf("%s/items", propertyPath), "", schemaDiff.ItemsDiff, schemaDiff, processor)
 	}
@@ -117,6 +123,12 @@ func processAddedPropertiesDiff(propertyPath string, propertyName string, schema
 	if schemaDiff.AnyOfDiff != nil {
 		for k, v := range schemaDiff.AnyOfDiff.Modified {
 			processAddedPropertiesDiff(fmt.Sprintf("%s/anyOf[%s]", propertyPath, k), "", v, schemaDiff, processor)
+		}
+	}
+
+	if schemaDiff.OneOfDiff != nil {
+		for k, v := range schemaDiff.OneOfDiff.Modified {
+			processAddedPropertiesDiff(fmt.Sprintf("%s/oneOf[%s]", propertyPath, k), "", v, schemaDiff, processor)
 		}
 	}
 
@@ -159,6 +171,12 @@ func processDeletedPropertiesDiff(propertyPath string, propertyName string, sche
 	if schemaDiff.AnyOfDiff != nil {
 		for k, v := range schemaDiff.AnyOfDiff.Modified {
 			processDeletedPropertiesDiff(fmt.Sprintf("%s/anyOf[%s]", propertyPath, k), "", v, schemaDiff, processor)
+		}
+	}
+
+	if schemaDiff.OneOfDiff != nil {
+		for k, v := range schemaDiff.OneOfDiff.Modified {
+			processDeletedPropertiesDiff(fmt.Sprintf("%s/oneOf[%s]", propertyPath, k), "", v, schemaDiff, processor)
 		}
 	}
 
