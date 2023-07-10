@@ -127,7 +127,7 @@ func processModifiedPropertiesAllOfDiff(propertyPath string, propertyName string
 			processModifiedPropertiesAllOfDiff(fmt.Sprintf("%s/oneOf[%s]", propertyPath, k), "", v, schemaDiff, processor)
 		}
 	}
-		if schemaDiff.PropertiesDiff != nil {
+	if schemaDiff.PropertiesDiff != nil {
 		for i, v := range schemaDiff.PropertiesDiff.Modified {
 			processModifiedPropertiesAllOfDiff(propertyPath, i, v, schemaDiff, processor)
 		}
