@@ -655,3 +655,17 @@ func TestBreaking_NestedProp(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-property-became-required", errs[0].GetId())
 }
+
+// BC: changing a response property to optional under AllOf, AnyOf or OneOf is breaking
+func TestBreaking_OneOf(t *testing.T) {
+	s1, err := open("../data/x-of/base.json")
+	require.NoError(t, err)
+
+	s2, err := open("../data/x-of/revision.json")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Len(t, errs, 3)
+}

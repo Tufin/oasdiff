@@ -12,6 +12,7 @@ These examples are automatically generated from unit tests.
 [changing a required property in response body to optional and also deleting it is breaking](checker/checker_breaking_property_test.go?plain=1#L280)  
 [changing a response body to nullable is breaking](checker/checker_breaking_property_test.go?plain=1#L216)  
 [changing a response property to nullable is breaking](checker/checker_breaking_property_test.go?plain=1#L248)  
+[changing a response property to optional under AllOf, AnyOf or OneOf is breaking](checker/checker_breaking_property_test.go?plain=1#L659)  
 [changing an embedded response property to nullable is breaking](checker/checker_breaking_property_test.go?plain=1#L264)  
 [changing an existing header param from optional to required is breaking](checker/checker_breaking_test.go?plain=1#L187)  
 [changing an existing header param to enum is breaking](checker/checker_breaking_property_test.go?plain=1#L184)  

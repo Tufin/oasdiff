@@ -1,0 +1,109 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "oasdiff bug repro for oneOf",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/api/oneOf/path": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AnotherSchema"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anyOf/path": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AnotherSchema"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/allOf/path": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AnotherSchema"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProblemSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "changedProperty": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "changedProperty"
+        ]
+      },
+      "AnotherSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "property": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "property"
+        ]
+      }
+    }
+  }
+}
