@@ -23,7 +23,8 @@ type ChangelogFlags struct {
 	lang                     string
 	errIgnoreFile            string
 	warnIgnoreFile           string
-	deprecationDays          int
+	deprecationDaysBeta      int
+	deprecationDaysStable    int
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
@@ -35,7 +36,6 @@ func (flags *ChangelogFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
-	config.DeprecationDays = flags.deprecationDays
 
 	return config
 }

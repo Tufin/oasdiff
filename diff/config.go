@@ -13,7 +13,6 @@ type Config struct {
 	PathPrefixRevision      string
 	PathStripPrefixBase     string
 	PathStripPrefixRevision string
-	DeprecationDays         int
 	ExcludeElements         utils.StringSet
 	IncludePathParams       bool
 }
