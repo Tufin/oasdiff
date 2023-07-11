@@ -22,7 +22,7 @@ You can specify the `--format` flag to output breaking-changes in json or yaml.
 
 ### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
-The new Breaking Changes method provides this feature through the `x-stability-level` extension.  
+oasdiff provides this feature through the `x-stability-level` extension.  
 There are four stability levels: `draft`->`alpha`->`beta`->`stable`.  
 APIs with the levels `draft` or `alpha` can be changed freely without triggering a breaking-change error.  
 Stability level may be increased, but not decreased, like this: `draft`->`alpha`->`beta`->`stable`.  
@@ -64,7 +64,7 @@ In most cases the `x-extensible-enum` is similar to enum values, except it allow
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
 ### Deprecating APIs
-OASDiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
+oasdiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
 
 ### Optional Breaking-Changes Checks
 You can use the `--include-checks` flag to include the following optional checks:
