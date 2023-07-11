@@ -3,7 +3,7 @@ module github.com/tufin/oasdiff
 go 1.20
 
 require (
-	cloud.google.com/go v0.110.4
+	cloud.google.com/go v0.110.5
 	github.com/TwiN/go-color v1.4.0
 	github.com/getkin/kin-openapi v0.118.0
 	github.com/stretchr/testify v1.8.4
