@@ -151,3 +151,5 @@ response-required-write-only-property-removed: удалено обязатель
 response-write-only-property-became-optional: свойство только для записи %s перестало быть обязательным для ответа со статусом %s
 response-property-became-required: свойство %s перестало быть необязательным для ответа со статусом %s
 response-write-only-property-became-required: свойство только для записи %s перестало быть необязательным для ответа со статусом %s
+request-body-media-type-added: добавлен тип медиа для тела запроса %s
+request-body-media-type-removed: удален тип медиа для тела запроса %s
