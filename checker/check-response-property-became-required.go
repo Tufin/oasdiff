@@ -7,11 +7,11 @@ import (
 )
 
 const (
-	ResponsePropertyBecameOptionalCheckId        = "response-property-became-optional"
-	ResponseWriteOnlyPropertyBecameOptionalCheck = "response-write-only-property-became-optional"
+	ResponsePropertyBecameRequiredCheckId        = "response-property-became-required"
+	ResponseWriteOnlyPropertyBecameRequiredCheck = "response-write-only-property-became-required"
 )
 
-func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -40,21 +40,19 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 					}
 
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
-						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
-							id := ResponsePropertyBecameOptionalCheckId
-							level := ERR
+						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
+							id := ResponsePropertyBecameRequiredCheckId
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
-								id = ResponseWriteOnlyPropertyBecameOptionalCheck
-								level = INFO
+								id = ResponseWriteOnlyPropertyBecameRequiredCheck
 							}
 
 							result = append(result, ApiChange{
 								Id:          id,
-								Level:       level,
+								Level:       INFO,
 								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -71,16 +69,13 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							if requiredDiff == nil {
 								return
 							}
-							for _, changedRequiredPropertyName := range requiredDiff.Deleted {
-								level := ERR
-								id := ResponsePropertyBecameOptionalCheckId
-
+							for _, changedRequiredPropertyName := range requiredDiff.Added {
+								id := ResponsePropertyBecameRequiredCheckId
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
 									continue
 								}
 								if propertyDiff.Base.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
-									level = INFO
-									id = ResponseWriteOnlyPropertyBecameOptionalCheck
+									id = ResponseWriteOnlyPropertyBecameRequiredCheck
 								}
 								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
 									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
@@ -88,7 +83,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								}
 								result = append(result, ApiChange{
 									Id:          id,
-									Level:       level,
+									Level:       INFO,
 									Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
