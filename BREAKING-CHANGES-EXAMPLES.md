@@ -139,6 +139,7 @@ These examples are automatically generated from unit tests.
 
 ## Examples of info-level changes for changelog
 [Adding a new global security to the API](checker/check-api-security-updated_test.go?plain=1#L11)  
+[Adding a new media type to request body](checker/check-request-body-mediatype-updated_test.go?plain=1#L11)  
 [Adding a new media type to response](checker/check-response-mediatype-updated_test.go?plain=1#L11)  
 [Adding a new oauth security scope](checker/check-components-security-updated_test.go?plain=1#L91)  
 [Adding a new operation id](checker/check-api-operation-id-updated_test.go?plain=1#L59)  
@@ -174,9 +175,9 @@ These examples are automatically generated from unit tests.
 [Removing an existing operation id](checker/check-api-operation-id-updated_test.go?plain=1#L11)  
 [Removing an existing tag](checker/check-api-tag-updated_test.go?plain=1#L35)  
 [Removing an optional write-only property from a response](checker/check-response-optional-property-updated_test.go?plain=1#L11)  
+[Removing media type from request body](checker/check-request-body-mediatype-updated_test.go?plain=1#L33)  
 [Updating an existing operation id](checker/check-api-operation-id-updated_test.go?plain=1#L35)  
 [Updating an existing tag](checker/check-api-tag-updated_test.go?plain=1#L60)  
-[adding a new media type to request body](checker/check-request-body-mediatype-updated_test.go?plain=1#L11)  
 [adding a required write-only property to response body is detected](checker/check-response-required-property-updated_test.go?plain=1#L57)  
 [changing an existing header param from required to optional](checker/checker_request_parameter_required_value_updated_test.go?plain=1#L35)  
 [changing an existing header param to optional](checker/checker_not_breaking_test.go?plain=1#L133)  
