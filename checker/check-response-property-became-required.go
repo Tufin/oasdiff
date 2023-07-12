@@ -43,7 +43,7 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
 							id := ResponsePropertyBecameRequiredCheckId
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
-								// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
+								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.WriteOnly {
@@ -78,7 +78,7 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 									id = ResponseWriteOnlyPropertyBecameRequiredCheck
 								}
 								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
-									// removed properties processed by the ResponseRequiredPropertyRemovedCheck check
+									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 									continue
 								}
 								result = append(result, ApiChange{
