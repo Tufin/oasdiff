@@ -613,3 +613,19 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 	require.Equal(t, "api-schema-removed", errs[1].GetId())
 	require.Equal(t, "removed the schema 'rules'", errs[1].GetText())
 }
+
+// BC: removing a media type from requesst body is breaking
+func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
+	s1, err := open("../data/checker/request_body_media_type_updated_revision.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/checker/request_body_media_type_updated_base.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Equal(t, "request-body-media-type-removed", errs[0].GetId())
+	require.Equal(t, "removed the media type application/json from the request body", errs[0].GetText())
+}
