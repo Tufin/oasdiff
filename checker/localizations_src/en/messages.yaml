@@ -153,3 +153,4 @@ response-property-became-required: the response property %s became required for 
 response-write-only-property-became-required: the response write-only property %s became required for the status %s
 request-body-media-type-removed: removed the media type %s from the request body
 request-body-media-type-added: added the media type %s to the request body
+response-write-only-property-enum-value-added: added the new '%s' enum value the %s response write-only property for the response status %s
