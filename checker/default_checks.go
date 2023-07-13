@@ -127,6 +127,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		RequestParameterDefaultValueChanged,
 		APIComponentsSecurityUpdatedCheck,
 		APISecurityUpdatedCheck,
+		RequestBodyMediaTypeChangedCheck,
 	}
 }
 
