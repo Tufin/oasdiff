@@ -88,7 +88,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		UncheckedRequestAllOfWarnCheck,
 		UncheckedResponseAllOfWarnCheck,
 		RequestPropertyRemovedCheck,
-		ResponseRequiredPropertyBecameNonWriteOnlyCheck,
+		ResponseRequiredPropertyWriteOnlyReadOnlyCheck,
 		RequestPropertyMaxLengthSetCheck,
 		RequestParameterMaxLengthSetCheck,
 		ResponsePropertyMaxLengthUnsetCheck,
@@ -128,6 +128,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		APIComponentsSecurityUpdatedCheck,
 		APISecurityUpdatedCheck,
 		RequestBodyMediaTypeChangedCheck,
+		ResponseOptionalPropertyWriteOnlyReadOnlyCheck,
 	}
 }
 
