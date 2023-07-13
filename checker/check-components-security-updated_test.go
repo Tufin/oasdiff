@@ -10,9 +10,10 @@ import (
 
 // CL: Changing security component oauth's url
 func TestComponentSecurityOauthURLUpdated(t *testing.T) {
-	s1, _ := open("../data/checker/component_security_updated_base.yaml")
+	s1, err := open("../data/checker/component_security_updated_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/component_security_updated_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Implicit.AuthorizationURL = "http://example.new.org/api/oauth/dialog"
 
@@ -31,9 +32,10 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 
 // CL: Changing security component type
 func TestComponentSecurityTypeUpdated(t *testing.T) {
-	s1, _ := open("../data/checker/component_security_updated_base.yaml")
+	s1, err := open("../data/checker/component_security_updated_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/component_security_updated_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.SecuritySchemes["petstore_auth"].Value.Type = "http"
 
@@ -52,9 +54,10 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 
 // CL: Adding a new security component
 func TestComponentSecurityAdded(t *testing.T) {
-	s1, _ := open("../data/checker/component_security_updated_base.yaml")
+	s1, err := open("../data/checker/component_security_updated_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/component_security_updated_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -71,9 +74,10 @@ func TestComponentSecurityAdded(t *testing.T) {
 
 // CL: Removing a new security component
 func TestComponentSecurityRemoved(t *testing.T) {
-	s1, _ := open("../data/checker/component_security_updated_revision.yaml")
+	s1, err := open("../data/checker/component_security_updated_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/component_security_updated_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -90,9 +94,10 @@ func TestComponentSecurityRemoved(t *testing.T) {
 
 // CL: Adding a new oauth security scope
 func TestComponentSecurityOauthScopeAdded(t *testing.T) {
-	s1, _ := open("../data/checker/component_security_updated_base.yaml")
+	s1, err := open("../data/checker/component_security_updated_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/component_security_updated_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Implicit.Scopes["admin:pets"] = "grants access to admin operations"
 
@@ -111,9 +116,10 @@ func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 
 // CL: Removing a new oauth security scope
 func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
-	s1, _ := open("../data/checker/component_security_updated_base.yaml")
+	s1, err := open("../data/checker/component_security_updated_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/component_security_updated_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	// Add to s1 so that it's deletion is identified
 	s1.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Implicit.Scopes["admin:pets"] = "grants access to admin operations"
@@ -133,9 +139,10 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 
 // CL: Removing a new oauth security scope
 func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
-	s1, _ := open("../data/checker/component_security_updated_base.yaml")
+	s1, err := open("../data/checker/component_security_updated_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/component_security_updated_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Implicit.Scopes["read:pets"] = "grants access to pets (deprecated)"
 

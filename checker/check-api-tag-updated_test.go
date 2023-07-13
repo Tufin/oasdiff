@@ -10,7 +10,8 @@ import (
 
 // CL: Adding a new tag
 func TestTagAdded(t *testing.T) {
-	s1, _ := open("../data/checker/tag_added_base.yaml")
+	s1, err := open("../data/checker/tag_added_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/tag_added_base.yaml")
 	require.NoError(t, err)
 
@@ -34,7 +35,8 @@ func TestTagAdded(t *testing.T) {
 
 // CL: Removing an existing tag
 func TestTagRemoved(t *testing.T) {
-	s1, _ := open("../data/checker/tag_removed_base.yaml")
+	s1, err := open("../data/checker/tag_removed_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/tag_removed_base.yaml")
 	require.NoError(t, err)
 
@@ -59,7 +61,8 @@ func TestTagRemoved(t *testing.T) {
 
 // CL: Updating an existing tag
 func TestTagUpdated(t *testing.T) {
-	s1, _ := open("../data/checker/tag_removed_base.yaml")
+	s1, err := open("../data/checker/tag_removed_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/tag_removed_base.yaml")
 	require.NoError(t, err)
 

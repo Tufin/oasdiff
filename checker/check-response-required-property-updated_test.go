@@ -10,9 +10,10 @@ import (
 
 // CL: Adding a required property to response body is detected
 func TestResponseRequiredPropertyAdded(t *testing.T) {
-	s1, _ := open("../data/checker/response_required_property_added_base.yaml")
+	s1, err := open("../data/checker/response_required_property_added_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_required_property_added_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -33,9 +34,10 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 
 // CL: Removing an existent property that was required in response body is detected
 func TestResponseRequiredPropertyRemoved(t *testing.T) {
-	s1, _ := open("../data/checker/response_required_property_added_revision.yaml")
+	s1, err := open("../data/checker/response_required_property_added_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_required_property_added_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Required = []string{"name", "id"}
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
@@ -57,9 +59,9 @@ func TestResponseRequiredPropertyRemoved(t *testing.T) {
 // CL: adding a required write-only property to response body is detected
 func TestResponseRequiredWriteOnlyPropertyAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_required_property_added_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_required_property_added_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["new"].Value.WriteOnly = true
 
@@ -82,9 +84,10 @@ func TestResponseRequiredWriteOnlyPropertyAdded(t *testing.T) {
 
 // CL: removing a required write-only property that was required in response body is detected
 func TestResponseRequiredWriteOnlyPropertyRemoved(t *testing.T) {
-	s1, _ := open("../data/checker/response_required_property_added_revision.yaml")
+	s1, err := open("../data/checker/response_required_property_added_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_required_property_added_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s1.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["new"].Value.WriteOnly = true
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Required = []string{"name", "id"}

@@ -11,9 +11,9 @@ import (
 // CL: Changing a response schema type
 func TestResponseSchemaTypeChangedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_schema_type_changed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_schema_type_changed_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -34,9 +34,9 @@ func TestResponseSchemaTypeChangedCheck(t *testing.T) {
 // CL: Changing a response property schema type
 func TestResponsePropertyTypeChangedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_schema_type_changed_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_schema_type_changed_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["200"].Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Type = "integer"
 

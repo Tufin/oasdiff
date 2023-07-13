@@ -10,9 +10,10 @@ import (
 
 // CL: Adding a new global security to the API
 func TestAPIGlobalSecurityyAdded(t *testing.T) {
-	s1, _ := open("../data/checker/api_security_global_added_base.yaml")
+	s1, err := open("../data/checker/api_security_global_added_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/api_security_global_added_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -29,9 +30,10 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 
 // CL: Removing a global security from the API
 func TestAPIGlobalSecurityyDeleted(t *testing.T) {
-	s1, _ := open("../data/checker/api_security_global_added_revision.yaml")
+	s1, err := open("../data/checker/api_security_global_added_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/api_security_global_added_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -48,9 +50,10 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 
 // CL: Removing a security scope from an API global security
 func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
-	s1, _ := open("../data/checker/api_security_global_added_revision.yaml")
+	s1, err := open("../data/checker/api_security_global_added_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/api_security_global_added_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Security[0]["petstore_auth"] = s2.Spec.Security[0]["petstore_auth"][:1]
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
@@ -68,9 +71,10 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 
 // CL: Adding a security scope from an API global security
 func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
-	s1, _ := open("../data/checker/api_security_global_added_revision.yaml")
+	s1, err := open("../data/checker/api_security_global_added_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/api_security_global_added_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s1.Spec.Security[0]["petstore_auth"] = s2.Spec.Security[0]["petstore_auth"][:1]
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
@@ -88,9 +92,10 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 
 // CL: Adding a new security to the API endpoint
 func TestAPISecurityAdded(t *testing.T) {
-	s1, _ := open("../data/checker/api_security_added_base.yaml")
+	s1, err := open("../data/checker/api_security_added_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/api_security_added_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -110,9 +115,10 @@ func TestAPISecurityAdded(t *testing.T) {
 
 // CL: Removing a new security to the API endpoint
 func TestAPISecurityDeleted(t *testing.T) {
-	s1, _ := open("../data/checker/api_security_added_revision.yaml")
+	s1, err := open("../data/checker/api_security_added_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/api_security_added_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -132,9 +138,10 @@ func TestAPISecurityDeleted(t *testing.T) {
 
 // CL: Removing a security scope from an API endpoint security
 func TestAPISecurityScopeRemoved(t *testing.T) {
-	s1, _ := open("../data/checker/api_security_updated_base.yaml")
+	s1, err := open("../data/checker/api_security_updated_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/api_security_updated_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -154,9 +161,10 @@ func TestAPISecurityScopeRemoved(t *testing.T) {
 
 // CL: Adding a security scope to an API endpoint security
 func TestAPISecurityScopeAdded(t *testing.T) {
-	s1, _ := open("../data/checker/api_security_updated_revision.yaml")
+	s1, err := open("../data/checker/api_security_updated_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/api_security_updated_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
