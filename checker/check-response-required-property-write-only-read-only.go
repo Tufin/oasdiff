@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	ResponseRequiredPropertyBecameNonWriteOnlyCheckId = "response-required-property-became-non-write-only"
+	ResponseRequiredPropertyBecameNonWriteOnlyCheckId = "response-required-property-became-not-write-only"
 	ResponseRequiredPropertyBecameWriteOnlyCheckId    = "response-required-property-became-write-only"
 	ResponseRequiredPropertyBecameReadOnlyCheckId     = "response-required-property-became-read-only"
-	ResponseRequiredPropertyBecameReadWriteCheckId    = "response-required-property-became-read-write"
+	ResponseRequiredPropertyBecameNonReadOnlyCheckId  = "response-required-property-became-not-read-only"
 )
 
 func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -58,12 +58,12 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								return
 							}
 
-							id := "response-required-property-became-not-write-only"
+							id := ResponseRequiredPropertyBecameNonWriteOnlyCheckId
 							level := WARN
 							comment := config.i18n("response-required-property-became-not-write-only-comment")
 
 							if writeOnlyDiff.To == true {
-								id = "response-required-property-became-write-only"
+								id = ResponseRequiredPropertyBecameWriteOnlyCheckId
 								level = INFO
 								comment = ""
 							}
@@ -96,11 +96,11 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								return
 							}
 
-							id := "response-required-property-became-not-read-only"
+							id := ResponseRequiredPropertyBecameNonReadOnlyCheckId
 							level := INFO
 
 							if readOnlyDiff.To == true {
-								id = "response-required-property-became-read-only"
+								id = ResponseRequiredPropertyBecameReadOnlyCheckId
 								level = INFO
 							}
 
