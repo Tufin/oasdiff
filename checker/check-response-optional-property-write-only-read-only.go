@@ -1,0 +1,115 @@
+package checker
+
+import (
+	"fmt"
+
+	"github.com/tufin/oasdiff/diff"
+	"golang.org/x/exp/slices"
+)
+
+const (
+	ResponseOptionalPropertyBecameNonWriteOnlyCheckId = "response-optional-property-became-non-write-only"
+	ResponseOptionalPropertyBecameWriteOnlyCheckId    = "response-optional-property-became-write-only"
+	ResponseOptionalPropertyBecameReadOnlyCheckId     = "response-optional-property-became-read-only"
+	ResponseOptionalPropertyBecameReadWriteCheckId    = "response-optional-property-became-read-write"
+)
+
+func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+	result := make(Changes, 0)
+	if diffReport.PathsDiff == nil {
+		return result
+	}
+	for path, pathItem := range diffReport.PathsDiff.Modified {
+		if pathItem.OperationsDiff == nil {
+			continue
+		}
+		for operation, operationItem := range pathItem.OperationsDiff.Modified {
+			source := (*operationsSources)[operationItem.Revision]
+
+			if operationItem.ResponsesDiff == nil {
+				continue
+			}
+
+			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
+				if responseDiff.ContentDiff == nil ||
+					responseDiff.ContentDiff.MediaTypeModified == nil {
+					continue
+				}
+
+				modifiedMediaTypes := responseDiff.ContentDiff.MediaTypeModified
+				for _, mediaTypeDiff := range modifiedMediaTypes {
+					if mediaTypeDiff.SchemaDiff == nil {
+						continue
+					}
+
+					CheckModifiedPropertiesDiff(
+						mediaTypeDiff.SchemaDiff,
+						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+							writeOnlyDiff := propertyDiff.WriteOnlyDiff
+							if writeOnlyDiff == nil {
+								return
+							}
+							if parent.Revision.Value.Properties[propertyName] == nil {
+								// removed properties processed by the ResponseOptionalPropertyUpdatedCheck check
+								return
+							}
+							if slices.Contains(parent.Base.Value.Required, propertyName) {
+								// skip required properties - checked at ResponseRequiredPropertyWriteOnlyReadOnlyCheck
+								return
+							}
+
+							id := "response-optional-property-became-not-write-only"
+
+							if writeOnlyDiff.To == true {
+								id = "response-optional-property-became-write-only"
+							}
+
+							result = append(result, ApiChange{
+								Id:          id,
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						})
+
+					CheckModifiedPropertiesDiff(
+						mediaTypeDiff.SchemaDiff,
+						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+							readOnlyDiff := propertyDiff.ReadOnlyDiff
+							if readOnlyDiff == nil {
+								return
+							}
+							if parent.Revision.Value.Properties[propertyName] == nil {
+								// removed properties processed by the ResponseOptionalPropertyUpdatedCheck check
+								return
+							}
+							if slices.Contains(parent.Base.Value.Required, propertyName) {
+								// skip non-optional properties
+								return
+							}
+
+							id := "response-optional-property-became-not-read-only"
+
+							if readOnlyDiff.To == true {
+								id = "response-optional-property-became-read-only"
+							}
+
+							result = append(result, ApiChange{
+								Id:          id,
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						})
+				}
+			}
+		}
+	}
+	return result
+}
