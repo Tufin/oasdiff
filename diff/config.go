@@ -73,9 +73,13 @@ const (
 )
 
 func (config *Config) WithCheckBreaking() *Config {
-	config.IncludeExtensions.Add(XStabilityLevelExtension)
-	config.IncludeExtensions.Add(SunsetExtension)
-	config.IncludeExtensions.Add(XExtensibleEnumExtension)
+	// config.IncludeExtensions.Add(XStabilityLevelExtension)
+	// config.IncludeExtensions.Add(SunsetExtension)
+	// config.IncludeExtensions.Add(XExtensibleEnumExtension)
+	config.IncludeExtensions.Add("x-cb-ui-key")
+	config.IncludeExtensions.Add("x-cb-obs-attributes")
+	config.IncludeExtensions.Add("x-cb-spec-domain")
+	config.IncludeExtensions.Add("x-cb-is-eap")
 
 	return config
 }

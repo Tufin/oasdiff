@@ -1,4 +1,17 @@
 
+# OASDiff for chargebee
+- We use this tool to generate a diff in JSON format between two OpenAPI documents.
+- This tool, by default, do not include diffs for custom extensions. However, with some code modification, it can support this, which is what we have done.
+    - We just need to add the following to `func generateConfig()` in `diff/config.go`
+```
+config.IncludeExtensions.Add("x-cb-ui-key")
+config.IncludeExtensions.Add("x-cb-obs-attributes")
+config.IncludeExtensions.Add("x-cb-spec-domain")
+config.IncludeExtensions.Add("x-cb-is-eap")
+```
+- Build the Docker Image and push it to ECR, in order to use it.
+
+
 [![CI](https://github.com/Tufin/oasdiff/workflows/go/badge.svg)](https://github.com/Tufin/oasdiff/actions)
 [![codecov](https://codecov.io/gh/tufin/oasdiff/branch/main/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/tufin/oasdiff)
 [![Go Report Card](https://goreportcard.com/badge/github.com/tufin/oasdiff)](https://goreportcard.com/report/github.com/tufin/oasdiff)
