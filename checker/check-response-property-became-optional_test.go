@@ -11,9 +11,9 @@ import (
 // CL: Changing required response property to optional
 func TestResponsePropertyBecameOptionalCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_property_became_optional_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_property_became_optional_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyBecameOptionalCheck), d, osm, checker.ERR)
@@ -33,9 +33,9 @@ func TestResponsePropertyBecameOptionalCheck(t *testing.T) {
 // CL: Changing write-only required response property to optional
 func TestResponseWriteOnlyPropertyBecameOptionalCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_property_became_optional_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_property_became_optional_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 

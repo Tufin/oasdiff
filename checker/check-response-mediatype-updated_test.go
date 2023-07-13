@@ -11,9 +11,9 @@ import (
 // CL: Adding a new media type to response
 func TestAddNewMediaType(t *testing.T) {
 	s1, err := open("../data/checker/add_new_media_type_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/add_new_media_type_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -34,9 +34,9 @@ func TestAddNewMediaType(t *testing.T) {
 // CL: Removing a new media type to response
 func TestDeleteNewMediaType(t *testing.T) {
 	s1, err := open("../data/checker/add_new_media_type_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/add_new_media_type_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

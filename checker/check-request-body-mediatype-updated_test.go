@@ -10,9 +10,10 @@ import (
 
 // CL: Adding a new media type to request body
 func TestRequestBodyMediaTypeAdded(t *testing.T) {
-	s1, _ := open("../data/checker/request_body_media_type_updated_base.yaml")
+	s1, err := open("../data/checker/request_body_media_type_updated_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/request_body_media_type_updated_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -32,9 +33,10 @@ func TestRequestBodyMediaTypeAdded(t *testing.T) {
 
 // CL: Removing media type from request body
 func TestRequestBodyMediaTypeRemoved(t *testing.T) {
-	s1, _ := open("../data/checker/request_body_media_type_updated_revision.yaml")
+	s1, err := open("../data/checker/request_body_media_type_updated_revision.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/request_body_media_type_updated_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

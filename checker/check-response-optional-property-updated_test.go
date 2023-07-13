@@ -11,9 +11,9 @@ import (
 // CL: Removing an optional write-only property from a response
 func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_removed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_optional_property_removed_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -34,9 +34,9 @@ func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 // CL: Adding an optional write-only property to a response
 func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_removed_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_optional_property_removed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -58,9 +58,9 @@ func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 // CL: Removing an optional write-only property from a response
 func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_removed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_optional_property_removed_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s1.Spec.Paths["/api/v1.0/groups"].Post.Responses["200"].Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["id"].Value.WriteOnly = true
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
@@ -81,9 +81,9 @@ func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 // CL: Adding an optional write-only property to a response
 func TestResponseOptionalWriteOnlyPropertyAddedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_removed_revision.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/response_optional_property_removed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["200"].Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["id"].Value.WriteOnly = true
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)

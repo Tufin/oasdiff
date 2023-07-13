@@ -10,9 +10,10 @@ import (
 
 // CL: changing request's body to required is breaking
 func TestRequestBodyBecameRequired(t *testing.T) {
-	s1, _ := open("../data/checker/request_body_became_required_base.yaml")
+	s1, err := open("../data/checker/request_body_became_required_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/request_body_became_required_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Paths["/api/v1.0/groups"].Post.RequestBody.Value.Required = true
 
@@ -34,9 +35,10 @@ func TestRequestBodyBecameRequired(t *testing.T) {
 
 // CL: changing request's body to optional
 func TestRequestBodyBecameOptional(t *testing.T) {
-	s1, _ := open("../data/checker/request_body_became_optional_base.yaml")
+	s1, err := open("../data/checker/request_body_became_optional_base.yaml")
+	require.NoError(t, err)
 	s2, err := open("../data/checker/request_body_became_optional_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Paths["/api/v1.0/groups"].Post.RequestBody.Value.Required = false
 

@@ -11,9 +11,9 @@ import (
 // CL: Changing request path parameter type
 func TestRequestPathParamTypeChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[0].Value.Schema.Value.Type = "int"
 
@@ -36,9 +36,9 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 // CL: Changing request query parameter type
 func TestRequestQueryParamTypeChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[1].Value.Schema.Value.Type = "int"
 
@@ -61,9 +61,9 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 // CL: Changing request header parameter type
 func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[2].Value.Schema.Value.Type = "int"
 
