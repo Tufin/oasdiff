@@ -10,9 +10,11 @@ import (
 
 // CL: Changing optional response property to write-only
 func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
-	s1, _ := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
+	s1, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
+	require.NoError(t, err)
+
 	s2, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["name"].Value.WriteOnly = true
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
@@ -34,9 +36,11 @@ func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
 
 // CL: Changing optional response property to not write-only
 func TestResponseOptionalPropertyBecameNotWriteOnly(t *testing.T) {
-	s1, _ := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
+	s1, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
+	require.NoError(t, err)
+
 	s2, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["writeOnlyName"].Value.WriteOnly = false
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
@@ -57,9 +61,11 @@ func TestResponseOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 
 // CL: Changing optional response property to read-only
 func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
-	s1, _ := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
+	s1, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
+	require.NoError(t, err)
+
 	s2, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s1.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["id"].Value.ReadOnly = false
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
@@ -81,9 +87,11 @@ func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
 
 // CL: Changing optional response property to not read-only
 func TestResponseOptionalPropertyBecameNonReadOnly(t *testing.T) {
-	s1, _ := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
+	s1, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
+	require.NoError(t, err)
+
 	s2, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
-	require.Empty(t, err)
+	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["id"].Value.ReadOnly = false
 
