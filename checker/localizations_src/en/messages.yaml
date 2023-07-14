@@ -153,3 +153,10 @@ response-property-became-required: the response property %s became required for 
 response-write-only-property-became-required: the response write-only property %s became required for the status %s
 request-body-media-type-removed: removed the media type %s from the request body
 request-body-media-type-added: added the media type %s to the request body
+response-required-property-became-write-only: the response required property %s became write-only for the status %s
+response-required-property-became-read-only: the response required property %s became read-only for the status %s
+response-required-property-became-not-read-only: the response required property %s became not read-only for the status %s
+response-optional-property-became-write-only: the response optional property %s became write-only for the status %s
+response-optional-property-became-read-only: the response optional property %s became read-only for the status %s
+response-optional-property-became-not-write-only: the response optional property %s became not write-only for the status %s
+response-optional-property-became-not-read-only: the response optional property %s became not read-only for the status %s
