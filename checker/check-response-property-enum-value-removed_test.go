@@ -32,7 +32,7 @@ func TestResponsePropertyEnumValueRemoved(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding an enum value to a response write-only property
+// CL: Removing an enum value from a response write-only property
 func TestResponseWriteOnlyPropertyEnumValueRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_property_enum_added_base.yaml")
 	require.NoError(t, err)
