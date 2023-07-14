@@ -129,6 +129,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		APISecurityUpdatedCheck,
 		RequestBodyMediaTypeChangedCheck,
 		ResponseOptionalPropertyWriteOnlyReadOnlyCheck,
+		ResponsePatternAddedOrChangedCheck,
 	}
 }
 
