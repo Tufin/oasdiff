@@ -48,7 +48,7 @@ func TestResponseWriteOnlyPropertyEnumValueAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "response-write-only-property-enum-value-added",
-		Text:        "added the new 'Test' enum value the 'data/writeOnlyEnum' response write-only property for the response status '200'",
+		Text:        "added the new 'Test' enum value to the 'data/writeOnlyEnum' response write-only property for the response status '200'",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
