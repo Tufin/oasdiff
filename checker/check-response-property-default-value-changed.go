@@ -34,7 +34,7 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 						result = append(result, ApiChange{
 							Id:          "response-body-default-value-changed",
 							Level:       INFO,
-							Text:        fmt.Sprintf(config.i18n("response-body-default-value-changed"), ColorizedValue(mediaType), empty2none(defaultValueDiff.To), empty2none(defaultValueDiff.To), ColorizedValue(responseStatus)),
+							Text:        fmt.Sprintf(config.i18n("response-body-default-value-changed"), ColorizedValue(mediaType), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To), ColorizedValue(responseStatus)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

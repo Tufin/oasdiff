@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing response property default value
+// CL: Changing response body property default value
 func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_property_default_value_changed_base.yaml")
 	require.NoError(t, err)
@@ -30,7 +30,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing response media type default value
+// CL: Changing response body default value
 func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_property_default_value_changed_base.yaml")
 	require.NoError(t, err)
@@ -44,7 +44,7 @@ func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "response-body-default-value-changed",
-		Text:        "the response body 'text/plain' default value changed from 'new default value' to 'new default value' for the status '404'",
+		Text:        "the response body 'text/plain' default value changed from 'Error' to 'new default value' for the status '404'",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
