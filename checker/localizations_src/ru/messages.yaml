@@ -153,6 +153,7 @@ response-property-became-required: свойство %s перестало быт
 response-write-only-property-became-required: свойство только для записи %s перестало быть необязательным для ответа со статусом %s
 request-body-media-type-added: добавлен тип медиа для тела запроса %s
 request-body-media-type-removed: удален тип медиа для тела запроса %s
+response-write-only-property-enum-value-added: добавлено значение enum %s для свойства только для записи %s в ответе со статусом %s
 response-property-became-write-only: свойство %s перестало быть только для записи для ответа со статусом %s
 response-required-property-became-read-only: обязательное свойство %s перестало быть только для записи для ответа со статусом %s
 response-required-property-became-not-read-only: обязательное свойство %s перестало быть только для чтения для ответа со статусом %s

@@ -6,6 +6,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponsePropertyEnumValueAddedCheckId          = "response-property-enum-value-added"
+	ResponseWriteOnlyPropertyEnumValueAddedCheckId = "response-write-only-property-enum-value-added"
+)
+
 func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -35,16 +40,24 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 							if enumDiff == nil || enumDiff.Added == nil {
 								return
 							}
+
+							id := ResponsePropertyEnumValueAddedCheckId
+							level := WARN
+							comment := config.i18n("response-property-enum-value-added-comment")
+
 							if propertyDiff.Revision.Value.WriteOnly {
-								return
+								// Document write-only enum update
+								id = ResponseWriteOnlyPropertyEnumValueAddedCheckId
+								level = INFO
+								comment = ""
 							}
 
 							for _, enumVal := range enumDiff.Added {
 								result = append(result, ApiChange{
-									Id:          "response-property-enum-value-added",
-									Level:       WARN,
-									Text:        fmt.Sprintf(config.i18n("response-property-enum-value-added"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-									Comment:     config.i18n("response-property-enum-value-added-comment"),
+									Id:          id,
+									Level:       level,
+									Text:        fmt.Sprintf(config.i18n(id), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Comment:     comment,
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
