@@ -24,7 +24,7 @@ func TestResponsePropertyPatternChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 
 		Id:          "response-property-pattern-changed",
-		Text:        "the response property 'data/created' pattern changed from '^(?:([a-z]+-)*([a-z]+)?)$' to '^[a-z]+$' for the status '200'",
+		Text:        "the response property 'data/created' pattern changed from '^[a-z]+$' to '^(?:([a-z]+-)*([a-z]+)?)$' for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

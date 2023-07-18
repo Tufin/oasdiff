@@ -49,7 +49,7 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 							}
 
 							id := ResponsePropertyPatternChangedId
-							text := fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.To), ColorizedValue(patternDiff.From), ColorizedValue(responseStatus))
+							text := fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.From), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
 							if patternDiff.To == "" || patternDiff.To == nil {
 								id = ResponsePropertyPatternRemovedId
 								text = fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.From), ColorizedValue(responseStatus))
