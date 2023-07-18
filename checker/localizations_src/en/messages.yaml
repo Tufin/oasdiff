@@ -161,5 +161,8 @@ response-optional-property-became-write-only: the response optional property %s 
 response-optional-property-became-read-only: the response optional property %s became read-only for the status %s
 response-optional-property-became-not-write-only: the response optional property %s became not write-only for the status %s
 response-optional-property-became-not-read-only: the response optional property %s became not read-only for the status %s
-response-property-default-value-changed: the response property %s default value changed from %s to %s for the status %s
+response-property-pattern-changed: the %s response's property pattern was changed from %s to %s for the status %s
+response-property-pattern-added: the %s response's property pattern %s was added for the status %s
+response-property-pattern-removed: the %s response's property pattern %s was removed for the status %s
+response-property-default-value-changed: the %s response's property default value changed from %s to %s for the status %s
 response-body-default-value-changed: the response body %s default value changed from %s to %s for the status %s
