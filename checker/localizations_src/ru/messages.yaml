@@ -153,6 +153,7 @@ response-property-became-required: свойство %s перестало быт
 response-write-only-property-became-required: свойство только для записи %s перестало быть необязательным для ответа со статусом %s
 request-body-media-type-added: добавлен тип медиа для тела запроса %s
 request-body-media-type-removed: удален тип медиа для тела запроса %s
+response-write-only-property-enum-value-added: добавлено значение enum %s для свойства только для записи %s в ответе со статусом %s
 response-property-became-write-only: свойство %s перестало быть только для записи для ответа со статусом %s
 response-required-property-became-read-only: обязательное свойство %s перестало быть только для записи для ответа со статусом %s
 response-required-property-became-not-read-only: обязательное свойство %s перестало быть только для чтения для ответа со статусом %s
@@ -163,3 +164,5 @@ response-optional-property-became-not-read-only: необязательное с
 response-property-pattern-changed: у свойства %s для ответа со статусом %s изменился паттерн с %s на %s
 response-property-pattern-added: у свойства %s для ответа со статусом %s добавлен паттерн %s
 response-property-pattern-removed: у свойства %s для ответа со статусом %s удален паттерн %s
+response-property-default-value-changed: значение по умолчанию для свойства %s в ответе со статусом %s было изменено с %s на %s
+response-body-default-value-changed: значение по умолчанию для тела ответа со статусом %s было изменено с %s на %s
