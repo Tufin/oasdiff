@@ -20,7 +20,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "response-property-default-value-changed",
-		Text:        "the response property 'created' default value changed from '2020-01-01T00:00:00Z' to '2020-02-01T00:00:00Z' for the status '200'",
+		Text:        "the 'created' response property default value changed from '2020-01-01T00:00:00Z' to '2020-02-01T00:00:00Z' for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

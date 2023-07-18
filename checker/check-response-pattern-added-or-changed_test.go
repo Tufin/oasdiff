@@ -24,7 +24,7 @@ func TestResponsePropertyPatternChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 
 		Id:          "response-property-pattern-changed",
-		Text:        "the response property 'data/created' pattern changed from '^[a-z]+$' to '^(?:([a-z]+-)*([a-z]+)?)$' for the status '200'",
+		Text:        "the 'data/created' response property pattern was changed from '^[a-z]+$' to '^(?:([a-z]+-)*([a-z]+)?)$' for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -50,7 +50,7 @@ func TestResponsePropertyPatternAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 
 		Id:          "response-property-pattern-added",
-		Text:        "the response property 'data/created' pattern '^[a-z]+$' was added for the status '200'",
+		Text:        "the 'data/created' response property pattern '^[a-z]+$' was added for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -76,7 +76,7 @@ func TestResponsePropertyPatternRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 
 		Id:          "response-property-pattern-removed",
-		Text:        "the response property 'data/created' pattern '^[a-z]+$' was removed for the status '200'",
+		Text:        "the 'data/created' response property pattern '^[a-z]+$' was removed for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
