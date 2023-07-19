@@ -18,6 +18,7 @@ docker run --rm -t tufin/oasdiff diff https://raw.githubusercontent.com/Tufin/oa
 ## Features 
 - Detect [breaking changes](BREAKING-CHANGES.md)
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
+- Display a user-friendly [changelog](#openapi-changelog) of all important API changes
 - [Run from Docker](#running-with-docker)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
 - OpenAPI diff of local files system or remote files over http/s
@@ -30,7 +31,6 @@ docker run --rm -t tufin/oasdiff diff https://raw.githubusercontent.com/Tufin/oa
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
 - [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
-- Display a user-friendly changelog of all important API changes
 - Localization: display breaking-changes and changelog messages in English or Russian (please submit an issue if you want to add another language)
 
 
@@ -109,7 +109,7 @@ oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c 
 oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text -o
 ```
 
-### OpenAPI changelog 
+### OpenAPI changelog
 ```bash
 oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
