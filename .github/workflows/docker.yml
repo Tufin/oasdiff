@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'docker-arm64'
     tags:
       - 'v*'
 jobs:
@@ -46,6 +47,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
+          platforms: linux/amd64,linux/arm64
           context: ./
           file: ./Dockerfile
           tags: tufin/oasdiff:${{ github.ref_name }}, tufin/oasdiff:stable, tufin/oasdiff:latest
