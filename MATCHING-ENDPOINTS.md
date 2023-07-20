@@ -1,24 +1,27 @@
-## Matching Endpoints
+## How oasdiff compares endpoints
 oasdiff compares matching endpoints to each other.  
-By default, matching **excludes** path parameter names.  
+By default, the matching algorithm **ignores** path parameter names.  
 For example, the following endpoints will be compared to each other because they differ only by a path parameter names:
-| File        | Method  | Path         |
-| ----------- | ------- | ------------ |
-| `-base`     | GET     | /pet/{petId} |
-| `-resivion` | GET     | /pet/{id}    |
+- GET /pet/{id}
+- GET /pet/{petId}
 
 This capability allows oasdiff to compare matching endpoints even if their path parameters were renamed.
 
 ## Duplicate Endpoints
-Because oasdiff compares matching endpoints to each other, it expects a single instance of each endpoint to appear in the `-base` spec or collection (see [Composed Mode](README.md#composed-mode)) and in the `-revision` spec or collection.
-If duplicate matching endpoints are found in either `-base` or `-revision`, there are two options.
+Because oasdiff compares matching endpoints to each other, it expects a single instance of each endpoint to appear in each of the compared specs (or collections in [Composed Mode](README.md#composed-mode)).
 
-1. **Include** path parameter names in endpoint matching with the `-match-path-params` flag. In this case, the endpoints in the table above will be considered two different ones.
+In some cases, your specs may contain duplicate matching endpoints which will cause oasdiff to return an error, for example:
+```
+✗ oasdiff diff data/duplicate_endpoints/base.yaml data/duplicate_endpoints/revision.yaml
+Error: diff failed with duplicate endpoint (GET /pet/{petId3}) found in data/duplicate_endpoints/base.yaml and data/duplicate_endpoints/base.yaml. You may add the x-since-date extension to specify order
+```
 
-1. Use [`x-since-date`](#duplicate-endpoints-and-x-since-date)
+There are two ways to overcome this:
+1. **Include** path parameter names in endpoint matching algorithm with the `--include-path-params` flag
+2. Use [`x-since-date`](#duplicate-endpoints-and-x-since-date)
 
 ## Duplicate Endpoints and `x-since-date`
-If duplicate matching endpoints are found in either `-base` or `-resivion`, then oasdiff uses the endpoint with the most recent `x-since-date` value.
+If duplicate matching endpoints are found in either of the compared specs (or collections in [Composed Mode](README.md#composed-mode)), then oasdiff uses the endpoint with the most recent `x-since-date` value.
 
 - The `x-since-date` extension can be set at the Path or Operation level.
 - `x-since-date` extensions set on the Operation level override the value set on Path level.

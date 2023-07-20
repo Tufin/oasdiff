@@ -19,7 +19,7 @@ docker run --rm -t tufin/oasdiff diff https://raw.githubusercontent.com/Tufin/oa
 - Detect [breaking changes](BREAKING-CHANGES.md)
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
 - Display a user-friendly [changelog](#openapi-changelog) of all important API changes
-- [Run from Docker](#running-with-docker)
+- [Run from Docker](#openapi-diff-with-docker)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
 - OpenAPI diff of local files system or remote files over http/s
 - Compare specs in YAML or JSON format
