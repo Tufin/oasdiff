@@ -26,6 +26,7 @@ docker run --rm -t tufin/oasdiff diff https://raw.githubusercontent.com/Tufin/oa
 - [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - [API deprecation](API-DEPRECATION.md)
+- [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md)
 - [Path prefix modification](#path-prefix-modification)
 - [Path parameter renaming](#path-parameter-reanaming)
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
