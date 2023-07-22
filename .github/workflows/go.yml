@@ -70,6 +70,9 @@ jobs:
         version: v1.52.2
 
     - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
+
+    - id: govulncheck
+      uses: golang/govulncheck-action@v1
     
       env:
         CGO_ENABLED: '1'
