@@ -17,7 +17,7 @@ Error: diff failed with duplicate endpoint (GET /pet/{petId3}) found in data/dup
 ```
 
 There are two ways to overcome this:
-1. **Include** path parameter names in endpoint matching algorithm with the `--include-path-params` flag
+1. **Include** path parameter names in the endpoint matching algorithm with the `--include-path-params` flag
 2. Use [`x-since-date`](#duplicate-endpoints-and-x-since-date)
 
 ## Duplicate Endpoints and `x-since-date`
