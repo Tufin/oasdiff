@@ -614,7 +614,7 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 	require.Equal(t, "removed the schema 'rules'", errs[1].GetText())
 }
 
-// BC: removing a media type from requesst body is breaking
+// BC: removing a media type from request body is breaking
 func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_body_media_type_updated_revision.yaml")
 	require.NoError(t, err)
@@ -628,4 +628,24 @@ func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Equal(t, "request-body-media-type-removed", errs[0].GetId())
 	require.Equal(t, "removed the media type application/json from the request body", errs[0].GetText())
+}
+
+// BC: removing 'anyOf' schema from the request body or request body property
+func TestBreaking_RequestPropertyAnyOffRemoved(t *testing.T) {
+	s1, err := open("../data/checker/request_property_any_of_removed_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_any_of_removed_revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+
+	require.Len(t, errs, 2)
+
+	require.Equal(t, "request-body-any-of-removed", errs[0].GetId())
+	require.Equal(t, "removed ''Rabbit'' from the request body 'anyOf' list", errs[0].GetText())
+
+	require.Equal(t, "request-property-any-of-removed", errs[1].GetId())
+	require.Equal(t, "removed ''Breed3'' from the '/anyOf[#/components/schemas/Dog]/breed' request property 'anyOf' list", errs[1].GetText())
 }
