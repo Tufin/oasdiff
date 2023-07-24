@@ -26,10 +26,10 @@ func TestRequestPropertyOneOffAdded(t *testing.T) {
 		Text:        "added ''Rabbit'' to the request body 'oneOf' list",
 		Comment:     "",
 		Level:       checker.INFO,
-		Operation:   "GET",
+		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_one_of_added_revision.yaml",
-		OperationId: "listPets",
+		OperationId: "updatePets",
 	}, errs[0])
 
 	require.Equal(t, checker.ApiChange{
@@ -37,10 +37,10 @@ func TestRequestPropertyOneOffAdded(t *testing.T) {
 		Text:        "added ''Breed3'' to the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list",
 		Comment:     "",
 		Level:       checker.INFO,
-		Operation:   "GET",
+		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_one_of_added_revision.yaml",
-		OperationId: "listPets",
+		OperationId: "updatePets",
 	}, errs[1])
 }
 
@@ -62,10 +62,10 @@ func TestRequestPropertyOneOffRemoved(t *testing.T) {
 		Text:        "removed ''Rabbit'' from the request body 'oneOf' list",
 		Comment:     "",
 		Level:       checker.ERR,
-		Operation:   "GET",
+		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_one_of_removed_revision.yaml",
-		OperationId: "listPets",
+		OperationId: "updatePets",
 	}, errs[0])
 
 	require.Equal(t, checker.ApiChange{
@@ -73,9 +73,9 @@ func TestRequestPropertyOneOffRemoved(t *testing.T) {
 		Text:        "removed ''Breed3'' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list",
 		Comment:     "",
 		Level:       checker.ERR,
-		Operation:   "GET",
+		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_one_of_removed_revision.yaml",
-		OperationId: "listPets",
+		OperationId: "updatePets",
 	}, errs[1])
 }

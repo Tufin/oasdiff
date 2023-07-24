@@ -5,8 +5,8 @@ info:
 
 paths:
   /pets:
-    get:
-      operationId: listPets
+    post:
+      operationId: updatePets
       requestBody:
         content:
           application/json:

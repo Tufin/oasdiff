@@ -5,18 +5,16 @@ info:
 
 paths:
   /pets:
-    post:
-      operationId: updatePets
-      requestBody:
-        content:
-          application/json:
-            schema:
-              oneOf:
-                - $ref: "#/components/schemas/Dog"
-                - $ref: "#/components/schemas/Cat"
+    get:
+      operationId: listPets
       responses:
         "200":
-          description: Updated
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Dog"
+                  - $ref: "#/components/schemas/Cat"
 
 components:
   schemas:

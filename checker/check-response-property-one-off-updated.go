@@ -51,10 +51,10 @@ func ResponsePropertyOneOffUpdated(diffReport *diff.Diff, operationsSources *dif
 
 					if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted > 0 {
 						result = append(result, ApiChange{
-							Id:    "response-body-one-of-deleted",
+							Id:    "response-body-one-of-removed",
 							Level: INFO,
 							Text: fmt.Sprintf(
-								config.i18n("response-body-one-of-deleted"),
+								config.i18n("response-body-one-of-removed"),
 								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.DeletedSchemas.String()),
 								responseStatus),
 							Operation:   operation,
@@ -89,10 +89,10 @@ func ResponsePropertyOneOffUpdated(diffReport *diff.Diff, operationsSources *dif
 
 							if propertyDiff.OneOfDiff.Deleted > 0 {
 								result = append(result, ApiChange{
-									Id:    "response-property-one-of-deleted",
+									Id:    "response-property-one-of-removed",
 									Level: INFO,
 									Text: fmt.Sprintf(
-										config.i18n("response-property-one-of-deleted"),
+										config.i18n("response-property-one-of-removed"),
 										ColorizedValue(propertyDiff.OneOfDiff.DeletedSchemas.String()),
 										ColorizedValue(propertyFullName(propertyPath, propertyName)),
 										responseStatus),
