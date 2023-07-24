@@ -24,7 +24,7 @@ func TestResponsePropertyAnyOfAdded(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "response-body-any-of-added",
-			Text:        "added ''Rabbit'' to the response body 'anyOf' list for the response status 200",
+			Text:        "added 'Rabbit' to the response body 'anyOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -34,7 +34,7 @@ func TestResponsePropertyAnyOfAdded(t *testing.T) {
 		},
 		{
 			Id:          "response-property-any-of-added",
-			Text:        "added ''Breed3'' to the '/anyOf[#/components/schemas/Dog]/breed' response property 'anyOf' list for the response status 200",
+			Text:        "added 'Breed3' to the '/anyOf[#/components/schemas/Dog]/breed' response property 'anyOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -60,7 +60,7 @@ func TestResponsePropertyAnyOfRemoved(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "response-body-any-of-removed",
-			Text:        "removed ''Rabbit'' from the response body 'anyOf' list for the response status 200",
+			Text:        "removed 'Rabbit' from the response body 'anyOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -70,7 +70,7 @@ func TestResponsePropertyAnyOfRemoved(t *testing.T) {
 		},
 		{
 			Id:          "response-property-any-of-removed",
-			Text:        "removed ''Breed3'' from the '/anyOf[#/components/schemas/Dog]/breed' response property 'anyOf' list for the response status 200",
+			Text:        "removed 'Breed3' from the '/anyOf[#/components/schemas/Dog]/breed' response property 'anyOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
