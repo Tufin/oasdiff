@@ -44,7 +44,7 @@ func TestRequestPropertyOneOffAdded(t *testing.T) {
 	}, errs[1])
 }
 
-// BC: removing 'oneOf' schema from the request body or request body property
+// CL: removing 'oneOf' schema from the request body or request body property
 func TestRequestPropertyOneOffRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_one_of_removed_base.yaml")
 	require.NoError(t, err)

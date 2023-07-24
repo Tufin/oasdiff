@@ -209,5 +209,6 @@ These examples are automatically generated from unit tests.
 [new paths or path operations](checker/check-api-added_test.go?plain=1#L11)  
 [path operations that became deprecated](checker/checker_deprecation_test.go?plain=1#L324)  
 [path operations that were re-activated](checker/checker_deprecation_test.go?plain=1#L346)  
+[removing 'oneOf' schema from the request body or request body property](checker/check-request-property-one-off-updated_test.go?plain=1#L47)  
 [removing 'oneOf' schema from the response body or response body property](checker/check-response-property-one-off-updated_test.go?plain=1#L47)  
 [removing a required write-only property that was required in response body is detected](checker/check-response-required-property-updated_test.go?plain=1#L85)  
