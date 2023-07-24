@@ -645,11 +645,11 @@ func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
 
 	require.Equal(t, "request-body-all-of-added", errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
-	require.Equal(t, "added ''Rabbit'' to the request body 'allOf' list", errs[0].GetText())
+	require.Equal(t, "added 'Rabbit' to the request body 'allOf' list", errs[0].GetText())
 
 	require.Equal(t, "request-property-all-of-added", errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
-	require.Equal(t, "added ''Breed3'' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
+	require.Equal(t, "added 'Breed3' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
 }
 
 // BC: removing 'allOf' schema from the request body or request body property
@@ -667,9 +667,9 @@ func TestBreaking_RequestPropertyAllOfRemoved(t *testing.T) {
 
 	require.Equal(t, "request-body-all-of-removed", errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
-	require.Equal(t, "removed ''Rabbit'' from the request body 'allOf' list", errs[0].GetText())
+	require.Equal(t, "removed 'Rabbit' from the request body 'allOf' list", errs[0].GetText())
 
 	require.Equal(t, "request-property-all-of-removed", errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
-	require.Equal(t, "removed ''Breed3'' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
+	require.Equal(t, "removed 'Breed3' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
 }
