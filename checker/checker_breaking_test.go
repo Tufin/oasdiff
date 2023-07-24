@@ -614,7 +614,7 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 	require.Equal(t, "removed the schema 'rules'", errs[1].GetText())
 }
 
-// BC: removing a media type from requesst body is breaking
+// BC: removing a media type from request body is breaking
 func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_body_media_type_updated_revision.yaml")
 	require.NoError(t, err)
@@ -628,4 +628,48 @@ func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Equal(t, "request-body-media-type-removed", errs[0].GetId())
 	require.Equal(t, "removed the media type application/json from the request body", errs[0].GetText())
+}
+
+// BC: adding 'allOf' schema from the request body or request body property
+func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
+	s1, err := open("../data/checker/request_property_all_of_added_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_all_of_added_revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+
+	require.Len(t, errs, 2)
+
+	require.Equal(t, "request-body-all-of-added", errs[0].GetId())
+	require.Equal(t, checker.ERR, errs[0].GetLevel())
+	require.Equal(t, "added ''Rabbit'' to the request body 'allOf' list", errs[0].GetText())
+
+	require.Equal(t, "request-property-all-of-added", errs[1].GetId())
+	require.Equal(t, checker.ERR, errs[1].GetLevel())
+	require.Equal(t, "added ''Breed3'' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
+}
+
+// BC: removing 'allOf' schema from the request body or request body property
+func TestBreaking_RequestPropertyAllOfRemoved(t *testing.T) {
+	s1, err := open("../data/checker/request_property_all_of_removed_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_all_of_removed_revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+
+	require.Len(t, errs, 2)
+
+	require.Equal(t, "request-body-all-of-removed", errs[0].GetId())
+	require.Equal(t, checker.ERR, errs[0].GetLevel())
+	require.Equal(t, "removed ''Rabbit'' from the request body 'allOf' list", errs[0].GetText())
+
+	require.Equal(t, "request-property-all-of-removed", errs[1].GetId())
+	require.Equal(t, checker.ERR, errs[1].GetLevel())
+	require.Equal(t, "removed ''Breed3'' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
 }
