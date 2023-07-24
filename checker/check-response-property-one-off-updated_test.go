@@ -24,7 +24,7 @@ func TestResponsePropertyOneOffAdded(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "response-body-one-of-added",
-			Text:        "added ''Rabbit'' to the response body 'oneOf' list for the response status 200",
+			Text:        "added 'Rabbit' to the response body 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -34,7 +34,7 @@ func TestResponsePropertyOneOffAdded(t *testing.T) {
 		},
 		{
 			Id:          "response-property-one-of-added",
-			Text:        "added ''Breed3'' to the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
+			Text:        "added 'Breed3' to the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -60,7 +60,7 @@ func TestResponsePropertyOneOffRemoved(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "response-body-one-of-removed",
-			Text:        "removed ''Rabbit'' from the response body 'oneOf' list for the response status 200",
+			Text:        "removed 'Rabbit' from the response body 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -70,7 +70,7 @@ func TestResponsePropertyOneOffRemoved(t *testing.T) {
 		},
 		{
 			Id:          "response-property-one-of-removed",
-			Text:        "removed ''Breed3'' from the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
+			Text:        "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",

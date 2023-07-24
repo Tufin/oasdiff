@@ -645,9 +645,9 @@ func TestBreaking_RequestPropertyOneOffRemoved(t *testing.T) {
 
 	require.Equal(t, "request-body-one-of-removed", errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
-	require.Equal(t, "removed ''Rabbit'' from the request body 'oneOf' list", errs[0].GetText())
+	require.Equal(t, "removed 'Rabbit' from the request body 'oneOf' list", errs[0].GetText())
 
 	require.Equal(t, "request-property-one-of-removed", errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
-	require.Equal(t, "removed ''Breed3'' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list", errs[1].GetText())
+	require.Equal(t, "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list", errs[1].GetText())
 }

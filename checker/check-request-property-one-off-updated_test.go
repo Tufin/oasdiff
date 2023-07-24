@@ -24,7 +24,7 @@ func TestRequestPropertyOneOffAdded(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "request-body-one-of-added",
-			Text:        "added ''Rabbit'' to the request body 'oneOf' list",
+			Text:        "added 'Rabbit' to the request body 'oneOf' list",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -34,7 +34,7 @@ func TestRequestPropertyOneOffAdded(t *testing.T) {
 		},
 		{
 			Id:          "request-property-one-of-added",
-			Text:        "added ''Breed3'' to the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list",
+			Text:        "added 'Breed3' to the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -60,7 +60,7 @@ func TestRequestPropertyOneOffRemoved(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "request-body-one-of-removed",
-			Text:        "removed ''Rabbit'' from the request body 'oneOf' list",
+			Text:        "removed 'Rabbit' from the request body 'oneOf' list",
 			Comment:     "",
 			Level:       checker.ERR,
 			Operation:   "POST",
@@ -70,7 +70,7 @@ func TestRequestPropertyOneOffRemoved(t *testing.T) {
 		},
 		{
 			Id:          "request-property-one-of-removed",
-			Text:        "removed ''Breed3'' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list",
+			Text:        "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list",
 			Comment:     "",
 			Level:       checker.ERR,
 			Operation:   "POST",
