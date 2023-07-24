@@ -21,27 +21,27 @@ func TestResponsePropertyOneOffAdded(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.Equal(t, checker.ApiChange{
-		Id:          "response-body-one-of-added",
-		Text:        "added ''Rabbit'' to the response body 'oneOf' list for the response status 200",
-		Comment:     "",
-		Level:       checker.INFO,
-		Operation:   "GET",
-		Path:        "/pets",
-		Source:      "../data/checker/response_property_one_of_added_revision.yaml",
-		OperationId: "listPets",
-	}, errs[0])
-
-	require.Equal(t, checker.ApiChange{
-		Id:          "response-property-one-of-added",
-		Text:        "added ''Breed3'' to the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
-		Comment:     "",
-		Level:       checker.INFO,
-		Operation:   "GET",
-		Path:        "/pets",
-		Source:      "../data/checker/response_property_one_of_added_revision.yaml",
-		OperationId: "listPets",
-	}, errs[1])
+	require.ElementsMatch(t, []checker.ApiChange{
+		{
+			Id:          "response-body-one-of-added",
+			Text:        "added ''Rabbit'' to the response body 'oneOf' list for the response status 200",
+			Comment:     "",
+			Level:       checker.INFO,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      "../data/checker/response_property_one_of_added_revision.yaml",
+			OperationId: "listPets",
+		},
+		{
+			Id:          "response-property-one-of-added",
+			Text:        "added ''Breed3'' to the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
+			Comment:     "",
+			Level:       checker.INFO,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      "../data/checker/response_property_one_of_added_revision.yaml",
+			OperationId: "listPets",
+		}}, errs)
 }
 
 // CL: removing 'oneOf' schema from the response body or response body property
@@ -57,25 +57,25 @@ func TestResponsePropertyOneOffRemoved(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.Equal(t, checker.ApiChange{
-		Id:          "response-body-one-of-removed",
-		Text:        "removed ''Rabbit'' from the response body 'oneOf' list for the response status 200",
-		Comment:     "",
-		Level:       checker.INFO,
-		Operation:   "GET",
-		Path:        "/pets",
-		Source:      "../data/checker/response_property_one_of_removed_revision.yaml",
-		OperationId: "listPets",
-	}, errs[0])
-
-	require.Equal(t, checker.ApiChange{
-		Id:          "response-property-one-of-removed",
-		Text:        "removed ''Breed3'' from the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
-		Comment:     "",
-		Level:       checker.INFO,
-		Operation:   "GET",
-		Path:        "/pets",
-		Source:      "../data/checker/response_property_one_of_removed_revision.yaml",
-		OperationId: "listPets",
-	}, errs[1])
+	require.ElementsMatch(t, []checker.ApiChange{
+		{
+			Id:          "response-body-one-of-removed",
+			Text:        "removed ''Rabbit'' from the response body 'oneOf' list for the response status 200",
+			Comment:     "",
+			Level:       checker.INFO,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      "../data/checker/response_property_one_of_removed_revision.yaml",
+			OperationId: "listPets",
+		},
+		{
+			Id:          "response-property-one-of-removed",
+			Text:        "removed ''Breed3'' from the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
+			Comment:     "",
+			Level:       checker.INFO,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      "../data/checker/response_property_one_of_removed_revision.yaml",
+			OperationId: "listPets",
+		}}, errs)
 }
