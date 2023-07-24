@@ -21,27 +21,27 @@ func TestRequestPropertyAllOfAdded(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-all-of-added",
-		Text:        "added ''Rabbit'' to the request body 'allOf' list",
-		Comment:     "",
-		Level:       checker.ERR,
-		Operation:   "POST",
-		Path:        "/pets",
-		Source:      "../data/checker/request_property_all_of_added_revision.yaml",
-		OperationId: "updatePets",
-	}, errs[0])
-
-	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-all-of-added",
-		Text:        "added ''Breed3'' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list",
-		Comment:     "",
-		Level:       checker.ERR,
-		Operation:   "POST",
-		Path:        "/pets",
-		Source:      "../data/checker/request_property_all_of_added_revision.yaml",
-		OperationId: "updatePets",
-	}, errs[1])
+	require.ElementsMatch(t, []checker.ApiChange{
+		{
+			Id:          "request-body-all-of-added",
+			Text:        "added ''Rabbit'' to the request body 'allOf' list",
+			Comment:     "",
+			Level:       checker.ERR,
+			Operation:   "POST",
+			Path:        "/pets",
+			Source:      "../data/checker/request_property_all_of_added_revision.yaml",
+			OperationId: "updatePets",
+		},
+		{
+			Id:          "request-property-all-of-added",
+			Text:        "added ''Breed3'' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list",
+			Comment:     "",
+			Level:       checker.ERR,
+			Operation:   "POST",
+			Path:        "/pets",
+			Source:      "../data/checker/request_property_all_of_added_revision.yaml",
+			OperationId: "updatePets",
+		}}, errs)
 }
 
 // CL: removing 'allOf' schema from the request body or request body property
@@ -57,25 +57,25 @@ func TestRequestPropertyAllOfRemoved(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-all-of-removed",
-		Text:        "removed ''Rabbit'' from the request body 'allOf' list",
-		Comment:     "",
-		Level:       checker.ERR,
-		Operation:   "POST",
-		Path:        "/pets",
-		Source:      "../data/checker/request_property_all_of_removed_revision.yaml",
-		OperationId: "updatePets",
-	}, errs[0])
-
-	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-all-of-removed",
-		Text:        "removed ''Breed3'' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list",
-		Comment:     "",
-		Level:       checker.ERR,
-		Operation:   "POST",
-		Path:        "/pets",
-		Source:      "../data/checker/request_property_all_of_removed_revision.yaml",
-		OperationId: "updatePets",
-	}, errs[1])
+	require.ElementsMatch(t, []checker.ApiChange{
+		{
+			Id:          "request-body-all-of-removed",
+			Text:        "removed ''Rabbit'' from the request body 'allOf' list",
+			Comment:     "",
+			Level:       checker.ERR,
+			Operation:   "POST",
+			Path:        "/pets",
+			Source:      "../data/checker/request_property_all_of_removed_revision.yaml",
+			OperationId: "updatePets",
+		},
+		{
+			Id:          "request-property-all-of-removed",
+			Text:        "removed ''Breed3'' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list",
+			Comment:     "",
+			Level:       checker.ERR,
+			Operation:   "POST",
+			Path:        "/pets",
+			Source:      "../data/checker/request_property_all_of_removed_revision.yaml",
+			OperationId: "updatePets",
+		}}, errs)
 }
