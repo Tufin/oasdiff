@@ -9,7 +9,7 @@ import (
 )
 
 // CL: adding 'anyOf' schema to the request body or request body property
-func TestRequestPropertyAnyOffAdded(t *testing.T) {
+func TestRequestPropertyAnyOfAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_property_any_of_added_base.yaml")
 	require.NoError(t, err)
 	s2, err := open("../data/checker/request_property_any_of_added_revision.yaml")
@@ -17,7 +17,7 @@ func TestRequestPropertyAnyOffAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyAnyOffUpdated), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyAnyOfUpdated), d, osm, checker.INFO)
 
 	require.Len(t, errs, 2)
 
@@ -45,7 +45,7 @@ func TestRequestPropertyAnyOffAdded(t *testing.T) {
 }
 
 // CL: removing 'anyOf' schema from the request body or request body property
-func TestRequestPropertyAnyOffRemoved(t *testing.T) {
+func TestRequestPropertyAnyOfRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_any_of_removed_base.yaml")
 	require.NoError(t, err)
 	s2, err := open("../data/checker/request_property_any_of_removed_revision.yaml")
@@ -53,7 +53,7 @@ func TestRequestPropertyAnyOffRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyAnyOffUpdated), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyAnyOfUpdated), d, osm, checker.INFO)
 
 	require.Len(t, errs, 2)
 
