@@ -55,9 +55,6 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 								return
 							}
 
-							if propertyDiff.Revision.Value.ReadOnly {
-								return
-							}
 							schemaDiff := propertyDiff
 							typeDiff := schemaDiff.TypeDiff
 							formatDiff := schemaDiff.FormatDiff
