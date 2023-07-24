@@ -196,6 +196,7 @@ These examples are automatically generated from unit tests.
 [Removing response property pattern](checker/check-response-pattern-added-or-changed_test.go?plain=1#L63)  
 [Updating an existing operation id](checker/check-api-operation-id-updated_test.go?plain=1#L36)  
 [Updating an existing tag](checker/check-api-tag-updated_test.go?plain=1#L62)  
+[adding 'oneOf' schema to the request body or request body property](checker/check-request-property-one-off-updated_test.go?plain=1#L11)  
 [adding a required write-only property to response body is detected](checker/check-response-required-property-updated_test.go?plain=1#L59)  
 [changing an existing header param from required to optional](checker/checker_request_parameter_required_value_updated_test.go?plain=1#L35)  
 [changing an existing header param to optional](checker/checker_not_breaking_test.go?plain=1#L133)  

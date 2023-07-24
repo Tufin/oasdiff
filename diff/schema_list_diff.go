@@ -2,8 +2,10 @@ package diff
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 /*
@@ -13,9 +15,11 @@ The result is a combination of two diffs:
 2. Diff of schemas without a $ref (inline schemas): number of added/deleted schemas; modified=only if exactly one schema was added and one deleted, the Modified field will show a diff between them
 */
 type SchemaListDiff struct {
-	Added    int             `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  int             `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedSchemas `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added          int              `json:"added,omitempty" yaml:"added,omitempty"`
+	AddedSchemas   utils.StringList `json:"-" yaml:"-"`
+	Deleted        int              `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	DeletedSchemas utils.StringList `json:"-" yaml:"-"`
+	Modified       ModifiedSchemas  `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -45,9 +49,11 @@ func getSchemaListsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 o
 func (diff SchemaListDiff) combine(other SchemaListDiff) (*SchemaListDiff, error) {
 
 	return &SchemaListDiff{
-		Added:    diff.Added + other.Added,
-		Deleted:  diff.Deleted + other.Deleted,
-		Modified: diff.Modified.combine(other.Modified),
+		Added:          diff.Added + other.Added,
+		AddedSchemas:   append(diff.AddedSchemas, other.AddedSchemas...),
+		Deleted:        diff.Deleted + other.Deleted,
+		DeletedSchemas: append(diff.DeletedSchemas, other.DeletedSchemas...),
+		Modified:       diff.Modified.combine(other.Modified),
 	}, nil
 }
 
@@ -74,7 +80,10 @@ type schemaRefsFilter func(schemaRef *openapi3.SchemaRef) bool
 
 // getSchemaListsRefsDiff compares schemas by $ref name
 func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SchemaListDiff, error) {
+	added := 0
+	addedSchemas := utils.StringList{}
 	deleted := 0
+	deletedSchemas := utils.StringList{}
 	modified := ModifiedSchemas{}
 
 	schemaMap2 := toSchemaRefMap(schemaRefs2, filter)
@@ -90,10 +99,11 @@ func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRef
 			}
 		} else {
 			deleted++
+			schemaName := ref[strings.LastIndex(ref, "/")+1:]
+			deletedSchemas = append(deletedSchemas, schemaName)
 		}
 	}
 
-	added := 0
 	schemaMap1 := toSchemaRefMap(schemaRefs1, filter)
 	for _, schema2 := range schemaRefs2 {
 		if !filter(schema2) {
@@ -104,12 +114,16 @@ func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRef
 			schemaMap1.delete(ref)
 		} else {
 			added++
+			schemaName := ref[strings.LastIndex(ref, "/")+1:]
+			addedSchemas = append(addedSchemas, schemaName)
 		}
 	}
 	return SchemaListDiff{
-		Added:    added,
-		Deleted:  deleted,
-		Modified: modified,
+		Added:          added,
+		AddedSchemas:   addedSchemas,
+		Deleted:        deleted,
+		DeletedSchemas: deletedSchemas,
+		Modified:       modified,
 	}, nil
 }
 
