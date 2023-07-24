@@ -138,6 +138,9 @@ These examples are automatically generated from unit tests.
 [renaming a path parameter is not breaking](checker/checker_breaking_test.go?plain=1#L135)  
 
 ## Examples of info-level changes for changelog
+[Adding request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L36)  
+[Changing request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L11)  
+[Removing request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L59)  
 [adding 'oneOf' schema to the request body or request body property](checker/check-request-property-one-of-updated_test.go?plain=1#L11)  
 [adding 'oneOf' schema to the response body or response body property](checker/check-response-property-one-of-updated_test.go?plain=1#L11)  
 [adding a new global security to the API](checker/check-api-security-updated_test.go?plain=1#L11)  
