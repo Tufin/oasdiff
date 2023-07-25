@@ -47,6 +47,8 @@ request-parameter-max-increased: в %s параметре запроса %s, max
 request-parameter-default-value-changed: в %s параметре запроса %s, значение по умолчанию изменено с %s на %s
 request-parameter-max-length-decreased: в %s параметре запроса %s, maxLength уменьшен с %s до %s
 request-parameter-max-length-increased: в %s параметре запроса %s, maxLength увеличен с %s до %s
+request-parameter-min-length-increased: в %s параметре запроса %s, minLength увеличен с %s до %s
+request-parameter-min-length-decreased: в %s параметре запроса %s, minLength уменьшен с %s до %s
 request-parameter-max-length-set: в %s параметре запроса %s, maxLength установлен в %s
 request-parameter-max-length-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
 request-parameter-max-set: в %s параметре запроса %s, max установлен в %s
