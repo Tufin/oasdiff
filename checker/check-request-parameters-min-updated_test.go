@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Increasing minimum value of request parameter
+// CL: increasing minimum value of request parameter
 func TestRequestParameterMinIncreased(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_min_increased_base.yaml")
 	require.NoError(t, err)
@@ -30,7 +30,7 @@ func TestRequestParameterMinIncreased(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Decreasing minimum value of request parameter
+// CL: decreasing minimum value of request parameter
 func TestRequestParameterMinDecreased(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_min_increased_revision.yaml")
 	require.NoError(t, err)
