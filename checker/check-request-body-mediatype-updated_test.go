@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Adding a new media type to request body
+// CL: adding a new media type to request body
 func TestRequestBodyMediaTypeAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_body_media_type_updated_base.yaml")
 	require.NoError(t, err)
@@ -31,7 +31,7 @@ func TestRequestBodyMediaTypeAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing media type from request body
+// CL: removing media type from request body
 func TestRequestBodyMediaTypeRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_body_media_type_updated_revision.yaml")
 	require.NoError(t, err)

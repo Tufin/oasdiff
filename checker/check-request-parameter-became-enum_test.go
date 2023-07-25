@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing request parameter type to enum
+// CL: changing request parameter type to enum
 func TestRequestParameterBecameEnum(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_became_enum_base.yaml")
 	require.NoError(t, err)

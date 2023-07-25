@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing security component oauth's url
+// CL: changing security component oauth's url
 func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -30,7 +30,7 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing security component type
+// CL: changing security component type
 func TestComponentSecurityTypeUpdated(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -52,7 +52,7 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding a new security component
+// CL: adding a new security component
 func TestComponentSecurityAdded(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -72,7 +72,7 @@ func TestComponentSecurityAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing a new security component
+// CL: removing a new security component
 func TestComponentSecurityRemoved(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_revision.yaml")
 	require.NoError(t, err)
@@ -92,7 +92,7 @@ func TestComponentSecurityRemoved(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding a new oauth security scope
+// CL: adding a new oauth security scope
 func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -114,7 +114,7 @@ func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing a new oauth security scope
+// CL: removing a new oauth security scope
 func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -137,7 +137,7 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing a new oauth security scope
+// CL: removing a new oauth security scope
 func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)

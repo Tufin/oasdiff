@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Adding an enum value to a response property
+// CL: adding an enum value to a response property
 func TestResponsePropertyEnumValueAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_property_enum_added_base.yaml")
 	require.NoError(t, err)
@@ -33,7 +33,7 @@ func TestResponsePropertyEnumValueAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding an enum value to a response write-only property
+// CL: adding an enum value to a response write-only property
 func TestResponseWriteOnlyPropertyEnumValueAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_property_enum_added_base.yaml")
 	require.NoError(t, err)

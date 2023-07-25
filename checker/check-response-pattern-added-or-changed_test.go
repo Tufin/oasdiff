@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing response property pattern
+// CL: changing response property pattern
 func TestResponsePropertyPatternChanged(t *testing.T) {
 	s1, err := open("../data/checker/response_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)
@@ -34,7 +34,7 @@ func TestResponsePropertyPatternChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding response property pattern
+// CL: adding response property pattern
 func TestResponsePropertyPatternAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)
@@ -60,7 +60,7 @@ func TestResponsePropertyPatternAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing response property pattern
+// CL: removing response property pattern
 func TestResponsePropertyPatternRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)

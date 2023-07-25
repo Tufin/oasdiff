@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Adding a success response status
+// CL: adding a success response status
 func TestResponseSuccessStatusAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
@@ -34,7 +34,7 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding a non-success response status
+// CL: adding a non-success response status
 func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
@@ -60,7 +60,7 @@ func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing a non-success response status
+// CL: removing a non-success response status
 func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
@@ -86,7 +86,7 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	}, errs[0])
 }
 
-// BC: Removing a success status is breaking
+// BC: removing a success status is breaking
 func TestResponseSuccessStatusRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
