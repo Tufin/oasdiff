@@ -52,6 +52,7 @@ request-parameter-max-set-comment: "This is a warning because sometimes it is re
 request-parameter-min-increased: for the %s request parameter %s, the min was increased from %s to %s
 request-parameter-min-decreased: for the %s request parameter %s, the min was decreased from %s to %s
 request-parameter-min-items-increased: for the %s request parameter %s, the minItems was increased from %s to %s
+request-parameter-min-items-decreased: for the %s request parameter %s, the minItems was decreased from %s to %s
 request-parameter-min-items-set: for the %s request parameter %s, the minItems was set to %s
 request-parameter-min-items-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
 request-parameter-min-set: for the %s request parameter %s, the min was set to %s

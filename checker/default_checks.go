@@ -105,7 +105,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		RequestParameterMaxDecreasedCheck,
 		RequestParameterMinUpdatedCheck,
 		RequestParameterMinItemsSetCheck,
-		RequestParameterMinItemsIncreasedCheck,
+		RequestParameterMinItemsUpdatedCheck,
 		RequestPropertyMinItemsSetCheck,
 		RequestPropertyMinItemsIncreasedCheck,
 		ResponsePropertyMinItemsUnsetCheck,

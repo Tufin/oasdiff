@@ -52,6 +52,7 @@ request-parameter-max-set-comment: Это предупреждение, пото
 request-parameter-min-increased: в %s параметре запроса %s, min увеличен с %s до %s
 request-parameter-min-decreased: в %s параметре запроса %s, min уменьшен с %s до %s
 request-parameter-min-items-increased: в %s параметре запроса %s, minItems увеличен с %s до %s
+request-parameter-min-items-decreased: в %s параметре запроса %s, minItems уменьшен с %s до %s
 request-parameter-min-items-set: в %s параметре запроса %s, minItems установлен в %s
 request-parameter-min-items-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
 request-parameter-min-set: в %s параметре запроса %s, min установлен в %s
