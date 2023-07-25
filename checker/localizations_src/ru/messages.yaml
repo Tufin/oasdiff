@@ -40,6 +40,7 @@ request-parameter-became-required: ранее необязательный %s п
 request-parameter-became-optional: ранее необязательный параметр запроса %s %s теперь является необязательным
 request-parameter-became-enum: заголовок запроса %s поле %s было ограничено списком значений перечисления
 request-parameter-enum-value-removed: удалено значение enum %s у %s параметра запроса %s
+request-parameter-enum-value-added: добавлено значение enum %s у %s параметра запроса %s
 pattern-changed-warn-comment: Это предупреждение, потому что сложно автоматически проанализировать, является ли новый шаблон надмножеством предыдущего шаблона (например, изменен с '[0-9]+' на '[0-9]*').
 request-parameter-x-extensible-enum-value-removed: удалено из x-extensible-enum значение %s у %s параметра запроса %s
 request-parameter-max-decreased: в %s параметре запроса %s, max уменьшен с %s до %s
