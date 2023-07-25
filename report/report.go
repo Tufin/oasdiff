@@ -392,10 +392,10 @@ func (r *report) printSchemaListDiff(d *diff.SchemaListDiff) {
 		return
 	}
 
-	if d.Added > 0 {
+	if len(d.Added) > 0 {
 		r.print(d.Added, "schemas added")
 	}
-	if d.Deleted > 0 {
+	if len(d.Deleted) > 0 {
 		r.print(d.Deleted, "schemas deleted")
 	}
 	if len(d.Modified) > 0 {

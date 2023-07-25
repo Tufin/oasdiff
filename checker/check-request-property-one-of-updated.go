@@ -31,13 +31,13 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 					continue
 				}
 
-				if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && mediaTypeDiff.SchemaDiff.OneOfDiff.Added > 0 {
+				if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Added) > 0 {
 					result = append(result, ApiChange{
 						Id:    "request-body-one-of-added",
 						Level: INFO,
 						Text: fmt.Sprintf(
 							config.i18n("request-body-one-of-added"),
-							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.AddedSchemas.String())),
+							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String())),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -45,13 +45,13 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 					})
 				}
 
-				if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted > 0 {
+				if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted) > 0 {
 					result = append(result, ApiChange{
 						Id:    "request-body-one-of-removed",
 						Level: ERR,
 						Text: fmt.Sprintf(
 							config.i18n("request-body-one-of-removed"),
-							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.DeletedSchemas.String())),
+							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String())),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -66,13 +66,13 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 							return
 						}
 
-						if propertyDiff.OneOfDiff.Added > 0 {
+						if len(propertyDiff.OneOfDiff.Added) > 0 {
 							result = append(result, ApiChange{
 								Id:    "request-property-one-of-added",
 								Level: INFO,
 								Text: fmt.Sprintf(
 									config.i18n("request-property-one-of-added"),
-									ColorizedValue(propertyDiff.OneOfDiff.AddedSchemas.String()),
+									ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
 									ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -81,13 +81,13 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 							})
 						}
 
-						if propertyDiff.OneOfDiff.Deleted > 0 {
+						if len(propertyDiff.OneOfDiff.Deleted) > 0 {
 							result = append(result, ApiChange{
 								Id:    "request-property-one-of-removed",
 								Level: ERR,
 								Text: fmt.Sprintf(
 									config.i18n("request-property-one-of-removed"),
-									ColorizedValue(propertyDiff.OneOfDiff.DeletedSchemas.String()),
+									ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
 									ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
