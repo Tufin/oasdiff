@@ -182,8 +182,13 @@ These examples are automatically generated from unit tests.
 [Changing request parameter type to enum](checker/check-request-parameter-became-enum_test.go?plain=1#L11)  
 [Changing request path parameter format](checker/check-request-parameters-type-changed_test.go?plain=1#L86)  
 [Changing request path parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L11)  
+<<<<<<< HEAD
 [Changing request query parameter format](checker/check-request-parameters-type-changed_test.go?plain=1#L111)  
 [Changing request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L11)  
+=======
+[Changing request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L11)  
+[Changing request query parameter format](checker/check-request-parameters-type-changed_test.go?plain=1#L111)  
+>>>>>>> 3b0185a (Update file)
 [Changing request query parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L36)  
 [Changing required response property to not read-only](checker/check-response-required-property-write-only-read-only_test.go?plain=1#L89)  
 [Changing required response property to not write-only](checker/check-response-required-property-write-only-read-only_test.go?plain=1#L37)  
