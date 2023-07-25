@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing optional response property to write-only
+// CL: changing optional response property to write-only
 func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
 	require.NoError(t, err)
@@ -34,7 +34,7 @@ func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing optional response property to not write-only
+// CL: changing optional response property to not write-only
 func TestResponseOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
 	require.NoError(t, err)
@@ -59,7 +59,7 @@ func TestResponseOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing optional response property to read-only
+// CL: changing optional response property to read-only
 func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
 	require.NoError(t, err)
@@ -85,7 +85,7 @@ func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing optional response property to not read-only
+// CL: changing optional response property to not read-only
 func TestResponseOptionalPropertyBecameNonReadOnly(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_write_only_read_only_base.yaml")
 	require.NoError(t, err)

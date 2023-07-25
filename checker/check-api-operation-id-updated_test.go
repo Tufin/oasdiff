@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Removing an existing operation id
+// CL: removing an existing operation id
 func TestOperationIdRemoved(t *testing.T) {
 	s1, err := open("../data/checker/operation_id_removed_base.yaml")
 	require.NoError(t, err)
@@ -33,7 +33,7 @@ func TestOperationIdRemoved(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Updating an existing operation id
+// CL: updating an existing operation id
 func TestOperationIdUpdated(t *testing.T) {
 	s1, err := open("../data/checker/operation_id_removed_base.yaml")
 	require.NoError(t, err)
@@ -58,7 +58,7 @@ func TestOperationIdUpdated(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding a new operation id
+// CL: adding a new operation id
 func TestOperationIdAdded(t *testing.T) {
 	s1, err := open("../data/checker/operation_id_added_base.yaml")
 	require.NoError(t, err)
