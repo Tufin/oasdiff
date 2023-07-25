@@ -69,13 +69,13 @@ jobs:
       with:
         version: v1.52.2
 
-    - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
-
     - id: govulncheck
       uses: golang/govulncheck-action@v1
-    
+
+    - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
       env:
         CGO_ENABLED: '1'
+
     - run: git --no-pager diff --exit-code
 
     - if: runner.os == 'Linux'
