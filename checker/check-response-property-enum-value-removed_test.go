@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Removing an enum value from a response property
+// CL: removing an enum value from a response property
 func TestResponsePropertyEnumValueRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_property_enum_added_base.yaml")
 	require.NoError(t, err)
@@ -32,7 +32,7 @@ func TestResponsePropertyEnumValueRemoved(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing an enum value from a response write-only property
+// CL: removing an enum value from a response write-only property
 func TestResponseWriteOnlyPropertyEnumValueRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_property_enum_added_base.yaml")
 	require.NoError(t, err)

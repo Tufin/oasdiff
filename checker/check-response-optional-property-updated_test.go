@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Removing an optional write-only property from a response
+// CL: removing an optional write-only property from a response
 func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_removed_base.yaml")
 	require.NoError(t, err)
@@ -31,7 +31,7 @@ func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding an optional write-only property to a response
+// CL: adding an optional write-only property to a response
 func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_removed_revision.yaml")
 	require.NoError(t, err)
@@ -55,7 +55,7 @@ func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing an optional write-only property from a response
+// CL: removing an optional write-only property from a response
 func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_removed_base.yaml")
 	require.NoError(t, err)
@@ -78,7 +78,7 @@ func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding an optional write-only property to a response
+// CL: adding an optional write-only property to a response
 func TestResponseOptionalWriteOnlyPropertyAddedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_optional_property_removed_revision.yaml")
 	require.NoError(t, err)

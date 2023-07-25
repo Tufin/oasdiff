@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing response body property default value
+// CL: changing response body property default value
 func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_property_default_value_changed_base.yaml")
 	require.NoError(t, err)
@@ -30,7 +30,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing response body default value
+// CL: changing response body default value
 func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_property_default_value_changed_base.yaml")
 	require.NoError(t, err)
