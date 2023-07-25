@@ -138,9 +138,6 @@ These examples are automatically generated from unit tests.
 [renaming a path parameter is not breaking](checker/checker_breaking_test.go?plain=1#L135)  
 
 ## Examples of info-level changes for changelog
-[Adding request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L36)  
-[Changing request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L11)  
-[Removing request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L59)  
 [adding 'oneOf' schema to the request body or request body property](checker/check-request-property-one-of-updated_test.go?plain=1#L11)  
 [adding 'oneOf' schema to the response body or response body property](checker/check-response-property-one-of-updated_test.go?plain=1#L11)  
 [adding a new global security to the API](checker/check-api-security-updated_test.go?plain=1#L11)  
@@ -160,6 +157,7 @@ These examples are automatically generated from unit tests.
 [adding an enum value to a response property](checker/check-response-property-enum-value-added_test.go?plain=1#L11)  
 [adding an enum value to a response write-only property](checker/check-response-property-enum-value-added_test.go?plain=1#L36)  
 [adding an optional write-only property to a response](checker/check-response-optional-property-updated_test.go?plain=1#L34)  
+[adding request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L36)  
 [adding response property pattern](checker/check-response-pattern-added-or-changed_test.go?plain=1#L37)  
 [changing a response property schema format](checker/check-response-property-type-changed_test.go?plain=1#L59)  
 [changing a response property schema type](checker/check-response-property-type-changed_test.go?plain=1#L34)  
@@ -179,6 +177,7 @@ These examples are automatically generated from unit tests.
 [changing request parameter type to enum](checker/check-request-parameter-became-enum_test.go?plain=1#L11)  
 [changing request path parameter format](checker/check-request-parameters-type-changed_test.go?plain=1#L86)  
 [changing request path parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L11)  
+[changing request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L11)  
 [changing request query parameter format](checker/check-request-parameters-type-changed_test.go?plain=1#L111)  
 [changing request query parameter type](checker/check-request-parameters-type-changed_test.go?plain=1#L36)  
 [changing request's body to optional](checker/check-request-body-required-value-updated_test.go?plain=1#L36)  
@@ -217,6 +216,7 @@ These examples are automatically generated from unit tests.
 [removing an existing tag](checker/check-api-tag-updated_test.go?plain=1#L36)  
 [removing an optional write-only property from a response](checker/check-response-optional-property-updated_test.go?plain=1#L11)  
 [removing media type from request body](checker/check-request-body-mediatype-updated_test.go?plain=1#L34)  
+[removing request property pattern](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L59)  
 [removing response property pattern](checker/check-response-pattern-added-or-changed_test.go?plain=1#L63)  
 [updating an existing operation id](checker/check-api-operation-id-updated_test.go?plain=1#L36)  
 [updating an existing tag](checker/check-api-tag-updated_test.go?plain=1#L62)  

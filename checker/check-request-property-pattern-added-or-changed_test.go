@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing request property pattern
+// CL: changing request property pattern
 func TestRequestPropertyPatternChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_property_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)
@@ -33,7 +33,7 @@ func TestRequestPropertyPatternChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding request property pattern
+// CL: adding request property pattern
 func TestRequestPropertyPatternAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_property_pattern_added_or_changed_revision.yaml")
 	require.NoError(t, err)
@@ -56,7 +56,7 @@ func TestRequestPropertyPatternAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing request property pattern
+// CL: removing request property pattern
 func TestRequestPropertyPatternRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)
