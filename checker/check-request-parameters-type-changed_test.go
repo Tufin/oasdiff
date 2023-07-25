@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing request path parameter type
+// CL: changing request path parameter type
 func TestRequestPathParamTypeChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
@@ -33,7 +33,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing request query parameter type
+// CL: changing request query parameter type
 func TestRequestQueryParamTypeChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
@@ -58,7 +58,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing request header parameter type
+// CL: changing request header parameter type
 func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
@@ -83,7 +83,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing request path parameter format
+// CL: changing request path parameter format
 func TestRequestPathParamFormatChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
@@ -108,7 +108,7 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing request query parameter format
+// CL: changing request query parameter format
 func TestRequestQueryParamFormatChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
@@ -133,7 +133,7 @@ func TestRequestQueryParamFormatChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing request header parameter format
+// CL: changing request header parameter format
 func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
