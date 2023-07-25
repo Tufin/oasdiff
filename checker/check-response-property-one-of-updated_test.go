@@ -9,7 +9,7 @@ import (
 )
 
 // CL: adding 'oneOf' schema to the response body or response body property
-func TestResponsePropertyOneOffAdded(t *testing.T) {
+func TestResponsePropertyOneOfAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_property_one_of_added_base.yaml")
 	require.NoError(t, err)
 	s2, err := open("../data/checker/response_property_one_of_added_revision.yaml")
@@ -17,7 +17,7 @@ func TestResponsePropertyOneOffAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyOneOffUpdated), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyOneOfUpdated), d, osm, checker.INFO)
 
 	require.Len(t, errs, 2)
 
@@ -45,7 +45,7 @@ func TestResponsePropertyOneOffAdded(t *testing.T) {
 }
 
 // CL: removing 'oneOf' schema from the response body or response body property
-func TestResponsePropertyOneOffRemoved(t *testing.T) {
+func TestResponsePropertyOneOfRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_property_one_of_removed_base.yaml")
 	require.NoError(t, err)
 	s2, err := open("../data/checker/response_property_one_of_removed_revision.yaml")
@@ -53,7 +53,7 @@ func TestResponsePropertyOneOffRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyOneOffUpdated), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyOneOfUpdated), d, osm, checker.INFO)
 
 	require.Len(t, errs, 2)
 

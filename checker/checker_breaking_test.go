@@ -631,7 +631,7 @@ func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
 }
 
 // BC: removing 'oneOf' schema from the request body or request body property
-func TestBreaking_RequestPropertyOneOffRemoved(t *testing.T) {
+func TestBreaking_RequestPropertyOneOfRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_one_of_removed_base.yaml")
 	require.NoError(t, err)
 	s2, err := open("../data/checker/request_property_one_of_removed_revision.yaml")
