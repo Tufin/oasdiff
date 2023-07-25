@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterMaxUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -33,16 +33,20 @@ func RequestParameterMaxDecreasedCheck(diffReport *diff.Diff, operationsSources 
 						continue
 					}
 
+					id := "request-parameter-max-decreased"
+					level := ERR
+
 					if !IsDecreasedValue(maxDiff) {
-						continue
+						id = "request-parameter-max-increased"
+						level = INFO
 					}
 
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, ApiChange{
-						Id:          "request-parameter-max-decreased",
-						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-max-decreased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+						Id:          id,
+						Level:       level,
+						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
