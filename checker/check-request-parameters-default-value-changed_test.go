@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing request parameter default value
+// CL: changing request parameter default value
 func TestRequestParameterDefaultValueChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_default_value_changed_base.yaml")
 	require.NoError(t, err)

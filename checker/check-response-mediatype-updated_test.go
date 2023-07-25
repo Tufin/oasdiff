@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Adding a new media type to response
+// CL: adding a new media type to response
 func TestAddNewMediaType(t *testing.T) {
 	s1, err := open("../data/checker/add_new_media_type_base.yaml")
 	require.NoError(t, err)
@@ -31,7 +31,7 @@ func TestAddNewMediaType(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing a new media type to response
+// CL: removing a new media type to response
 func TestDeleteNewMediaType(t *testing.T) {
 	s1, err := open("../data/checker/add_new_media_type_revision.yaml")
 	require.NoError(t, err)

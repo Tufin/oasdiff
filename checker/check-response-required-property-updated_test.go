@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Adding a required property to response body is detected
+// CL: adding a required property to response body is detected
 func TestResponseRequiredPropertyAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_required_property_added_base.yaml")
 	require.NoError(t, err)
@@ -32,7 +32,7 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing an existent property that was required in response body is detected
+// CL: removing an existent property that was required in response body is detected
 func TestResponseRequiredPropertyRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_required_property_added_revision.yaml")
 	require.NoError(t, err)

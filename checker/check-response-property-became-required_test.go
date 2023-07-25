@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing optional response property to required
+// CL: changing optional response property to required
 func TestResponsePropertyBecameRequiredlCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_property_became_optional_revision.yaml")
 	require.NoError(t, err)
@@ -30,7 +30,7 @@ func TestResponsePropertyBecameRequiredlCheck(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Changing optional response write-only property to required
+// CL: changing optional response write-only property to required
 func TestResponseWriteOnlyPropertyBecameRequiredCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_property_became_optional_revision.yaml")
 	require.NoError(t, err)
