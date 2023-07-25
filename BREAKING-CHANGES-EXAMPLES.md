@@ -139,9 +139,7 @@ These examples are automatically generated from unit tests.
 
 ## Examples of info-level changes for changelog
 [Adding pattern to request parameters](checker/check-request-parameter-pattern-added-or-changed_test.go?plain=1#L35)  
-[Changing of requ](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L11)  
 [Changing pattern of request parameters](checker/check-request-parameter-pattern-added-or-changed_test.go?plain=1#L11)  
-[Pattern of request property 'name' added](checker/check-request-property-pattern-added-or-changed_test.go?plain=1#L34)  
 [Removing pattern from request parameters](checker/check-request-parameter-pattern-added-or-changed_test.go?plain=1#L58)  
 [adding a new global security to the API](checker/check-api-security-updated_test.go?plain=1#L11)  
 [adding a new media type to request body](checker/check-request-body-mediatype-updated_test.go?plain=1#L11)  
