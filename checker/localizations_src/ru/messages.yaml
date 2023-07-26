@@ -67,6 +67,10 @@ request-body-max-decreased: значение max у тела запроса ум
 request-property-max-decreased: значение max у поля запроса %s уменьшено до %s
 request-body-max-length-decreased: значение maxLength у тела запроса уменьшено до %s
 request-property-max-length-decreased: значение maxLength у поля запроса %s уменьшено до %s
+request-body-max-increased: значение max у тела запроса увеличено до %s
+request-property-max-increased: значение max у поля запроса %s увеличено до %s
+request-body-max-length-increased: значение maxLength у тела запроса увеличено до %s
+request-property-max-length-increased: значение maxLength у поля запроса %s увеличено до %s
 request-body-max-length-set: у тела запроса задано значение maxLength в %s
 request-body-max-length-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
 request-property-max-length-set: у поля запроса %s задано значение maxLength в %s
@@ -79,6 +83,10 @@ request-body-min-increased: значение min у тела запроса ув
 request-property-min-increased: у поля запроса %s, увеличено значение min до %s
 request-body-min-items-increased: значение minItems у тела запроса увеличено до %s
 request-property-min-items-increased: значение minItems у поля запроса %s увеличено до %s
+request-body-min-decreased: значение min у тела запроса уменьшено до %s
+request-property-min-decreased: значение min у поля запроса %s уменьшено до %s
+request-body-min-items-decreased: значение minItems у тела запроса уменьшено до %s
+request-property-min-items-decreased: значение minItems у поля запроса %s уменьшено до %s
 request-body-min-items-set: задано значение minItems у тела запроса в %s
 request-body-min-items-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
 request-property-min-items-set: у поля запроса %s задано значение minItems в %s

@@ -67,6 +67,10 @@ request-body-max-decreased: the request's body max was decreased to %s
 request-property-max-decreased: the %s request property's max was decreased to %s
 request-body-max-length-decreased: the request's body maxLength was decreased to %s
 request-property-max-length-decreased: the %s request property's maxLength was decreased to %s
+request-body-max-increased: the request's body max was increased to %s
+request-property-max-increased: the %s request property's max was increased to %s
+request-body-max-length-increased: the request's body maxLength was increased to %s
+request-property-max-length-increased: the %s request property's maxLength was increased to %s
 request-body-max-length-set: the request's body maxLength was set to %s
 request-body-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-max-length-set: the %s request property's maxLength was set to %s
@@ -79,6 +83,10 @@ request-body-min-increased: the request's body min was increased to %s
 request-property-min-increased: the %s request property's min was increased to %s
 request-body-min-items-increased: the request's body minItems was increased to %s
 request-property-min-items-increased: the %s request property's minItems was increased to %s
+request-body-min-decreased: the request's body min was increased to %s
+request-property-min-decreased: the %s request property's min was increased to %s
+request-body-min-items-decreased: the request's body minItems was increased to %s
+request-property-min-items-decreased: the %s request property's minItems was increased to %s
 request-body-min-items-set: the request's body minItems was set to %s
 request-body-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-min-items-set: the %s request property's minItems was set to %s
