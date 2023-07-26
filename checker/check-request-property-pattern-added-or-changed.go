@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -30,14 +30,20 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 						if patternDiff == nil {
 							return
 						}
-						if patternDiff.To == "" ||
-							patternDiff.To == ".*" {
-							return
-						}
 
 						source := (*operationsSources)[operationItem.Revision]
 
-						if patternDiff.From == "" {
+						if patternDiff.To == "" {
+							result = append(result, ApiChange{
+								Id:          "request-property-pattern-removed",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-property-pattern-removed"), patternDiff.From, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						} else if patternDiff.From == "" {
 							result = append(result, ApiChange{
 								Id:          "request-property-pattern-added",
 								Level:       WARN,
@@ -49,11 +55,17 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 								Source:      source,
 							})
 						} else {
+							level := WARN
+							comment := config.i18n("pattern-changed-warn-comment")
+							if patternDiff.To == ".*" {
+								level = INFO
+								comment = ""
+							}
 							result = append(result, ApiChange{
 								Id:          "request-property-pattern-changed",
-								Level:       WARN,
+								Level:       level,
 								Text:        fmt.Sprintf(config.i18n("request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
-								Comment:     config.i18n("pattern-changed-warn-comment"),
+								Comment:     comment,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

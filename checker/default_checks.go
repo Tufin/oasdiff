@@ -64,7 +64,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		RequestParameterRemovedCheck,
 		NewRequiredRequestPropertyCheck,
 		RequestParameterPatternAddedOrChangedCheck,
-		RequestPropertyPatternAddedOrChangedCheck,
+		RequestPropertyPatternUpdatedCheck,
 		AddedRequiredRequestBodyCheck,
 		RequestParameterRequiredValueUpdatedCheck,
 		RequestParameterBecameEnumCheck,
@@ -131,6 +131,8 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponseOptionalPropertyWriteOnlyReadOnlyCheck,
 		ResponsePatternAddedOrChangedCheck,
 		ResponsePropertyDefaultValueChangedCheck,
+		RequestPropertyOneOfUpdated,
+		ResponsePropertyOneOfUpdated,
 	}
 }
 
