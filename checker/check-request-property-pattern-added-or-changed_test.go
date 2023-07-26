@@ -29,7 +29,7 @@ func TestRequestPropertyPatternChanged(t *testing.T) {
 		Path:        "/test",
 		Source:      "../data/checker/request_property_pattern_added_or_changed_revision.yaml",
 		OperationId: "",
-		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')",
+		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')",
 	}, errs[0])
 }
 
@@ -52,7 +52,7 @@ func TestRequestPropertyPatternAdded(t *testing.T) {
 		Path:        "/test",
 		Source:      "../data/checker/request_property_pattern_added_or_changed_base.yaml",
 		OperationId: "",
-		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')",
+		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')",
 	}, errs[0])
 }
 
