@@ -22,8 +22,8 @@ func TestRequestParameterPatternChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-parameter-pattern-changed",
-		Text:        "changed the pattern for the 'query' request parameter 'category' from '^\\w+$' to '^[\\w\\s]+$'",
-		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')",
+		Text:        "changed the pattern of the 'query' request parameter 'category' from '^\\w+$' to '^[\\w\\s]+$'",
+		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')",
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/test",
@@ -45,8 +45,8 @@ func TestRequestParameterPatternAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-parameter-pattern-added",
-		Text:        "added the pattern '^\\w+$' for the 'query' request parameter 'category'",
-		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')",
+		Text:        "added the pattern '^\\w+$' to the 'query' request parameter 'category'",
+		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')",
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/test",
@@ -68,7 +68,7 @@ func TestRequestParameterPatternRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-parameter-pattern-removed",
-		Text:        "removed the pattern '^\\w+$' for the 'query' request parameter 'category'",
+		Text:        "removed the pattern '^\\w+$' from the 'query' request parameter 'category'",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/test",
