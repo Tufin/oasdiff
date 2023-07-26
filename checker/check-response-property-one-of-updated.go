@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponsePropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -34,13 +34,13 @@ func ResponsePropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff
 						continue
 					}
 
-					if mediaTypeDiff.SchemaDiff.AnyOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AnyOfDiff.Added) > 0 {
+					if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Added) > 0 {
 						result = append(result, ApiChange{
-							Id:    "response-body-any-of-added",
+							Id:    "response-body-one-of-added",
 							Level: INFO,
 							Text: fmt.Sprintf(
-								config.i18n("response-body-any-of-added"),
-								ColorizedValue(mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String()),
+								config.i18n("response-body-one-of-added"),
+								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String()),
 								responseStatus),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -49,13 +49,13 @@ func ResponsePropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff
 						})
 					}
 
-					if mediaTypeDiff.SchemaDiff.AnyOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted) > 0 {
+					if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted) > 0 {
 						result = append(result, ApiChange{
-							Id:    "response-body-any-of-removed",
+							Id:    "response-body-one-of-removed",
 							Level: INFO,
 							Text: fmt.Sprintf(
-								config.i18n("response-body-any-of-removed"),
-								ColorizedValue(mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String()),
+								config.i18n("response-body-one-of-removed"),
+								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String()),
 								responseStatus),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -67,17 +67,17 @@ func ResponsePropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff
 					CheckModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-							if propertyDiff.AnyOfDiff == nil {
+							if propertyDiff.OneOfDiff == nil {
 								return
 							}
 
-							if len(propertyDiff.AnyOfDiff.Added) > 0 {
+							if len(propertyDiff.OneOfDiff.Added) > 0 {
 								result = append(result, ApiChange{
-									Id:    "response-property-any-of-added",
+									Id:    "response-property-one-of-added",
 									Level: INFO,
 									Text: fmt.Sprintf(
-										config.i18n("response-property-any-of-added"),
-										ColorizedValue(propertyDiff.AnyOfDiff.Added.String()),
+										config.i18n("response-property-one-of-added"),
+										ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
 										ColorizedValue(propertyFullName(propertyPath, propertyName)),
 										responseStatus),
 									Operation:   operation,
@@ -87,13 +87,13 @@ func ResponsePropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff
 								})
 							}
 
-							if len(propertyDiff.AnyOfDiff.Deleted) > 0 {
+							if len(propertyDiff.OneOfDiff.Deleted) > 0 {
 								result = append(result, ApiChange{
-									Id:    "response-property-any-of-removed",
+									Id:    "response-property-one-of-removed",
 									Level: INFO,
 									Text: fmt.Sprintf(
-										config.i18n("response-property-any-of-removed"),
-										ColorizedValue(propertyDiff.AnyOfDiff.Deleted.String()),
+										config.i18n("response-property-one-of-removed"),
+										ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
 										ColorizedValue(propertyFullName(propertyPath, propertyName)),
 										responseStatus),
 									Operation:   operation,

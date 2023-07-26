@@ -174,3 +174,11 @@ response-body-any-of-added: добавлено %s в список 'anyOf' тел
 response-body-any-of-removed: удалён %s из списка 'anyOf' тела ответа для статуса ответа %s
 response-property-any-of-added: добавлено %s в список 'anyOf' свойства ответа %s для статуса ответа %s
 response-property-any-of-removed: удалён %s из списка 'anyOf' свойства ответа %s для статуса ответа %s
+request-body-one-of-added: добавлено %s в список 'oneOf' тела запроса
+request-body-one-of-removed: удалён %s из списка 'oneOf' тела запроса
+request-property-one-of-added: добавлено %s в список 'oneOf' свойства запроса %s
+request-property-one-of-removed: удалён %s из списка 'oneOf' свойства запроса %s
+response-body-one-of-added: добавлено %s в список 'oneOf' тела ответа для статуса ответа %s
+response-body-one-of-removed: удалён %s из списка 'oneOf' тела ответа для статуса ответа %s
+response-property-one-of-added: добавлено %s в список 'oneOf' свойства ответа %s для статуса ответа %s
+response-property-one-of-removed: удалён %s из списка 'oneOf' свойства ответа %s для статуса ответа %s

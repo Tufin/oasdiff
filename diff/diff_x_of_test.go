@@ -114,8 +114,8 @@ func TestAnyOf_IncludeDescriptions(t *testing.T) {
 	dd, err := diff.Get(&diff.Config{}, s1, s2)
 	require.NoError(t, err)
 	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
-	require.Equal(t, 2, anyOfDiff.Added)
-	require.Equal(t, 1, anyOfDiff.Deleted)
+	require.ElementsMatch(t, []string{"RevisionSchema[0]", "RevisionSchema[2]"}, anyOfDiff.Added)
+	require.ElementsMatch(t, []string{"BaseSchema[0]"}, anyOfDiff.Deleted)
 	require.Empty(t, anyOfDiff.Modified)
 }
 
@@ -131,7 +131,7 @@ func TestAnyOf_ExcludeDescriptions(t *testing.T) {
 	dd, err := diff.Get(diff.NewConfig().WithExcludeElements([]string{diff.ExcludeDescriptionOption}), s1, s2)
 	require.NoError(t, err)
 	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
-	require.Equal(t, 1, anyOfDiff.Added)
-	require.Equal(t, 0, anyOfDiff.Deleted)
+	require.ElementsMatch(t, []string{"RevisionSchema[2]"}, anyOfDiff.Added)
+	require.ElementsMatch(t, []string{}, anyOfDiff.Deleted)
 	require.Empty(t, anyOfDiff.Modified)
 }

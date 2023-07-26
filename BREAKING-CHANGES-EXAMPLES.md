@@ -140,6 +140,8 @@ These examples are automatically generated from unit tests.
 ## Examples of info-level changes for changelog
 [adding 'anyOf' schema to the request body or request body property](checker/check-request-property-any-of-updated_test.go?plain=1#L11)  
 [adding 'anyOf' schema to the response body or response body property](checker/check-response-property-any-of-updated_test.go?plain=1#L11)  
+[adding 'oneOf' schema to the request body or request body property](checker/check-request-property-one-of-updated_test.go?plain=1#L11)  
+[adding 'oneOf' schema to the response body or response body property](checker/check-response-property-one-of-updated_test.go?plain=1#L11)  
 [adding a new global security to the API](checker/check-api-security-updated_test.go?plain=1#L11)  
 [adding a new media type to request body](checker/check-request-body-mediatype-updated_test.go?plain=1#L11)  
 [adding a new media type to response](checker/check-response-mediatype-updated_test.go?plain=1#L11)  
@@ -198,6 +200,8 @@ These examples are automatically generated from unit tests.
 [path operations that were re-activated](checker/checker_deprecation_test.go?plain=1#L346)  
 [removing 'anyOf' schema from the request body or request body property](checker/check-request-property-any-of-updated_test.go?plain=1#L47)  
 [removing 'anyOf' schema from the response body or response body property](checker/check-response-property-any-of-updated_test.go?plain=1#L47)  
+[removing 'oneOf' schema from the request body or request body property](checker/check-request-property-one-of-updated_test.go?plain=1#L47)  
+[removing 'oneOf' schema from the response body or response body property](checker/check-response-property-one-of-updated_test.go?plain=1#L47)  
 [removing a global security from the API](checker/check-api-security-updated_test.go?plain=1#L31)  
 [removing a new media type to response](checker/check-response-mediatype-updated_test.go?plain=1#L34)  
 [removing a new oauth security scope](checker/check-components-security-updated_test.go?plain=1#L117)  
