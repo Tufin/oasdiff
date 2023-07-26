@@ -630,7 +630,7 @@ func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
 	require.Equal(t, "removed the media type application/json from the request body", errs[0].GetText())
 }
 
-// BC: removing 'oneOf' schema from the request body or request body property
+// BC: removing 'oneOf' schema from the request body or request body property is breaking
 func TestBreaking_RequestPropertyOneOfRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_one_of_removed_base.yaml")
 	require.NoError(t, err)
@@ -651,7 +651,7 @@ func TestBreaking_RequestPropertyOneOfRemoved(t *testing.T) {
 	require.Equal(t, "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list", errs[1].GetText())
 }
 
-// BC: adding 'allOf' schema from the request body or request body property
+// BC: adding 'allOf' schema from the request body or request body property is breaking
 func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_property_all_of_added_base.yaml")
 	require.NoError(t, err)
@@ -673,7 +673,7 @@ func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
 	require.Equal(t, "added 'Breed3' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
 }
 
-// BC: removing 'allOf' schema from the request body or request body property
+// BC: removing 'allOf' schema from the request body or request body property is breaking
 func TestBreaking_RequestPropertyAllOfRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_all_of_removed_base.yaml")
 	require.NoError(t, err)
