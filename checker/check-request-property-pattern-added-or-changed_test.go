@@ -23,7 +23,7 @@ func TestRequestPropertyPatternChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-pattern-changed",
-		Text:        "changed the pattern for the request property 'name' from '^\\w+$' to '^[\\w\\s]+$'",
+		Text:        "changed the pattern of the request property 'name' from '^\\w+$' to '^[\\w\\s]+$'",
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/test",
@@ -46,7 +46,7 @@ func TestRequestPropertyPatternAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-pattern-added",
-		Text:        "added the pattern '^\\w+$' for the request property 'name'",
+		Text:        "added the pattern '^\\w+$' to the request property 'name'",
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/test",
@@ -69,7 +69,7 @@ func TestRequestPropertyPatternRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-pattern-removed",
-		Text:        "removed the pattern '^\\w+$' for the request property 'name'",
+		Text:        "removed the pattern '^\\w+$' from the request property 'name'",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/test",
