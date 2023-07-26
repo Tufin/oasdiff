@@ -5,7 +5,7 @@ request-parameter-removed: deleted the %s request parameter %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
 request-parameter-pattern-added: "added the pattern '%s' to the %s request parameter %s"
-request-parameter-pattern-removed: "removed the pattern '%s' for the %s request parameter %s"
+request-parameter-pattern-removed: "removed the pattern '%s' from the %s request parameter %s"
 request-parameter-pattern-changed: "changed the pattern of the %s request parameter %s from '%s' to '%s'"
 request-property-pattern-added: "added the pattern '%s' to the request property %s"
 request-property-pattern-removed: "removed the pattern '%s' from the request property %s"
