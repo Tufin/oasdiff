@@ -29,7 +29,7 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 					mediaTypeDiff.SchemaDiff,
 					nil,
 					func(propertyPath string, propertyName string, allOfDiff *diff.SchemaListDiff, parent *diff.SchemaDiff) {
-						if allOfDiff.Added > 0 && allOfDiff.Deleted > 0 {
+						if len(allOfDiff.Added) > 0 && len(allOfDiff.Deleted) > 0 {
 							source := (*operationsSources)[operationItem.Revision]
 							result = append(result, ApiChange{
 								Id:          "request-allOf-modified",
@@ -76,7 +76,7 @@ func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *d
 						mediaTypeDiff.SchemaDiff,
 						nil,
 						func(propertyPath string, propertyName string, allOfDiff *diff.SchemaListDiff, parent *diff.SchemaDiff) {
-							if allOfDiff.Added > 0 && allOfDiff.Deleted > 0 {
+							if len(allOfDiff.Added) > 0 && len(allOfDiff.Deleted) > 0 {
 								source := (*operationsSources)[operationItem.Revision]
 								result = append(result, ApiChange{
 									Id:          "response-allOf-modified",
