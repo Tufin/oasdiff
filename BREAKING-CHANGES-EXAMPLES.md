@@ -62,6 +62,8 @@ These examples are automatically generated from unit tests.
 [reducing max length in request is breaking](checker/checker_breaking_min_max_test.go?plain=1#L12)  
 [reducing min items in response is breaking](checker/checker_breaking_min_max_test.go?plain=1#L220)  
 [reducing min length in response is breaking](checker/checker_breaking_min_max_test.go?plain=1#L62)  
+[removing 'anyOf' schema from the request body or request body property is breaking](checker/checker_breaking_test.go?plain=1#L633)  
+[removing 'oneOf' schema from the request body or request body property is breaking](checker/checker_breaking_test.go?plain=1#L655)  
 [removing a media type from request body is breaking](checker/checker_breaking_test.go?plain=1#L617)  
 [removing a success status is breaking](checker/check-response-status-updated_test.go?plain=1#L89)  
 [removing an existing optional response header is breaking as warn](checker/checker_breaking_test.go?plain=1#L410)  
