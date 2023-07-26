@@ -7,6 +7,7 @@ total-changes: "%d изменений: %d %s, %d %s, %d %s\\n"
 request-parameter-pattern-added: добавлен pattern '%s' у %s параметра запроса %s
 request-parameter-pattern-changed: изменён pattern у %s параметра запроса %s со значения '%s' на значение '%s'
 request-property-pattern-added: добавлен pattern '%s' у поля запроса %s
+request-property-pattern-removed: удалён pattern '%s' у поля запроса %s
 request-property-pattern-changed: изменён pattern у поля запроса %s со значения '%s' на значение '%s'
 api-deprecated-sunset-parse: "API deprecated без валидно парсящейся '%s' даты sunset: %v"
 api-sunset-date-too-small: дата API sunset date '%s' слишком ранняя, должно быть как минимум %d дней от текущего дня
