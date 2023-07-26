@@ -166,6 +166,14 @@ response-property-pattern-added: у свойства %s для ответа со
 response-property-pattern-removed: у свойства %s для ответа со статусом %s удален паттерн %s
 response-property-default-value-changed: значение по умолчанию для свойства %s в ответе со статусом %s было изменено с %s на %s
 response-body-default-value-changed: значение по умолчанию для тела ответа со статусом %s было изменено с %s на %s
+request-body-one-of-added: добавлено %s в список 'oneOf' тела запроса
+request-body-one-of-removed: удалён %s из списка 'oneOf' тела запроса
+request-property-one-of-added: добавлено %s в список 'oneOf' свойства запроса %s
+request-property-one-of-removed: удалён %s из списка 'oneOf' свойства запроса %s
+response-body-one-of-added: добавлено %s в список 'oneOf' тела ответа для статуса ответа %s
+response-body-one-of-removed: удалён %s из списка 'oneOf' тела ответа для статуса ответа %s
+response-property-one-of-added: добавлено %s в список 'oneOf' свойства ответа %s для статуса ответа %s
+response-property-one-of-removed: удалён %s из списка 'oneOf' свойства ответа %s для статуса ответа %s
 request-body-all-of-added: добавлено %s в список 'allOf' тела запроса
 request-body-all-of-removed: удалён %s из списка 'allOf' тела запроса
 request-property-all-of-added: добавлено %s в список 'allOf' свойства запроса %s

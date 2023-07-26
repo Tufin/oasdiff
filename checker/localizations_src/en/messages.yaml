@@ -166,6 +166,14 @@ response-property-pattern-added: the %s response's property pattern %s was added
 response-property-pattern-removed: the %s response's property pattern %s was removed for the status %s
 response-property-default-value-changed: the %s response's property default value changed from %s to %s for the status %s
 response-body-default-value-changed: the response body %s default value changed from %s to %s for the status %s
+request-body-one-of-added: added %s to the request body 'oneOf' list
+request-body-one-of-removed: removed %s from the request body 'oneOf' list
+request-property-one-of-added: added %s to the %s request property 'oneOf' list
+request-property-one-of-removed: removed %s from the %s request property 'oneOf' list
+response-body-one-of-added: added %s to the response body 'oneOf' list for the response status %s
+response-body-one-of-removed: removed %s from the response body 'oneOf' list for the response status %s
+response-property-one-of-added: added %s to the %s response property 'oneOf' list for the response status %s
+response-property-one-of-removed: removed %s from the %s response property 'oneOf' list for the response status %s
 request-body-all-of-added: added %s to the request body 'allOf' list
 request-body-all-of-removed: removed %s from the request body 'allOf' list
 request-property-all-of-added: added %s to the %s request property 'allOf' list

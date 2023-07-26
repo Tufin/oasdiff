@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyAllOfUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -31,13 +31,13 @@ func RequestPropertyAllOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 					continue
 				}
 
-				if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Added) > 0 {
+				if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Added) > 0 {
 					result = append(result, ApiChange{
-						Id:    "request-body-all-of-added",
-						Level: ERR,
+						Id:    "request-body-one-of-added",
+						Level: INFO,
 						Text: fmt.Sprintf(
-							config.i18n("request-body-all-of-added"),
-							ColorizedValue(mediaTypeDiff.SchemaDiff.AllOfDiff.Added.String())),
+							config.i18n("request-body-one-of-added"),
+							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String())),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -45,13 +45,13 @@ func RequestPropertyAllOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 					})
 				}
 
-				if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted) > 0 {
+				if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted) > 0 {
 					result = append(result, ApiChange{
-						Id:    "request-body-all-of-removed",
+						Id:    "request-body-one-of-removed",
 						Level: ERR,
 						Text: fmt.Sprintf(
-							config.i18n("request-body-all-of-removed"),
-							ColorizedValue(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted.String())),
+							config.i18n("request-body-one-of-removed"),
+							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String())),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -62,17 +62,17 @@ func RequestPropertyAllOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 				CheckModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-						if propertyDiff.AllOfDiff == nil {
+						if propertyDiff.OneOfDiff == nil {
 							return
 						}
 
-						if len(propertyDiff.AllOfDiff.Added) > 0 {
+						if len(propertyDiff.OneOfDiff.Added) > 0 {
 							result = append(result, ApiChange{
-								Id:    "request-property-all-of-added",
-								Level: ERR,
+								Id:    "request-property-one-of-added",
+								Level: INFO,
 								Text: fmt.Sprintf(
-									config.i18n("request-property-all-of-added"),
-									ColorizedValue(propertyDiff.AllOfDiff.Added.String()),
+									config.i18n("request-property-one-of-added"),
+									ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
 									ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -81,13 +81,13 @@ func RequestPropertyAllOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 							})
 						}
 
-						if len(propertyDiff.AllOfDiff.Deleted) > 0 {
+						if len(propertyDiff.OneOfDiff.Deleted) > 0 {
 							result = append(result, ApiChange{
-								Id:    "request-property-all-of-removed",
+								Id:    "request-property-one-of-removed",
 								Level: ERR,
 								Text: fmt.Sprintf(
-									config.i18n("request-property-all-of-removed"),
-									ColorizedValue(propertyDiff.AllOfDiff.Deleted.String()),
+									config.i18n("request-property-one-of-removed"),
+									ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
 									ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
