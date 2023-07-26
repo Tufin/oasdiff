@@ -11,8 +11,8 @@ import (
 /*
 SchemaListDiff describes the changes between a pair of lists of schema objects: https://swagger.io/specification/#schema-object
 The result is a combination of two diffs:
-1. Diff of schemas with a $ref: number of added/deleted schemas; modified=diff of schemas with the same $ref
-2. Diff of schemas without a $ref (inline schemas): number of added/deleted schemas; modified=only if exactly one schema was added and one deleted, the Modified field will show a diff between them
+1. Diff of schemas with a $ref: added/deleted schema names; modified=diff of schemas with the same $ref
+2. Diff of schemas without a $ref (inline schemas): added/deleted schemas (base/revision + index in the list of schemas); modified=only if exactly one schema was added and one deleted, the Modified field will show a diff between them
 */
 type SchemaListDiff struct {
 	Added    utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
@@ -120,12 +120,12 @@ func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRef
 // getSchemaListsRefsDiff compares schemas by their syntax
 func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SchemaListDiff, error) {
 
-	addedIdx, addedSchemas, err := getGroupDifference(config, state, schemaRefs2, schemaRefs1, filter, "RevisionSchema")
+	addedIdx, addedSchemas, err := getGroupDiffForInlineSchemas(config, state, schemaRefs2, schemaRefs1, filter, "RevisionSchema")
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
 
-	deletedIdx, deletedSchemas, err := getGroupDifference(config, state, schemaRefs1, schemaRefs2, filter, "BaseSchema")
+	deletedIdx, deletedSchemas, err := getGroupDiffForInlineSchemas(config, state, schemaRefs1, schemaRefs2, filter, "BaseSchema")
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
@@ -151,7 +151,7 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 	}, nil
 }
 
-func getGroupDifference(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter, inlineSchemaPrefix string) ([]int, []string, error) {
+func getGroupDiffForInlineSchemas(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter, inlineSchemaPrefix string) ([]int, []string, error) {
 
 	notContainedIdx := []int{}
 	notContainedSchemas := []string{}
@@ -166,10 +166,7 @@ func getGroupDifference(config *Config, state *state, schemaRefs1, schemaRefs2 o
 			return nil, nil, err
 		} else if !found {
 			notContainedIdx = append(notContainedIdx, index1)
-			schemaName := schemaRef1.Ref
-			if schemaName == "" {
-				schemaName = fmt.Sprintf("%s[%d]", inlineSchemaPrefix, index1)
-			}
+			schemaName := fmt.Sprintf("%s[%d]", inlineSchemaPrefix, index1)
 			notContainedSchemas = append(notContainedSchemas, schemaName)
 		} else {
 			matched[index2] = struct{}{}
