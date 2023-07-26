@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -28,18 +28,32 @@ func RequestPropertyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSourc
 				CheckModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-						enumDiff := mediaTypeDiff.SchemaDiff.EnumDiff
-						if enumDiff == nil || enumDiff.Deleted == nil {
+						enumDiff := propertyDiff.EnumDiff
+						if enumDiff == nil {
 							return
 						}
-						if propertyDiff.Revision.Value.ReadOnly {
-							return
-						}
+
 						for _, enumVal := range enumDiff.Deleted {
+							level := ERR
+							if propertyDiff.Revision.Value.ReadOnly {
+								level = INFO
+							}
 							result = append(result, ApiChange{
 								Id:          "request-property-enum-value-removed",
-								Level:       ERR,
+								Level:       level,
 								Text:        fmt.Sprintf(config.i18n("request-property-enum-value-removed"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						}
+
+						for _, enumVal := range enumDiff.Added {
+							result = append(result, ApiChange{
+								Id:          "request-property-enum-value-added",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-property-enum-value-added"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

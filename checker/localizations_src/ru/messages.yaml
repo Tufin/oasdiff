@@ -62,6 +62,7 @@ request-property-became-not-nullable: свойство запроса %s ста�
 request-body-became-not-nullable: тело запроса стало недействительным
 request-property-became-enum: свойство запроса %s было ограничено списком значений перечисления
 request-property-enum-value-removed: удалено enum значение %s у поля запроса %s
+request-property-enum-value-added: добавлено enum значение %s у поля запроса %s
 request-body-max-decreased: значение max у тела запроса уменьшено до %s
 request-property-max-decreased: значение max у поля запроса %s уменьшено до %s
 request-body-max-length-decreased: значение maxLength у тела запроса уменьшено до %s

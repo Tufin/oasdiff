@@ -111,7 +111,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyMinItemsUnsetCheck,
 		ResponsePropertyMinItemsDecreasedCheck,
 		RequestParameterEnumValueRemovedCheck,
-		RequestPropertyEnumValueRemovedCheck,
+		RequestPropertyEnumValueUpdatedCheck,
 		ResponsePropertyEnumValueAddedCheck,
 		RequestParameterXExtensibleEnumValueRemovedCheck,
 		RequestPropertyXExtensibleEnumValueRemovedCheck,
