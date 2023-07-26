@@ -27,7 +27,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 		result = append(result, SecurityChange{
 			Id:     APIGlobalSecurityAddedCheckId,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityAddedCheckId), ColorizedValue(addedSecurity)),
+			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityAddedCheckId), colorizedValue(addedSecurity)),
 			Source: "",
 		})
 	}
@@ -36,7 +36,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 		result = append(result, SecurityChange{
 			Id:     APIGlobalSecurityRemovedCheckId,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityRemovedCheckId), ColorizedValue(removedSecurity)),
+			Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityRemovedCheckId), colorizedValue(removedSecurity)),
 			Source: "",
 		})
 	}
@@ -47,7 +47,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, SecurityChange{
 					Id:     APIGlobalSecurityScopeAddedId,
 					Level:  INFO,
-					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeAddedId), ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
+					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeAddedId), colorizedValue(addedScope), colorizedValue(securitySchemeName)),
 					Source: "",
 				})
 			}
@@ -55,7 +55,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, SecurityChange{
 					Id:     APIGlobalSecurityScopeRemovedId,
 					Level:  INFO,
-					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeRemovedId), ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
+					Text:   fmt.Sprintf(config.i18n(APIGlobalSecurityScopeRemovedId), colorizedValue(deletedScope), colorizedValue(securitySchemeName)),
 					Source: "",
 				})
 			}
@@ -94,7 +94,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				result = append(result, ApiChange{
 					Id:          APISecurityAddedCheckId,
 					Level:       INFO,
-					Text:        fmt.Sprintf(config.i18n(APISecurityAddedCheckId), ColorizedValue(addedSecurity)),
+					Text:        fmt.Sprintf(config.i18n(APISecurityAddedCheckId), colorizedValue(addedSecurity)),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -109,7 +109,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				result = append(result, ApiChange{
 					Id:          APISecurityRemovedCheckId,
 					Level:       INFO,
-					Text:        fmt.Sprintf(config.i18n(APISecurityRemovedCheckId), ColorizedValue(deletedSecurity)),
+					Text:        fmt.Sprintf(config.i18n(APISecurityRemovedCheckId), colorizedValue(deletedSecurity)),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -126,7 +126,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 						result = append(result, ApiChange{
 							Id:          APISecurityScopeAddedId,
 							Level:       INFO,
-							Text:        fmt.Sprintf(config.i18n(APISecurityScopeAddedId), ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
+							Text:        fmt.Sprintf(config.i18n(APISecurityScopeAddedId), colorizedValue(addedScope), colorizedValue(securitySchemeName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -137,7 +137,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 						result = append(result, ApiChange{
 							Id:          APISecurityScopeRemovedId,
 							Level:       INFO,
-							Text:        fmt.Sprintf(config.i18n(APISecurityScopeRemovedId), ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
+							Text:        fmt.Sprintf(config.i18n(APISecurityScopeRemovedId), colorizedValue(deletedScope), colorizedValue(securitySchemeName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -34,7 +34,7 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 						result = append(result, ApiChange{
 							Id:          "response-body-default-value-changed",
 							Level:       INFO,
-							Text:        fmt.Sprintf(config.i18n("response-body-default-value-changed"), ColorizedValue(mediaType), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To), ColorizedValue(responseStatus)),
+							Text:        fmt.Sprintf(config.i18n("response-body-default-value-changed"), colorizedValue(mediaType), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To), colorizedValue(responseStatus)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -42,7 +42,7 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 						})
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							if propertyDiff == nil || propertyDiff.Revision == nil || propertyDiff.Revision.Value == nil || propertyDiff.DefaultDiff == nil {
@@ -54,7 +54,7 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 							result = append(result, ApiChange{
 								Id:          "response-property-default-value-changed",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("response-property-default-value-changed"), ColorizedValue(propertyName), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n("response-property-default-value-changed"), colorizedValue(propertyName), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

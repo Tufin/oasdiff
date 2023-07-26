@@ -32,7 +32,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          "request-body-min-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-body-min-set"), ColorizedValue(minDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-body-min-set"), colorizedValue(minDiff.To)),
 							Comment:     config.i18n("request-body-min-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -42,7 +42,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					}
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						minDiff := propertyDiff.MinDiff
@@ -60,7 +60,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          "request-property-min-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-property-min-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-property-min-set"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(minDiff.To)),
 							Comment:     config.i18n("request-property-min-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

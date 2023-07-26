@@ -31,7 +31,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 					continue
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 
@@ -42,7 +42,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 						result = append(result, ApiChange{
 							Id:          requestPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Text:        fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), colorizedValue(propertyFullName(propertyPath, propertyName))),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

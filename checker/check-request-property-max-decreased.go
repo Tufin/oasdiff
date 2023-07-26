@@ -29,11 +29,11 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 					maxDiff := mediaTypeDiff.SchemaDiff.MaxDiff
 					if maxDiff.From != nil &&
 						maxDiff.To != nil {
-						if IsDecreasedValue(maxDiff) {
+						if isDecreasedValue(maxDiff) {
 							result = append(result, ApiChange{
 								Id:          "request-body-max-decreased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-body-max-decreased"), ColorizedValue(maxDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-body-max-decreased"), colorizedValue(maxDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -43,7 +43,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 					}
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						maxDiff := propertyDiff.MaxDiff
@@ -57,14 +57,14 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						if propertyDiff.Revision.Value.ReadOnly {
 							return
 						}
-						if !IsDecreasedValue(maxDiff) {
+						if !isDecreasedValue(maxDiff) {
 							return
 						}
 
 						result = append(result, ApiChange{
 							Id:          "request-property-max-decreased",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-max-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-property-max-decreased"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(maxDiff.To)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

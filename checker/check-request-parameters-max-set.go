@@ -38,7 +38,7 @@ func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.
 					result = append(result, ApiChange{
 						Id:          "request-parameter-max-set",
 						Level:       WARN,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-max-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.To)),
+						Text:        fmt.Sprintf(config.i18n("request-parameter-max-set"), colorizedValue(paramLocation), colorizedValue(paramName), colorizedValue(maxDiff.To)),
 						Comment:     config.i18n("request-parameter-max-set-comment"),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

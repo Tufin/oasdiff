@@ -37,7 +37,7 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 						result = append(result, ApiChange{
 							Id:          "required-response-header-removed",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("required-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Text:        fmt.Sprintf(config.i18n("required-response-header-removed"), colorizedValue(headerName), colorizedValue(responseStatus)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -47,7 +47,7 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 						result = append(result, ApiChange{
 							Id:          "optional-response-header-removed",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("optional-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Text:        fmt.Sprintf(config.i18n("optional-response-header-removed"), colorizedValue(headerName), colorizedValue(responseStatus)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -55,7 +55,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n(id), colorizedValue(changedRequiredPropertyName), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -64,7 +64,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 						}
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							requiredDiff := propertyDiff.RequiredDiff
@@ -89,7 +89,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								result = append(result, ApiChange{
 									Id:          id,
 									Level:       level,
-									Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), ColorizedValue(responseStatus)),
+									Text:        fmt.Sprintf(config.i18n(id), colorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))), colorizedValue(responseStatus)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

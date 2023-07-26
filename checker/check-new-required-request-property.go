@@ -25,7 +25,7 @@ func NewRequiredRequestPropertyCheck(diffReport *diff.Diff, operationsSources *d
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
-				CheckAddedPropertiesDiff(
+				checkAddedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 						if !propertyItem.ReadOnly &&
@@ -34,7 +34,7 @@ func NewRequiredRequestPropertyCheck(diffReport *diff.Diff, operationsSources *d
 							result = append(result, ApiChange{
 								Id:          "new-required-request-property",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("new-required-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        fmt.Sprintf(config.i18n("new-required-request-property"), colorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

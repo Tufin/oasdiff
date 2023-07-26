@@ -51,7 +51,7 @@ func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 					result = append(result, ApiChange{
 						Id:          id,
 						Level:       config.getLogLevel(id, defaultLevel),
-						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(responseStatus)),
+						Text:        fmt.Sprintf(config.i18n(id), colorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -73,7 +73,7 @@ func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 					result = append(result, ApiChange{
 						Id:          addedId,
 						Level:       config.getLogLevel(addedId, defaultLevel),
-						Text:        fmt.Sprintf(config.i18n(addedId), ColorizedValue(responseStatus)),
+						Text:        fmt.Sprintf(config.i18n(addedId), colorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

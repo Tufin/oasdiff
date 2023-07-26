@@ -33,7 +33,7 @@ func RequestParameterMaxDecreasedCheck(diffReport *diff.Diff, operationsSources 
 						continue
 					}
 
-					if !IsDecreasedValue(maxDiff) {
+					if !isDecreasedValue(maxDiff) {
 						continue
 					}
 
@@ -42,7 +42,7 @@ func RequestParameterMaxDecreasedCheck(diffReport *diff.Diff, operationsSources 
 					result = append(result, ApiChange{
 						Id:          "request-parameter-max-decreased",
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-max-decreased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+						Text:        fmt.Sprintf(config.i18n("request-parameter-max-decreased"), colorizedValue(paramLocation), colorizedValue(paramName), colorizedValue(maxDiff.From), colorizedValue(maxDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

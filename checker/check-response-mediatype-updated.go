@@ -39,7 +39,7 @@ func ResponseMediaTypeUpdated(diffReport *diff.Diff, operationsSources *diff.Ope
 					result = append(result, ApiChange{
 						Id:          ResponseMediaTypeUpdatedId,
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n(ResponseMediaTypeUpdatedId), ColorizedValue(mediaType), ColorizedValue(responseStatus)),
+						Text:        fmt.Sprintf(config.i18n(ResponseMediaTypeUpdatedId), colorizedValue(mediaType), colorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -50,7 +50,7 @@ func ResponseMediaTypeUpdated(diffReport *diff.Diff, operationsSources *diff.Ope
 					result = append(result, ApiChange{
 						Id:          ResponseMediaTypeAddedId,
 						Level:       INFO,
-						Text:        fmt.Sprintf(config.i18n(ResponseMediaTypeAddedId), ColorizedValue(mediaType), ColorizedValue(responseStatus)),
+						Text:        fmt.Sprintf(config.i18n(ResponseMediaTypeAddedId), colorizedValue(mediaType), colorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

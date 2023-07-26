@@ -29,11 +29,11 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 					maxLengthDiff := mediaTypeDiff.SchemaDiff.MaxLengthDiff
 					if maxLengthDiff.From != nil &&
 						maxLengthDiff.To != nil {
-						if IsDecreasedValue(maxLengthDiff) {
+						if isDecreasedValue(maxLengthDiff) {
 							result = append(result, ApiChange{
 								Id:          "request-body-max-length-decreased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-body-max-length-decreased"), ColorizedValue(maxLengthDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-body-max-length-decreased"), colorizedValue(maxLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -43,7 +43,7 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 					}
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						maxLengthDiff := propertyDiff.MaxLengthDiff
@@ -57,14 +57,14 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 						if propertyDiff.Revision.Value.ReadOnly {
 							return
 						}
-						if !IsDecreasedValue(maxLengthDiff) {
+						if !isDecreasedValue(maxLengthDiff) {
 							return
 						}
 
 						result = append(result, ApiChange{
 							Id:          "request-property-max-length-decreased",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-max-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-property-max-length-decreased"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(maxLengthDiff.To)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -37,7 +37,7 @@ func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          "request-parameter-min-items-set",
 						Level:       WARN,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-min-items-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
+						Text:        fmt.Sprintf(config.i18n("request-parameter-min-items-set"), colorizedValue(paramLocation), colorizedValue(paramName), colorizedValue(minItemsDiff.To)),
 						Comment:     config.i18n("request-parameter-min-items-set-comment"),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

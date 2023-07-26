@@ -38,7 +38,7 @@ func RequestParameterMinSetCheck(diffReport *diff.Diff, operationsSources *diff.
 					result = append(result, ApiChange{
 						Id:          "request-parameter-min-set",
 						Level:       WARN,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-min-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minDiff.To)),
+						Text:        fmt.Sprintf(config.i18n("request-parameter-min-set"), colorizedValue(paramLocation), colorizedValue(paramName), colorizedValue(minDiff.To)),
 						Comment:     config.i18n("request-parameter-min-set-comment"),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

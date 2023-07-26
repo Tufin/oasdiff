@@ -33,7 +33,7 @@ func RequestParameterMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSou
 						continue
 					}
 
-					if !IsIncreasedValue(minItemsDiff) {
+					if !isIncreasedValue(minItemsDiff) {
 						continue
 					}
 
@@ -42,7 +42,7 @@ func RequestParameterMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSou
 					result = append(result, ApiChange{
 						Id:          "request-parameter-min-items-increased",
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-min-items-increased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
+						Text:        fmt.Sprintf(config.i18n("request-parameter-min-items-increased"), colorizedValue(paramLocation), colorizedValue(paramName), colorizedValue(minItemsDiff.From), colorizedValue(minItemsDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

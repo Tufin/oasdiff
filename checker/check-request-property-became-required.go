@@ -44,7 +44,7 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 						result = append(result, ApiChange{
 							Id:          "request-property-became-required",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(changedRequiredPropertyName)),
+							Text:        fmt.Sprintf(config.i18n("request-property-became-required"), colorizedValue(changedRequiredPropertyName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -53,7 +53,7 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 					}
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						requiredDiff := propertyDiff.RequiredDiff
@@ -74,7 +74,7 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          "request-property-became-required",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Text:        fmt.Sprintf(config.i18n("request-property-became-required"), colorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

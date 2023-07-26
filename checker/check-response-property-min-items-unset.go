@@ -35,7 +35,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          "response-body-min-items-unset",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-body-min-items-unset"), ColorizedValue(minItemsDiff.From)),
+								Text:        fmt.Sprintf(config.i18n("response-body-min-items-unset"), colorizedValue(minItemsDiff.From)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -44,7 +44,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 						}
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							minItemsDiff := propertyDiff.MinItemsDiff
@@ -62,7 +62,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          "response-property-min-items-unset",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-property-min-items-unset"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n("response-property-min-items-unset"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(minItemsDiff.From), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -33,7 +33,7 @@ func RequestParameterMinIncreasedCheck(diffReport *diff.Diff, operationsSources 
 						continue
 					}
 
-					if !IsIncreasedValue(minDiff) {
+					if !isIncreasedValue(minDiff) {
 						continue
 					}
 
@@ -42,7 +42,7 @@ func RequestParameterMinIncreasedCheck(diffReport *diff.Diff, operationsSources 
 					result = append(result, ApiChange{
 						Id:          "request-parameter-min-increased",
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-min-increased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+						Text:        fmt.Sprintf(config.i18n("request-parameter-min-increased"), colorizedValue(paramLocation), colorizedValue(paramName), colorizedValue(minDiff.From), colorizedValue(minDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

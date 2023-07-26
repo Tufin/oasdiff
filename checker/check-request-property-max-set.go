@@ -32,7 +32,7 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          "request-body-max-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-body-max-set"), ColorizedValue(maxDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-body-max-set"), colorizedValue(maxDiff.To)),
 							Comment:     config.i18n("request-body-max-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -42,7 +42,7 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					}
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						maxDiff := propertyDiff.MaxDiff
@@ -60,7 +60,7 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          "request-property-max-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-property-max-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-property-max-set"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(maxDiff.To)),
 							Comment:     config.i18n("request-property-max-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

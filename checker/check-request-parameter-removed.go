@@ -25,7 +25,7 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, ApiChange{
 						Id:          "request-parameter-removed",
 						Level:       WARN,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-removed"), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Text:        fmt.Sprintf(config.i18n("request-parameter-removed"), colorizedValue(paramLocation), colorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

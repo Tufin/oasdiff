@@ -35,7 +35,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          "response-body-max-length-unset",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-body-max-length-unset"), ColorizedValue(maxLengthDiff.From)),
+								Text:        fmt.Sprintf(config.i18n("response-body-max-length-unset"), colorizedValue(maxLengthDiff.From)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -44,7 +44,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 						}
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							maxLengthDiff := propertyDiff.MaxLengthDiff
@@ -62,7 +62,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          "response-property-max-length-unset",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-property-max-length-unset"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n("response-property-max-length-unset"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(maxLengthDiff.From), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

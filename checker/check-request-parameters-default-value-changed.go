@@ -46,7 +46,7 @@ func RequestParameterDefaultValueChanged(diffReport *diff.Diff, operationsSource
 					result = append(result, ApiChange{
 						Id:          "request-parameter-default-value-changed",
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-default-value-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To)),
+						Text:        fmt.Sprintf(config.i18n("request-parameter-default-value-changed"), colorizedValue(paramLocation), colorizedValue(paramName), colorizedValue(defaultValueDiff.From), colorizedValue(defaultValueDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

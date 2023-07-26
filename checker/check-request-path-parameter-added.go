@@ -29,7 +29,7 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, ApiChange{
 						Id:          "new-request-path-parameter",
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("new-request-path-parameter"), ColorizedValue(paramName)),
+						Text:        fmt.Sprintf(config.i18n("new-request-path-parameter"), colorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

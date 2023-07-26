@@ -32,11 +32,11 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 						minLengthDiff := mediaTypeDiff.SchemaDiff.MinLengthDiff
 						if minLengthDiff.From != nil &&
 							minLengthDiff.To != nil {
-							if IsDecreasedValue(minLengthDiff) {
+							if isDecreasedValue(minLengthDiff) {
 								result = append(result, ApiChange{
 									Id:          "response-body-min-length-decreased",
 									Level:       ERR,
-									Text:        fmt.Sprintf(config.i18n("response-body-min-length-decreased"), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+									Text:        fmt.Sprintf(config.i18n("response-body-min-length-decreased"), colorizedValue(minLengthDiff.From), colorizedValue(minLengthDiff.To)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -46,7 +46,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 						}
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							minLengthDiff := propertyDiff.MinLengthDiff
@@ -57,7 +57,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 								minLengthDiff.From == nil {
 								return
 							}
-							if !IsDecreasedValue(minLengthDiff) {
+							if !isDecreasedValue(minLengthDiff) {
 								return
 							}
 
@@ -68,7 +68,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 							result = append(result, ApiChange{
 								Id:          "response-property-min-length-decreased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-property-min-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n("response-property-min-length-decreased"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(minLengthDiff.From), colorizedValue(minLengthDiff.To), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

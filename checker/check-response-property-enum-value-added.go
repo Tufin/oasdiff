@@ -33,7 +33,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 				}
 				modifiedMediaTypes := responseDiff.ContentDiff.MediaTypeModified
 				for _, mediaTypeDiff := range modifiedMediaTypes {
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							enumDiff := propertyDiff.EnumDiff
@@ -56,7 +56,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 								result = append(result, ApiChange{
 									Id:          id,
 									Level:       level,
-									Text:        fmt.Sprintf(config.i18n(id), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Text:        fmt.Sprintf(config.i18n(id), enumVal, colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(responseStatus)),
 									Comment:     comment,
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,

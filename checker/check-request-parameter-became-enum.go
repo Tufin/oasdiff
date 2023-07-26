@@ -38,7 +38,7 @@ func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *d
 					result = append(result, ApiChange{
 						Id:          requestParameterBecameEnumId,
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n(requestParameterBecameEnumId), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Text:        fmt.Sprintf(config.i18n(requestParameterBecameEnumId), colorizedValue(paramLocation), colorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

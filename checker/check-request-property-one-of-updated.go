@@ -37,7 +37,7 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 						Level: INFO,
 						Text: fmt.Sprintf(
 							config.i18n("request-body-one-of-added"),
-							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String())),
+							colorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String())),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -51,7 +51,7 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 						Level: ERR,
 						Text: fmt.Sprintf(
 							config.i18n("request-body-one-of-removed"),
-							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String())),
+							colorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String())),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -59,7 +59,7 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 					})
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						if propertyDiff.OneOfDiff == nil {
@@ -72,8 +72,8 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 								Level: INFO,
 								Text: fmt.Sprintf(
 									config.i18n("request-property-one-of-added"),
-									ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
-									ColorizedValue(propertyFullName(propertyPath, propertyName))),
+									colorizedValue(propertyDiff.OneOfDiff.Added.String()),
+									colorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -87,8 +87,8 @@ func RequestPropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 								Level: ERR,
 								Text: fmt.Sprintf(
 									config.i18n("request-property-one-of-removed"),
-									ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
-									ColorizedValue(propertyFullName(propertyPath, propertyName))),
+									colorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
+									colorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

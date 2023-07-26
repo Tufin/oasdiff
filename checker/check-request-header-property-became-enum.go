@@ -39,7 +39,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 						result = append(result, ApiChange{
 							Id:          requestHeaderPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName)),
+							Text:        fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), colorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -47,7 +47,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 						})
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						paramDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 
@@ -58,7 +58,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          requestHeaderPropertyBecameEnumId,
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), colorizedValue(paramName), colorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

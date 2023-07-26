@@ -29,11 +29,11 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 					minItemsDiff := mediaTypeDiff.SchemaDiff.MinItemsDiff
 					if minItemsDiff.From != nil &&
 						minItemsDiff.To != nil {
-						if IsIncreasedValue(minItemsDiff) {
+						if isIncreasedValue(minItemsDiff) {
 							result = append(result, ApiChange{
 								Id:          "request-body-min-items-increased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-body-min-items-increased"), ColorizedValue(minItemsDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-body-min-items-increased"), colorizedValue(minItemsDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -43,7 +43,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 					}
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						minItemsDiff := propertyDiff.MinItemsDiff
@@ -57,14 +57,14 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						if propertyDiff.Revision.Value.ReadOnly {
 							return
 						}
-						if !IsIncreasedValue(minItemsDiff) {
+						if !isIncreasedValue(minItemsDiff) {
 							return
 						}
 
 						result = append(result, ApiChange{
 							Id:          "request-property-min-items-increased",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-min-items-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-property-min-items-increased"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(minItemsDiff.To)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

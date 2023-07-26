@@ -42,7 +42,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 						continue
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							writeOnlyDiff := propertyDiff.WriteOnlyDiff
@@ -71,7 +71,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n(id), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(responseStatus)),
 								Comment:     comment,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -80,7 +80,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							})
 						})
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							readOnlyDiff := propertyDiff.ReadOnlyDiff
@@ -107,7 +107,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n(id), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

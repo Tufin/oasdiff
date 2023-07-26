@@ -32,11 +32,11 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 						minDiff := mediaTypeDiff.SchemaDiff.MinDiff
 						if minDiff.From != nil &&
 							minDiff.To != nil {
-							if IsDecreasedValue(minDiff) {
+							if isDecreasedValue(minDiff) {
 								result = append(result, ApiChange{
 									Id:          "response-body-min-decreased",
 									Level:       ERR,
-									Text:        fmt.Sprintf(config.i18n("response-body-min-decreased"), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+									Text:        fmt.Sprintf(config.i18n("response-body-min-decreased"), colorizedValue(minDiff.From), colorizedValue(minDiff.To)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -46,7 +46,7 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 						}
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							minDiff := propertyDiff.MinDiff
@@ -57,7 +57,7 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 								minDiff.From == nil {
 								return
 							}
-							if !IsDecreasedValue(minDiff) {
+							if !isDecreasedValue(minDiff) {
 								return
 							}
 
@@ -68,7 +68,7 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 							result = append(result, ApiChange{
 								Id:          "response-property-min-decreased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-property-min-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n("response-property-min-decreased"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(minDiff.From), colorizedValue(minDiff.To), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -34,7 +34,7 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 							result = append(result, ApiChange{
 								Id:          "request-allOf-modified",
 								Level:       WARN,
-								Text:        fmt.Sprintf(config.i18n("request-allOf-modified"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        fmt.Sprintf(config.i18n("request-allOf-modified"), colorizedValue(propertyFullName(propertyPath, propertyName))),
 								Comment:     config.i18n("request-allOf-modified-comment"),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -81,7 +81,7 @@ func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *d
 								result = append(result, ApiChange{
 									Id:          "response-allOf-modified",
 									Level:       WARN,
-									Text:        fmt.Sprintf("modified allOf for the response property %s for status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Text:        fmt.Sprintf("modified allOf for the response property %s for status %s", colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(responseStatus)),
 									Comment:     "It is a warn because it is very difficult to check that allOf changed correctly without breaking changes",
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,

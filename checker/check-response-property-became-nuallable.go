@@ -49,7 +49,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 						})
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							nullableDiff := propertyDiff.NullableDiff
@@ -63,7 +63,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          responsePropertyBecameNullableId,
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n(responsePropertyBecameNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n(responsePropertyBecameNullableId), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -24,7 +24,7 @@ func RequestPropertyRemovedCheck(diffReport *diff.Diff, operationsSources *diff.
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
-				CheckDeletedPropertiesDiff(
+				checkDeletedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 						if !propertyItem.ReadOnly {
@@ -32,7 +32,7 @@ func RequestPropertyRemovedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:          "request-property-removed",
 								Level:       WARN,
-								Text:        fmt.Sprintf(config.i18n("request-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        fmt.Sprintf(config.i18n("request-property-removed"), colorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -50,7 +50,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							result = append(result, ApiChange{
 								Id:          "request-header-property-became-required",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-header-property-became-required"), ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
+								Text:        fmt.Sprintf(config.i18n("request-header-property-became-required"), colorizedValue(paramName), colorizedValue(changedRequiredPropertyName)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -59,7 +59,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 						}
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						paramDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							requiredDiff := propertyDiff.RequiredDiff
@@ -76,7 +76,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								result = append(result, ApiChange{
 									Id:          "request-header-property-became-required",
 									Level:       ERR,
-									Text:        fmt.Sprintf(config.i18n("request-header-property-became-required"), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+									Text:        fmt.Sprintf(config.i18n("request-header-property-became-required"), colorizedValue(paramName), colorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

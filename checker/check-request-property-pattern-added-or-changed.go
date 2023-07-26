@@ -23,7 +23,7 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						patternDiff := propertyDiff.PatternDiff
@@ -41,7 +41,7 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 							result = append(result, ApiChange{
 								Id:          "request-property-pattern-added",
 								Level:       WARN,
-								Text:        fmt.Sprintf(config.i18n("request-property-pattern-added"), patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        fmt.Sprintf(config.i18n("request-property-pattern-added"), patternDiff.To, colorizedValue(propertyFullName(propertyPath, propertyName))),
 								Comment:     config.i18n("pattern-changed-warn-comment"),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -52,7 +52,7 @@ func RequestPropertyPatternAddedOrChangedCheck(diffReport *diff.Diff, operations
 							result = append(result, ApiChange{
 								Id:          "request-property-pattern-changed",
 								Level:       WARN,
-								Text:        fmt.Sprintf(config.i18n("request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
+								Text:        fmt.Sprintf(config.i18n("request-property-pattern-changed"), colorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
 								Comment:     config.i18n("pattern-changed-warn-comment"),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

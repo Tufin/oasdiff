@@ -32,7 +32,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityComponentOauthUrlUpdated,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityComponentOauthUrlUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(urlDiff.From), ColorizedValue(urlDiff.To)),
+			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityComponentOauthUrlUpdated), colorizedValue(updatedSecurityName), colorizedValue(urlDiff.From), colorizedValue(urlDiff.To)),
 			Source: "",
 		})
 	}
@@ -41,7 +41,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityOauthTokenUrlUpdated,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityOauthTokenUrlUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(tokenDiff.From), ColorizedValue(tokenDiff.To)),
+			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityOauthTokenUrlUpdated), colorizedValue(updatedSecurityName), colorizedValue(tokenDiff.From), colorizedValue(tokenDiff.To)),
 			Source: "",
 		})
 	}
@@ -51,7 +51,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeAdded,
 				Level:  INFO,
-				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeAdded), ColorizedValue(updatedSecurityName), ColorizedValue(addedScope)),
+				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeAdded), colorizedValue(updatedSecurityName), colorizedValue(addedScope)),
 				Source: "",
 			})
 		}
@@ -60,7 +60,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeRemoved,
 				Level:  INFO,
-				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeRemoved), ColorizedValue(updatedSecurityName), ColorizedValue(removedScope)),
+				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeRemoved), colorizedValue(updatedSecurityName), colorizedValue(removedScope)),
 				Source: "",
 			})
 		}
@@ -69,7 +69,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeUpdated,
 				Level:  INFO,
-				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(name), ColorizedValue(modifiedScope.From), ColorizedValue(modifiedScope.To)),
+				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeUpdated), colorizedValue(updatedSecurityName), colorizedValue(name), colorizedValue(modifiedScope.From), colorizedValue(modifiedScope.To)),
 				Source: "",
 			})
 		}
@@ -89,7 +89,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityAddedCheckId,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityAddedCheckId), ColorizedValue(updatedSecurity)),
+			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityAddedCheckId), colorizedValue(updatedSecurity)),
 			Source: "",
 		})
 	}
@@ -98,7 +98,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityRemovedCheckId,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityRemovedCheckId), ColorizedValue(updatedSecurity)),
+			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityRemovedCheckId), colorizedValue(updatedSecurity)),
 			Source: "",
 		})
 	}
@@ -110,7 +110,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 			result = append(result, ComponentChange{
 				Id:     APIComponentsSecurityTyepUpdated,
 				Level:  INFO,
-				Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityTyepUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(updatedSecurity.TypeDiff.From), ColorizedValue(updatedSecurity.TypeDiff.To)),
+				Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityTyepUpdated), colorizedValue(updatedSecurityName), colorizedValue(updatedSecurity.TypeDiff.From), colorizedValue(updatedSecurity.TypeDiff.To)),
 				Source: "",
 			})
 		}

@@ -40,7 +40,7 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 						continue
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							patternDiff := propertyDiff.PatternDiff
@@ -49,14 +49,14 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 							}
 
 							id := ResponsePropertyPatternChangedId
-							text := fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.From), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
+							text := fmt.Sprintf(config.i18n(id), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(patternDiff.From), colorizedValue(patternDiff.To), colorizedValue(responseStatus))
 							if patternDiff.To == "" || patternDiff.To == nil {
 								id = ResponsePropertyPatternRemovedId
-								text = fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.From), ColorizedValue(responseStatus))
+								text = fmt.Sprintf(config.i18n(id), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(patternDiff.From), colorizedValue(responseStatus))
 
 							} else if patternDiff.From == "" || patternDiff.From == nil {
 								id = ResponsePropertyPatternAddedId
-								text = fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
+								text = fmt.Sprintf(config.i18n(id), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(patternDiff.To), colorizedValue(responseStatus))
 							}
 
 							result = append(result, ApiChange{

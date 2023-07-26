@@ -20,7 +20,7 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 		result = append(result, ComponentChange{
 			Id:     apiSchemasRemovedCheckId,
 			Level:  config.getLogLevel(apiSchemasRemovedCheckId, INFO),
-			Text:   fmt.Sprintf(config.i18n(apiSchemasRemovedCheckId), ColorizedValue(deletedSchema)),
+			Text:   fmt.Sprintf(config.i18n(apiSchemasRemovedCheckId), colorizedValue(deletedSchema)),
 			Source: "", // TODO: get the file name
 		})
 	}

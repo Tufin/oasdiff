@@ -32,11 +32,11 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 						minItemsDiff := mediaTypeDiff.SchemaDiff.MinItemsDiff
 						if minItemsDiff.From != nil &&
 							minItemsDiff.To != nil {
-							if IsDecreasedValue(minItemsDiff) {
+							if isDecreasedValue(minItemsDiff) {
 								result = append(result, ApiChange{
 									Id:          "response-body-min-items-decreased",
 									Level:       ERR,
-									Text:        fmt.Sprintf(config.i18n("response-body-min-items-decreased"), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
+									Text:        fmt.Sprintf(config.i18n("response-body-min-items-decreased"), colorizedValue(minItemsDiff.From), colorizedValue(minItemsDiff.To)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -46,7 +46,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 						}
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							minItemsDiff := propertyDiff.MinItemsDiff
@@ -57,7 +57,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 								minItemsDiff.From == nil {
 								return
 							}
-							if !IsDecreasedValue(minItemsDiff) {
+							if !isDecreasedValue(minItemsDiff) {
 								return
 							}
 
@@ -68,7 +68,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 							result = append(result, ApiChange{
 								Id:          "response-property-min-items-decreased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-property-min-items-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n("response-property-min-items-decreased"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(minItemsDiff.From), colorizedValue(minItemsDiff.To), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

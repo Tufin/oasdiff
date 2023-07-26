@@ -43,7 +43,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 					})
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						nullableDiff := propertyDiff.NullableDiff
@@ -57,7 +57,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:        requestPropertyBecameNotNullableId,
 							Level:     ERR,
-							Text:      fmt.Sprintf(config.i18n(requestPropertyBecameNotNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Text:      fmt.Sprintf(config.i18n(requestPropertyBecameNotNullableId), colorizedValue(propertyFullName(propertyPath, propertyName))),
 							Operation: operation,
 							Path:      path,
 							Source:    source,

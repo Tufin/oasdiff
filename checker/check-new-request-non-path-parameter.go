@@ -38,7 +38,7 @@ func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *d
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+								Text:        fmt.Sprintf(config.i18n(id), colorizedValue(paramLocation), colorizedValue(paramName)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

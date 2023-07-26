@@ -17,9 +17,9 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 	return propertyFullName
 }
 
-func ColorizedValue(arg interface{}) string {
+func colorizedValue(arg interface{}) string {
 	str := interfaceToString(arg)
-	if IsPipedOutput() {
+	if isPipedOutput() {
 		return fmt.Sprintf("'%s'", str)
 	}
 	return color.InBold(fmt.Sprintf("'%s'", str))
@@ -48,7 +48,7 @@ func interfaceToString(arg interface{}) string {
 	return fmt.Sprintf("%s", arg)
 }
 
-func CheckModifiedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *diff.SchemaDiff, propertyParentItem *diff.SchemaDiff)) {
+func checkModifiedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *diff.SchemaDiff, propertyParentItem *diff.SchemaDiff)) {
 	if schemaDiff == nil {
 		return
 	}
@@ -98,7 +98,7 @@ func processModifiedPropertiesDiff(propertyPath string, propertyName string, sch
 	}
 }
 
-func CheckAddedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentDiff *diff.SchemaDiff)) {
+func checkAddedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentDiff *diff.SchemaDiff)) {
 	if schemaDiff == nil {
 		return
 	}
@@ -146,7 +146,7 @@ func processAddedPropertiesDiff(propertyPath string, propertyName string, schema
 	}
 }
 
-func CheckDeletedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentDiff *diff.SchemaDiff)) {
+func checkDeletedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentDiff *diff.SchemaDiff)) {
 	if schemaDiff == nil {
 		return
 	}
@@ -194,7 +194,7 @@ func processDeletedPropertiesDiff(propertyPath string, propertyName string, sche
 	}
 }
 
-func IsIncreased(from interface{}, to interface{}) bool {
+func isIncreased(from interface{}, to interface{}) bool {
 	fromUint64, ok := from.(uint64)
 	toUint64, okTo := to.(uint64)
 	if ok && okTo {
@@ -208,15 +208,15 @@ func IsIncreased(from interface{}, to interface{}) bool {
 	return false
 }
 
-func IsIncreasedValue(diff *diff.ValueDiff) bool {
-	return IsIncreased(diff.From, diff.To)
+func isIncreasedValue(diff *diff.ValueDiff) bool {
+	return isIncreased(diff.From, diff.To)
 }
 
-func IsDecreasedValue(diff *diff.ValueDiff) bool {
-	return IsDecreased(diff.From, diff.To)
+func isDecreasedValue(diff *diff.ValueDiff) bool {
+	return isDecreased(diff.From, diff.To)
 }
 
-func IsDecreased(from interface{}, to interface{}) bool {
+func isDecreased(from interface{}, to interface{}) bool {
 	fromUint64, ok := from.(uint64)
 	toUint64, okTo := to.(uint64)
 	if ok && okTo {
@@ -232,7 +232,7 @@ func IsDecreased(from interface{}, to interface{}) bool {
 
 func empty2none(a interface{}) interface{} {
 	if a == nil || a == "" {
-		return ColorizedValue("none")
+		return colorizedValue("none")
 	}
-	return ColorizedValue(a)
+	return colorizedValue(a)
 }

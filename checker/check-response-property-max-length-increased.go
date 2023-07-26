@@ -32,11 +32,11 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 						maxLengthDiff := mediaTypeDiff.SchemaDiff.MaxLengthDiff
 						if maxLengthDiff.From != nil &&
 							maxLengthDiff.To != nil {
-							if IsIncreasedValue(maxLengthDiff) {
+							if isIncreasedValue(maxLengthDiff) {
 								result = append(result, ApiChange{
 									Id:          "response-body-max-length-increased",
 									Level:       ERR,
-									Text:        fmt.Sprintf(config.i18n("response-body-max-length-increased"), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+									Text:        fmt.Sprintf(config.i18n("response-body-max-length-increased"), colorizedValue(maxLengthDiff.From), colorizedValue(maxLengthDiff.To)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -46,7 +46,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 						}
 					}
 
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							maxLengthDiff := propertyDiff.MaxLengthDiff
@@ -57,7 +57,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 								maxLengthDiff.From == nil {
 								return
 							}
-							if !IsIncreasedValue(maxLengthDiff) {
+							if !isIncreasedValue(maxLengthDiff) {
 								return
 							}
 
@@ -68,7 +68,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 							result = append(result, ApiChange{
 								Id:          "response-property-max-length-increased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-property-max-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To), ColorizedValue(responseStatus)),
+								Text:        fmt.Sprintf(config.i18n("response-property-max-length-increased"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(maxLengthDiff.From), colorizedValue(maxLengthDiff.To), colorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

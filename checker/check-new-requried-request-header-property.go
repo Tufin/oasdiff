@@ -31,7 +31,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 				}
 
 				for paramName, paramDiff := range paramDiffs {
-					CheckAddedPropertiesDiff(
+					checkAddedPropertiesDiff(
 						paramDiff.SchemaDiff,
 						func(propertyPath string, newPropertyName string, newProperty *openapi3.Schema, parent *diff.SchemaDiff) {
 							if newProperty.ReadOnly {
@@ -44,7 +44,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          "new-required-request-header-property",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("new-required-request-header-property"), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
+								Text:        fmt.Sprintf(config.i18n("new-required-request-header-property"), colorizedValue(paramName), colorizedValue(propertyFullName(propertyPath, newPropertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -30,7 +30,7 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 					continue
 				}
 				for _, mediaTypeDiff := range responseDiff.ContentDiff.MediaTypeModified {
-					CheckModifiedPropertiesDiff(
+					checkModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 							enumDiff := propertyDiff.EnumDiff
@@ -42,7 +42,7 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 								result = append(result, ApiChange{
 									Id:          responsePropertyEnumValueRemovedId,
 									Level:       config.getLogLevel(responsePropertyEnumValueRemovedId, INFO),
-									Text:        fmt.Sprintf(config.i18n(responsePropertyEnumValueRemovedId), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Text:        fmt.Sprintf(config.i18n(responsePropertyEnumValueRemovedId), enumVal, colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(responseStatus)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

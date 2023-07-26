@@ -40,7 +40,7 @@ func (level Level) String() string {
 }
 
 func (level Level) PrettyString() string {
-	if IsPipedOutput() {
+	if isPipedOutput() {
 		return level.String()
 	}
 

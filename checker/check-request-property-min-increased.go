@@ -29,11 +29,11 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 					minDiff := mediaTypeDiff.SchemaDiff.MinDiff
 					if minDiff.From != nil &&
 						minDiff.To != nil {
-						if IsIncreasedValue(minDiff) {
+						if isIncreasedValue(minDiff) {
 							result = append(result, ApiChange{
 								Id:          "request-body-min-increased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-body-min-increased"), ColorizedValue(minDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-body-min-increased"), colorizedValue(minDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -43,7 +43,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 					}
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						minDiff := propertyDiff.MinDiff
@@ -57,14 +57,14 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						if propertyDiff.Revision.Value.ReadOnly {
 							return
 						}
-						if !IsIncreasedValue(minDiff) {
+						if !isIncreasedValue(minDiff) {
 							return
 						}
 
 						result = append(result, ApiChange{
 							Id:          "request-property-min-increased",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-min-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-property-min-increased"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(minDiff.To)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

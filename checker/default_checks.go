@@ -10,10 +10,10 @@ func GetDefaultChecks() Config {
 }
 
 func GetChecks(includeChecks utils.StringList) Config {
-	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks), BetaDeprecationDays, StableDeprecationDays)
+	return getBackwardCompatibilityCheckConfig(allChecks(), levelOverrides(includeChecks), BetaDeprecationDays, StableDeprecationDays)
 }
 
-func LevelOverrides(includeChecks utils.StringList) map[string]Level {
+func levelOverrides(includeChecks utils.StringList) map[string]Level {
 	result := map[string]Level{}
 	for _, s := range includeChecks {
 		// if the checker was explicitly included with the `--include-checks`,
@@ -25,7 +25,7 @@ func LevelOverrides(includeChecks utils.StringList) map[string]Level {
 }
 
 func GetAllChecks(includeChecks utils.StringList, deprecationDaysBeta int, deprecationDaysStable int) Config {
-	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks), deprecationDaysBeta, deprecationDaysStable)
+	return getBackwardCompatibilityCheckConfig(allChecks(), levelOverrides(includeChecks), deprecationDaysBeta, deprecationDaysStable)
 }
 
 func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, levelOverrides map[string]Level, minSunsetBetaDays int, minSunsetStableDays int) Config {

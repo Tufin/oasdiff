@@ -32,7 +32,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, ApiChange{
 							Id:          "request-body-max-length-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-body-max-length-set"), ColorizedValue(maxLengthDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-body-max-length-set"), colorizedValue(maxLengthDiff.To)),
 							Comment:     config.i18n("request-body-max-length-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -42,7 +42,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 					}
 				}
 
-				CheckModifiedPropertiesDiff(
+				checkModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						maxLengthDiff := propertyDiff.MaxLengthDiff
@@ -60,7 +60,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, ApiChange{
 							Id:          "request-property-max-length-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-property-max-length-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+							Text:        fmt.Sprintf(config.i18n("request-property-max-length-set"), colorizedValue(propertyFullName(propertyPath, propertyName)), colorizedValue(maxLengthDiff.To)),
 							Comment:     config.i18n("request-property-max-length-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

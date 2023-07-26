@@ -40,7 +40,7 @@ func ResponseHeaderBecameOptional(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, ApiChange{
 						Id:          "response-header-became-optional",
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("response-header-became-optional"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
+						Text:        fmt.Sprintf(config.i18n("response-header-became-optional"), colorizedValue(headerName), colorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
