@@ -23,7 +23,7 @@ func TestResponsePropertyEnumValueAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "response-property-enum-value-added",
-		Text:        "added the new 'Test' enum value the 'data/typeEnum' response property for the response status '200'",
+		Text:        "added the new 'Test' enum value to the 'data/typeEnum' response property for the response status '200'",
 		Comment:     "Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.",
 		Level:       checker.WARN,
 		Operation:   "POST",
