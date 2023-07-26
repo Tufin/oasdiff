@@ -4,11 +4,19 @@ added-required-request-body: added required request body
 request-parameter-removed: deleted the %s request parameter %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
+<<<<<<< HEAD
 request-parameter-pattern-added: "added the pattern '%s' for the %s request parameter %s"
 request-parameter-pattern-changed: "changed the pattern for the %s request parameter %s from '%s' to '%s'"
 request-property-pattern-added: "added the pattern '%s' for the request property %s"
 request-property-pattern-removed: "removed the pattern '%s' for the request property %s"
 request-property-pattern-changed: "changed the pattern for the request property %s from '%s' to '%s'"
+=======
+request-parameter-pattern-added: "added the pattern '%s' to the %s request parameter %s"
+request-parameter-pattern-changed: "changed the pattern of the %s request parameter %s from '%s' to '%s'"
+request-property-pattern-added: "added the pattern '%s' to the request property %s"
+request-property-pattern-removed: "removed the pattern '%s' from the request property %s"
+request-property-pattern-changed: "changed the pattern of the request property %s from '%s' to '%s'"
+>>>>>>> main
 api-deprecated-sunset-parse: "api sunset date '%s' can't be parsed for deprecated API: %v"
 api-sunset-date-too-small: "api sunset date '%s' is too small, must be at least %d days from now"
 endpoint-added: endpoint added
@@ -39,9 +47,9 @@ request-header-property-became-enum: the %s request header's property %s was res
 request-parameter-became-required: the %s request parameter %s became required
 request-parameter-became-optional: the %s request parameter %s became optional
 request-parameter-became-enum: the %s request parameter %s was restricted to a list of enum values
-request-parameter-enum-value-removed: removed the enum value %s for the %s request parameter %s
-pattern-changed-warn-comment: "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern(e.g. changed from '[0-9]+' to '[0-9]*')"
-request-parameter-x-extensible-enum-value-removed: removed the x-extensible-enum value %s for the %s request parameter %s
+request-parameter-enum-value-removed: removed the enum value %s from the %s request parameter %s
+pattern-changed-warn-comment: "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')"
+request-parameter-x-extensible-enum-value-removed: removed the x-extensible-enum value %s from the %s request parameter %s
 request-parameter-max-decreased: for the %s request parameter %s, the max was decreased from %s to %s
 request-parameter-default-value-changed: for the %s request parameter %s, default value was changed from %s to %s
 request-parameter-max-length-decreased: for the %s request parameter %s, the maxLength was decreased from %s to %s
@@ -99,7 +107,7 @@ response-optional-property-removed: removed the optional property %s from the re
 response-property-became-optional: the response property %s became optional for the status %s
 response-property-became-nullable: the response property %s became nullable for the status %s
 response-body-became-nullable: the response's body became nullable
-response-property-enum-value-added: added the new '%s' enum value the %s response property for the response status %s
+response-property-enum-value-added: added the new '%s' enum value to the %s response property for the response status %s
 response-property-enum-value-added-comment: Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.
 response-property-enum-value-removed: removed the '%s' enum value from the %s response property for the response status %s
 response-body-max-length-increased: the response's body maxLength was increased from %s to %s
@@ -122,7 +130,7 @@ response-success-status-removed: removed the success response with the status %s
 response-non-success-status-removed: removed the non-success response with the status %s
 response-success-status-added: added the success response with the status %s
 response-non-success-status-added: added the non-success response with the status %s
-request-allOf-modified: modified allOf for the request property %s
+request-allOf-modified: modified allOf of the request property %s
 request-allOf-modified-comment: It is a warning because it is very difficult to check that allOf changed correctly without breaking changes
 response-body-max-increased: the response's body max was increased from %s to %s
 response-property-max-increased: the %s response property's max was increased from %s to %s for the response status %s
