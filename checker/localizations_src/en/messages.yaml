@@ -191,7 +191,6 @@ response-body-all-of-added: added %s to the response body 'allOf' list for the r
 response-body-all-of-removed: removed %s from the response body 'allOf' list for the response status %s
 response-property-all-of-added: added %s to the %s response property 'allOf' list for the response status %s
 response-property-all-of-removed: removed %s from the %s response property 'allOf' list for the response status %s
-
 response-body-discriminator-added: added response discriminator for the response status %s
 response-property-discriminator-added: added discriminator to %s response property for the response status %s
 response-body-discriminator-removed: removed response discriminator for the response status %s

@@ -191,16 +191,15 @@ response-body-all-of-added: добавлено %s в список 'allOf' тел
 response-body-all-of-removed: удалён %s из списка 'allOf' тела ответа для статуса ответа %s
 response-property-all-of-added: добавлено %s в список 'allOf' свойства ответа %s для статуса ответа %s
 response-property-all-of-removed: удалён %s из списка 'allOf' свойства ответа %s для статуса ответа %s
-
-response-body-discriminator-added: added response discriminator for the response status %s
-response-property-discriminator-added: added discriminator to %s response property for the response status %s
-response-body-discriminator-removed: removed response discriminator for the response status %s
-response-property-discriminator-removed: removed discriminator to %s response property for the response status %s
-response-body-discriminator-property-name-changed: response discriminator property name changed from %s to %s for the response status %s
-response-property-discriminator-property-name-changed: response discriminator property name changed for %s response property from %s to %s for the response status %s
-response-body-discriminator-mapping-added: added %s mapping keys to the response discriminator for the response status %s
-response-property-discriminator-mapping-added: added %s discriminator mapping keys to the %s response property for the response status %s
-response-body-discriminator-mapping-deleted: removed %s mapping keys from the response discriminator for the response status %s
-response-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from the %s response property for the response status %s
-response-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the response discriminator for the response status %s
-response-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s response property for the response status %s
+response-body-discriminator-added: добавлен дискриминатор ответа для статуса ответа %s
+response-property-discriminator-added: добавлен дискриминатор для свойства ответа %s для статуса ответа %s
+response-body-discriminator-removed: удален дискриминатор ответа для статуса ответа %s
+response-property-discriminator-removed: удален дискриминатор для свойства ответа %s для статуса ответа %s
+response-body-discriminator-property-name-changed: изменено имя свойства дискриминатора ответа с %s на %s для статуса ответа %s
+response-property-discriminator-property-name-changed: изменено имя свойства дискриминатора ответа для свойства ответа %s с %s на %s для статуса ответа %s
+response-body-discriminator-mapping-added: добавлены ключи сопоставления %s в дискриминатор ответа для статуса ответа %s
+response-property-discriminator-mapping-added: добавлены ключи дискриминатора %s в свойство ответа %s для статуса ответа %s
+response-body-discriminator-mapping-deleted: удалены ключи сопоставления %s из дискриминатора ответа для статуса ответа %s
+response-property-discriminator-mapping-deleted: удалены ключи дискриминатора %s из свойства ответа %s для статуса ответа %s
+response-body-discriminator-mapping-changed: значение для ключа %s изменено с %s на %s в дискриминаторе ответа для статуса ответа %s
+response-property-discriminator-mapping-changed: значение для ключа дискриминатора %s изменено с %s на %s для свойства ответа %s для статуса ответа %s
