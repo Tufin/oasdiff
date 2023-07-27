@@ -8,6 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+// CL: increasing maxItems of request parameters
 func TestRequestParameterMaxItemsIncreased(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_max_items_updated_base.yaml")
 	require.NoError(t, err)
@@ -30,6 +31,7 @@ func TestRequestParameterMaxItemsIncreased(t *testing.T) {
 	}, errs[0])
 }
 
+// CL: decreasing maxItems of request parameters
 func TestRequestParameterMaxItemsDecreased(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_max_items_updated_revision.yaml")
 	require.NoError(t, err)

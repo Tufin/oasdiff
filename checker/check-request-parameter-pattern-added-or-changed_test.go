@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: Changing pattern of request parameters
+// CL: changing pattern of request parameters
 func TestRequestParameterPatternChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)
@@ -32,7 +32,7 @@ func TestRequestParameterPatternChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Adding pattern to request parameters
+// CL: adding pattern to request parameters
 func TestRequestParameterPatternAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_pattern_added_or_changed_revision.yaml")
 	require.NoError(t, err)
@@ -55,7 +55,7 @@ func TestRequestParameterPatternAdded(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: Removing pattern from request parameters
+// CL: removing pattern from request parameters
 func TestRequestParameterPatternRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)

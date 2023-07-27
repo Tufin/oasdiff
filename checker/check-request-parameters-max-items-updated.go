@@ -21,7 +21,7 @@ func RequestParameterMaxItemsUpdatedCheck(diffReport *diff.Diff, operationsSourc
 			}
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {
-					if paramDiff.SchemaDiff == nil {
+					if paramDiff.SchemaDiff == nil || paramDiff.SchemaDiff.ItemsDiff == nil {
 						continue
 					}
 					maxItemsDiff := paramDiff.SchemaDiff.ItemsDiff.MaxItemsDiff
