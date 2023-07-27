@@ -191,3 +191,16 @@ response-body-all-of-added: added %s to the response body 'allOf' list for the r
 response-body-all-of-removed: removed %s from the response body 'allOf' list for the response status %s
 response-property-all-of-added: added %s to the %s response property 'allOf' list for the response status %s
 response-property-all-of-removed: removed %s from the %s response property 'allOf' list for the response status %s
+
+response-body-discriminator-added: added response discriminator for the response status %s
+response-property-discriminator-added: added discriminator to %s response property for the response status %s
+response-body-discriminator-removed: removed response discriminator for the response status %s
+response-property-discriminator-removed: removed discriminator to %s response property for the response status %s
+response-body-discriminator-property-name-changed: response discriminator property name changed from %s to %s for the response status %s
+response-property-discriminator-property-name-changed: response discriminator property name changed for %s response property from %s to %s for the response status %s
+response-body-discriminator-mapping-added: added %s mapping keys to the response discriminator for the response status %s
+response-property-discriminator-mapping-added: added %s discriminator mapping keys to the %s response property for the response status %s
+response-body-discriminator-mapping-deleted: removed %s mapping keys from the response discriminator for the response status %s
+response-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from the %s response property for the response status %s
+response-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the response discriminator for the response status %s
+response-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s response property for the response status %s
