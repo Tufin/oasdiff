@@ -93,7 +93,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		RequestParameterMaxLengthSetCheck,
 		ResponsePropertyMaxLengthUnsetCheck,
 		RequestParameterMaxLengthDecreasedCheck,
-		RequestPropertyMaxLengthDecreasedCheck,
+		RequestPropertyMaxLengthUpdatedCheck,
 		ResponsePropertyMaxLengthIncreasedCheck,
 		ResponsePropertyMinLengthDecreasedCheck,
 		RequestPropertyMaxSetCheck,
