@@ -203,3 +203,15 @@ response-body-discriminator-mapping-deleted: removed %s mapping keys from the re
 response-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from the %s response property for the response status %s
 response-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the response discriminator for the response status %s
 response-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s response property for the response status %s
+request-body-discriminator-added: added request schema discriminator
+request-property-discriminator-added: added discriminator to %s request property
+request-body-discriminator-removed: removed request schema discriminator
+request-property-discriminator-removed: removed discriminator to %s request property
+request-body-discriminator-property-name-changed: request schema discriminator property name changed from %s to %s
+request-property-discriminator-property-name-changed: request schema discriminator property name changed for %s request property from %s to %s
+request-body-discriminator-mapping-added: added %s mapping keys to the request schema discriminator
+request-property-discriminator-mapping-added: added %s discriminator mapping keys to the %s request property
+request-body-discriminator-mapping-deleted: removed %s mapping keys from the request schema discriminator
+request-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from the %s request property
+request-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the request schema discriminator
+request-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s request property
