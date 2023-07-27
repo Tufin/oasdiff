@@ -29,6 +29,7 @@ api-sunset-date-changed-too-small: дата sunset у API изменена на 
 new-required-request-parameter: добавлен новый обязательный %s параметр зароса %s
 new-optional-request-parameter: добавлен новый необязательный %s параметр зароса %s
 new-required-request-property: добавлено новле обязательное поле запроса %s
+new-optional-request-property: добавлено новле необязательное поле запроса %s
 new-required-request-header-property: в заголовке запроса %s добавлено новое обязательное поле %s
 request-body-became-required: тело запроса стало обязательным
 request-body-became-optional: тело запроса стало необязательным
