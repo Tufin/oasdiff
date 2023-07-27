@@ -54,22 +54,32 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							minDiff.To == nil {
 							return
 						}
+						level := ERR
 						if propertyDiff.Revision.Value.ReadOnly {
-							return
+							level = INFO
 						}
-						if !IsIncreasedValue(minDiff) {
-							return
+						if IsIncreasedValue(minDiff) {
+							result = append(result, ApiChange{
+								Id:          "request-property-min-increased",
+								Level:       level,
+								Text:        fmt.Sprintf(config.i18n("request-property-min-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "request-property-min-decreased",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-property-min-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
 						}
 
-						result = append(result, ApiChange{
-							Id:          "request-property-min-increased",
-							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-min-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      source,
-						})
 					})
 			}
 		}
