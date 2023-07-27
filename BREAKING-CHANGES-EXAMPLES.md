@@ -1,6 +1,7 @@
 # Examples of Breaking and Non-Breaking Changes
 These examples are automatically generated from unit tests.
 ## Examples of breaking changes
+[adding 'allOf' schema to the request body or request body property is breaking](checker/checker_breaking_test.go?plain=1#L676)  
 [adding a new required property in request body is breaking](checker/checker_breaking_property_test.go?plain=1#L352)  
 [adding a pattern to a schema is breaking for recursive properties](checker/checker_breaking_test.go?plain=1#L475)  
 [adding a pattern to a schema is breaking](checker/checker_breaking_test.go?plain=1#L459)  
@@ -62,6 +63,7 @@ These examples are automatically generated from unit tests.
 [reducing max length in request is breaking](checker/checker_breaking_min_max_test.go?plain=1#L12)  
 [reducing min items in response is breaking](checker/checker_breaking_min_max_test.go?plain=1#L220)  
 [reducing min length in response is breaking](checker/checker_breaking_min_max_test.go?plain=1#L62)  
+[removing 'allOf' schema from the request body or request body property is breaking with warn](checker/checker_breaking_test.go?plain=1#L698)  
 [removing 'anyOf' schema from the request body or request body property is breaking](checker/checker_breaking_test.go?plain=1#L633)  
 [removing 'oneOf' schema from the request body or request body property is breaking](checker/checker_breaking_test.go?plain=1#L655)  
 [removing a media type from request body is breaking](checker/checker_breaking_test.go?plain=1#L617)  
@@ -140,6 +142,8 @@ These examples are automatically generated from unit tests.
 [renaming a path parameter is not breaking](checker/checker_breaking_test.go?plain=1#L135)  
 
 ## Examples of info-level changes for changelog
+[adding 'allOf' schema to the request body or request body property](checker/check-request-property-all-of-updated_test.go?plain=1#L11)  
+[adding 'allOf' schema to the response body or response body property](checker/check-response-property-all-of-updated_test.go?plain=1#L11)  
 [adding 'anyOf' schema to the request body or request body property](checker/check-request-property-any-of-updated_test.go?plain=1#L11)  
 [adding 'anyOf' schema to the response body or response body property](checker/check-response-property-any-of-updated_test.go?plain=1#L11)  
 [adding 'oneOf' schema to the request body or request body property](checker/check-request-property-one-of-updated_test.go?plain=1#L11)  
@@ -202,6 +206,8 @@ These examples are automatically generated from unit tests.
 [new paths or path operations](checker/check-api-added_test.go?plain=1#L11)  
 [path operations that became deprecated](checker/checker_deprecation_test.go?plain=1#L324)  
 [path operations that were re-activated](checker/checker_deprecation_test.go?plain=1#L346)  
+[removing 'allOf' schema from the request body or request body property](checker/check-request-property-all-of-updated_test.go?plain=1#L47)  
+[removing 'allOf' schema from the response body or response body property](checker/check-response-property-all-of-updated_test.go?plain=1#L47)  
 [removing 'anyOf' schema from the request body or request body property](checker/check-request-property-any-of-updated_test.go?plain=1#L47)  
 [removing 'anyOf' schema from the response body or response body property](checker/check-response-property-any-of-updated_test.go?plain=1#L47)  
 [removing 'oneOf' schema from the request body or request body property](checker/check-request-property-one-of-updated_test.go?plain=1#L47)  

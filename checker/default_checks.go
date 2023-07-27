@@ -135,6 +135,8 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyAnyOfUpdated,
 		RequestPropertyOneOfUpdated,
 		ResponsePropertyOneOfUpdated,
+		RequestPropertyAllOfUpdated,
+		ResponsePropertyAllOfUpdated,
 	}
 }
 
