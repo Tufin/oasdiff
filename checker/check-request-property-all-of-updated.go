@@ -48,7 +48,7 @@ func RequestPropertyAllOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 				if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted) > 0 {
 					result = append(result, ApiChange{
 						Id:    "request-body-all-of-removed",
-						Level: ERR,
+						Level: WARN,
 						Text: fmt.Sprintf(
 							config.i18n("request-body-all-of-removed"),
 							ColorizedValue(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted.String())),
@@ -84,7 +84,7 @@ func RequestPropertyAllOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 						if len(propertyDiff.AllOfDiff.Deleted) > 0 {
 							result = append(result, ApiChange{
 								Id:    "request-property-all-of-removed",
-								Level: ERR,
+								Level: WARN,
 								Text: fmt.Sprintf(
 									config.i18n("request-property-all-of-removed"),
 									ColorizedValue(propertyDiff.AllOfDiff.Deleted.String()),
