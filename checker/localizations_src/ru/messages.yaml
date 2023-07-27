@@ -5,6 +5,7 @@ request-parameter-removed: удалён %s параметр запроса %s
 total-errors: "%d критические изменения: %d %s, %d %s\\n"
 total-changes: "%d изменений: %d %s, %d %s, %d %s\\n"
 request-parameter-pattern-added: добавлен pattern '%s' у %s параметра запроса %s
+request-parameter-pattern-removed: удалён pattern '%s' у %s параметра запроса %s
 request-parameter-pattern-changed: изменён pattern у %s параметра запроса %s со значения '%s' на значение '%s'
 request-property-pattern-added: добавлен pattern '%s' у поля запроса %s
 request-property-pattern-removed: удалён pattern '%s' у поля запроса %s
@@ -40,17 +41,26 @@ request-parameter-became-required: ранее необязательный %s п
 request-parameter-became-optional: ранее необязательный параметр запроса %s %s теперь является необязательным
 request-parameter-became-enum: заголовок запроса %s поле %s было ограничено списком значений перечисления
 request-parameter-enum-value-removed: удалено значение enum %s у %s параметра запроса %s
+request-parameter-enum-value-added: добавлено значение enum %s у %s параметра запроса %s
 pattern-changed-warn-comment: Это предупреждение, потому что сложно автоматически проанализировать, является ли новый шаблон надмножеством предыдущего шаблона (например, изменен с '[0-9]+' на '[0-9]*').
 request-parameter-x-extensible-enum-value-removed: удалено из x-extensible-enum значение %s у %s параметра запроса %s
 request-parameter-max-decreased: в %s параметре запроса %s, max уменьшен с %s до %s
+request-parameter-max-increased: в %s параметре запроса %s, max увеличен с %s до %s
 request-parameter-default-value-changed: в %s параметре запроса %s, значение по умолчанию изменено с %s на %s
 request-parameter-max-length-decreased: в %s параметре запроса %s, maxLength уменьшен с %s до %s
+request-parameter-max-length-increased: в %s параметре запроса %s, maxLength увеличен с %s до %s
+request-parameter-min-length-increased: в %s параметре запроса %s, minLength увеличен с %s до %s
+request-parameter-min-length-decreased: в %s параметре запроса %s, minLength уменьшен с %s до %s
 request-parameter-max-length-set: в %s параметре запроса %s, maxLength установлен в %s
 request-parameter-max-length-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
 request-parameter-max-set: в %s параметре запроса %s, max установлен в %s
 request-parameter-max-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
 request-parameter-min-increased: в %s параметре запроса %s, min увеличен с %s до %s
+request-parameter-min-decreased: в %s параметре запроса %s, min уменьшен с %s до %s
+request-parameter-max-items-decreased: в %s параметре запроса %s, maxItems уменьшен с %s до %s
+request-parameter-max-items-increased: в %s параметре запроса %s, maxItems увеличен с %s до %s
 request-parameter-min-items-increased: в %s параметре запроса %s, minItems увеличен с %s до %s
+request-parameter-min-items-decreased: в %s параметре запроса %s, minItems уменьшен с %s до %s
 request-parameter-min-items-set: в %s параметре запроса %s, minItems установлен в %s
 request-parameter-min-items-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
 request-parameter-min-set: в %s параметре запроса %s, min установлен в %s
