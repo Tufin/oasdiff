@@ -39,6 +39,16 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 								Path:        path,
 								Source:      source,
 							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "request-body-max-increased",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("request-body-max-increased"), ColorizedValue(maxDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
 						}
 					}
 				}
@@ -54,22 +64,32 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							maxDiff.To == nil {
 							return
 						}
+						level := ERR
 						if propertyDiff.Revision.Value.ReadOnly {
-							return
+							level = INFO
 						}
-						if !IsDecreasedValue(maxDiff) {
-							return
+						if IsDecreasedValue(maxDiff) {
+							result = append(result, ApiChange{
+								Id:          "request-property-max-decreased",
+								Level:       level,
+								Text:        fmt.Sprintf(config.i18n("request-property-max-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "request-property-max-increased",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-property-max-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
 						}
 
-						result = append(result, ApiChange{
-							Id:          "request-property-max-decreased",
-							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-max-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      source,
-						})
 					})
 			}
 		}
