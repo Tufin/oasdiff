@@ -68,6 +68,7 @@ request-parameter-min-set-comment: This is a warning because sometimes it is req
 request-parameter-type-changed: for the %s request parameter %s, the type/format was changed from %s/%s to %s/%s
 new-request-path-parameter: added the new path request parameter %s
 request-property-became-required: the request property %s became required
+request-property-became-optional: the request property %s became optional
 request-property-became-not-nullable: the request property %s became not nullable
 request-body-became-not-nullable: the request's body became not nullable
 request-property-became-nullable: the request property %s became nullable

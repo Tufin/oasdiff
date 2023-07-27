@@ -68,6 +68,7 @@ request-parameter-min-set-comment: Это предупреждение, пото
 request-parameter-type-changed: в %s параметре запроса %s, type/format изменился с %s/%s на %s/%s
 new-request-path-parameter: добален новый path параметр запроса %s
 request-property-became-required: поле запроса %s стало обязательным
+request-property-became-optional: поле запроса %s стало необязательным
 request-property-became-not-nullable: свойство запроса %s стало недействительным
 request-property-became-nullable: свойство запроса %s стало обнуляемым
 request-body-became-nullable: тело запроса стало обнуляемым
