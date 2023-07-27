@@ -664,7 +664,6 @@ func TestBreaking_RequestPropertyOneOfRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 
 	require.Len(t, errs, 2)
-
 	require.Equal(t, "request-body-one-of-removed", errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
 	require.Equal(t, "removed 'Rabbit' from the request body 'oneOf' list", errs[0].GetText())
@@ -672,4 +671,48 @@ func TestBreaking_RequestPropertyOneOfRemoved(t *testing.T) {
 	require.Equal(t, "request-property-one-of-removed", errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
 	require.Equal(t, "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list", errs[1].GetText())
+}
+
+// BC: adding 'allOf' schema to the request body or request body property is breaking
+func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
+	s1, err := open("../data/checker/request_property_all_of_added_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_all_of_added_revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+
+	require.Len(t, errs, 2)
+
+	require.Equal(t, "request-body-all-of-added", errs[0].GetId())
+	require.Equal(t, checker.ERR, errs[0].GetLevel())
+	require.Equal(t, "added 'Rabbit' to the request body 'allOf' list", errs[0].GetText())
+
+	require.Equal(t, "request-property-all-of-added", errs[1].GetId())
+	require.Equal(t, checker.ERR, errs[1].GetLevel())
+	require.Equal(t, "added 'Breed3' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
+}
+
+// BC: removing 'allOf' schema from the request body or request body property is breaking with warn
+func TestBreaking_RequestPropertyAllOfRemoved(t *testing.T) {
+	s1, err := open("../data/checker/request_property_all_of_removed_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_all_of_removed_revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+
+	require.Len(t, errs, 2)
+
+	require.Equal(t, "request-body-all-of-removed", errs[0].GetId())
+	require.Equal(t, checker.WARN, errs[0].GetLevel())
+	require.Equal(t, "removed 'Rabbit' from the request body 'allOf' list", errs[0].GetText())
+
+	require.Equal(t, "request-property-all-of-removed", errs[1].GetId())
+	require.Equal(t, checker.WARN, errs[1].GetLevel())
+	require.Equal(t, "removed 'Breed3' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
 }
