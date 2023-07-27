@@ -5,6 +5,7 @@ request-parameter-removed: deleted the %s request parameter %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
 request-parameter-pattern-added: "added the pattern '%s' to the %s request parameter %s"
+request-parameter-pattern-removed: "removed the pattern '%s' from the %s request parameter %s"
 request-parameter-pattern-changed: "changed the pattern of the %s request parameter %s from '%s' to '%s'"
 request-property-pattern-added: "added the pattern '%s' to the request property %s"
 request-property-pattern-removed: "removed the pattern '%s' from the request property %s"
@@ -40,17 +41,26 @@ request-parameter-became-required: the %s request parameter %s became required
 request-parameter-became-optional: the %s request parameter %s became optional
 request-parameter-became-enum: the %s request parameter %s was restricted to a list of enum values
 request-parameter-enum-value-removed: removed the enum value %s from the %s request parameter %s
+request-parameter-enum-value-added: added the new enum value %s to the %s request parameter %s
 pattern-changed-warn-comment: "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')"
 request-parameter-x-extensible-enum-value-removed: removed the x-extensible-enum value %s from the %s request parameter %s
 request-parameter-max-decreased: for the %s request parameter %s, the max was decreased from %s to %s
+request-parameter-max-increased: for the %s request parameter %s, the max was increased from %s to %s
 request-parameter-default-value-changed: for the %s request parameter %s, default value was changed from %s to %s
 request-parameter-max-length-decreased: for the %s request parameter %s, the maxLength was decreased from %s to %s
+request-parameter-max-length-increased: for the %s request parameter %s, the maxLength was increased from %s to %s
+request-parameter-min-length-increased: for the %s request parameter %s, the minLength was increased from %s to %s
+request-parameter-min-length-decreased: for the %s request parameter %s, the minLength was decreased from %s to %s
 request-parameter-max-length-set: for the %s request parameter %s, the maxLength was set to %s
 request-parameter-max-length-set-comment: "This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification."
 request-parameter-max-set: for the %s request parameter %s, the max was set to %s
 request-parameter-max-set-comment: "This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification."
 request-parameter-min-increased: for the %s request parameter %s, the min was increased from %s to %s
+request-parameter-min-decreased: for the %s request parameter %s, the min was decreased from %s to %s
+request-parameter-max-items-decreased: for the %s request parameter %s, the maxItems was decreased from %s to %s
+request-parameter-max-items-increased: for the %s request parameter %s, the maxItems was increased from %s to %s
 request-parameter-min-items-increased: for the %s request parameter %s, the minItems was increased from %s to %s
+request-parameter-min-items-decreased: for the %s request parameter %s, the minItems was decreased from %s to %s
 request-parameter-min-items-set: for the %s request parameter %s, the minItems was set to %s
 request-parameter-min-items-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
 request-parameter-min-set: for the %s request parameter %s, the min was set to %s

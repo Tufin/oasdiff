@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterMinItemsUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -24,25 +24,28 @@ func RequestParameterMaxDecreasedCheck(diffReport *diff.Diff, operationsSources 
 					if paramDiff.SchemaDiff == nil {
 						continue
 					}
-					maxDiff := paramDiff.SchemaDiff.MaxDiff
-					if maxDiff == nil {
+					minItemsDiff := paramDiff.SchemaDiff.MinItemsDiff
+					if minItemsDiff == nil {
 						continue
 					}
-					if maxDiff.From == nil ||
-						maxDiff.To == nil {
+					if minItemsDiff.From == nil ||
+						minItemsDiff.To == nil {
 						continue
 					}
 
-					if !IsDecreasedValue(maxDiff) {
-						continue
+					id := "request-parameter-min-items-increased"
+					level := ERR
+					if !IsIncreasedValue(minItemsDiff) {
+						id = "request-parameter-min-items-decreased"
+						level = INFO
 					}
 
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, ApiChange{
-						Id:          "request-parameter-max-decreased",
-						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-max-decreased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+						Id:          id,
+						Level:       level,
+						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

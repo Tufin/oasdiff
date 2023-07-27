@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -33,16 +33,19 @@ func RequestParameterMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 						continue
 					}
 
+					id := "request-parameter-max-length-decreased"
+					level := ERR
 					if !IsDecreasedValue(maxLengthDiff) {
-						continue
+						id = "request-parameter-max-length-increased"
+						level = INFO
 					}
 
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, ApiChange{
-						Id:          "request-parameter-max-length-decreased",
-						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-max-length-decreased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+						Id:          id,
+						Level:       level,
+						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

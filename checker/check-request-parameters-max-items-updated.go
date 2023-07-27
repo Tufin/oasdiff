@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterMinIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterMaxItemsUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -21,28 +21,31 @@ func RequestParameterMinIncreasedCheck(diffReport *diff.Diff, operationsSources 
 			}
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {
-					if paramDiff.SchemaDiff == nil {
+					if paramDiff.SchemaDiff == nil || paramDiff.SchemaDiff.ItemsDiff == nil {
 						continue
 					}
-					minDiff := paramDiff.SchemaDiff.MinDiff
-					if minDiff == nil {
+					maxItemsDiff := paramDiff.SchemaDiff.ItemsDiff.MaxItemsDiff
+					if maxItemsDiff == nil {
 						continue
 					}
-					if minDiff.From == nil ||
-						minDiff.To == nil {
+					if maxItemsDiff.From == nil ||
+						maxItemsDiff.To == nil {
 						continue
 					}
 
-					if !IsIncreasedValue(minDiff) {
-						continue
+					id := "request-parameter-max-items-decreased"
+					level := ERR
+					if IsIncreasedValue(maxItemsDiff) {
+						id = "request-parameter-max-items-increased"
+						level = INFO
 					}
 
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, ApiChange{
-						Id:          "request-parameter-min-increased",
-						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-min-increased"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+						Id:          id,
+						Level:       level,
+						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxItemsDiff.From), ColorizedValue(maxItemsDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
