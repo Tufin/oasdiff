@@ -32,8 +32,8 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						if IsIncreasedValue(minLengthDiff) {
 							result = append(result, ApiChange{
 								Id:          "request-body-min-length-increased",
-								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-body-min-length-increased"), ColorizedValue(minLengthDiff.To)),
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("request-body-min-length-increased"), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -43,7 +43,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          "request-body-min-length-decreased",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-body-min-length-decreased"), ColorizedValue(minLengthDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-body-min-length-decreased"), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -69,7 +69,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          "request-property-min-length-decreased",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-min-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-property-min-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -78,8 +78,8 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						} else {
 							result = append(result, ApiChange{
 								Id:          "request-property-min-length-increased",
-								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-min-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.To)),
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("request-property-min-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

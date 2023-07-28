@@ -23,7 +23,7 @@ func TestRequestPropertyMinLengthDecreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-min-length-decreased",
-		Text:        "the 'name' request property's maxLength was decreased to '2'",
+		Text:        "the 'name' request property's maxLength was decreased from '3' to '2'",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -48,9 +48,9 @@ func TestRequestPropertyMinLengthIncreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-min-length-increased",
-		Text:        "the 'name' request property's maxLength was increased to '5'",
+		Text:        "the 'name' request property's maxLength was increased from '3' to '5'",
 		Comment:     "",
-		Level:       checker.INFO,
+		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      "../data/checker/request_property_min_length_decreased_base.yaml",
@@ -73,9 +73,9 @@ func TestRequestBodyMinLengthIncreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-body-min-length-increased",
-		Text:        "the request's body maxLength was increased to '100'",
+		Text:        "the request's body maxLength was increased from '10' to '100'",
 		Comment:     "",
-		Level:       checker.INFO,
+		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      "../data/checker/request_property_min_length_decreased_base.yaml",
@@ -98,7 +98,7 @@ func TestRequestBodyMinLengthDecreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-body-min-length-decreased",
-		Text:        "the request's body maxLength was decreased to '1'",
+		Text:        "the request's body maxLength was decreased from '10' to '1'",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

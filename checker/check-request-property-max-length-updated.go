@@ -43,7 +43,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          "request-body-max-length-increased",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-body-max-length-increased"), ColorizedValue(maxLengthDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-body-max-length-increased"), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -82,7 +82,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          "request-property-max-length-increased",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-max-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-property-max-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

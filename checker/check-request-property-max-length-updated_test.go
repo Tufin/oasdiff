@@ -27,7 +27,7 @@ func TestRequestBodyMaxLengthDecreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-body-max-length-increased",
-		Text:        "the request's body maxLength was increased to '100'",
+		Text:        "the request's body maxLength was increased from '50' to '100'",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",
@@ -109,7 +109,7 @@ func TestRequestPropertyMaxLengthIncreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-max-length-increased",
-		Text:        "the 'description' request property's maxLength was increased to '100'",
+		Text:        "the 'description' request property's maxLength was increased from '50' to '100'",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",

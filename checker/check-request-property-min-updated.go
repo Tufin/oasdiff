@@ -39,6 +39,16 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 								Path:        path,
 								Source:      source,
 							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "request-body-min-decreased",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-body-min-decreased"), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
 						}
 					}
 				}
@@ -72,7 +82,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          "request-property-min-decreased",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-min-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-property-min-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -43,7 +43,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          "request-body-max-increased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-body-max-increased"), ColorizedValue(maxDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-body-max-increased"), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -82,7 +82,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          "request-property-max-increased",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-max-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+								Text:        fmt.Sprintf(config.i18n("request-property-max-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
