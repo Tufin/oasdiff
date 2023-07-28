@@ -207,3 +207,11 @@ response-property-all-of-added: добавлено %s в список 'allOf' с
 response-property-all-of-removed: удалён %s из списка 'allOf' свойства ответа %s для статуса ответа %s
 request-property-default-value-changed: значение по умолчанию для свойства %s в запросе было изменено с %s на %s 
 request-body-default-value-changed: значение по умолчанию для тела запроса было изменено с %s на %s
+request-required-property-became-read-only: обязательное поле запроса %s стало только для чтения
+request-required-property-became-not-read-only: обязательное поле запроса %s перестало быть только для чтения
+request-optional-property-became-write-only: необязательное поле запроса %s стало только для записи
+request-optional-property-became-read-only: необязательное поле запроса %s стало только для чтения
+request-optional-property-became-not-write-only: необязательное поле запроса %s перестало быть только для записи
+request-optional-property-became-not-read-only: необязательное поле запроса %s перестало быть только для чтения
+request-required-property-became-write-only: обязательное поле запроса %s стало только для записи
+request-required-property-became-not-write-only: обязательное поле запроса %s перестало быть только для записи
