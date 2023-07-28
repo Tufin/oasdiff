@@ -53,7 +53,7 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          "request-property-enum-value-added",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-enum-value-added"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        fmt.Sprintf(config.i18n("request-property-enum-value-added"), ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

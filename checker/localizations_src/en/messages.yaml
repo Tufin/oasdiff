@@ -72,7 +72,7 @@ request-property-became-not-nullable: the request property %s became not nullabl
 request-body-became-not-nullable: the request's body became not nullable
 request-property-became-enum: request property %s was restricted to a list of enum values
 request-property-enum-value-removed: removed the enum value %s of the request property %s
-request-property-enum-value-added: added the new '%s' enum value to the request property %s
+request-property-enum-value-added: added the new %s enum value to the request property %s
 request-body-max-decreased: the request's body max was decreased to %s
 request-property-max-decreased: the %s request property's max was decreased to %s
 request-body-max-length-decreased: the request's body maxLength was decreased to %s
