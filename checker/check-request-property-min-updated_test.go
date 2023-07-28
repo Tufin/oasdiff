@@ -45,7 +45,7 @@ func TestRequestPropertyMinDecreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-min-decreased",
-		Text:        "the 'age' request property's min was decreased to '10.00'",
+		Text:        "the 'age' request property's min was decreased from '15.00' to '10.00'",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",

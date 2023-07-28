@@ -64,11 +64,12 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							minDiff.To == nil {
 							return
 						}
-						level := ERR
-						if propertyDiff.Revision.Value.ReadOnly {
-							level = INFO
-						}
 						if IsIncreasedValue(minDiff) {
+							level := ERR
+							if propertyDiff.Revision.Value.ReadOnly {
+								level = INFO
+							}
+
 							result = append(result, ApiChange{
 								Id:          "request-property-min-increased",
 								Level:       level,
