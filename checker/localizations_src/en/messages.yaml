@@ -181,6 +181,8 @@ response-property-pattern-added: the %s response's property pattern %s was added
 response-property-pattern-removed: the %s response's property pattern %s was removed for the status %s
 response-property-default-value-changed: the %s response's property default value changed from %s to %s for the status %s
 response-body-default-value-changed: the response body %s default value changed from %s to %s for the status %s
+request-property-default-value-changed: the %s request property default value changed from %s to %s
+request-body-default-value-changed: the request body %s default value changed from %s to %s
 request-body-any-of-added: added %s to the request body 'anyOf' list
 request-body-any-of-removed: removed %s from the request body 'anyOf' list
 request-property-any-of-added: added %s to the %s request property 'anyOf' list

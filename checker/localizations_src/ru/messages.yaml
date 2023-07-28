@@ -205,3 +205,5 @@ response-body-all-of-added: добавлено %s в список 'allOf' тел
 response-body-all-of-removed: удалён %s из списка 'allOf' тела ответа для статуса ответа %s
 response-property-all-of-added: добавлено %s в список 'allOf' свойства ответа %s для статуса ответа %s
 response-property-all-of-removed: удалён %s из списка 'allOf' свойства ответа %s для статуса ответа %s
+request-property-default-value-changed: значение по умолчанию для свойства %s в запросе было изменено с %s на %s 
+request-body-default-value-changed: значение по умолчанию для тела запроса было изменено с %s на %s
