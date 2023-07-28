@@ -219,6 +219,7 @@ These examples are automatically generated from unit tests.
 [decreasing minLength value of request parameter](checker/check-request-parameters-min-length-updated_test.go?plain=1#L34)  
 [decreasing minimum value of request parameter](checker/check-request-parameters-min-updated_test.go?plain=1#L33)  
 [decreasing minimum value of request property](checker/check-request-property-min-updated_test.go?plain=1#L34)  
+[decreasing request body maximum value](checker/check-request-property-max-updated_test.go?plain=1#L91)  
 [decreasing request property maximum value](checker/check-request-property-max-updated_test.go?plain=1#L11)  
 [deprecating an operation with sunset greater than min](checker/checker_not_breaking_test.go?plain=1#L199)  
 [increasing max length of request body](checker/check-request-property-max-length-updated_test.go?plain=1#L11)  

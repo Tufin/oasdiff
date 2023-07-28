@@ -42,7 +42,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						} else {
 							result = append(result, ApiChange{
 								Id:          "request-body-max-increased",
-								Level:       ERR,
+								Level:       INFO,
 								Text:        fmt.Sprintf(config.i18n("request-body-max-increased"), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
