@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -39,6 +39,16 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 								Path:        path,
 								Source:      source,
 							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "request-body-max-length-increased",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-body-max-length-increased"), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
 						}
 					}
 				}
@@ -54,22 +64,29 @@ func RequestPropertyMaxLengthDecreasedCheck(diffReport *diff.Diff, operationsSou
 							maxLengthDiff.To == nil {
 							return
 						}
-						if propertyDiff.Revision.Value.ReadOnly {
-							return
-						}
-						if !IsDecreasedValue(maxLengthDiff) {
-							return
+
+						if IsDecreasedValue(maxLengthDiff) {
+							result = append(result, ApiChange{
+								Id:          "request-property-max-length-decreased",
+								Level:       ConditionalError(!propertyDiff.Revision.Value.ReadOnly),
+								Text:        fmt.Sprintf(config.i18n("request-property-max-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "request-property-max-length-increased",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-property-max-length-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
 						}
 
-						result = append(result, ApiChange{
-							Id:          "request-property-max-length-decreased",
-							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-max-length-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      source,
-						})
 					})
 			}
 		}

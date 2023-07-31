@@ -1,14 +1,12 @@
 openapi: 3.0.1
 info:
-  title: Sample API
+  title: Test API
   version: 1.0.0
 paths:
   /pets:
     post:
-      summary: Add a new pet
       operationId: addPet
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -16,9 +14,10 @@ paths:
               properties:
                 name:
                   type: string
-                  format: string
-                age:
-                  type: integer
-                  format: int32
+                  maximum: 15
               required:
                 - name
+      responses:
+        "200":
+          description: OK
+

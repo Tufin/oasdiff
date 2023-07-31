@@ -18,7 +18,7 @@ paths:
                   type: string
                   format: string
                 age:
-                  type: integer
-                  format: int32
+                  type: string
+                  format: string
               required:
                 - name
