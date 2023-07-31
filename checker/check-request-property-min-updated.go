@@ -39,6 +39,16 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 								Path:        path,
 								Source:      source,
 							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "request-body-min-decreased",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-body-min-decreased"), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
 						}
 					}
 				}
@@ -54,22 +64,28 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							minDiff.To == nil {
 							return
 						}
-						if propertyDiff.Revision.Value.ReadOnly {
-							return
-						}
-						if !IsIncreasedValue(minDiff) {
-							return
+						if IsIncreasedValue(minDiff) {
+							result = append(result, ApiChange{
+								Id:          "request-property-min-increased",
+								Level:       ConditionalError(!propertyDiff.Revision.Value.ReadOnly),
+								Text:        fmt.Sprintf(config.i18n("request-property-min-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "request-property-min-decreased",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-property-min-decreased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
 						}
 
-						result = append(result, ApiChange{
-							Id:          "request-property-min-increased",
-							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-min-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      source,
-						})
 					})
 			}
 		}

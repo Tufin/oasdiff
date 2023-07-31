@@ -29,17 +29,20 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 					schemaDiff := mediaTypeDiff.SchemaDiff
 					typeDiff := schemaDiff.TypeDiff
 					formatDiff := schemaDiff.FormatDiff
-					if breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
+
+					if !typeDiff.Empty() || !formatDiff.Empty() {
 						typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
 						result = append(result, ApiChange{
 							Id:          "request-body-type-changed",
-							Level:       ERR,
+							Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff)),
 							Text:        fmt.Sprintf(config.i18n("request-body-type-changed"), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
 							Source:      source,
 						})
+
 					}
 				}
 
@@ -52,11 +55,12 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						schemaDiff := propertyDiff
 						typeDiff := schemaDiff.TypeDiff
 						formatDiff := schemaDiff.FormatDiff
-						if breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
+
+						if !typeDiff.Empty() || !formatDiff.Empty() {
 							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
 							result = append(result, ApiChange{
 								Id:          "request-property-type-changed",
-								Level:       ERR,
+								Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff)),
 								Text:        fmt.Sprintf(config.i18n("request-property-type-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
