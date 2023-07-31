@@ -64,11 +64,12 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							maxDiff.To == nil {
 							return
 						}
-						level := ERR
-						if propertyDiff.Revision.Value.ReadOnly {
-							level = INFO
-						}
 						if IsDecreasedValue(maxDiff) {
+							level := ERR
+							if propertyDiff.Revision.Value.ReadOnly {
+								level = INFO
+							}
+
 							result = append(result, ApiChange{
 								Id:          "request-property-max-decreased",
 								Level:       level,

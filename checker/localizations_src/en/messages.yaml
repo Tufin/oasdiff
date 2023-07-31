@@ -77,10 +77,10 @@ request-body-max-decreased: the request's body max was decreased to %s
 request-property-max-decreased: the %s request property's max was decreased to %s
 request-body-max-length-decreased: the request's body maxLength was decreased to %s
 request-property-max-length-decreased: the %s request property's maxLength was decreased to %s
-request-body-min-length-increased: the request's body maxLength was increased from %s to %s
-request-property-min-length-increased: the %s request property's maxLength was increased from %s to %s
-request-body-min-length-decreased: the request's body maxLength was decreased from %s to %s
-request-property-min-length-decreased: the %s request property's maxLength was decreased from %s to %s
+request-body-min-length-increased: the request's body minLength was increased from %s to %s
+request-property-min-length-increased: the %s request property's minLength was increased from %s to %s
+request-body-min-length-decreased: the request's body minLength was decreased from %s to %s
+request-property-min-length-decreased: the %s request property's minLength was decreased from %s to %s
 request-body-max-increased: the request's body max was increased from %s to %s
 request-property-max-increased: the %s request property's max was increased from %s to %s
 request-body-max-length-increased: the request's body maxLength was increased from %s to %s
