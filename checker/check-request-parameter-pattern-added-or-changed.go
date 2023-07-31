@@ -31,11 +31,6 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 					if patternDiff == nil {
 						continue
 					}
-					if patternDiff.To == "" ||
-						patternDiff.To == ".*" {
-						continue
-					}
-
 					source := (*operationsSources)[operationItem.Revision]
 
 					if patternDiff.From == "" {
@@ -49,12 +44,28 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							Path:        path,
 							Source:      source,
 						})
+					} else if patternDiff.To == "" {
+						result = append(result, ApiChange{
+							Id:          "request-parameter-pattern-removed",
+							Level:       INFO,
+							Text:        fmt.Sprintf(config.i18n("request-parameter-pattern-removed"), patternDiff.From, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
+						})
 					} else {
+						level := WARN
+						comment := config.i18n("pattern-changed-warn-comment")
+						if patternDiff.To == ".*" {
+							level = INFO
+							comment = ""
+						}
 						result = append(result, ApiChange{
 							Id:          "request-parameter-pattern-changed",
-							Level:       WARN,
+							Level:       level,
 							Text:        fmt.Sprintf(config.i18n("request-parameter-pattern-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
-							Comment:     config.i18n("pattern-changed-warn-comment"),
+							Comment:     comment,
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
