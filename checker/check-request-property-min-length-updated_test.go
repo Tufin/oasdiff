@@ -48,7 +48,7 @@ func TestRequestPropertyMinLengthIncreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-min-length-increased",
-		Text:        "the 'name' request property's maxLength was increased from '3' to '5'",
+		Text:        "the 'name' request property's minLength was increased from '3' to '5'",
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
