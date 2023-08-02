@@ -204,7 +204,7 @@ These examples are automatically generated from unit tests.
 [changing required response property to optional](checker/check-response-property-became-optional_test.go?plain=1#L11)  
 [changing required response property to read-only](checker/check-response-required-property-write-only-read-only_test.go?plain=1#L63)  
 [changing required response property to write-only](checker/check-response-required-property-write-only-read-only_test.go?plain=1#L11)  
-[changing response body default value](checker/check-response-property-default-value-changed_test.go?plain=1#L33)  
+[changing response body default value](checker/check-response-property-default-value-changed_test.go?plain=1#L42)  
 [changing response body property default value](checker/check-response-property-default-value-changed_test.go?plain=1#L11)  
 [changing response property pattern](checker/check-response-pattern-added-or-changed_test.go?plain=1#L11)  
 [changing schema discriminator mapping in the request body or request body property](checker/check-request-discriminator-updated_test.go?plain=1#L119)  

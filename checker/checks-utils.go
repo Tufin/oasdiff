@@ -30,22 +30,23 @@ func interfaceToString(arg interface{}) string {
 		return "undefined"
 	}
 
-	argString, ok := arg.(string)
-	if ok {
+	if argString, ok := arg.(string); ok {
 		return argString
 	}
 
-	argUint64, ok := arg.(uint64)
-	if ok {
+	if argUint64, ok := arg.(uint64); ok {
 		return fmt.Sprintf("%d", argUint64)
 	}
 
-	argFloat64, ok := arg.(float64)
-	if ok {
+	if argFloat64, ok := arg.(float64); ok {
 		return fmt.Sprintf("%.2f", argFloat64)
 	}
 
-	return fmt.Sprintf("%s", arg)
+	if argBool, ok := arg.(bool); ok {
+		return fmt.Sprintf("%t", argBool)
+	}
+
+	return fmt.Sprintf("%v", arg)
 }
 
 func CheckModifiedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *diff.SchemaDiff, propertyParentItem *diff.SchemaDiff)) {
