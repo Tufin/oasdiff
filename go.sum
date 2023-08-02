@@ -1,5 +1,5 @@
-cloud.google.com/go v0.110.6 h1:8uYAkj3YHTP/1iwReuHPxLSbdcyc+dSBbzFMrVwDR6Q=
-cloud.google.com/go v0.110.6/go.mod h1:+EYjdK8e5RME/VY/qLCAtuyALQ9q67dvuum8i+H5xsI=
+cloud.google.com/go v0.110.7 h1:rJyC7nWRg2jWGZ4wSJ5nY65GTdYJkg0cd/uXb+ACI6o=
+cloud.google.com/go v0.110.7/go.mod h1:+EYjdK8e5RME/VY/qLCAtuyALQ9q67dvuum8i+H5xsI=
 github.com/TwiN/go-color v1.4.0 h1:fNbOwOrvup5oj934UragnW0B1WKaAkkB85q19Y7h4ng=
 github.com/TwiN/go-color v1.4.0/go.mod h1:0QTVEPlu+AoCyTrho7bXbVkrCkVpdQr7YF7PYWEtSxM=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
