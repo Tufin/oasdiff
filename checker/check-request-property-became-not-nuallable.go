@@ -34,26 +34,28 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 					continue
 				}
 
-				if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.From == true {
-					result = append(result, ApiChange{
-						Id:          requestBodyBecameNotNullableId,
-						Level:       ERR,
-						Text:        config.i18n(requestBodyBecameNotNullableId),
-						Operation:   operation,
-						Path:        path,
-						Source:      source,
-						OperationId: operationItem.Revision.OperationID,
-					})
-				} else if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
-					result = append(result, ApiChange{
-						Id:          requestBodyBecameNullableId,
-						Level:       INFO,
-						Text:        config.i18n(requestBodyBecameNullableId),
-						Operation:   operation,
-						Path:        path,
-						Source:      source,
-						OperationId: operationItem.Revision.OperationID,
-					})
+				if mediaTypeDiff.SchemaDiff.NullableDiff != nil {
+					if mediaTypeDiff.SchemaDiff.NullableDiff.From == true {
+						result = append(result, ApiChange{
+							Id:          requestBodyBecameNotNullableId,
+							Level:       ERR,
+							Text:        config.i18n(requestBodyBecameNotNullableId),
+							Operation:   operation,
+							Path:        path,
+							Source:      source,
+							OperationId: operationItem.Revision.OperationID,
+						})
+					} else if mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
+						result = append(result, ApiChange{
+							Id:          requestBodyBecameNullableId,
+							Level:       INFO,
+							Text:        config.i18n(requestBodyBecameNullableId),
+							Operation:   operation,
+							Path:        path,
+							Source:      source,
+							OperationId: operationItem.Revision.OperationID,
+						})
+					}
 				}
 
 				CheckModifiedPropertiesDiff(
