@@ -149,7 +149,7 @@ func (r *report) printMethod(d *diff.MethodDiff) {
 	}
 }
 
-func (r *report) printParams(d *diff.ParametersDiff) {
+func (r *report) printParams(d *diff.ParametersDiffByLocation) {
 	if d.Empty() {
 		return
 	}
