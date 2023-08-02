@@ -29,6 +29,7 @@ api-sunset-date-changed-too-small: дата sunset у API изменена на 
 new-required-request-parameter: добавлен новый обязательный %s параметр зароса %s
 new-optional-request-parameter: добавлен новый необязательный %s параметр зароса %s
 new-required-request-property: добавлено новле обязательное поле запроса %s
+new-optional-request-property: добавлено новле необязательное поле запроса %s
 new-required-request-header-property: в заголовке запроса %s добавлено новое обязательное поле %s
 request-body-became-required: тело запроса стало обязательным
 request-body-became-optional: тело запроса стало необязательным
@@ -68,7 +69,10 @@ request-parameter-min-set-comment: Это предупреждение, пото
 request-parameter-type-changed: в %s параметре запроса %s, type/format изменился с %s/%s на %s/%s
 new-request-path-parameter: добален новый path параметр запроса %s
 request-property-became-required: поле запроса %s стало обязательным
+request-property-became-optional: поле запроса %s стало необязательным
 request-property-became-not-nullable: свойство запроса %s стало недействительным
+request-property-became-nullable: свойство запроса %s стало обнуляемым
+request-body-became-nullable: тело запроса стало обнуляемым
 request-body-became-not-nullable: тело запроса стало недействительным
 request-property-became-enum: свойство запроса %s было ограничено списком значений перечисления
 request-property-enum-value-removed: удалено enum значение %s у поля запроса %s
@@ -214,3 +218,13 @@ response-body-all-of-added: добавлено %s в список 'allOf' тел
 response-body-all-of-removed: удалён %s из списка 'allOf' тела ответа для статуса ответа %s
 response-property-all-of-added: добавлено %s в список 'allOf' свойства ответа %s для статуса ответа %s
 response-property-all-of-removed: удалён %s из списка 'allOf' свойства ответа %s для статуса ответа %s
+request-property-default-value-changed: значение по умолчанию для свойства %s в запросе было изменено с %s на %s 
+request-body-default-value-changed: значение по умолчанию для тела запроса было изменено с %s на %s
+request-required-property-became-read-only: обязательное поле запроса %s стало только для чтения
+request-required-property-became-not-read-only: обязательное поле запроса %s перестало быть только для чтения
+request-optional-property-became-write-only: необязательное поле запроса %s стало только для записи
+request-optional-property-became-read-only: необязательное поле запроса %s стало только для чтения
+request-optional-property-became-not-write-only: необязательное поле запроса %s перестало быть только для записи
+request-optional-property-became-not-read-only: необязательное поле запроса %s перестало быть только для чтения
+request-required-property-became-write-only: обязательное поле запроса %s стало только для записи
+request-required-property-became-not-write-only: обязательное поле запроса %s перестало быть только для записи
