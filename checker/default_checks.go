@@ -62,13 +62,12 @@ func GetOptionalChecks() []string {
 func defaultChecks() []BackwardCompatibilityCheck {
 	return []BackwardCompatibilityCheck{
 		RequestParameterRemovedCheck,
-		NewRequiredRequestPropertyCheck,
 		RequestParameterPatternAddedOrChangedCheck,
 		RequestPropertyPatternUpdatedCheck,
 		AddedRequiredRequestBodyCheck,
 		RequestParameterRequiredValueUpdatedCheck,
 		RequestParameterBecameEnumCheck,
-		RequestPropertyBecameRequiredCheck,
+		RequestPropertyRequiredUpdatedCheck,
 		RequestPropertyBecameEnumCheck,
 		RequestHeaderPropertyBecameRequiredCheck,
 		RequestHeaderPropertyBecameEnumCheck,
@@ -87,7 +86,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponseRequiredPropertyUpdatedCheck,
 		UncheckedRequestAllOfWarnCheck,
 		UncheckedResponseAllOfWarnCheck,
-		RequestPropertyRemovedCheck,
+		RequestPropertyUpdatedCheck,
 		ResponseRequiredPropertyWriteOnlyReadOnlyCheck,
 		RequestPropertyMaxLengthSetCheck,
 		RequestParameterMaxLengthSetCheck,
@@ -137,6 +136,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		ResponsePropertyOneOfUpdated,
 		RequestPropertyAllOfUpdated,
 		ResponsePropertyAllOfUpdated,
+		RequestPropertyWriteOnlyReadOnlyCheck,
 	}
 }
 
