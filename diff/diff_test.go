@@ -41,7 +41,7 @@ func TestDiff_Empty(t *testing.T) {
 	require.True(t, (*diff.ExtensionsDiff)(nil).Empty())
 	require.True(t, (*diff.HeadersDiff)(nil).Empty())
 	require.True(t, (*diff.OperationsDiff)(nil).Empty())
-	require.True(t, (*diff.ParametersDiff)(nil).Empty())
+	require.True(t, (*diff.ParametersDiffByLocation)(nil).Empty())
 	require.True(t, (*diff.RequestBodiesDiff)(nil).Empty())
 	require.True(t, (*diff.ResponsesDiff)(nil).Empty())
 	require.True(t, (*diff.SchemasDiff)(nil).Empty())
@@ -772,6 +772,29 @@ func TestDiff_PathParamInOperationRenamed(t *testing.T) {
 	require.Equal(t, "id", dd.To)
 }
 
+func TestDiff_PathParamRefInOperationRenamed(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/param-rename/op-base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/param-rename/op-revision-ref.yaml")
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s2,
+		})
+	require.NoError(t, err)
+
+	dd := d.PathsDiff.Modified["/books/{bookId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
+	require.Equal(t, "bookId", dd.From)
+	require.Equal(t, "id", dd.To)
+}
+
 func TestDiff_TwoPathParamsRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
@@ -820,4 +843,77 @@ func TestDiff_TwoPathParamsOneRenamed(t *testing.T) {
 	dd := d.PathsDiff.Modified["/books/{bookId}/{libraryId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["libraryId"].NameDiff
 	require.Equal(t, "libraryId", dd.From)
 	require.Equal(t, "otherId", dd.To)
+}
+
+func TestDiff_DifferentComponentSameParam(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/different_component_same_parameter.yaml")
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s1,
+		})
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+func TestDiff_DifferentComponentModifiedParam(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/different_component_same_parameter.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/different_component_modified_parameter.yaml")
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s2,
+		})
+	require.NoError(t, err)
+	dd := d.ComponentsDiff.ParametersDiff.Modified["differentComponentName_A"].InDiff
+	require.Equal(t, "header", dd.From)
+	require.Equal(t, "query", dd.To)
+}
+
+func TestDiff_DifferentComponentSameSchema(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/different_component_same_schema.yaml")
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s1,
+		})
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+func TestDiff_DifferentComponentSameHeader(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/different_component_same_header.yaml")
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s1,
+		})
+	require.NoError(t, err)
+	require.Empty(t, d)
 }

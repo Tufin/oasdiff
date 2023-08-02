@@ -11,7 +11,7 @@ type MethodDiff struct {
 	SummaryDiff      *ValueDiff                `json:"summary,omitempty" yaml:"summary,omitempty"`
 	DescriptionDiff  *ValueDiff                `json:"description,omitempty" yaml:"description,omitempty"`
 	OperationIDDiff  *ValueDiff                `json:"operationID,omitempty" yaml:"operationID,omitempty"`
-	ParametersDiff   *ParametersDiff           `json:"parameters,omitempty" yaml:"parameters,omitempty"`
+	ParametersDiff   *ParametersDiffByLocation `json:"parameters,omitempty" yaml:"parameters,omitempty"`
 	RequestBodyDiff  *RequestBodyDiff          `json:"requestBody,omitempty" yaml:"requestBody,omitempty"`
 	ResponsesDiff    *ResponsesDiff            `json:"responses,omitempty" yaml:"responses,omitempty"`
 	CallbacksDiff    *CallbacksDiff            `json:"callbacks,omitempty" yaml:"callbacks,omitempty"`
@@ -61,7 +61,7 @@ func getMethodDiffInternal(config *Config, state *state, operation1, operation2 
 	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), operation1.Summary, operation2.Summary)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), operation1.Description, operation2.Description)
 	result.OperationIDDiff = getValueDiff(operation1.OperationID, operation2.OperationID)
-	result.ParametersDiff, err = getParametersDiff(config, state, operation1.Parameters, operation2.Parameters, pathParamsMap)
+	result.ParametersDiff, err = getParametersDiffByLocation(config, state, operation1.Parameters, operation2.Parameters, pathParamsMap)
 	if err != nil {
 		return nil, err
 	}

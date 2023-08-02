@@ -1,0 +1,51 @@
+openapi: 3.0.0
+
+info:
+  title: My API
+  version: '0.1'
+
+paths:
+  /books/{id}:
+
+    get:
+      summary: get book details
+      description: get details for a book
+
+      parameters:
+        - $ref: "#/components/parameters/id"
+
+      responses:
+        '200':
+          description: successfully retrieved book details
+
+          content:
+            application/json:
+              schema:
+                title: book details
+                type: object
+
+                required:
+                  - author
+                  - title
+
+                properties:
+                  author:
+                    title: book author name
+                    type: string
+
+                  title:
+                    title: book title
+                    type: string
+
+components:
+  parameters:
+    id:
+        in: path
+        name: id
+        description: book ID
+        required: true
+
+        schema:
+          title: ID
+          type: string
+              

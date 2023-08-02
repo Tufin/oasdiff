@@ -8,15 +8,15 @@ import (
 
 // PathDiff describes the changes between a pair of path item objects: https://swagger.io/specification/#path-item-object
 type PathDiff struct {
-	ExtensionsDiff  *ExtensionsDiff    `json:"extensions,omitempty" yaml:"extensions,omitempty"`
-	RefDiff         *ValueDiff         `json:"ref,omitempty" yaml:"ref,omitempty"`
-	SummaryDiff     *ValueDiff         `json:"summary,omitempty" yaml:"summary,omitempty"`
-	DescriptionDiff *ValueDiff         `json:"description,omitempty" yaml:"description,omitempty"`
-	OperationsDiff  *OperationsDiff    `json:"operations,omitempty" yaml:"operations,omitempty"`
-	ServersDiff     *ServersDiff       `json:"servers,omitempty" yaml:"servers,omitempty"`
-	ParametersDiff  *ParametersDiff    `json:"parameters,omitempty" yaml:"parameters,omitempty"`
-	Base            *openapi3.PathItem `json:"-" yaml:"-"`
-	Revision        *openapi3.PathItem `json:"-" yaml:"-"`
+	ExtensionsDiff  *ExtensionsDiff           `json:"extensions,omitempty" yaml:"extensions,omitempty"`
+	RefDiff         *ValueDiff                `json:"ref,omitempty" yaml:"ref,omitempty"`
+	SummaryDiff     *ValueDiff                `json:"summary,omitempty" yaml:"summary,omitempty"`
+	DescriptionDiff *ValueDiff                `json:"description,omitempty" yaml:"description,omitempty"`
+	OperationsDiff  *OperationsDiff           `json:"operations,omitempty" yaml:"operations,omitempty"`
+	ServersDiff     *ServersDiff              `json:"servers,omitempty" yaml:"servers,omitempty"`
+	ParametersDiff  *ParametersDiffByLocation `json:"parameters,omitempty" yaml:"parameters,omitempty"`
+	Base            *openapi3.PathItem        `json:"-" yaml:"-"`
+	Revision        *openapi3.PathItem        `json:"-" yaml:"-"`
 }
 
 func newPathDiff() *PathDiff {
@@ -65,7 +65,7 @@ func getPathDiffInternal(config *Config, state *state, pathItemPair *pathItemPai
 	}
 
 	result.ServersDiff = getServersDiff(config, state, &pathItem1.Servers, &pathItem2.Servers)
-	result.ParametersDiff, err = getParametersDiff(config, state, pathItem1.Parameters, pathItem2.Parameters, pathItemPair.PathParamsMap)
+	result.ParametersDiff, err = getParametersDiffByLocation(config, state, pathItem1.Parameters, pathItem2.Parameters, pathItemPair.PathParamsMap)
 	result.Base = pathItem1
 	result.Revision = pathItem2
 	if err != nil {
