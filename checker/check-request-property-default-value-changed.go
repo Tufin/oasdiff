@@ -41,7 +41,7 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 				CheckModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-						if propertyDiff == nil || propertyDiff.Revision == nil || propertyDiff.Revision.Value == nil || propertyDiff.DefaultDiff == nil {
+						if propertyDiff == nil || propertyDiff.DefaultDiff == nil {
 							return
 						}
 
