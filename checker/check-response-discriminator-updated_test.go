@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: adding schema discriminator to the response body or response property
+// CL: adding discriminator to the response body or response property
 func TestResponseDiscriminatorUpdatedCheckAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_property_discriminator_added_base.yaml")
 	require.NoError(t, err)
@@ -44,7 +44,7 @@ func TestResponseDiscriminatorUpdatedCheckAdded(t *testing.T) {
 		}}, errs)
 }
 
-// CL: removing schema discriminator from the response body or response property
+// CL: removing discriminator from the response body or response property
 func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_property_discriminator_added_revision.yaml")
 	require.NoError(t, err)
@@ -70,7 +70,7 @@ func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 		},
 		{
 			Id:          "response-property-discriminator-removed",
-			Text:        "removed discriminator to '/oneOf[#/components/schemas/Dog]/breed' response property for the response status 200",
+			Text:        "removed discriminator from '/oneOf[#/components/schemas/Dog]/breed' response property for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -80,7 +80,7 @@ func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 		}}, errs)
 }
 
-// CL: changing schema discriminator propertyName in the response body or response property
+// CL: changing discriminator propertyName in the response body or response property
 func TestResponseDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 	s1, err := open("../data/checker/response_property_discriminator_added_revision.yaml")
 	require.NoError(t, err)
@@ -116,7 +116,7 @@ func TestResponseDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 		}}, errs)
 }
 
-// CL: changing schema discriminator mapping in the response body or response property
+// CL: changing discriminator mapping in the response body or response property
 func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 	s1, err := open("../data/checker/response_property_discriminator_added_revision.yaml")
 	require.NoError(t, err)

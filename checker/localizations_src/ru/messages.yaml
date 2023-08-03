@@ -219,28 +219,28 @@ response-body-all-of-removed: удалён %s из списка 'allOf' тела
 response-property-all-of-added: добавлено %s в список 'allOf' свойства ответа %s для статуса ответа %s
 response-property-all-of-removed: удалён %s из списка 'allOf' свойства ответа %s для статуса ответа %s
 response-body-discriminator-added: добавлен дискриминатор ответа для статуса ответа %s
-response-property-discriminator-added: добавлен дискриминатор для свойства ответа %s для статуса ответа %s
+response-property-discriminator-added: добавлен дискриминатор к свойству ответа %s для статуса ответа %s
 response-body-discriminator-removed: удален дискриминатор ответа для статуса ответа %s
-response-property-discriminator-removed: удален дискриминатор для свойства ответа %s для статуса ответа %s
-response-body-discriminator-property-name-changed: изменено имя свойства дискриминатора ответа с %s на %s для статуса ответа %s
-response-property-discriminator-property-name-changed: изменено имя свойства дискриминатора ответа для свойства ответа %s с %s на %s для статуса ответа %s
-response-body-discriminator-mapping-added: добавлены ключи сопоставления %s в дискриминатор ответа для статуса ответа %s
-response-property-discriminator-mapping-added: добавлены ключи дискриминатора %s в свойство ответа %s для статуса ответа %s
+response-property-discriminator-removed: удален дискриминатор из свойства ответа %s для статуса ответа %s
+response-body-discriminator-property-name-changed: имя свойства дискриминатора ответа изменено с %s на %s для статуса ответа %s
+response-property-discriminator-property-name-changed: имя свойства дискриминатора ответа изменено для свойства ответа %s с %s на %s для статуса ответа %s
+response-body-discriminator-mapping-added: добавлены ключи сопоставления %s для дискриминатора ответа для статуса ответа %s
+response-property-discriminator-mapping-added: добавлены ключи сопоставления дискриминатора %s для свойства ответа %s для статуса ответа %s
 response-body-discriminator-mapping-deleted: удалены ключи сопоставления %s из дискриминатора ответа для статуса ответа %s
-response-property-discriminator-mapping-deleted: удалены ключи дискриминатора %s из свойства ответа %s для статуса ответа %s
+response-property-discriminator-mapping-deleted: удалены ключи сопоставления дискриминатора %s из свойства ответа %s для статуса ответа %s
 response-body-discriminator-mapping-changed: значение для ключа %s изменено с %s на %s в дискриминаторе ответа для статуса ответа %s
 response-property-discriminator-mapping-changed: значение для ключа дискриминатора %s изменено с %s на %s для свойства ответа %s для статуса ответа %s
-request-body-discriminator-added: добавлен дискриминатор схемы запроса
-request-property-discriminator-added: добавлен дискриминатор для свойства запроса %s
-request-body-discriminator-removed: удален дискриминатор схемы запроса
-request-property-discriminator-removed: удален дискриминатор для свойства запроса %s
-request-body-discriminator-property-name-changed: изменено имя свойства дискриминатора схемы запроса с %s на %s
-request-property-discriminator-property-name-changed: изменено имя свойства дискриминатора схемы запроса для свойства запроса %s с %s на %s
-request-body-discriminator-mapping-added: добавлены ключи сопоставления %s в дискриминатор схемы запроса
-request-property-discriminator-mapping-added: добавлены ключи дискриминатора %s в свойство запроса %s
-request-body-discriminator-mapping-deleted: удалены ключи сопоставления %s из дискриминатора схемы запроса
-request-property-discriminator-mapping-deleted: удалены ключи дискриминатора %s из свойства запроса %s
-request-body-discriminator-mapping-changed: значение для ключа %s изменено с %s на %s в дискриминаторе схемы запроса
+request-body-discriminator-added: добавлен дискриминатор запроса
+request-property-discriminator-added: добавлен дискриминатор к свойству запроса %s
+request-body-discriminator-removed: удален дискриминатор запроса
+request-property-discriminator-removed: удален дискриминатор из свойства запроса %s
+request-body-discriminator-property-name-changed: имя свойства дискриминатора запроса изменено с %s на %s
+request-property-discriminator-property-name-changed: имя свойства дискриминатора запроса изменено для свойства запроса %s с %s на %s
+request-body-discriminator-mapping-added: добавлены ключи сопоставления %s для дискриминатора запроса
+request-property-discriminator-mapping-added: добавлены ключи сопоставления дискриминатора %s для свойства запроса %s
+request-body-discriminator-mapping-deleted: удалены ключи сопоставления %s из дискриминатора запроса
+request-property-discriminator-mapping-deleted: удалены ключи сопоставления дискриминатора %s из свойства запроса %s
+request-body-discriminator-mapping-changed: значение для ключа %s изменено с %s на %s в дискриминаторе запроса
 request-property-discriminator-mapping-changed: значение для ключа дискриминатора %s изменено с %s на %s для свойства запроса %s
 request-property-default-value-changed: значение по умолчанию для свойства %s в запросе было изменено с %s на %s 
 request-body-default-value-changed: значение по умолчанию для тела запроса было изменено с %s на %s

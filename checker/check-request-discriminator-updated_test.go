@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: adding schema discriminator to the request body or request body property
+// CL: adding discriminator to the request body or request body property
 func TestRequestDiscriminatorUpdatedCheckAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_property_discriminator_added_base.yaml")
 	require.NoError(t, err)
@@ -24,7 +24,7 @@ func TestRequestDiscriminatorUpdatedCheckAdded(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "request-body-discriminator-added",
-			Text:        "added request schema discriminator",
+			Text:        "added request discriminator",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -44,7 +44,7 @@ func TestRequestDiscriminatorUpdatedCheckAdded(t *testing.T) {
 		}}, errs)
 }
 
-// CL: removing schema discriminator from the request body or request body property
+// CL: removing discriminator from the request body or request body property
 func TestRequestDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_discriminator_added_revision.yaml")
 	require.NoError(t, err)
@@ -60,7 +60,7 @@ func TestRequestDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "request-body-discriminator-removed",
-			Text:        "removed request schema discriminator",
+			Text:        "removed request discriminator",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -70,7 +70,7 @@ func TestRequestDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 		},
 		{
 			Id:          "request-property-discriminator-removed",
-			Text:        "removed discriminator to '/oneOf[#/components/schemas/Dog]/breed' request property",
+			Text:        "removed discriminator from '/oneOf[#/components/schemas/Dog]/breed' request property",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -80,7 +80,7 @@ func TestRequestDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 		}}, errs)
 }
 
-// CL: changing schema discriminator propertyName in the request body or request body property
+// CL: changing discriminator propertyName in the request body or request body property
 func TestRequestDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 	s1, err := open("../data/checker/request_property_discriminator_added_revision.yaml")
 	require.NoError(t, err)
@@ -96,7 +96,7 @@ func TestRequestDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "request-body-discriminator-property-name-changed",
-			Text:        "request schema discriminator property name changed from 'petType' to 'petType2'",
+			Text:        "request discriminator property name changed from 'petType' to 'petType2'",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -106,7 +106,7 @@ func TestRequestDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 		},
 		{
 			Id:          "request-property-discriminator-property-name-changed",
-			Text:        "request schema discriminator property name changed for '/oneOf[#/components/schemas/Dog]/breed' request property from 'name' to 'name2'",
+			Text:        "request discriminator property name changed for '/oneOf[#/components/schemas/Dog]/breed' request property from 'name' to 'name2'",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -116,7 +116,7 @@ func TestRequestDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 		}}, errs)
 }
 
-// CL: changing schema discriminator mapping in the request body or request body property
+// CL: changing discriminator mapping in the request body or request body property
 func TestRequestDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 	s1, err := open("../data/checker/request_property_discriminator_added_revision.yaml")
 	require.NoError(t, err)
@@ -132,7 +132,7 @@ func TestRequestDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          "request-body-discriminator-mapping-added",
-			Text:        "added '[cats]' mapping keys to the request schema discriminator",
+			Text:        "added '[cats]' mapping keys to the request discriminator",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -142,7 +142,7 @@ func TestRequestDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 		},
 		{
 			Id:          "request-body-discriminator-mapping-deleted",
-			Text:        "removed '[cat]' mapping keys from the request schema discriminator",
+			Text:        "removed '[cat]' mapping keys from the request discriminator",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
