@@ -47,7 +47,9 @@ pattern-changed-warn-comment: Это предупреждение, потому 
 request-parameter-x-extensible-enum-value-removed: удалено из x-extensible-enum значение %s у %s параметра запроса %s
 request-parameter-max-decreased: в %s параметре запроса %s, max уменьшен с %s до %s
 request-parameter-max-increased: в %s параметре запроса %s, max увеличен с %s до %s
-request-parameter-default-value-changed: в %s параметре запроса %s, значение по умолчанию изменено с %s на %s
+request-parameter-default-value-added: для параметра запроса %s добавлено значение по умолчанию %s
+request-parameter-default-value-changed: для параметра запроса %s значение по умолчанию изменено с %s на %s
+request-parameter-default-value-removed: для параметра запроса %s удалено значение по умолчанию %s
 request-parameter-max-length-decreased: в %s параметре запроса %s, maxLength уменьшен с %s до %s
 request-parameter-max-length-increased: в %s параметре запроса %s, maxLength увеличен с %s до %s
 request-parameter-min-length-increased: в %s параметре запроса %s, minLength увеличен с %s до %s
@@ -192,8 +194,18 @@ response-optional-property-became-not-read-only: необязательное с
 response-property-pattern-changed: у свойства %s для ответа со статусом %s изменился паттерн с %s на %s
 response-property-pattern-added: у свойства %s для ответа со статусом %s добавлен паттерн %s
 response-property-pattern-removed: у свойства %s для ответа со статусом %s удален паттерн %s
-response-property-default-value-changed: значение по умолчанию для свойства %s в ответе со статусом %s было изменено с %s на %s
-response-body-default-value-changed: значение по умолчанию для тела ответа со статусом %s было изменено с %s на %s
+response-property-default-value-added: добавлено значение по умолчанию %s для свойства ответа %s для статуса %s
+response-property-default-value-changed: значение по умолчанию для свойства ответа %s изменено с %s на %s для статуса %s
+response-property-default-value-removed: удалено значение по умолчанию %s для свойства ответа %s для статуса %s
+response-body-default-value-added: добавлено значение по умолчанию %s для тела ответа для статуса %s
+response-body-default-value-changed: значение по умолчанию для тела ответа %s изменено с %s на %s для статуса %s
+response-body-default-value-removed: удалено значение по умолчанию %s для тела ответа для статуса %s
+request-property-default-value-added: добавлено значение по умолчанию %s для свойства запроса %s
+request-property-default-value-changed: значение по умолчанию для свойства запроса %s изменено с %s на %s
+request-property-default-value-removed: удалено значение по умолчанию %s для свойства запроса %s
+request-body-default-value-added: добавлено значение по умолчанию %s для тела запроса
+request-body-default-value-changed: значение по умолчанию для тела запроса изменено с %s на %s
+request-body-default-value-removed: удалено значение по умолчанию %s для тела запроса %s
 request-body-any-of-added: добавлено %s в список 'anyOf' тела запроса
 request-body-any-of-removed: удалён %s из списка 'anyOf' тела запроса
 request-property-any-of-added: добавлено %s в список 'anyOf' свойства запроса %s
@@ -242,8 +254,6 @@ request-body-discriminator-mapping-deleted: удалены ключи сопос
 request-property-discriminator-mapping-deleted: удалены ключи сопоставления дискриминатора %s из свойства запроса %s
 request-body-discriminator-mapping-changed: значение для ключа %s изменено с %s на %s в дискриминаторе запроса
 request-property-discriminator-mapping-changed: значение для ключа дискриминатора %s изменено с %s на %s для свойства запроса %s
-request-property-default-value-changed: значение по умолчанию для свойства %s в запросе было изменено с %s на %s 
-request-body-default-value-changed: значение по умолчанию для тела запроса было изменено с %s на %s
 request-required-property-became-read-only: обязательное поле запроса %s стало только для чтения
 request-required-property-became-not-read-only: обязательное поле запроса %s перестало быть только для чтения
 request-optional-property-became-write-only: необязательное поле запроса %s стало только для записи
