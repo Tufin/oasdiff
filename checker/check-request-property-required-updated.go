@@ -6,7 +6,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -36,6 +36,7 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 							continue
 						}
 						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+							// property was removed, checked by request-property-removed
 							continue
 						}
 						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
@@ -51,6 +52,29 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 							Source:      source,
 						})
 					}
+					for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
+						if mediaTypeDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+							// it is a new property, checked by the new-required-request-property check
+							continue
+						}
+						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+							// property was removed, checked by request-property-removed
+							continue
+						}
+						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+							continue
+						}
+						result = append(result, ApiChange{
+							Id:          "request-property-became-optional",
+							Level:       INFO,
+							Text:        fmt.Sprintf(config.i18n("request-property-became-optional"), ColorizedValue(changedRequiredPropertyName)),
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      source,
+						})
+					}
+
 				}
 
 				CheckModifiedPropertiesDiff(
@@ -69,12 +93,34 @@ func RequestPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources
 							}
 							if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
 								// it is a new property, checked by the new-required-request-property check
-								return
+								continue
 							}
 							result = append(result, ApiChange{
 								Id:          "request-property-became-required",
 								Level:       ERR,
 								Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						}
+
+						for _, changedRequiredPropertyName := range requiredDiff.Deleted {
+							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+								continue
+							}
+							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+								continue
+							}
+							if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+								// it is a new property, checked by the new-required-request-property check
+								continue
+							}
+							result = append(result, ApiChange{
+								Id:          "request-property-became-optional",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("request-property-became-optional"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

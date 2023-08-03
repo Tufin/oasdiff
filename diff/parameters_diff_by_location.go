@@ -7,22 +7,22 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
-// ParametersDiff describes the changes between a pair of lists of parameter objects: https://swagger.io/specification/#parameter-object
-type ParametersDiff struct {
+// ParametersDiffByLocation describes the changes, grouped by param location, between a pair of lists of parameter objects: https://swagger.io/specification/#parameter-object
+type ParametersDiffByLocation struct {
 	Added    ParamNamesByLocation `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  ParamNamesByLocation `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ParamDiffByLocation  `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
-func (parametersDiff *ParametersDiff) Empty() bool {
-	if parametersDiff == nil {
+func (diff *ParametersDiffByLocation) Empty() bool {
+	if diff == nil {
 		return true
 	}
 
-	return len(parametersDiff.Added) == 0 &&
-		len(parametersDiff.Deleted) == 0 &&
-		len(parametersDiff.Modified) == 0
+	return len(diff.Added) == 0 &&
+		len(diff.Deleted) == 0 &&
+		len(diff.Modified) == 0
 }
 
 // ParamLocations are the four possible locations of parameters: path, query, header or cookie
@@ -34,8 +34,8 @@ type ParamNamesByLocation map[string]utils.StringList
 // ParamDiffByLocation maps param location (path, query, header or cookie) to param diffs in this location
 type ParamDiffByLocation map[string]ParamDiffs
 
-func newParametersDiff() *ParametersDiff {
-	return &ParametersDiff{
+func newParametersDiffByLocation() *ParametersDiffByLocation {
+	return &ParametersDiffByLocation{
 		Added:    ParamNamesByLocation{},
 		Deleted:  ParamNamesByLocation{},
 		Modified: ParamDiffByLocation{},
@@ -45,35 +45,35 @@ func newParametersDiff() *ParametersDiff {
 // ParamDiffs is map of parameter names to their respective diffs
 type ParamDiffs map[string]*ParameterDiff
 
-func (parametersDiff *ParametersDiff) addAddedParam(param *openapi3.Parameter) {
+func (diff *ParametersDiffByLocation) addAddedParam(param *openapi3.Parameter) {
 
-	if paramNames, ok := parametersDiff.Added[param.In]; ok {
-		parametersDiff.Added[param.In] = append(paramNames, param.Name)
+	if paramNames, ok := diff.Added[param.In]; ok {
+		diff.Added[param.In] = append(paramNames, param.Name)
 	} else {
-		parametersDiff.Added[param.In] = utils.StringList{param.Name}
+		diff.Added[param.In] = utils.StringList{param.Name}
 	}
 }
 
-func (parametersDiff *ParametersDiff) addDeletedParam(param *openapi3.Parameter) {
+func (diff *ParametersDiffByLocation) addDeletedParam(param *openapi3.Parameter) {
 
-	if paramNames, ok := parametersDiff.Deleted[param.In]; ok {
-		parametersDiff.Deleted[param.In] = append(paramNames, param.Name)
+	if paramNames, ok := diff.Deleted[param.In]; ok {
+		diff.Deleted[param.In] = append(paramNames, param.Name)
 	} else {
-		parametersDiff.Deleted[param.In] = utils.StringList{param.Name}
+		diff.Deleted[param.In] = utils.StringList{param.Name}
 	}
 }
 
-func (parametersDiff *ParametersDiff) addModifiedParam(param *openapi3.Parameter, diff *ParameterDiff) {
+func (diff *ParametersDiffByLocation) addModifiedParam(param *openapi3.Parameter, paramDiff *ParameterDiff) {
 
-	if paramDiffs, ok := parametersDiff.Modified[param.In]; ok {
-		paramDiffs[param.Name] = diff
+	if paramDiffs, ok := diff.Modified[param.In]; ok {
+		paramDiffs[param.Name] = paramDiff
 	} else {
-		parametersDiff.Modified[param.In] = ParamDiffs{param.Name: diff}
+		diff.Modified[param.In] = ParamDiffs{param.Name: paramDiff}
 	}
 }
 
-func getParametersDiff(config *Config, state *state, params1, params2 openapi3.Parameters, pathParamsMap PathParamsMap) (*ParametersDiff, error) {
-	diff, err := getParametersDiffInternal(config, state, params1, params2, pathParamsMap)
+func getParametersDiffByLocation(config *Config, state *state, params1, params2 openapi3.Parameters, pathParamsMap PathParamsMap) (*ParametersDiffByLocation, error) {
+	diff, err := getParametersDiffByLocationInternal(config, state, params1, params2, pathParamsMap)
 	if err != nil {
 		return nil, err
 	}
@@ -85,9 +85,9 @@ func getParametersDiff(config *Config, state *state, params1, params2 openapi3.P
 	return diff, nil
 }
 
-func getParametersDiffInternal(config *Config, state *state, params1, params2 openapi3.Parameters, pathParamsMap PathParamsMap) (*ParametersDiff, error) {
+func getParametersDiffByLocationInternal(config *Config, state *state, params1, params2 openapi3.Parameters, pathParamsMap PathParamsMap) (*ParametersDiffByLocation, error) {
 
-	result := newParametersDiff()
+	result := newParametersDiffByLocation()
 
 	for _, paramRef1 := range params1 {
 		param1, err := derefParam(paramRef1)
@@ -179,22 +179,22 @@ func equalParams(param1 *openapi3.Parameter, param2 *openapi3.Parameter, pathPar
 	return pathParamsMap.find(param1.Name, param2.Name), nil
 }
 
-func (parametersDiff *ParametersDiff) getSummary() *SummaryDetails {
+func (diff *ParametersDiffByLocation) getSummary() *SummaryDetails {
 	return &SummaryDetails{
-		Added:    len(parametersDiff.Added),
-		Deleted:  len(parametersDiff.Deleted),
-		Modified: len(parametersDiff.Modified),
+		Added:    len(diff.Added),
+		Deleted:  len(diff.Deleted),
+		Modified: len(diff.Modified),
 	}
 }
 
 // Patch applies the patch to parameters
-func (parametersDiff *ParametersDiff) Patch(parameters openapi3.Parameters) error {
+func (diff *ParametersDiffByLocation) Patch(parameters openapi3.Parameters) error {
 
-	if parametersDiff.Empty() {
+	if diff.Empty() {
 		return nil
 	}
 
-	for location, paramDiffs := range parametersDiff.Modified {
+	for location, paramDiffs := range diff.Modified {
 		for name, parameterDiff := range paramDiffs {
 			err := parameterDiff.Patch(parameters.GetByInAndName(location, name))
 			if err != nil {

@@ -231,7 +231,7 @@ func (d *BCDiff) AddModifiedPath(path string) *diff.PathDiff {
 func (diffBC *BCDiff) AddModifiedParameter(path string, operation string, paramLocation string, paramName string) *diff.ParameterDiff {
 	opDiff := diffBC.AddModifiedOperation(path, operation)
 	if opDiff.ParametersDiff == nil {
-		opDiff.ParametersDiff = &diff.ParametersDiff{}
+		opDiff.ParametersDiff = &diff.ParametersDiffByLocation{}
 	}
 	if opDiff.ParametersDiff.Modified == nil {
 		opDiff.ParametersDiff.Modified = make(diff.ParamDiffByLocation)

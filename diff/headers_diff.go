@@ -78,9 +78,9 @@ func getHeadersDiffInternal(config *Config, state *state, headers1, headers2 ope
 		}
 	}
 
-	for headerValue2 := range headers2 {
-		if _, ok := headers1[headerValue2]; !ok {
-			result.Added = append(result.Added, headerValue2)
+	for headerName2 := range headers2 {
+		if _, ok := headers1[headerName2]; !ok {
+			result.Added = append(result.Added, headerName2)
 		}
 	}
 
