@@ -49,6 +49,9 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 				CheckModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
+						if propertyDiff.SchemaDeleted {
+							return
+						}
 						if propertyDiff.Revision.Value.ReadOnly {
 							return
 						}
