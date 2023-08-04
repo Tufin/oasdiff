@@ -220,7 +220,31 @@ response-body-all-of-added: added %s to the response body 'allOf' list for the r
 response-body-all-of-removed: removed %s from the response body 'allOf' list for the response status %s
 response-property-all-of-added: added %s to the %s response property 'allOf' list for the response status %s
 response-property-all-of-removed: removed %s from the %s response property 'allOf' list for the response status %s
-request-required-property-became-read-only: the request required property %s became read-only 
+response-body-discriminator-added: added response discriminator for the response status %s
+response-property-discriminator-added: added discriminator to %s response property for the response status %s
+response-body-discriminator-removed: removed response discriminator for the response status %s
+response-property-discriminator-removed: removed discriminator from %s response property for the response status %s
+response-body-discriminator-property-name-changed: response discriminator property name changed from %s to %s for the response status %s
+response-property-discriminator-property-name-changed: response discriminator property name changed for %s response property from %s to %s for the response status %s
+response-body-discriminator-mapping-added: added %s mapping keys to the response discriminator for the response status %s
+response-property-discriminator-mapping-added: added %s discriminator mapping keys to the %s response property for the response status %s
+response-body-discriminator-mapping-deleted: removed %s mapping keys from the response discriminator for the response status %s
+response-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from the %s response property for the response status %s
+response-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the response discriminator for the response status %s
+response-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s response property for the response status %s
+request-body-discriminator-added: added request discriminator
+request-property-discriminator-added: added discriminator to %s request property
+request-body-discriminator-removed: removed request discriminator
+request-property-discriminator-removed: removed discriminator from %s request property
+request-body-discriminator-property-name-changed: request discriminator property name changed from %s to %s
+request-property-discriminator-property-name-changed: request discriminator property name changed for %s request property from %s to %s
+request-body-discriminator-mapping-added: added %s mapping keys to the request discriminator
+request-property-discriminator-mapping-added: added %s discriminator mapping keys to the %s request property
+request-body-discriminator-mapping-deleted: removed %s mapping keys from the request discriminator
+request-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from the %s request property
+request-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the request discriminator
+request-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s request property
+request-required-property-became-read-only: the request required property %s became read-only
 request-required-property-became-not-read-only: the request required property %s became not read-only
 request-optional-property-became-write-only: the request optional property %s became write-only
 request-optional-property-became-read-only: the request optional property %s became read-only
