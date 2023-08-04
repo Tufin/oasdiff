@@ -3,7 +3,7 @@ info:
   title: Tufin
   version: "2.0"
 servers:
-- url: https://localhost:9080
+  - url: https://localhost:9080
 paths:
   /api/v1.0/groups:
     post:
@@ -13,7 +13,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupView'
+                $ref: "#/components/schemas/GroupView"
           description: OK
         "404":
           content:
@@ -21,7 +21,7 @@ paths:
               schema:
                 type: string
                 default: "Error"
-          description: Error   
+          description: Error
       summary: Create One Project
 components:
   parameters:
@@ -49,5 +49,8 @@ components:
               readOnly: true
             name:
               type: string
+            enabled:
+              default: false
+              type: boolean
           required:
             - name

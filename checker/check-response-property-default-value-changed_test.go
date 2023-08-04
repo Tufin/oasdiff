@@ -17,8 +17,8 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.ApiChange{
+	require.Len(t, errs, 2)
+	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          "response-property-default-value-changed",
 		Text:        "the 'created' response's property default value changed from '2020-01-01T00:00:00Z' to '2020-02-01T00:00:00Z' for the status '200'",
 		Comment:     "",
@@ -27,7 +27,16 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 		Path:        "/api/v1.0/groups",
 		Source:      "../data/checker/response_property_default_value_changed_revision.yaml",
 		OperationId: "createOneGroup",
-	}, errs[0])
+	}, {
+		Id:          "response-property-default-value-changed",
+		Text:        "the 'enabled' response's property default value changed from 'false' to 'true' for the status '200'",
+		Comment:     "",
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      "../data/checker/response_property_default_value_changed_revision.yaml",
+		OperationId: "createOneGroup",
+	}}, errs)
 }
 
 // CL: changing response body default value
