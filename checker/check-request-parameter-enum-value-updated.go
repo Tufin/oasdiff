@@ -36,7 +36,7 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          "request-parameter-enum-value-removed",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-parameter-enum-value-removed"), enumVal, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:        fmt.Sprintf(config.i18n("request-parameter-enum-value-removed"), ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
