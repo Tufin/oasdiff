@@ -44,35 +44,31 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 				CheckAddedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
-						CheckAddedPropertiesDiff(
-							mediaTypeDiff.SchemaDiff,
-							func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
-								source := (*operationsSources)[operationItem.Revision]
-								if propertyItem.ReadOnly {
-									return
-								}
-								if slices.Contains(parent.Revision.Value.Required, propertyName) {
-									result = append(result, ApiChange{
-										Id:          "new-required-request-property",
-										Level:       ERR,
-										Text:        fmt.Sprintf(config.i18n("new-required-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-										Operation:   operation,
-										OperationId: operationItem.Revision.OperationID,
-										Path:        path,
-										Source:      source,
-									})
-								} else {
-									result = append(result, ApiChange{
-										Id:          "new-optional-request-property",
-										Level:       INFO,
-										Text:        fmt.Sprintf(config.i18n("new-optional-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-										Operation:   operation,
-										OperationId: operationItem.Revision.OperationID,
-										Path:        path,
-										Source:      source,
-									})
-								}
+						source := (*operationsSources)[operationItem.Revision]
+						if propertyItem.ReadOnly {
+							return
+						}
+						if slices.Contains(parent.Revision.Value.Required, propertyName) {
+							result = append(result, ApiChange{
+								Id:          "new-required-request-property",
+								Level:       ERR,
+								Text:        fmt.Sprintf(config.i18n("new-required-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
 							})
+						} else {
+							result = append(result, ApiChange{
+								Id:          "new-optional-request-property",
+								Level:       INFO,
+								Text:        fmt.Sprintf(config.i18n("new-optional-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Operation:   operation,
+								OperationId: operationItem.Revision.OperationID,
+								Path:        path,
+								Source:      source,
+							})
+						}
 					})
 			}
 		}
