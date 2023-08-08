@@ -78,23 +78,29 @@ func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.Sche
 }
 
 func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
-	if status := getSchemaStatus(schema1, schema2); status != schemaStatusOK {
-		switch status {
-		case schemaStatusNoSchemas:
-			return nil, nil
-		case schemaStatusSchemaAdded:
-			return &SchemaDiff{SchemaAdded: true}, nil
-		case schemaStatusSchemaDeleted:
-			return &SchemaDiff{SchemaDeleted: true}, nil
-		}
+
+	result := SchemaDiff{
+		Base:     schema1,
+		Revision: schema2,
+	}
+
+	if schema1 == nil && schema2 == nil {
+		return &result, nil
+	} else if schema1 == nil {
+		result.SchemaAdded = true
+		return &result, nil
+	} else if schema2 == nil {
+		result.SchemaDeleted = true
+		return &result, nil
 	}
 
 	if status := getCircularRefsDiff(state.visitedSchemasBase, state.visitedSchemasRevision, schema1, schema2); status != circularRefStatusNone {
 		switch status {
 		case circularRefStatusDiff:
-			return &SchemaDiff{CircularRefDiff: true}, nil
+			result.CircularRefDiff = true
+			return &result, nil
 		case circularRefStatusNoDiff:
-			return nil, nil
+			return &result, nil
 		}
 	}
 
@@ -118,8 +124,6 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		state.visitedSchemasRevision.Add(schema2.Ref)
 		defer state.visitedSchemasRevision.Remove(schema2.Ref)
 	}
-
-	result := SchemaDiff{}
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
 	result.OneOfDiff, err = getSchemaListsDiff(config, state, value1.OneOf, value2.OneOf)
@@ -186,36 +190,7 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 
 	result.DiscriminatorDiff = getDiscriminatorDiff(config, state, value1.Discriminator, value2.Discriminator)
 
-	result.Base = schema1
-	result.Revision = schema2
-
 	return &result, nil
-}
-
-type schemaStatus int
-
-const (
-	schemaStatusOK schemaStatus = iota
-	schemaStatusNoSchemas
-	schemaStatusSchemaAdded
-	schemaStatusSchemaDeleted
-	schemaStatusCircularRefDiff
-)
-
-func getSchemaStatus(schema1, schema2 *openapi3.SchemaRef) schemaStatus {
-	if schema1 == nil && schema2 == nil {
-		return schemaStatusNoSchemas
-	}
-
-	if schema1 == nil && schema2 != nil {
-		return schemaStatusSchemaAdded
-	}
-
-	if schema1 != nil && schema2 == nil {
-		return schemaStatusSchemaDeleted
-	}
-
-	return schemaStatusOK
 }
 
 func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
