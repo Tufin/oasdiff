@@ -13,4 +13,13 @@ paths:
             schema:
               type: string
               default: "Default"
-        description: RequestBody   
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                  default: 10.0
+        description: RequestBody

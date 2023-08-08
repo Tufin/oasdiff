@@ -19,6 +19,18 @@ func RequestParameterDefaultValueChanged(diffReport *diff.Diff, operationsSource
 			if operationItem.ParametersDiff == nil {
 				continue
 			}
+			source := (*operationsSources)[operationItem.Revision]
+			appendResultItem := func(messageId string, a ...any) {
+				result = append(result, ApiChange{
+					Id:          messageId,
+					Level:       ERR,
+					Text:        fmt.Sprintf(config.i18n(messageId), a...),
+					Operation:   operation,
+					OperationId: operationItem.Revision.OperationID,
+					Path:        path,
+					Source:      source,
+				})
+			}
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {
 
@@ -41,17 +53,13 @@ func RequestParameterDefaultValueChanged(diffReport *diff.Diff, operationsSource
 						continue
 					}
 
-					source := (*operationsSources)[operationItem.Revision]
-
-					result = append(result, ApiChange{
-						Id:          "request-parameter-default-value-changed",
-						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-default-value-changed"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To)),
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      source,
-					})
+					if defaultValueDiff.From == nil {
+						appendResultItem("request-parameter-default-value-added", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.To))
+					} else if defaultValueDiff.To == nil {
+						appendResultItem("request-parameter-default-value-removed", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From))
+					} else {
+						appendResultItem("request-parameter-default-value-changed", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To))
+					}
 				}
 			}
 		}

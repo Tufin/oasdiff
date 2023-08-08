@@ -26,7 +26,7 @@ func TestRequestPropertyEnumValueRemovedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          "request-property-enum-value-removed",
 		Level:       checker.ERR,
-		Text:        "removed the enum value bird of the request property 'category'",
+		Text:        "removed the enum value 'bird' of the request property 'category'",
 		Operation:   "POST",
 		OperationId: "updatePet",
 		Path:        "/pets",

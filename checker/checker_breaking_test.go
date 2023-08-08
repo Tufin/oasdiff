@@ -553,7 +553,7 @@ func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
 }
 
 // BC: setting the default value of an optional request parameter is breaking
-func TestBreaking_SettingRequiredOptionalParamDefaultValue(t *testing.T) {
+func TestBreaking_SettingOptionalParamDefaultValue(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
@@ -566,8 +566,26 @@ func TestBreaking_SettingRequiredOptionalParamDefaultValue(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-default-value-changed", errs[0].GetId())
-	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'undefined' to 'Y'", errs[0].GetText())
+	require.Equal(t, "request-parameter-default-value-added", errs[0].GetId())
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was added", errs[0].GetText())
+}
+
+// BC: removing the default value of an optional request parameter is breaking
+func TestBreaking_RemovingOptionalParamDefaultValue(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
+	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = nil
+
+	// By default, OpenAPI treats all request parameters as optional
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Len(t, errs, 1)
+	require.Equal(t, "request-parameter-default-value-removed", errs[0].GetId())
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was removed", errs[0].GetText())
 }
 
 // BC: modifying the default value of a required request parameter is not breaking

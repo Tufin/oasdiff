@@ -47,7 +47,9 @@ pattern-changed-warn-comment: "This is a warning because it is difficult to auto
 request-parameter-x-extensible-enum-value-removed: removed the x-extensible-enum value %s from the %s request parameter %s
 request-parameter-max-decreased: for the %s request parameter %s, the max was decreased from %s to %s
 request-parameter-max-increased: for the %s request parameter %s, the max was increased from %s to %s
+request-parameter-default-value-added: for the %s request parameter %s, default value %s was added
 request-parameter-default-value-changed: for the %s request parameter %s, default value was changed from %s to %s
+request-parameter-default-value-removed: for the %s request parameter %s, default value %s was removed
 request-parameter-max-length-decreased: for the %s request parameter %s, the maxLength was decreased from %s to %s
 request-parameter-max-length-increased: for the %s request parameter %s, the maxLength was increased from %s to %s
 request-parameter-min-length-increased: for the %s request parameter %s, the minLength was increased from %s to %s
@@ -192,10 +194,18 @@ response-optional-property-became-not-read-only: the response optional property 
 response-property-pattern-changed: the %s response's property pattern was changed from %s to %s for the status %s
 response-property-pattern-added: the %s response's property pattern %s was added for the status %s
 response-property-pattern-removed: the %s response's property pattern %s was removed for the status %s
+response-property-default-value-added: the %s response's property default value %s was added for the status %s
 response-property-default-value-changed: the %s response's property default value changed from %s to %s for the status %s
+response-property-default-value-removed: the %s response's property default value %s was removed for the status %s
+response-body-default-value-added: the response body %s default value %s was added for the status %s
 response-body-default-value-changed: the response body %s default value changed from %s to %s for the status %s
+response-body-default-value-removed: the response body %s default value %s was removed for the status %s
+request-property-default-value-added: the %s request property default value %s was added
 request-property-default-value-changed: the %s request property default value changed from %s to %s
+request-property-default-value-removed: the %s request property default value %s was removed
+request-body-default-value-added: the request body %s default value %s was added
 request-body-default-value-changed: the request body %s default value changed from %s to %s
+request-body-default-value-removed: the request body %s default value %s was removed
 request-body-any-of-added: added %s to the request body 'anyOf' list
 request-body-any-of-removed: removed %s from the request body 'anyOf' list
 request-property-any-of-added: added %s to the %s request property 'anyOf' list
