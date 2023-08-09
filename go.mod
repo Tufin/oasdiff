@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	cloud.google.com/go v0.110.7
-	github.com/TwiN/go-color v1.4.0
+	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.118.0
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
