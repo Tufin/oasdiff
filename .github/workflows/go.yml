@@ -2,7 +2,6 @@ name: go
 on:
   pull_request:
   push:
-
 jobs:
   build-and-test:
     env:
