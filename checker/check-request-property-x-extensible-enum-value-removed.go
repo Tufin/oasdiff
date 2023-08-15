@@ -88,7 +88,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							result = append(result, ApiChange{
 								Id:          "request-property-x-extensible-enum-value-removed",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-property-x-extensible-enum-value-removed"), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize("request-property-x-extensible-enum-value-removed", enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

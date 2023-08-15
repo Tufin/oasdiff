@@ -85,7 +85,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 						result = append(result, ApiChange{
 							Id:          "request-parameter-x-extensible-enum-value-removed",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-parameter-x-extensible-enum-value-removed"), ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:        config.Localize("request-parameter-x-extensible-enum-value-removed", ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

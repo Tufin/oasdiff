@@ -34,7 +34,7 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 			result = append(result, ApiChange{
 				Id:          id,
 				Level:       logLevel,
-				Text:        config.i18n(id),
+				Text:        config.Localize(id),
 				Operation:   operation,
 				OperationId: operationItem.Revision.OperationID,
 				Path:        path,

@@ -7,7 +7,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 	"gopkg.in/yaml.v3"
@@ -90,7 +89,7 @@ func ExampleGetPathsDiff() {
 	}
 
 	c := checker.GetDefaultChecks()
-	c.Localizer = *localizations.New("en", "en")
+	c.Localize = checker.NewLocalizer("en", "en")
 	errs := checker.CheckBackwardCompatibility(c, diffRes, operationsSources)
 
 	// process configuration file for ignoring errors
@@ -110,9 +109,9 @@ func ExampleGetPathsDiff() {
 	// pretty print breaking changes errors
 	if len(errs) > 0 {
 		count := errs.GetLevelCount()
-		fmt.Printf(c.Localizer.Get("messages.total-errors"), len(errs), count[checker.ERR], "error", count[checker.WARN], "warning")
+		fmt.Print(c.Localize("total-errors", len(errs), count[checker.ERR], "error", count[checker.WARN], "warning"))
 		for _, bcerr := range errs {
-			fmt.Printf("%s\n\n", strings.TrimRight(bcerr.PrettyErrorText(c.Localizer), " "))
+			fmt.Printf("%s\n\n", strings.TrimRight(bcerr.PrettyErrorText(c.Localize), " "))
 		}
 	}
 

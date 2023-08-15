@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -37,7 +35,7 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 						result = append(result, ApiChange{
 							Id:          "required-response-header-removed",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("required-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Text:        config.Localize("required-response-header-removed", ColorizedValue(headerName), ColorizedValue(responseStatus)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -47,7 +45,7 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 						result = append(result, ApiChange{
 							Id:          "optional-response-header-removed",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("optional-response-header-removed"), ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Text:        config.Localize("optional-response-header-removed", ColorizedValue(headerName), ColorizedValue(responseStatus)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

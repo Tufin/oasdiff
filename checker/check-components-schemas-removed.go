@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -20,7 +18,7 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 		result = append(result, ComponentChange{
 			Id:     apiSchemasRemovedCheckId,
 			Level:  config.getLogLevel(apiSchemasRemovedCheckId, INFO),
-			Text:   fmt.Sprintf(config.i18n(apiSchemasRemovedCheckId), ColorizedValue(deletedSchema)),
+			Text:   config.Localize(apiSchemasRemovedCheckId, ColorizedValue(deletedSchema)),
 			Source: "", // TODO: get the file name
 		})
 	}

@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -45,7 +43,7 @@ func RequestParameterMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSour
 					result = append(result, ApiChange{
 						Id:          id,
 						Level:       level,
-						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+						Text:        config.Localize(id, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

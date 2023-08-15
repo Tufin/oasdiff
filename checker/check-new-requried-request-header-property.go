@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
@@ -44,7 +42,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          "new-required-request-header-property",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("new-required-request-header-property"), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
+								Text:        config.Localize("new-required-request-header-property", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

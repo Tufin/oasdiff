@@ -7,7 +7,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -79,7 +78,7 @@ func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level, 
 	}
 
 	bcConfig := checker.GetAllChecks(flags.includeChecks, flags.deprecationDaysBeta, flags.deprecationDaysStable)
-	bcConfig.Localizer = *localizations.New(flags.lang, LangDefault)
+	bcConfig.Localize = checker.NewLocalizer(flags.lang, LangDefault)
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffReport, operationsSources, level),
@@ -128,8 +127,8 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 func getChangelogTitle(config checker.Config, errs checker.Changes) string {
 	count := errs.GetLevelCount()
 
-	return fmt.Sprintf(
-		config.Localizer.Get("messages.total-changes"),
+	return config.Localize(
+		"total-changes",
 		len(errs),
 		count[checker.ERR],
 		checker.ERR.PrettyString(),
@@ -158,7 +157,7 @@ func outputChangelog(config checker.Config, format string, stdout io.Writer, err
 		}
 
 		for _, bcerr := range errs {
-			fmt.Fprintf(stdout, "%s\n\n", bcerr.PrettyErrorText(config.Localizer))
+			fmt.Fprintf(stdout, "%s\n\n", bcerr.PrettyErrorText(config.Localize))
 		}
 	default:
 		return getErrUnsupportedBreakingChangesFormat(format)

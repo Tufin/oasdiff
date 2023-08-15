@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -47,7 +45,7 @@ func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 						result = append(result, ApiChange{
 							Id:          responseMediatypeEnumValueRemovedId,
 							Level:       config.getLogLevel(responseMediatypeEnumValueRemovedId, ERR),
-							Text:        fmt.Sprintf(config.i18n(responseMediatypeEnumValueRemovedId), mediaType, ColorizedValue(enumVal)),
+							Text:        config.Localize(responseMediatypeEnumValueRemovedId, mediaType, ColorizedValue(enumVal)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

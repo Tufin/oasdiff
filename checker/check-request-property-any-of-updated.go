@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -35,8 +33,8 @@ func RequestPropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 					result = append(result, ApiChange{
 						Id:    "request-body-any-of-added",
 						Level: INFO,
-						Text: fmt.Sprintf(
-							config.i18n("request-body-any-of-added"),
+						Text: config.Localize(
+							"request-body-any-of-added",
 							ColorizedValue(mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String())),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
@@ -49,8 +47,8 @@ func RequestPropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 					result = append(result, ApiChange{
 						Id:    "request-body-any-of-removed",
 						Level: ERR,
-						Text: fmt.Sprintf(
-							config.i18n("request-body-any-of-removed"),
+						Text: config.Localize(
+							"request-body-any-of-removed",
 							ColorizedValue(mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String())),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
@@ -70,8 +68,8 @@ func RequestPropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:    "request-property-any-of-added",
 								Level: INFO,
-								Text: fmt.Sprintf(
-									config.i18n("request-property-any-of-added"),
+								Text: config.Localize(
+									"request-property-any-of-added",
 									ColorizedValue(propertyDiff.AnyOfDiff.Added.String()),
 									ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
@@ -85,8 +83,8 @@ func RequestPropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:    "request-property-any-of-removed",
 								Level: ERR,
-								Text: fmt.Sprintf(
-									config.i18n("request-property-any-of-removed"),
+								Text: config.Localize(
+									"request-property-any-of-removed",
 									ColorizedValue(propertyDiff.AnyOfDiff.Deleted.String()),
 									ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,

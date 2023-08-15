@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -51,7 +50,7 @@ func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 					result = append(result, ApiChange{
 						Id:          id,
 						Level:       config.getLogLevel(id, defaultLevel),
-						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(responseStatus)),
+						Text:        config.Localize(id, ColorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -73,7 +72,7 @@ func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 					result = append(result, ApiChange{
 						Id:          addedId,
 						Level:       config.getLogLevel(addedId, defaultLevel),
-						Text:        fmt.Sprintf(config.i18n(addedId), ColorizedValue(responseStatus)),
+						Text:        config.Localize(addedId, ColorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

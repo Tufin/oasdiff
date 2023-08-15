@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
@@ -33,7 +31,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:          "request-property-removed",
 								Level:       WARN,
-								Text:        fmt.Sprintf(config.i18n("request-property-removed"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize("request-property-removed", ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -52,7 +50,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:          "new-required-request-property",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("new-required-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize("new-required-request-property", ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -62,7 +60,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:          "new-optional-request-property",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("new-optional-request-property"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize("new-optional-request-property", ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

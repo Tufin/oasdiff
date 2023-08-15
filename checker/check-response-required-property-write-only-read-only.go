@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
 )
@@ -60,7 +58,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 
 							id := ResponseRequiredPropertyBecameNonWriteOnlyCheckId
 							level := WARN
-							comment := config.i18n("response-required-property-became-not-write-only-comment")
+							comment := config.Localize("response-required-property-became-not-write-only-comment")
 
 							if writeOnlyDiff.To == true {
 								id = ResponseRequiredPropertyBecameWriteOnlyCheckId
@@ -71,7 +69,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Comment:     comment,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -107,7 +105,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

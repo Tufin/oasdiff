@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -42,7 +40,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 						result = append(result, ApiChange{
 							Id:          requestPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n(requestPropertyBecameEnumId), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Text:        config.Localize(requestPropertyBecameEnumId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

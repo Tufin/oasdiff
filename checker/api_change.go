@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/TwiN/go-color"
-	"github.com/tufin/oasdiff/checker/localizations"
 )
 
 // ApiChange represnts a change in the Paths Section of an OpenAPI spec
@@ -59,11 +58,11 @@ func (c ApiChange) GetPath() string {
 	return c.Path
 }
 
-func (c ApiChange) LocalizedError(l localizations.Localizer) string {
-	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", c.Level, l.Get("messages.at"), c.Source, l.Get("messages.in"), c.Operation, c.Path, c.Text, c.Id, c.Comment)
+func (c ApiChange) LocalizedError(l Localizer) string {
+	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", c.Level, l("at"), c.Source, l("in"), c.Operation, c.Path, c.Text, c.Id, c.Comment)
 }
 
-func (c ApiChange) PrettyErrorText(l localizations.Localizer) string {
+func (c ApiChange) PrettyErrorText(l Localizer) string {
 	if IsPipedOutput() {
 		return c.LocalizedError(l)
 	}
@@ -72,7 +71,7 @@ func (c ApiChange) PrettyErrorText(l localizations.Localizer) string {
 	if c.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l.Get("messages.at"), c.Source, l.Get("messages.in"), color.InGreen(c.Operation), color.InGreen(c.Path), c.Text, comment)
+	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("at"), c.Source, l("in"), color.InGreen(c.Operation), color.InGreen(c.Path), c.Text, comment)
 }
 
 func (c ApiChange) Error() string {

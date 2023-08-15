@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -38,8 +36,8 @@ func RequestParameterMinSetCheck(diffReport *diff.Diff, operationsSources *diff.
 					result = append(result, ApiChange{
 						Id:          "request-parameter-min-set",
 						Level:       WARN,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-min-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minDiff.To)),
-						Comment:     config.i18n("request-parameter-min-set-comment"),
+						Text:        config.Localize("request-parameter-min-set", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minDiff.To)),
+						Comment:     config.Localize("request-parameter-min-set-comment"),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

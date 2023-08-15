@@ -34,8 +34,8 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 							result = append(result, ApiChange{
 								Id:          "request-allOf-modified",
 								Level:       WARN,
-								Text:        fmt.Sprintf(config.i18n("request-allOf-modified"), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Comment:     config.i18n("request-allOf-modified-comment"),
+								Text:        config.Localize("request-allOf-modified", ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Comment:     config.Localize("request-allOf-modified-comment"),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

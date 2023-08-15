@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -29,7 +27,7 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, ApiChange{
 						Id:          "new-request-path-parameter",
 						Level:       ERR,
-						Text:        fmt.Sprintf(config.i18n("new-request-path-parameter"), ColorizedValue(paramName)),
+						Text:        config.Localize("new-request-path-parameter", ColorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

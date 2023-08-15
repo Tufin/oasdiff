@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"io"
 
 	"github.com/spf13/cobra"
@@ -72,8 +71,8 @@ func runBreakingChanges(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnE
 func getBreakingChangesTitle(config checker.Config, errs checker.Changes) string {
 	count := errs.GetLevelCount()
 
-	return fmt.Sprintf(
-		config.Localizer.Get("messages.total-errors"),
+	return config.Localize(
+		"total-errors",
 		len(errs),
 		count[checker.ERR],
 		checker.ERR.PrettyString(),

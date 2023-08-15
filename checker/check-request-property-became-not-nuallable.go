@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -39,7 +37,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          requestBodyBecameNotNullableId,
 							Level:       ERR,
-							Text:        config.i18n(requestBodyBecameNotNullableId),
+							Text:        config.Localize(requestBodyBecameNotNullableId),
 							Operation:   operation,
 							Path:        path,
 							Source:      source,
@@ -49,7 +47,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          requestBodyBecameNullableId,
 							Level:       INFO,
-							Text:        config.i18n(requestBodyBecameNullableId),
+							Text:        config.Localize(requestBodyBecameNullableId),
 							Operation:   operation,
 							Path:        path,
 							Source:      source,
@@ -69,7 +67,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          requestPropertyBecameNotNullableId,
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n(requestPropertyBecameNotNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(requestPropertyBecameNotNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								Path:        path,
 								Source:      source,
@@ -79,7 +77,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          requestPropertyBecameNullableId,
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n(requestPropertyBecameNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(requestPropertyBecameNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								Path:        path,
 								Source:      source,

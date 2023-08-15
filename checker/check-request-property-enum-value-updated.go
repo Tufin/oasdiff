@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -41,7 +39,7 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          "request-property-enum-value-removed",
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n("request-property-enum-value-removed"), ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize("request-property-enum-value-removed", ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -53,7 +51,7 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          "request-property-enum-value-added",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-enum-value-added"), ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize("request-property-enum-value-added", ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

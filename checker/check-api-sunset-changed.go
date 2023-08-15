@@ -30,7 +30,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          "sunset-deleted",
 					Level:       ERR,
-					Text:        config.i18n("sunset-deleted"),
+					Text:        config.Localize("sunset-deleted"),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -49,7 +49,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          "api-deprecated-sunset-parse",
 					Level:       ERR,
-					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
+					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -63,7 +63,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          "api-deprecated-sunset-parse",
 					Level:       ERR,
-					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
+					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -94,7 +94,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          "api-sunset-date-changed-too-small",
 					Level:       ERR,
-					Text:        fmt.Sprintf(config.i18n("api-sunset-date-changed-too-small"), baseDate, date, baseDate, deprecationDays),
+					Text:        config.Localize("api-sunset-date-changed-too-small", baseDate, date, baseDate, deprecationDays),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,

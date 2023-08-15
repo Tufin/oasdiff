@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
 )
@@ -61,7 +59,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -77,7 +75,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          id,
 							Level:       INFO,
-							Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -104,7 +102,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -120,7 +118,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          id,
 							Level:       INFO,
-							Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
