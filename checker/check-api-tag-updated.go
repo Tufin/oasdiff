@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -34,7 +32,7 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 				result = append(result, ApiChange{
 					Id:          APITagRemovedCheckId,
 					Level:       config.getLogLevel(APITagRemovedCheckId, INFO),
-					Text:        fmt.Sprintf(config.i18n(APITagRemovedCheckId), ColorizedValue(tag)),
+					Text:        config.Localize(APITagRemovedCheckId, ColorizedValue(tag)),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -47,7 +45,7 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 				result = append(result, ApiChange{
 					Id:          APITagAddedCheckId,
 					Level:       config.getLogLevel(APITagAddedCheckId, INFO),
-					Text:        fmt.Sprintf(config.i18n(APITagAddedCheckId), ColorizedValue(tag)),
+					Text:        config.Localize(APITagAddedCheckId, ColorizedValue(tag)),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,

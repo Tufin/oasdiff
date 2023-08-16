@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -33,7 +31,7 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 				result = append(result, ApiChange{
 					Id:          RequestBodyMediaTypeAdded,
 					Level:       INFO,
-					Text:        fmt.Sprintf(config.i18n(RequestBodyMediaTypeAdded), mediaType),
+					Text:        config.Localize(RequestBodyMediaTypeAdded, mediaType),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -46,7 +44,7 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 				result = append(result, ApiChange{
 					Id:          RequestBodyMediaTypeRemoved,
 					Level:       ERR,
-					Text:        fmt.Sprintf(config.i18n(RequestBodyMediaTypeRemoved), mediaType),
+					Text:        config.Localize(RequestBodyMediaTypeRemoved, mediaType),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

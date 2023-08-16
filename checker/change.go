@@ -1,7 +1,5 @@
 package checker
 
-import "github.com/tufin/oasdiff/checker/localizations"
-
 type Change interface {
 	GetId() string
 	GetText() string
@@ -12,7 +10,7 @@ type Change interface {
 	GetPath() string
 
 	MatchIgnore(ignorePath, ignoreLine string) bool
-	LocalizedError(l localizations.Localizer) string
-	PrettyErrorText(l localizations.Localizer) string
+	LocalizedError(l Localizer) string
+	PrettyErrorText(l Localizer) string
 	Error() string
 }

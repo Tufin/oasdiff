@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -45,7 +43,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						result = append(result, ApiChange{
 							Id:          "request-property-became-required",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(changedRequiredPropertyName)),
+							Text:        config.Localize("request-property-became-required", ColorizedValue(changedRequiredPropertyName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -67,7 +65,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						result = append(result, ApiChange{
 							Id:          "request-property-became-optional",
 							Level:       INFO,
-							Text:        fmt.Sprintf(config.i18n("request-property-became-optional"), ColorizedValue(changedRequiredPropertyName)),
+							Text:        config.Localize("request-property-became-optional", ColorizedValue(changedRequiredPropertyName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -98,7 +96,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          "request-property-became-required",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-property-became-required"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Text:        config.Localize("request-property-became-required", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -120,7 +118,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          "request-property-became-optional",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-became-optional"), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Text:        config.Localize("request-property-became-optional", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

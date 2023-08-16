@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -38,8 +36,8 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 						result = append(result, ApiChange{
 							Id:    "response-body-one-of-added",
 							Level: INFO,
-							Text: fmt.Sprintf(
-								config.i18n("response-body-one-of-added"),
+							Text: config.Localize(
+								"response-body-one-of-added",
 								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String()),
 								responseStatus),
 							Operation:   operation,
@@ -53,8 +51,8 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 						result = append(result, ApiChange{
 							Id:    "response-body-one-of-removed",
 							Level: INFO,
-							Text: fmt.Sprintf(
-								config.i18n("response-body-one-of-removed"),
+							Text: config.Localize(
+								"response-body-one-of-removed",
 								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String()),
 								responseStatus),
 							Operation:   operation,
@@ -75,8 +73,8 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 								result = append(result, ApiChange{
 									Id:    "response-property-one-of-added",
 									Level: INFO,
-									Text: fmt.Sprintf(
-										config.i18n("response-property-one-of-added"),
+									Text: config.Localize(
+										"response-property-one-of-added",
 										ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
 										ColorizedValue(propertyFullName(propertyPath, propertyName)),
 										responseStatus),
@@ -91,8 +89,8 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 								result = append(result, ApiChange{
 									Id:    "response-property-one-of-removed",
 									Level: INFO,
-									Text: fmt.Sprintf(
-										config.i18n("response-property-one-of-removed"),
+									Text: config.Localize(
+										"response-property-one-of-removed",
 										ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
 										ColorizedValue(propertyFullName(propertyPath, propertyName)),
 										responseStatus),

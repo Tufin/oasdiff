@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -33,11 +31,11 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 
 			level := INFO
 			id := apiOperationRemovedCheckId
-			text := fmt.Sprintf(config.i18n(id), ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID))
+			text := config.Localize(id, ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID))
 			if operationItem.OperationIDDiff.From == nil || operationItem.OperationIDDiff.From == "" {
 				id = apiOperationAddCheckId
 				op = pathItem.Revision.Operations()[operation]
-				text = fmt.Sprintf(config.i18n(id), ColorizedValue(operationItem.Revision.OperationID))
+				text = config.Localize(id, ColorizedValue(operationItem.Revision.OperationID))
 			}
 
 			result = append(result, ApiChange{

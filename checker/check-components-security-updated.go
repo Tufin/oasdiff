@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -32,7 +30,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityComponentOauthUrlUpdated,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityComponentOauthUrlUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(urlDiff.From), ColorizedValue(urlDiff.To)),
+			Text:   config.Localize(APIComponentsSecurityComponentOauthUrlUpdated, ColorizedValue(updatedSecurityName), ColorizedValue(urlDiff.From), ColorizedValue(urlDiff.To)),
 			Source: "",
 		})
 	}
@@ -41,7 +39,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityOauthTokenUrlUpdated,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityOauthTokenUrlUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(tokenDiff.From), ColorizedValue(tokenDiff.To)),
+			Text:   config.Localize(APIComponentsSecurityOauthTokenUrlUpdated, ColorizedValue(updatedSecurityName), ColorizedValue(tokenDiff.From), ColorizedValue(tokenDiff.To)),
 			Source: "",
 		})
 	}
@@ -51,7 +49,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeAdded,
 				Level:  INFO,
-				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeAdded), ColorizedValue(updatedSecurityName), ColorizedValue(addedScope)),
+				Text:   config.Localize(APIComponentSecurityOauthScopeAdded, ColorizedValue(updatedSecurityName), ColorizedValue(addedScope)),
 				Source: "",
 			})
 		}
@@ -60,7 +58,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeRemoved,
 				Level:  INFO,
-				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeRemoved), ColorizedValue(updatedSecurityName), ColorizedValue(removedScope)),
+				Text:   config.Localize(APIComponentSecurityOauthScopeRemoved, ColorizedValue(updatedSecurityName), ColorizedValue(removedScope)),
 				Source: "",
 			})
 		}
@@ -69,7 +67,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			result = append(result, ComponentChange{
 				Id:     APIComponentSecurityOauthScopeUpdated,
 				Level:  INFO,
-				Text:   fmt.Sprintf(config.i18n(APIComponentSecurityOauthScopeUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(name), ColorizedValue(modifiedScope.From), ColorizedValue(modifiedScope.To)),
+				Text:   config.Localize(APIComponentSecurityOauthScopeUpdated, ColorizedValue(updatedSecurityName), ColorizedValue(name), ColorizedValue(modifiedScope.From), ColorizedValue(modifiedScope.To)),
 				Source: "",
 			})
 		}
@@ -89,7 +87,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityAddedCheckId,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityAddedCheckId), ColorizedValue(updatedSecurity)),
+			Text:   config.Localize(APIComponentsSecurityAddedCheckId, ColorizedValue(updatedSecurity)),
 			Source: "",
 		})
 	}
@@ -98,7 +96,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 		result = append(result, ComponentChange{
 			Id:     APIComponentsSecurityRemovedCheckId,
 			Level:  INFO,
-			Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityRemovedCheckId), ColorizedValue(updatedSecurity)),
+			Text:   config.Localize(APIComponentsSecurityRemovedCheckId, ColorizedValue(updatedSecurity)),
 			Source: "",
 		})
 	}
@@ -110,7 +108,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 			result = append(result, ComponentChange{
 				Id:     APIComponentsSecurityTyepUpdated,
 				Level:  INFO,
-				Text:   fmt.Sprintf(config.i18n(APIComponentsSecurityTyepUpdated), ColorizedValue(updatedSecurityName), ColorizedValue(updatedSecurity.TypeDiff.From), ColorizedValue(updatedSecurity.TypeDiff.To)),
+				Text:   config.Localize(APIComponentsSecurityTyepUpdated, ColorizedValue(updatedSecurityName), ColorizedValue(updatedSecurity.TypeDiff.From), ColorizedValue(updatedSecurity.TypeDiff.To)),
 				Source: "",
 			})
 		}

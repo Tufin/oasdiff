@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -38,8 +36,8 @@ func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.
 					result = append(result, ApiChange{
 						Id:          "request-parameter-max-set",
 						Level:       WARN,
-						Text:        fmt.Sprintf(config.i18n("request-parameter-max-set"), ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.To)),
-						Comment:     config.i18n("request-parameter-max-set-comment"),
+						Text:        config.Localize("request-parameter-max-set", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.To)),
+						Comment:     config.Localize("request-parameter-max-set-comment"),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

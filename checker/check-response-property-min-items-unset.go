@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -35,7 +33,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          "response-body-min-items-unset",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-body-min-items-unset"), ColorizedValue(minItemsDiff.From)),
+								Text:        config.Localize("response-body-min-items-unset", ColorizedValue(minItemsDiff.From)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -62,7 +60,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          "response-property-min-items-unset",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("response-property-min-items-unset"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),
+								Text:        config.Localize("response-property-min-items-unset", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

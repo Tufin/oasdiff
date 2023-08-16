@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -44,7 +42,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          requestBodyEnumRemovedId,
 						Level:       config.getLogLevel(requestBodyEnumRemovedId, INFO),
-						Text:        fmt.Sprintf(config.i18n(requestBodyEnumRemovedId), ColorizedValue(enumVal)),
+						Text:        config.Localize(requestBodyEnumRemovedId, ColorizedValue(enumVal)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -32,8 +30,8 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, ApiChange{
 							Id:          "request-body-min-items-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-body-min-items-set"), ColorizedValue(minItemsDiff.To)),
-							Comment:     config.i18n("request-body-min-items-set-comment"),
+							Text:        config.Localize("request-body-min-items-set", ColorizedValue(minItemsDiff.To)),
+							Comment:     config.Localize("request-body-min-items-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -60,8 +58,8 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, ApiChange{
 							Id:          "request-property-min-items-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-property-min-items-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
-							Comment:     config.i18n("request-property-min-items-set-comment"),
+							Text:        config.Localize("request-property-min-items-set", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Comment:     config.Localize("request-property-min-items-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

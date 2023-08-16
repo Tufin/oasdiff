@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/utils"
 )
 
@@ -34,7 +33,7 @@ func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, le
 		LogLevelOverrides:   levelOverrides,
 		MinSunsetBetaDays:   minSunsetBetaDays,
 		MinSunsetStableDays: minSunsetStableDays,
-		Localizer:           *localizations.New("en", "en"),
+		Localize:            NewLocalizer("en", "en"),
 	}
 }
 

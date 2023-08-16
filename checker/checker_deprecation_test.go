@@ -10,7 +10,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
@@ -28,7 +27,7 @@ func singleCheckConfig(c checker.BackwardCompatibilityCheck) checker.Config {
 		Checks:              []checker.BackwardCompatibilityCheck{c},
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
-		Localizer:           *localizations.New("en", "en"),
+		Localize:            checker.NewLocalizer("en", "en"),
 	}
 }
 

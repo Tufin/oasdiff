@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -33,7 +31,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          "request-body-min-items-increased",
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n("request-body-min-items-increased"), ColorizedValue(minItemsDiff.To)),
+								Text:        config.Localize("request-body-min-items-increased", ColorizedValue(minItemsDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -64,7 +62,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          "request-property-min-items-increased",
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n("request-property-min-items-increased"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Text:        config.Localize("request-property-min-items-increased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -41,7 +39,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 						result = append(result, ApiChange{
 							Id:          responseBodyBecameNullableId,
 							Level:       ERR,
-							Text:        config.i18n(responseBodyBecameNullableId),
+							Text:        config.Localize(responseBodyBecameNullableId),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -63,7 +61,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          responsePropertyBecameNullableId,
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n(responsePropertyBecameNullableId), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        config.Localize(responsePropertyBecameNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

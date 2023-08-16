@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -41,7 +39,7 @@ func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operations
 					result = append(result, ApiChange{
 						Id:          id,
 						Level:       level,
-						Text:        fmt.Sprintf(config.i18n(id), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Text:        config.Localize(id, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

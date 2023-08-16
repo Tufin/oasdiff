@@ -1,17 +1,29 @@
 package checker
 
-import "github.com/tufin/oasdiff/checker/localizations"
+import (
+	"fmt"
+
+	"github.com/tufin/oasdiff/checker/localizations"
+)
+
+type Localizer func(key string, args ...interface{}) string
+
+func NewLocalizer(locale string, fallbackLocale string) Localizer {
+	locales := localizations.New(locale, fallbackLocale)
+
+	return func(key string, args ...interface{}) string {
+		pattern := locales.Get("messages." + key)
+
+		return fmt.Sprintf(pattern, args...)
+	}
+}
 
 type Config struct {
 	Checks              []BackwardCompatibilityCheck
 	MinSunsetBetaDays   int
 	MinSunsetStableDays int
-	Localizer           localizations.Localizer
+	Localize            Localizer
 	LogLevelOverrides   map[string]Level
-}
-
-func (c *Config) i18n(messageID string) string {
-	return c.Localizer.Get("messages." + messageID)
 }
 
 func (c *Config) getLogLevel(checkerId string, defaultLevel Level) Level {

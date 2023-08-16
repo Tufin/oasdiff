@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -32,8 +30,8 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          "request-body-max-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-body-max-set"), ColorizedValue(maxDiff.To)),
-							Comment:     config.i18n("request-body-max-set-comment"),
+							Text:        config.Localize("request-body-max-set", ColorizedValue(maxDiff.To)),
+							Comment:     config.Localize("request-body-max-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -60,8 +58,8 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          "request-property-max-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-property-max-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
-							Comment:     config.i18n("request-property-max-set-comment"),
+							Text:        config.Localize("request-property-max-set", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+							Comment:     config.Localize("request-property-max-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

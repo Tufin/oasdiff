@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/TwiN/go-color"
-	"github.com/tufin/oasdiff/checker/localizations"
 )
 
 // SecurityChange represnts a change in the Security Section (not to be confised with components/securitySchemes)
@@ -48,11 +47,11 @@ func (SecurityChange) GetPath() string {
 	return ""
 }
 
-func (c SecurityChange) LocalizedError(l localizations.Localizer) string {
-	return fmt.Sprintf("%s, %s security %s [%s]. %s", c.Level, l.Get("messages.in"), c.Text, c.Id, c.Comment)
+func (c SecurityChange) LocalizedError(l Localizer) string {
+	return fmt.Sprintf("%s, %s security %s [%s]. %s", c.Level, l("in"), c.Text, c.Id, c.Comment)
 }
 
-func (c SecurityChange) PrettyErrorText(l localizations.Localizer) string {
+func (c SecurityChange) PrettyErrorText(l Localizer) string {
 	if IsPipedOutput() {
 		return c.LocalizedError(l)
 	}
@@ -61,7 +60,7 @@ func (c SecurityChange) PrettyErrorText(l localizations.Localizer) string {
 	if c.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] \t\n\t%s security\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l.Get("messages.in"), c.Text, comment)
+	return fmt.Sprintf("%s\t[%s] \t\n\t%s security\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Text, comment)
 }
 
 func (c SecurityChange) Error() string {

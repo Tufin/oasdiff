@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"fmt"
 	"time"
 
 	"cloud.google.com/go/civil"
@@ -25,7 +24,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          "api-path-removed-without-deprecation",
 					Level:       ERR,
-					Text:        config.i18n("api-path-removed-without-deprecation"),
+					Text:        config.Localize("api-path-removed-without-deprecation"),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -39,7 +38,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          "api-path-sunset-parse",
 					Level:       ERR,
-					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
+					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -52,7 +51,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          "api-path-removed-before-sunset",
 					Level:       ERR,
-					Text:        fmt.Sprintf(config.i18n("api-path-removed-before-sunset"), date),
+					Text:        config.Localize("api-path-removed-before-sunset", date),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -73,7 +72,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          "api-removed-without-deprecation",
 					Level:       ERR,
-					Text:        config.i18n("api-removed-without-deprecation"),
+					Text:        config.Localize("api-removed-without-deprecation"),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -87,7 +86,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          "api-path-sunset-parse",
 					Level:       ERR,
-					Text:        fmt.Sprintf(config.i18n("api-deprecated-sunset-parse"), rawDate, err),
+					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -100,7 +99,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          "api-removed-before-sunset",
 					Level:       ERR,
-					Text:        fmt.Sprintf(config.i18n("api-removed-before-sunset"), date),
+					Text:        config.Localize("api-removed-before-sunset", date),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,

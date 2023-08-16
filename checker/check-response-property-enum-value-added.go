@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -43,7 +41,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 
 							id := ResponsePropertyEnumValueAddedCheckId
 							level := WARN
-							comment := config.i18n("response-property-enum-value-added-comment")
+							comment := config.Localize("response-property-enum-value-added-comment")
 
 							if propertyDiff.Revision.Value.WriteOnly {
 								// Document write-only enum update
@@ -56,7 +54,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 								result = append(result, ApiChange{
 									Id:          id,
 									Level:       level,
-									Text:        fmt.Sprintf(config.i18n(id), enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Text:        config.Localize(id, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 									Comment:     comment,
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,

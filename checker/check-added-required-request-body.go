@@ -23,7 +23,7 @@ func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *dif
 				result = append(result, ApiChange{
 					Id:          "added-required-request-body",
 					Level:       ERR,
-					Text:        config.i18n("added-required-request-body"),
+					Text:        config.Localize("added-required-request-body"),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

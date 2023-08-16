@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -39,7 +37,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 						result = append(result, ApiChange{
 							Id:          requestHeaderPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName)),
+							Text:        config.Localize(requestHeaderPropertyBecameEnumId, ColorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -58,7 +56,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          requestHeaderPropertyBecameEnumId,
 								Level:       ERR,
-								Text:        fmt.Sprintf(config.i18n(requestHeaderPropertyBecameEnumId), ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(requestHeaderPropertyBecameEnumId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

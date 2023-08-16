@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -32,8 +30,8 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, ApiChange{
 							Id:          "request-body-max-length-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-body-max-length-set"), ColorizedValue(maxLengthDiff.To)),
-							Comment:     config.i18n("request-body-max-length-set-comment"),
+							Text:        config.Localize("request-body-max-length-set", ColorizedValue(maxLengthDiff.To)),
+							Comment:     config.Localize("request-body-max-length-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -60,8 +58,8 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, ApiChange{
 							Id:          "request-property-max-length-set",
 							Level:       WARN,
-							Text:        fmt.Sprintf(config.i18n("request-property-max-length-set"), ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
-							Comment:     config.i18n("request-property-max-length-set-comment"),
+							Text:        config.Localize("request-property-max-length-set", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+							Comment:     config.Localize("request-property-max-length-set-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

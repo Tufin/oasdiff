@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -37,7 +35,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          "request-property-pattern-removed",
 								Level:       INFO,
-								Text:        fmt.Sprintf(config.i18n("request-property-pattern-removed"), patternDiff.From, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize("request-property-pattern-removed", patternDiff.From, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -47,8 +45,8 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          "request-property-pattern-added",
 								Level:       WARN,
-								Text:        fmt.Sprintf(config.i18n("request-property-pattern-added"), patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Comment:     config.i18n("pattern-changed-warn-comment"),
+								Text:        config.Localize("request-property-pattern-added", patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Comment:     config.Localize("pattern-changed-warn-comment"),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -56,7 +54,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							})
 						} else {
 							level := WARN
-							comment := config.i18n("pattern-changed-warn-comment")
+							comment := config.Localize("pattern-changed-warn-comment")
 							if patternDiff.To == ".*" {
 								level = INFO
 								comment = ""
@@ -64,7 +62,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          "request-property-pattern-changed",
 								Level:       level,
-								Text:        fmt.Sprintf(config.i18n("request-property-pattern-changed"), ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
+								Text:        config.Localize("request-property-pattern-changed", ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
 								Comment:     comment,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

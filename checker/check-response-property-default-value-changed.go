@@ -1,8 +1,6 @@
 package checker
 
 import (
-	"fmt"
-
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -25,7 +23,7 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 				result = append(result, ApiChange{
 					Id:          messageId,
 					Level:       INFO,
-					Text:        fmt.Sprintf(config.i18n(messageId), a...),
+					Text:        config.Localize(messageId, a...),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
