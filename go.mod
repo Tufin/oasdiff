@@ -8,7 +8,7 @@ require (
 	github.com/getkin/kin-openapi v0.118.0
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
-	github.com/yuin/goldmark v1.5.5
+	github.com/yuin/goldmark v1.5.6
 	golang.org/x/exp v0.0.0-20230801115018-d63ba01acd4b
 	gopkg.in/yaml.v3 v3.0.1
 )
