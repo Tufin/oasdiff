@@ -394,9 +394,11 @@ func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
+	require.Len(t, errs, 2)
 	require.Equal(t, "request-property-removed", errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
+	require.Equal(t, "response-optional-property-removed", errs[1].GetId())
+	require.Equal(t, checker.WARN, errs[1].GetLevel())
 }
 
 // BC: adding a new required property in response body is not breaking
@@ -540,9 +542,13 @@ func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
+	require.Len(t, errs, 3)
 	require.Equal(t, "request-property-removed", errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
+	require.Equal(t, "response-optional-property-removed", errs[1].GetId())
+	require.Equal(t, checker.WARN, errs[1].GetLevel())
+	require.Equal(t, "response-optional-property-removed", errs[2].GetId())
+	require.Equal(t, checker.WARN, errs[2].GetLevel())
 }
 
 // BC: changing an existing write-only property in response body to optional is not breaking
