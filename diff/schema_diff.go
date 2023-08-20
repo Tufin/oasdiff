@@ -95,12 +95,12 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		return nil, errors.New("revision schema value is nil")
 	}
 
-	value1, err := openapi3.Merge(schema1.Value)
+	value1, err := openapi3.Merge(*schema1.Value)
 	if err != nil {
 		return nil, errors.New("base schema merge failed with %v")
 	}
 
-	value2, err := openapi3.Merge(schema2.Value)
+	value2, err := openapi3.Merge(*schema2.Value)
 	if err != nil {
 		return nil, errors.New("revision schema merge failed with %v")
 	}
