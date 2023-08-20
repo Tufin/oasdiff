@@ -108,11 +108,13 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	if err != nil {
 		return nil, err
 	}
+	value1 = openapi3.Merge(*value1)
 
 	value2, err := derefSchema(schema2)
 	if err != nil {
 		return nil, err
 	}
+	value2 = openapi3.Merge(*value2)
 
 	// mark visited schema references to avoid infinite loops
 	if schema1.Ref != "" {
