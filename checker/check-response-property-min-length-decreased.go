@@ -59,7 +59,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 								return
 							}
 
-							if propertyDiff.Revision.Value.WriteOnly {
+							if propertyDiff.Revision.WriteOnly {
 								return
 							}
 

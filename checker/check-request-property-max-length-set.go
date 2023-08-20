@@ -51,7 +51,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 							maxLengthDiff.To == nil {
 							return
 						}
-						if propertyDiff.Revision.Value.ReadOnly {
+						if propertyDiff.Revision.ReadOnly {
 							return
 						}
 

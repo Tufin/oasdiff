@@ -33,7 +33,7 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 
 						for _, enumVal := range enumDiff.Deleted {
 							level := ERR
-							if propertyDiff.Revision.Value.ReadOnly {
+							if propertyDiff.Revision.ReadOnly {
 								level = INFO
 							}
 							result = append(result, ApiChange{

@@ -81,7 +81,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							}
 						}
 
-						if propertyDiff.Revision.Value.ReadOnly {
+						if propertyDiff.Revision.ReadOnly {
 							return
 						}
 						for _, enumVal := range deletedVals {
