@@ -39,7 +39,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								level = INFO
 								id = "response-optional-write-only-property-removed"
 							}
-							if slices.Contains(parent.Base.Value.Required, propertyName) {
+							if slices.Contains(parent.Base.Required, propertyName) {
 								// covered by response-required-property-removed
 								return
 							}
@@ -60,7 +60,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							if propertyItem.WriteOnly {
 								id = "response-optional-write-only-property-added"
 							}
-							if slices.Contains(parent.Revision.Value.Required, propertyName) {
+							if slices.Contains(parent.Revision.Required, propertyName) {
 								// covered by response-required-property-added
 								return
 							}

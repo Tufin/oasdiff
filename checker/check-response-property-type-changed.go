@@ -50,7 +50,7 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					CheckModifiedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-							if propertyDiff == nil || propertyDiff.Revision == nil || propertyDiff.Revision.Value == nil {
+							if propertyDiff == nil || propertyDiff.Revision == nil {
 								return
 							}
 
@@ -85,7 +85,7 @@ func breakingTypeFormatChangedInResponseProperty(typeDiff *diff.ValueDiff, forma
 	}
 
 	if formatDiff != nil {
-		return !isFormatContained(schemaDiff.Revision.Value.Type, formatDiff.From, formatDiff.To)
+		return !isFormatContained(schemaDiff.Revision.Type, formatDiff.From, formatDiff.To)
 	}
 
 	return false

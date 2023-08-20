@@ -66,7 +66,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						if IsDecreasedValue(maxLengthDiff) {
 							result = append(result, ApiChange{
 								Id:          "request-property-max-length-decreased",
-								Level:       ConditionalError(!propertyDiff.Revision.Value.ReadOnly),
+								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly),
 								Text:        config.Localize("request-property-max-length-decreased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

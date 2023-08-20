@@ -139,7 +139,7 @@ func processAddedPropertiesDiff(propertyPath string, propertyName string, schema
 
 	if schemaDiff.PropertiesDiff != nil {
 		for _, v := range schemaDiff.PropertiesDiff.Added {
-			processor(propertyPath, v, schemaDiff.Revision.Value.Properties[v].Value, schemaDiff)
+			processor(propertyPath, v, schemaDiff.Revision.Properties[v].Value, schemaDiff)
 		}
 		for i, v := range schemaDiff.PropertiesDiff.Modified {
 			processAddedPropertiesDiff(propertyPath, i, v, schemaDiff, processor)
@@ -187,7 +187,7 @@ func processDeletedPropertiesDiff(propertyPath string, propertyName string, sche
 
 	if schemaDiff.PropertiesDiff != nil {
 		for _, v := range schemaDiff.PropertiesDiff.Deleted {
-			processor(propertyPath, v, schemaDiff.Base.Value.Properties[v].Value, schemaDiff)
+			processor(propertyPath, v, schemaDiff.Base.Properties[v].Value, schemaDiff)
 		}
 		for i, v := range schemaDiff.PropertiesDiff.Modified {
 			processDeletedPropertiesDiff(propertyPath, i, v, schemaDiff, processor)

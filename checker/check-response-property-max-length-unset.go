@@ -53,7 +53,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 								maxLengthDiff.From == nil {
 								return
 							}
-							if propertyDiff.Revision.Value.WriteOnly {
+							if propertyDiff.Revision.WriteOnly {
 								return
 							}
 

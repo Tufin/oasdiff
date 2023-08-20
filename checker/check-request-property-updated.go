@@ -46,7 +46,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 						if propertyItem.ReadOnly {
 							return
 						}
-						if slices.Contains(parent.Revision.Value.Required, propertyName) {
+						if slices.Contains(parent.Revision.Required, propertyName) {
 							result = append(result, ApiChange{
 								Id:          "new-required-request-property",
 								Level:       ERR,

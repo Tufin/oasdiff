@@ -29,15 +29,15 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 
 				if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 					for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
-						if mediaTypeDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+						if mediaTypeDiff.SchemaDiff.Base.Properties[changedRequiredPropertyName] == nil {
 							// it is a new property, checked by the new-required-request-property check
 							continue
 						}
-						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 							// property was removed, checked by request-property-removed
 							continue
 						}
-						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 							continue
 						}
 						result = append(result, ApiChange{
@@ -51,15 +51,15 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						})
 					}
 					for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
-						if mediaTypeDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+						if mediaTypeDiff.SchemaDiff.Base.Properties[changedRequiredPropertyName] == nil {
 							// it is a new property, checked by the new-required-request-property check
 							continue
 						}
-						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 							// property was removed, checked by request-property-removed
 							continue
 						}
-						if mediaTypeDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 							continue
 						}
 						result = append(result, ApiChange{
@@ -83,13 +83,13 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							return
 						}
 						for _, changedRequiredPropertyName := range requiredDiff.Added {
-							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+							if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 								continue
 							}
-							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+							if propertyDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 								continue
 							}
-							if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+							if propertyDiff.Base.Properties[changedRequiredPropertyName] == nil {
 								// it is a new property, checked by the new-required-request-property check
 								continue
 							}
@@ -105,13 +105,13 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						}
 
 						for _, changedRequiredPropertyName := range requiredDiff.Deleted {
-							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+							if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 								continue
 							}
-							if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+							if propertyDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 								continue
 							}
-							if propertyDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+							if propertyDiff.Base.Properties[changedRequiredPropertyName] == nil {
 								// it is a new property, checked by the new-required-request-property check
 								continue
 							}

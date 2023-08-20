@@ -33,14 +33,14 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 
 					if paramDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range paramDiff.SchemaDiff.RequiredDiff.Added {
-							if paramDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+							if paramDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 								continue
 							}
-							if paramDiff.SchemaDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+							if paramDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 								continue
 							}
 
-							if paramDiff.SchemaDiff.Base.Value.Properties[changedRequiredPropertyName] == nil {
+							if paramDiff.SchemaDiff.Base.Properties[changedRequiredPropertyName] == nil {
 								// new added required properties processed via the new-required-request-header-property check
 								continue
 							}
@@ -65,10 +65,10 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								return
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Added {
-								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName] == nil {
+								if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 									continue
 								}
-								if propertyDiff.Revision.Value.Properties[changedRequiredPropertyName].Value.ReadOnly {
+								if propertyDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 									continue
 								}
 								result = append(result, ApiChange{
