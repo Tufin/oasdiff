@@ -31,3 +31,5 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/cobra v1.7.0
 )
+
+replace github.com/getkin/kin-openapi => github.com/tcdsv/kin-openapi v0.0.0-20230514091704-bf98f1c1d07c
