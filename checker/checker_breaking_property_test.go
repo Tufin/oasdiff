@@ -382,7 +382,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 }
 
-// BC: deleting a required property within another property in request is breaking with warn
+// BC: deleting an embedded optional property in request is breaking with warn
 func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 	s1, err := open(getReqPropFile("request-property-items.yaml"))
 	require.NoError(t, err)
@@ -393,10 +393,16 @@ func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-removed", errs[0].GetId())
-	require.Equal(t, checker.WARN, errs[0].GetLevel())
+	require.Contains(t, errs, checker.ApiChange{
+		Id:          "request-property-removed",
+		Text:        "removed the request property 'roleAssignments/items/role'",
+		Comment:     "",
+		Level:       checker.WARN,
+		Operation:   "POST",
+		OperationId: "",
+		Path:        "/api/roleMappings",
+		Source:      "../data/required-properties/request-property-items-2.yaml",
+	})
 }
 
 // BC: adding a new required property in response body is not breaking
@@ -466,7 +472,7 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 // For allOf all subSchemas must be merged before diff checking
 // For anyOf schemas must be compared one-by-one
 // I am going to change the behaviour in this case because currently it is false-positive case which can't correctly be checked
-// At least now oit is a warn
+// At least now it is a warn
 func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 	s1, err := open(getReqPropFile("response-allof-multi-base.json"))
 	require.NoError(t, err)
@@ -528,7 +534,7 @@ func TestBreaking_WriteOnlyDeleteRequiredProperty(t *testing.T) {
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 }
 
-// BC: deleting a non-required non-write-only property in response body is not breaking
+// BC: deleting a non-required non-write-only property in response body is breaking with warning
 func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
 	s1, err := open(getReqPropFile("write-only-delete-partial-base.yaml"))
 	require.NoError(t, err)
@@ -540,9 +546,13 @@ func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
+	require.Len(t, errs, 3)
 	require.Equal(t, "request-property-removed", errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
+	require.Equal(t, "response-optional-property-removed", errs[1].GetId())
+	require.Equal(t, checker.WARN, errs[1].GetLevel())
+	require.Equal(t, "response-optional-property-removed", errs[2].GetId())
+	require.Equal(t, checker.WARN, errs[2].GetLevel())
 }
 
 // BC: changing an existing write-only property in response body to optional is not breaking
