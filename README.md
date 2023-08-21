@@ -281,3 +281,6 @@ If you have other ideas, please [let us know](https://github.com/Tufin/oasdiff/d
 
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi).
+
+## Telemetry
+oasdiff collects telemetry which is used to help understand how to improve the product and build a great product. For example, this usage data helps to debug issues and to prioritize features and improvements based on usage. The usage of our telemetry data falls under our privacy policy. We understand that not everyone wants to share their usage data. If you would like to disable telemetry you can add an environment variable that will opt out of sending usage data: `OASDIFF_NO_TELEMETRY=1`
