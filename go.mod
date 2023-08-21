@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.110.7
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.118.0
-	github.com/oasdiff/telemetry v0.0.2
+	github.com/oasdiff/telemetry v0.0.3
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.5.6

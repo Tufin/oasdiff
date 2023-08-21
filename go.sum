@@ -43,8 +43,8 @@ github.com/mailru/easyjson v0.7.7 h1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0
 github.com/mailru/easyjson v0.7.7/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9M+97sNutRR1RKhG96O6jWumTTnw=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826/go.mod h1:TaXosZuwdSHYgviHp1DAtfrULt5eUgsSMsZf+YrPgl8=
-github.com/oasdiff/telemetry v0.0.2 h1:xrF1Z0hhg65fkdHP/BX/lC6nTniV//b2bE8g1WgrMFI=
-github.com/oasdiff/telemetry v0.0.2/go.mod h1:E5Gzq+hnDtZ8qnKcd9gDg0NF8doJckIjFmp+qHPRr9Q=
+github.com/oasdiff/telemetry v0.0.3 h1:JS175Oxw3idczOWqkPNfoTAX6m4Wdl6ib2p9xwVlBD4=
+github.com/oasdiff/telemetry v0.0.3/go.mod h1:o33r2t4iOstouy6LBuVcXF/1ks3QX0FtUbjpLNmLGk0=
 github.com/perimeterx/marshmallow v1.1.4/go.mod h1:dsXbUu8CRzfYP5a87xpp0xq9S3u0Vchtcl8we9tYaXw=
 github.com/perimeterx/marshmallow v1.1.5 h1:a2LALqQ1BlHM8PZblsDdidgv1mWi1DgC2UmX50IvK2s=
 github.com/perimeterx/marshmallow v1.1.5/go.mod h1:dsXbUu8CRzfYP5a87xpp0xq9S3u0Vchtcl8we9tYaXw=
