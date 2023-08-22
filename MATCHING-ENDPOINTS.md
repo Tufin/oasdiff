@@ -1,7 +1,7 @@
 ## How oasdiff compares endpoints
 oasdiff compares matching endpoints to each other.  
 By default, the matching algorithm **ignores** path parameter names.  
-For example, the following endpoints will be compared to each other because they differ only by a path parameter names:
+For example, the following endpoints will be compared to each other because they differ only by a path parameter name:
 - GET /pet/{id}
 - GET /pet/{petId}
 
