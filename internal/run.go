@@ -70,7 +70,7 @@ func strategy() func(*cobra.Command) int {
 		c := make(chan int)
 		go func() {
 			defer close(c)
-			_ = client.Send(cmd)
+			_ = client.NewCollector().Send(cmd)
 		}()
 
 		ret := run(cmd)
