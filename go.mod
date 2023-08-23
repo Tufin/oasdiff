@@ -6,17 +6,20 @@ require (
 	cloud.google.com/go v0.110.7
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.118.0
+	github.com/oasdiff/telemetry v0.0.5
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.5.6
-	golang.org/x/exp v0.0.0-20230801115018-d63ba01acd4b
+	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
+	github.com/denisbrodbeck/machineid v1.0.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	golang.org/x/sys v0.11.0 // indirect
 )
 
 require (

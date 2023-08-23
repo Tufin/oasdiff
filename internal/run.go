@@ -2,8 +2,12 @@ package internal
 
 import (
 	"io"
+	"os"
 	"strconv"
+	"time"
 
+	"github.com/oasdiff/telemetry/client"
+	"github.com/oasdiff/telemetry/model"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/build"
 )
@@ -26,14 +30,7 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 		getChangelogCmd(),
 	)
 
-	if err := rootCmd.Execute(); err != nil {
-		if ret := getReturnValue(rootCmd); ret != 0 {
-			return ret
-		}
-		return 100
-	}
-
-	return getReturnValue(rootCmd)
+	return strategy()(rootCmd)
 }
 
 func setReturnValue(cmd *cobra.Command, code int) {
@@ -61,4 +58,40 @@ func getReturnValue(cmd *cobra.Command) int {
 	}
 
 	return code
+}
+
+func strategy() func(*cobra.Command) int {
+
+	if os.Getenv(model.EnvNoTelemetry) == "1" {
+		return run
+	}
+
+	return func(cmd *cobra.Command) int {
+		c := make(chan int)
+		go func() {
+			defer close(c)
+			_ = client.NewCollector().Send(cmd)
+		}()
+
+		ret := run(cmd)
+
+		select {
+		case <-c:
+		case <-time.After(model.DefaultTimeout):
+		}
+
+		return ret
+	}
+}
+
+func run(cmd *cobra.Command) int {
+
+	if err := cmd.Execute(); err != nil {
+		if ret := getReturnValue(cmd); ret != 0 {
+			return ret
+		}
+		return 100
+	}
+
+	return getReturnValue(cmd)
 }

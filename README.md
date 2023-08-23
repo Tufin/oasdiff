@@ -279,5 +279,11 @@ References are normally resolved automatically when you load the spec. In other 
 
 If you have other ideas, please [let us know](https://github.com/Tufin/oasdiff/discussions/new?category=ideas).
 
+## Telemetry
+The oasdiff tool collects data in order to help us, the development team, understand how it is being used and what we can to do to continue improving it.  
+We use this data in compliance with our [privacy policy](https://www.oasdiff.com/about/privacy-policy).  
+To disable telemetry, add the environment variable: `OASDIFF_NO_TELEMETRY=1`
+
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi).
+
