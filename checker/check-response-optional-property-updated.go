@@ -60,6 +60,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							if propertyItem.WriteOnly {
 								id = "response-optional-write-only-property-added"
 							}
+
 							if slices.Contains(parent.Revision.Required, propertyName) {
 								// covered by response-required-property-added
 								return
