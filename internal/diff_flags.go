@@ -16,6 +16,7 @@ type DiffFlags struct {
 	filterExtension          string
 	format                   string
 	failOnDiff               bool
+	mergeAllOf               bool
 	circularReferenceCounter int
 	includePathParams        bool
 	excludeElements          []string
@@ -30,6 +31,7 @@ func (flags *DiffFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
+	config.MergeAllOf = flags.mergeAllOf
 
 	return config
 }
