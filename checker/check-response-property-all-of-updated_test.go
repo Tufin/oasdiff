@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: adding 'allOf' schema to the response body or response body property
+// CL: adding 'allOf' subschema to the response body or response body property
 func TestResponsePropertyAllOfAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_property_all_of_added_base.yaml")
 	require.NoError(t, err)
@@ -44,7 +44,7 @@ func TestResponsePropertyAllOfAdded(t *testing.T) {
 		}}, errs)
 }
 
-// CL: removing 'allOf' schema from the response body or response body property
+// CL: removing 'allOf' subschema from the response body or response body property
 func TestResponsePropertyAllOfRemoved(t *testing.T) {
 	s1, err := open("../data/checker/response_property_all_of_removed_base.yaml")
 	require.NoError(t, err)
