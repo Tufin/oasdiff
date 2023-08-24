@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: adding 'allOf' schema to the request body or request body property
+// CL: adding 'allOf' subschema to the request body or request body property
 func TestRequestPropertyAllOfAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_property_all_of_added_base.yaml")
 	require.NoError(t, err)
@@ -44,7 +44,7 @@ func TestRequestPropertyAllOfAdded(t *testing.T) {
 		}}, errs)
 }
 
-// CL: removing 'allOf' schema from the request body or request body property
+// CL: removing 'allOf' subschema from the request body or request body property
 func TestRequestPropertyAllOfRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_all_of_removed_base.yaml")
 	require.NoError(t, err)
