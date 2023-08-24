@@ -32,4 +32,4 @@ require (
 	github.com/spf13/cobra v1.7.0
 )
 
-replace github.com/getkin/kin-openapi => github.com/tcdsv/kin-openapi v0.0.0-20230820180523-474a0ab72a64
+replace github.com/getkin/kin-openapi => github.com/tcdsv/kin-openapi v0.0.0-20230823183622-29d3523d2f54

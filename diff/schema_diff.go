@@ -95,14 +95,9 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		return nil, errors.New("revision schema value is nil")
 	}
 
-	value1, err := openapi3.Merge(*schema1.Value)
+	value1, value2, err := mergeAllOf(config, schema1.Value, schema2.Value)
 	if err != nil {
-		return nil, errors.New("base schema merge failed with %v")
-	}
-
-	value2, err := openapi3.Merge(*schema2.Value)
-	if err != nil {
-		return nil, errors.New("revision schema merge failed with %v")
+		return nil, err
 	}
 
 	result := SchemaDiff{
@@ -205,6 +200,25 @@ func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
 	}
 
 	return ref.Value, nil
+}
+
+func mergeAllOf(config *Config, value1, value2 *openapi3.Schema) (*openapi3.Schema, *openapi3.Schema, error) {
+
+	if !config.MergeAllOf {
+		return value1, value2, nil
+	}
+
+	var err error
+	if value1, err = openapi3.Merge(*value1); err != nil {
+		return value1, value2, errors.New("base schema merge failed with %v")
+	}
+
+	value2, err = openapi3.Merge(*value2)
+	if err != nil {
+		return value1, value2, errors.New("revision schema merge failed with %v")
+	}
+
+	return value1, value2, nil
 }
 
 // Patch applies the patch to a schema
