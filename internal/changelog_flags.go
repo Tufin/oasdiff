@@ -20,6 +20,7 @@ type ChangelogFlags struct {
 	excludeElements          []string
 	includeChecks            []string
 	failOn                   string
+	mergeAllOf               bool
 	lang                     string
 	errIgnoreFile            string
 	warnIgnoreFile           string
@@ -36,6 +37,7 @@ func (flags *ChangelogFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
+	config.MergeAllOf = flags.mergeAllOf
 
 	return config
 }
