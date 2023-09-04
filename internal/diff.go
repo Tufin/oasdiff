@@ -139,13 +139,14 @@ func normalDiff(loader load.Loader, base, revision string, config *diff.Config) 
 func composedDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
 	s1, err := load.FromGlob(loader, base)
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("base", base, err)
+		return nil, nil, getErrFailedToLoadSpecs("base", base, err)
 	}
 
 	s2, err := load.FromGlob(loader, revision)
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
+		return nil, nil, getErrFailedToLoadSpecs("revision", revision, err)
 	}
+
 	diffReport, operationsSources, err := diff.GetPathsDiff(config, s1, s2)
 	if err != nil {
 		return nil, nil, getErrDiffFailed(err)

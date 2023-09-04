@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"os"
 	"strings"
 	"testing"
 
@@ -63,7 +62,30 @@ func Test_Summary(t *testing.T) {
 }
 
 func Test_InvalidFile(t *testing.T) {
-	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff diff no-file ../data/openapi-test3.yaml"), os.Stdout, io.Discard))
+	var stderr bytes.Buffer
+	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff diff no-file ../data/openapi-test3.yaml"), io.Discard, &stderr))
+	require.Condition(t, func() (success bool) {
+		return stderr.String() == "Error: failed to load base spec from \"no-file\" with open no-file: no such file or directory\n" ||
+			stderr.String() == "Error: failed to load base spec from \"no-file\" with open no-file: The system cannot find the file specified.\n" // windows
+	})
+}
+
+func Test_InvalidGlob(t *testing.T) {
+	var stderr bytes.Buffer
+	require.Equal(t, 103, internal.Run(cmdToArgs(`oasdiff diff -c "a[" ../data/openapi-test3.yaml`), io.Discard, &stderr))
+	require.Equal(t, "Error: failed to load base specs from glob \"\\\"a[\\\"\" with syntax error in pattern\n", stderr.String())
+}
+
+func Test_GlobNoFiles(t *testing.T) {
+	var stderr bytes.Buffer
+	require.Equal(t, 103, internal.Run(cmdToArgs("oasdiff diff -c no-file ../data/openapi-test3.yaml"), io.Discard, &stderr))
+	require.Equal(t, "Error: failed to load base specs from glob \"no-file\" with no matching files\n", stderr.String())
+}
+
+func Test_GlobWithUrl(t *testing.T) {
+	var stderr bytes.Buffer
+	require.Equal(t, 103, internal.Run(cmdToArgs("oasdiff diff -c ../data/openapi-test1.yaml https://"), io.Discard, &stderr))
+	require.Equal(t, "Error: failed to load revision specs from glob \"https://\" with no matching files (should be a glob, not a URL)\n", stderr.String())
 }
 
 func Test_DiffInvalidFormat(t *testing.T) {
