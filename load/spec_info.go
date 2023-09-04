@@ -1,6 +1,9 @@
 package load
 
 import (
+	"errors"
+	"net/url"
+
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/yargevad/filepathx"
 )
@@ -37,5 +40,19 @@ func FromGlob(loader Loader, glob string) ([]SpecInfo, error) {
 		result = append(result, SpecInfo{Url: file, Spec: spec})
 	}
 
-	return result, nil
+	if len(result) > 0 {
+		return result, nil
+	}
+
+	if isUrl(glob) {
+		return nil, errors.New("no matching files (should be a glob, not a URL)")
+	}
+
+	return nil, errors.New("no matching files")
+
+}
+
+func isUrl(spec string) bool {
+	_, err := url.ParseRequestURI(spec)
+	return err == nil
 }
