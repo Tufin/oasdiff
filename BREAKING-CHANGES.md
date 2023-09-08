@@ -36,6 +36,9 @@ Example:
      x-stability-level: "alpha"
    ```
 
+### Deprecating APIs
+oasdiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
+
 ### Ignoring Specific Breaking Changes
 Sometimes, you may want to ignore certain breaking changes.  
 The new Breaking Changes method allows you define breaking changes that you want to ignore in a configuration file.  
@@ -62,9 +65,6 @@ This method allows adding new entries to enums used in responses which is very u
 `x-extensible-enum` was introduced by [Zalando](https://opensource.zalando.com/restful-api-guidelines/#112) and picked up by the OpenAPI community. Technically, it could be replaced with anyOf+classical enum but the `x-extensible-enum` is a more explicit way to do it.  
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
-
-### Deprecating APIs
-oasdiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
 
 ### Optional Breaking-Changes Checks
 You can use the `--include-checks` flag to include the following optional checks:
