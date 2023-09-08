@@ -1,4 +1,4 @@
-## Breaking Changes [Beta]
+## Breaking Changes
 A breaking change is a change to a component, such as a server, that could break a dependent component, such as a client, for example deleting an endpoint. 
 When working with OpenAPI, breaking-changes can be caught by monitoring changes to the specification.
 
@@ -92,4 +92,3 @@ This document is automatically generated from oasdiff unit tests.
 ### Known Limitations
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
-

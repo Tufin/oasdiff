@@ -1,4 +1,4 @@
-## Deprecating APIs [Beta]
+## Deprecating APIs
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.
 As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
 
@@ -22,4 +22,3 @@ oasdiff breaking data/deprecation/base.yaml data/deprecation/deprecated-past.yam
 ```
 
 By default, `--deprecation-days-beta` and `--deprecation-days-stable` are set to 31 and 180, respectively. Setting deprecation-days to 0 allows for non-breaking deprecation, regardless of the sunset date.  
-Note: this is a Beta feature. Please report issues.
