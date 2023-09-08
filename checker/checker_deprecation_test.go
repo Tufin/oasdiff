@@ -118,7 +118,7 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
-	alpha := toJson(t, "alpha")
+	alpha := toJson(t, checker.STABILITY_ALPHA)
 	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = alpha
 	s1.Spec.Paths["/api/test"].Post.Extensions["x-stability-level"] = alpha
 
@@ -155,7 +155,7 @@ func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 func TestBreaking_DeprecationForDraft(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
-	draft := toJson(t, "draft")
+	draft := toJson(t, checker.STABILITY_DRAFT)
 	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
 
 	s2, err := open(getDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
@@ -172,7 +172,7 @@ func TestBreaking_DeprecationForDraft(t *testing.T) {
 func TestBreaking_RemovedPathForDraft(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
-	draft := toJson(t, "draft")
+	draft := toJson(t, checker.STABILITY_DRAFT)
 	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
 	s1.Spec.Paths["/api/test"].Post.Extensions["x-stability-level"] = draft
 
@@ -191,7 +191,7 @@ func TestBreaking_RemovedPathForDraft(t *testing.T) {
 func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
-	draft := toJson(t, "draft")
+	draft := toJson(t, checker.STABILITY_DRAFT)
 	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
 
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
@@ -360,6 +360,26 @@ func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
 	require.Equal(t, "endpoint-reactivated", e0.Id)
+	require.Equal(t, "GET", e0.Operation)
+	require.Equal(t, "/api/test", e0.Path)
+}
+
+func TestBreaking_InvaidStability(t *testing.T) {
+
+	s1, err := open(getDeprecationFile("invalid-stability.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+	require.Len(t, errs, 1)
+
+	require.IsType(t, checker.ApiChange{}, errs[0])
+	e0 := errs[0].(checker.ApiChange)
+	require.Equal(t, "parsing-error", e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
 }
