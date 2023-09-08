@@ -107,10 +107,24 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 	return result
 }
 
-func getDeperacationDays(config Config, stability string) int {
-	if stability == "beta" {
-		return config.MinSunsetBetaDays
-	}
+const (
+	STABILITY_DRAFT  = "draft"
+	STABILITY_ALPHA  = "alpha"
+	STABILITY_BETA   = "beta"
+	STABILITY_STABLE = "stable"
+)
 
-	return config.MinSunsetStableDays
+func getDeperacationDays(config Config, stability string) int {
+	switch stability {
+	case STABILITY_DRAFT:
+		return 0
+	case STABILITY_ALPHA:
+		return 0
+	case STABILITY_BETA:
+		return config.MinSunsetBetaDays
+	case STABILITY_STABLE:
+		return config.MinSunsetStableDays
+	default:
+		return config.MinSunsetStableDays
+	}
 }
