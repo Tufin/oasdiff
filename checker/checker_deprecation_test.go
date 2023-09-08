@@ -363,3 +363,23 @@ func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
 }
+
+func TestBreaking_InvaidStability(t *testing.T) {
+
+	s1, err := open(getDeprecationFile("invalid-stability.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+	require.Len(t, errs, 1)
+
+	require.IsType(t, checker.ApiChange{}, errs[0])
+	e0 := errs[0].(checker.ApiChange)
+	require.Equal(t, "parsing-error", e0.Id)
+	require.Equal(t, "GET", e0.Operation)
+	require.Equal(t, "/api/test", e0.Path)
+}
