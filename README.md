@@ -161,16 +161,9 @@ docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff diff /data/openapi-test
 Replace `$(pwd)/data` by the path that contains your files.  
 Note that the spec paths must begin with `/`.  
 
-## OpenAPI Diff and Breaking-Changes as a Service
-You can use oasdiff as a service like this:
-```
-curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com/diff
-```
-Or, to see breaking changes:
-```
-curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com/breaking-changes
-```
-Service source code: https://github.com/oasdiff/oasdiff-service
+## OpenAPI Diff, Breaking Changes and Changelog as a Service
+oasdiff is also available a service.
+See: https://github.com/oasdiff/oasdiff-service
 
 ## Diff Output Formats
 The default diff output format, YAML, provides a full view of all diff details.  
