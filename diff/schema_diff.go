@@ -209,11 +209,11 @@ func mergeAllOf(config *Config, value1, value2 *openapi3.Schema) (*openapi3.Sche
 	}
 
 	var err error
-	if value1, err = openapi3.Merge(*value1); err != nil {
+	if value1, err = Merge2(*value1); err != nil {
 		return value1, value2, errors.New("base schema merge failed with %v")
 	}
 
-	value2, err = openapi3.Merge(*value2)
+	value2, err = Merge2(*value2)
 	if err != nil {
 		return value1, value2, errors.New("revision schema merge failed with %v")
 	}
