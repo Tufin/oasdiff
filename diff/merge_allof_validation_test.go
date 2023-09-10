@@ -1209,7 +1209,7 @@ func validateConsistency(t *testing.T, spec string, tests []Test) {
 
 func merge(doc *openapi3.T) *openapi3.T {
 	schemaRef := doc.Paths.Find("/sample").Put.RequestBody.Value.Content.Get("application/json").Schema
-	merged, err := Merge2(*schemaRef.Value)
+	merged, err := Merge(*schemaRef.Value)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

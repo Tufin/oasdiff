@@ -52,7 +52,7 @@ type SchemaCollection struct {
 }
 
 // Merge replaces objects under AllOf with a flattened equivalent
-func Merge2(schema openapi3.Schema) (*openapi3.Schema, error) {
+func Merge(schema openapi3.Schema) (*openapi3.Schema, error) {
 	if !isListOfObjects(&schema) {
 		return &schema, nil
 	}
@@ -94,7 +94,7 @@ func handleNestedAllOfCases(schema *openapi3.Schema) (*openapi3.Schema, error) {
 			if schemaRef == nil {
 				continue
 			}
-			result, err := Merge2(*schemaRef.Value)
+			result, err := Merge(*schemaRef.Value)
 			if err != nil {
 				return &openapi3.Schema{}, err
 			}
@@ -111,7 +111,7 @@ func handleNestedAllOfCases(schema *openapi3.Schema) (*openapi3.Schema, error) {
 			if schemaRef == nil {
 				continue
 			}
-			result, err := Merge2(*schemaRef.Value)
+			result, err := Merge(*schemaRef.Value)
 			if err != nil {
 				return &openapi3.Schema{}, err
 			}
@@ -123,7 +123,7 @@ func handleNestedAllOfCases(schema *openapi3.Schema) (*openapi3.Schema, error) {
 	}
 
 	if schema.Not != nil {
-		result, err := Merge2(*schema.Not.Value)
+		result, err := Merge(*schema.Not.Value)
 		if err != nil {
 			return &openapi3.Schema{}, err
 		}
@@ -138,7 +138,7 @@ func handleNestedAllOfCases(schema *openapi3.Schema) (*openapi3.Schema, error) {
 func mergeProperties(schemas openapi3.Schemas) (openapi3.Schemas, error) {
 	res := make(openapi3.Schemas)
 	for name, schemaRef := range schemas {
-		merged, err := Merge2(*schemaRef.Value)
+		merged, err := Merge(*schemaRef.Value)
 		if err != nil {
 			return res, err
 		}
@@ -245,7 +245,7 @@ func processAllOf(allOf openapi3.SchemaRefs) (*openapi3.Schema, error) {
 
 	schemas := []*openapi3.Schema{}
 	for _, schema := range allOf {
-		merged, err := Merge2(*schema.Value)
+		merged, err := Merge(*schema.Value)
 		if err != nil {
 			return &openapi3.Schema{}, err
 		}
@@ -799,7 +799,7 @@ func mergeSchemaRefs(sr []openapi3.SchemaRefs) ([]openapi3.SchemaRefs, error) {
 	for _, refs := range sr {
 		r := openapi3.SchemaRefs{}
 		for _, ref := range refs {
-			merged, err := Merge2(*ref.Value)
+			merged, err := Merge(*ref.Value)
 			if err != nil {
 				return result, err
 			}
