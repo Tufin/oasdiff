@@ -2,7 +2,6 @@
 package diff
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -866,25 +865,4 @@ func findIntersection(arrays ...[]string) []string {
 	}
 
 	return intersection
-}
-
-// temporary
-func PrettyPrintJSON(s *openapi3.Schema) error {
-	var data interface{}
-	rawJSON, jsonErr := s.MarshalJSON()
-	if jsonErr != nil {
-		return jsonErr
-	}
-	err := json.Unmarshal(rawJSON, &data)
-	if err != nil {
-		return err
-	}
-
-	prettyJSON, err := json.MarshalIndent(data, "", "  ")
-	if err != nil {
-		return err
-	}
-
-	log.Println(string(prettyJSON))
-	return nil
 }
