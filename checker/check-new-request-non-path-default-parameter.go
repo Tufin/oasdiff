@@ -4,7 +4,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func NewNonPathRequestDefaultParameterCheck(diffReport *diff.Diff, _ *diff.OperationsSourcesMap, config Config) Changes {
+func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, _ *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil || len(diffReport.PathsDiff.Modified) == 0 {
 		return result
