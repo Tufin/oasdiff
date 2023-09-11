@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"fmt"
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -17,9 +16,6 @@ func NewNonPathRequestDefaultParameterCheck(diffReport *diff.Diff, _ *diff.Opera
 		for paramLoc, paramNameList := range pathItem.ParametersDiff.Added {
 			if paramLoc == "path" {
 				continue
-			}
-			for _, n := range paramNameList {
-				fmt.Print(n)
 			}
 			for _, param := range pathItem.Revision.Parameters {
 				if !paramNameList.Contains(param.Value.Name) {
