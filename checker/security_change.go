@@ -64,5 +64,5 @@ func (c SecurityChange) PrettyErrorText(l Localizer) string {
 }
 
 func (c SecurityChange) Error() string {
-	return fmt.Sprintf("%s, in security %s [%s]. %s", c.Level.String(), c.Text, c.Id, c.Comment)
+	return fmt.Sprintf("%s, in security %s [%s]. %s", c.Level, c.Text, c.Id, c.Comment)
 }
