@@ -16,10 +16,10 @@ const (
 	FormatErrorMessage = "unable to resolve Format conflict: all Format values must be identical"
 	TypeErrorMessage   = "unable to resolve Type conflict: all Type values must be identical"
 
-	formatInt32  = "int32"
-	formatInt64  = "int64"
-	formatFloat  = "float"
-	formatDouble = "double"
+	FormatInt32  = "int32"
+	FormatInt64  = "int64"
+	FormatFloat  = "float"
+	FormatDouble = "double"
 )
 
 type SchemaCollection struct {
@@ -538,11 +538,11 @@ func resolveFormat(schema *openapi3.Schema, collection *SchemaCollection) (*open
 
 	if areFormatsNumeric(formats) {
 		orderMap := make(map[string]int)
-		orderMap[formatInt32] = 1
-		orderMap[formatInt64] = 2
-		orderMap[formatFloat] = 3
-		orderMap[formatDouble] = 4
-		result := formatDouble
+		orderMap[FormatInt32] = 1
+		orderMap[FormatInt64] = 2
+		orderMap[FormatFloat] = 3
+		orderMap[FormatDouble] = 4
+		result := FormatDouble
 		for _, format := range formats {
 			if orderMap[format] < orderMap[result] {
 				result = format
@@ -561,7 +561,7 @@ func resolveFormat(schema *openapi3.Schema, collection *SchemaCollection) (*open
 
 func areFormatsNumeric(values []string) bool {
 	for _, val := range values {
-		if val != formatInt32 && val != formatInt64 && val != formatFloat && val != formatDouble {
+		if val != FormatInt32 && val != FormatInt64 && val != FormatFloat && val != FormatDouble {
 			return false
 		}
 	}

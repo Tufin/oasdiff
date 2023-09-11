@@ -1,4 +1,4 @@
-package diff
+package diff_test
 
 import (
 	"bytes"
@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"github.com/tufin/oasdiff/diff"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -1209,7 +1210,7 @@ func validateConsistency(t *testing.T, spec string, tests []Test) {
 
 func merge(doc *openapi3.T) *openapi3.T {
 	schemaRef := doc.Paths.Find("/sample").Put.RequestBody.Value.Content.Get("application/json").Schema
-	merged, err := Merge(*schemaRef.Value)
+	merged, err := diff.Merge(*schemaRef.Value)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
