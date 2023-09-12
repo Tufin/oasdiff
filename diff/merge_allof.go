@@ -1,4 +1,3 @@
-/*package openapi3*/
 package diff
 
 import (
