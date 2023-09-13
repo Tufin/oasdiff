@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/flatten"
 )
 
 // SchemaDiff describes the changes between a pair of schema objects: https://swagger.io/specification/#schema-object
@@ -208,13 +209,15 @@ func mergeAllOf(config *Config, value1, value2 *openapi3.Schema) (*openapi3.Sche
 		return value1, value2, nil
 	}
 
+	// TODO: check if we need a cache
+
 	var err error
-	if value1, err = Merge(*value1); err != nil {
+
+	if value1, err = flatten.Merge(*value1); err != nil {
 		return value1, value2, errors.New("base schema merge failed with %v")
 	}
 
-	value2, err = Merge(*value2)
-	if err != nil {
+	if value2, err = flatten.Merge(*value2); err != nil {
 		return value1, value2, errors.New("revision schema merge failed with %v")
 	}
 

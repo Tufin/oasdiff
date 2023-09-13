@@ -24,6 +24,7 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 		getSummaryCmd(),
 		getBreakingChangesCmd(),
 		getChangelogCmd(),
+		getFlattenCmd(),
 	)
 
 	if err := rootCmd.Execute(); err != nil {

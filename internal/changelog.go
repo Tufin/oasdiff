@@ -161,7 +161,7 @@ func outputChangelog(config checker.Config, format string, stdout io.Writer, err
 			fmt.Fprintf(stdout, "%s\n\n", bcerr.PrettyErrorText(config.Localize))
 		}
 	default:
-		return getErrUnsupportedBreakingChangesFormat(format)
+		return getErrUnsupportedFormat(format)
 	}
 
 	return nil

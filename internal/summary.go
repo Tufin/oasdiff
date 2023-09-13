@@ -85,7 +85,7 @@ func outputSummary(stdout io.Writer, diffReport *diff.Diff, format string) *Retu
 			return getErrFailedPrint("summary", err)
 		}
 	default:
-		return getErrUnsupportedDiffFormat(format)
+		return getErrUnsupportedFormat(format)
 	}
 
 	return nil

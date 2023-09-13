@@ -44,22 +44,23 @@ func getErrFailedGenerateHTML(err error) *ReturnError {
 	}
 }
 
-func getErrUnsupportedDiffFormat(format string) *ReturnError {
+func getErrUnsupportedFormat(format string) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("unsupported format %q", format),
 		Code:  108,
 	}
 }
 
-func getErrUnsupportedBreakingChangesFormat(format string) *ReturnError {
-	return &ReturnError{
-		error: fmt.Errorf("format %q is not supported with \"-check-breaking\"", format),
-		Code:  109,
-	}
-}
 func getErrCantProcessIgnoreFile(what string, err error) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("can't process %s ignore file %v", what, err),
 		Code:  121,
+	}
+}
+
+func getErrFailedToFlattenSpec(what string, path string, err error) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("failed to flatten %s spec from %q with %v", what, path, err),
+		Code:  102,
 	}
 }

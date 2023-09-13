@@ -101,7 +101,7 @@ func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnE
 		}
 		fmt.Fprintf(stdout, "%s", html)
 	default:
-		return getErrUnsupportedDiffFormat(format)
+		return getErrUnsupportedFormat(format)
 	}
 
 	return nil

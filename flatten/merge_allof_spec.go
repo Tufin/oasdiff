@@ -1,40 +1,12 @@
-package diff
+package flatten
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-func MergeSpec(spec openapi3.T) (openapi3.T, error) {
-	schemas, err := mergeSchemas(spec.Components.Schemas)
-	if err != nil {
-		return spec, err
-	}
-	spec.Components.Schemas = schemas
-	parameters, err := mergeParametersMap(spec.Components.Parameters)
-	if err != nil {
-		return spec, err
-	}
-	spec.Components.Parameters = parameters
-	headers, err := mergeHeaders(spec.Components.Headers)
-	if err != nil {
-		return spec, err
-	}
-	spec.Components.Headers = headers
-	requestBodies, err := mergeRequestBodies(spec.Components.RequestBodies)
-	if err != nil {
-		return spec, err
-	}
-	spec.Components.RequestBodies = requestBodies
-	responses, err := mergeResponses(spec.Components.Responses)
-	if err != nil {
-		return spec, err
-	}
-	spec.Components.Responses = responses
-	callbacks, err := mergeCallbacks(spec.Components.Callbacks)
-	if err != nil {
-		return spec, err
-	}
-	spec.Components.Callbacks = callbacks
+func MergeSpec(spec *openapi3.T) (*openapi3.T, error) {
+
+	mergeComponents(spec.Components)
 
 	for _, v := range spec.Paths {
 		if v == nil {
@@ -47,6 +19,40 @@ func MergeSpec(spec openapi3.T) (openapi3.T, error) {
 		*v = pathItem
 	}
 	return spec, nil
+}
+
+func mergeComponents(components *openapi3.Components) error {
+	if components == nil {
+		return nil
+	}
+
+	var err error
+
+	if components.Schemas, err = mergeSchemas(components.Schemas); err != nil {
+		return err
+	}
+
+	if components.Parameters, err = mergeParametersMap(components.Parameters); err != nil {
+		return err
+	}
+
+	if components.Headers, err = mergeHeaders(components.Headers); err != nil {
+		return err
+	}
+
+	if components.RequestBodies, err = mergeRequestBodies(components.RequestBodies); err != nil {
+		return err
+	}
+
+	if components.Responses, err = mergeResponses(components.Responses); err != nil {
+		return err
+	}
+
+	if components.Callbacks, err = mergeCallbacks(components.Callbacks); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func mergeOperation(operation openapi3.Operation) (openapi3.Operation, error) {
