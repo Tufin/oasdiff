@@ -6,7 +6,9 @@ import (
 
 func MergeSpec(spec *openapi3.T) (*openapi3.T, error) {
 
-	mergeComponents(spec.Components)
+	if err := mergeComponents(spec.Components); err != nil {
+		return spec, err
+	}
 
 	for _, v := range spec.Paths {
 		if v == nil {
