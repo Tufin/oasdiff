@@ -37,7 +37,9 @@ Spec can be a path to a file or a URL.
 		},
 	}
 
+	cmd.PersistentFlags().VarP(newEnumValue([]string{FormatYAML, FormatJSON}, FormatYAML, &flags.format), "format", "f", "output format: yaml or json")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
+
 	return &cmd
 }
 
@@ -53,7 +55,7 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 	}
 
 	// TODO: get the original format of the spec
-	format := FormatYAML
+	format := flags.format
 
 	flatSpec, err := flatten.MergeSpec(spec.Spec)
 	if err != nil {
