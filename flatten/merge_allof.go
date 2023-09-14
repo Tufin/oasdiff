@@ -51,10 +51,6 @@ type SchemaCollection struct {
 
 // Merge replaces objects under AllOf with a flattened equivalent
 func Merge(schema openapi3.Schema) (*openapi3.Schema, error) {
-	if !isListOfObjects(&schema) {
-		return &schema, nil
-	}
-
 	if schema.AllOf != nil {
 		mergedAllOf, err := processAllOf(schema.AllOf)
 		if err != nil {
@@ -586,20 +582,6 @@ func filterEmptyStrings(input []string) []string {
 	}
 
 	return result
-}
-
-func isListOfObjects(schema *openapi3.Schema) bool {
-	if schema == nil || schema.AllOf == nil {
-		return false
-	}
-
-	// for _, subSchema := range schema.AllOf {
-	// 	if subSchema.Value.Type != "object" {
-	// 		return false
-	// 	}
-	// }
-
-	return true
 }
 
 func allStringsEqual(values []string) bool {
