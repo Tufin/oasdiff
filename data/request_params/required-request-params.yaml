@@ -71,3 +71,11 @@ paths:
       responses:
         200:
           description: OK
+
+  /api/test4:
+    parameters:
+      - in: query
+        name: emptyPath2
+        required: true
+        schema:
+          type: string
