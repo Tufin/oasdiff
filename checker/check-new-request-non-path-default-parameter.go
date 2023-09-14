@@ -10,7 +10,7 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, _ *diff.Opera
 		return result
 	}
 	for path, pathItem := range diffReport.PathsDiff.Modified {
-		if pathItem.ParametersDiff == nil {
+		if pathItem.ParametersDiff == nil || pathItem.Revision == nil {
 			continue
 		}
 		for paramLoc, paramNameList := range pathItem.ParametersDiff.Added {
