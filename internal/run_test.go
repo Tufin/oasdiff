@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"os"
 	"strings"
 	"testing"
 
@@ -17,6 +18,15 @@ func cmdToArgs(cmd string) []string {
 	return strings.Fields(cmd)
 }
 
+func TestMain(m *testing.M) {
+	setup()
+	code := m.Run()
+	os.Exit(code)
+}
+
+func setup() {
+	os.Setenv("OASDIFF_NO_TELEMETRY", "1")
+}
 func Test_InvalidCmd(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff invalid"), io.Discard, io.Discard))
 }
