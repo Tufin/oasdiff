@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/oasdiff/go-common/util"
 	"github.com/oasdiff/telemetry/client"
 	"github.com/oasdiff/telemetry/model"
 	"github.com/spf13/cobra"
@@ -70,7 +71,14 @@ func strategy() func(*cobra.Command) int {
 		c := make(chan int)
 		go func() {
 			defer close(c)
-			_ = client.NewCollector().Send(cmd)
+			_ = client.NewCollector(util.NewStringSet().Add("err-ignore").
+				Add("warn-ignore").
+				Add("match-path").
+				Add("prefix-base").
+				Add("prefix-revision").
+				Add("strip-prefix-base").
+				Add("strip-prefix-revision").
+				Add("filter-extension")).Send(cmd)
 		}()
 
 		ret := run(cmd)
