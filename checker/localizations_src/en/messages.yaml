@@ -262,3 +262,5 @@ request-optional-property-became-not-write-only: the request optional property %
 request-optional-property-became-not-read-only: the request optional property %s became not read-only
 request-required-property-became-write-only: the request required property %s became write-only
 request-required-property-became-not-write-only: the request required property %s became not write-only
+new-required-request-default-parameter-to-existing-path: added the new required %s request parameter %s to all path's operations
+new-optional-request-default-parameter-to-existing-path: added the new optional %s request parameter %s to all path's operations

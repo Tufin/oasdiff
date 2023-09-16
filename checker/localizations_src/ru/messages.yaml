@@ -262,3 +262,5 @@ request-optional-property-became-not-write-only: необязательное п
 request-optional-property-became-not-read-only: необязательное поле запроса %s перестало быть только для чтения
 request-required-property-became-write-only: обязательное поле запроса %s стало только для записи
 request-required-property-became-not-write-only: обязательное поле запроса %s перестало быть только для записи
+new-required-request-default-parameter-to-existing-path: добавлен новый обязательный %s параметр запроса %s для всех операций пути
+new-optional-request-default-parameter-to-existing-path: добавлен новый необязательный %s параметр запроса %s ко всем операциям пути

@@ -57,6 +57,7 @@ These examples are automatically generated from unit tests.
 [modifying a pattern in a schema is breaking](checker/checker_breaking_test.go?plain=1#L491)  
 [modifying a pattern in request parameter is breaking](checker/checker_breaking_test.go?plain=1#L507)  
 [modifying the default value of an optional request parameter is breaking](checker/checker_breaking_test.go?plain=1#L537)  
+[new header, query and cookie required request default param is breaking](checker/check-new-request-non-path-default-parameter_test.go?plain=1#L11)  
 [new required header param is breaking](checker/checker_breaking_test.go?plain=1#L171)  
 [new required path param is breaking](checker/checker_breaking_test.go?plain=1#L155)  
 [new required property in request header is breaking](checker/checker_breaking_property_test.go?plain=1#L17)  
