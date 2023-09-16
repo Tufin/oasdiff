@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/flatten"
 )
 
 // SchemaDiff describes the changes between a pair of schema objects: https://swagger.io/specification/#schema-object
@@ -88,17 +87,14 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		return &SchemaDiff{SchemaDeleted: true}, nil
 	}
 
-	if schema1.Value == nil {
+	value1 := schema1.Value
+	if value1 == nil {
 		return nil, errors.New("base schema value is nil")
 	}
 
-	if schema2.Value == nil {
+	value2 := schema2.Value
+	if value2 == nil {
 		return nil, errors.New("revision schema value is nil")
-	}
-
-	value1, value2, err := mergeAllOf(config, schema1.Value, schema2.Value)
-	if err != nil {
-		return nil, err
 	}
 
 	result := SchemaDiff{
@@ -126,6 +122,8 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		state.visitedSchemasRevision.Add(schema2.Ref)
 		defer state.visitedSchemasRevision.Remove(schema2.Ref)
 	}
+
+	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
 	result.OneOfDiff, err = getSchemaListsDiff(config, state, value1.OneOf, value2.OneOf)
@@ -201,27 +199,6 @@ func derefSchema(ref *openapi3.SchemaRef) (*openapi3.Schema, error) {
 	}
 
 	return ref.Value, nil
-}
-
-func mergeAllOf(config *Config, value1, value2 *openapi3.Schema) (*openapi3.Schema, *openapi3.Schema, error) {
-
-	if !config.MergeAllOf {
-		return value1, value2, nil
-	}
-
-	// TODO: check if we need a cache
-
-	var err error
-
-	if value1, err = flatten.Merge(*value1); err != nil {
-		return value1, value2, errors.New("base schema merge failed with %v")
-	}
-
-	if value2, err = flatten.Merge(*value2); err != nil {
-		return value1, value2, errors.New("revision schema merge failed with %v")
-	}
-
-	return value1, value2, nil
 }
 
 // Patch applies the patch to a schema

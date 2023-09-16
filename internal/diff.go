@@ -7,6 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/flatten"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
 )
@@ -56,7 +57,7 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixBase, "strip-prefix-base", "", "", "strip this prefix from paths in base-spec before comparison")
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
-	cmd.PersistentFlags().BoolVarP(&flags.mergeAllOf, "merge-all-of", "m", false, "merge subschemas under allOf before diff")
+	cmd.PersistentFlags().BoolVarP(&flags.flatten, "flatten", "", false, "merge subschemas under allOf before diff")
 	cmd.PersistentFlags().BoolVarP(&flags.failOnDiff, "fail-on-diff", "o", false, "exit with return code 1 when any change is found")
 
 	return &cmd
@@ -113,23 +114,34 @@ func calcDiff(flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError
 	loader.IsExternalRefsAllowed = true
 
 	if flags.getComposed() {
-		return composedDiff(loader, flags.getBase(), flags.getRevision(), flags.toConfig())
+		return composedDiff(loader, flags)
 	}
 
-	return normalDiff(loader, flags.getBase(), flags.getRevision(), flags.toConfig())
+	return normalDiff(loader, flags)
 }
 
-func normalDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
-	s1, err := load.LoadSpecInfo(loader, base)
+func normalDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
+	s1, err := load.LoadSpecInfo(loader, flags.getBase())
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("base", base, err)
-	}
-	s2, err := load.LoadSpecInfo(loader, revision)
-	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
+		return nil, nil, getErrFailedToLoadSpec("base", flags.getBase(), err)
 	}
 
-	diffReport, operationsSources, err := diff.GetWithOperationsSourcesMap(config, s1, s2)
+	s2, err := load.LoadSpecInfo(loader, flags.getRevision())
+	if err != nil {
+		return nil, nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
+	}
+
+	if flags.getFlatten() {
+		if err := mergeAllOf("base", []*load.SpecInfo{s1}); err != nil {
+			return nil, nil, err
+		}
+
+		if err := mergeAllOf("revision", []*load.SpecInfo{s2}); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	diffReport, operationsSources, err := diff.GetWithOperationsSourcesMap(flags.toConfig(), s1, s2)
 	if err != nil {
 		return nil, nil, getErrDiffFailed(err)
 	}
@@ -137,20 +149,44 @@ func normalDiff(loader load.Loader, base, revision string, config *diff.Config) 
 	return diffReport, operationsSources, nil
 }
 
-func composedDiff(loader load.Loader, base, revision string, config *diff.Config) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
-	s1, err := load.FromGlob(loader, base)
+func composedDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
+	s1, err := load.FromGlob(loader, flags.getBase())
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("base", base, err)
+		return nil, nil, getErrFailedToLoadSpec("base", flags.getBase(), err)
 	}
 
-	s2, err := load.FromGlob(loader, revision)
+	s2, err := load.FromGlob(loader, flags.getRevision())
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("revision", revision, err)
+		return nil, nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
 	}
-	diffReport, operationsSources, err := diff.GetPathsDiff(config, s1, s2)
+
+	if flags.getFlatten() {
+		if err := mergeAllOf("base", s1); err != nil {
+			return nil, nil, err
+		}
+
+		if err := mergeAllOf("revision", s2); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	diffReport, operationsSources, err := diff.GetPathsDiff(flags.toConfig(), s1, s2)
 	if err != nil {
 		return nil, nil, getErrDiffFailed(err)
 	}
 
 	return diffReport, operationsSources, nil
+}
+
+func mergeAllOf(title string, specInfos []*load.SpecInfo) *ReturnError {
+
+	var err error
+
+	for _, specInfo := range specInfos {
+		if specInfo.Spec, err = flatten.MergeSpec(specInfo.Spec); err != nil {
+			return getErrFailedToFlattenSpec(title, specInfo.Url, err)
+		}
+	}
+
+	return nil
 }

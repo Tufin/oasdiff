@@ -79,8 +79,8 @@ func ExampleGetPathsDiff() {
 	diffConfig := diff.NewConfig().WithCheckBreaking()
 
 	diffRes, operationsSources, err := diff.GetPathsDiff(diffConfig,
-		[]load.SpecInfo{*s1},
-		[]load.SpecInfo{*s2},
+		[]*load.SpecInfo{s1},
+		[]*load.SpecInfo{s2},
 	)
 
 	if err != nil {

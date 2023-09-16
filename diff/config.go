@@ -15,7 +15,6 @@ type Config struct {
 	PathStripPrefixRevision string
 	ExcludeElements         utils.StringSet
 	IncludePathParams       bool
-	MergeAllOf              bool
 }
 
 const (

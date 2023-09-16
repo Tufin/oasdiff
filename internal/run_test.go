@@ -218,3 +218,7 @@ func Test_BreakingChangesChangelogOptionalCheckersAreErrorLevelWhenSpecified(t *
 		require.Equal(t, c.GetLevel(), checker.ERR)
 	}
 }
+
+func Test_BreakingChangesMergeAllOf(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/allof/simple.yaml ../data/allof/revision.yaml --flatten --fail-on ERR"), io.Discard, io.Discard))
+}
