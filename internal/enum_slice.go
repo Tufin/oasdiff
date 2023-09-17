@@ -50,32 +50,46 @@ func writeAsCSV(vals []string) (string, error) {
 	return strings.TrimSuffix(b.String(), "\n"), nil
 }
 
-func checkAllowedValues(values []string, allowed []string) error {
-	if notAllowed := utils.StringList(values).ToStringSet().Minus(utils.StringList(allowed).ToStringSet()); !notAllowed.Empty() {
+func (s *enumSliceValue) checkAllowedValues(values []string) error {
+	if notAllowed := utils.StringList(values).ToStringSet().Minus(utils.StringList(s.allowedValues).ToStringSet()); !notAllowed.Empty() {
 		verb := "are"
 		if len(notAllowed) == 1 {
 			verb = "is"
 		}
 		// TODO: find a better way to document the options
-		return fmt.Errorf("%s %s not one of the allowed values: %s", strings.Join(notAllowed.ToStringList(), ","), verb, strings.Join(allowed, ","))
+		return fmt.Errorf("%s %s not one of the allowed values: %s", strings.Join(notAllowed.ToStringList(), ","), verb, s.listOf())
 	}
 	return nil
 }
 
+func (s *enumSliceValue) listOf() string {
+	l := len(s.allowedValues)
+	switch l {
+	case 0:
+		return "no options available"
+	case 1:
+		return s.allowedValues[0]
+	case 2:
+		return s.allowedValues[0] + " or " + s.allowedValues[1]
+	default:
+		return strings.Join(s.allowedValues[:l-1], ", ") + ", or " + s.allowedValues[l-1]
+	}
+}
+
 func (s *enumSliceValue) Set(val string) error {
-	v, err := readAsCSV(val)
+	value, err := readAsCSV(val)
 	if err != nil {
 		return err
 	}
 
-	if err := checkAllowedValues(v, s.allowedValues); err != nil {
+	if err := s.checkAllowedValues(value); err != nil {
 		return err
 	}
 
 	if !s.changed {
-		*s.value = v
+		*s.value = value
 	} else {
-		*s.value = append(*s.value, v...)
+		*s.value = append(*s.value, value...)
 	}
 	s.changed = true
 	return nil
