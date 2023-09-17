@@ -32,10 +32,10 @@ github.com/mailru/easyjson v0.7.7 h1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0
 github.com/mailru/easyjson v0.7.7/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9M+97sNutRR1RKhG96O6jWumTTnw=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826/go.mod h1:TaXosZuwdSHYgviHp1DAtfrULt5eUgsSMsZf+YrPgl8=
-github.com/oasdiff/go-common v0.2.17 h1:0pyP2ArHEs4e23PwoO9Metc12TQ1ip0hREOhDa/h4DQ=
-github.com/oasdiff/go-common v0.2.17/go.mod h1:TzaXZ0Ot03yT7LitmbtJWzZhovMYql/7kx8847A7III=
-github.com/oasdiff/telemetry v0.0.6 h1:XffhIxJRcFvokh1WkBUMcvX0faH2IQI79qOPHTWkUF0=
-github.com/oasdiff/telemetry v0.0.6/go.mod h1:7VLIiPrRWuQn+xmY1nMm5hrhl1JPc4yifyPPSSbkSTw=
+github.com/oasdiff/go-common v0.2.18 h1:jTkgdTchcho1G7TfImdhG9+K54jC11k2IHCaZEGMOis=
+github.com/oasdiff/go-common v0.2.18/go.mod h1:blYY7oQVM271IqpnWmea3ElnBH64LCe+bMME0TzKA4E=
+github.com/oasdiff/telemetry v0.0.7 h1:31W8BOy8eORsUBUESBcnziqWLILWJSATSc61glBbLMI=
+github.com/oasdiff/telemetry v0.0.7/go.mod h1:nam9P433+Fks9NZRZlhqddSaJ6aGtjTnPHAReDdekNI=
 github.com/perimeterx/marshmallow v1.1.5 h1:a2LALqQ1BlHM8PZblsDdidgv1mWi1DgC2UmX50IvK2s=
 github.com/perimeterx/marshmallow v1.1.5/go.mod h1:dsXbUu8CRzfYP5a87xpp0xq9S3u0Vchtcl8we9tYaXw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
