@@ -19,7 +19,10 @@ func getChecksCmd() *cobra.Command {
 			// by now flags have been parsed successfully so we don't need to show usage on any errors
 			cmd.Root().SilenceUsage = true
 
-			runChecks(cmd.OutOrStdout())
+			if err := runChecks(cmd.OutOrStdout()); err != nil {
+				setReturnValue(cmd, err.Code)
+				return err
+			}
 
 			return nil
 		},
@@ -28,6 +31,9 @@ func getChecksCmd() *cobra.Command {
 	return &cmd
 }
 
-func runChecks(stdout io.Writer) {
-	printYAML(stdout, checker.GetOptionalChecks())
+func runChecks(stdout io.Writer) *ReturnError {
+	if err := printYAML(stdout, checker.GetOptionalChecks()); err != nil {
+		return getErrFailedPrint("optional breaking changes checks", err)
+	}
+	return nil
 }
