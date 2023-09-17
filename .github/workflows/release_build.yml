@@ -16,11 +16,11 @@ jobs:
         with:
           fetch-depth: 0 # See: https://goreleaser.com/ci/actions/
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
         with:
-          go-version: '^1.21.1'
-        id: go
+          go-version: '1.21.1'
+      - run: go version
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
