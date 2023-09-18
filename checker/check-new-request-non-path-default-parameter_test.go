@@ -46,16 +46,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 		},
 		{
 			Id:          "new-required-request-default-parameter-to-existing-path",
-			Text:        "added the new required 'header' request parameter 'id' to all path's operations",
-			Comment:     "",
-			Level:       3,
-			Operation:   "GET",
-			OperationId: "getTest",
-			Path:        "/api/test2",
-			Source:      "../data/request_params/required-request-params.yaml",
-		},
-		{
-			Id:          "new-required-request-default-parameter-to-existing-path",
 			Text:        "added the new required 'query' request parameter 'id' to all path's operations",
 			Comment:     "",
 			Level:       3,
@@ -97,16 +87,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 		{
 			Id:          "new-optional-request-default-parameter-to-existing-path",
 			Text:        "added the new optional 'header' request parameter 'optionalHeaderParam' to all path's operations",
-			Comment:     "",
-			Level:       1,
-			Operation:   "GET",
-			OperationId: "getTest",
-			Path:        "/api/test2",
-			Source:      "../data/request_params/required-request-params.yaml",
-		},
-		{
-			Id:          "new-optional-request-default-parameter-to-existing-path",
-			Text:        "added the new optional 'query' request parameter 'optionalHeaderParam' to all path's operations",
 			Comment:     "",
 			Level:       1,
 			Operation:   "GET",
