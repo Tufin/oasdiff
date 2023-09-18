@@ -10,6 +10,135 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestMerge_NestedAllOfInProperties(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		Properties: openapi3.Schemas{
+			"prop1": &openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type: "object",
+					AllOf: openapi3.SchemaRefs{
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 10,
+								MaxProps: openapi3.Uint64Ptr(40),
+							},
+						},
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 5,
+								MaxProps: openapi3.Uint64Ptr(25),
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+	)
+	require.NoError(t, err)
+	require.Nil(t, merged.Properties["prop1"].Value.AllOf)
+	require.Equal(t, uint64(10), merged.Properties["prop1"].Value.MinProps)
+	require.Equal(t, uint64(25), *merged.Properties["prop1"].Value.MaxProps)
+}
+
+func TestMerge_NestedAllOfInNot(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		Not: &openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				Type: "object",
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:     "object",
+							MinProps: 10,
+							MaxProps: openapi3.Uint64Ptr(40),
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:     "object",
+							MinProps: 5,
+							MaxProps: openapi3.Uint64Ptr(25),
+						},
+					},
+				},
+			},
+		},
+	},
+	)
+	require.NoError(t, err)
+	require.Nil(t, merged.Not.Value.AllOf)
+	require.Equal(t, uint64(10), merged.Not.Value.MinProps)
+	require.Equal(t, uint64(25), *merged.Not.Value.MaxProps)
+}
+
+func TestMerge_NestedAllOfInOneOf(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		OneOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type: "object",
+					AllOf: openapi3.SchemaRefs{
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 10,
+								MaxProps: openapi3.Uint64Ptr(40),
+							},
+						},
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 5,
+								MaxProps: openapi3.Uint64Ptr(25),
+							},
+						},
+					},
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.OneOf[0].Value.AllOf)
+	require.Equal(t, uint64(10), merged.OneOf[0].Value.MinProps)
+	require.Equal(t, uint64(25), *merged.OneOf[0].Value.MaxProps)
+}
+
+// AllOf is empty in base schema, but there is nested non-empty AllOf in base schema.
+func TestMerge_NestedAllOfInAnyOf(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AnyOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type: "object",
+					AllOf: openapi3.SchemaRefs{
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 10,
+								MaxProps: openapi3.Uint64Ptr(40),
+							},
+						},
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 5,
+								MaxProps: openapi3.Uint64Ptr(25),
+							},
+						},
+					},
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AnyOf[0].Value.AllOf)
+	require.Equal(t, uint64(10), merged.AnyOf[0].Value.MinProps)
+	require.Equal(t, uint64(25), *merged.AnyOf[0].Value.MaxProps)
+}
+
 // identical numeric types are merged successfully
 func TestMerge_TypeNumeric(t *testing.T) {
 	merged, err := flatten.Merge(openapi3.Schema{

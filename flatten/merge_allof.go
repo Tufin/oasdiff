@@ -3,7 +3,6 @@ package flatten
 import (
 	"errors"
 	"fmt"
-	"log"
 	"math"
 	"regexp"
 	"strings"
@@ -50,101 +49,39 @@ type SchemaCollection struct {
 }
 
 // Merge replaces objects under AllOf with a flattened equivalent
-func Merge(schema openapi3.Schema) (*openapi3.Schema, error) {
-	if schema.AllOf != nil {
-		mergedAllOf, err := processAllOf(schema.AllOf)
-		if err != nil {
-			return &openapi3.Schema{}, err
-		}
-		schema.AllOf = nil
-		result, err := mergeFields([]*openapi3.Schema{&schema, mergedAllOf})
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-		return result, nil
-	}
-
-	// handle cases where AllOf is nil, but other fields might include AllOf.
-	result, err := handleNestedAllOfCases(&schema)
+func Merge(baseSchema openapi3.Schema) (*openapi3.Schema, error) {
+	allOfSchemas, err := getAllOfSchemas(baseSchema)
 	if err != nil {
 		return &openapi3.Schema{}, err
 	}
-
+	schemas := []*openapi3.Schema{&baseSchema}
+	schemas = append(schemas, allOfSchemas...)
+	result, err := flattenSchemas(schemas)
+	if err != nil {
+		return &openapi3.Schema{}, err
+	}
 	return result, nil
 }
 
-func handleNestedAllOfCases(schema *openapi3.Schema) (*openapi3.Schema, error) {
-	if schema.Properties != nil {
-		properties, err := mergeProperties(schema.Properties)
+func getAllOfSchemas(schema openapi3.Schema) ([]*openapi3.Schema, error) {
+	schemas := []*openapi3.Schema{}
+	if schema.AllOf == nil {
+		return schemas, nil
+	}
+	for _, schema := range schema.AllOf {
+		merged, err := Merge(*schema.Value)
 		if err != nil {
-			return &openapi3.Schema{}, err
+			return schemas, err
 		}
-		schema.Properties = properties
+		schemas = append(schemas, merged)
 	}
-
-	if schema.AnyOf != nil {
-		var mergedAnyOf openapi3.SchemaRefs
-		for _, schemaRef := range schema.AnyOf {
-			if schemaRef == nil {
-				continue
-			}
-			result, err := Merge(*schemaRef.Value)
-			if err != nil {
-				return &openapi3.Schema{}, err
-			}
-			mergedAnyOf = append(mergedAnyOf, &openapi3.SchemaRef{
-				Value: result,
-			})
-		}
-		schema.AnyOf = mergedAnyOf
-	}
-
-	if schema.OneOf != nil {
-		var mergedOneOf openapi3.SchemaRefs
-		for _, schemaRef := range schema.OneOf {
-			if schemaRef == nil {
-				continue
-			}
-			result, err := Merge(*schemaRef.Value)
-			if err != nil {
-				return &openapi3.Schema{}, err
-			}
-			mergedOneOf = append(mergedOneOf, &openapi3.SchemaRef{
-				Value: result,
-			})
-		}
-		schema.OneOf = mergedOneOf
-	}
-
-	if schema.Not != nil {
-		result, err := Merge(*schema.Not.Value)
-		if err != nil {
-			return &openapi3.Schema{}, err
-		}
-		schema.Not = &openapi3.SchemaRef{
-			Value: result,
-		}
-	}
-
-	return schema, nil
+	return schemas, nil
 }
 
-func mergeProperties(schemas openapi3.Schemas) (openapi3.Schemas, error) {
-	res := make(openapi3.Schemas)
-	for name, schemaRef := range schemas {
-		merged, err := Merge(*schemaRef.Value)
-		if err != nil {
-			return res, err
-		}
-		schemaRef.Value = merged
-		res[name] = schemaRef
-	}
-	return res, nil
-}
-
-func mergeFields(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
+func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 	result := openapi3.NewSchema()
 	collection := collect(schemas)
+
 	result.Title = collection.Title[0]
 	result.Description = collection.Description[0]
 	result, err := resolveFormat(result, &collection)
@@ -190,7 +127,11 @@ func mergeFields(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 		return result, err
 	}
 
-	result = resolveNot(result, &collection)
+	result, err = resolveNot(result, &collection)
+	if err != nil {
+		return result, err
+	}
+
 	result, err = resolveAdditionalProperties(result, &collection)
 	if err != nil {
 		return result, err
@@ -235,24 +176,6 @@ func resolveNumberRange(schema *openapi3.Schema, collection *SchemaCollection) *
 	return schema
 }
 
-func processAllOf(allOf openapi3.SchemaRefs) (*openapi3.Schema, error) {
-
-	schemas := []*openapi3.Schema{}
-	for _, schema := range allOf {
-		merged, err := Merge(*schema.Value)
-		if err != nil {
-			return &openapi3.Schema{}, err
-		}
-		schemas = append(schemas, merged)
-	}
-
-	schema, err := mergeFields(schemas)
-	if err != nil {
-		return schema, err
-	}
-	return schema, nil
-}
-
 func resolveItems(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
 	items := []*openapi3.Schema{}
 	for _, s := range collection.Items {
@@ -265,7 +188,7 @@ func resolveItems(schema *openapi3.Schema, collection *SchemaCollection) (*opena
 		return schema, nil
 	}
 
-	res, err := mergeFields(items)
+	res, err := flattenSchemas(items)
 	if err != nil {
 		return schema, err
 	}
@@ -375,7 +298,15 @@ func resolveProperties(schema *openapi3.Schema, collection *SchemaCollection) (*
 
 	result := make(openapi3.Schemas)
 	for name, schemas := range allRefs {
-		merged, err := mergeFields(schemas)
+		var mergedSchemas []*openapi3.Schema
+		for _, s := range schemas {
+			mergedSchema, err := Merge(*s)
+			if err != nil {
+				return &openapi3.Schema{}, err
+			}
+			mergedSchemas = append(mergedSchemas, mergedSchema)
+		}
+		merged, err := flattenSchemas(mergedSchemas)
 		if err != nil {
 			schema.Properties = nil
 			return schema, err
@@ -413,7 +344,7 @@ func resolveAdditionalProperties(schema *openapi3.Schema, collection *SchemaColl
 	}
 
 	if len(additionalSchemas) > 0 {
-		result, err := mergeFields(additionalSchemas)
+		result, err := flattenSchemas(additionalSchemas)
 		if err != nil {
 			return schema, err
 		}
@@ -713,7 +644,7 @@ func mergeCombinations(combinations []openapi3.SchemaRefs) ([]*openapi3.Schema, 
 		for _, ref := range combination {
 			schemas = append(schemas, ref.Value)
 		}
-		schema, err := mergeFields(schemas)
+		schema, err := flattenSchemas(schemas)
 		if err != nil {
 			continue
 		}
@@ -725,21 +656,29 @@ func mergeCombinations(combinations []openapi3.SchemaRefs) ([]*openapi3.Schema, 
 	return merged, nil
 }
 
-func resolveNot(schema *openapi3.Schema, collection *SchemaCollection) *openapi3.Schema {
+func resolveNot(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
 	refs := filterNilSchemaRef(collection.Not)
 	if len(refs) == 0 {
-		return schema
+		return schema, nil
 	}
+	for _, ref := range refs {
+		merged, err := Merge(*ref.Value)
+		if err != nil {
+			return &openapi3.Schema{}, err
+		}
+		ref.Value = merged
+	}
+
 	if len(refs) == 1 {
 		schema.Not = refs[0]
-		return schema
+		return schema, nil
 	}
 	schema.Not = &openapi3.SchemaRef{
 		Value: &openapi3.Schema{
 			AnyOf: refs,
 		},
 	}
-	return schema
+	return schema, nil
 }
 
 func filterNilSchemaRef(refs []*openapi3.SchemaRef) []*openapi3.SchemaRef {
