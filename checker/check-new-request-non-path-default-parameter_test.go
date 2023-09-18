@@ -21,7 +21,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.NewRequestNonPathDefaultParameterCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
-	require.Len(t, errs, 9)
+	require.Len(t, errs, 7)
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{

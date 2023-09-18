@@ -6,6 +6,11 @@ paths:
   /api/test1:
     parameters:
       - in: query
+        name: baseQueryParam
+        required: true
+        schema:
+          type: string
+      - in: query
         name: version
         required: true
         schema:
@@ -33,6 +38,11 @@ paths:
 
   /api/test2:
     parameters:
+      - in: query
+        name: baseNotRequiredQueryParam
+        required: false
+        schema:
+          type: string
       - in: query
         name: id
         required: true
