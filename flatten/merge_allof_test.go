@@ -10,6 +10,98 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// verify that if all ReadOnly fields are set to false, then the ReadOnly field in the merged schema is false.
+func TestMerge_ReadOnlyIsSetToFalse(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					ReadOnly: false,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					ReadOnly: false,
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, false, merged.ReadOnly)
+}
+
+// verify that if there exists a ReadOnly field which is true, then the ReadOnly field in the merged schema is true.
+func TestMerge_ReadOnlyIsSetToTrue(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					ReadOnly: true,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					ReadOnly: false,
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, true, merged.ReadOnly)
+}
+
+// verify that if all WriteOnly fields are set to false, then the WriteOnly field in the merged schema is false.
+func TestMerge_WriteOnlyIsSetToFalse(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:      "object",
+					WriteOnly: false,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:      "object",
+					WriteOnly: false,
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, false, merged.WriteOnly)
+}
+
+// verify that if there exists a WriteOnly field which is true, then the WriteOnly field in the merged schema is true.
+func TestMerge_WriteOnlyIsSetToTrue(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:      "object",
+					WriteOnly: true,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:      "object",
+					WriteOnly: false,
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, true, merged.WriteOnly)
+}
+
 // verify that if all nullable fields are set to true, then the nullable field in the merged schema is true.
 func TestMerge_NullableIsSetToTrue(t *testing.T) {
 	merged, err := flatten.Merge(openapi3.Schema{

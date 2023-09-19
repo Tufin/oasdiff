@@ -48,6 +48,8 @@ type SchemaCollection struct {
 	MaxProps             []*uint64
 	AdditionalProperties []openapi3.AdditionalProperties
 	Nullable             []bool
+	ReadOnly             []bool
+	WriteOnly            []bool
 }
 
 // Merge replaces objects under AllOf with a flattened equivalent
@@ -103,6 +105,9 @@ func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 	result.MaxProps = findMinValue(collection.MaxProps)
 	result.Pattern = resolvePattern(collection.Pattern)
 	result.Nullable = !hasFalse(collection.Nullable)
+	result.ReadOnly = hasTrue(collection.ReadOnly)
+	result.WriteOnly = hasTrue(collection.WriteOnly)
+
 	enums, err := resolveEnum(collection.Enum)
 	if err != nil {
 		return result, err
@@ -136,6 +141,15 @@ func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 	}
 
 	return result, nil
+}
+
+func hasTrue(values []bool) bool {
+	for _, val := range values {
+		if val {
+			return true
+		}
+	}
+	return false
 }
 
 func hasFalse(values []bool) bool {
@@ -671,6 +685,8 @@ func collect(schemas []*openapi3.Schema) SchemaCollection {
 		collection.MaxProps = append(collection.MaxProps, s.MaxProps)
 		collection.AdditionalProperties = append(collection.AdditionalProperties, s.AdditionalProperties)
 		collection.Nullable = append(collection.Nullable, s.Nullable)
+		collection.ReadOnly = append(collection.ReadOnly, s.ReadOnly)
+		collection.WriteOnly = append(collection.WriteOnly, s.WriteOnly)
 	}
 	return collection
 }
