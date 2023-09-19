@@ -20,7 +20,7 @@ func getDiffCmd() *cobra.Command {
 		Short: "Generate a diff report",
 		Long: `Generate a diff report between base and revision specs.
 Base and revision can be a path to a file or a URL.
-In 'composed' mode, base and revision can be a glob and oasdiff will compare mathcing endpoints between the two sets of files.
+In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.
 `,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -46,7 +46,7 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	cmd.PersistentFlags().VarP(newEnumValue([]string{FormatYAML, FormatJSON, FormatText, FormatHTML}, FormatYAML, &flags.format), "format", "f", "output format: yaml, json, text or html")
+	enumWithOptions(&cmd, newEnumValue([]string{FormatYAML, FormatJSON, FormatText, FormatHTML}, FormatYAML, &flags.format), "format", "f", "output format")
 	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "e", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")

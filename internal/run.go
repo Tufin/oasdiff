@@ -29,6 +29,7 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 		getSummaryCmd(),
 		getBreakingChangesCmd(),
 		getChangelogCmd(),
+		getChecksCmd(),
 	)
 
 	return strategy()(rootCmd)
