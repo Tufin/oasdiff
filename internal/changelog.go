@@ -44,15 +44,9 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 		},
 	}
 
-	formatEnum := newEnumValue([]string{FormatYAML, FormatJSON, FormatText}, FormatText, &flags.format)
-	langEnum := newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang)
-
-	excludeElementsEnum := newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements)
-	includeChecksEnum := newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks)
-
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	cmd.PersistentFlags().VarP(formatEnum, "format", "f", "output format: "+formatEnum.listOf())
-	cmd.PersistentFlags().VarP(excludeElementsEnum, "exclude-elements", "e", "comma-separated list of elements to exclude: "+excludeElementsEnum.listOf())
+	varWithOptions(&cmd, newEnumValue([]string{FormatYAML, FormatJSON, FormatText}, FormatText, &flags.format), "format", "f", "output format")
+	varWithOptions(&cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "e", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
@@ -61,14 +55,18 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixBase, "strip-prefix-base", "", "", "strip this prefix from paths in base-spec before comparison")
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
-	cmd.PersistentFlags().VarP(langEnum, "lang", "l", "language for localized output: "+langEnum.listOf())
+	varWithOptions(&cmd, newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().StringVarP(&flags.errIgnoreFile, "err-ignore", "", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().StringVarP(&flags.warnIgnoreFile, "warn-ignore", "", "", "configuration file for ignoring warnings")
-	cmd.PersistentFlags().VarP(includeChecksEnum, "include-checks", "i", "comma-separated list of optional checks (see 'oasdiff checks')")
+	varWithOptions(&cmd, newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (see 'oasdiff checks')")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysBeta, "deprecation-days-beta", "", checker.BetaDeprecationDays, "min days required between deprecating a beta resource and removing it")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysStable, "deprecation-days-stable", "", checker.StableDeprecationDays, "min days required between deprecating a stable resource and removing it")
 
 	return &cmd
+}
+
+func varWithOptions(cmd *cobra.Command, value enumVal, name, shorthand, usage string) {
+	cmd.PersistentFlags().VarP(value, name, shorthand, usage+": "+value.listOf())
 }
 
 func runChangelog(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnError) {

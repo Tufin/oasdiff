@@ -7,6 +7,13 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+type enumVal interface {
+	Set(s string) error
+	String() string
+	Type() string
+	listOf() string
+}
+
 // enumValue is like stringValue with allowed values
 type enumValue struct {
 	value         *string
