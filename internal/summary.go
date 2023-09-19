@@ -16,7 +16,7 @@ func getSummaryCmd() *cobra.Command {
 		Short: "Generate a diff summary",
 		Long: `Display a summary of changes between base and revision specs.
 Base and revision can be a path to a file or a URL.
-In 'composed' mode, base and revision can be a glob and oasdiff will compare mathcing endpoints between the two sets of files.
+In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.
 `,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
