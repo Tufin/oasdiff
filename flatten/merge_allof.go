@@ -11,8 +11,9 @@ import (
 )
 
 const (
-	FormatErrorMessage = "unable to resolve Format conflict: all Format values must be identical"
-	TypeErrorMessage   = "unable to resolve Type conflict: all Type values must be identical"
+	FormatErrorMessage  = "unable to resolve Format conflict using default resolver: all Format values must be identical"
+	TypeErrorMessage    = "unable to resolve Type conflict: all Type values must be identical"
+	FormatResolverError = ""
 
 	FormatInt32  = "int32"
 	FormatInt64  = "int64"
@@ -511,28 +512,34 @@ func resolveFormat(schema *openapi3.Schema, collection *SchemaCollection) (*open
 		schema.Format = ""
 		return schema, nil
 	}
-
 	if areFormatsNumeric(formats) {
-		orderMap := make(map[string]int)
-		orderMap[FormatInt32] = 1
-		orderMap[FormatInt64] = 2
-		orderMap[FormatFloat] = 3
-		orderMap[FormatDouble] = 4
-		result := FormatDouble
-		for _, format := range formats {
-			if orderMap[format] < orderMap[result] {
-				result = format
-			}
-		}
-		schema.Format = result
+		schema.Format = resolveNumericFormat(formats)
 		return schema, nil
 	}
+	return defaultFormatResolver(schema, formats)
+}
 
+func resolveNumericFormat(formats []string) string {
+	orderMap := make(map[string]int)
+	orderMap[FormatInt32] = 1
+	orderMap[FormatInt64] = 2
+	orderMap[FormatFloat] = 3
+	orderMap[FormatDouble] = 4
+	result := FormatDouble
+	for _, format := range formats {
+		if orderMap[format] < orderMap[result] {
+			result = format
+		}
+	}
+	return result
+}
+
+func defaultFormatResolver(schema *openapi3.Schema, formats []string) (*openapi3.Schema, error) {
 	if allStringsEqual(formats) {
 		schema.Format = formats[0]
 		return schema, nil
 	}
-	return schema, errors.New(FormatErrorMessage)
+	return &openapi3.Schema{}, errors.New(FormatErrorMessage)
 }
 
 func areFormatsNumeric(values []string) bool {
