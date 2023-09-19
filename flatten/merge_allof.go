@@ -102,7 +102,7 @@ func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 	result.MinProps = findMaxValue(collection.MinProps)
 	result.MaxProps = findMinValue(collection.MaxProps)
 	result.Pattern = resolvePattern(collection.Pattern)
-	result.Nullable = resolveNullable(collection.Nullable)
+	result.Nullable = !hasFalse(collection.Nullable)
 	enums, err := resolveEnum(collection.Enum)
 	if err != nil {
 		return result, err
@@ -138,13 +138,13 @@ func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 	return result, nil
 }
 
-func resolveNullable(values []bool) bool {
-	for _, v := range values {
-		if !v {
-			return false
+func hasFalse(values []bool) bool {
+	for _, val := range values {
+		if !val {
+			return true
 		}
 	}
-	return true
+	return false
 }
 
 func resolveNumberRange(schema *openapi3.Schema, collection *SchemaCollection) *openapi3.Schema {
