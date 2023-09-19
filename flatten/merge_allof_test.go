@@ -10,6 +10,54 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// verify that if all nullable fields are set to true, then the nullable field in the merged schema is true.
+func TestMerge_NullableIsSetToTrue(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					Nullable: true,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					Nullable: true,
+				},
+			},
+		},
+		Nullable: true,
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, true, merged.Nullable)
+}
+
+// verify that if there exists a nullable field which is false, then the nullable field in the merged schema is false.
+func TestMerge_NullableIsSetToFalse(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					Nullable: false,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					Nullable: true,
+				},
+			},
+		},
+		Nullable: true,
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, false, merged.Nullable)
+}
+
 func TestMerge_NestedAllOfInProperties(t *testing.T) {
 	merged, err := flatten.Merge(openapi3.Schema{
 		Properties: openapi3.Schemas{

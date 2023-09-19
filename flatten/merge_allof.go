@@ -46,6 +46,7 @@ type SchemaCollection struct {
 	MinProps             []uint64
 	MaxProps             []*uint64
 	AdditionalProperties []openapi3.AdditionalProperties
+	Nullable             []bool
 }
 
 // Merge replaces objects under AllOf with a flattened equivalent
@@ -100,6 +101,7 @@ func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 	result.MinProps = findMaxValue(collection.MinProps)
 	result.MaxProps = findMinValue(collection.MaxProps)
 	result.Pattern = resolvePattern(collection.Pattern)
+	result.Nullable = resolveNullable(collection.Nullable)
 	enums, err := resolveEnum(collection.Enum)
 	if err != nil {
 		return result, err
@@ -133,6 +135,15 @@ func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 	}
 
 	return result, nil
+}
+
+func resolveNullable(values []bool) bool {
+	for _, v := range values {
+		if !v {
+			return false
+		}
+	}
+	return true
 }
 
 func resolveNumberRange(schema *openapi3.Schema, collection *SchemaCollection) *openapi3.Schema {
@@ -652,6 +663,7 @@ func collect(schemas []*openapi3.Schema) SchemaCollection {
 		collection.MinProps = append(collection.MinProps, s.MinProps)
 		collection.MaxProps = append(collection.MaxProps, s.MaxProps)
 		collection.AdditionalProperties = append(collection.AdditionalProperties, s.AdditionalProperties)
+		collection.Nullable = append(collection.Nullable, s.Nullable)
 	}
 	return collection
 }
