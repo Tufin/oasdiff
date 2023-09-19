@@ -19,6 +19,94 @@ type Test struct {
 	wantErr bool
 }
 
+// validate nullable fields are equivalent after merge, in case all of the values are true
+func TestMerge_NullableIsTrue(t *testing.T) {
+	const spec = `
+openapi: 3.0.0
+info:
+  title: base schema merge test
+  version: '0.1'
+paths:
+  /sample:
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: integer
+                      nullable: true
+                - type: object
+                  properties:
+                    id:
+                      type: number
+                      nullable: true
+      responses:
+        '200':
+          description: Ok
+`
+	tests := []Test{
+		{
+			[]byte(`{"id": 1}`),
+			false,
+		},
+		{
+			[]byte(`{"id": null}`),
+			false,
+		},
+	}
+
+	validateConsistency(t, spec, tests)
+}
+
+// validate nullable fields are equivalent after merge, in case one of the values is false.
+func TestMerge_NullableIsFalse(t *testing.T) {
+	const spec = `
+openapi: 3.0.0
+info:
+  title: base schema merge test
+  version: '0.1'
+paths:
+  /sample:
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: integer
+                      nullable: false
+                - type: object
+                  properties:
+                    id:
+                      type: number
+                      nullable: true
+      responses:
+        '200':
+          description: Ok
+`
+	tests := []Test{
+		{
+			[]byte(`{"id": 1}`),
+			false,
+		},
+		{
+			[]byte(`{"id": null}`),
+			true,
+		},
+	}
+
+	validateConsistency(t, spec, tests)
+}
+
 // Validation of conflicting numeric formats.
 func TestMerge_ConflictingFormat(t *testing.T) {
 	const spec = `
@@ -63,7 +151,6 @@ paths:
 
 	validateConsistency(t, spec, tests)
 
-	t.SkipNow()
 	const spec2 = `
 openapi: 3.0.0
 info:

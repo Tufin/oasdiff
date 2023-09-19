@@ -10,6 +10,275 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// verify that if all ReadOnly fields are set to false, then the ReadOnly field in the merged schema is false.
+func TestMerge_ReadOnlyIsSetToFalse(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					ReadOnly: false,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					ReadOnly: false,
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, false, merged.ReadOnly)
+}
+
+// verify that if there exists a ReadOnly field which is true, then the ReadOnly field in the merged schema is true.
+func TestMerge_ReadOnlyIsSetToTrue(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					ReadOnly: true,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					ReadOnly: false,
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, true, merged.ReadOnly)
+}
+
+// verify that if all WriteOnly fields are set to false, then the WriteOnly field in the merged schema is false.
+func TestMerge_WriteOnlyIsSetToFalse(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:      "object",
+					WriteOnly: false,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:      "object",
+					WriteOnly: false,
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, false, merged.WriteOnly)
+}
+
+// verify that if there exists a WriteOnly field which is true, then the WriteOnly field in the merged schema is true.
+func TestMerge_WriteOnlyIsSetToTrue(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:      "object",
+					WriteOnly: true,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:      "object",
+					WriteOnly: false,
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, true, merged.WriteOnly)
+}
+
+// verify that if all nullable fields are set to true, then the nullable field in the merged schema is true.
+func TestMerge_NullableIsSetToTrue(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					Nullable: true,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					Nullable: true,
+				},
+			},
+		},
+		Nullable: true,
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, true, merged.Nullable)
+}
+
+// verify that if there exists a nullable field which is false, then the nullable field in the merged schema is false.
+func TestMerge_NullableIsSetToFalse(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AllOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					Nullable: false,
+				},
+			},
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type:     "object",
+					Nullable: true,
+				},
+			},
+		},
+		Nullable: true,
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, false, merged.Nullable)
+}
+
+func TestMerge_NestedAllOfInProperties(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		Properties: openapi3.Schemas{
+			"prop1": &openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type: "object",
+					AllOf: openapi3.SchemaRefs{
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 10,
+								MaxProps: openapi3.Uint64Ptr(40),
+							},
+						},
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 5,
+								MaxProps: openapi3.Uint64Ptr(25),
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+	)
+	require.NoError(t, err)
+	require.Nil(t, merged.Properties["prop1"].Value.AllOf)
+	require.Equal(t, uint64(10), merged.Properties["prop1"].Value.MinProps)
+	require.Equal(t, uint64(25), *merged.Properties["prop1"].Value.MaxProps)
+}
+
+func TestMerge_NestedAllOfInNot(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		Not: &openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				Type: "object",
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:     "object",
+							MinProps: 10,
+							MaxProps: openapi3.Uint64Ptr(40),
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:     "object",
+							MinProps: 5,
+							MaxProps: openapi3.Uint64Ptr(25),
+						},
+					},
+				},
+			},
+		},
+	},
+	)
+	require.NoError(t, err)
+	require.Nil(t, merged.Not.Value.AllOf)
+	require.Equal(t, uint64(10), merged.Not.Value.MinProps)
+	require.Equal(t, uint64(25), *merged.Not.Value.MaxProps)
+}
+
+func TestMerge_NestedAllOfInOneOf(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		OneOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type: "object",
+					AllOf: openapi3.SchemaRefs{
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 10,
+								MaxProps: openapi3.Uint64Ptr(40),
+							},
+						},
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 5,
+								MaxProps: openapi3.Uint64Ptr(25),
+							},
+						},
+					},
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.OneOf[0].Value.AllOf)
+	require.Equal(t, uint64(10), merged.OneOf[0].Value.MinProps)
+	require.Equal(t, uint64(25), *merged.OneOf[0].Value.MaxProps)
+}
+
+// AllOf is empty in base schema, but there is nested non-empty AllOf in base schema.
+func TestMerge_NestedAllOfInAnyOf(t *testing.T) {
+	merged, err := flatten.Merge(openapi3.Schema{
+		AnyOf: openapi3.SchemaRefs{
+			&openapi3.SchemaRef{
+				Value: &openapi3.Schema{
+					Type: "object",
+					AllOf: openapi3.SchemaRefs{
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 10,
+								MaxProps: openapi3.Uint64Ptr(40),
+							},
+						},
+						&openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Type:     "object",
+								MinProps: 5,
+								MaxProps: openapi3.Uint64Ptr(25),
+							},
+						},
+					},
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Nil(t, merged.AnyOf[0].Value.AllOf)
+	require.Equal(t, uint64(10), merged.AnyOf[0].Value.MinProps)
+	require.Equal(t, uint64(25), *merged.AnyOf[0].Value.MaxProps)
+}
+
 // identical numeric types are merged successfully
 func TestMerge_TypeNumeric(t *testing.T) {
 	merged, err := flatten.Merge(openapi3.Schema{
