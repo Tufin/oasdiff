@@ -132,10 +132,6 @@ func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
 		return result, err
 	}
 
-	result, err = resolveAdditionalProperties(result, &collection)
-	if err != nil {
-		return result, err
-	}
 	return result, nil
 }
 
@@ -261,7 +257,63 @@ func resolveMultipleOf(schema *openapi3.Schema, collection *SchemaCollection) *o
 	return schema
 }
 
-func getPropFieldsToMerge(collection *SchemaCollection) []string {
+func hasFalseValue(ap []openapi3.AdditionalProperties) bool {
+	for _, v := range ap {
+		if v.Has != nil && !*v.Has {
+			return true
+		}
+	}
+	return false
+}
+
+// resolve properties which have additionalProperties that are set to false.
+func resolveFalseProps(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+	schema = resolveFalseAdditionalProps(schema, collection)
+	propsToMerge := getFalsePropsKeys(collection)
+	return mergeProps(schema, collection, propsToMerge)
+}
+
+func resolveFalseAdditionalProps(schema *openapi3.Schema, collection *SchemaCollection) *openapi3.Schema {
+	has := false
+	schema.AdditionalProperties.Has = &has
+	return schema
+}
+
+// if there are additionalProperties which are Schemas, they are merged to a single Schema.
+func resolveNonFalseAdditionalProps(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+	additionalSchemas := []*openapi3.Schema{}
+	for _, ap := range collection.AdditionalProperties {
+		if ap.Schema != nil && ap.Schema.Value != nil {
+			additionalSchemas = append(additionalSchemas, ap.Schema.Value)
+		}
+	}
+
+	var schemaRef *openapi3.SchemaRef
+	if len(additionalSchemas) > 0 {
+		result, err := flattenSchemas(additionalSchemas)
+		if err != nil {
+			return schema, err
+		}
+		schemaRef = &openapi3.SchemaRef{
+			Value: result,
+		}
+	}
+	schema.AdditionalProperties.Has = nil
+	schema.AdditionalProperties.Schema = schemaRef
+	return schema, nil
+}
+
+func resolveNonFalseProps(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+	result, err := resolveNonFalseAdditionalProps(schema, collection)
+	if err != nil {
+		return &openapi3.Schema{}, err
+	}
+	propsToMerge := getNonFalsePropsKeys(collection)
+	return mergeProps(result, collection, propsToMerge)
+}
+
+// the output is the intersection of all properties keys of schemas which have additionalProperties set to false.
+func getFalsePropsKeys(collection *SchemaCollection) []string {
 	properties := [][]string{}
 	for i, schema := range collection.Properties {
 		additionalProps := collection.AdditionalProperties[i].Has
@@ -273,87 +325,74 @@ func getPropFieldsToMerge(collection *SchemaCollection) []string {
 			properties = append(properties, keys)
 		}
 	}
-	if len(properties) > 0 {
-		return findIntersection(properties...)
-	}
+	return findIntersection(properties...)
+}
+
+// the output is a list of unique properties keys of all schemas.
+func getNonFalsePropsKeys(collection *SchemaCollection) []string {
 	keys := []string{}
 	for _, schema := range collection.Properties {
 		for key := range schema {
 			keys = append(keys, key)
 		}
 	}
-	return keys
+	return getUniqueStrings(keys)
+}
+
+func getUniqueStrings(input []string) []string {
+	uniqueStrings := make(map[string]bool)
+
+	for _, str := range input {
+		uniqueStrings[str] = true
+	}
+
+	result := []string{}
+	for str := range uniqueStrings {
+		result = append(result, str)
+	}
+
+	return result
 }
 
 func resolveProperties(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-	keys := getPropFieldsToMerge(collection)
-	allRefs := map[string][]*openapi3.Schema{}
+	if hasFalseValue(collection.AdditionalProperties) {
+		return resolveFalseProps(schema, collection)
+	} else {
+		return resolveNonFalseProps(schema, collection)
+	}
+}
+
+func mergeProps(schema *openapi3.Schema, collection *SchemaCollection, propsToMerge []string) (*openapi3.Schema, error) {
+	propsToSchemasMap := map[string][]*openapi3.Schema{}
 	for _, schema := range collection.Properties {
-		for name, schemaRef := range schema {
-			if containsString(keys, name) {
-				allRefs[name] = append(allRefs[name], schemaRef.Value)
+		for propKey, schemaRef := range schema {
+			if containsString(propsToMerge, propKey) {
+				propMergedSchema, err := Merge(*schemaRef.Value)
+				if err != nil {
+					return &openapi3.Schema{}, err
+				}
+				propsToSchemasMap[propKey] = append(propsToSchemasMap[propKey], propMergedSchema)
 			}
 		}
 	}
 
 	result := make(openapi3.Schemas)
-	for name, schemas := range allRefs {
-		var mergedSchemas []*openapi3.Schema
-		for _, s := range schemas {
-			mergedSchema, err := Merge(*s)
-			if err != nil {
-				return &openapi3.Schema{}, err
-			}
-			mergedSchemas = append(mergedSchemas, mergedSchema)
-		}
-		merged, err := flattenSchemas(mergedSchemas)
+	for prop, schemas := range propsToSchemasMap {
+		mergedProp, err := flattenSchemas(schemas)
 		if err != nil {
-			schema.Properties = nil
-			return schema, err
+			return &openapi3.Schema{}, err
 		}
 		ref := openapi3.SchemaRef{
-			Value: merged,
+			Value: mergedProp,
 		}
-		result[name] = &ref
+		result[prop] = &ref
 	}
+
 	if len(result) == 0 {
 		result = nil
 	}
 
 	schema.Properties = result
-	return schema, nil
-}
-
-func resolveAdditionalProperties(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-	additionalProperties := &openapi3.AdditionalProperties{
-		Has:    nil,
-		Schema: nil,
-	}
-
-	additionalSchemas := []*openapi3.Schema{}
-	for _, ap := range collection.AdditionalProperties {
-		if ap.Has != nil && !*ap.Has {
-			hasValue := false
-			additionalProperties.Has = &hasValue
-			schema.AdditionalProperties = *additionalProperties
-			return schema, nil
-		}
-		if ap.Schema != nil && ap.Schema.Value != nil {
-			additionalSchemas = append(additionalSchemas, ap.Schema.Value)
-		}
-	}
-
-	if len(additionalSchemas) > 0 {
-		result, err := flattenSchemas(additionalSchemas)
-		if err != nil {
-			return schema, err
-		}
-		additionalProperties.Schema = &openapi3.SchemaRef{
-			Value: result,
-		}
-	}
-
-	schema.AdditionalProperties = *additionalProperties
 	return schema, nil
 }
 
