@@ -5,7 +5,7 @@ You can use these keywords to create a complex schema or validate a value agains
 - allOf – validates the value against all the subschemas
 - anyOf – validates the value against any (one or more) of the subschemas
 
-Using these keywords can be useful to describe complex data models but, as the same time, it complicates breaking changes detection.
+Using these keywords can be useful to describe complex data models but it complicates breaking changes detection.
 Consider, for example, the following comparison of two OpenAPI specs:
 ```
 oasdiff breaking data/allof/simple.yaml data/allof/revision.yaml 
