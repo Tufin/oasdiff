@@ -2,8 +2,13 @@ package internal
 
 import (
 	"io"
+	"os"
 	"strconv"
+	"time"
 
+	"github.com/oasdiff/go-common/util"
+	"github.com/oasdiff/telemetry/client"
+	"github.com/oasdiff/telemetry/model"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/build"
 )
@@ -25,16 +30,10 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 		getBreakingChangesCmd(),
 		getChangelogCmd(),
 		getFlattenCmd(),
+		getChecksCmd(),
 	)
 
-	if err := rootCmd.Execute(); err != nil {
-		if ret := getReturnValue(rootCmd); ret != 0 {
-			return ret
-		}
-		return 100
-	}
-
-	return getReturnValue(rootCmd)
+	return strategy()(rootCmd)
 }
 
 func setReturnValue(cmd *cobra.Command, code int) {
@@ -62,4 +61,47 @@ func getReturnValue(cmd *cobra.Command) int {
 	}
 
 	return code
+}
+
+func strategy() func(*cobra.Command) int {
+
+	if os.Getenv(model.EnvNoTelemetry) == "1" {
+		return run
+	}
+
+	return func(cmd *cobra.Command) int {
+		c := make(chan int)
+		go func() {
+			defer close(c)
+			_ = client.NewCollector(util.NewStringSet().Add("err-ignore").
+				Add("warn-ignore").
+				Add("match-path").
+				Add("prefix-base").
+				Add("prefix-revision").
+				Add("strip-prefix-base").
+				Add("strip-prefix-revision").
+				Add("filter-extension")).Send(cmd)
+		}()
+
+		ret := run(cmd)
+
+		select {
+		case <-c:
+		case <-time.After(model.DefaultTimeout):
+		}
+
+		return ret
+	}
+}
+
+func run(cmd *cobra.Command) int {
+
+	if err := cmd.Execute(); err != nil {
+		if ret := getReturnValue(cmd); ret != 0 {
+			return ret
+		}
+		return 100
+	}
+
+	return getReturnValue(cmd)
 }

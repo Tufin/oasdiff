@@ -6,15 +6,17 @@
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 [![Slack](https://img.shields.io/badge/slack-&#64;oasdiff-green.svg?logo=slack)](https://join.slack.com/t/oasdiff/shared_invite/zt-1wvo7wois-ttncNBmyjyRXqBzyg~P6oA)
 
-![image](https://github.com/yonatanmgr/oasdiff/assets/31913495/4fc67b8f-a7d6-4417-bebe-9ab2c7935a1e)
+![oasdiff banner](https://github.com/yonatanmgr/oasdiff/assets/31913495/ac9b154e-72d1-4969-bc3b-f527bbe7751d)
+
 
 Command-line and Go package to compare and detect breaking changes in OpenAPI specs.
 
 
 ## Try it
 ```
-docker run --rm -t tufin/oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
+docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test5.yaml
 ```
+
 ## Features 
 - Detect [breaking changes](BREAKING-CHANGES.md)
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
@@ -160,16 +162,9 @@ docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff diff /data/openapi-test
 Replace `$(pwd)/data` by the path that contains your files.  
 Note that the spec paths must begin with `/`.  
 
-## OpenAPI Diff and Breaking-Changes as a Service
-You can use oasdiff as a service like this:
-```
-curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com/diff
-```
-Or, to see breaking changes:
-```
-curl -X POST -F base=@spec1.yaml -F revision=@spec2.yaml https://api.oasdiff.com/breaking-changes
-```
-Service source code: https://github.com/oasdiff/oasdiff-service
+## OpenAPI Diff, Breaking Changes and Changelog as a Service
+oasdiff is also available a service.
+See: https://github.com/oasdiff/oasdiff-service
 
 ## Diff Output Formats
 The default diff output format, YAML, provides a full view of all diff details.  
@@ -280,5 +275,11 @@ References are normally resolved automatically when you load the spec. In other 
 
 If you have other ideas, please [let us know](https://github.com/Tufin/oasdiff/discussions/new?category=ideas).
 
+## Telemetry
+The oasdiff tool collects data in order to help us, the development team, understand how it is being used and what we can to do to continue improving it.  
+We use this data in compliance with our [privacy policy](https://www.oasdiff.com/about/privacy-policy).  
+To disable telemetry, add the environment variable: `OASDIFF_NO_TELEMETRY=1`
+
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi).
+

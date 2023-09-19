@@ -7,6 +7,13 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+type enumVal interface {
+	Set(s string) error
+	String() string
+	Type() string
+	listOf() string
+}
+
 // enumValue is like stringValue with allowed values
 type enumValue struct {
 	value         *string
@@ -32,24 +39,24 @@ func (v *enumValue) Set(s string) error {
 		*v.value = s
 		return nil
 	}
-	return fmt.Errorf("must be %s", listOf(v.allowedValues))
+	return fmt.Errorf("%s is not one of the allowed values: %s", s, v.listOf())
 }
 
-func listOf(options []string) string {
-	l := len(options)
-	if l == 0 {
-		return "empty"
+func (v *enumValue) listOf() string {
+	l := len(v.allowedValues)
+	switch l {
+	case 0:
+		return "no options available"
+	case 1:
+		return v.allowedValues[0]
+	case 2:
+		return v.allowedValues[0] + " or " + v.allowedValues[1]
+	default:
+		return strings.Join(v.allowedValues[:l-1], ", ") + ", or " + v.allowedValues[l-1]
 	}
-	if l == 1 {
-		return options[0]
-	}
-	if l == 2 {
-		return options[0] + " or " + options[1]
-	}
-	return strings.Join(options[:l-1], ", ") + ", or " + options[l-1]
 }
 
 // Type is only used in help text
-func (f *enumValue) Type() string {
+func (v *enumValue) Type() string {
 	return "string"
 }

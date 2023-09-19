@@ -23,6 +23,13 @@ func getErrFailedToLoadSpec(what string, path string, err error) *ReturnError {
 	}
 }
 
+func getErrFailedToLoadSpecs(what string, path string, err error) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("failed to load %s specs from glob %q with %v", what, path, err),
+		Code:  103,
+	}
+}
+
 func getErrDiffFailed(err error) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("diff failed with %v", err),

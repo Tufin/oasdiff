@@ -70,7 +70,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				result = newParsingError(result, err, operation, operationItem, path, source)
 				continue
 			}
-			if !(baseStability == "draft" || baseStability == "alpha") {
+			if !(baseStability == STABILITY_DRAFT || baseStability == STABILITY_ALPHA) {
 				ignore = false
 				break
 			}
@@ -97,7 +97,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				result = newParsingError(result, err, operation, operationItem, path, source)
 				continue
 			}
-			if !(baseStability == "draft" || baseStability == "alpha") {
+			if !(baseStability == STABILITY_DRAFT || baseStability == STABILITY_ALPHA) {
 				pathDiff.OperationsDiff.Deleted[iOperation] = operation
 				iOperation++
 			}
@@ -135,9 +135,9 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				continue
 			}
 			source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
-			if baseStability == "stable" && revisionStability != "stable" ||
-				baseStability == "beta" && revisionStability != "beta" && revisionStability != "stable" ||
-				baseStability == "alpha" && revisionStability != "alpha" && revisionStability != "beta" && revisionStability != "stable" ||
+			if baseStability == STABILITY_STABLE && revisionStability != STABILITY_STABLE ||
+				baseStability == STABILITY_BETA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
+				baseStability == STABILITY_ALPHA && revisionStability != STABILITY_ALPHA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
 				revisionStability == "" && baseStability != "" {
 				result = append(result, ApiChange{
 					Id:          "api-stability-decreased",
@@ -150,7 +150,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				})
 				continue
 			}
-			if revisionStability == "draft" || revisionStability == "alpha" {
+			if revisionStability == STABILITY_DRAFT || revisionStability == STABILITY_ALPHA {
 				delete(pathDiff.OperationsDiff.Modified, operation)
 			}
 		}
@@ -192,6 +192,13 @@ func getStabilityLevel(i map[string]interface{}) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("unparseable x-stability-level")
 		}
+	}
+
+	if stabilityLevel != STABILITY_DRAFT &&
+		stabilityLevel != STABILITY_ALPHA &&
+		stabilityLevel != STABILITY_BETA &&
+		stabilityLevel != STABILITY_STABLE {
+		return "", fmt.Errorf("invalid x-stability-level: %q", stabilityLevel)
 	}
 
 	return stabilityLevel, nil

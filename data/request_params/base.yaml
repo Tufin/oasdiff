@@ -4,6 +4,12 @@ info:
 openapi: 3.0.3
 paths:
   /api/test1:
+    parameters:
+      - in: query
+        name: baseQueryParam
+        required: true
+        schema:
+          type: string
     get:
       operationId: getTest
       responses:
@@ -15,6 +21,12 @@ paths:
           description: OK
 
   /api/test2:
+    parameters:
+      - in: query
+        name: baseNotRequiredQueryParam
+        required: false
+        schema:
+          type: string
     get:
       operationId: getTest
       responses:
@@ -27,3 +39,12 @@ paths:
       responses:
         200:
           description: OK
+
+  /api/test4:
+    parameters:
+      - in: query
+        name: emptyPath
+        required: false
+        schema:
+          type: string
+

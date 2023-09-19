@@ -64,5 +64,5 @@ func (c ComponentChange) PrettyErrorText(l Localizer) string {
 }
 
 func (c ComponentChange) Error() string {
-	return fmt.Sprintf("%s, in components %s [%s]. %s", c.Level.String(), c.Text, c.Id, c.Comment)
+	return fmt.Sprintf("%s, in components %s [%s]. %s", c.Level, c.Text, c.Id, c.Comment)
 }
