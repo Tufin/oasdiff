@@ -14,13 +14,15 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 			continue
 		}
 
-		for paramLoc := range pathItem.ParametersDiff.Added {
+		for paramLoc, paramNameList := range pathItem.ParametersDiff.Added {
 			if paramLoc == "path" {
 				continue
 			}
 
 			for _, param := range pathItem.Revision.Parameters {
-
+				if !paramNameList.Contains(param.Value.Name) {
+					continue
+				}
 				id := "new-required-request-default-parameter-to-existing-path"
 				level := ERR
 				if !param.Value.Required {
