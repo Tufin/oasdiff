@@ -34,7 +34,7 @@ func getChecksCmd() *cobra.Command {
 
 func runChecks(stdout io.Writer) *ReturnError {
 	if err := printYAML(stdout, checker.GetOptionalChecks()); err != nil {
-		return getErrFailedPrint("optional breaking changes checks", err)
+		return getErrFailedPrint("optional checks YAML", err)
 	}
 	return nil
 }
