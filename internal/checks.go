@@ -11,8 +11,8 @@ func getChecksCmd() *cobra.Command {
 
 	cmd := cobra.Command{
 		Use:   "checks [flags]",
-		Short: "Display optional breaking changes checks",
-		Long:  `Display optional breaking changes checks`,
+		Short: "Display optional checks",
+		Long:  `Display optional checks`,
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
