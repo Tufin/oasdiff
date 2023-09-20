@@ -4,6 +4,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
+// MergeSpec merges all instances in allOf in place
 func MergeSpec(spec *openapi3.T) (*openapi3.T, error) {
 
 	if err := mergeComponents(spec.Components); err != nil {
@@ -14,11 +15,9 @@ func MergeSpec(spec *openapi3.T) (*openapi3.T, error) {
 		if v == nil {
 			continue
 		}
-		pathItem, err := mergePathItem(*v)
-		if err != nil {
+		if _, err := mergePathItem(v); err != nil {
 			return spec, err
 		}
-		*v = pathItem
 	}
 	return spec, nil
 }
@@ -57,7 +56,7 @@ func mergeComponents(components *openapi3.Components) error {
 	return nil
 }
 
-func mergeOperation(operation openapi3.Operation) (openapi3.Operation, error) {
+func mergeOperation(operation *openapi3.Operation) (*openapi3.Operation, error) {
 	parameteres, err := mergeParameters(operation.Parameters)
 	if err != nil {
 		return operation, err
@@ -83,7 +82,7 @@ func mergeOperation(operation openapi3.Operation) (openapi3.Operation, error) {
 	return operation, nil
 }
 
-func mergePathItem(pathItem openapi3.PathItem) (openapi3.PathItem, error) {
+func mergePathItem(pathItem *openapi3.PathItem) (*openapi3.PathItem, error) {
 	operations := []*openapi3.Operation{
 		pathItem.Connect, pathItem.Delete, pathItem.Get, pathItem.Head,
 		pathItem.Options, pathItem.Patch, pathItem.Post, pathItem.Put, pathItem.Trace,
@@ -91,11 +90,9 @@ func mergePathItem(pathItem openapi3.PathItem) (openapi3.PathItem, error) {
 
 	for _, op := range operations {
 		if op != nil {
-			mergedOp, err := mergeOperation(*op)
-			if err != nil {
+			if _, err := mergeOperation(op); err != nil {
 				return pathItem, err
 			}
-			*op = mergedOp
 		}
 	}
 
@@ -110,11 +107,9 @@ func mergePathItem(pathItem openapi3.PathItem) (openapi3.PathItem, error) {
 func mergeCallbacks(callbacks openapi3.Callbacks) (openapi3.Callbacks, error) {
 	for _, v := range callbacks {
 		for _, pathItem := range *v.Value {
-			m, err := mergePathItem(*pathItem)
-			if err != nil {
+			if _, err := mergePathItem(pathItem); err != nil {
 				return callbacks, err
 			}
-			*pathItem = m
 		}
 	}
 	return callbacks, nil
@@ -144,11 +139,9 @@ func mergeResponses(responses openapi3.Responses) (openapi3.Responses, error) {
 			return responses, err
 		}
 		v.Value.Content = content
-		headers, err := mergeHeaders(v.Value.Headers)
-		if err != nil {
+		if _, err := mergeHeaders(v.Value.Headers); err != nil {
 			return responses, err
 		}
-		v.Value.Headers = headers
 	}
 	return responses, nil
 }
@@ -172,11 +165,9 @@ func mergeParameters(parameters openapi3.Parameters) (openapi3.Parameters, error
 		if v == nil || v.Value == nil {
 			continue
 		}
-		parameter, err := mergeParameter(*v.Value)
-		if err != nil {
+		if _, err := mergeParameter(v.Value); err != nil {
 			return parameters, err
 		}
-		*v.Value = parameter
 	}
 	return parameters, nil
 }
@@ -186,16 +177,14 @@ func mergeParametersMap(parameters openapi3.ParametersMap) (openapi3.ParametersM
 		if v == nil || v.Value == nil {
 			continue
 		}
-		parameter, err := mergeParameter(*v.Value)
-		if err != nil {
+		if _, err := mergeParameter(v.Value); err != nil {
 			return parameters, err
 		}
-		*v.Value = parameter
 	}
 	return parameters, nil
 }
 
-func mergeParameter(p openapi3.Parameter) (openapi3.Parameter, error) {
+func mergeParameter(p *openapi3.Parameter) (*openapi3.Parameter, error) {
 	if p.Schema == nil || p.Schema.Value == nil {
 		return p, nil
 	}
@@ -241,11 +230,9 @@ func mergeHeaders(headers openapi3.Headers) (openapi3.Headers, error) {
 		if v == nil || v.Value == nil {
 			continue
 		}
-		parameter, err := mergeParameter(v.Value.Parameter)
-		if err != nil {
+		if _, err := mergeParameter(&v.Value.Parameter); err != nil {
 			return headers, err
 		}
-		v.Value.Parameter = parameter
 	}
 	return headers, nil
 }
