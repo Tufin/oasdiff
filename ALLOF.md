@@ -29,4 +29,7 @@ In order to see how oasdiff merges allOf, you can use the dedicated `flatten` co
 oasdiff flatten data/allof/simple.yaml
 ```
 
+Limitations:
+This feature is still being actively developed, and not all schema fields are supported at this time. Schema fields such as Extensions, Default, Example, ExternalDocs, AllowEmptyValue, Deprecated, XML, and Discriminator are not yet implemented.
+
 Please help us improve this feature by providing feedback and reporting issues.
