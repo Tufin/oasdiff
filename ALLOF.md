@@ -30,7 +30,7 @@ oasdiff flatten data/allof/simple.yaml
 ```
 
 Limitations:
-For following schema fields are not merged:
+The following schema fields are not merged:
 - Extensions
 - Default
 - Example
