@@ -43,7 +43,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 							level := WARN
 							comment := config.Localize("response-property-enum-value-added-comment")
 
-							if propertyDiff.Revision.Value.WriteOnly {
+							if propertyDiff.Revision.WriteOnly {
 								// Document write-only enum update
 								id = ResponseWriteOnlyPropertyEnumValueAddedCheckId
 								level = INFO

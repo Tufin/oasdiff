@@ -51,7 +51,7 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 							minItemsDiff.To == nil {
 							return
 						}
-						if propertyDiff.Revision.Value.ReadOnly {
+						if propertyDiff.Revision.ReadOnly {
 							return
 						}
 

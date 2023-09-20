@@ -29,12 +29,13 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - [API deprecation](API-DEPRECATION.md)
 - [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md)
+- [Merge allOf schemas](ALLOF.md)
 - [Path prefix modification](#path-prefix-modification)
 - [Path parameter renaming](#path-parameter-reanaming)
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
 - [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
-- Localization: display breaking-changes and changelog messages in English or Russian (please submit an issue if you want to add another language)
+- Localization: display breaking-changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
 
 
 ## Install with Go

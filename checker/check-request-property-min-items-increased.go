@@ -52,7 +52,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 							minItemsDiff.To == nil {
 							return
 						}
-						if propertyDiff.Revision.Value.ReadOnly {
+						if propertyDiff.Revision.ReadOnly {
 							return
 						}
 						if !IsIncreasedValue(minItemsDiff) {

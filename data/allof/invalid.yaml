@@ -1,0 +1,87 @@
+openapi: 3.0.1
+info:
+  title: Tufin
+  version: "1.0"
+servers:
+- url: https://localhost:9080
+paths:
+  /api/v1.0/groups:
+    post:
+      operationId: createOneGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupView'
+        description: Creates one project.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupView'
+          description: OK
+      summary: Create One Project
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              allOf:
+                - type: object
+                  properties:
+                    prop1:
+                      type: string
+                - type: object
+                  properties:
+                    prop1:
+                      type: boolean
+  /api/v1.0/groups/{groupId}:
+    get:
+      operationId: returnOneGroup
+      parameters:
+      - $ref: '#/components/parameters/groupId'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupView'
+          description: OK
+      summary: Return One Project
+components:
+  parameters:
+    groupId:
+      in: path
+      name: groupId
+      required: true
+      schema:
+        type: object
+        allOf:
+          - type: object
+            properties:
+              prop1:
+                type: string
+          - type: object
+            properties:
+              prop2:
+                type: boolean
+  schemas:
+    GroupView:
+      type: object
+      allOf:
+        - type: object
+          properties:
+            created:
+              type: string
+              format: date-time
+        - type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+      required:
+      - name

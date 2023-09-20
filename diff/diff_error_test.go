@@ -15,7 +15,7 @@ func TestDiff_SchemaRefNil(t *testing.T) {
 
 	s1.Components.Schemas["LightingSummary"].Value.Properties["zones"].Value.Items.Value.Properties["deviceId"].Value = nil
 	_, err = diff.Get(diff.NewConfig(), s1, s1)
-	require.EqualError(t, err, "schema reference is nil")
+	require.EqualError(t, err, "base schema value is nil")
 }
 
 func TestDiff_MediaTypeNil(t *testing.T) {
@@ -96,10 +96,10 @@ func TestDiff_ComponentSchemaNil(t *testing.T) {
 		},
 	}
 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-	require.EqualError(t, err, "schema reference is nil")
+	require.EqualError(t, err, "revision schema value is nil")
 
 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-	require.EqualError(t, err, "schema reference is nil")
+	require.EqualError(t, err, "base schema value is nil")
 }
 
 func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
@@ -115,7 +115,7 @@ func TestDiff_ComponentSchemaDeepNil(t *testing.T) {
 	}
 
 	_, err := diff.Get(diff.NewConfig(), &s1, &s1)
-	require.EqualError(t, err, "schema reference is nil")
+	require.EqualError(t, err, "base schema value is nil")
 }
 
 func TestDiff_ComponentParameterNil(t *testing.T) {

@@ -46,12 +46,12 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						if writeOnlyDiff == nil {
 							return
 						}
-						if parent.Revision.Value.Properties[propertyName] == nil {
+						if parent.Revision.Properties[propertyName] == nil {
 							// removed properties processed by the RequestOptionalPropertyUpdatedCheck check
 							return
 						}
 
-						if slices.Contains(parent.Base.Value.Required, propertyName) {
+						if slices.Contains(parent.Base.Required, propertyName) {
 							id := RequestRequiredPropertyBecameNonWriteOnlyCheckId
 							if writeOnlyDiff.To == true {
 								id = RequestRequiredPropertyBecameWriteOnlyCheckId
@@ -90,11 +90,11 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						if readOnlyDiff == nil {
 							return
 						}
-						if parent.Revision.Value.Properties[propertyName] == nil {
+						if parent.Revision.Properties[propertyName] == nil {
 							// removed properties processed by the RequestOptionalPropertyUpdatedCheck check
 							return
 						}
-						if slices.Contains(parent.Base.Value.Required, propertyName) {
+						if slices.Contains(parent.Base.Required, propertyName) {
 							id := RequestRequiredPropertyBecameNonReadOnlyCheckId
 							if readOnlyDiff.To == true {
 								id = RequestRequiredPropertyBecameReadOnlyCheckId

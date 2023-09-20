@@ -49,8 +49,8 @@ type SchemaDiff struct {
 	MaxPropsDiff                    *ValueDiff              `json:"maxProps,omitempty" yaml:"maxProps,omitempty"`
 	AdditionalPropertiesDiff        *SchemaDiff             `json:"additionalProperties,omitempty" yaml:"additionalProperties,omitempty"`
 	DiscriminatorDiff               *DiscriminatorDiff      `json:"discriminatorDiff,omitempty" yaml:"discriminatorDiff,omitempty"`
-	Base                            *openapi3.SchemaRef     `json:"-" yaml:"-"`
-	Revision                        *openapi3.SchemaRef     `json:"-" yaml:"-"`
+	Base                            *openapi3.Schema        `json:"-" yaml:"-"`
+	Revision                        *openapi3.Schema        `json:"-" yaml:"-"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -79,19 +79,27 @@ func getSchemaDiff(config *Config, state *state, schema1, schema2 *openapi3.Sche
 
 func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *openapi3.SchemaRef) (*SchemaDiff, error) {
 
-	result := SchemaDiff{
-		Base:     schema1,
-		Revision: schema2,
+	if schema1 == nil && schema2 == nil {
+		return nil, nil
+	} else if schema1 == nil {
+		return &SchemaDiff{SchemaAdded: true}, nil
+	} else if schema2 == nil {
+		return &SchemaDiff{SchemaDeleted: true}, nil
 	}
 
-	if schema1 == nil && schema2 == nil {
-		return &result, nil
-	} else if schema1 == nil {
-		result.SchemaAdded = true
-		return &result, nil
-	} else if schema2 == nil {
-		result.SchemaDeleted = true
-		return &result, nil
+	value1 := schema1.Value
+	if value1 == nil {
+		return nil, errors.New("base schema value is nil")
+	}
+
+	value2 := schema2.Value
+	if value2 == nil {
+		return nil, errors.New("revision schema value is nil")
+	}
+
+	result := SchemaDiff{
+		Base:     value1,
+		Revision: value2,
 	}
 
 	if status := getCircularRefsDiff(state.visitedSchemasBase, state.visitedSchemasRevision, schema1, schema2); status != circularRefStatusNone {
@@ -104,16 +112,6 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		}
 	}
 
-	value1, err := derefSchema(schema1)
-	if err != nil {
-		return nil, err
-	}
-
-	value2, err := derefSchema(schema2)
-	if err != nil {
-		return nil, err
-	}
-
 	// mark visited schema references to avoid infinite loops
 	if schema1.Ref != "" {
 		state.visitedSchemasBase.Add(schema1.Ref)
@@ -124,6 +122,8 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		state.visitedSchemasRevision.Add(schema2.Ref)
 		defer state.visitedSchemasRevision.Remove(schema2.Ref)
 	}
+
+	var err error
 
 	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
 	result.OneOfDiff, err = getSchemaListsDiff(config, state, value1.OneOf, value2.OneOf)

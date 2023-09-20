@@ -20,6 +20,7 @@ type ChangelogFlags struct {
 	excludeElements          []string
 	includeChecks            []string
 	failOn                   string
+	flatten                  bool
 	lang                     string
 	errIgnoreFile            string
 	warnIgnoreFile           string
@@ -50,4 +51,8 @@ func (flags *ChangelogFlags) getBase() string {
 
 func (flags *ChangelogFlags) getRevision() string {
 	return flags.revision
+}
+
+func (flags *ChangelogFlags) getFlatten() bool {
+	return flags.flatten
 }

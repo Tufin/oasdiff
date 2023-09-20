@@ -16,6 +16,7 @@ type DiffFlags struct {
 	filterExtension          string
 	format                   string
 	failOnDiff               bool
+	flatten                  bool
 	circularReferenceCounter int
 	includePathParams        bool
 	excludeElements          []string
@@ -44,4 +45,8 @@ func (flags *DiffFlags) getBase() string {
 
 func (flags *DiffFlags) getRevision() string {
 	return flags.revision
+}
+
+func (flags *DiffFlags) getFlatten() bool {
+	return flags.flatten
 }

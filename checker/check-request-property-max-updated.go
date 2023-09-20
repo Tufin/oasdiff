@@ -64,7 +64,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						}
 						if IsDecreasedValue(maxDiff) {
 							level := ERR
-							if propertyDiff.Revision.Value.ReadOnly {
+							if propertyDiff.Revision.ReadOnly {
 								level = INFO
 							}
 

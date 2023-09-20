@@ -26,18 +26,18 @@ func LoadSpecInfo(loader Loader, location string) (*SpecInfo, error) {
 }
 
 // FromGlob creates SpecInfo specs from local files matching the specified glob parameter
-func FromGlob(loader Loader, glob string) ([]SpecInfo, error) {
+func FromGlob(loader Loader, glob string) ([]*SpecInfo, error) {
 	files, err := filepathx.Glob(glob)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]SpecInfo, 0)
+	result := make([]*SpecInfo, 0)
 	for _, file := range files {
 		spec, err := loader.LoadFromFile(file)
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, SpecInfo{Url: file, Spec: spec})
+		result = append(result, &SpecInfo{Url: file, Spec: spec})
 	}
 
 	if len(result) > 0 {

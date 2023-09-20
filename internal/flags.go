@@ -8,4 +8,5 @@ type Flags interface {
 	getComposed() bool
 	getBase() string
 	getRevision() string
+	getFlatten() bool
 }

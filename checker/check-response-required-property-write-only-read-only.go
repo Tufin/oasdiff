@@ -47,11 +47,11 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							if writeOnlyDiff == nil {
 								return
 							}
-							if parent.Revision.Value.Properties[propertyName] == nil {
+							if parent.Revision.Properties[propertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								return
 							}
-							if !slices.Contains(parent.Base.Value.Required, propertyName) {
+							if !slices.Contains(parent.Base.Required, propertyName) {
 								// skip non-required properties
 								return
 							}
@@ -85,11 +85,11 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							if readOnlyDiff == nil {
 								return
 							}
-							if parent.Revision.Value.Properties[propertyName] == nil {
+							if parent.Revision.Properties[propertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								return
 							}
-							if !slices.Contains(parent.Base.Value.Required, propertyName) {
+							if !slices.Contains(parent.Base.Required, propertyName) {
 								// skip non-required properties
 								return
 							}

@@ -35,7 +35,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 							if newProperty.ReadOnly {
 								return
 							}
-							if !slices.Contains(parent.Revision.Value.Required, newPropertyName) {
+							if !slices.Contains(parent.Revision.Required, newPropertyName) {
 								return
 							}
 

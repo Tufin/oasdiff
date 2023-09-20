@@ -47,10 +47,10 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 				CheckModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-						if propertyDiff.Revision == nil || propertyDiff.Revision.Value == nil {
+						if propertyDiff.Revision == nil {
 							return
 						}
-						if propertyDiff.Revision.Value.ReadOnly {
+						if propertyDiff.Revision.ReadOnly {
 							return
 						}
 						schemaDiff := propertyDiff
@@ -78,10 +78,10 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 
 func fillEmptyTypeAndFormatDiffs(typeDiff *diff.ValueDiff, schemaDiff *diff.SchemaDiff, formatDiff *diff.ValueDiff) (*diff.ValueDiff, *diff.ValueDiff) {
 	if typeDiff == nil {
-		typeDiff = &diff.ValueDiff{From: schemaDiff.Revision.Value.Type, To: schemaDiff.Revision.Value.Type}
+		typeDiff = &diff.ValueDiff{From: schemaDiff.Revision.Type, To: schemaDiff.Revision.Type}
 	}
 	if formatDiff == nil {
-		formatDiff = &diff.ValueDiff{From: schemaDiff.Revision.Value.Format, To: schemaDiff.Revision.Value.Format}
+		formatDiff = &diff.ValueDiff{From: schemaDiff.Revision.Format, To: schemaDiff.Revision.Format}
 	}
 	return typeDiff, formatDiff
 }
@@ -93,7 +93,7 @@ func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.ValueDiff, format
 	}
 
 	if formatDiff != nil {
-		return !isFormatContained(schemaDiff.Revision.Value.Type, formatDiff.To, formatDiff.From)
+		return !isFormatContained(schemaDiff.Revision.Type, formatDiff.To, formatDiff.From)
 	}
 
 	return false
