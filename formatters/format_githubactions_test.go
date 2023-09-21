@@ -7,7 +7,7 @@ import (
 	"github.com/tufin/oasdiff/checker"
 )
 
-func TestRenderBreakingChanges(t *testing.T) {
+func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	// prepare formatter and test changes
 	formatter := GitHubActionsFormatter{}
 	testChanges := checker.Changes{
@@ -25,7 +25,7 @@ func TestRenderBreakingChanges(t *testing.T) {
 	assert.Equal(t, expectedOutput, string(output))
 }
 
-func TestRenderBreakingChangesLevels(t *testing.T) {
+func TestGitHubActionsFormatter_RenderBreakingChanges_MultipleLevels(t *testing.T) {
 	// prepare formatter and test changes
 	formatter := GitHubActionsFormatter{}
 	testChanges := checker.Changes{
@@ -53,7 +53,7 @@ func TestRenderBreakingChangesLevels(t *testing.T) {
 	assert.Equal(t, expectedOutput, string(output))
 }
 
-func TestRenderBreakingChangesMultilineText(t *testing.T) {
+func TestGitHubActionsFormatter_RenderBreakingChanges_MultilineText(t *testing.T) {
 	// prepare formatter and test changes
 	formatter := GitHubActionsFormatter{}
 	testChanges := checker.Changes{
@@ -71,7 +71,7 @@ func TestRenderBreakingChangesMultilineText(t *testing.T) {
 	assert.Equal(t, expectedOutput, string(output))
 }
 
-func TestRenderBreakingChangesWithFileAndLine(t *testing.T) {
+func TestGitHubActionsFormatter_RenderBreakingChanges_FileLocation(t *testing.T) {
 	// prepare formatter and test changes
 	formatter := GitHubActionsFormatter{}
 	testChanges := checker.Changes{

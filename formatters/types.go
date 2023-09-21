@@ -10,6 +10,7 @@ const (
 	FormatText          Format = "text"
 	FormatHTML          Format = "html"
 	FormatGithubActions Format = "githubactions"
+	FormatJUnit         Format = "junit"
 	FormatSarif         Format = "sarif"
 )
 

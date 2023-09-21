@@ -81,7 +81,7 @@ func getErrUnsupportedChangelogFormat(format string) *ReturnError {
 
 func getErrUnsupportedBreakingChangesFormat(format string) *ReturnError {
 	return &ReturnError{
-		error: fmt.Errorf("format %q is not supported by \"-check-breaking\"", format),
+		error: fmt.Errorf("format %q is not supported by \"breaking\"", format),
 		Code:  112,
 	}
 }

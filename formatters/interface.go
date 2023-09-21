@@ -25,6 +25,7 @@ var formatters = map[Format]Formatter{
 	FormatText:          TEXTFormatter{},
 	FormatHTML:          HTMLFormatter{},
 	FormatGithubActions: GitHubActionsFormatter{},
+	FormatJUnit:         JUnitFormatter{},
 	// TODO: FormatSarif:         Sarif{},
 }
 
@@ -51,6 +52,10 @@ func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 		}, nil
 	case FormatGithubActions:
 		return GitHubActionsFormatter{
+			Localizer: checker.NewLocalizer(opts.Language, LangDefault),
+		}, nil
+	case FormatJUnit:
+		return JUnitFormatter{
 			Localizer: checker.NewLocalizer(opts.Language, LangDefault),
 		}, nil
 	default:

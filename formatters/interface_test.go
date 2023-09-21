@@ -32,9 +32,10 @@ func TestChangelogOutputFormats(t *testing.T) {
 
 func TestBreakingChangesOutputFormats(t *testing.T) {
 	supportedFormats := SupportedFormatsByContentType("breaking-changes")
-	assert.Len(t, supportedFormats, 4)
+	assert.Len(t, supportedFormats, 5)
 	assert.Contains(t, supportedFormats, string(FormatYAML))
 	assert.Contains(t, supportedFormats, string(FormatJSON))
 	assert.Contains(t, supportedFormats, string(FormatText))
 	assert.Contains(t, supportedFormats, string(FormatGithubActions))
+	assert.Contains(t, supportedFormats, string(FormatJUnit))
 }
