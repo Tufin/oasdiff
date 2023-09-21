@@ -1,11 +1,13 @@
 package internal
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/formatters"
 )
 
 func getBreakingChangesCmd() *cobra.Command {
@@ -43,7 +45,7 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	enumWithOptions(&cmd, newEnumValue([]string{FormatYAML, FormatJSON, FormatText}, FormatText, &flags.format), "format", "f", "output format")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType("breaking-changes"), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "e", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
@@ -66,18 +68,26 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 }
 
 func runBreakingChanges(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnError) {
-	return getChangelog(flags, stdout, checker.WARN, getBreakingChangesTitle)
+	return getChangelog(flags, stdout, checker.WARN)
 }
 
-func getBreakingChangesTitle(config checker.Config, errs checker.Changes) string {
-	count := errs.GetLevelCount()
+func outputBreakingChanges(config checker.Config, format string, lang string, stdout io.Writer, errs checker.Changes, level checker.Level) *ReturnError {
+	// formatter lookup
+	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
+		Language: lang,
+	})
+	if err != nil {
+		return getErrUnsupportedBreakingChangesFormat(format)
+	}
 
-	return config.Localize(
-		"total-errors",
-		len(errs),
-		count[checker.ERR],
-		checker.ERR.PrettyString(),
-		count[checker.WARN],
-		checker.WARN.PrettyString(),
-	)
+	// render
+	bytes, err := formatter.RenderBreakingChanges(nil, nil, errs, formatters.RenderOpts{})
+	if err != nil {
+		return getErrFailedPrint("diff "+format, err)
+	}
+
+	// print output
+	_, _ = fmt.Fprintf(stdout, "%s\n", bytes)
+
+	return nil
 }

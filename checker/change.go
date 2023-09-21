@@ -8,7 +8,11 @@ type Change interface {
 	GetOperation() string
 	GetOperationId() string
 	GetPath() string
-
+	GetSourceFile() string
+	GetSourceLine() int
+	GetSourceLineEnd() int
+	GetSourceColumn() int
+	GetSourceColumnEnd() int
 	MatchIgnore(ignorePath, ignoreLine string) bool
 	LocalizedError(l Localizer) string
 	PrettyErrorText(l Localizer) string

@@ -1,11 +1,13 @@
 package internal
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/formatters"
 )
 
 func getSummaryCmd() *cobra.Command {
@@ -24,7 +26,7 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 			flags.base = args[0]
 			flags.revision = args[1]
 
-			// by now flags have been parsed successfully so we don't need to show usage on any errors
+			// by now flags have been parsed successfully, so we don't need to show usage on any errors
 			cmd.Root().SilenceUsage = true
 
 			failEmpty, err := runSummary(&flags, cmd.OutOrStdout())
@@ -42,7 +44,7 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	enumWithOptions(&cmd, newEnumValue([]string{FormatYAML, FormatJSON}, FormatYAML, &flags.format), "format", "f", "output format")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType("summary"), string(formatters.FormatYAML), &flags.format), "format", "f", "output format")
 	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "e", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
@@ -74,19 +76,20 @@ func runSummary(flags *DiffFlags, stdout io.Writer) (bool, *ReturnError) {
 }
 
 func outputSummary(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {
-	switch format {
-	case FormatYAML:
-		if err := printYAML(stdout, diffReport.GetSummary()); err != nil {
-			return getErrFailedPrint("summary", err)
-		}
-	case FormatJSON:
-
-		if err := printJSON(stdout, diffReport.GetSummary()); err != nil {
-			return getErrFailedPrint("summary", err)
-		}
-	default:
-		return getErrUnsupportedFormat(format)
+	// formatter lookup
+	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
+	if err != nil {
+		return getErrUnsupportedSummaryFormat(format)
 	}
+
+	// render
+	bytes, err := formatter.RenderSummary(nil, diffReport, nil, formatters.RenderOpts{})
+	if err != nil {
+		return getErrFailedPrint("summary "+format, err)
+	}
+
+	// print output
+	_, _ = fmt.Fprintf(stdout, "%s\n", bytes)
 
 	return nil
 }

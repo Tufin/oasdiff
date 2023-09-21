@@ -6,6 +6,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/flatten"
+	"github.com/tufin/oasdiff/formatters"
 	"github.com/tufin/oasdiff/load"
 )
 
@@ -24,7 +25,7 @@ Spec can be a path to a file or a URL.
 
 			flags.spec = args[0]
 
-			// by now flags have been parsed successfully so we don't need to show usage on any errors
+			// by now flags have been parsed successfully, so we don't need to show usage on any errors
 			cmd.Root().SilenceUsage = true
 
 			err := runFlatten(&flags, cmd.OutOrStdout())
@@ -37,7 +38,7 @@ Spec can be a path to a file or a URL.
 		},
 	}
 
-	cmd.PersistentFlags().VarP(newEnumValue([]string{FormatYAML, FormatJSON}, FormatYAML, &flags.format), "format", "f", "output format: yaml or json")
+	cmd.PersistentFlags().VarP(newEnumValue([]string{string(formatters.FormatYAML), string(formatters.FormatJSON)}, string(formatters.FormatYAML), &flags.format), "format", "f", "output format: yaml or json")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 
 	return &cmd
@@ -62,25 +63,25 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 		return getErrFailedToFlattenSpec("original", flags.spec, err)
 	}
 
-	if returnErr := outputFlattenedSpec(format, stdout, flatSpec); returnErr != nil {
+	if returnErr := outputFlattenedSpec(formatters.Format(format), stdout, flatSpec); returnErr != nil {
 		return returnErr
 	}
 
 	return nil
 }
 
-func outputFlattenedSpec(format string, stdout io.Writer, spec *openapi3.T) *ReturnError {
+func outputFlattenedSpec(format formatters.Format, stdout io.Writer, spec *openapi3.T) *ReturnError {
 	switch format {
-	case FormatYAML:
+	case formatters.FormatYAML:
 		if err := printYAML(stdout, spec); err != nil {
 			return getErrFailedPrint("flattened spec YAML", err)
 		}
-	case FormatJSON:
+	case formatters.FormatJSON:
 		if err := printJSON(stdout, spec); err != nil {
 			return getErrFailedPrint("flattened spec JSON", err)
 		}
 	default:
-		return getErrUnsupportedFormat(format)
+		return getErrUnsupportedFormat(string(format))
 	}
 
 	return nil

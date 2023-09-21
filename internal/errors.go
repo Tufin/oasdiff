@@ -58,6 +58,41 @@ func getErrUnsupportedFormat(format string) *ReturnError {
 	}
 }
 
+func getErrUnsupportedDiffFormat(format string) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("format %q is not supported by \"diff\"", format),
+		Code:  109,
+	}
+}
+
+func getErrUnsupportedSummaryFormat(format string) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("format %q is not supported by \"summary\"", format),
+		Code:  110,
+	}
+}
+
+func getErrUnsupportedChangelogFormat(format string) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("format %q is not supported by \"changelog\"", format),
+		Code:  111,
+	}
+}
+
+func getErrUnsupportedBreakingChangesFormat(format string) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("format %q is not supported by \"-check-breaking\"", format),
+		Code:  112,
+	}
+}
+
+func getErrUnsupportedChecksFormat(format string) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("format %q is not supported with \"checks\"", format),
+		Code:  113,
+	}
+}
+
 func getErrCantProcessIgnoreFile(what string, err error) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("can't process %s ignore file %v", what, err),
