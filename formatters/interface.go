@@ -2,7 +2,6 @@ package formatters
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
@@ -76,8 +75,6 @@ func SupportedFormatsByContentType(format string) []string {
 // DefaultFormatterOpts returns the default formatter options (e.g. colors, CI mode, etc.)
 func DefaultFormatterOpts() FormatterOpts {
 	return FormatterOpts{
-		ColorMode: "auto",
-		CI:        os.Getenv("CI") == "true",
-		Language:  LangDefault,
+		Language: LangDefault,
 	}
 }

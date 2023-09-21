@@ -47,5 +47,5 @@ func printJSON(output interface{}) ([]byte, error) {
 		return nil, fmt.Errorf("failed to marshal JSON: %w", err)
 	}
 
-	return bytes, nil
+	return StripANSIEscapeCodes(bytes), nil
 }

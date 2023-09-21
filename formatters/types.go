@@ -16,9 +16,7 @@ const (
 
 // FormatterOpts can be used to pass properties to the formatter (e.g. colors)
 type FormatterOpts struct {
-	ColorMode string
-	CI        bool
-	Language  string
+	Language string
 }
 
 // RenderOpts can be used to pass properties to the renderer method

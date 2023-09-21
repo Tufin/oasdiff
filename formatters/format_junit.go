@@ -49,7 +49,7 @@ func (f JUnitFormatter) RenderSummary(checks []checker.BackwardCompatibilityChec
 }
 
 func (f JUnitFormatter) RenderBreakingChanges(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	var testSuite JUnitTestSuite = JUnitTestSuite{
+	var testSuite = JUnitTestSuite{
 		Package:   "com.oasdiff",
 		Time:      "0",
 		Tests:     len(changes), // TODO: use GetAllRules to the test count and test case list in the future, once the list is complete
@@ -66,7 +66,7 @@ func (f JUnitFormatter) RenderBreakingChanges(checks []checker.BackwardCompatibi
 			Time:      "0",
 			Failure: &JUnitFailure{
 				Message: "Breaking change detected",
-				CDATA:   change.GetText(),
+				CDATA:   StripANSIEscapeCodesStr(change.GetText()),
 			},
 		}
 		testSuite.TestCases = append(testSuite.TestCases, testCase)
