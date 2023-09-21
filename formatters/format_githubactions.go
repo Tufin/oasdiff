@@ -17,7 +17,6 @@ var githubActionsSeverity = map[checker.Level]string{
 }
 
 type GitHubActionsFormatter struct {
-	Localizer checker.Localizer
 }
 
 func (f GitHubActionsFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {

@@ -9,7 +9,6 @@ import (
 )
 
 type HTMLFormatter struct {
-	Localizer checker.Localizer
 }
 
 func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {

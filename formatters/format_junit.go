@@ -37,7 +37,6 @@ type JUnitFailure struct {
 }
 
 type JUnitFormatter struct {
-	Localizer checker.Localizer
 }
 
 func (f JUnitFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
@@ -52,7 +51,7 @@ func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts Rend
 	var testSuite = JUnitTestSuite{
 		Package:   "com.oasdiff",
 		Time:      "0",
-		Tests:     len(changes), // TODO: use GetAllRules to the test count and test case list in the future, once the list is complete
+		Tests:     len(changes), // TODO: use GetAllRules for the test count / test case list in the future, once the list is complete
 		Errors:    0,
 		Failures:  len(changes),
 		Name:      "OASDiff",
@@ -73,6 +72,7 @@ func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts Rend
 	}
 
 	// if there are no changes, add a dummy test case to the test suite as we need at least one test case
+	// TODO: remove once GetAllRules is used for the test case list
 	if len(changes) == 0 {
 		testCase := JUnitTestCase{
 			Name:      "no breaking changes detected",

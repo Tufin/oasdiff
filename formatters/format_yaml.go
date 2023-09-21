@@ -10,7 +10,6 @@ import (
 )
 
 type YAMLFormatter struct {
-	Localizer checker.Localizer
 }
 
 func (f YAMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {

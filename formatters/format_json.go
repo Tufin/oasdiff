@@ -10,7 +10,6 @@ import (
 )
 
 type JSONFormatter struct {
-	Localizer checker.Localizer
 }
 
 func (f JSONFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
