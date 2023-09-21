@@ -12,7 +12,7 @@ type HTMLFormatter struct {
 	Localizer checker.Localizer
 }
 
-func (f HTMLFormatter) RenderDiff(diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	reportAsString, err := report.GetHTMLReportAsString(diff)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate HTML report: %w", err)
@@ -21,11 +21,11 @@ func (f HTMLFormatter) RenderDiff(diff *diff.Diff, changes checker.Changes, opts
 	return []byte(reportAsString), nil
 }
 
-func (f HTMLFormatter) RenderSummary(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f HTMLFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f HTMLFormatter) RenderBreakingChanges(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f HTMLFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

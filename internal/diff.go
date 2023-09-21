@@ -92,7 +92,7 @@ func outputDiff(stdout io.Writer, checks []checker.BackwardCompatibilityCheck, d
 	}
 
 	// render
-	bytes, err := formatter.RenderDiff(diffReport, nil, formatters.RenderOpts{})
+	bytes, err := formatter.RenderDiff(diffReport, formatters.RenderOpts{})
 	if err != nil {
 		return getErrFailedPrint("diff "+format, err)
 	}

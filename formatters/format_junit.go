@@ -40,15 +40,15 @@ type JUnitFormatter struct {
 	Localizer checker.Localizer
 }
 
-func (f JUnitFormatter) RenderDiff(diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f JUnitFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f JUnitFormatter) RenderSummary(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f JUnitFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f JUnitFormatter) RenderBreakingChanges(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
 	var testSuite = JUnitTestSuite{
 		Package:   "com.oasdiff",
 		Time:      "0",

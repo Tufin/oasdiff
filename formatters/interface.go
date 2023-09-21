@@ -10,9 +10,9 @@ import (
 
 // Formatter is a common interface for output formatters
 type Formatter interface {
-	RenderDiff(diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error)
-	RenderSummary(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error)
-	RenderBreakingChanges(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error)
+	RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error)
+	RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error)
+	RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error)
 	RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error)
 	RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error)
 	SupportedOutputs() []string

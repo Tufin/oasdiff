@@ -13,15 +13,15 @@ type JSONFormatter struct {
 	Localizer checker.Localizer
 }
 
-func (f JSONFormatter) RenderDiff(diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f JSONFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return printJSON(diff)
 }
 
-func (f JSONFormatter) RenderSummary(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f JSONFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return printJSON(diff.GetSummary())
 }
 
-func (f JSONFormatter) RenderBreakingChanges(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f JSONFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
 	return printJSON(changes)
 }
 

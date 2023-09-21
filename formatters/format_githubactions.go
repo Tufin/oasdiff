@@ -20,15 +20,15 @@ type GitHubActionsFormatter struct {
 	Localizer checker.Localizer
 }
 
-func (f GitHubActionsFormatter) RenderDiff(diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f GitHubActionsFormatter) RenderSummary(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f GitHubActionsFormatter) RenderBreakingChanges(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
 	var buf bytes.Buffer
 
 	for _, change := range changes {

@@ -15,15 +15,15 @@ type TEXTFormatter struct {
 	Localizer checker.Localizer
 }
 
-func (f TEXTFormatter) RenderDiff(diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f TEXTFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return []byte(report.GetTextReportAsString(diff)), nil
 }
 
-func (f TEXTFormatter) RenderSummary(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f TEXTFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f TEXTFormatter) RenderBreakingChanges(checks []checker.BackwardCompatibilityCheck, diff *diff.Diff, changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f TEXTFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
 	result := bytes.NewBuffer(nil)
 
 	if len(changes) > 0 {
