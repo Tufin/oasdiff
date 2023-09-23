@@ -3,6 +3,7 @@ package formatters
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -30,8 +31,18 @@ func (f GitHubActionsFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) 
 func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
 	var buf bytes.Buffer
 
+	// add error, warning and notice count to job output parameters
+	err := writeGitHubActionsJobOutputParameters(map[string]string{
+		"error_count":   fmt.Sprint(changes.GetLevelCount()[checker.ERR]),
+		"warning_count": fmt.Sprint(changes.GetLevelCount()[checker.WARN]),
+		"info_count":    fmt.Sprint(changes.GetLevelCount()[checker.INFO]),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// generate messages for each change (source file, line and column are optional)
 	for _, change := range changes {
-		// source file, line and column are optional
 		var params = []string{
 			"title=" + change.GetId(),
 		}
@@ -70,4 +81,32 @@ func (f GitHubActionsFormatter) RenderChecks(rules []checker.BackwardCompatibili
 
 func (f GitHubActionsFormatter) SupportedOutputs() []string {
 	return []string{"breaking-changes"}
+}
+
+func writeGitHubActionsJobOutputParameters(params map[string]string) error {
+	githubOutputFile := os.Getenv("GITHUB_OUTPUT")
+	if githubOutputFile == "" {
+		// If GITHUB_OUTPUT is not set, we can't write job output parameters (running outside of GitHub Actions)
+		return nil
+	}
+
+	// open the file in append mode
+	file, err := os.OpenFile(githubOutputFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to open GitHub Actions job output file: %w", err)
+	}
+	defer file.Close()
+
+	// collect all parameters into a string
+	var contentBuilder strings.Builder
+	for key, value := range params {
+		contentBuilder.WriteString(fmt.Sprintf("%s=%s\n", key, value))
+	}
+
+	// write the parameters to the file
+	if _, err := file.WriteString(contentBuilder.String()); err != nil {
+		return fmt.Errorf("failed to write GitHub Actions job output parameters: %w", err)
+	}
+
+	return nil
 }

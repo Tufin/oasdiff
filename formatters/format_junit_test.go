@@ -19,7 +19,7 @@ func TestJUnitFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(nil, nil, testChanges, RenderOpts{})
+	output, err := formatter.RenderBreakingChanges(testChanges, RenderOpts{})
 	assert.NoError(t, err)
 	expectedOutput := `<?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
@@ -38,7 +38,7 @@ func TestJUnitFormatter_RenderBreakingChanges_Success(t *testing.T) {
 	testChanges := checker.Changes{}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(nil, nil, testChanges, RenderOpts{})
+	output, err := formatter.RenderBreakingChanges(testChanges, RenderOpts{})
 	assert.NoError(t, err)
 	expectedOutput := `<?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
