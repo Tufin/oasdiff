@@ -44,13 +44,6 @@ func getErrFailedPrint(what string, err error) *ReturnError {
 	}
 }
 
-func getErrFailedGenerateHTML(err error) *ReturnError {
-	return &ReturnError{
-		error: fmt.Errorf("failed to generate HTML diff report with %v", err),
-		Code:  107,
-	}
-}
-
 func getErrUnsupportedFormat(format string) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("unsupported format %q", format),
