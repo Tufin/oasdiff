@@ -7,7 +7,7 @@ require (
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.120.0
 	github.com/oasdiff/go-common v0.2.18
-	github.com/oasdiff/telemetry v0.0.7
+	github.com/oasdiff/telemetry v0.1.0
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.5.6
