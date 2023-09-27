@@ -10,10 +10,15 @@ import (
 type Loader interface {
 	LoadFromURI(*url.URL) (*openapi3.T, error)
 	LoadFromFile(string) (*openapi3.T, error)
+	LoadFromStdin() (*openapi3.T, error)
 }
 
 // From is a convenience function that opens an OpenAPI spec from a URL or a local path based on the format of the path parameter
 func From(loader Loader, path string) (*openapi3.T, error) {
+
+	if path == "-" {
+		return loader.LoadFromStdin()
+	}
 
 	uri, err := url.ParseRequestURI(path)
 	if err == nil {

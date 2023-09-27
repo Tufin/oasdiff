@@ -16,7 +16,7 @@ func getBreakingChangesCmd() *cobra.Command {
 		Use:   "breaking base revision [flags]",
 		Short: "Display breaking changes",
 		Long: `Display breaking changes between base and revision specs.
-Base and revision can be a path to a file or a URL.
+Base and revision can be a path to a file, a URL or '-' to read standard input.
 In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.
 `,
 		Args: cobra.ExactArgs(2),
@@ -58,7 +58,7 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 	enumWithOptions(&cmd, newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().StringVarP(&flags.errIgnoreFile, "err-ignore", "", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().StringVarP(&flags.warnIgnoreFile, "warn-ignore", "", "", "configuration file for ignoring warnings")
-	enumWithOptions(&cmd, newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks' to see options)")
+	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks' to see options)")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysBeta, "deprecation-days-beta", "", checker.BetaDeprecationDays, "min days required between deprecating a beta resource and removing it")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysStable, "deprecation-days-stable", "", checker.StableDeprecationDays, "min days required between deprecating a stable resource and removing it")
 

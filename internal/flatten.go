@@ -17,7 +17,7 @@ func getFlattenCmd() *cobra.Command {
 		Use:   "flatten spec",
 		Short: "Merge allOf",
 		Long: `Display a flattened version of the given OpenAPI spec by merging all instances of allOf.
-Spec can be a path to a file or a URL.
+Spec can be a path to a file, a URL or '-' to read standard input.
 `,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

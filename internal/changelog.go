@@ -18,7 +18,7 @@ func getChangelogCmd() *cobra.Command {
 		Use:   "changelog base revision [flags]",
 		Short: "Display changelog",
 		Long: `Display a changelog between base and revision specs.
-Base and revision can be a path to a file or a URL.
+Base and revision can be a path to a file, a URL or '-' to read standard input.
 In 'composed' mode, base and revision can be a glob and oasdiff will compare mathcing endpoints between the two sets of files.
 `,
 		Args: cobra.ExactArgs(2),

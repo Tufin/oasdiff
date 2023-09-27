@@ -20,7 +20,7 @@ func getDiffCmd() *cobra.Command {
 		Use:   "diff base revision [flags]",
 		Short: "Generate a diff report",
 		Long: `Generate a diff report between base and revision specs.
-Base and revision can be a path to a file or a URL.
+Base and revision can be a path to a file, a URL or '-' to read standard input.
 In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.
 `,
 		Args: cobra.ExactArgs(2),
@@ -129,6 +129,11 @@ func normalDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSo
 	s2, err := load.LoadSpecInfo(loader, flags.getRevision())
 	if err != nil {
 		return nil, nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
+	}
+
+	if flags.getBase() == "-" && flags.getRevision() == "-" {
+		// io.ReadAll can only read stdin once, so in this edge case, we copy base into revision
+		s2.Spec = s1.Spec
 	}
 
 	if flags.getFlatten() {
