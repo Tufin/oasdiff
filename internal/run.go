@@ -80,7 +80,7 @@ func strategy() func(*cobra.Command) int {
 				Add("prefix-revision").
 				Add("strip-prefix-base").
 				Add("strip-prefix-revision").
-				Add("filter-extension")).Send(cmd)
+				Add("filter-extension")).SendCommand(cmd)
 		}()
 
 		ret := run(cmd)
