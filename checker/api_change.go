@@ -19,15 +19,10 @@ type ApiChange struct {
 	Source      string `json:"source,omitempty" yaml:"source,omitempty"`
 }
 
-func (c ApiChange) getUncolorizedText() string {
-	uncolorizedText := strings.ReplaceAll(c.Text, color.Bold, "")
-	return strings.ReplaceAll(uncolorizedText, color.Reset, "")
-}
-
 func (c ApiChange) MatchIgnore(ignorePath, ignoreLine string) bool {
 	return ignorePath == strings.ToLower(c.Path) &&
 		strings.Contains(ignoreLine, strings.ToLower(c.Operation+" "+c.Path)) &&
-		strings.Contains(ignoreLine, strings.ToLower(c.getUncolorizedText()))
+		strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c)))
 }
 
 func (c ApiChange) GetId() string {
