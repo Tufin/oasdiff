@@ -2,6 +2,7 @@ package checker
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/TwiN/go-color"
 )
@@ -15,8 +16,13 @@ type ComponentChange struct {
 	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
 }
 
-func (ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
-	return false
+func (c ComponentChange) getUncolorizedText() string {
+	uncolorizedText := strings.ReplaceAll(c.Text, color.Bold, "")
+	return strings.ReplaceAll(uncolorizedText, color.Reset, "")
+}
+
+func (c ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
+	return strings.Contains(ignoreLine, strings.ToLower(c.getUncolorizedText())) && strings.Contains(ignoreLine, strings.ToLower(c.Id))
 }
 
 func (c ComponentChange) GetId() string {
