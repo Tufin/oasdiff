@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 const (
@@ -52,13 +53,29 @@ type SchemaCollection struct {
 	WriteOnly            []bool
 }
 
+type state struct {
+	visitedSchemas utils.VisitedRefs
+}
+
 // Merge replaces objects under AllOf with a flattened equivalent
-func Merge(baseSchema openapi3.Schema) (*openapi3.Schema, error) {
-	allOfSchemas, err := getAllOfSchemas(baseSchema)
+func Merge(state *state, baseSchemaRef openapi3.SchemaRef) (*openapi3.Schema, error) {
+
+	if state.visitedSchemas.IsVisited(baseSchemaRef.Ref) {
+		return baseSchemaRef.Value, nil // TODO: check
+	}
+
+	baseSchema := baseSchemaRef.Value
+
+	if baseSchemaRef.Ref != "" {
+		state.visitedSchemas.Add(baseSchemaRef.Ref)
+		defer state.visitedSchemas.Remove(baseSchemaRef.Ref)
+	}
+
+	allOfSchemas, err := getAllOfSchemas(state, *baseSchema)
 	if err != nil {
 		return &openapi3.Schema{}, err
 	}
-	schemas := []*openapi3.Schema{&baseSchema}
+	schemas := []*openapi3.Schema{baseSchema}
 	schemas = append(schemas, allOfSchemas...)
 	result, err := flattenSchemas(schemas)
 	if err != nil {
@@ -67,13 +84,13 @@ func Merge(baseSchema openapi3.Schema) (*openapi3.Schema, error) {
 	return result, nil
 }
 
-func getAllOfSchemas(schema openapi3.Schema) ([]*openapi3.Schema, error) {
+func getAllOfSchemas(state *state, schema openapi3.Schema) ([]*openapi3.Schema, error) {
 	schemas := []*openapi3.Schema{}
 	if schema.AllOf == nil {
 		return schemas, nil
 	}
 	for _, schema := range schema.AllOf {
-		merged, err := Merge(*schema.Value)
+		merged, err := Merge(state, schema)
 		if err != nil {
 			return schemas, err
 		}
@@ -388,12 +405,12 @@ func resolveProperties(schema *openapi3.Schema, collection *SchemaCollection) (*
 	}
 }
 
-func mergeProps(schema *openapi3.Schema, collection *SchemaCollection, propsToMerge []string) (*openapi3.Schema, error) {
+func mergeProps(state *state, schema *openapi3.Schema, collection *SchemaCollection, propsToMerge []string) (*openapi3.Schema, error) {
 	propsToSchemasMap := map[string][]*openapi3.Schema{}
 	for _, schema := range collection.Properties {
 		for propKey, schemaRef := range schema {
 			if containsString(propsToMerge, propKey) {
-				propMergedSchema, err := Merge(*schemaRef.Value)
+				propMergedSchema, err := Merge(state, *schemaRef.Value)
 				if err != nil {
 					return &openapi3.Schema{}, err
 				}
@@ -730,13 +747,13 @@ func mergeCombinations(combinations []openapi3.SchemaRefs) ([]*openapi3.Schema, 
 	return merged, nil
 }
 
-func resolveNot(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+func resolveNot(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
 	refs := filterNilSchemaRef(collection.Not)
 	if len(refs) == 0 {
 		return schema, nil
 	}
 	for _, ref := range refs {
-		merged, err := Merge(*ref.Value)
+		merged, err := Merge(state, *ref.Value)
 		if err != nil {
 			return &openapi3.Schema{}, err
 		}
@@ -787,12 +804,12 @@ func resolveOneOf(schema *openapi3.Schema, collection *SchemaCollection) (*opena
 	return schema, err
 }
 
-func mergeSchemaRefs(sr []openapi3.SchemaRefs) ([]openapi3.SchemaRefs, error) {
+func mergeSchemaRefs(state *state, sr []openapi3.SchemaRefs) ([]openapi3.SchemaRefs, error) {
 	result := []openapi3.SchemaRefs{}
 	for _, refs := range sr {
 		r := openapi3.SchemaRefs{}
 		for _, ref := range refs {
-			merged, err := Merge(*ref.Value)
+			merged, err := Merge(state, *ref.Value)
 			if err != nil {
 				return result, err
 			}
@@ -803,12 +820,12 @@ func mergeSchemaRefs(sr []openapi3.SchemaRefs) ([]openapi3.SchemaRefs, error) {
 	return result, nil
 }
 
-func resolveCombinations(collection []openapi3.SchemaRefs) (openapi3.SchemaRefs, error) {
+func resolveCombinations(state *state, collection []openapi3.SchemaRefs) (openapi3.SchemaRefs, error) {
 	groups := filterEmptySchemaRefs(collection)
 	if len(groups) == 0 {
 		return nil, nil
 	}
-	groups, err := mergeSchemaRefs(groups)
+	groups, err := mergeSchemaRefs(state, groups)
 	if err != nil {
 		return openapi3.SchemaRefs{}, err
 	}
