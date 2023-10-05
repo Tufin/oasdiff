@@ -16,6 +16,7 @@ paths:
                   - $ref: "#/components/schemas/Dog"
                   - $ref: "#/components/schemas/Cat"
                   - $ref: "#/components/schemas/Rabbit"
+                  - $ref: "#/components/schemas/Fox"
 
 components:
   schemas:
@@ -58,3 +59,21 @@ components:
       properties:
         name:
           type: string
+
+    Fox:
+      type: object
+      properties:
+        name:
+          type: string
+        breed:
+          oneOf:
+            - enum:
+                - BROWN_1
+                - BROWN_2
+              title: Brown types
+              type: string
+            - enum:
+                - DARK_BROWN_1
+                - DARK_BROWN_2
+              title: Dark brown types
+              type: string

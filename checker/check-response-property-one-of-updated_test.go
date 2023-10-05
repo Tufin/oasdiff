@@ -19,7 +19,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyOneOfUpdated), d, osm, checker.INFO)
 
-	require.Len(t, errs, 2)
+	require.Len(t, errs, 3)
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
@@ -41,6 +41,16 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 			Path:        "/pets",
 			Source:      "../data/checker/response_property_one_of_added_revision.yaml",
 			OperationId: "listPets",
+		},
+		{
+			Id:          "response-property-one-of-added",
+			Text:        "added 'Dark brown types' to the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
+			Comment:     "",
+			Level:       checker.INFO,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      "../data/checker/response_property_one_of_added_revision.yaml",
+			OperationId: "listPets",
 		}}, errs)
 }
 
@@ -55,7 +65,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyOneOfUpdated), d, osm, checker.INFO)
 
-	require.Len(t, errs, 2)
+	require.Len(t, errs, 3)
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
@@ -71,6 +81,16 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 		{
 			Id:          "response-property-one-of-removed",
 			Text:        "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
+			Comment:     "",
+			Level:       checker.INFO,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      "../data/checker/response_property_one_of_removed_revision.yaml",
+			OperationId: "listPets",
+		},
+		{
+			Id:          "response-property-one-of-removed",
+			Text:        "removed 'Dark brown types' from the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
