@@ -57,27 +57,21 @@ type state struct {
 	visitedSchemas utils.VisitedRefs
 }
 
-func NewState() *state {
+func newState() *state {
 	return &state{
 		visitedSchemas: utils.VisitedRefs{},
 	}
 }
 
-// Merge replaces objects under AllOf with a flattened equivalent
-func Merge(state *state, baseSchemaRef openapi3.SchemaRef) (*openapi3.Schema, error) {
+func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
+	return mergeInternal(newState(), schema)
+}
 
-	/*	if state.visitedSchemas.IsVisited(baseSchemaRef.Ref) {
-			return baseSchemaRef.Value, nil // TODO: check
-		}
-	*/
+// Merge replaces objects under AllOf with a flattened equivalent
+func mergeInternal(state *state, baseSchemaRef openapi3.SchemaRef) (*openapi3.Schema, error) {
 	baseSchema := baseSchemaRef.Value
-	/*
-		if baseSchemaRef.Ref != "" {
-			state.visitedSchemas.Add(baseSchemaRef.Ref)
-			defer state.visitedSchemas.Remove(baseSchemaRef.Ref)
-		}
-	*/
 	allOfSchemas, err := getAllOfSchemas(state, *baseSchema)
+
 	if err != nil {
 		return &openapi3.Schema{}, err
 	}
@@ -96,7 +90,7 @@ func getAllOfSchemas(state *state, schema openapi3.Schema) ([]*openapi3.Schema, 
 		return schemas, nil
 	}
 	for _, schema := range schema.AllOf {
-		merged, err := Merge(state, *schema)
+		merged, err := mergeInternal(state, *schema)
 		if err != nil {
 			return schemas, err
 		}
@@ -416,7 +410,7 @@ func mergeProps(state *state, schema *openapi3.Schema, collection *SchemaCollect
 	for _, schema := range collection.Properties {
 		for propKey, schemaRef := range schema {
 			if containsString(propsToMerge, propKey) {
-				propMergedSchema, err := Merge(state, *schemaRef)
+				propMergedSchema, err := mergeInternal(state, *schemaRef)
 				if err != nil {
 					return &openapi3.Schema{}, err
 				}
@@ -759,7 +753,7 @@ func resolveNot(state *state, schema *openapi3.Schema, collection *SchemaCollect
 		return schema, nil
 	}
 	for _, ref := range refs {
-		merged, err := Merge(state, *ref)
+		merged, err := mergeInternal(state, *ref)
 		if err != nil {
 			return &openapi3.Schema{}, err
 		}
@@ -815,7 +809,7 @@ func mergeSchemaRefs(state *state, sr []openapi3.SchemaRefs) ([]openapi3.SchemaR
 	for _, refs := range sr {
 		r := openapi3.SchemaRefs{}
 		for _, ref := range refs {
-			merged, err := Merge(state, *ref)
+			merged, err := mergeInternal(state, *ref)
 			if err != nil {
 				return result, err
 			}
