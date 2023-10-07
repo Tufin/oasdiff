@@ -22,7 +22,7 @@ Spec can be a path to a file, a URL or '-' to read standard input.
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			flags.spec = args[0]
+			flags.source = load.GetSource(args[0])
 
 			// by now flags have been parsed successfully so we don't need to show usage on any errors
 			cmd.Root().SilenceUsage = true
@@ -49,9 +49,9 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
-	spec, err := load.LoadSpecInfo(loader, flags.spec)
+	spec, err := load.LoadSpecInfo(loader, flags.source)
 	if err != nil {
-		return getErrFailedToLoadSpec("original", flags.spec, err)
+		return getErrFailedToLoadSpec("original", flags.source, err)
 	}
 
 	// TODO: get the original format of the spec
@@ -59,7 +59,7 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 
 	flatSpec, err := flatten.MergeSpec(spec.Spec)
 	if err != nil {
-		return getErrFailedToFlattenSpec("original", flags.spec, err)
+		return getErrFailedToFlattenSpec("original", flags.source, err)
 	}
 
 	if returnErr := outputFlattenedSpec(format, stdout, flatSpec); returnErr != nil {

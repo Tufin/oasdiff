@@ -2,11 +2,12 @@ package internal
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 type ChangelogFlags struct {
-	base                     string
-	revision                 string
+	base                     load.Source
+	revision                 load.Source
 	composed                 bool
 	prefixBase               string
 	prefixRevision           string
@@ -45,11 +46,11 @@ func (flags *ChangelogFlags) getComposed() bool {
 	return flags.composed
 }
 
-func (flags *ChangelogFlags) getBase() string {
+func (flags *ChangelogFlags) getBase() load.Source {
 	return flags.base
 }
 
-func (flags *ChangelogFlags) getRevision() string {
+func (flags *ChangelogFlags) getRevision() load.Source {
 	return flags.revision
 }
 

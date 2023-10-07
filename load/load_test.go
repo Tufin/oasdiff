@@ -28,17 +28,17 @@ func (mockLoader MockLoader) LoadFromStdin() (*openapi3.T, error) {
 type MockLoader struct{}
 
 func TestLoad_File(t *testing.T) {
-	_, err := load.From(MockLoader{}, "openapi-test1.yaml")
+	_, err := load.From(MockLoader{}, load.GetSource("openapi-test1.yaml"))
 	require.NoError(t, err)
 }
 
 func TestLoad_URI(t *testing.T) {
-	_, err := load.From(MockLoader{}, "http://localhost/openapi-test1.yaml")
+	_, err := load.From(MockLoader{}, load.GetSource("http://localhost/openapi-test1.yaml"))
 	require.NoError(t, err)
 }
 
 func TestLoad_URIError(t *testing.T) {
-	_, err := load.From(MockLoader{}, "http://localhost/null")
+	_, err := load.From(MockLoader{}, load.GetSource("http://localhost/null"))
 	require.Error(t, err)
 }
 
@@ -74,6 +74,6 @@ paths:
 	defer func() { os.Stdin = oldStdin }() // Restore original Stdin
 
 	os.Stdin = tmpfile
-	_, err = load.From(MockLoader{}, "-")
+	_, err = load.From(MockLoader{}, load.GetSource("-"))
 	require.NoError(t, err)
 }

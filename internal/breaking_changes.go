@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 func getBreakingChangesCmd() *cobra.Command {
@@ -22,8 +23,8 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			flags.base = args[0]
-			flags.revision = args[1]
+			flags.base = load.GetSource(args[0])
+			flags.revision = load.GetSource(args[1])
 
 			// by now flags have been parsed successfully so we don't need to show usage on any errors
 			cmd.Root().SilenceUsage = true

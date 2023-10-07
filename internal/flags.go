@@ -1,12 +1,15 @@
 package internal
 
-import "github.com/tufin/oasdiff/diff"
+import (
+	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
+)
 
 type Flags interface {
 	toConfig() *diff.Config
 
 	getComposed() bool
-	getBase() string
-	getRevision() string
+	getBase() load.Source
+	getRevision() load.Source
 	getFlatten() bool
 }
