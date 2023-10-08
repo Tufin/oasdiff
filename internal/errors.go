@@ -19,13 +19,8 @@ func getErrInvalidFlags(err error) *ReturnError {
 }
 
 func getErrFailedToLoadSpec(what string, source load.Source, err error) *ReturnError {
-	pathStr := source.Path
-	if !source.Stdin {
-		pathStr = fmt.Sprintf("%q", source.Path)
-	}
-
 	return &ReturnError{
-		error: fmt.Errorf("failed to load %s spec from %s with %v", what, pathStr, err),
+		error: fmt.Errorf("failed to load %s spec from %s with %v", what, source.Out(), err),
 		Code:  102,
 	}
 }
@@ -73,13 +68,8 @@ func getErrCantProcessIgnoreFile(what string, err error) *ReturnError {
 }
 
 func getErrFailedToFlattenSpec(what string, source load.Source, err error) *ReturnError {
-	pathStr := source.Path
-	if !source.Stdin {
-		pathStr = fmt.Sprintf("%q", source.Path)
-	}
-
 	return &ReturnError{
-		error: fmt.Errorf("failed to flatten %s spec from %s with %v", what, pathStr, err),
+		error: fmt.Errorf("failed to flatten %s spec from %s with %v", what, source.Out(), err),
 		Code:  102,
 	}
 }
