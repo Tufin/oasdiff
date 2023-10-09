@@ -6,7 +6,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 func getSummaryCmd() *cobra.Command {
@@ -19,27 +18,8 @@ func getSummaryCmd() *cobra.Command {
 Base and revision can be a path to a file, a URL or '-' to read standard input.
 In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.
 `,
-		Args: cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-
-			flags.base = load.GetSource(args[0])
-			flags.revision = load.GetSource(args[1])
-
-			// by now flags have been parsed successfully so we don't need to show usage on any errors
-			cmd.Root().SilenceUsage = true
-
-			failEmpty, err := runSummary(&flags, cmd.OutOrStdout())
-			if err != nil {
-				setReturnValue(cmd, err.Code)
-				return err
-			}
-
-			if failEmpty {
-				setReturnValue(cmd, 1)
-			}
-
-			return nil
-		},
+		Args: getParseArgs(&flags),
+		RunE: getRun(&flags, runSummary),
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
@@ -58,20 +38,20 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 	return &cmd
 }
 
-func runSummary(flags *DiffFlags, stdout io.Writer) (bool, *ReturnError) {
+func runSummary(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 
-	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
+	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
 	diffReport, _, err := calcDiff(flags)
 	if err != nil {
 		return false, err
 	}
 
-	if err := outputSummary(stdout, diffReport, flags.format); err != nil {
+	if err := outputSummary(stdout, diffReport, flags.getFormat()); err != nil {
 		return false, err
 	}
 
-	return flags.failOnDiff && !diffReport.Empty(), nil
+	return flags.getFailOnDiff() && !diffReport.Empty(), nil
 }
 
 func outputSummary(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {

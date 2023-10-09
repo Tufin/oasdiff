@@ -57,3 +57,55 @@ func (flags *ChangelogFlags) getRevision() load.Source {
 func (flags *ChangelogFlags) getFlatten() bool {
 	return flags.flatten
 }
+
+func (flags *ChangelogFlags) getCircularReferenceCounter() int {
+	return flags.circularReferenceCounter
+}
+
+func (flags *ChangelogFlags) getIncludeChecks() []string {
+	return flags.includeChecks
+}
+
+func (flags *ChangelogFlags) getDeprecationDaysBeta() int {
+	return flags.deprecationDaysBeta
+}
+
+func (flags *ChangelogFlags) getDeprecationDaysStable() int {
+	return flags.deprecationDaysStable
+}
+
+func (flags *ChangelogFlags) getLang() string {
+	return flags.lang
+}
+
+func (flags *ChangelogFlags) getWarnIgnoreFile() string {
+	return flags.warnIgnoreFile
+}
+
+func (flags *ChangelogFlags) getErrIgnoreFile() string {
+	return flags.errIgnoreFile
+}
+
+func (flags *ChangelogFlags) getFormat() string {
+	return flags.format
+}
+
+func (flags *ChangelogFlags) getFailOn() string {
+	return flags.failOn
+}
+
+func (flags *ChangelogFlags) getFailOnDiff() bool {
+	return false
+}
+
+func (flags *ChangelogFlags) setBase(source load.Source) {
+	flags.base = source
+}
+
+func (flags *ChangelogFlags) setRevision(source load.Source) {
+	flags.revision = source
+}
+
+func (flags *ChangelogFlags) addExcludeElements(element string) {
+	flags.excludeElements = append(flags.excludeElements, element)
+}

@@ -12,4 +12,19 @@ type Flags interface {
 	getBase() load.Source
 	getRevision() load.Source
 	getFlatten() bool
+	getCircularReferenceCounter() int
+	getIncludeChecks() []string
+	getDeprecationDaysBeta() int
+	getDeprecationDaysStable() int
+	getLang() string
+	getWarnIgnoreFile() string
+	getErrIgnoreFile() string
+	getFormat() string
+	getFailOn() string
+	getFailOnDiff() bool
+
+	setBase(source load.Source)
+	setRevision(source load.Source)
+
+	addExcludeElements(string)
 }
