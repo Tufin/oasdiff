@@ -44,7 +44,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		},
 		{
 			Id:          "response-property-one-of-added",
-			Text:        "added 'Dark brown types' to the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
+			Text:        "added 'RevisionSchema[1]:Dark brown types' to the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -90,7 +90,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 		},
 		{
 			Id:          "response-property-one-of-removed",
-			Text:        "removed 'Dark brown types' from the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
+			Text:        "removed 'BaseSchema[1]:Dark brown types' from the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
