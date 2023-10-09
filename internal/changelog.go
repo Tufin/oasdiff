@@ -17,12 +17,9 @@ func getChangelogCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "changelog base revision [flags]",
 		Short: "Display changelog",
-		Long: `Display a changelog between base and revision specs.
-Base and revision can be a path to a file, a URL or '-' to read standard input.
-In 'composed' mode, base and revision can be a glob and oasdiff will compare mathcing endpoints between the two sets of files.
-`,
-		Args: getParseArgs(&flags),
-		RunE: getRun(&flags, runChangelog),
+		Long:  "Display a changelog between base and revision specs." + specHelp,
+		Args:  getParseArgs(&flags),
+		RunE:  getRun(&flags, runChangelog),
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")

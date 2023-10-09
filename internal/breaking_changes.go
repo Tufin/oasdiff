@@ -15,12 +15,9 @@ func getBreakingChangesCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "breaking base revision [flags]",
 		Short: "Display breaking changes",
-		Long: `Display breaking changes between base and revision specs.
-Base and revision can be a path to a file, a URL or '-' to read standard input.
-In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.
-`,
-		Args: getParseArgs(&flags),
-		RunE: getRun(&flags, runBreakingChanges),
+		Long:  "Display breaking changes between base and revision specs." + specHelp,
+		Args:  getParseArgs(&flags),
+		RunE:  getRun(&flags, runBreakingChanges),
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")

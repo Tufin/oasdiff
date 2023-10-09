@@ -8,6 +8,10 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
+const specHelp = `
+Base and revision can be a path to a file, a URL, or '-' to read standard input.
+In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.`
+
 func getParseArgs(flags Flags) cobra.PositionalArgs {
 	return func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {

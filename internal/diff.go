@@ -19,12 +19,9 @@ func getDiffCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "diff base revision [flags]",
 		Short: "Generate a diff report",
-		Long: `Generate a diff report between base and revision specs.
-Base and revision can be a path to a file, a URL or '-' to read standard input.
-In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.
-`,
-		Args: getParseArgs(&flags),
-		RunE: getRun(&flags, runDiff),
+		Long:  "Generate a diff report between base and revision specs." + specHelp,
+		Args:  getParseArgs(&flags),
+		RunE:  getRun(&flags, runDiff),
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
