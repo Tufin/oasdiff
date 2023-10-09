@@ -2,7 +2,6 @@ package internal
 
 import (
 	"errors"
-	"fmt"
 	"io"
 
 	"github.com/spf13/cobra"
@@ -12,10 +11,10 @@ import (
 func getParseArgs(flags Flags) cobra.PositionalArgs {
 	return func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
-			return fmt.Errorf("please specify base and revision arguments as a path to a file, a glob (in composed mode), a URL, or '-' to read standard input")
+			return errors.New("please specify base and revision arguments as a path to a file, a glob (in composed mode), a URL, or '-' to read standard input")
 		}
 		if len(args) > 2 {
-			return fmt.Errorf("extra arguments after base and revision")
+			return errors.New("invalid arguments after base and revision")
 		}
 		if flags.getComposed() {
 			if args[0] == "-" || args[1] == "-" {
