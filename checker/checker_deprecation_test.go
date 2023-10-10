@@ -15,7 +15,7 @@ import (
 )
 
 func open(file string) (*load.SpecInfo, error) {
-	return load.LoadSpecInfoFromFile(openapi3.NewLoader(), file)
+	return load.LoadSpecInfo(openapi3.NewLoader(), load.GetSource(file))
 }
 
 func getDeprecationFile(file string) string {

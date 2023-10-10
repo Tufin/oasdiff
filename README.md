@@ -31,7 +31,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md)
 - [Merge allOf schemas](ALLOF.md)
 - [Path prefix modification](#path-prefix-modification)
-- [Path parameter renaming](#path-parameter-reanaming)
+- [Path parameter renaming](#path-parameter-renaming)
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
 - [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
@@ -235,7 +235,7 @@ oasdiff diff original.yaml new.yaml --strip-prefix-base /api/v1 --strip-prefix-r
 ```
 Note that stripping precedes prepending.
 
-## Path Parameter Reanaming
+## Path Parameter Renaming
 Sometimes developers decide to change names of path parameters, for example, in order to follow a certain naming convention.  
 See [this](MATCHING-ENDPOINTS.md) to learn more about how oasdiff supports path parameter renaming.
 
