@@ -11,6 +11,8 @@ const (
 	APIPathRemovedWithoutDeprecationId = "api-path-removed-without-deprecation"
 	APIPathSunsetParseId               = "api-path-sunset-parse"
 	APIPathRemovedBeforeSunsetId       = "api-path-removed-before-sunset"
+	APIRemovedWithoutDeprecationId     = "api-removed-without-deprecation"
+	APIRemovedBeforeSunsetId           = "api-removed-before-sunset"
 )
 
 func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -30,7 +32,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIPathRemovedWithoutDeprecationId,
 					Level:       ERR,
-					Text:        config.Localize("api-path-removed-without-deprecation"),
+					Text:        config.Localize(APIPathRemovedWithoutDeprecationId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -57,7 +59,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIPathRemovedBeforeSunsetId,
 					Level:       ERR,
-					Text:        config.Localize("api-path-removed-before-sunset", date),
+					Text:        config.Localize(APIPathRemovedBeforeSunsetId, date),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -76,9 +78,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			if !op.Deprecated {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
-					Id:          APIPathRemovedWithoutDeprecationId,
+					Id:          APIRemovedWithoutDeprecationId,
 					Level:       ERR,
-					Text:        config.Localize("api-removed-without-deprecation"),
+					Text:        config.Localize(APIRemovedWithoutDeprecationId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -103,9 +105,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			if !civil.DateOf(time.Now()).After(date) {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
-					Id:          APIPathRemovedBeforeSunsetId,
+					Id:          APIRemovedBeforeSunsetId,
 					Level:       ERR,
-					Text:        config.Localize("api-removed-before-sunset", date),
+					Text:        config.Localize(APIRemovedBeforeSunsetId, date),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,

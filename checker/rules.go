@@ -32,6 +32,8 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(APIPathRemovedWithoutDeprecationId, ERR, true),
 		newBackwardCompatibilityRule(APIPathSunsetParseId, ERR, true),
 		newBackwardCompatibilityRule(APIPathRemovedBeforeSunsetId, ERR, true),
+		newBackwardCompatibilityRule(APIRemovedWithoutDeprecationId, ERR, true),
+		newBackwardCompatibilityRule(APIRemovedBeforeSunsetId, ERR, true),
 		// APISunsetChangedCheck
 		newBackwardCompatibilityRule(APISunsetDeletedId, ERR, true),
 		newBackwardCompatibilityRule(APISunsetDateChangedTooSmallId, ERR, true),

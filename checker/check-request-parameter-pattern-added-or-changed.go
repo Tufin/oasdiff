@@ -42,7 +42,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							Id:          RequestParameterPatternAddedId,
 							Level:       WARN,
 							Text:        config.Localize(RequestParameterPatternAddedId, patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
-							Comment:     config.Localize(RequestParameterPatternAddedId + "-comment"),
+							Comment:     config.Localize("pattern-changed-warn-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
