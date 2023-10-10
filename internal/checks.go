@@ -10,6 +10,7 @@ import (
 )
 
 type ChecksFlags struct {
+	lang   string
 	format string
 }
 
@@ -35,6 +36,7 @@ func getChecksCmd() *cobra.Command {
 		},
 	}
 
+	enumWithOptions(&cmd, newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType("checks"), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 
 	return &cmd
@@ -43,16 +45,18 @@ func getChecksCmd() *cobra.Command {
 func runChecks(stdout io.Writer, flags ChecksFlags) *ReturnError {
 	rules := checker.GetAllRules()
 
-	if err := outputChecks(stdout, flags.format, rules); err != nil {
+	if err := outputChecks(stdout, flags.lang, flags.format, rules); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func outputChecks(stdout io.Writer, format string, rules []checker.BackwardCompatibilityRule) *ReturnError {
+func outputChecks(stdout io.Writer, lang string, format string, rules []checker.BackwardCompatibilityRule) *ReturnError {
 	// formatter lookup
-	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
+	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
+		Language: lang,
+	})
 	if err != nil {
 		return getErrUnsupportedChecksFormat(format)
 	}

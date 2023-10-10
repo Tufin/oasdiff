@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestHeaderPropertyBecameRequiredId = "request-header-property-became-required"
+)
+
 func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -46,9 +50,9 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							}
 
 							result = append(result, ApiChange{
-								Id:          "request-header-property-became-required",
+								Id:          RequestHeaderPropertyBecameRequiredId,
 								Level:       ERR,
-								Text:        config.Localize("request-header-property-became-required", ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
+								Text:        config.Localize(RequestHeaderPropertyBecameRequiredId, ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -72,9 +76,9 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 									continue
 								}
 								result = append(result, ApiChange{
-									Id:          "request-header-property-became-required",
+									Id:          RequestHeaderPropertyBecameRequiredId,
 									Level:       ERR,
-									Text:        config.Localize("request-header-property-became-required", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+									Text:        config.Localize(RequestHeaderPropertyBecameRequiredId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

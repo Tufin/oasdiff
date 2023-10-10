@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	apiSchemasRemovedCheckId = "api-schema-removed"
+	APISchemasRemovedId = "api-schema-removed"
 )
 
 func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -16,9 +16,9 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 
 	for _, deletedSchema := range diffReport.ComponentsDiff.SchemasDiff.Deleted {
 		result = append(result, ComponentChange{
-			Id:     apiSchemasRemovedCheckId,
-			Level:  config.getLogLevel(apiSchemasRemovedCheckId, INFO),
-			Text:   config.Localize(apiSchemasRemovedCheckId, ColorizedValue(deletedSchema)),
+			Id:     APISchemasRemovedId,
+			Level:  config.getLogLevel(APISchemasRemovedId, INFO),
+			Text:   config.Localize(APISchemasRemovedId, ColorizedValue(deletedSchema)),
 			Source: "", // TODO: get the file name
 		})
 	}

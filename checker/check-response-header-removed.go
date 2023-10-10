@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequiredResponseHeaderRemovedId = "required-response-header-removed"
+	OptionalResponseHeaderRemovedId = "optional-response-header-removed"
+)
+
 func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -33,9 +38,9 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 					required := responseDiff.Base.Headers[headerName].Value.Required
 					if required {
 						result = append(result, ApiChange{
-							Id:          "required-response-header-removed",
+							Id:          RequiredResponseHeaderRemovedId,
 							Level:       ERR,
-							Text:        config.Localize("required-response-header-removed", ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Text:        config.Localize(RequiredResponseHeaderRemovedId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -43,9 +48,9 @@ func ResponseHeaderRemoved(diffReport *diff.Diff, operationsSources *diff.Operat
 						})
 					} else {
 						result = append(result, ApiChange{
-							Id:          "optional-response-header-removed",
+							Id:          OptionalResponseHeaderRemovedId,
 							Level:       WARN,
-							Text:        config.Localize("optional-response-header-removed", ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Text:        config.Localize(OptionalResponseHeaderRemovedId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -4,6 +4,12 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestPropertyPatternRemovedId = "request-property-pattern-removed"
+	RequestPropertyPatternAddedId   = "request-property-pattern-added"
+	RequestPropertyPatternChangedId = "request-property-pattern-changed"
+)
+
 func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -33,9 +39,9 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 
 						if patternDiff.To == "" {
 							result = append(result, ApiChange{
-								Id:          "request-property-pattern-removed",
+								Id:          RequestPropertyPatternRemovedId,
 								Level:       INFO,
-								Text:        config.Localize("request-property-pattern-removed", patternDiff.From, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestPropertyPatternRemovedId, patternDiff.From, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -43,9 +49,9 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							})
 						} else if patternDiff.From == "" {
 							result = append(result, ApiChange{
-								Id:          "request-property-pattern-added",
+								Id:          RequestPropertyPatternAddedId,
 								Level:       WARN,
-								Text:        config.Localize("request-property-pattern-added", patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestPropertyPatternAddedId, patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Comment:     config.Localize("pattern-changed-warn-comment"),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -60,9 +66,9 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 								comment = ""
 							}
 							result = append(result, ApiChange{
-								Id:          "request-property-pattern-changed",
+								Id:          RequestPropertyPatternChangedId,
 								Level:       level,
-								Text:        config.Localize("request-property-pattern-changed", ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
+								Text:        config.Localize(RequestPropertyPatternChangedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
 								Comment:     comment,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

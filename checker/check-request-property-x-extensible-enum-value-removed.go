@@ -8,6 +8,12 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+const (
+	UnparseablePropertyFromXExtensibleEnumId     = "unparseable-property-from-x-extensible-enum"
+	UnparseablePropertyToXExtensibleEnumId       = "unparseable-property-to-x-extensible-enum"
+	RequestPropertyXExtensibleEnumValueRemovedId = "request-property-x-extensible-enum-value-removed"
+)
+
 func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -50,7 +56,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						var fromSlice []string
 						if err := json.Unmarshal(from, &fromSlice); err != nil {
 							result = append(result, ApiChange{
-								Id:          "unparseable-property-from-x-extensible-enum",
+								Id:          UnparseablePropertyFromXExtensibleEnumId,
 								Level:       ERR,
 								Text:        fmt.Sprintf("unparseable x-extensible-enum of the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
@@ -63,7 +69,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						var toSlice []string
 						if err := json.Unmarshal(to, &toSlice); err != nil {
 							result = append(result, ApiChange{
-								Id:          "unparseable-property-to-x-extensible-enum",
+								Id:          UnparseablePropertyToXExtensibleEnumId,
 								Level:       ERR,
 								Text:        fmt.Sprintf("unparseable x-extensible-enum of the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
@@ -86,9 +92,9 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						}
 						for _, enumVal := range deletedVals {
 							result = append(result, ApiChange{
-								Id:          "request-property-x-extensible-enum-value-removed",
+								Id:          RequestPropertyXExtensibleEnumValueRemovedId,
 								Level:       ERR,
-								Text:        config.Localize("request-property-x-extensible-enum-value-removed", enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestPropertyXExtensibleEnumValueRemovedId, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

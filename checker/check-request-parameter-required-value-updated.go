@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterBecomeRequiredId = "request-parameter-became-required"
+	RequestParameterBecomeOptionalId = "request-parameter-became-optional"
+)
+
 func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -27,11 +32,11 @@ func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operations
 						continue
 					}
 
-					id := "request-parameter-became-required"
+					id := RequestParameterBecomeRequiredId
 					level := ERR
 
 					if requiredDiff.To != true {
-						id = "request-parameter-became-optional"
+						id = RequestParameterBecomeOptionalId
 						level = INFO
 					}
 

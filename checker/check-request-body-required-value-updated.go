@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyBecameOptionalId = "request-body-became-optional"
+	RequestBodyBecameRequiredId = "request-body-became-required"
+)
+
 func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -24,10 +29,10 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 
 			source := (*operationsSources)[operationItem.Revision]
 
-			id := "request-body-became-optional"
+			id := RequestBodyBecameOptionalId
 			logLevel := INFO
 			if operationItem.RequestBodyDiff.RequiredDiff.To == true {
-				id = "request-body-became-required"
+				id = RequestBodyBecameRequiredId
 				logLevel = ERR
 			}
 

@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	NewRequiredRequestParameterId = "new-required-request-parameter"
+	NewOptionalRequestParameterId = "new-optional-request-parameter"
+)
+
 func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -26,10 +31,10 @@ func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *d
 				for _, paramName := range paramItems {
 					for _, param := range operationItem.Revision.Parameters {
 						if param.Value.Name == paramName {
-							id := "new-required-request-parameter"
+							id := NewRequiredRequestParameterId
 							level := ERR
 							if !param.Value.Required {
-								id = "new-optional-request-parameter"
+								id = NewOptionalRequestParameterId
 								level = INFO
 							}
 							source := (*operationsSources)[operationItem.Revision]

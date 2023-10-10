@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyMaxLengthSetId     = "request-body-max-length-set"
+	RequestPropertyMaxLengthSetId = "request-property-max-length-set"
+)
+
 func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -28,10 +33,10 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 					if maxLengthDiff.From == nil &&
 						maxLengthDiff.To != nil {
 						result = append(result, ApiChange{
-							Id:          "request-body-max-length-set",
+							Id:          RequestBodyMaxLengthSetId,
 							Level:       WARN,
-							Text:        config.Localize("request-body-max-length-set", ColorizedValue(maxLengthDiff.To)),
-							Comment:     config.Localize("request-body-max-length-set-comment"),
+							Text:        config.Localize(RequestBodyMaxLengthSetId, ColorizedValue(maxLengthDiff.To)),
+							Comment:     config.Localize(RequestBodyMaxLengthSetId + "-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -56,10 +61,10 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						}
 
 						result = append(result, ApiChange{
-							Id:          "request-property-max-length-set",
+							Id:          RequestPropertyMaxLengthSetId,
 							Level:       WARN,
-							Text:        config.Localize("request-property-max-length-set", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
-							Comment:     config.Localize("request-property-max-length-set-comment"),
+							Text:        config.Localize(RequestPropertyMaxLengthSetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+							Comment:     config.Localize(RequestPropertyMaxLengthSetId + "-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

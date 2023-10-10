@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	NewRequiredRequestDefaultParameterToExistingPathId = "new-required-request-default-parameter-to-existing-path"
+	NewOptionalRequestDefaultParameterToExistingPathId = "new-optional-request-default-parameter-to-existing-path"
+)
+
 func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil || len(diffReport.PathsDiff.Modified) == 0 {
@@ -23,10 +28,10 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 				if !paramNameList.Contains(param.Value.Name) {
 					continue
 				}
-				id := "new-required-request-default-parameter-to-existing-path"
+				id := NewRequiredRequestDefaultParameterToExistingPathId
 				level := ERR
 				if !param.Value.Required {
-					id = "new-optional-request-default-parameter-to-existing-path"
+					id = NewOptionalRequestDefaultParameterToExistingPathId
 					level = INFO
 				}
 

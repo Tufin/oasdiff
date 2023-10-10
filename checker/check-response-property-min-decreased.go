@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseBodyMinDecreasedId     = "response-body-min-decreased"
+	ResponsePropertyMinDecreasedId = "response-property-min-decreased"
+)
+
 func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -32,9 +37,9 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 							minDiff.To != nil {
 							if IsDecreasedValue(minDiff) {
 								result = append(result, ApiChange{
-									Id:          "response-body-min-decreased",
+									Id:          ResponseBodyMinDecreasedId,
 									Level:       ERR,
-									Text:        config.Localize("response-body-min-decreased", ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+									Text:        config.Localize(ResponseBodyMinDecreasedId, ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -64,9 +69,9 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 							}
 
 							result = append(result, ApiChange{
-								Id:          "response-property-min-decreased",
+								Id:          ResponsePropertyMinDecreasedId,
 								Level:       ERR,
-								Text:        config.Localize("response-property-min-decreased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To), ColorizedValue(responseStatus)),
+								Text:        config.Localize(ResponsePropertyMinDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -78,7 +78,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 		RequestHeaderPropertyBecameEnumCheck,
 		RequestHeaderPropertyBecameRequiredCheck,
 		RequestParameterBecameEnumCheck,
-		RequestParameterDefaultValueChanged,
+		RequestParameterDefaultValueChangedCheck,
 		RequestParameterEnumValueUpdatedCheck,
 		RequestParameterMaxItemsUpdatedCheck,
 		RequestParameterMaxLengthSetCheck,
@@ -154,16 +154,4 @@ func allChecks() []BackwardCompatibilityCheck {
 		checks = append(checks, v)
 	}
 	return checks
-}
-
-func GetAllRules() []BackwardCompatibilityRule {
-	return []BackwardCompatibilityRule{
-		{
-			Id:          "endpoint-added",
-			Level:       INFO,
-			Description: "a new endpoint was added",
-			Required:    true,
-			Func:        APIAddedCheck,
-		},
-	}
 }

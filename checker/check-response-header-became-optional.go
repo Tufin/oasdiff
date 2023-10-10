@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseHeaderBecameOptionalId = "response-header-became-optional"
+)
+
 func ResponseHeaderBecameOptional(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -36,9 +40,9 @@ func ResponseHeaderBecameOptional(diffReport *diff.Diff, operationsSources *diff
 					}
 
 					result = append(result, ApiChange{
-						Id:          "response-header-became-optional",
+						Id:          ResponseHeaderBecameOptionalId,
 						Level:       ERR,
-						Text:        config.Localize("response-header-became-optional", ColorizedValue(headerName), ColorizedValue(responseStatus)),
+						Text:        config.Localize(ResponseHeaderBecameOptionalId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

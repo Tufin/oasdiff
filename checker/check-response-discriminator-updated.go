@@ -4,6 +4,21 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseBodyDiscriminatorAddedId                   = "response-body-discriminator-added"
+	ResponseBodyDiscriminatorRemovedId                 = "response-body-discriminator-removed"
+	ResponseBodyDiscriminatorPropertyNameChangedId     = "response-body-discriminator-property-name-changed"
+	ResponseBodyDiscriminatorMappingAddedId            = "response-body-discriminator-mapping-added"
+	ResponseBodyDiscriminatorMappingDeletedId          = "response-body-discriminator-mapping-deleted"
+	ResponseBodyDiscriminatorMappingChangedId          = "response-body-discriminator-mapping-changed"
+	ResponsePropertyDiscriminatorAddedId               = "response-property-discriminator-added"
+	ResponsePropertyDiscriminatorRemovedId             = "response-property-discriminator-removed"
+	ResponsePropertyDiscriminatorPropertyNameChangedId = "response-property-discriminator-property-name-changed"
+	ResponsePropertyDiscriminatorMappingAddedId        = "response-property-discriminator-mapping-added"
+	ResponsePropertyDiscriminatorMappingDeletedId      = "response-property-discriminator-mapping-deleted"
+	ResponsePropertyDiscriminatorMappingChangedId      = "response-property-discriminator-mapping-changed"
+)
+
 func ResponseDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {

@@ -6,6 +6,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseBodyTypeChangedId     = "response-body-type-changed"
+	ResponsePropertyTypeChangedId = "response-property-type-changed"
+)
+
 func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -36,9 +41,9 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 						if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
 							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
 							result = append(result, ApiChange{
-								Id:          "response-body-type-changed",
+								Id:          ResponseBodyTypeChangedId,
 								Level:       ERR,
-								Text:        config.Localize("response-body-type-changed", empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
+								Text:        config.Localize(ResponseBodyTypeChangedId, empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -61,9 +66,9 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 							if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
 								typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
 								result = append(result, ApiChange{
-									Id:          "response-property-type-changed",
+									Id:          ResponsePropertyTypeChangedId,
 									Level:       ERR,
-									Text:        config.Localize("response-property-type-changed", empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
+									Text:        config.Localize(ResponsePropertyTypeChangedId, empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

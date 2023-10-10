@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyMinItemsSetId     = "request-body-min-items-set"
+	RequestPropertyMinItemsSetId = "request-property-min-items-set"
+)
+
 func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -28,10 +33,10 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 					if minItemsDiff.From == nil &&
 						minItemsDiff.To != nil {
 						result = append(result, ApiChange{
-							Id:          "request-body-min-items-set",
+							Id:          RequestBodyMinItemsSetId,
 							Level:       WARN,
-							Text:        config.Localize("request-body-min-items-set", ColorizedValue(minItemsDiff.To)),
-							Comment:     config.Localize("request-body-min-items-set-comment"),
+							Text:        config.Localize(RequestBodyMinItemsSetId, ColorizedValue(minItemsDiff.To)),
+							Comment:     config.Localize(RequestBodyMinItemsSetId + "-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -56,10 +61,10 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						}
 
 						result = append(result, ApiChange{
-							Id:          "request-property-min-items-set",
+							Id:          RequestPropertyMinItemsSetId,
 							Level:       WARN,
-							Text:        config.Localize("request-property-min-items-set", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
-							Comment:     config.Localize("request-property-min-items-set-comment"),
+							Text:        config.Localize(RequestPropertyMinItemsSetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Comment:     config.Localize(RequestPropertyMinItemsSetId + "-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

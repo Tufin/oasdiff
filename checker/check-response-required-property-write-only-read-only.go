@@ -6,10 +6,10 @@ import (
 )
 
 const (
-	ResponseRequiredPropertyBecameNonWriteOnlyCheckId = "response-required-property-became-not-write-only"
-	ResponseRequiredPropertyBecameWriteOnlyCheckId    = "response-required-property-became-write-only"
-	ResponseRequiredPropertyBecameReadOnlyCheckId     = "response-required-property-became-read-only"
-	ResponseRequiredPropertyBecameNonReadOnlyCheckId  = "response-required-property-became-not-read-only"
+	ResponseRequiredPropertyBecameNonWriteOnlyId = "response-required-property-became-not-write-only"
+	ResponseRequiredPropertyBecameWriteOnlyId    = "response-required-property-became-write-only"
+	ResponseRequiredPropertyBecameReadOnlyId     = "response-required-property-became-read-only"
+	ResponseRequiredPropertyBecameNonReadOnlyId  = "response-required-property-became-not-read-only"
 )
 
 func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -56,12 +56,12 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								return
 							}
 
-							id := ResponseRequiredPropertyBecameNonWriteOnlyCheckId
+							id := ResponseRequiredPropertyBecameNonWriteOnlyId
 							level := WARN
 							comment := config.Localize("response-required-property-became-not-write-only-comment")
 
 							if writeOnlyDiff.To == true {
-								id = ResponseRequiredPropertyBecameWriteOnlyCheckId
+								id = ResponseRequiredPropertyBecameWriteOnlyId
 								level = INFO
 								comment = ""
 							}
@@ -94,11 +94,11 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								return
 							}
 
-							id := ResponseRequiredPropertyBecameNonReadOnlyCheckId
+							id := ResponseRequiredPropertyBecameNonReadOnlyId
 							level := INFO
 
 							if readOnlyDiff.To == true {
-								id = ResponseRequiredPropertyBecameReadOnlyCheckId
+								id = ResponseRequiredPropertyBecameReadOnlyId
 								level = INFO
 							}
 

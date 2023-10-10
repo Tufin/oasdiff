@@ -6,10 +6,10 @@ import (
 )
 
 const (
-	ResponseOptionalPropertyBecameNonWriteOnlyCheckId = "response-optional-property-became-not-write-only"
-	ResponseOptionalPropertyBecameWriteOnlyCheckId    = "response-optional-property-became-write-only"
-	ResponseOptionalPropertyBecameReadOnlyCheckId     = "response-optional-property-became-read-only"
-	ResponseOptionalPropertyBecameNonReadOnlyCheckId  = "response-optional-property-became-not-read-only"
+	ResponseOptionalPropertyBecameNonWriteOnlyId = "response-optional-property-became-not-write-only"
+	ResponseOptionalPropertyBecameWriteOnlyId    = "response-optional-property-became-write-only"
+	ResponseOptionalPropertyBecameReadOnlyId     = "response-optional-property-became-read-only"
+	ResponseOptionalPropertyBecameNonReadOnlyId  = "response-optional-property-became-not-read-only"
 )
 
 func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -56,10 +56,10 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								return
 							}
 
-							id := ResponseOptionalPropertyBecameNonWriteOnlyCheckId
+							id := ResponseOptionalPropertyBecameNonWriteOnlyId
 
 							if writeOnlyDiff.To == true {
-								id = ResponseOptionalPropertyBecameWriteOnlyCheckId
+								id = ResponseOptionalPropertyBecameWriteOnlyId
 							}
 
 							result = append(result, ApiChange{
@@ -89,10 +89,10 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								return
 							}
 
-							id := ResponseOptionalPropertyBecameNonReadOnlyCheckId
+							id := ResponseOptionalPropertyBecameNonReadOnlyId
 
 							if readOnlyDiff.To == true {
-								id = ResponseOptionalPropertyBecameReadOnlyCheckId
+								id = ResponseOptionalPropertyBecameReadOnlyId
 							}
 
 							result = append(result, ApiChange{

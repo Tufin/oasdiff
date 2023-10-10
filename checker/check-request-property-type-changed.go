@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyTypeChangedId     = "request-body-type-changed"
+	RequestPropertyTypeChangedId = "request-property-type-changed"
+)
+
 func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -32,9 +37,9 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
 
 						result = append(result, ApiChange{
-							Id:          "request-body-type-changed",
-							Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff)),
-							Text:        config.Localize("request-body-type-changed", empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+							Id:          RequestBodyTypeChangedId,
+							Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
+							Text:        config.Localize(RequestBodyTypeChangedId, empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -60,9 +65,9 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						if !typeDiff.Empty() || !formatDiff.Empty() {
 							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
 							result = append(result, ApiChange{
-								Id:          "request-property-type-changed",
-								Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff)),
-								Text:        config.Localize("request-property-type-changed", ColorizedValue(propertyFullName(propertyPath, propertyName)), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+								Id:          RequestPropertyTypeChangedId,
+								Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
+								Text:        config.Localize(RequestPropertyTypeChangedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

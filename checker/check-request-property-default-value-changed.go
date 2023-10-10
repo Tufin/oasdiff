@@ -4,6 +4,15 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyDefaultValueAddedId       = "request-body-default-value-added"
+	RequestBodyDefaultValueRemovedId     = "request-body-default-value-removed"
+	RequestBodyDefaultValueChangedId     = "request-body-default-value-changed"
+	RequestPropertyDefaultValueAddedId   = "request-property-default-value-added"
+	RequestPropertyDefaultValueRemovedId = "request-property-default-value-removed"
+	RequestPropertyDefaultValueChangedId = "request-property-default-value-changed"
+)
+
 func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -39,11 +48,11 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 					defaultValueDiff := mediaTypeDiff.SchemaDiff.DefaultDiff
 
 					if defaultValueDiff.From == nil {
-						appendResultItem("request-body-default-value-added", ColorizedValue(mediaType), empty2none(defaultValueDiff.To))
+						appendResultItem(RequestBodyDefaultValueAddedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.To))
 					} else if defaultValueDiff.To == nil {
-						appendResultItem("request-body-default-value-removed", ColorizedValue(mediaType), empty2none(defaultValueDiff.From))
+						appendResultItem(RequestBodyDefaultValueRemovedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.From))
 					} else {
-						appendResultItem("request-body-default-value-changed", ColorizedValue(mediaType), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To))
+						appendResultItem(RequestBodyDefaultValueChangedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To))
 					}
 				}
 
@@ -57,11 +66,11 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 						defaultValueDiff := propertyDiff.DefaultDiff
 
 						if defaultValueDiff.From == nil {
-							appendResultItem("request-property-default-value-added", ColorizedValue(propertyName), empty2none(defaultValueDiff.To))
+							appendResultItem(RequestPropertyDefaultValueAddedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.To))
 						} else if defaultValueDiff.To == nil {
-							appendResultItem("request-property-default-value-removed", ColorizedValue(propertyName), empty2none(defaultValueDiff.From))
+							appendResultItem(RequestPropertyDefaultValueRemovedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.From))
 						} else {
-							appendResultItem("request-property-default-value-changed", ColorizedValue(propertyName), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To))
+							appendResultItem(RequestPropertyDefaultValueChangedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To))
 						}
 					})
 			}

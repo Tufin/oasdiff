@@ -18,7 +18,6 @@ type BackwardCompatibilityRule struct {
 	Level       Level
 	Description string
 	Required    bool
-	Func        func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes `yaml:"-" json:"-"`
 }
 
 var pipedOutput *bool

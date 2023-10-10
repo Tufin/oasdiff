@@ -4,7 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const responsePropertyEnumValueRemovedId = "response-property-enum-value-removed"
+const (
+	ResponsePropertyEnumValueRemovedId = "response-property-enum-value-removed"
+)
 
 func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -38,9 +40,9 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 
 							for _, enumVal := range enumDiff.Deleted {
 								result = append(result, ApiChange{
-									Id:          responsePropertyEnumValueRemovedId,
-									Level:       config.getLogLevel(responsePropertyEnumValueRemovedId, INFO),
-									Text:        config.Localize(responsePropertyEnumValueRemovedId, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Id:          ResponsePropertyEnumValueRemovedId,
+									Level:       config.getLogLevel(ResponsePropertyEnumValueRemovedId, INFO),
+									Text:        config.Localize(ResponsePropertyEnumValueRemovedId, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

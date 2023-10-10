@@ -4,7 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const responseMediatypeEnumValueRemovedId = "response-mediatype-enum-value-removed"
+const (
+	ResponseMediaTypeEnumValueRemovedId = "response-mediatype-enum-value-removed"
+)
 
 func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -43,9 +45,9 @@ func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 
 					for _, enumVal := range enumDiff.Deleted {
 						result = append(result, ApiChange{
-							Id:          responseMediatypeEnumValueRemovedId,
-							Level:       config.getLogLevel(responseMediatypeEnumValueRemovedId, ERR),
-							Text:        config.Localize(responseMediatypeEnumValueRemovedId, mediaType, ColorizedValue(enumVal)),
+							Id:          ResponseMediaTypeEnumValueRemovedId,
+							Level:       config.getLogLevel(ResponseMediaTypeEnumValueRemovedId, ERR),
+							Text:        config.Localize(ResponseMediaTypeEnumValueRemovedId, mediaType, ColorizedValue(enumVal)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

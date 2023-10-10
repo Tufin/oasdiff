@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterMaxLengthSetId = "request-parameter-max-length-set"
+)
+
 func RequestParameterMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -34,10 +38,10 @@ func RequestParameterMaxLengthSetCheck(diffReport *diff.Diff, operationsSources 
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, ApiChange{
-						Id:          "request-parameter-max-length-set",
+						Id:          RequestParameterMaxLengthSetId,
 						Level:       WARN,
-						Text:        config.Localize("request-parameter-max-length-set", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.To)),
-						Comment:     config.Localize("request-parameter-max-length-set-comment"),
+						Text:        config.Localize(RequestParameterMaxLengthSetId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.To)),
+						Comment:     config.Localize(RequestParameterMaxLengthSetId + "-comment"),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
