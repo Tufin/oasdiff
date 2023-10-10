@@ -12,7 +12,7 @@ const (
 	ResponseNonSuccessStatusRemovedId = "response-non-success-status-removed"
 )
 
-func ResponseSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	success := func(status int) bool {
 		return status >= 200 && status <= 299
 	}

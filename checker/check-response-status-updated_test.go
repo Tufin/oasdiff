@@ -20,7 +20,7 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseSuccessStatusUpdated), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseSuccessStatusUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          "response-success-status-added",
@@ -97,7 +97,7 @@ func TestResponseSuccessStatusRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseSuccessStatusUpdated), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseSuccessStatusUpdatedCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{

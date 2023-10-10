@@ -124,12 +124,12 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(UnparsableParameterFromXExtensibleEnumId, ERR, true),
 		newBackwardCompatibilityRule(UnparsableParameterToXExtensibleEnumId, ERR, true),
 		newBackwardCompatibilityRule(RequestParameterXExtensibleEnumValueRemovedId, ERR, true),
-		// RequestPropertyAllOfUpdated
+		// RequestPropertyAllOfUpdatedCheck
 		newBackwardCompatibilityRule(RequestBodyAllOfAddedId, ERR, true),
 		newBackwardCompatibilityRule(RequestBodyAllOfRemovedId, WARN, true),
 		newBackwardCompatibilityRule(RequestPropertyAllOfAddedId, ERR, true),
 		newBackwardCompatibilityRule(RequestPropertyAllOfRemovedId, WARN, true),
-		// RequestPropertyAnyOfUpdated
+		// RequestPropertyAnyOfUpdatedCheck
 		newBackwardCompatibilityRule(RequestBodyAnyOfAddedId, INFO, true),
 		newBackwardCompatibilityRule(RequestBodyAnyOfRemovedId, ERR, true),
 		newBackwardCompatibilityRule(RequestPropertyAnyOfAddedId, INFO, true),
@@ -186,7 +186,7 @@ func GetAllRules() []BackwardCompatibilityRule {
 		// RequestPropertyMinSetCheck
 		newBackwardCompatibilityRule(RequestBodyMinSetId, WARN, true),
 		newBackwardCompatibilityRule(RequestPropertyMinSetId, WARN, true),
-		// RequestPropertyOneOfUpdated
+		// RequestPropertyOneOfUpdatedCheck
 		newBackwardCompatibilityRule(RequestBodyOneOfAddedId, INFO, true),
 		newBackwardCompatibilityRule(RequestBodyOneOfRemovedId, ERR, true),
 		newBackwardCompatibilityRule(RequestPropertyOneOfAddedId, INFO, true),
@@ -231,12 +231,12 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingAddedId, INFO, true),
 		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingDeletedId, INFO, true),
 		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingChangedId, INFO, true),
-		// ResponseHeaderBecameOptional
+		// ResponseHeaderBecameOptionalCheck
 		newBackwardCompatibilityRule(ResponseHeaderBecameOptionalId, ERR, true),
-		// ResponseHeaderRemoved
+		// ResponseHeaderRemovedCheck
 		newBackwardCompatibilityRule(RequiredResponseHeaderRemovedId, ERR, true),
 		newBackwardCompatibilityRule(OptionalResponseHeaderRemovedId, WARN, true),
-		// ResponseMediaTypeUpdated
+		// ResponseMediaTypeUpdatedCheck
 		newBackwardCompatibilityRule(ResponseMediaTypeUpdatedId, ERR, true),
 		newBackwardCompatibilityRule(ResponseMediaTypeAddedId, INFO, true),
 		// ResponseOptionalPropertyUpdatedCheck
@@ -253,12 +253,12 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(ResponsePropertyPatternAddedId, INFO, true),
 		newBackwardCompatibilityRule(ResponsePropertyPatternChangedId, INFO, true),
 		newBackwardCompatibilityRule(ResponsePropertyPatternRemovedId, INFO, true),
-		// ResponsePropertyAllOfUpdated
+		// ResponsePropertyAllOfUpdatedCheck
 		newBackwardCompatibilityRule(ResponseBodyAllOfAddedId, INFO, true),
 		newBackwardCompatibilityRule(ResponseBodyAllOfRemovedId, INFO, true),
 		newBackwardCompatibilityRule(ResponsePropertyAllOfAddedId, INFO, true),
 		newBackwardCompatibilityRule(ResponsePropertyAllOfRemovedId, INFO, true),
-		// ResponsePropertyAnyOfUpdated
+		// ResponsePropertyAnyOfUpdatedCheck
 		newBackwardCompatibilityRule(ResponseBodyAnyOfAddedId, INFO, true),
 		newBackwardCompatibilityRule(ResponseBodyAnyOfRemovedId, INFO, true),
 		newBackwardCompatibilityRule(ResponsePropertyAnyOfAddedId, INFO, true),
@@ -321,7 +321,7 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameWriteOnlyId, INFO, true),
 		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameReadOnlyId, INFO, true),
 		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameNonReadOnlyId, INFO, true),
-		// ResponseSuccessStatusUpdated / ResponseNonSuccessStatusUpdated
+		// ResponseSuccessStatusUpdatedCheck / ResponseNonSuccessStatusUpdated
 		newBackwardCompatibilityRule(ResponseSuccessStatusRemovedId, ERR, true),
 		newBackwardCompatibilityRule(ResponseNonSuccessStatusRemovedId, INFO, false),
 		// UncheckedRequestAllOfWarnCheck

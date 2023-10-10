@@ -11,7 +11,7 @@ const (
 	RequestPropertyAnyOfRemovedId = "request-property-any-of-removed"
 )
 
-func RequestPropertyAnyOfUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
