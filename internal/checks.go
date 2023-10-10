@@ -25,7 +25,7 @@ func getChecksCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:               "checks [flags]",
 		Short:             "Display checks",
-		Long:              `Display a list of all checks that oasdiff supports.`,
+		Long:              `Display a list of all supported checks.`,
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions, // see https://github.com/spf13/cobra/issues/1969
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -93,7 +93,7 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 			continue
 		}
 
-		// tags (experimental, would be better to list the tags in the rule instead of str contains)
+		// tags (experimental, the string contains approach is not very robust)
 		if len(flags.tags) > 0 {
 			match := false
 			for _, tag := range flags.tags {
