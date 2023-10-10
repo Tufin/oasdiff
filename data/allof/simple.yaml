@@ -24,6 +24,9 @@ paths:
           description: OK
       summary: Create One Project
     patch:
+      responses:
+        '200':
+          description: OK
       requestBody:
         content:
           application/json:
