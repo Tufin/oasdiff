@@ -17,31 +17,9 @@ func getChangelogCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "changelog base revision [flags]",
 		Short: "Display changelog",
-		Long: `Display a changelog between base and revision specs.
-Base and revision can be a path to a file or a URL.
-In 'composed' mode, base and revision can be a glob and oasdiff will compare mathcing endpoints between the two sets of files.
-`,
-		Args: cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-
-			flags.base = args[0]
-			flags.revision = args[1]
-
-			// by now flags have been parsed successfully so we don't need to show usage on any errors
-			cmd.Root().SilenceUsage = true
-
-			failEmpty, err := runChangelog(&flags, cmd.OutOrStdout())
-			if err != nil {
-				setReturnValue(cmd, err.Code)
-				return err
-			}
-
-			if failEmpty {
-				setReturnValue(cmd, 1)
-			}
-
-			return nil
-		},
+		Long:  "Display a changelog between base and revision specs." + specHelp,
+		Args:  getParseArgs(&flags),
+		RunE:  getRun(&flags, runChangelog),
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
@@ -70,38 +48,38 @@ func enumWithOptions(cmd *cobra.Command, value enumVal, name, shorthand, usage s
 	cmd.PersistentFlags().VarP(value, name, shorthand, usage+": "+value.listOf())
 }
 
-func runChangelog(flags *ChangelogFlags, stdout io.Writer) (bool, *ReturnError) {
+func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 	return getChangelog(flags, stdout, checker.INFO, getChangelogTitle)
 }
 
-func getChangelog(flags *ChangelogFlags, stdout io.Writer, level checker.Level, getOutputTitle GetOutputTitle) (bool, *ReturnError) {
+func getChangelog(flags Flags, stdout io.Writer, level checker.Level, getOutputTitle GetOutputTitle) (bool, *ReturnError) {
 
-	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
+	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
 	diffReport, operationsSources, err := calcDiff(flags)
 	if err != nil {
 		return false, err
 	}
 
-	bcConfig := checker.GetAllChecks(flags.includeChecks, flags.deprecationDaysBeta, flags.deprecationDaysStable)
-	bcConfig.Localize = checker.NewLocalizer(flags.lang, LangDefault)
+	bcConfig := checker.GetAllChecks(flags.getIncludeChecks(), flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
+	bcConfig.Localize = checker.NewLocalizer(flags.getLang(), LangDefault)
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffReport, operationsSources, level),
-		flags.warnIgnoreFile, flags.errIgnoreFile)
+		flags.getWarnIgnoreFile(), flags.getErrIgnoreFile())
 
 	if returnErr != nil {
 		return false, returnErr
 	}
 
-	if returnErr := outputChangelog(bcConfig, flags.format, stdout, errs, getOutputTitle); returnErr != nil {
+	if returnErr := outputChangelog(bcConfig, flags.getFormat(), stdout, errs, getOutputTitle); returnErr != nil {
 		return false, returnErr
 	}
 
-	if flags.failOn != "" {
-		level, err := checker.NewLevel(flags.failOn)
+	if flags.getFailOn() != "" {
+		level, err := checker.NewLevel(flags.getFailOn())
 		if err != nil {
-			return false, getErrInvalidFlags(fmt.Errorf("invalid fail-on value %s", flags.failOn))
+			return false, getErrInvalidFlags(fmt.Errorf("invalid fail-on value %s", flags.getFailOn()))
 		}
 		return errs.HasLevelOrHigher(level), nil
 	}

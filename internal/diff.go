@@ -19,31 +19,9 @@ func getDiffCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "diff base revision [flags]",
 		Short: "Generate a diff report",
-		Long: `Generate a diff report between base and revision specs.
-Base and revision can be a path to a file or a URL.
-In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.
-`,
-		Args: cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-
-			flags.base = args[0]
-			flags.revision = args[1]
-
-			// by now flags have been parsed successfully so we don't need to show usage on any errors
-			cmd.Root().SilenceUsage = true
-
-			failEmpty, err := runDiff(&flags, cmd.OutOrStdout())
-			if err != nil {
-				setReturnValue(cmd, err.Code)
-				return err
-			}
-
-			if failEmpty {
-				setReturnValue(cmd, 1)
-			}
-
-			return nil
-		},
+		Long:  "Generate a diff report between base and revision specs." + specHelp,
+		Args:  getParseArgs(&flags),
+		RunE:  getRun(&flags, runDiff),
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
@@ -63,12 +41,12 @@ In 'composed' mode, base and revision can be a glob and oasdiff will compare mat
 	return &cmd
 }
 
-func runDiff(flags *DiffFlags, stdout io.Writer) (bool, *ReturnError) {
+func runDiff(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 
-	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
+	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
-	if flags.format == FormatJSON {
-		flags.excludeElements = append(flags.excludeElements, diff.ExcludeEndpointsOption)
+	if flags.getFormat() == FormatJSON {
+		flags.addExcludeElements(diff.ExcludeEndpointsOption)
 	}
 
 	diffReport, _, err := calcDiff(flags)
@@ -76,11 +54,11 @@ func runDiff(flags *DiffFlags, stdout io.Writer) (bool, *ReturnError) {
 		return false, err
 	}
 
-	if err := outputDiff(stdout, diffReport, flags.format); err != nil {
+	if err := outputDiff(stdout, diffReport, flags.getFormat()); err != nil {
 		return false, err
 	}
 
-	return flags.failOnDiff && !diffReport.Empty(), nil
+	return flags.getFailOnDiff() && !diffReport.Empty(), nil
 }
 
 func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {
@@ -131,12 +109,17 @@ func normalDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSo
 		return nil, nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
 	}
 
+	if flags.getBase().Stdin && flags.getRevision().Stdin {
+		// io.ReadAll can only read stdin once, so in this edge case, we copy base into revision
+		s2.Spec = s1.Spec
+	}
+
 	if flags.getFlatten() {
-		if err := mergeAllOf("base", []*load.SpecInfo{s1}); err != nil {
+		if err := mergeAllOf("base", []*load.SpecInfo{s1}, flags.getBase()); err != nil {
 			return nil, nil, err
 		}
 
-		if err := mergeAllOf("revision", []*load.SpecInfo{s2}); err != nil {
+		if err := mergeAllOf("revision", []*load.SpecInfo{s2}, flags.getRevision()); err != nil {
 			return nil, nil, err
 		}
 	}
@@ -150,22 +133,22 @@ func normalDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSo
 }
 
 func composedDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
-	s1, err := load.FromGlob(loader, flags.getBase())
+	s1, err := load.FromGlob(loader, flags.getBase().Path)
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpecs("base", flags.getBase(), err)
+		return nil, nil, getErrFailedToLoadSpecs("base", flags.getBase().Path, err)
 	}
 
-	s2, err := load.FromGlob(loader, flags.getRevision())
+	s2, err := load.FromGlob(loader, flags.getRevision().Path)
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpecs("revision", flags.getRevision(), err)
+		return nil, nil, getErrFailedToLoadSpecs("revision", flags.getRevision().Path, err)
 	}
 
 	if flags.getFlatten() {
-		if err := mergeAllOf("base", s1); err != nil {
+		if err := mergeAllOf("base", s1, flags.getBase()); err != nil {
 			return nil, nil, err
 		}
 
-		if err := mergeAllOf("revision", s2); err != nil {
+		if err := mergeAllOf("revision", s2, flags.getRevision()); err != nil {
 			return nil, nil, err
 		}
 	}
@@ -178,13 +161,13 @@ func composedDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.Operations
 	return diffReport, operationsSources, nil
 }
 
-func mergeAllOf(title string, specInfos []*load.SpecInfo) *ReturnError {
+func mergeAllOf(title string, specInfos []*load.SpecInfo, source load.Source) *ReturnError {
 
 	var err error
 
 	for _, specInfo := range specInfos {
 		if specInfo.Spec, err = flatten.MergeSpec(specInfo.Spec); err != nil {
-			return getErrFailedToFlattenSpec(title, specInfo.Url, err)
+			return getErrFailedToFlattenSpec(title, source, err)
 		}
 	}
 
