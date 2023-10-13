@@ -237,7 +237,8 @@ Note that stripping precedes prepending.
 
 ## Path Parameter Renaming
 Sometimes developers decide to change names of path parameters, for example, in order to follow a certain naming convention.  
-See [this](MATCHING-ENDPOINTS.md) to learn more about how oasdiff supports path parameter renaming.
+oasdiff supports path parameter renaming by default.  
+[Learn more](MATCHING-ENDPOINTS.md) about how oasdiff supports path parameter renaming.
 
 ## Excluding Specific Kinds of Changes 
 You can use the `--exclude-elements` flag to exclude certain kinds of changes:
