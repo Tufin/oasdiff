@@ -39,7 +39,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, ApiChange{
 					Id:          EndpointReactivatedId,
 					Level:       INFO,
-					Text:        config.Localize("endpoint-reactivated"),
+					Text:        config.Localize(EndpointReactivatedId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -53,7 +53,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, ApiChange{
 					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
+					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -84,7 +84,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, ApiChange{
 					Id:          APISunsetDateTooSmallId,
 					Level:       ERR,
-					Text:        config.Localize("api-sunset-date-too-small", date, deprecationDays),
+					Text:        config.Localize(APISunsetDateTooSmallId, date, deprecationDays),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -95,9 +95,9 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			// not breaking changes
 			result = append(result, ApiChange{
-				Id:          "endpoint-deprecated",
+				Id:          EndpointDeprecatedId,
 				Level:       INFO,
-				Text:        config.Localize("endpoint-deprecated"),
+				Text:        config.Localize(EndpointDeprecatedId),
 				Operation:   operation,
 				OperationId: op.OperationID,
 				Path:        path,

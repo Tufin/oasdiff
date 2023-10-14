@@ -46,7 +46,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIPathSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
+					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -94,7 +94,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIPathSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
+					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
