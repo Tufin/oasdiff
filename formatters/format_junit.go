@@ -99,6 +99,6 @@ func (f JUnitFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, 
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f JUnitFormatter) SupportedOutputs() []string {
-	return []string{OutputBreaking}
+func (f JUnitFormatter) SupportedOutputs() []Output {
+	return []Output{OutputBreaking}
 }

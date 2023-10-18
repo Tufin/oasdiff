@@ -32,8 +32,8 @@ func (f JSONFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 	return printJSON(rules)
 }
 
-func (f JSONFormatter) SupportedOutputs() []string {
-	return []string{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks}
+func (f JSONFormatter) SupportedOutputs() []Output {
+	return []Output{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks}
 }
 
 func printJSON(output interface{}) ([]byte, error) {

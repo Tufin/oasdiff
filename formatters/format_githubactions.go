@@ -79,8 +79,8 @@ func (f GitHubActionsFormatter) RenderChecks(rules []checker.BackwardCompatibili
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f GitHubActionsFormatter) SupportedOutputs() []string {
-	return []string{OutputBreaking}
+func (f GitHubActionsFormatter) SupportedOutputs() []Output {
+	return []Output{OutputBreaking}
 }
 
 func writeGitHubActionsJobOutputParameters(params map[string]string) error {

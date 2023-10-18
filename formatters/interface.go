@@ -15,7 +15,7 @@ type Formatter interface {
 	RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error)
 	RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error)
 	RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error)
-	SupportedOutputs() []string
+	SupportedOutputs() []Output
 }
 
 var formatters = map[Format]Formatter{
@@ -51,7 +51,7 @@ func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 	}
 }
 
-func SupportedFormatsByContentType(output string) []string {
+func SupportedFormatsByContentType(output Output) []string {
 	var formats []string
 	for k, v := range formatters {
 		if slices.Contains(v.SupportedOutputs(), output) {

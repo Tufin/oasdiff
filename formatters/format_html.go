@@ -36,6 +36,6 @@ func (f HTMLFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f HTMLFormatter) SupportedOutputs() []string {
-	return []string{OutputDiff}
+func (f HTMLFormatter) SupportedOutputs() []Output {
+	return []Output{OutputDiff}
 }

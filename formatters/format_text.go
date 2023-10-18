@@ -86,6 +86,6 @@ func (f TEXTFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 	return result.Bytes(), nil
 }
 
-func (f TEXTFormatter) SupportedOutputs() []string {
-	return []string{OutputDiff, OutputBreaking, OutputChangelog, OutputChecks}
+func (f TEXTFormatter) SupportedOutputs() []Output {
+	return []Output{OutputDiff, OutputBreaking, OutputChangelog, OutputChecks}
 }

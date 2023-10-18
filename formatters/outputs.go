@@ -1,9 +1,11 @@
 package formatters
 
+type Output string
+
 const (
-	OutputDiff      = "diff"
-	OutputSummary   = "summary"
-	OutputBreaking  = "breaking"
-	OutputChangelog = "changelog"
-	OutputChecks    = "checks"
+	OutputDiff      Output = "diff"
+	OutputSummary   Output = "summary"
+	OutputBreaking  Output = "breaking"
+	OutputChangelog Output = "changelog"
+	OutputChecks    Output = "checks"
 )
