@@ -1,6 +1,7 @@
 module github.com/tufin/oasdiff
 
 go 1.21
+
 toolchain go1.21.3
 
 require (
@@ -12,7 +13,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.5.6
-	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
+	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
 	gopkg.in/yaml.v3 v3.0.1
 )
 
