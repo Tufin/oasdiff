@@ -100,5 +100,5 @@ func (f JUnitFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, 
 }
 
 func (f JUnitFormatter) SupportedOutputs() []string {
-	return []string{"breaking-changes"}
+	return []string{OutputBreaking}
 }

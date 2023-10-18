@@ -33,7 +33,7 @@ func (f YAMLFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 }
 
 func (f YAMLFormatter) SupportedOutputs() []string {
-	return []string{"diff", "summary", "breaking-changes", "changelog", "checks"}
+	return []string{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks}
 }
 
 func printYAML(output interface{}) ([]byte, error) {

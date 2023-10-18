@@ -37,5 +37,5 @@ func (f HTMLFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 }
 
 func (f HTMLFormatter) SupportedOutputs() []string {
-	return []string{"diff"}
+	return []string{OutputDiff}
 }

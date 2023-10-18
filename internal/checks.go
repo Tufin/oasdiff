@@ -42,7 +42,7 @@ func getChecksCmd() *cobra.Command {
 	}
 
 	enumWithOptions(&cmd, newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
-	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType("checks"), string(formatters.FormatText), &flags.format), "format", "f", "output format")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChecks), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumSliceValue([]string{"info", "warn", "error"}, nil, &flags.severity), "severity", "s", "list of severities to include (experimental)")
 	cmd.PersistentFlags().StringSliceVarP(&flags.tags, "tags", "t", []string{}, "list of tags to include, eg. parameter, request (experimental)")
 	enumWithOptions(&cmd, newEnumValue([]string{"true", "false", "all"}, "all", &flags.required), "required", "r", "filter by required / optional")

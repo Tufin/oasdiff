@@ -80,7 +80,7 @@ func (f GitHubActionsFormatter) RenderChecks(rules []checker.BackwardCompatibili
 }
 
 func (f GitHubActionsFormatter) SupportedOutputs() []string {
-	return []string{"breaking-changes"}
+	return []string{OutputBreaking}
 }
 
 func writeGitHubActionsJobOutputParameters(params map[string]string) error {

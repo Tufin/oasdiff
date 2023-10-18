@@ -7,7 +7,7 @@ import (
 )
 
 func TestDiffOutputFormats(t *testing.T) {
-	supportedFormats := SupportedFormatsByContentType("diff")
+	supportedFormats := SupportedFormatsByContentType(OutputDiff)
 	assert.Len(t, supportedFormats, 4)
 	assert.Contains(t, supportedFormats, string(FormatYAML))
 	assert.Contains(t, supportedFormats, string(FormatJSON))
@@ -16,14 +16,14 @@ func TestDiffOutputFormats(t *testing.T) {
 }
 
 func TestSummaryOutputFormats(t *testing.T) {
-	supportedFormats := SupportedFormatsByContentType("summary")
+	supportedFormats := SupportedFormatsByContentType(OutputSummary)
 	assert.Len(t, supportedFormats, 2)
 	assert.Contains(t, supportedFormats, string(FormatYAML))
 	assert.Contains(t, supportedFormats, string(FormatJSON))
 }
 
 func TestChangelogOutputFormats(t *testing.T) {
-	supportedFormats := SupportedFormatsByContentType("changelog")
+	supportedFormats := SupportedFormatsByContentType(OutputChangelog)
 	assert.Len(t, supportedFormats, 3)
 	assert.Contains(t, supportedFormats, string(FormatYAML))
 	assert.Contains(t, supportedFormats, string(FormatJSON))
@@ -31,7 +31,7 @@ func TestChangelogOutputFormats(t *testing.T) {
 }
 
 func TestBreakingChangesOutputFormats(t *testing.T) {
-	supportedFormats := SupportedFormatsByContentType("breaking-changes")
+	supportedFormats := SupportedFormatsByContentType(OutputBreaking)
 	assert.Len(t, supportedFormats, 5)
 	assert.Contains(t, supportedFormats, string(FormatYAML))
 	assert.Contains(t, supportedFormats, string(FormatJSON))

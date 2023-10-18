@@ -51,10 +51,10 @@ func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 	}
 }
 
-func SupportedFormatsByContentType(format string) []string {
+func SupportedFormatsByContentType(output string) []string {
 	var formats []string
 	for k, v := range formatters {
-		if slices.Contains(v.SupportedOutputs(), format) {
+		if slices.Contains(v.SupportedOutputs(), output) {
 			formats = append(formats, string(k))
 		}
 	}

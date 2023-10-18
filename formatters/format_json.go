@@ -33,7 +33,7 @@ func (f JSONFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 }
 
 func (f JSONFormatter) SupportedOutputs() []string {
-	return []string{"diff", "summary", "breaking-changes", "changelog", "checks"}
+	return []string{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks}
 }
 
 func printJSON(output interface{}) ([]byte, error) {
