@@ -1651,3 +1651,48 @@ func TestMerge_Required(t *testing.T) {
 		})
 	}
 }
+
+func TestMerge_SimpleCircularAllOf(t *testing.T) {
+	ctx := context.Background()
+	sl := openapi3.NewLoader()
+	doc, err := sl.LoadFromFile("testdata/circular1.yaml")
+	require.NoError(t, err, "loading test file")
+	err = doc.Validate(ctx)
+	require.NoError(t, err)
+	result, err := flatten.Merge(*doc.Components.Schemas["Circular_1"])
+	require.NoError(t, err)
+	require.NotEmpty(t, result.AllOf)
+	require.Equal(t, "#/components/schemas/Circular_1", result.AllOf[0].Ref)
+	require.Equal(t, result, result.AllOf[0].Value)
+}
+
+func TestMerge_CircularAllOfProps(t *testing.T) {
+
+	ctx := context.Background()
+	sl := openapi3.NewLoader()
+	doc, err := sl.LoadFromFile("testdata/circular1.yaml")
+
+	require.NoError(t, err, "loading test file")
+	err = doc.Validate(ctx)
+	require.NoError(t, err)
+	result, err := flatten.Merge(*doc.Components.Schemas["Circular_2"])
+	require.NoError(t, err)
+
+	require.Len(t, result.AllOf, 2)
+	require.Equal(t, result, result.AllOf[0].Value)
+	require.Equal(t, "#/components/schemas/Circular_2", result.AllOf[0].Ref)
+	require.Equal(t, result, result.AllOf[1].Value.Properties["test"].Value)
+	require.Equal(t, "#/components/schemas/Circular_2", result.AllOf[1].Value.Properties["test"].Ref)
+
+	result, err = flatten.Merge(*doc.Components.Schemas["Circular_3"])
+	require.NoError(t, err)
+	require.Equal(t, "#/components/schemas/Circular_3", result.Properties["test"].Value.AllOf[0].Ref)
+	require.Equal(t, result, result.Properties["test"].Value.AllOf[0].Value)
+
+	result, err = flatten.Merge(*doc.Components.Schemas["Circular_4"])
+	require.NoError(t, err)
+	require.Equal(t, "#/components/schemas/Circular_4", result.AllOf[0].Ref)
+	require.Equal(t, result, result.AllOf[0].Value)
+	require.Equal(t, "#/components/schemas/Circular_4", result.AllOf[1].Value.Properties["test"].Value.Properties["b"].Ref)
+	require.Equal(t, result, result.AllOf[1].Value.Properties["test"].Value.Properties["b"].Value)
+}

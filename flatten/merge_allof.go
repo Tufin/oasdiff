@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
 )
 
 const (
@@ -54,12 +53,17 @@ type SchemaCollection struct {
 }
 
 type state struct {
-	visitedSchemas utils.VisitedRefs
+	// map processed circular refs to their result schema
+	circularRefs map[string]*openapi3.Schema
+
+	// map original schemas to their result schema
+	mergedSchemas map[*openapi3.Schema]*openapi3.Schema
 }
 
 func newState() *state {
 	return &state{
-		visitedSchemas: utils.VisitedRefs{},
+		circularRefs:  map[string]*openapi3.Schema{},
+		mergedSchemas: map[*openapi3.Schema]*openapi3.Schema{},
 	}
 }
 
@@ -73,6 +77,30 @@ func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
 
 // Merge replaces objects under AllOf with a flattened equivalent
 func mergeInternal(state *state, baseSchemaRef openapi3.SchemaRef) (*openapi3.SchemaRef, error) {
+
+	// handle circular refs
+	if baseSchemaRef.Ref != "" {
+
+		// If the reference is circular and has already been processed, return its resulting schema.
+		result, ok := state.circularRefs[baseSchemaRef.Ref]
+		if ok {
+			return openapi3.NewSchemaRef(baseSchemaRef.Ref, result), nil
+		}
+
+		// If a circular reference is found, return a schema that closes the loop.
+		result, ok = state.mergedSchemas[baseSchemaRef.Value]
+		if ok {
+			state.circularRefs[baseSchemaRef.Ref] = result
+			return openapi3.NewSchemaRef(baseSchemaRef.Ref, result), nil
+		}
+	}
+
+	mergedSchema := openapi3.NewSchema()
+	result := openapi3.NewSchemaRef(baseSchemaRef.Ref, mergedSchema)
+
+	// map original schema to result
+	state.mergedSchemas[baseSchemaRef.Value] = mergedSchema
+
 	baseSchema := baseSchemaRef.Value
 	allOfSchemas, err := getAllOfSchemas(state, baseSchema.AllOf)
 
@@ -80,15 +108,30 @@ func mergeInternal(state *state, baseSchemaRef openapi3.SchemaRef) (*openapi3.Sc
 		return nil, err
 	}
 
-	schemaRefs := openapi3.SchemaRefs{&baseSchemaRef}
-	schemaRefs = append(schemaRefs, allOfSchemas...)
-	result, err := flattenSchemas(state, schemaRefs)
+	schemaRefsToFlatten := openapi3.SchemaRefs{&baseSchemaRef}
 
+	// in case that AllOf has circular reference, it is not flattened.
+	if isCircular(state, allOfSchemas) {
+		mergedSchema.AllOf = allOfSchemas
+	} else {
+		schemaRefsToFlatten = append(schemaRefsToFlatten, allOfSchemas...)
+	}
+
+	_, err = flattenSchemas(state, schemaRefsToFlatten, mergedSchema)
 	if err != nil {
 		return nil, err
 	}
+	return result, nil
+}
 
-	return openapi3.NewSchemaRef(baseSchemaRef.Ref, result), nil
+func isCircular(state *state, schemaRefs openapi3.SchemaRefs) bool {
+	for _, s := range schemaRefs {
+		_, ok := state.circularRefs[s.Ref]
+		if ok {
+			return true
+		}
+	}
+	return false
 }
 
 func getAllOfSchemas(state *state, schemaRefs openapi3.SchemaRefs) (openapi3.SchemaRefs, error) {
@@ -107,8 +150,7 @@ func getAllOfSchemas(state *state, schemaRefs openapi3.SchemaRefs) (openapi3.Sch
 	return srefs, nil
 }
 
-func flattenSchemas(state *state, schemas []*openapi3.SchemaRef) (*openapi3.Schema, error) {
-	result := openapi3.NewSchema()
+func flattenSchemas(state *state, schemas []*openapi3.SchemaRef, result *openapi3.Schema) (*openapi3.Schema, error) {
 	collection := collect(schemas)
 
 	result.Title = collection.Title[0]
@@ -236,7 +278,7 @@ func resolveItems(state *state, schema *openapi3.Schema, collection *SchemaColle
 		return schema, nil
 	}
 
-	res, err := flattenSchemas(state, items)
+	res, err := flattenSchemas(state, items, openapi3.NewSchema())
 	if err != nil {
 		return nil, err
 	}
@@ -339,7 +381,7 @@ func resolveNonFalseAdditionalProps(state *state, schema *openapi3.Schema, colle
 
 	var schemaRef *openapi3.SchemaRef
 	if len(additionalSchemas) > 0 {
-		result, err := flattenSchemas(state, additionalSchemas)
+		result, err := flattenSchemas(state, additionalSchemas, openapi3.NewSchema())
 		if err != nil {
 			return nil, err
 		}
@@ -356,6 +398,9 @@ func resolveNonFalseProps(state *state, schema *openapi3.Schema, collection *Sch
 		return nil, err
 	}
 	propsToMerge := getNonFalsePropsKeys(collection)
+	if len(propsToMerge) == 0 {
+		return schema, nil
+	}
 	return mergeProps(state, result, collection, propsToMerge)
 }
 
@@ -425,7 +470,15 @@ func mergeProps(state *state, schema *openapi3.Schema, collection *SchemaCollect
 
 	result := make(openapi3.Schemas)
 	for prop, schemas := range propsToSchemasMap {
-		mergedProp, err := flattenSchemas(state, schemas)
+
+		if len(schemas) == 1 {
+			result[prop] = schemas[0]
+			continue
+		}
+
+		// TODO: If schemas of some property contain a loop, do not flatten them.
+
+		mergedProp, err := flattenSchemas(state, schemas, openapi3.NewSchema())
 		if err != nil {
 			return nil, err
 		}
@@ -735,7 +788,7 @@ func getCombinations(groups []openapi3.SchemaRefs) []openapi3.SchemaRefs {
 func mergeCombinations(state *state, combinations []openapi3.SchemaRefs) ([]*openapi3.Schema, error) {
 	merged := []*openapi3.Schema{}
 	for _, combination := range combinations {
-		schema, err := flattenSchemas(state, combination)
+		schema, err := flattenSchemas(state, combination, openapi3.NewSchema())
 		if err != nil {
 			continue
 		}
@@ -812,7 +865,7 @@ func mergeSchemaRefs(state *state, sr []openapi3.SchemaRefs) ([]openapi3.SchemaR
 			if err != nil {
 				return result, err
 			}
-			r = append(r, openapi3.NewSchemaRef("", merged.Value))
+			r = append(r, merged)
 		}
 		result = append(result, r)
 	}
