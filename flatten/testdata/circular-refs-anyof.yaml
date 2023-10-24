@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  title: Successful merge of Items with circular refs
+  version: 1.0.0
+paths:
+  /endpoint:
+    get:
+      summary: Example endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Successful_Merge_1'
+
+components:
+  schemas:
+    Successful_Merge_1:
+      type: object
+      allOf:
+        - type: object
+          anyOf:
+            - $ref: '#/components/schemas/Successful_Merge_1' 
+        - type: object
+          properties:
+            test:
+              type: integer
+
+    Failed_Merge_1:
+      type: object
+      allOf:
+        - type: object
+          anyOf:
+            - $ref: '#/components/schemas/Failed_Merge_1' 
+        - type: object
+          anyOf:
+            - type: object
+              properties:
+                test:
+                  type: integer

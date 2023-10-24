@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: Circular Reference Example
+  version: 1.0.0
+paths:
+  /endpoint:
+    get:
+      summary: Example endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Circular_1'
+
+components:
+  schemas:
+    Circular_1:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Circular_1'         
+      required:
+      - name
+      description: simple circular allof

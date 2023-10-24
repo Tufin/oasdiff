@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+  title: Circular Reference Example
+  version: 1.0.0
+paths:
+  /endpoint:
+    get:
+      summary: Example endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Successful_Merge_2'
+
+components:
+  schemas:
+
+    Successful_Merge_2:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Successful_Merge_2'
+        - type: object
+          properties:
+            test:
+              $ref: '#/components/schemas/Successful_Merge_2'   
+    
+    Successful_Merge_3:
+      type: object
+      properties:
+        test:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/Successful_Merge_3'
+
+    Successful_Merge_4:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Successful_Merge_4'
+        - type: object
+          properties:
+            test:
+              type: object
+              allOf:
+                - type: object
+                  properties:
+                    a:
+                      type: object
+                  description: a
+                - type: object
+                  properties:
+                    b:
+                      $ref: '#/components/schemas/Successful_Merge_4'
+                  description: b 
+
+    Failed_Merge_1:
+      type: object
+      allOf:
+        - type: object
+          properties:
+            test:
+              type: array
+              items:
+                type: integer
+        - type: object
+          properties:
+            test:
+              type: array
+              items:
+                $ref: '#/components/schemas/Failed_Merge_1'                  

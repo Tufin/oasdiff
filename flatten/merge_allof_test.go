@@ -1653,12 +1653,7 @@ func TestMerge_Required(t *testing.T) {
 }
 
 func TestMerge_SimpleCircularAllOf(t *testing.T) {
-	ctx := context.Background()
-	sl := openapi3.NewLoader()
-	doc, err := sl.LoadFromFile("testdata/circular1.yaml")
-	require.NoError(t, err, "loading test file")
-	err = doc.Validate(ctx)
-	require.NoError(t, err)
+	doc := loadSpec(t, "testdata/circular-refs-allof.yaml")
 	result, err := flatten.Merge(*doc.Components.Schemas["Circular_1"])
 	require.NoError(t, err)
 	require.NotEmpty(t, result.AllOf)
@@ -1666,33 +1661,114 @@ func TestMerge_SimpleCircularAllOf(t *testing.T) {
 	require.Equal(t, result, result.AllOf[0].Value)
 }
 
-func TestMerge_CircularAllOfProps(t *testing.T) {
+func TestMerge_CircularRefsPropsFailure(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-properties.yaml")
+	_, err := flatten.Merge(*doc.Components.Schemas["Failed_Merge_1"])
+	require.Error(t, err)
+}
 
-	ctx := context.Background()
-	sl := openapi3.NewLoader()
-	doc, err := sl.LoadFromFile("testdata/circular1.yaml")
-
-	require.NoError(t, err, "loading test file")
-	err = doc.Validate(ctx)
-	require.NoError(t, err)
-	result, err := flatten.Merge(*doc.Components.Schemas["Circular_2"])
+func TestMerge_CircularRefsProps(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-properties.yaml")
+	result, err := flatten.Merge(*doc.Components.Schemas["Successful_Merge_2"])
 	require.NoError(t, err)
 
 	require.Len(t, result.AllOf, 2)
 	require.Equal(t, result, result.AllOf[0].Value)
-	require.Equal(t, "#/components/schemas/Circular_2", result.AllOf[0].Ref)
+	require.Equal(t, "#/components/schemas/Successful_Merge_2", result.AllOf[0].Ref)
 	require.Equal(t, result, result.AllOf[1].Value.Properties["test"].Value)
-	require.Equal(t, "#/components/schemas/Circular_2", result.AllOf[1].Value.Properties["test"].Ref)
+	require.Equal(t, "#/components/schemas/Successful_Merge_2", result.AllOf[1].Value.Properties["test"].Ref)
 
-	result, err = flatten.Merge(*doc.Components.Schemas["Circular_3"])
+	result, err = flatten.Merge(*doc.Components.Schemas["Successful_Merge_3"])
 	require.NoError(t, err)
-	require.Equal(t, "#/components/schemas/Circular_3", result.Properties["test"].Value.AllOf[0].Ref)
+	require.Equal(t, "#/components/schemas/Successful_Merge_3", result.Properties["test"].Value.AllOf[0].Ref)
 	require.Equal(t, result, result.Properties["test"].Value.AllOf[0].Value)
 
-	result, err = flatten.Merge(*doc.Components.Schemas["Circular_4"])
+	result, err = flatten.Merge(*doc.Components.Schemas["Successful_Merge_4"])
 	require.NoError(t, err)
-	require.Equal(t, "#/components/schemas/Circular_4", result.AllOf[0].Ref)
+	require.Equal(t, "#/components/schemas/Successful_Merge_4", result.AllOf[0].Ref)
 	require.Equal(t, result, result.AllOf[0].Value)
-	require.Equal(t, "#/components/schemas/Circular_4", result.AllOf[1].Value.Properties["test"].Value.Properties["b"].Ref)
+	require.Equal(t, "#/components/schemas/Successful_Merge_4", result.AllOf[1].Value.Properties["test"].Value.Properties["b"].Ref)
 	require.Equal(t, result, result.AllOf[1].Value.Properties["test"].Value.Properties["b"].Value)
+}
+
+// Circular property field could not be merged with other schemas
+func TestMerge_CircularRefPropFailure(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-properties.yaml")
+	_, err := flatten.Merge(*doc.Components.Schemas["Failed_Merge_1"])
+	require.Error(t, err)
+}
+
+// Circular item could not be merged with other schemas
+func TestMerge_CircularRefItemFailure(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-items.yaml")
+	_, err := flatten.Merge(*doc.Components.Schemas["Failed_Merge_1"])
+	require.Error(t, err)
+}
+
+func TestMerge_CircularRefItem(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-items.yaml")
+	result, err := flatten.Merge(*doc.Components.Schemas["Successful_Merge_1"])
+	require.NoError(t, err)
+	require.Equal(t, "#/components/schemas/Successful_Merge_1", result.Properties["test"].Value.Items.Ref)
+	require.Equal(t, result, result.Properties["test"].Value.Items.Value)
+}
+
+func TestMerge_CircularRefAnyOf(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-anyof.yaml")
+	result, err := flatten.Merge(*doc.Components.Schemas["Successful_Merge_1"])
+	require.NoError(t, err)
+	require.Equal(t, "#/components/schemas/Successful_Merge_1", result.AnyOf[0].Ref)
+	require.Equal(t, result, result.AnyOf[0].Value)
+	require.Equal(t, "integer", result.Properties["test"].Value.Type)
+}
+
+func TestMerge_CircularRefAnyOf_Failure(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-anyof.yaml")
+	_, err := flatten.Merge(*doc.Components.Schemas["Failed_Merge_1"])
+	require.Error(t, err)
+}
+
+func TestMerge_CircularRefOneOf(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-oneof.yaml")
+	result, err := flatten.Merge(*doc.Components.Schemas["Successful_Merge_1"])
+	require.NoError(t, err)
+	require.Equal(t, "#/components/schemas/Successful_Merge_1", result.OneOf[0].Ref)
+	require.Equal(t, result, result.OneOf[0].Value)
+	require.Equal(t, "integer", result.Properties["test"].Value.Type)
+}
+
+func TestMerge_CircularRefOneOf_Failure(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-oneof.yaml")
+	_, err := flatten.Merge(*doc.Components.Schemas["Failed_Merge_1"])
+	require.Error(t, err)
+}
+
+func loadSpec(t *testing.T, path string) *openapi3.T {
+	ctx := context.Background()
+	sl := openapi3.NewLoader()
+	doc, err := sl.LoadFromFile(path)
+	require.NoError(t, err, "loading test file")
+	err = doc.Validate(ctx)
+	require.NoError(t, err)
+	return doc
+}
+
+//	doc, err := sl.LoadFromFile("testdata/circular-refs-allof-validation.yaml")
+
+func TestMerge_CircularRef_Success(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-allof-validation.yaml")
+	schema_A, err := flatten.Merge(*doc.Components.Schemas["A"])
+	require.NoError(t, err)
+
+	require.Equal(t, "#/components/schemas/B", schema_A.OneOf[0].Ref)
+
+	schema_B := schema_A.OneOf[0].Value
+
+	require.Equal(t, "#/components/schemas/A", schema_B.AllOf[0].Ref)
+	require.Equal(t, schema_A, schema_B.AllOf[0].Value)
+
+	require.Equal(t, "number", schema_A.Properties["prop1"].Value.Type)
+	require.Equal(t, "integer", schema_B.AllOf[1].Value.Properties["prop1"].Value.Type)
+
+	// require.Equal(t, "integer", result.Properties["test"].Value.Type)
 }

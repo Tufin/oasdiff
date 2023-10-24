@@ -266,7 +266,6 @@ func resolveNumberRange(schema *openapi3.Schema, collection *SchemaCollection) *
 }
 
 func resolveItems(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-
 	items := openapi3.SchemaRefs{}
 	for _, sref := range collection.Items {
 		if sref != nil {
@@ -278,7 +277,31 @@ func resolveItems(state *state, schema *openapi3.Schema, collection *SchemaColle
 		return schema, nil
 	}
 
-	res, err := flattenSchemas(state, items, openapi3.NewSchema())
+	mergedItems := openapi3.SchemaRefs{}
+	for _, item := range items {
+		m, err := mergeInternal(state, *item)
+		if err != nil {
+			return nil, err
+		}
+		mergedItems = append(mergedItems, m)
+	}
+
+	if len(items) == 1 {
+		/*r, err := mergeInternal(state, *items[0])
+		if err != nil {
+			return nil, err
+		}*/
+		schema.Items = mergedItems[0]
+		return schema, nil
+	}
+
+	// Any list of Items that includes a circular reference is considered invalid,
+	// except a single circular ref Item.
+	if len(mergedItems) > 1 && isCircular(state, mergedItems) {
+		return nil, errors.New("could not merge items with circular refs")
+	}
+
+	res, err := flattenSchemas(state, mergedItems, openapi3.NewSchema())
 	if err != nil {
 		return nil, err
 	}
@@ -476,7 +499,9 @@ func mergeProps(state *state, schema *openapi3.Schema, collection *SchemaCollect
 			continue
 		}
 
-		// TODO: If schemas of some property contain a loop, do not flatten them.
+		if isCircular(state, schemas) {
+			return nil, errors.New("could not merge circular ref property")
+		}
 
 		mergedProp, err := flattenSchemas(state, schemas, openapi3.NewSchema())
 		if err != nil {
@@ -879,7 +904,7 @@ func resolveCombinations(state *state, collection []openapi3.SchemaRefs) (openap
 	}
 	groups, err := mergeSchemaRefs(state, groups)
 	if err != nil {
-		return openapi3.SchemaRefs{}, err
+		return nil, err
 	}
 	// there is only one schema, no need for calculating combinations.
 	if len(groups) == 1 {
@@ -887,6 +912,15 @@ func resolveCombinations(state *state, collection []openapi3.SchemaRefs) (openap
 	}
 
 	combinations := getCombinations(groups)
+
+	// Any combination that includes a circular reference is considered invalid,
+	// except a combination that includes a single circular ref, without additional schemas.
+	for _, c := range combinations {
+		if len(c) > 1 && isCircular(state, c) {
+			return nil, errors.New("could not merge OneOf/AnyOf with circular ref")
+		}
+	}
+
 	mergedCombinations, err := mergeCombinations(state, combinations)
 	if err != nil {
 		return nil, err
