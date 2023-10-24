@@ -23,3 +23,20 @@ components:
       required:
       - name
       description: simple circular allof
+
+    A:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/B'
+      properties:
+        prop1:
+          type: number
+    
+    B:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/A'
+        - type: object
+          properties:
+            prop1:
+              type: integer      

@@ -1661,6 +1661,24 @@ func TestMerge_SimpleCircularAllOf(t *testing.T) {
 	require.Equal(t, result, result.AllOf[0].Value)
 }
 
+// circular allOf schema is not merged
+func TestMerge_CircularAllOfMultipleSchemas(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular-refs-allof.yaml")
+	schema_A, err := flatten.Merge(*doc.Components.Schemas["A"])
+	require.NoError(t, err)
+
+	require.Equal(t, "#/components/schemas/B", schema_A.OneOf[0].Ref)
+
+	schema_B := schema_A.OneOf[0].Value
+
+	require.Equal(t, "#/components/schemas/A", schema_B.AllOf[0].Ref)
+	require.Equal(t, schema_A, schema_B.AllOf[0].Value)
+
+	require.Equal(t, "number", schema_A.Properties["prop1"].Value.Type)
+	require.Equal(t, "integer", schema_B.AllOf[1].Value.Properties["prop1"].Value.Type)
+}
+
+// circular allOf with multiple schemas are not merged
 func TestMerge_CircularRefsPropsFailure(t *testing.T) {
 	doc := loadSpec(t, "testdata/circular-refs-properties.yaml")
 	_, err := flatten.Merge(*doc.Components.Schemas["Failed_Merge_1"])
@@ -1751,24 +1769,4 @@ func loadSpec(t *testing.T, path string) *openapi3.T {
 	err = doc.Validate(ctx)
 	require.NoError(t, err)
 	return doc
-}
-
-//	doc, err := sl.LoadFromFile("testdata/circular-refs-allof-validation.yaml")
-
-func TestMerge_CircularRef_Success(t *testing.T) {
-	doc := loadSpec(t, "testdata/circular-refs-allof-validation.yaml")
-	schema_A, err := flatten.Merge(*doc.Components.Schemas["A"])
-	require.NoError(t, err)
-
-	require.Equal(t, "#/components/schemas/B", schema_A.OneOf[0].Ref)
-
-	schema_B := schema_A.OneOf[0].Value
-
-	require.Equal(t, "#/components/schemas/A", schema_B.AllOf[0].Ref)
-	require.Equal(t, schema_A, schema_B.AllOf[0].Value)
-
-	require.Equal(t, "number", schema_A.Properties["prop1"].Value.Type)
-	require.Equal(t, "integer", schema_B.AllOf[1].Value.Properties["prop1"].Value.Type)
-
-	// require.Equal(t, "integer", result.Properties["test"].Value.Type)
 }
