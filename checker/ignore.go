@@ -2,7 +2,6 @@ package checker
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strings"
 )
@@ -45,14 +44,7 @@ func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs Changes, ignore
 				continue
 			}
 
-			typeOfChange := fmt.Sprintf("%T", err)
-			if typeOfChange != "checker.ComponentChange" {
-				ignorePath = ignoreLinePath(ignoreLine)
-				if ignorePath == "" {
-					continue
-				}
-			}
-
+			ignorePath = ignoreLinePath(ignoreLine)
 			if err.MatchIgnore(ignorePath, ignoreLine) {
 				ignoredErrs[errIndex] = true
 			}

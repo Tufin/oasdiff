@@ -20,6 +20,9 @@ type ApiChange struct {
 }
 
 func (c ApiChange) MatchIgnore(ignorePath, ignoreLine string) bool {
+	if ignorePath == "" {
+		return false
+	}
 	return ignorePath == strings.ToLower(c.Path) &&
 		strings.Contains(ignoreLine, strings.ToLower(c.Operation+" "+c.Path)) &&
 		strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c)))
