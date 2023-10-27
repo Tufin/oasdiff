@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 )
@@ -32,8 +33,12 @@ func (f JSONFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 	return printJSON(rules)
 }
 
+func (f JSONFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
+	return printJSON(spec)
+}
+
 func (f JSONFormatter) SupportedOutputs() []Output {
-	return []Output{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks}
+	return []Output{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks, OutputFlatten}
 }
 
 func printJSON(output interface{}) ([]byte, error) {

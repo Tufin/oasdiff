@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"text/tabwriter"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/report"
@@ -84,6 +85,10 @@ func (f TEXTFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 	_ = w.Flush()
 
 	return result.Bytes(), nil
+}
+
+func (f TEXTFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
+	return nil, fmt.Errorf("not implemented")
 }
 
 func (f TEXTFormatter) SupportedOutputs() []Output {

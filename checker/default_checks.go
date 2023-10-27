@@ -1,6 +1,8 @@
 package checker
 
 import (
+	"fmt"
+
 	"github.com/tufin/oasdiff/utils"
 )
 
@@ -37,17 +39,26 @@ func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, le
 	}
 }
 
-var optionalChecks = map[string]BackwardCompatibilityCheck{
-	"response-non-success-status-removed":   ResponseNonSuccessStatusUpdated,
-	"api-operation-id-removed":              APIOperationIdUpdatedCheck,
-	"api-tag-removed":                       APITagUpdatedCheck,
-	"api-schema-removed":                    APIComponentsSchemaRemovedCheck,
-	"response-property-enum-value-removed":  ResponseParameterEnumValueRemovedCheck,
-	"response-mediatype-enum-value-removed": ResponseMediaTypeEnumValueRemovedCheck,
-	"request-body-enum-value-removed":       RequestBodyEnumValueRemovedCheck,
+func optionalChecks() map[string]BackwardCompatibilityCheck {
+	result := map[string]BackwardCompatibilityCheck{}
+	for _, rule := range GetAllRules() {
+		if rule.Required {
+			continue
+		}
+
+		if rule.Level == INFO {
+			// rules with level INFO are not breaking
+			continue
+		}
+
+		result[rule.Id] = rule.Handler
+	}
+	return result
 }
 
 func GetOptionalChecks() []string {
+	optionalChecks := optionalChecks()
+
 	result := make([]string, len(optionalChecks))
 	i := 0
 	for key := range optionalChecks {
@@ -59,99 +70,27 @@ func GetOptionalChecks() []string {
 }
 
 func defaultChecks() []BackwardCompatibilityCheck {
-	return []BackwardCompatibilityCheck{
-		APIAddedCheck,
-		APIComponentsSecurityUpdatedCheck,
-		APIDeprecationCheck,
-		APIRemovedCheck,
-		APISecurityUpdatedCheck,
-		APISunsetChangedCheck,
-		AddedRequiredRequestBodyCheck,
-		NewRequestNonPathDefaultParameterCheck,
-		NewRequestNonPathParameterCheck,
-		NewRequestPathParameterCheck,
-		NewRequiredRequestHeaderPropertyCheck,
-		RequestBodyBecameEnumCheck,
-		RequestBodyMediaTypeChangedCheck,
-		RequestBodyRequiredUpdatedCheck,
-		RequestDiscriminatorUpdatedCheck,
-		RequestHeaderPropertyBecameEnumCheck,
-		RequestHeaderPropertyBecameRequiredCheck,
-		RequestParameterBecameEnumCheck,
-		RequestParameterDefaultValueChangedCheck,
-		RequestParameterEnumValueUpdatedCheck,
-		RequestParameterMaxItemsUpdatedCheck,
-		RequestParameterMaxLengthSetCheck,
-		RequestParameterMaxLengthUpdatedCheck,
-		RequestParameterMaxSetCheck,
-		RequestParameterMaxUpdatedCheck,
-		RequestParameterMinItemsSetCheck,
-		RequestParameterMinItemsUpdatedCheck,
-		RequestParameterMinLengthUpdatedCheck,
-		RequestParameterMinSetCheck,
-		RequestParameterMinUpdatedCheck,
-		RequestParameterPatternAddedOrChangedCheck,
-		RequestParameterRemovedCheck,
-		RequestParameterRequiredValueUpdatedCheck,
-		RequestParameterTypeChangedCheck,
-		RequestParameterXExtensibleEnumValueRemovedCheck,
-		RequestPropertyAllOfUpdatedCheck,
-		RequestPropertyAnyOfUpdatedCheck,
-		RequestPropertyBecameEnumCheck,
-		RequestPropertyBecameNotNullableCheck,
-		RequestPropertyDefaultValueChangedCheck,
-		RequestPropertyEnumValueUpdatedCheck,
-		RequestPropertyMaxDecreasedCheck,
-		RequestPropertyMaxLengthSetCheck,
-		RequestPropertyMaxLengthUpdatedCheck,
-		RequestPropertyMaxSetCheck,
-		RequestPropertyMinIncreasedCheck,
-		RequestPropertyMinItemsIncreasedCheck,
-		RequestPropertyMinItemsSetCheck,
-		RequestPropertyMinLengthUpdatedCheck,
-		RequestPropertyMinSetCheck,
-		RequestPropertyOneOfUpdatedCheck,
-		RequestPropertyPatternUpdatedCheck,
-		RequestPropertyRequiredUpdatedCheck,
-		RequestPropertyTypeChangedCheck,
-		RequestPropertyUpdatedCheck,
-		RequestPropertyWriteOnlyReadOnlyCheck,
-		RequestPropertyXExtensibleEnumValueRemovedCheck,
-		ResponseDiscriminatorUpdatedCheck,
-		ResponseHeaderBecameOptionalCheck,
-		ResponseHeaderRemovedCheck,
-		ResponseMediaTypeUpdatedCheck,
-		ResponseOptionalPropertyUpdatedCheck,
-		ResponseOptionalPropertyWriteOnlyReadOnlyCheck,
-		ResponsePatternAddedOrChangedCheck,
-		ResponsePropertyAllOfUpdatedCheck,
-		ResponsePropertyAnyOfUpdatedCheck,
-		ResponsePropertyBecameNullableCheck,
-		ResponsePropertyBecameOptionalCheck,
-		ResponsePropertyBecameRequiredCheck,
-		ResponsePropertyDefaultValueChangedCheck,
-		ResponsePropertyEnumValueAddedCheck,
-		ResponsePropertyMaxIncreasedCheck,
-		ResponsePropertyMaxLengthIncreasedCheck,
-		ResponsePropertyMaxLengthUnsetCheck,
-		ResponsePropertyMinDecreasedCheck,
-		ResponsePropertyMinItemsDecreasedCheck,
-		ResponsePropertyMinItemsUnsetCheck,
-		ResponsePropertyMinLengthDecreasedCheck,
-		ResponsePropertyOneOfUpdated,
-		ResponsePropertyTypeChangedCheck,
-		ResponseRequiredPropertyUpdatedCheck,
-		ResponseRequiredPropertyWriteOnlyReadOnlyCheck,
-		ResponseSuccessStatusUpdatedCheck,
-		UncheckedRequestAllOfWarnCheck,
-		UncheckedResponseAllOfWarnCheck,
+	result := []BackwardCompatibilityCheck{}
+	m := utils.StringSet{}
+	for _, rule := range GetAllRules() {
+		if !rule.Required {
+			continue
+		}
+		pStr := fmt.Sprintf("%v", rule.Handler)
+		if !m.Contains(pStr) {
+			m.Add(pStr)
+			result = append(result, rule.Handler)
+		}
 	}
+	return result
 }
 
 func allChecks() []BackwardCompatibilityCheck {
-	checks := defaultChecks()
+	defaultChecks := defaultChecks()
+	optionalChecks := optionalChecks()
+
 	for _, v := range optionalChecks {
-		checks = append(checks, v)
+		defaultChecks = append(defaultChecks, v)
 	}
-	return checks
+	return defaultChecks
 }

@@ -10,6 +10,8 @@ import (
 const (
 	ResponseSuccessStatusRemovedId    = "response-success-status-removed"
 	ResponseNonSuccessStatusRemovedId = "response-non-success-status-removed"
+	ResponseSuccessStatusAddedId      = "response-success-status-added"
+	ResponseNonSuccessStatusAddedId   = "response-non-success-status-added"
 )
 
 func ResponseSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -17,18 +19,18 @@ func ResponseSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSources 
 		return status >= 200 && status <= 299
 	}
 
-	return ResponseStatusUpdated(diffReport, operationsSources, config, success, ResponseSuccessStatusRemovedId, ERR)
+	return responseStatusUpdated(diffReport, operationsSources, config, success, ResponseSuccessStatusRemovedId, ERR)
 }
 
-func ResponseNonSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseNonSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	notSuccess := func(status int) bool {
 		return status < 200 || status > 299
 	}
 
-	return ResponseStatusUpdated(diffReport, operationsSources, config, notSuccess, ResponseNonSuccessStatusRemovedId, INFO)
+	return responseStatusUpdated(diffReport, operationsSources, config, notSuccess, ResponseNonSuccessStatusRemovedId, INFO)
 }
 
-func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config, filter func(int) bool, id string, defaultLevel Level) Changes {
+func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config, filter func(int) bool, id string, defaultLevel Level) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result

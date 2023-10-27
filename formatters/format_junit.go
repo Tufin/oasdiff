@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 )
@@ -96,6 +97,10 @@ func (f JUnitFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts
 }
 
 func (f JUnitFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
+func (f JUnitFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

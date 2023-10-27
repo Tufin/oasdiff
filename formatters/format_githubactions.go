@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 )
@@ -76,6 +77,10 @@ func (f GitHubActionsFormatter) RenderChangelog(changes checker.Changes, opts Re
 }
 
 func (f GitHubActionsFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
+func (f GitHubActionsFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

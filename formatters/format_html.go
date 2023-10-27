@@ -3,6 +3,7 @@ package formatters
 import (
 	"fmt"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/report"
@@ -33,6 +34,10 @@ func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts)
 }
 
 func (f HTMLFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
+func (f HTMLFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

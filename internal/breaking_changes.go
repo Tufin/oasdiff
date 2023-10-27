@@ -61,7 +61,7 @@ func outputBreakingChanges(config checker.Config, format string, lang string, st
 	// render
 	bytes, err := formatter.RenderBreakingChanges(errs, formatters.RenderOpts{})
 	if err != nil {
-		return getErrFailedPrint("diff "+format, err)
+		return getErrFailedPrint("breaking "+format, err)
 	}
 
 	// print output

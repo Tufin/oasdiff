@@ -129,7 +129,7 @@ func outputChangelog(config checker.Config, format string, lang string, stdout i
 	// render
 	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{})
 	if err != nil {
-		return getErrFailedPrint("diff "+format, err)
+		return getErrFailedPrint("changelog "+format, err)
 	}
 
 	// print output

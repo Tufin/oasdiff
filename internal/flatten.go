@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -38,7 +39,7 @@ Spec can be a path to a file, a URL or '-' to read standard input.
 		},
 	}
 
-	cmd.PersistentFlags().VarP(newEnumValue([]string{string(formatters.FormatYAML), string(formatters.FormatJSON)}, string(formatters.FormatYAML), &flags.format), "format", "f", "output format: yaml or json")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputFlatten), string(formatters.FormatJSON), &flags.format), "format", "f", "output format")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 
 	return &cmd
@@ -63,26 +64,28 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 		return getErrFailedToFlattenSpec("original", flags.spec, err)
 	}
 
-	if returnErr := outputFlattenedSpec(formatters.Format(format), stdout, flatSpec); returnErr != nil {
+	if returnErr := outputFlattenedSpec(stdout, flatSpec, format); returnErr != nil {
 		return returnErr
 	}
 
 	return nil
 }
 
-func outputFlattenedSpec(format formatters.Format, stdout io.Writer, spec *openapi3.T) *ReturnError {
-	switch format {
-	case formatters.FormatYAML:
-		if err := printYAML(stdout, spec); err != nil {
-			return getErrFailedPrint("flattened spec YAML", err)
-		}
-	case formatters.FormatJSON:
-		if err := printJSON(stdout, spec); err != nil {
-			return getErrFailedPrint("flattened spec JSON", err)
-		}
-	default:
-		return getErrUnsupportedFormat(string(format))
+func outputFlattenedSpec(stdout io.Writer, spec *openapi3.T, format string) *ReturnError {
+	// formatter lookup
+	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
+	if err != nil {
+		return getErrUnsupportedSummaryFormat(format)
 	}
+
+	// render
+	bytes, err := formatter.RenderFlatten(spec, formatters.RenderOpts{})
+	if err != nil {
+		return getErrFailedPrint("flatten "+format, err)
+	}
+
+	// print output
+	_, _ = fmt.Fprintf(stdout, "%s\n", bytes)
 
 	return nil
 }

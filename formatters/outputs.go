@@ -1,11 +1,12 @@
 package formatters
 
-type Output string
+type Output int
 
 const (
-	OutputDiff      Output = "diff"
-	OutputSummary   Output = "summary"
-	OutputBreaking  Output = "breaking"
-	OutputChangelog Output = "changelog"
-	OutputChecks    Output = "checks"
+	OutputDiff Output = iota
+	OutputSummary
+	OutputBreaking
+	OutputChangelog
+	OutputChecks
+	OutputFlatten
 )

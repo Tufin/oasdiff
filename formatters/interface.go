@@ -3,6 +3,7 @@ package formatters
 import (
 	"fmt"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
@@ -15,6 +16,7 @@ type Formatter interface {
 	RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error)
 	RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error)
 	RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error)
+	RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error)
 	SupportedOutputs() []Output
 }
 

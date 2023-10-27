@@ -18,6 +18,7 @@ type BackwardCompatibilityRule struct {
 	Level       Level
 	Description string
 	Required    bool
+	Handler     BackwardCompatibilityCheck
 }
 
 var pipedOutput *bool

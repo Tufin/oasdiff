@@ -6,7 +6,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/flatten"
 	"github.com/tufin/oasdiff/formatters"
@@ -55,14 +54,14 @@ func runDiff(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 		return false, err
 	}
 
-	if err := outputDiff(stdout, nil, diffReport, flags.getFormat()); err != nil {
+	if err := outputDiff(stdout, diffReport, flags.getFormat()); err != nil {
 		return false, err
 	}
 
 	return flags.getFailOnDiff() && !diffReport.Empty(), nil
 }
 
-func outputDiff(stdout io.Writer, checks []checker.BackwardCompatibilityCheck, diffReport *diff.Diff, format string) *ReturnError {
+func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
 	if err != nil {

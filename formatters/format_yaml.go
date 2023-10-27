@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"gopkg.in/yaml.v3"
@@ -32,8 +33,12 @@ func (f YAMLFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 	return printYAML(rules)
 }
 
+func (f YAMLFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
+	return printYAML(spec)
+}
+
 func (f YAMLFormatter) SupportedOutputs() []Output {
-	return []Output{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks}
+	return []Output{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks, OutputFlatten}
 }
 
 func printYAML(output interface{}) ([]byte, error) {
