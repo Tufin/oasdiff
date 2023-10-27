@@ -18,7 +18,7 @@ type BackwardCompatibilityRule struct {
 	Level       Level
 	Description string
 	Required    bool
-	Handler     BackwardCompatibilityCheck
+	Handler     BackwardCompatibilityCheck `json:"-" yaml:"-"`
 }
 
 var pipedOutput *bool

@@ -51,7 +51,15 @@ func getChecksCmd() *cobra.Command {
 }
 
 func runChecks(stdout io.Writer, flags ChecksFlags) *ReturnError {
-	rules := checker.GetAllRules()
+
+	rules := []checker.BackwardCompatibilityRule{}
+	if flags.required == "all" {
+		rules = checker.GetAllRules()
+	} else if flags.required == "false" {
+		rules = checker.GetOptionalRules()
+	} else if flags.required == "true" {
+		rules = checker.GetRequiredRules()
+	}
 
 	if err := outputChecks(stdout, flags, rules); err != nil {
 		return err
@@ -83,14 +91,6 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 			if rule.Level == checker.INFO && !slices.Contains(flags.severity, "info") {
 				continue
 			}
-		}
-
-		// required / optional
-		if flags.required == "false" && rule.Required {
-			continue
-		}
-		if flags.required == "true" && !rule.Required {
-			continue
 		}
 
 		// tags (experimental, the string contains approach is not very robust)

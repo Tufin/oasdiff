@@ -357,3 +357,32 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(RequestBodyEnumValueRemovedId, ERR, false, RequestBodyEnumValueRemovedCheck),
 	}
 }
+
+func GetOptionalRules() []BackwardCompatibilityRule {
+
+	result := []BackwardCompatibilityRule{}
+	for _, rule := range GetAllRules() {
+		if rule.Required {
+			continue
+		}
+
+		if rule.Level == INFO {
+			// rules with level INFO are not breaking
+			continue
+		}
+
+		result = append(result, rule)
+	}
+	return result
+}
+
+func GetRequiredRules() []BackwardCompatibilityRule {
+
+	result := []BackwardCompatibilityRule{}
+	for _, rule := range GetAllRules() {
+		if rule.Required {
+			result = append(result, rule)
+		}
+	}
+	return result
+}

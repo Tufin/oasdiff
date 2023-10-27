@@ -3,7 +3,6 @@ package formatters
 import (
 	"bytes"
 	"fmt"
-	"strconv"
 	"text/tabwriter"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -80,7 +79,7 @@ func (f TEXTFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, o
 	w := tabwriter.NewWriter(result, 1, 1, 1, ' ', 0)
 	_, _ = fmt.Fprintln(w, "ID\tDESCRIPTION\tLEVEL")
 	for _, rule := range rules {
-		_, _ = fmt.Fprintln(w, rule.Id+"\t"+rule.Description+"\t"+strconv.Itoa(int(rule.Level)))
+		_, _ = fmt.Fprintln(w, rule.Id+"\t"+rule.Description+"\t"+rule.Level.String())
 	}
 	_ = w.Flush()
 

@@ -40,17 +40,10 @@ func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, le
 }
 
 func optionalChecks() map[string]BackwardCompatibilityCheck {
-	result := map[string]BackwardCompatibilityCheck{}
-	for _, rule := range GetAllRules() {
-		if rule.Required {
-			continue
-		}
+	optionalRules := GetOptionalRules()
 
-		if rule.Level == INFO {
-			// rules with level INFO are not breaking
-			continue
-		}
-
+	result := make(map[string]BackwardCompatibilityCheck, len(optionalRules))
+	for _, rule := range optionalRules {
 		result[rule.Id] = rule.Handler
 	}
 	return result
@@ -70,12 +63,10 @@ func GetOptionalChecks() []string {
 }
 
 func defaultChecks() []BackwardCompatibilityCheck {
+
 	result := []BackwardCompatibilityCheck{}
 	m := utils.StringSet{}
-	for _, rule := range GetAllRules() {
-		if !rule.Required {
-			continue
-		}
+	for _, rule := range GetRequiredRules() {
 		pStr := fmt.Sprintf("%v", rule.Handler)
 		if !m.Contains(pStr) {
 			m.Add(pStr)
