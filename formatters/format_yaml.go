@@ -29,8 +29,8 @@ func (f YAMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts)
 	return printYAML(changes)
 }
 
-func (f YAMLFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
-	return printYAML(rules)
+func (f YAMLFormatter) RenderChecks(checks []Check, opts RenderOpts) ([]byte, error) {
+	return printYAML(checks)
 }
 
 func (f YAMLFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {

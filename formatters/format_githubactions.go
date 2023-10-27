@@ -21,11 +21,11 @@ var githubActionsSeverity = map[checker.Level]string{
 type GitHubActionsFormatter struct {
 }
 
-func (f GitHubActionsFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderDiff(*diff.Diff, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f GitHubActionsFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
@@ -72,15 +72,15 @@ func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, o
 	return buf.Bytes(), nil
 }
 
-func (f GitHubActionsFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f GitHubActionsFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f GitHubActionsFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

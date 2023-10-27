@@ -21,23 +21,23 @@ func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 	return []byte(reportAsString), nil
 }
 
-func (f HTMLFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
+func (f HTMLFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f HTMLFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f HTMLFormatter) RenderBreakingChanges(checker.Changes, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f HTMLFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f HTMLFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
+func (f HTMLFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f HTMLFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
+func (f HTMLFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

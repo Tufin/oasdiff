@@ -40,11 +40,11 @@ type JUnitFailure struct {
 type JUnitFormatter struct {
 }
 
-func (f JUnitFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
+func (f JUnitFormatter) RenderDiff(*diff.Diff, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f JUnitFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
+func (f JUnitFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
@@ -92,15 +92,15 @@ func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts Rend
 	return []byte(xml.Header + string(output)), nil
 }
 
-func (f JUnitFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f JUnitFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f JUnitFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
+func (f JUnitFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (f JUnitFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
+func (f JUnitFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

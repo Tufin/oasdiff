@@ -29,8 +29,8 @@ func (f JSONFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts)
 	return printJSON(changes)
 }
 
-func (f JSONFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
-	return printJSON(rules)
+func (f JSONFormatter) RenderChecks(checks []Check, opts RenderOpts) ([]byte, error) {
+	return printJSON(checks)
 }
 
 func (f JSONFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {

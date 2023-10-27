@@ -19,7 +19,7 @@ func (f TEXTFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 	return []byte(report.GetTextReportAsString(diff)), nil
 }
 
-func (f TEXTFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
+func (f TEXTFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
@@ -73,20 +73,20 @@ func (f TEXTFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts)
 	return result.Bytes(), nil
 }
 
-func (f TEXTFormatter) RenderChecks(rules []checker.BackwardCompatibilityRule, opts RenderOpts) ([]byte, error) {
+func (f TEXTFormatter) RenderChecks(checks []Check, opts RenderOpts) ([]byte, error) {
 	result := bytes.NewBuffer(nil)
 
 	w := tabwriter.NewWriter(result, 1, 1, 1, ' ', 0)
 	_, _ = fmt.Fprintln(w, "ID\tDESCRIPTION\tLEVEL")
-	for _, rule := range rules {
-		_, _ = fmt.Fprintln(w, rule.Id+"\t"+rule.Description+"\t"+rule.Level.String())
+	for _, check := range checks {
+		_, _ = fmt.Fprintln(w, check.Id+"\t"+check.Description+"\t"+check.Level)
 	}
 	_ = w.Flush()
 
 	return result.Bytes(), nil
 }
 
-func (f TEXTFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error) {
+func (f TEXTFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 

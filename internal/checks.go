@@ -78,7 +78,7 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 	}
 
 	// filter rules
-	filteredRules := make([]checker.BackwardCompatibilityRule, 0, len(rules))
+	checks := make([]formatters.Check, 0, len(rules))
 	for _, rule := range rules {
 		// severity
 		if len(flags.severity) > 0 {
@@ -107,11 +107,16 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 			}
 		}
 
-		filteredRules = append(filteredRules, rule)
+		checks = append(checks, formatters.Check{
+			Id:          rule.Id,
+			Level:       rule.Level.String(),
+			Description: rule.Description,
+			Required:    rule.Required,
+		})
 	}
 
 	// render
-	bytes, err := formatter.RenderChecks(filteredRules, formatters.RenderOpts{})
+	bytes, err := formatter.RenderChecks(checks, formatters.RenderOpts{})
 	if err != nil {
 		return getErrFailedPrint("checks "+flags.format, err)
 	}
