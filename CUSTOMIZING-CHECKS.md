@@ -26,3 +26,6 @@
 3. Make sure that [BREAKING-CHANGES-EXAMPLES.md](BREAKING-CHANGES-EXAMPLES.md) was updated with your use-cases
 4. If your check is optional, also add it to [this list of optional checks](https://github.com/Tufin/oasdiff#optional-breaking-changes-checks)
 
+## Example
+See this example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
+
