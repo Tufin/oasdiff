@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/formatters"
 )
 
 func getChangelogCmd() *cobra.Command {
@@ -23,7 +24,7 @@ func getChangelogCmd() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	enumWithOptions(&cmd, newEnumValue([]string{FormatYAML, FormatJSON, FormatText}, FormatText, &flags.format), "format", "f", "output format")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChangelog), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "e", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
@@ -37,7 +38,7 @@ func getChangelogCmd() *cobra.Command {
 	enumWithOptions(&cmd, newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().StringVarP(&flags.errIgnoreFile, "err-ignore", "", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().StringVarP(&flags.warnIgnoreFile, "warn-ignore", "", "", "configuration file for ignoring warnings")
-	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks' to see options)")
+	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks --required false' to see options)")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysBeta, "deprecation-days-beta", "", checker.BetaDeprecationDays, "min days required between deprecating a beta resource and removing it")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysStable, "deprecation-days-stable", "", checker.StableDeprecationDays, "min days required between deprecating a stable resource and removing it")
 
@@ -49,10 +50,10 @@ func enumWithOptions(cmd *cobra.Command, value enumVal, name, shorthand, usage s
 }
 
 func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
-	return getChangelog(flags, stdout, checker.INFO, getChangelogTitle)
+	return getChangelog(flags, stdout, checker.INFO)
 }
 
-func getChangelog(flags Flags, stdout io.Writer, level checker.Level, getOutputTitle GetOutputTitle) (bool, *ReturnError) {
+func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
@@ -72,8 +73,16 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level, getOutputT
 		return false, returnErr
 	}
 
-	if returnErr := outputChangelog(bcConfig, flags.getFormat(), stdout, errs, getOutputTitle); returnErr != nil {
-		return false, returnErr
+	if level == checker.WARN {
+		// breaking changes
+		if returnErr := outputBreakingChanges(bcConfig, flags.getFormat(), flags.getLang(), stdout, errs, level); returnErr != nil {
+			return false, returnErr
+		}
+	} else {
+		// changelog
+		if returnErr := outputChangelog(bcConfig, flags.getFormat(), flags.getLang(), stdout, errs, level); returnErr != nil {
+			return false, returnErr
+		}
 	}
 
 	if flags.getFailOn() != "" {
@@ -108,44 +117,23 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 	return errs, nil
 }
 
-func getChangelogTitle(config checker.Config, errs checker.Changes) string {
-	count := errs.GetLevelCount()
-
-	return config.Localize(
-		"total-changes",
-		len(errs),
-		count[checker.ERR],
-		checker.ERR.PrettyString(),
-		count[checker.WARN],
-		checker.WARN.PrettyString(),
-		count[checker.INFO],
-		checker.INFO.PrettyString(),
-	)
-}
-
-type GetOutputTitle func(config checker.Config, errs checker.Changes) string
-
-func outputChangelog(config checker.Config, format string, stdout io.Writer, errs checker.Changes, getOutputTitle GetOutputTitle) *ReturnError {
-	switch format {
-	case FormatYAML:
-		if err := printYAML(stdout, errs); err != nil {
-			return getErrFailedPrint("breaking changes YAML", err)
-		}
-	case FormatJSON:
-		if err := printJSON(stdout, errs); err != nil {
-			return getErrFailedPrint("breaking changes JSON", err)
-		}
-	case FormatText:
-		if len(errs) > 0 {
-			fmt.Fprint(stdout, getOutputTitle(config, errs))
-		}
-
-		for _, bcerr := range errs {
-			fmt.Fprintf(stdout, "%s\n\n", bcerr.PrettyErrorText(config.Localize))
-		}
-	default:
-		return getErrUnsupportedFormat(format)
+func outputChangelog(config checker.Config, format string, lang string, stdout io.Writer, errs checker.Changes, level checker.Level) *ReturnError {
+	// formatter lookup
+	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
+		Language: lang,
+	})
+	if err != nil {
+		return getErrUnsupportedChangelogFormat(format)
 	}
+
+	// render
+	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{})
+	if err != nil {
+		return getErrFailedPrint("changelog "+format, err)
+	}
+
+	// print output
+	_, _ = fmt.Fprintf(stdout, "%s\n", bytes)
 
 	return nil
 }

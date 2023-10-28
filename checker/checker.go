@@ -13,6 +13,14 @@ import (
 
 type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes
 
+type BackwardCompatibilityRule struct {
+	Id          string
+	Level       Level
+	Description string
+	Required    bool
+	Handler     BackwardCompatibilityCheck `json:"-" yaml:"-"`
+}
+
 var pipedOutput *bool
 
 func IsPipedOutput() bool {

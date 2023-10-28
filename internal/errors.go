@@ -46,17 +46,38 @@ func getErrFailedPrint(what string, err error) *ReturnError {
 	}
 }
 
-func getErrFailedGenerateHTML(err error) *ReturnError {
+func getErrUnsupportedDiffFormat(format string) *ReturnError {
 	return &ReturnError{
-		error: fmt.Errorf("failed to generate HTML diff report with %v", err),
-		Code:  107,
+		error: fmt.Errorf("format %q is not supported by \"diff\"", format),
+		Code:  109,
 	}
 }
 
-func getErrUnsupportedFormat(format string) *ReturnError {
+func getErrUnsupportedSummaryFormat(format string) *ReturnError {
 	return &ReturnError{
-		error: fmt.Errorf("unsupported format %q", format),
-		Code:  108,
+		error: fmt.Errorf("format %q is not supported by \"summary\"", format),
+		Code:  110,
+	}
+}
+
+func getErrUnsupportedChangelogFormat(format string) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("format %q is not supported by \"changelog\"", format),
+		Code:  111,
+	}
+}
+
+func getErrUnsupportedBreakingChangesFormat(format string) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("format %q is not supported by \"breaking\"", format),
+		Code:  112,
+	}
+}
+
+func getErrUnsupportedChecksFormat(format string) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("format %q is not supported with \"checks\"", format),
+		Code:  113,
 	}
 }
 

@@ -4,7 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const requestPropertyBecameEnumId = "request-property-became-enum"
+const (
+	RequestPropertyBecameEnumId = "request-property-became-enum"
+)
 
 func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -38,9 +40,9 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 						}
 
 						result = append(result, ApiChange{
-							Id:          requestPropertyBecameEnumId,
+							Id:          RequestPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        config.Localize(requestPropertyBecameEnumId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Text:        config.Localize(RequestPropertyBecameEnumId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

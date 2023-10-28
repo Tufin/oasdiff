@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseBodyMinItemsUnsetId     = "response-body-min-items-unset"
+	ResponsePropertyMinItemsUnsetId = "response-property-min-items-unset"
+)
+
 func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -31,9 +36,9 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 						if minItemsDiff.From != nil &&
 							minItemsDiff.To == nil {
 							result = append(result, ApiChange{
-								Id:          "response-body-min-items-unset",
+								Id:          ResponseBodyMinItemsUnsetId,
 								Level:       ERR,
-								Text:        config.Localize("response-body-min-items-unset", ColorizedValue(minItemsDiff.From)),
+								Text:        config.Localize(ResponseBodyMinItemsUnsetId, ColorizedValue(minItemsDiff.From)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -58,9 +63,9 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							}
 
 							result = append(result, ApiChange{
-								Id:          "response-property-min-items-unset",
+								Id:          ResponsePropertyMinItemsUnsetId,
 								Level:       ERR,
-								Text:        config.Localize("response-property-min-items-unset", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),
+								Text:        config.Localize(ResponsePropertyMinItemsUnsetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

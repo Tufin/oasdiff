@@ -6,6 +6,13 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+const (
+	ResponseOptionalPropertyRemovedId          = "response-optional-property-removed"
+	ResponseOptionalWriteOnlyPropertyRemovedId = "response-optional-write-only-property-removed"
+	ResponseOptionalPropertyAddedId            = "response-optional-property-added"
+	ResponseOptionalWriteOnlyPropertyAddedId   = "response-optional-write-only-property-added"
+)
+
 func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -34,10 +41,10 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 							level := WARN
-							id := "response-optional-property-removed"
+							id := ResponseOptionalPropertyRemovedId
 							if propertyItem.WriteOnly {
 								level = INFO
-								id = "response-optional-write-only-property-removed"
+								id = ResponseOptionalWriteOnlyPropertyRemovedId
 							}
 							if slices.Contains(parent.Base.Required, propertyName) {
 								// covered by response-required-property-removed
@@ -56,9 +63,9 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 					CheckAddedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
-							id := "response-optional-property-added"
+							id := ResponseOptionalPropertyAddedId
 							if propertyItem.WriteOnly {
-								id = "response-optional-write-only-property-added"
+								id = ResponseOptionalWriteOnlyPropertyAddedId
 							}
 
 							if slices.Contains(parent.Revision.Required, propertyName) {

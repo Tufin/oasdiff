@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/flatten"
+	"github.com/tufin/oasdiff/formatters"
 	"github.com/tufin/oasdiff/load"
-	"github.com/tufin/oasdiff/report"
 )
 
 func getDiffCmd() *cobra.Command {
@@ -25,7 +25,7 @@ func getDiffCmd() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().BoolVarP(&flags.composed, "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	enumWithOptions(&cmd, newEnumValue([]string{FormatYAML, FormatJSON, FormatText, FormatHTML}, FormatYAML, &flags.format), "format", "f", "output format")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputDiff), string(formatters.FormatYAML), &flags.format), "format", "f", "output format")
 	cmd.PersistentFlags().VarP(newEnumSliceValue(diff.ExcludeDiffOptions, nil, &flags.excludeElements), "exclude-elements", "e", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(&flags.matchPath, "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(&flags.filterExtension, "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
@@ -45,7 +45,7 @@ func runDiff(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
-	if flags.getFormat() == FormatJSON {
+	if flags.getFormat() == string(formatters.FormatJSON) {
 		flags.addExcludeElements(diff.ExcludeEndpointsOption)
 	}
 
@@ -62,26 +62,20 @@ func runDiff(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 }
 
 func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {
-	switch format {
-	case FormatYAML:
-		if err := printYAML(stdout, diffReport); err != nil {
-			return getErrFailedPrint("diff YAML", err)
-		}
-	case FormatJSON:
-		if err := printJSON(stdout, diffReport); err != nil {
-			return getErrFailedPrint("diff JSON", err)
-		}
-	case FormatText:
-		fmt.Fprintf(stdout, "%s", report.GetTextReportAsString(diffReport))
-	case FormatHTML:
-		html, err := report.GetHTMLReportAsString(diffReport)
-		if err != nil {
-			return getErrFailedGenerateHTML(err)
-		}
-		fmt.Fprintf(stdout, "%s", html)
-	default:
-		return getErrUnsupportedFormat(format)
+	// formatter lookup
+	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
+	if err != nil {
+		return getErrUnsupportedDiffFormat(format)
 	}
+
+	// render
+	bytes, err := formatter.RenderDiff(diffReport, formatters.RenderOpts{})
+	if err != nil {
+		return getErrFailedPrint("diff "+format, err)
+	}
+
+	// print output
+	_, _ = fmt.Fprintf(stdout, "%s\n", bytes)
 
 	return nil
 }

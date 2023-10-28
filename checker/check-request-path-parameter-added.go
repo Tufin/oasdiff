@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	NewRequestPathParameterId = "new-request-path-parameter"
+)
+
 func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -25,9 +29,9 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 				for _, paramName := range paramItems {
 					source := (*operationsSources)[operationItem.Revision]
 					result = append(result, ApiChange{
-						Id:          "new-request-path-parameter",
+						Id:          NewRequestPathParameterId,
 						Level:       ERR,
-						Text:        config.Localize("new-request-path-parameter", ColorizedValue(paramName)),
+						Text:        config.Localize(NewRequestPathParameterId, ColorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

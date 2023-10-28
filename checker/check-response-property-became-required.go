@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	ResponsePropertyBecameRequiredCheckId        = "response-property-became-required"
-	ResponseWriteOnlyPropertyBecameRequiredCheck = "response-write-only-property-became-required"
+	ResponsePropertyBecameRequiredId          = "response-property-became-required"
+	ResponseWriteOnlyPropertyBecameRequiredId = "response-write-only-property-became-required"
 )
 
 func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -39,13 +39,13 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
-							id := ResponsePropertyBecameRequiredCheckId
+							id := ResponsePropertyBecameRequiredId
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.WriteOnly {
-								id = ResponseWriteOnlyPropertyBecameRequiredCheck
+								id = ResponseWriteOnlyPropertyBecameRequiredId
 							}
 
 							result = append(result, ApiChange{
@@ -68,12 +68,12 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 								return
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Added {
-								id := ResponsePropertyBecameRequiredCheckId
+								id := ResponsePropertyBecameRequiredId
 								if propertyDiff.Base.Properties[changedRequiredPropertyName] == nil {
 									continue
 								}
 								if propertyDiff.Base.Properties[changedRequiredPropertyName].Value.WriteOnly {
-									id = ResponseWriteOnlyPropertyBecameRequiredCheck
+									id = ResponseWriteOnlyPropertyBecameRequiredId
 								}
 								if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check

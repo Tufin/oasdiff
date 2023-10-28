@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyMinItemsIncreasedId     = "request-body-min-items-increased"
+	RequestPropertyMinItemsIncreasedId = "request-property-min-items-increased"
+)
+
 func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -29,9 +34,9 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						minItemsDiff.To != nil {
 						if IsIncreasedValue(minItemsDiff) {
 							result = append(result, ApiChange{
-								Id:          "request-body-min-items-increased",
+								Id:          RequestBodyMinItemsIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize("request-body-min-items-increased", ColorizedValue(minItemsDiff.To)),
+								Text:        config.Localize(RequestBodyMinItemsIncreasedId, ColorizedValue(minItemsDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -60,9 +65,9 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						}
 
 						result = append(result, ApiChange{
-							Id:          "request-property-min-items-increased",
+							Id:          RequestPropertyMinItemsIncreasedId,
 							Level:       ERR,
-							Text:        config.Localize("request-property-min-items-increased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Text:        config.Localize(RequestPropertyMinItemsIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

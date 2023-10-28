@@ -17,7 +17,7 @@ func TestResponsePropertyAnyOfAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyAnyOfUpdated), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyAnyOfUpdatedCheck), d, osm, checker.INFO)
 
 	require.Len(t, errs, 2)
 
@@ -53,7 +53,7 @@ func TestResponsePropertyAnyOfRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyAnyOfUpdated), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyAnyOfUpdatedCheck), d, osm, checker.INFO)
 
 	require.Len(t, errs, 2)
 

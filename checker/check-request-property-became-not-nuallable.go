@@ -4,10 +4,12 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const requestPropertyBecameNotNullableId = "request-property-became-not-nullable"
-const requestBodyBecameNotNullableId = "request-body-became-not-nullable"
-const requestPropertyBecameNullableId = "request-property-became-nullable"
-const requestBodyBecameNullableId = "request-body-became-nullable"
+const (
+	RequestBodyBecomeNotNullableId     = "request-body-became-not-nullable"
+	RequestBodyBecomeNullableId        = "request-body-became-nullable"
+	RequestPropertyBecomeNotNullableId = "request-property-became-not-nullable"
+	RequestPropertyBecomeNullableId    = "request-property-became-nullable"
+)
 
 func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -35,9 +37,9 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 				if mediaTypeDiff.SchemaDiff.NullableDiff != nil {
 					if mediaTypeDiff.SchemaDiff.NullableDiff.From == true {
 						result = append(result, ApiChange{
-							Id:          requestBodyBecameNotNullableId,
+							Id:          RequestBodyBecomeNotNullableId,
 							Level:       ERR,
-							Text:        config.Localize(requestBodyBecameNotNullableId),
+							Text:        config.Localize(RequestBodyBecomeNotNullableId),
 							Operation:   operation,
 							Path:        path,
 							Source:      source,
@@ -45,9 +47,9 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						})
 					} else if mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
 						result = append(result, ApiChange{
-							Id:          requestBodyBecameNullableId,
+							Id:          RequestBodyBecomeNullableId,
 							Level:       INFO,
-							Text:        config.Localize(requestBodyBecameNullableId),
+							Text:        config.Localize(RequestBodyBecomeNullableId),
 							Operation:   operation,
 							Path:        path,
 							Source:      source,
@@ -65,9 +67,9 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						}
 						if nullableDiff.From == true {
 							result = append(result, ApiChange{
-								Id:          requestPropertyBecameNotNullableId,
+								Id:          RequestPropertyBecomeNotNullableId,
 								Level:       ERR,
-								Text:        config.Localize(requestPropertyBecameNotNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestPropertyBecomeNotNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								Path:        path,
 								Source:      source,
@@ -75,9 +77,9 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							})
 						} else if nullableDiff.To == true {
 							result = append(result, ApiChange{
-								Id:          requestPropertyBecameNullableId,
+								Id:          RequestPropertyBecomeNullableId,
 								Level:       INFO,
-								Text:        config.Localize(requestPropertyBecameNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestPropertyBecomeNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								Path:        path,
 								Source:      source,

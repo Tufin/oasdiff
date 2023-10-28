@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	AddedRequiredRequestBodyId = "added-required-request-body"
+)
+
 func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -21,9 +25,9 @@ func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *dif
 				operationItem.Revision.RequestBody.Value.Required {
 				source := (*operationsSources)[operationItem.Revision]
 				result = append(result, ApiChange{
-					Id:          "added-required-request-body",
+					Id:          AddedRequiredRequestBodyId,
 					Level:       ERR,
-					Text:        config.Localize("added-required-request-body"),
+					Text:        config.Localize(AddedRequiredRequestBodyId),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

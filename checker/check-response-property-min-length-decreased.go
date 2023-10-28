@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseBodyMinLengthDecreasedId     = "response-body-min-length-decreased"
+	ResponsePropertyMinLengthDecreasedId = "response-property-min-length-decreased"
+)
+
 func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -32,9 +37,9 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 							minLengthDiff.To != nil {
 							if IsDecreasedValue(minLengthDiff) {
 								result = append(result, ApiChange{
-									Id:          "response-body-min-length-decreased",
+									Id:          ResponseBodyMinLengthDecreasedId,
 									Level:       ERR,
-									Text:        config.Localize("response-body-min-length-decreased", ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+									Text:        config.Localize(ResponseBodyMinLengthDecreasedId, ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -64,9 +69,9 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 							}
 
 							result = append(result, ApiChange{
-								Id:          "response-property-min-length-decreased",
+								Id:          ResponsePropertyMinLengthDecreasedId,
 								Level:       ERR,
-								Text:        config.Localize("response-property-min-length-decreased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To), ColorizedValue(responseStatus)),
+								Text:        config.Localize(ResponsePropertyMinLengthDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

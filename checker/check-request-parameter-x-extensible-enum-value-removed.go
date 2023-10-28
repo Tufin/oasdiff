@@ -8,6 +8,12 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+const (
+	UnparsableParameterFromXExtensibleEnumId      = "unparseable-parameter-from-x-extensible-enum"
+	UnparsableParameterToXExtensibleEnumId        = "unparseable-parameter-to-x-extensible-enum"
+	RequestParameterXExtensibleEnumValueRemovedId = "request-parameter-x-extensible-enum-value-removed"
+)
+
 func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -50,7 +56,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 					var fromSlice []string
 					if err := json.Unmarshal(from, &fromSlice); err != nil {
 						result = append(result, ApiChange{
-							Id:          "unparseable-parameter-from-x-extensible-enum",
+							Id:          UnparsableParameterFromXExtensibleEnumId,
 							Level:       ERR,
 							Text:        fmt.Sprintf("unparseable x-extensible-enum of the %s request parameter %s", ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation:   operation,
@@ -63,7 +69,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 					var toSlice []string
 					if err := json.Unmarshal(to, &toSlice); err != nil {
 						result = append(result, ApiChange{
-							Id:          "unparseable-paramater-to-x-extensible-enum",
+							Id:          UnparsableParameterToXExtensibleEnumId,
 							Level:       ERR,
 							Text:        fmt.Sprintf("unparseable x-extensible-enum of the %s request parameter %s", ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation:   operation,
@@ -83,9 +89,9 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 
 					for _, enumVal := range deletedVals {
 						result = append(result, ApiChange{
-							Id:          "request-parameter-x-extensible-enum-value-removed",
+							Id:          RequestParameterXExtensibleEnumValueRemovedId,
 							Level:       ERR,
-							Text:        config.Localize("request-parameter-x-extensible-enum-value-removed", ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:        config.Localize(RequestParameterXExtensibleEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

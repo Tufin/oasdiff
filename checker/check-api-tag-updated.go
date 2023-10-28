@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	APITagRemovedCheckId = "api-tag-removed"
-	APITagAddedCheckId   = "api-tag-added"
+	APITagRemovedId = "api-tag-removed"
+	APITagAddedId   = "api-tag-added"
 )
 
 func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -30,9 +30,9 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 
 			for _, tag := range operationItem.TagsDiff.Deleted {
 				result = append(result, ApiChange{
-					Id:          APITagRemovedCheckId,
-					Level:       config.getLogLevel(APITagRemovedCheckId, INFO),
-					Text:        config.Localize(APITagRemovedCheckId, ColorizedValue(tag)),
+					Id:          APITagRemovedId,
+					Level:       config.getLogLevel(APITagRemovedId, INFO),
+					Text:        config.Localize(APITagRemovedId, ColorizedValue(tag)),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -43,9 +43,9 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 
 			for _, tag := range operationItem.TagsDiff.Added {
 				result = append(result, ApiChange{
-					Id:          APITagAddedCheckId,
-					Level:       config.getLogLevel(APITagAddedCheckId, INFO),
-					Text:        config.Localize(APITagAddedCheckId, ColorizedValue(tag)),
+					Id:          APITagAddedId,
+					Level:       config.getLogLevel(APITagAddedId, INFO),
+					Text:        config.Localize(APITagAddedId, ColorizedValue(tag)),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,

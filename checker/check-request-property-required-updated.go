@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestPropertyBecameRequiredId = "request-property-became-required"
+	RequestPropertyBecameOptionalId = "request-property-became-optional"
+)
+
 func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -41,9 +46,9 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							continue
 						}
 						result = append(result, ApiChange{
-							Id:          "request-property-became-required",
+							Id:          RequestPropertyBecameRequiredId,
 							Level:       ERR,
-							Text:        config.Localize("request-property-became-required", ColorizedValue(changedRequiredPropertyName)),
+							Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(changedRequiredPropertyName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -63,9 +68,9 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							continue
 						}
 						result = append(result, ApiChange{
-							Id:          "request-property-became-optional",
+							Id:          RequestPropertyBecameOptionalId,
 							Level:       INFO,
-							Text:        config.Localize("request-property-became-optional", ColorizedValue(changedRequiredPropertyName)),
+							Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(changedRequiredPropertyName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -94,9 +99,9 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 							result = append(result, ApiChange{
-								Id:          "request-property-became-required",
+								Id:          RequestPropertyBecameRequiredId,
 								Level:       ERR,
-								Text:        config.Localize("request-property-became-required", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -116,9 +121,9 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 							result = append(result, ApiChange{
-								Id:          "request-property-became-optional",
+								Id:          RequestPropertyBecameOptionalId,
 								Level:       INFO,
-								Text:        config.Localize("request-property-became-optional", ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

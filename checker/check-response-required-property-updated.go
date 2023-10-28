@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	ResponseRequiredPropertyRemovedCheckId          = "response-required-property-removed"
-	ResponseRequiredWriteOnlyPropertyRemovedCheckId = "response-required-write-only-property-removed"
-	ResponseRequiredPropertyAddedCheckId            = "response-required-property-added"
-	ResponseRequiredWriteOnlyPropertyAddedCheckId   = "response-required-write-only-property-added"
+	ResponseRequiredPropertyRemovedId          = "response-required-property-removed"
+	ResponseRequiredWriteOnlyPropertyRemovedId = "response-required-write-only-property-removed"
+	ResponseRequiredPropertyAddedId            = "response-required-property-added"
+	ResponseRequiredWriteOnlyPropertyAddedId   = "response-required-write-only-property-added"
 )
 
 func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -41,10 +41,10 @@ func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 							level := ERR
-							id := ResponseRequiredPropertyRemovedCheckId
+							id := ResponseRequiredPropertyRemovedId
 							if propertyItem.WriteOnly {
 								level = INFO
-								id = ResponseRequiredWriteOnlyPropertyRemovedCheckId
+								id = ResponseRequiredWriteOnlyPropertyRemovedId
 							}
 							if !slices.Contains(parent.Base.Required, propertyName) {
 								// Covered by response-optional-property-removed
@@ -63,9 +63,9 @@ func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 					CheckAddedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
-							id := ResponseRequiredPropertyAddedCheckId
+							id := ResponseRequiredPropertyAddedId
 							if propertyItem.WriteOnly {
-								id = ResponseRequiredWriteOnlyPropertyAddedCheckId
+								id = ResponseRequiredWriteOnlyPropertyAddedId
 							}
 							if !slices.Contains(parent.Revision.Required, propertyName) {
 								// Covered by response-optional-property-added

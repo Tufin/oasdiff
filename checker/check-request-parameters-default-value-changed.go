@@ -4,7 +4,13 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func RequestParameterDefaultValueChanged(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+const (
+	RequestParameterDefaultValueChangedId = "request-parameter-default-value-changed"
+	RequestParameterDefaultValueAddedId   = "request-parameter-default-value-added"
+	RequestParameterDefaultValueRemovedId = "request-parameter-default-value-removed"
+)
+
+func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -52,11 +58,11 @@ func RequestParameterDefaultValueChanged(diffReport *diff.Diff, operationsSource
 					}
 
 					if defaultValueDiff.From == nil {
-						appendResultItem("request-parameter-default-value-added", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.To))
+						appendResultItem(RequestParameterDefaultValueAddedId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.To))
 					} else if defaultValueDiff.To == nil {
-						appendResultItem("request-parameter-default-value-removed", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From))
+						appendResultItem(RequestParameterDefaultValueRemovedId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From))
 					} else {
-						appendResultItem("request-parameter-default-value-changed", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To))
+						appendResultItem(RequestParameterDefaultValueChangedId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To))
 					}
 				}
 			}

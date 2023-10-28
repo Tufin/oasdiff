@@ -8,6 +8,14 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	EndpointReactivatedId      = "endpoint-reactivated"
+	APIDeprecatedSunsetParseId = "api-deprecated-sunset-parse"
+	ParseErrorId               = "parsing-error"
+	APISunsetDateTooSmallId    = "api-sunset-date-too-small"
+	EndpointDeprecatedId       = "endpoint-deprecated"
+)
+
 func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -29,9 +37,9 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			if operationDiff.DeprecatedDiff.To == nil || operationDiff.DeprecatedDiff.To == false {
 				// not breaking changes
 				result = append(result, ApiChange{
-					Id:          "endpoint-reactivated",
+					Id:          EndpointReactivatedId,
 					Level:       INFO,
-					Text:        config.Localize("endpoint-reactivated"),
+					Text:        config.Localize(EndpointReactivatedId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -43,9 +51,9 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			rawDate, date, err := getSunsetDate(op.Extensions)
 			if err != nil {
 				result = append(result, ApiChange{
-					Id:          "api-deprecated-sunset-parse",
+					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
+					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -59,7 +67,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
 				result = append(result, ApiChange{
-					Id:          "parsing-error",
+					Id:          ParseErrorId,
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
 					Operation:   operation,
@@ -70,13 +78,13 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				continue
 			}
 
-			deprecationDays := getDeperacationDays(config, stability)
+			deprecationDays := getDeprecationDays(config, stability)
 
 			if days < deprecationDays {
 				result = append(result, ApiChange{
-					Id:          "api-sunset-date-too-small",
+					Id:          APISunsetDateTooSmallId,
 					Level:       ERR,
-					Text:        config.Localize("api-sunset-date-too-small", date, deprecationDays),
+					Text:        config.Localize(APISunsetDateTooSmallId, date, deprecationDays),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -87,9 +95,9 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			// not breaking changes
 			result = append(result, ApiChange{
-				Id:          "endpoint-deprecated",
+				Id:          EndpointDeprecatedId,
 				Level:       INFO,
-				Text:        config.Localize("endpoint-deprecated"),
+				Text:        config.Localize(EndpointDeprecatedId),
 				Operation:   operation,
 				OperationId: op.OperationID,
 				Path:        path,

@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterMaxItemsIncreasedId = "request-parameter-max-items-increased"
+	RequestParameterMaxItemsDecreasedId = "request-parameter-max-items-decreased"
+)
+
 func RequestParameterMaxItemsUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -31,10 +36,10 @@ func RequestParameterMaxItemsUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						continue
 					}
 
-					id := "request-parameter-max-items-decreased"
+					id := RequestParameterMaxItemsDecreasedId
 					level := ERR
 					if IsIncreasedValue(maxItemsDiff) {
-						id = "request-parameter-max-items-increased"
+						id = RequestParameterMaxItemsIncreasedId
 						level = INFO
 					}
 

@@ -4,7 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const requestParameterBecameEnumId = "request-parameter-became-enum"
+const (
+	RequestParameterBecameEnumId = "request-parameter-became-enum"
+)
 
 func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -34,9 +36,9 @@ func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *d
 					}
 
 					result = append(result, ApiChange{
-						Id:          requestParameterBecameEnumId,
+						Id:          RequestParameterBecameEnumId,
 						Level:       ERR,
-						Text:        config.Localize(requestParameterBecameEnumId, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Text:        config.Localize(RequestParameterBecameEnumId, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

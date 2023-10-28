@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	ResponsePropertyBecameOptionalCheckId        = "response-property-became-optional"
-	ResponseWriteOnlyPropertyBecameOptionalCheck = "response-write-only-property-became-optional"
+	ResponsePropertyBecameOptionalId          = "response-property-became-optional"
+	ResponseWriteOnlyPropertyBecameOptionalId = "response-write-only-property-became-optional"
 )
 
 func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -39,14 +39,14 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
-							id := ResponsePropertyBecameOptionalCheckId
+							id := ResponsePropertyBecameOptionalId
 							level := ERR
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.WriteOnly {
-								id = ResponseWriteOnlyPropertyBecameOptionalCheck
+								id = ResponseWriteOnlyPropertyBecameOptionalId
 								level = INFO
 							}
 
@@ -71,14 +71,14 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Deleted {
 								level := ERR
-								id := ResponsePropertyBecameOptionalCheckId
+								id := ResponsePropertyBecameOptionalId
 
 								if propertyDiff.Base.Properties[changedRequiredPropertyName] == nil {
 									continue
 								}
 								if propertyDiff.Base.Properties[changedRequiredPropertyName].Value.WriteOnly {
 									level = INFO
-									id = ResponseWriteOnlyPropertyBecameOptionalCheck
+									id = ResponseWriteOnlyPropertyBecameOptionalId
 								}
 								if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
