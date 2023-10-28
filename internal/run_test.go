@@ -265,3 +265,7 @@ func Test_FlattenInvalid(t *testing.T) {
 	require.Equal(t, `Error: failed to flatten original spec from "../data/allof/invalid.yaml" with unable to resolve Type conflict: all Type values must be identical
 `, stderr.String())
 }
+
+func Test_Checks(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff checks"), io.Discard, io.Discard))
+}
