@@ -20,7 +20,7 @@ func (f TEXTFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 }
 
 func (f TEXTFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f TEXTFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
@@ -87,7 +87,7 @@ func (f TEXTFormatter) RenderChecks(checks []Check, opts RenderOpts) ([]byte, er
 }
 
 func (f TEXTFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f TEXTFormatter) SupportedOutputs() []Output {

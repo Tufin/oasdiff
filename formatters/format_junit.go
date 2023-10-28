@@ -41,11 +41,11 @@ type JUnitFormatter struct {
 }
 
 func (f JUnitFormatter) RenderDiff(*diff.Diff, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f JUnitFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
@@ -93,15 +93,15 @@ func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts Rend
 }
 
 func (f JUnitFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f JUnitFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f JUnitFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f JUnitFormatter) SupportedOutputs() []Output {

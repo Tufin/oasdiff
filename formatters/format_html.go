@@ -22,23 +22,23 @@ func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 }
 
 func (f HTMLFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f HTMLFormatter) RenderBreakingChanges(checker.Changes, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f HTMLFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f HTMLFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f HTMLFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
+	return notImplemented()
 }
 
 func (f HTMLFormatter) SupportedOutputs() []Output {
