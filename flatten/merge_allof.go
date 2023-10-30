@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
 )
 
 const (
@@ -53,18 +52,11 @@ type SchemaCollection struct {
 	WriteOnly            []bool
 }
 
-type state struct {
-	visitedSchemas utils.VisitedRefs
-}
-
-func newState() *state {
-	return &state{
-		visitedSchemas: utils.VisitedRefs{},
-	}
-}
+// state will be used to handle circular refs
+type state struct{}
 
 func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
-	result, err := mergeInternal(newState(), &schema)
+	result, err := mergeInternal(&state{}, &schema)
 	if err != nil {
 		return nil, err
 	}
