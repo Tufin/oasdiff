@@ -1,11 +1,13 @@
 package internal
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/flatten"
+	"github.com/tufin/oasdiff/formatters"
 	"github.com/tufin/oasdiff/load"
 )
 
@@ -17,14 +19,14 @@ func getFlattenCmd() *cobra.Command {
 		Use:   "flatten spec",
 		Short: "Merge allOf",
 		Long: `Display a flattened version of the given OpenAPI spec by merging all instances of allOf.
-Spec can be a path to a file or a URL.
+Spec can be a path to a file, a URL or '-' to read standard input.
 `,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			flags.spec = args[0]
+			flags.spec = load.GetSource(args[0])
 
-			// by now flags have been parsed successfully so we don't need to show usage on any errors
+			// by now flags have been parsed successfully, so we don't need to show usage on any errors
 			cmd.Root().SilenceUsage = true
 
 			err := runFlatten(&flags, cmd.OutOrStdout())
@@ -37,7 +39,7 @@ Spec can be a path to a file or a URL.
 		},
 	}
 
-	cmd.PersistentFlags().VarP(newEnumValue([]string{FormatYAML, FormatJSON}, FormatYAML, &flags.format), "format", "f", "output format: yaml or json")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputFlatten), string(formatters.FormatJSON), &flags.format), "format", "f", "output format")
 	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 
 	return &cmd
@@ -62,26 +64,28 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 		return getErrFailedToFlattenSpec("original", flags.spec, err)
 	}
 
-	if returnErr := outputFlattenedSpec(format, stdout, flatSpec); returnErr != nil {
+	if returnErr := outputFlattenedSpec(stdout, flatSpec, format); returnErr != nil {
 		return returnErr
 	}
 
 	return nil
 }
 
-func outputFlattenedSpec(format string, stdout io.Writer, spec *openapi3.T) *ReturnError {
-	switch format {
-	case FormatYAML:
-		if err := printYAML(stdout, spec); err != nil {
-			return getErrFailedPrint("flattened spec YAML", err)
-		}
-	case FormatJSON:
-		if err := printJSON(stdout, spec); err != nil {
-			return getErrFailedPrint("flattened spec JSON", err)
-		}
-	default:
-		return getErrUnsupportedFormat(format)
+func outputFlattenedSpec(stdout io.Writer, spec *openapi3.T, format string) *ReturnError {
+	// formatter lookup
+	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
+	if err != nil {
+		return getErrUnsupportedSummaryFormat(format)
 	}
+
+	// render
+	bytes, err := formatter.RenderFlatten(spec, formatters.RenderOpts{})
+	if err != nil {
+		return getErrFailedPrint("flatten "+format, err)
+	}
+
+	// print output
+	_, _ = fmt.Fprintf(stdout, "%s\n", bytes)
 
 	return nil
 }

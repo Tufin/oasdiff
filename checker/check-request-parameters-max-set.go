@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterMaxSetId = "request-parameter-max-set"
+)
+
 func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -34,10 +38,10 @@ func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.
 					source := (*operationsSources)[operationItem.Revision]
 
 					result = append(result, ApiChange{
-						Id:          "request-parameter-max-set",
+						Id:          RequestParameterMaxSetId,
 						Level:       WARN,
-						Text:        config.Localize("request-parameter-max-set", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.To)),
-						Comment:     config.Localize("request-parameter-max-set-comment"),
+						Text:        config.Localize(RequestParameterMaxSetId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.To)),
+						Comment:     config.Localize(RequestParameterMaxSetId + "-comment"),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

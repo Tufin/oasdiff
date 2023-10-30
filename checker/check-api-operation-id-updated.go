@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	apiOperationRemovedCheckId = "api-operation-id-removed"
-	apiOperationAddCheckId     = "api-operation-id-added"
+	APIOperationIdRemovedId = "api-operation-id-removed"
+	APIOperationIdAddId     = "api-operation-id-added"
 )
 
 func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -21,7 +21,6 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 		}
 
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-
 			if operationItem.OperationIDDiff == nil {
 				continue
 			}
@@ -29,18 +28,17 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 			op := pathItem.Base.Operations()[operation]
 			source := (*operationsSources)[op]
 
-			level := INFO
-			id := apiOperationRemovedCheckId
+			id := APIOperationIdRemovedId
 			text := config.Localize(id, ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID))
 			if operationItem.OperationIDDiff.From == nil || operationItem.OperationIDDiff.From == "" {
-				id = apiOperationAddCheckId
+				id = APIOperationIdAddId
 				op = pathItem.Revision.Operations()[operation]
 				text = config.Localize(id, ColorizedValue(operationItem.Revision.OperationID))
 			}
 
 			result = append(result, ApiChange{
 				Id:          id,
-				Level:       config.getLogLevel(id, level),
+				Level:       config.getLogLevel(id, INFO),
 				Text:        text,
 				Operation:   operation,
 				OperationId: op.OperationID,

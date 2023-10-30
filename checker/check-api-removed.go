@@ -7,6 +7,14 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	APIPathRemovedWithoutDeprecationId = "api-path-removed-without-deprecation"
+	APIPathSunsetParseId               = "api-path-sunset-parse"
+	APIPathRemovedBeforeSunsetId       = "api-path-removed-before-sunset"
+	APIRemovedWithoutDeprecationId     = "api-removed-without-deprecation"
+	APIRemovedBeforeSunsetId           = "api-removed-before-sunset"
+)
+
 func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -22,9 +30,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			if !op.Deprecated {
 				source := "original_source=" + (*operationsSources)[op]
 				result = append(result, ApiChange{
-					Id:          "api-path-removed-without-deprecation",
+					Id:          APIPathRemovedWithoutDeprecationId,
 					Level:       ERR,
-					Text:        config.Localize("api-path-removed-without-deprecation"),
+					Text:        config.Localize(APIPathRemovedWithoutDeprecationId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -36,9 +44,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			if err != nil {
 				source := "original_source=" + (*operationsSources)[op]
 				result = append(result, ApiChange{
-					Id:          "api-path-sunset-parse",
+					Id:          APIPathSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
+					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -49,9 +57,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			if !civil.DateOf(time.Now()).After(date) {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
-					Id:          "api-path-removed-before-sunset",
+					Id:          APIPathRemovedBeforeSunsetId,
 					Level:       ERR,
-					Text:        config.Localize("api-path-removed-before-sunset", date),
+					Text:        config.Localize(APIPathRemovedBeforeSunsetId, date),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -70,9 +78,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			if !op.Deprecated {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
-					Id:          "api-removed-without-deprecation",
+					Id:          APIRemovedWithoutDeprecationId,
 					Level:       ERR,
-					Text:        config.Localize("api-removed-without-deprecation"),
+					Text:        config.Localize(APIRemovedWithoutDeprecationId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -84,9 +92,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			if err != nil {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
-					Id:          "api-path-sunset-parse",
+					Id:          APIPathSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
+					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -97,9 +105,9 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			if !civil.DateOf(time.Now()).After(date) {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
-					Id:          "api-removed-before-sunset",
+					Id:          APIRemovedBeforeSunsetId,
 					Level:       ERR,
-					Text:        config.Localize("api-removed-before-sunset", date),
+					Text:        config.Localize(APIRemovedBeforeSunsetId, date),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,

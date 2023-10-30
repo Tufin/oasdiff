@@ -7,23 +7,30 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func ResponseSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+const (
+	ResponseSuccessStatusRemovedId    = "response-success-status-removed"
+	ResponseNonSuccessStatusRemovedId = "response-non-success-status-removed"
+	ResponseSuccessStatusAddedId      = "response-success-status-added"
+	ResponseNonSuccessStatusAddedId   = "response-non-success-status-added"
+)
+
+func ResponseSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	success := func(status int) bool {
 		return status >= 200 && status <= 299
 	}
 
-	return ResponseStatusUpdated(diffReport, operationsSources, config, success, "response-success-status-removed", ERR)
+	return responseStatusUpdated(diffReport, operationsSources, config, success, ResponseSuccessStatusRemovedId, ERR)
 }
 
-func ResponseNonSuccessStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseNonSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	notSuccess := func(status int) bool {
 		return status < 200 || status > 299
 	}
 
-	return ResponseStatusUpdated(diffReport, operationsSources, config, notSuccess, "response-non-success-status-removed", INFO)
+	return responseStatusUpdated(diffReport, operationsSources, config, notSuccess, ResponseNonSuccessStatusRemovedId, INFO)
 }
 
-func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config, filter func(int) bool, id string, defaultLevel Level) Changes {
+func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config, filter func(int) bool, id string, defaultLevel Level) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -62,7 +69,6 @@ func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			for _, responseStatus := range operationItem.ResponsesDiff.Added {
 				addedId := strings.Replace(id, "removed", "added", 1)
-				defaultLevel := INFO
 				status, err := strconv.Atoi(responseStatus)
 				if err != nil {
 					continue
@@ -71,7 +77,7 @@ func ResponseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				if filter(status) {
 					result = append(result, ApiChange{
 						Id:          addedId,
-						Level:       config.getLogLevel(addedId, defaultLevel),
+						Level:       config.getLogLevel(addedId, INFO),
 						Text:        config.Localize(addedId, ColorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

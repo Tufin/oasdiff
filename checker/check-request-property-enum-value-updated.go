@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestPropertyEnumValueRemovedId = "request-property-enum-value-removed"
+	RequestPropertyEnumValueAddedId   = "request-property-enum-value-added"
+)
+
 func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -32,14 +37,10 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						}
 
 						for _, enumVal := range enumDiff.Deleted {
-							level := ERR
-							if propertyDiff.Revision.ReadOnly {
-								level = INFO
-							}
 							result = append(result, ApiChange{
-								Id:          "request-property-enum-value-removed",
-								Level:       level,
-								Text:        config.Localize("request-property-enum-value-removed", ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Id:          RequestPropertyEnumValueRemovedId,
+								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								Text:        config.Localize(RequestPropertyEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -49,9 +50,9 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 
 						for _, enumVal := range enumDiff.Added {
 							result = append(result, ApiChange{
-								Id:          "request-property-enum-value-added",
+								Id:          RequestPropertyEnumValueAddedId,
 								Level:       INFO,
-								Text:        config.Localize("request-property-enum-value-added", ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestPropertyEnumValueAddedId, ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

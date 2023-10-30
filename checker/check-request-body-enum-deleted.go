@@ -4,7 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const requestBodyEnumRemovedId = "request-body-enum-value-removed"
+const (
+	RequestBodyEnumValueRemovedId = "request-body-enum-value-removed"
+)
 
 func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -40,9 +42,9 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 				}
 				for _, enumVal := range enumDiff.Deleted {
 					result = append(result, ApiChange{
-						Id:          requestBodyEnumRemovedId,
-						Level:       config.getLogLevel(requestBodyEnumRemovedId, INFO),
-						Text:        config.Localize(requestBodyEnumRemovedId, ColorizedValue(enumVal)),
+						Id:          RequestBodyEnumValueRemovedId,
+						Level:       config.getLogLevel(RequestBodyEnumValueRemovedId, INFO),
+						Text:        config.Localize(RequestBodyEnumValueRemovedId, ColorizedValue(enumVal)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

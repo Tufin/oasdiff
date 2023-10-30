@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyMinSetId     = "request-body-min-set"
+	RequestPropertyMinSetId = "request-property-min-set"
+)
+
 func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -28,10 +33,10 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					if minDiff.From == nil &&
 						minDiff.To != nil {
 						result = append(result, ApiChange{
-							Id:          "request-body-min-set",
+							Id:          RequestBodyMinSetId,
 							Level:       WARN,
-							Text:        config.Localize("request-body-min-set", ColorizedValue(minDiff.To)),
-							Comment:     config.Localize("request-body-min-set-comment"),
+							Text:        config.Localize(RequestBodyMinSetId, ColorizedValue(minDiff.To)),
+							Comment:     config.Localize(RequestBodyMinSetId + "-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -56,10 +61,10 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						}
 
 						result = append(result, ApiChange{
-							Id:          "request-property-min-set",
+							Id:          RequestPropertyMinSetId,
 							Level:       WARN,
-							Text:        config.Localize("request-property-min-set", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
-							Comment:     config.Localize("request-property-min-set-comment"),
+							Text:        config.Localize(RequestPropertyMinSetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+							Comment:     config.Localize(RequestPropertyMinSetId + "-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

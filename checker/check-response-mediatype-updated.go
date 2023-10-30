@@ -9,7 +9,7 @@ const (
 	ResponseMediaTypeAddedId   = "response-media-type-added"
 )
 
-func ResponseMediaTypeUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result

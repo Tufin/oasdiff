@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	RequestBodyMediaTypeAdded   = "request-body-media-type-added"
-	RequestBodyMediaTypeRemoved = "request-body-media-type-removed"
+	RequestBodyMediaTypeAddedId   = "request-body-media-type-added"
+	RequestBodyMediaTypeRemovedId = "request-body-media-type-removed"
 )
 
 func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -29,9 +29,9 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 			addedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeAdded
 			for _, mediaType := range addedMediaTypes {
 				result = append(result, ApiChange{
-					Id:          RequestBodyMediaTypeAdded,
+					Id:          RequestBodyMediaTypeAddedId,
 					Level:       INFO,
-					Text:        config.Localize(RequestBodyMediaTypeAdded, mediaType),
+					Text:        config.Localize(RequestBodyMediaTypeAddedId, mediaType),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -42,9 +42,9 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 			removedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeDeleted
 			for _, mediaType := range removedMediaTypes {
 				result = append(result, ApiChange{
-					Id:          RequestBodyMediaTypeRemoved,
+					Id:          RequestBodyMediaTypeRemovedId,
 					Level:       ERR,
-					Text:        config.Localize(RequestBodyMediaTypeRemoved, mediaType),
+					Text:        config.Localize(RequestBodyMediaTypeRemovedId, mediaType),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

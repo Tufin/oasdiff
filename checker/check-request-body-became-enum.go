@@ -4,7 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const requestBodyBecameEnumId = "request-body-became-enum"
+const (
+	RequestBodyBecameEnumId = "request-body-became-enum"
+)
 
 func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -35,9 +37,9 @@ func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.O
 					continue
 				}
 				result = append(result, ApiChange{
-					Id:          requestBodyBecameEnumId,
+					Id:          RequestBodyBecameEnumId,
 					Level:       ERR,
-					Text:        config.Localize(requestBodyBecameEnumId),
+					Text:        config.Localize(RequestBodyBecameEnumId),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

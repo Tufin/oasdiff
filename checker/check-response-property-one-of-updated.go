@@ -4,6 +4,13 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseBodyOneOfAddedId       = "response-body-one-of-added"
+	ResponseBodyOneOfRemovedId     = "response-body-one-of-removed"
+	ResponsePropertyOneOfAddedId   = "response-property-one-of-added"
+	ResponsePropertyOneOfRemovedId = "response-property-one-of-removed"
+)
+
 func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -34,10 +41,10 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 
 					if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Added) > 0 {
 						result = append(result, ApiChange{
-							Id:    "response-body-one-of-added",
+							Id:    ResponseBodyOneOfAddedId,
 							Level: INFO,
 							Text: config.Localize(
-								"response-body-one-of-added",
+								ResponseBodyOneOfAddedId,
 								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String()),
 								responseStatus),
 							Operation:   operation,
@@ -49,10 +56,10 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 
 					if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted) > 0 {
 						result = append(result, ApiChange{
-							Id:    "response-body-one-of-removed",
+							Id:    ResponseBodyOneOfRemovedId,
 							Level: INFO,
 							Text: config.Localize(
-								"response-body-one-of-removed",
+								ResponseBodyOneOfRemovedId,
 								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String()),
 								responseStatus),
 							Operation:   operation,
@@ -71,10 +78,10 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 
 							if len(propertyDiff.OneOfDiff.Added) > 0 {
 								result = append(result, ApiChange{
-									Id:    "response-property-one-of-added",
+									Id:    ResponsePropertyOneOfAddedId,
 									Level: INFO,
 									Text: config.Localize(
-										"response-property-one-of-added",
+										ResponsePropertyOneOfAddedId,
 										ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
 										ColorizedValue(propertyFullName(propertyPath, propertyName)),
 										responseStatus),
@@ -87,10 +94,10 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 
 							if len(propertyDiff.OneOfDiff.Deleted) > 0 {
 								result = append(result, ApiChange{
-									Id:    "response-property-one-of-removed",
+									Id:    ResponsePropertyOneOfRemovedId,
 									Level: INFO,
 									Text: config.Localize(
-										"response-property-one-of-removed",
+										ResponsePropertyOneOfRemovedId,
 										ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
 										ColorizedValue(propertyFullName(propertyPath, propertyName)),
 										responseStatus),

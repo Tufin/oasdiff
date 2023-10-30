@@ -18,7 +18,7 @@ To exit with return code 1 even if only WARN-level breaking changes are found, a
 
 ### Output Formats
 The default output format is human-readable text.  
-You can specify the `--format` flag to output breaking-changes in json or yaml.
+You can specify the `--format` flag to output breaking-changes in json, yaml, githubactions or junit formats.
 
 ### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
@@ -67,23 +67,23 @@ In most cases the `x-extensible-enum` is similar to enum values, except it allow
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
 ### Optional Breaking-Changes Checks
-You can use the `--include-checks` flag to include the following optional checks:
-- response-non-success-status-removed
-- api-operation-id-removed
-- api-tag-removed
-- api-schema-removed
-- response-property-enum-value-removed
-- response-mediatype-enum-value-removed
-- request-body-enum-value-removed
+You can use the `--include-checks` flag to include optional checks for breaking-changes.  
+Use the `oasdiff checks --required false` command to see the list of optional checks.  
 
 For example:
 ```
 oasdiff breaking data/openapi-test1.yaml data/openapi-test3.yaml --include-checks response-non-success-status-removed
 ```
 
+### Localization
+To display changes in other languages use the `--lang` flag.  
+Currently English and Russian are supported.  
+[Please improve oasdiff by adding your own language](https://github.com/Tufin/oasdiff/issues/383).
+
 ### Customizing Breaking-Changes Checks
-If you encounter a change that isn't considered breaking by oasdiff and you would like to consider it as a breaking-change you may add an [optional breaking-changes check](#optional-breaking-changes-checks).  
-For more information, see [this guide](CUSTOMIZING-CHECKS.md) and this example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
+If you encounter a change that isn't considered breaking by oasdiff you may:
+1. Check if the change is already available as an [optional breaking-changes check](#optional-breaking-changes-checks).  
+2. Add a [custom check](CUSTOMIZING-CHECKS.md)
 
 ### Examples
 [Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  

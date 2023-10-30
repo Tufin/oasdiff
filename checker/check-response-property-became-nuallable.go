@@ -4,8 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const responsePropertyBecameNullableId = "response-property-became-nullable"
-const responseBodyBecameNullableId = "response-body-became-nullable"
+const (
+	ResponsePropertyBecameNullableId = "response-property-became-nullable"
+	ResponseBodyBecameNullableId     = "response-body-became-nullable"
+)
 
 func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -37,9 +39,9 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 
 					if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
 						result = append(result, ApiChange{
-							Id:          responseBodyBecameNullableId,
+							Id:          ResponseBodyBecameNullableId,
 							Level:       ERR,
-							Text:        config.Localize(responseBodyBecameNullableId),
+							Text:        config.Localize(ResponseBodyBecameNullableId),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -59,9 +61,9 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							result = append(result, ApiChange{
-								Id:          responsePropertyBecameNullableId,
+								Id:          ResponsePropertyBecameNullableId,
 								Level:       ERR,
-								Text:        config.Localize(responsePropertyBecameNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Text:        config.Localize(ResponsePropertyBecameNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

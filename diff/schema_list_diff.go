@@ -167,6 +167,9 @@ func getGroupDiffForInlineSchemas(config *Config, state *state, schemaRefs1, sch
 		} else if !found {
 			notContainedIdx = append(notContainedIdx, index1)
 			schemaName := fmt.Sprintf("%s[%d]", inlineSchemaPrefix, index1)
+			if schemaRef1 != nil && schemaRef1.Value != nil && schemaRef1.Value.Title != "" {
+				schemaName = fmt.Sprintf("%s:%s", schemaName, schemaRef1.Value.Title)
+			}
 			notContainedSchemas = append(notContainedSchemas, schemaName)
 		} else {
 			matched[index2] = struct{}{}

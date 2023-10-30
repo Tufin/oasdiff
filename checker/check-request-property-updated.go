@@ -6,6 +6,12 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+const (
+	RequestPropertyRemovedId     = "request-property-removed"
+	NewRequiredRequestPropertyId = "new-required-request-property"
+	NewOptionalRequestPropertyId = "new-optional-request-property"
+)
+
 func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -29,9 +35,9 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 						if !propertyItem.ReadOnly {
 							source := (*operationsSources)[operationItem.Revision]
 							result = append(result, ApiChange{
-								Id:          "request-property-removed",
+								Id:          RequestPropertyRemovedId,
 								Level:       WARN,
-								Text:        config.Localize("request-property-removed", ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestPropertyRemovedId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -48,9 +54,9 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 						}
 						if slices.Contains(parent.Revision.Required, propertyName) {
 							result = append(result, ApiChange{
-								Id:          "new-required-request-property",
+								Id:          NewRequiredRequestPropertyId,
 								Level:       ERR,
-								Text:        config.Localize("new-required-request-property", ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(NewRequiredRequestPropertyId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -58,9 +64,9 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							})
 						} else {
 							result = append(result, ApiChange{
-								Id:          "new-optional-request-property",
+								Id:          NewOptionalRequestPropertyId,
 								Level:       INFO,
-								Text:        config.Localize("new-optional-request-property", ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(NewOptionalRequestPropertyId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

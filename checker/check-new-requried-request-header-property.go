@@ -6,6 +6,10 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+const (
+	NewRequiredRequestHeaderPropertyId = "new-required-request-header-property"
+)
+
 func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -40,9 +44,9 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 							}
 
 							result = append(result, ApiChange{
-								Id:          "new-required-request-header-property",
+								Id:          NewRequiredRequestHeaderPropertyId,
 								Level:       ERR,
-								Text:        config.Localize("new-required-request-header-property", ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
+								Text:        config.Localize(NewRequiredRequestHeaderPropertyId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
