@@ -1297,13 +1297,12 @@ func validateConsistency(t *testing.T, spec string, tests []Test) {
 func runTests(t *testing.T, spec string, tests []Test, shouldMerge bool) []error {
 	loader := openapi3.NewLoader()
 	doc, err := loader.LoadFromData([]byte(spec))
+	require.NoError(t, err)
 
 	if shouldMerge {
 		doc, err = flatten.MergeSpec(doc)
 		require.NoError(t, err)
 	}
-
-	require.NoError(t, err)
 
 	router, err := legacyrouter.NewRouter(doc)
 	require.NoError(t, err)
