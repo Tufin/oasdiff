@@ -2,7 +2,6 @@ package flatten_test
 
 import (
 	"bytes"
-	"log"
 	"net/http"
 	"testing"
 
@@ -1295,22 +1294,13 @@ func validateConsistency(t *testing.T, spec string, tests []Test) {
 	}
 }
 
-func merge(doc *openapi3.T) *openapi3.T {
-	schemaRef := doc.Paths.Find("/sample").Put.RequestBody.Value.Content.Get("application/json").Schema
-	merged, err := flatten.Merge(*schemaRef)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	schemaRef.Value = merged
-	return doc
-}
-
 func runTests(t *testing.T, spec string, tests []Test, shouldMerge bool) []error {
 	loader := openapi3.NewLoader()
 	doc, err := loader.LoadFromData([]byte(spec))
 
 	if shouldMerge {
-		doc = merge(doc)
+		doc, err = flatten.MergeSpec(doc)
+		require.NoError(t, err)
 	}
 
 	require.NoError(t, err)
