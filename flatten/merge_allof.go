@@ -211,8 +211,8 @@ func mergeSchemaRefs(state *state, srefs openapi3.SchemaRefs) (openapi3.SchemaRe
 	return result, nil
 }
 
-// input: A list of schemas without AllOf
-// output: A single equivalent schema without AllOf
+// Given a list of schemas that are free of AllOf or nested AllOf components as input,
+// the function produces a single equivalent schema in the resultRef parameter.
 func flattenSchemas(state *state, result *openapi3.SchemaRef, schemas []*openapi3.SchemaRef) error {
 
 	collection := collect(schemas)
