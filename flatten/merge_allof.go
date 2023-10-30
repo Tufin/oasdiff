@@ -113,6 +113,9 @@ func mergeInternal(state *state, baseSchemaRef *openapi3.SchemaRef) (*openapi3.S
 		return nil, err
 	}
 
+	if len(allOf) == 0 {
+		return result, nil
+	}
 	// flatten merged schemas into a single equivalent schema
 	schemaRefs := openapi3.SchemaRefs{result}
 	schemaRefs = append(schemaRefs, allOf...)
@@ -174,11 +177,14 @@ func mergeAdditionalProperties(state *state, ap openapi3.AdditionalProperties) (
 	} else {
 		ptr = nil
 	}
-	result.Has = &value
+	result.Has = ptr
 	return result, nil
 }
 
 func mergeProperties(state *state, props openapi3.Schemas) (openapi3.Schemas, error) {
+	if props == nil {
+		return nil, nil
+	}
 	result := openapi3.Schemas{}
 	for k, v := range props {
 		merged, err := mergeInternal(state, v)
