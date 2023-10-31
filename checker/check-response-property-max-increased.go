@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseBodyMaxIncreasedId     = "response-body-max-increased"
+	ResponsePropertyMaxIncreasedId = "response-property-max-increased"
+)
+
 func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -32,9 +37,9 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 							maxDiff.To != nil {
 							if IsIncreasedValue(maxDiff) {
 								result = append(result, ApiChange{
-									Id:          "response-body-max-increased",
+									Id:          ResponseBodyMaxIncreasedId,
 									Level:       ERR,
-									Text:        config.Localize("response-body-max-increased", ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+									Text:        config.Localize(ResponseBodyMaxIncreasedId, ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -64,9 +69,9 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 							}
 
 							result = append(result, ApiChange{
-								Id:          "response-property-max-increased",
+								Id:          ResponsePropertyMaxIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize("response-property-max-increased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To), ColorizedValue(responseStatus)),
+								Text:        config.Localize(ResponsePropertyMaxIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

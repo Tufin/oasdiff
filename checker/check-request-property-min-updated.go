@@ -4,6 +4,13 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyMinIncreasedId     = "request-body-min-increased"
+	RequestBodyMinDecreasedId     = "request-body-min-decreased"
+	RequestPropertyMinIncreasedId = "request-property-min-increased"
+	RequestPropertyMinDecreasedId = "request-property-min-decreased"
+)
+
 func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -29,9 +36,9 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						minDiff.To != nil {
 						if IsIncreasedValue(minDiff) {
 							result = append(result, ApiChange{
-								Id:          "request-body-min-increased",
+								Id:          RequestBodyMinIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize("request-body-min-increased", ColorizedValue(minDiff.To)),
+								Text:        config.Localize(RequestBodyMinIncreasedId, ColorizedValue(minDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -39,9 +46,9 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							})
 						} else {
 							result = append(result, ApiChange{
-								Id:          "request-body-min-decreased",
+								Id:          RequestBodyMinDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize("request-body-min-decreased", ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Text:        config.Localize(RequestBodyMinDecreasedId, ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -64,9 +71,9 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						}
 						if IsIncreasedValue(minDiff) {
 							result = append(result, ApiChange{
-								Id:          "request-property-min-increased",
-								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly),
-								Text:        config.Localize("request-property-min-increased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+								Id:          RequestPropertyMinIncreasedId,
+								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								Text:        config.Localize(RequestPropertyMinIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -74,9 +81,9 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							})
 						} else {
 							result = append(result, ApiChange{
-								Id:          "request-property-min-decreased",
+								Id:          RequestPropertyMinDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize("request-property-min-decreased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Text:        config.Localize(RequestPropertyMinDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

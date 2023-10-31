@@ -4,6 +4,12 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterPatternAddedId   = "request-parameter-pattern-added"
+	RequestParameterPatternRemovedId = "request-parameter-pattern-removed"
+	RequestParameterPatternChangedId = "request-parameter-pattern-changed"
+)
+
 func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -33,9 +39,9 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 
 					if patternDiff.From == "" {
 						result = append(result, ApiChange{
-							Id:          "request-parameter-pattern-added",
+							Id:          RequestParameterPatternAddedId,
 							Level:       WARN,
-							Text:        config.Localize("request-parameter-pattern-added", patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:        config.Localize(RequestParameterPatternAddedId, patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Comment:     config.Localize("pattern-changed-warn-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -44,9 +50,9 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						})
 					} else if patternDiff.To == "" {
 						result = append(result, ApiChange{
-							Id:          "request-parameter-pattern-removed",
+							Id:          RequestParameterPatternRemovedId,
 							Level:       INFO,
-							Text:        config.Localize("request-parameter-pattern-removed", patternDiff.From, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:        config.Localize(RequestParameterPatternRemovedId, patternDiff.From, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -60,9 +66,9 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							comment = ""
 						}
 						result = append(result, ApiChange{
-							Id:          "request-parameter-pattern-changed",
+							Id:          RequestParameterPatternChangedId,
 							Level:       level,
-							Text:        config.Localize("request-parameter-pattern-changed", ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
+							Text:        config.Localize(RequestParameterPatternChangedId, ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
 							Comment:     comment,
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

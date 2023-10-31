@@ -5,6 +5,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	EndpointAddedId = "endpoint-added"
+)
+
 func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -13,9 +17,9 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 
 	appendErr := func(path, opName string, opConfig *openapi3.Operation) {
 		result = append(result, ApiChange{
-			Id:          "endpoint-added",
+			Id:          EndpointAddedId,
 			Level:       INFO,
-			Text:        config.Localize("endpoint-added"),
+			Text:        config.Localize(EndpointAddedId),
 			Operation:   opName,
 			OperationId: opConfig.OperationID,
 			Path:        path,

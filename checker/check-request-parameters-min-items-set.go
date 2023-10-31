@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterMinItemsSetId = "request-parameter-min-items-set"
+)
+
 func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -33,10 +37,10 @@ func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *
 
 					source := (*operationsSources)[operationItem.Revision]
 					result = append(result, ApiChange{
-						Id:          "request-parameter-min-items-set",
+						Id:          RequestParameterMinItemsSetId,
 						Level:       WARN,
-						Text:        config.Localize("request-parameter-min-items-set", ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
-						Comment:     config.Localize("request-parameter-min-items-set-comment"),
+						Text:        config.Localize(RequestParameterMinItemsSetId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
+						Comment:     config.Localize(RequestParameterMinItemsSetId + "-comment"),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

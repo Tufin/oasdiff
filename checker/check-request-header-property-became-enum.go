@@ -4,7 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const requestHeaderPropertyBecameEnumId = "request-header-property-became-enum"
+const (
+	RequestHeaderPropertyBecameEnumId = "request-header-property-became-enum"
+)
 
 func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
@@ -35,9 +37,9 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 
 					if paramDiff.SchemaDiff.EnumDiff != nil && paramDiff.SchemaDiff.EnumDiff.EnumAdded {
 						result = append(result, ApiChange{
-							Id:          requestHeaderPropertyBecameEnumId,
+							Id:          RequestHeaderPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        config.Localize(requestHeaderPropertyBecameEnumId, ColorizedValue(paramName)),
+							Text:        config.Localize(RequestHeaderPropertyBecameEnumId, ColorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -54,9 +56,9 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 							}
 
 							result = append(result, ApiChange{
-								Id:          requestHeaderPropertyBecameEnumId,
+								Id:          RequestHeaderPropertyBecameEnumId,
 								Level:       ERR,
-								Text:        config.Localize(requestHeaderPropertyBecameEnumId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestHeaderPropertyBecameEnumId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

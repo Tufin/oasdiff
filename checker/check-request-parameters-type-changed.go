@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterTypeChangedId = "request-parameter-type-changed"
+)
+
 func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -68,9 +72,9 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					}
 
 					result = append(result, ApiChange{
-						Id:          "request-parameter-type-changed",
+						Id:          RequestParameterTypeChangedId,
 						Level:       ERR,
-						Text:        config.Localize("request-parameter-type-changed", ColorizedValue(paramLocation), ColorizedValue(paramName), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+						Text:        config.Localize(RequestParameterTypeChangedId, ColorizedValue(paramLocation), ColorizedValue(paramName), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

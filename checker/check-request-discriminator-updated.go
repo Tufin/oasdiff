@@ -4,6 +4,21 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyDiscriminatorAddedId                   = "request-body-discriminator-added"
+	RequestBodyDiscriminatorRemovedId                 = "request-body-discriminator-removed"
+	RequestBodyDiscriminatorPropertyNameChangedId     = "request-body-discriminator-property-name-changed"
+	RequestBodyDiscriminatorMappingAddedId            = "request-body-discriminator-mapping-added"
+	RequestBodyDiscriminatorMappingDeletedId          = "request-body-discriminator-mapping-deleted"
+	RequestBodyDiscriminatorMappingChangedId          = "request-body-discriminator-mapping-changed"
+	RequestPropertyDiscriminatorAddedId               = "request-property-discriminator-added"
+	RequestPropertyDiscriminatorRemovedId             = "request-property-discriminator-removed"
+	RequestPropertyDiscriminatorPropertyNameChangedId = "request-property-discriminator-property-name-changed"
+	RequestPropertyDiscriminatorMappingAddedId        = "request-property-discriminator-mapping-added"
+	RequestPropertyDiscriminatorMappingDeletedId      = "request-property-discriminator-mapping-deleted"
+	RequestPropertyDiscriminatorMappingChangedId      = "request-property-discriminator-mapping-changed"
+)
+
 func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {

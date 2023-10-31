@@ -8,6 +8,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	APISunsetDeletedId             = "sunset-deleted"
+	APISunsetDateChangedTooSmallId = "api-sunset-date-changed-too-small"
+)
+
 func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -28,9 +33,9 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			if operationDiff.ExtensionsDiff != nil && !operationDiff.ExtensionsDiff.Deleted.Empty() {
 				result = append(result, ApiChange{
-					Id:          "sunset-deleted",
+					Id:          APISunsetDeletedId,
 					Level:       ERR,
-					Text:        config.Localize("sunset-deleted"),
+					Text:        config.Localize(APISunsetDeletedId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -47,9 +52,9 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			rawDate, date, err := getSunsetDate(op.Extensions)
 			if err != nil {
 				result = append(result, ApiChange{
-					Id:          "api-deprecated-sunset-parse",
+					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
+					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -61,9 +66,9 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			rawDate, baseDate, err := getSunsetDate(opBase.Extensions)
 			if err != nil {
 				result = append(result, ApiChange{
-					Id:          "api-deprecated-sunset-parse",
+					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize("api-deprecated-sunset-parse", rawDate, err),
+					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -77,7 +82,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
 				result = append(result, ApiChange{
-					Id:          "parsing-error",
+					Id:          ParseErrorId,
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
 					Operation:   operation,
@@ -88,13 +93,13 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				continue
 			}
 
-			deprecationDays := getDeperacationDays(config, stability)
+			deprecationDays := getDeprecationDays(config, stability)
 
 			if baseDate.After(date) && days < deprecationDays {
 				result = append(result, ApiChange{
-					Id:          "api-sunset-date-changed-too-small",
+					Id:          APISunsetDateChangedTooSmallId,
 					Level:       ERR,
-					Text:        config.Localize("api-sunset-date-changed-too-small", baseDate, date, baseDate, deprecationDays),
+					Text:        config.Localize(APISunsetDateChangedTooSmallId, baseDate, date, baseDate, deprecationDays),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -114,7 +119,7 @@ const (
 	STABILITY_STABLE = "stable"
 )
 
-func getDeperacationDays(config Config, stability string) int {
+func getDeprecationDays(config Config, stability string) int {
 	switch stability {
 	case STABILITY_DRAFT:
 		return 0

@@ -4,6 +4,13 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyMaxDecreasedId     = "request-body-max-decreased"
+	RequestBodyMaxIncreasedId     = "request-body-max-increased"
+	RequestPropertyMaxDecreasedId = "request-property-max-decreased"
+	RequestPropertyMaxIncreasedId = "request-property-max-increased"
+)
+
 func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -29,9 +36,9 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						maxDiff.To != nil {
 						if IsDecreasedValue(maxDiff) {
 							result = append(result, ApiChange{
-								Id:          "request-body-max-decreased",
+								Id:          RequestBodyMaxDecreasedId,
 								Level:       ERR,
-								Text:        config.Localize("request-body-max-decreased", ColorizedValue(maxDiff.To)),
+								Text:        config.Localize(RequestBodyMaxDecreasedId, ColorizedValue(maxDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -39,9 +46,9 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							})
 						} else {
 							result = append(result, ApiChange{
-								Id:          "request-body-max-increased",
+								Id:          RequestBodyMaxIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize("request-body-max-increased", ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+								Text:        config.Localize(RequestBodyMaxIncreasedId, ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -63,15 +70,10 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							return
 						}
 						if IsDecreasedValue(maxDiff) {
-							level := ERR
-							if propertyDiff.Revision.ReadOnly {
-								level = INFO
-							}
-
 							result = append(result, ApiChange{
-								Id:          "request-property-max-decreased",
-								Level:       level,
-								Text:        config.Localize("request-property-max-decreased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+								Id:          RequestPropertyMaxDecreasedId,
+								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								Text:        config.Localize(RequestPropertyMaxDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -79,9 +81,9 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							})
 						} else {
 							result = append(result, ApiChange{
-								Id:          "request-property-max-increased",
+								Id:          RequestPropertyMaxIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize("request-property-max-increased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+								Text:        config.Localize(RequestPropertyMaxIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

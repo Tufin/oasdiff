@@ -14,6 +14,12 @@ type SecurityChange struct {
 	Comment string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level   Level  `json:"level" yaml:"level"`
 	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
+
+	SourceFile      string `json:"-" yaml:"-"`
+	SourceLine      int    `json:"-" yaml:"-"`
+	SourceLineEnd   int    `json:"-" yaml:"-"`
+	SourceColumn    int    `json:"-" yaml:"-"`
+	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
 func (c SecurityChange) MatchIgnore(ignorePath, ignoreLine string) bool {
@@ -47,6 +53,26 @@ func (SecurityChange) GetOperationId() string {
 
 func (SecurityChange) GetPath() string {
 	return ""
+}
+
+func (c SecurityChange) GetSourceFile() string {
+	return c.SourceFile
+}
+
+func (c SecurityChange) GetSourceLine() int {
+	return c.SourceLine
+}
+
+func (c SecurityChange) GetSourceLineEnd() int {
+	return c.SourceLineEnd
+}
+
+func (c SecurityChange) GetSourceColumn() int {
+	return c.SourceColumn
+}
+
+func (c SecurityChange) GetSourceColumnEnd() int {
+	return c.SourceColumnEnd
 }
 
 func (c SecurityChange) LocalizedError(l Localizer) string {

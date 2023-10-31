@@ -2,11 +2,12 @@ package internal
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 type ChangelogFlags struct {
-	base                     string
-	revision                 string
+	base                     load.Source
+	revision                 load.Source
 	composed                 bool
 	prefixBase               string
 	prefixRevision           string
@@ -45,14 +46,66 @@ func (flags *ChangelogFlags) getComposed() bool {
 	return flags.composed
 }
 
-func (flags *ChangelogFlags) getBase() string {
+func (flags *ChangelogFlags) getBase() load.Source {
 	return flags.base
 }
 
-func (flags *ChangelogFlags) getRevision() string {
+func (flags *ChangelogFlags) getRevision() load.Source {
 	return flags.revision
 }
 
 func (flags *ChangelogFlags) getFlatten() bool {
 	return flags.flatten
+}
+
+func (flags *ChangelogFlags) getCircularReferenceCounter() int {
+	return flags.circularReferenceCounter
+}
+
+func (flags *ChangelogFlags) getIncludeChecks() []string {
+	return flags.includeChecks
+}
+
+func (flags *ChangelogFlags) getDeprecationDaysBeta() int {
+	return flags.deprecationDaysBeta
+}
+
+func (flags *ChangelogFlags) getDeprecationDaysStable() int {
+	return flags.deprecationDaysStable
+}
+
+func (flags *ChangelogFlags) getLang() string {
+	return flags.lang
+}
+
+func (flags *ChangelogFlags) getWarnIgnoreFile() string {
+	return flags.warnIgnoreFile
+}
+
+func (flags *ChangelogFlags) getErrIgnoreFile() string {
+	return flags.errIgnoreFile
+}
+
+func (flags *ChangelogFlags) getFormat() string {
+	return flags.format
+}
+
+func (flags *ChangelogFlags) getFailOn() string {
+	return flags.failOn
+}
+
+func (flags *ChangelogFlags) getFailOnDiff() bool {
+	return false
+}
+
+func (flags *ChangelogFlags) setBase(source load.Source) {
+	flags.base = source
+}
+
+func (flags *ChangelogFlags) setRevision(source load.Source) {
+	flags.revision = source
+}
+
+func (flags *ChangelogFlags) addExcludeElements(element string) {
+	flags.excludeElements = append(flags.excludeElements, element)
 }

@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyMaxSetId     = "request-body-max-set"
+	RequestPropertyMaxSetId = "request-property-max-set"
+)
+
 func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -28,10 +33,10 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					if maxDiff.From == nil &&
 						maxDiff.To != nil {
 						result = append(result, ApiChange{
-							Id:          "request-body-max-set",
+							Id:          RequestBodyMaxSetId,
 							Level:       WARN,
-							Text:        config.Localize("request-body-max-set", ColorizedValue(maxDiff.To)),
-							Comment:     config.Localize("request-body-max-set-comment"),
+							Text:        config.Localize(RequestBodyMaxSetId, ColorizedValue(maxDiff.To)),
+							Comment:     config.Localize(RequestBodyMaxSetId + "-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -56,10 +61,10 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						}
 
 						result = append(result, ApiChange{
-							Id:          "request-property-max-set",
+							Id:          RequestPropertyMaxSetId,
 							Level:       WARN,
-							Text:        config.Localize("request-property-max-set", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
-							Comment:     config.Localize("request-property-max-set-comment"),
+							Text:        config.Localize(RequestPropertyMaxSetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
+							Comment:     config.Localize(RequestPropertyMaxSetId + "-comment"),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

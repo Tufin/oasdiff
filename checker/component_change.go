@@ -14,6 +14,12 @@ type ComponentChange struct {
 	Comment string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level   Level  `json:"level" yaml:"level"`
 	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
+
+	SourceFile      string `json:"-" yaml:"-"`
+	SourceLine      int    `json:"-" yaml:"-"`
+	SourceLineEnd   int    `json:"-" yaml:"-"`
+	SourceColumn    int    `json:"-" yaml:"-"`
+	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
 func (c ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
@@ -47,6 +53,26 @@ func (ComponentChange) GetOperationId() string {
 
 func (ComponentChange) GetPath() string {
 	return ""
+}
+
+func (c ComponentChange) GetSourceFile() string {
+	return c.SourceFile
+}
+
+func (c ComponentChange) GetSourceLine() int {
+	return c.SourceLine
+}
+
+func (c ComponentChange) GetSourceLineEnd() int {
+	return c.SourceLineEnd
+}
+
+func (c ComponentChange) GetSourceColumn() int {
+	return c.SourceColumn
+}
+
+func (c ComponentChange) GetSourceColumnEnd() int {
+	return c.SourceColumnEnd
 }
 
 func (c ComponentChange) LocalizedError(l Localizer) string {

@@ -17,6 +17,12 @@ type ApiChange struct {
 	OperationId string `json:"operationId,omitempty" yaml:"operationId,omitempty"`
 	Path        string `json:"path,omitempty" yaml:"path,omitempty"`
 	Source      string `json:"source,omitempty" yaml:"source,omitempty"`
+
+	SourceFile      string `json:"-" yaml:"-"`
+	SourceLine      int    `json:"-" yaml:"-"`
+	SourceLineEnd   int    `json:"-" yaml:"-"`
+	SourceColumn    int    `json:"-" yaml:"-"`
+	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
 func (c ApiChange) MatchIgnore(ignorePath, ignoreLine string) bool {
@@ -54,6 +60,26 @@ func (c ApiChange) GetOperationId() string {
 
 func (c ApiChange) GetPath() string {
 	return c.Path
+}
+
+func (c ApiChange) GetSourceFile() string {
+	return c.SourceFile
+}
+
+func (c ApiChange) GetSourceLine() int {
+	return c.SourceLine
+}
+
+func (c ApiChange) GetSourceLineEnd() int {
+	return c.SourceLineEnd
+}
+
+func (c ApiChange) GetSourceColumn() int {
+	return c.SourceColumn
+}
+
+func (c ApiChange) GetSourceColumnEnd() int {
+	return c.SourceColumnEnd
 }
 
 func (c ApiChange) LocalizedError(l Localizer) string {

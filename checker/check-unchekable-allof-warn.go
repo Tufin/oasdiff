@@ -6,6 +6,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestAllOfModifiedId  = "request-allOf-modified"
+	ResponseAllOfModifiedId = "response-allOf-modified"
+)
+
 func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -32,10 +37,10 @@ func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *di
 						if len(allOfDiff.Added) > 0 && len(allOfDiff.Deleted) > 0 {
 							source := (*operationsSources)[operationItem.Revision]
 							result = append(result, ApiChange{
-								Id:          "request-allOf-modified",
+								Id:          RequestAllOfModifiedId,
 								Level:       WARN,
-								Text:        config.Localize("request-allOf-modified", ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Comment:     config.Localize("request-allOf-modified-comment"),
+								Text:        config.Localize(RequestAllOfModifiedId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Comment:     config.Localize(RequestAllOfModifiedId + "-comment"),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -79,7 +84,7 @@ func UncheckedResponseAllOfWarnCheck(diffReport *diff.Diff, operationsSources *d
 							if len(allOfDiff.Added) > 0 && len(allOfDiff.Deleted) > 0 {
 								source := (*operationsSources)[operationItem.Revision]
 								result = append(result, ApiChange{
-									Id:          "response-allOf-modified",
+									Id:          ResponseAllOfModifiedId,
 									Level:       WARN,
 									Text:        fmt.Sprintf("modified allOf for the response property %s for status %s", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
 									Comment:     "It is a warn because it is very difficult to check that allOf changed correctly without breaking changes",

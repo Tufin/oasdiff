@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterMinLengthIncreasedId = "request-parameter-min-length-increased"
+	RequestParameterMinLengthDecreasedId = "request-parameter-min-length-decreased"
+)
+
 func RequestParameterMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -31,10 +36,10 @@ func RequestParameterMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSour
 						continue
 					}
 
-					id := "request-parameter-min-length-increased"
+					id := RequestParameterMinLengthIncreasedId
 					level := ERR
 					if IsDecreasedValue(minLengthDiff) {
-						id = "request-parameter-min-length-decreased"
+						id = RequestParameterMinLengthDecreasedId
 						level = INFO
 					}
 

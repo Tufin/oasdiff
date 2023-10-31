@@ -4,6 +4,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterRemovedId = "request-parameter-removed"
+)
+
 func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -21,9 +25,9 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 				for _, paramName := range paramItems {
 					source := (*operationsSources)[operationItem.Revision]
 					result = append(result, ApiChange{
-						Id:          "request-parameter-removed",
+						Id:          RequestParameterRemovedId,
 						Level:       WARN,
-						Text:        config.Localize("request-parameter-removed", ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Text:        config.Localize(RequestParameterRemovedId, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

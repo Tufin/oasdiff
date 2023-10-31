@@ -33,10 +33,10 @@ func (c *Config) getLogLevel(checkerId string, defaultLevel Level) Level {
 	return defaultLevel
 }
 
-func ConditionalError(isConditionSatisfied bool) Level {
+func ConditionalError(isConditionSatisfied bool, defaultLevel Level) Level {
 	if isConditionSatisfied {
 		return ERR
 	}
 
-	return INFO
+	return defaultLevel
 }

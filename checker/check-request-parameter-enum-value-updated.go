@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestParameterEnumValueAddedId   = "request-parameter-enum-value-added"
+	RequestParameterEnumValueRemovedId = "request-parameter-enum-value-removed"
+)
+
 func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -32,9 +37,9 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 					}
 					for _, enumVal := range enumDiff.Deleted {
 						result = append(result, ApiChange{
-							Id:          "request-parameter-enum-value-removed",
+							Id:          RequestParameterEnumValueRemovedId,
 							Level:       ERR,
-							Text:        config.Localize("request-parameter-enum-value-removed", ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:        config.Localize(RequestParameterEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -43,9 +48,9 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 					}
 					for _, enumVal := range enumDiff.Added {
 						result = append(result, ApiChange{
-							Id:          "request-parameter-enum-value-added",
+							Id:          RequestParameterEnumValueAddedId,
 							Level:       INFO,
-							Text:        config.Localize("request-parameter-enum-value-added", ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Text:        config.Localize(RequestParameterEnumValueAddedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -19,8 +19,8 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 
 ## Features 
 - Detect [breaking changes](BREAKING-CHANGES.md)
+- Display a user-friendly [changelog](CHANGELOG.md) of all important API changes
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
-- Display a user-friendly [changelog](#openapi-changelog) of all important API changes
 - [Run from Docker](#openapi-diff-with-docker)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
 - OpenAPI diff of local files system or remote files over http/s
@@ -237,7 +237,8 @@ Note that stripping precedes prepending.
 
 ## Path Parameter Renaming
 Sometimes developers decide to change names of path parameters, for example, in order to follow a certain naming convention.  
-See [this](MATCHING-ENDPOINTS.md) to learn more about how oasdiff supports path parameter renaming.
+oasdiff supports path parameter renaming by default.  
+[Learn more](MATCHING-ENDPOINTS.md) about how oasdiff supports path parameter renaming.
 
 ## Excluding Specific Kinds of Changes 
 You can use the `--exclude-elements` flag to exclude certain kinds of changes:

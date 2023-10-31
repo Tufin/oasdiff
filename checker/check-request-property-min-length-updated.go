@@ -4,6 +4,13 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	RequestBodyMinLengthIncreasedId     = "request-body-min-length-increased"
+	RequestBodyMinLengthDecreasedId     = "request-body-min-length-decreased"
+	RequestPropertyMinLengthIncreasedId = "request-property-min-length-increased"
+	RequestPropertyMinLengthDecreasedId = "request-property-min-length-decreased"
+)
+
 func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -29,9 +36,9 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						minLengthDiff.To != nil {
 						if IsIncreasedValue(minLengthDiff) {
 							result = append(result, ApiChange{
-								Id:          "request-body-min-length-increased",
+								Id:          RequestBodyMinLengthIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize("request-body-min-length-increased", ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+								Text:        config.Localize(RequestBodyMinLengthIncreasedId, ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -39,9 +46,9 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							})
 						} else {
 							result = append(result, ApiChange{
-								Id:          "request-body-min-length-decreased",
+								Id:          RequestBodyMinLengthDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize("request-body-min-length-decreased", ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+								Text:        config.Localize(RequestBodyMinLengthDecreasedId, ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -65,9 +72,9 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 
 						if IsDecreasedValue(minLengthDiff) {
 							result = append(result, ApiChange{
-								Id:          "request-property-min-length-decreased",
+								Id:          RequestPropertyMinLengthDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize("request-property-min-length-decreased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+								Text:        config.Localize(RequestPropertyMinLengthDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -75,9 +82,9 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							})
 						} else {
 							result = append(result, ApiChange{
-								Id:          "request-property-min-length-increased",
+								Id:          RequestPropertyMinLengthIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize("request-property-min-length-increased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+								Text:        config.Localize(RequestPropertyMinLengthIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

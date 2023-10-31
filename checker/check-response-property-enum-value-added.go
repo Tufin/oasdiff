@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	ResponsePropertyEnumValueAddedCheckId          = "response-property-enum-value-added"
-	ResponseWriteOnlyPropertyEnumValueAddedCheckId = "response-write-only-property-enum-value-added"
+	ResponsePropertyEnumValueAddedId          = "response-property-enum-value-added"
+	ResponseWriteOnlyPropertyEnumValueAddedId = "response-write-only-property-enum-value-added"
 )
 
 func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -39,13 +39,13 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 								return
 							}
 
-							id := ResponsePropertyEnumValueAddedCheckId
+							id := ResponsePropertyEnumValueAddedId
 							level := WARN
 							comment := config.Localize("response-property-enum-value-added-comment")
 
 							if propertyDiff.Revision.WriteOnly {
 								// Document write-only enum update
-								id = ResponseWriteOnlyPropertyEnumValueAddedCheckId
+								id = ResponseWriteOnlyPropertyEnumValueAddedId
 								level = INFO
 								comment = ""
 							}

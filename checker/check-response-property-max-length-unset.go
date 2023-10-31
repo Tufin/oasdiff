@@ -4,6 +4,11 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	ResponseBodyMaxLengthUnsetId     = "response-body-max-length-unset"
+	ResponsePropertyMaxLengthUnsetId = "response-property-max-length-unset"
+)
+
 func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
@@ -31,9 +36,9 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 						if maxLengthDiff.From != nil &&
 							maxLengthDiff.To == nil {
 							result = append(result, ApiChange{
-								Id:          "response-body-max-length-unset",
+								Id:          ResponseBodyMaxLengthUnsetId,
 								Level:       ERR,
-								Text:        config.Localize("response-body-max-length-unset", ColorizedValue(maxLengthDiff.From)),
+								Text:        config.Localize(ResponseBodyMaxLengthUnsetId, ColorizedValue(maxLengthDiff.From)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -58,9 +63,9 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							result = append(result, ApiChange{
-								Id:          "response-property-max-length-unset",
+								Id:          ResponsePropertyMaxLengthUnsetId,
 								Level:       ERR,
-								Text:        config.Localize("response-property-max-length-unset", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(responseStatus)),
+								Text:        config.Localize(ResponsePropertyMaxLengthUnsetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(responseStatus)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
