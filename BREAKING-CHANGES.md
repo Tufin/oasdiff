@@ -40,21 +40,24 @@ Example:
 oasdiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
 
 ### Ignoring Specific Breaking Changes
-Sometimes, you may want to ignore certain breaking changes.  
-The new Breaking Changes method allows you define breaking changes that you want to ignore in a configuration file.  
+Sometimes, you want to allow certain breaking changes, for example, when your spec and service are out-of-sync and you need to correct the spec.  
+Oasdiff allows you define breaking changes that you want to ignore in a configuration file.  
 You can specify the configuration file name in the oasdiff command-line with the `--warn-ignore` flag for WARNINGS or the `--err-ignore` flag for ERRORS.  
 Each line in the configuration file should contain two parts:
-1. method and path (the first field in the line beginning with slash)
+1. method and path (the first field in the line beginning with slash) to ignore a change to an endpoint, or the keyword 'components' to ignore a change in components
 2. description of the breaking change
 
 For example:
 ```
 GET /api/{domain}/{project}/badges/security-score removed the success response with the status '200'
+components removed the schema 'rules'
 ```
 
 The line may contain additional info, like this:
 ```
  - 12.01.2023 In the GET /api/{domain}/{project}/badges/security-score, we removed the success response with the status '200'
+ - 31.10.2023 In components, removed the schema 'network-policies'
+
 ```
 
 The configuration files can be of any text type, e.g., Markdown, so you can use them to document breaking changes and other important changes.
