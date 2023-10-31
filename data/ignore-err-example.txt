@@ -1,3 +1,4 @@
 GET /api/{domain}/{project}/badges/security-score removed the success response with the status '200'
-components removed the schema 'rules' [api-schema-removed]
-API   removed the schema 'network-policies' [api-schema-removed]
+in components removed the schema 'rules'
+removed the schema 'network-policies' from components
+

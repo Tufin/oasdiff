@@ -17,8 +17,8 @@ type SecurityChange struct {
 }
 
 func (c SecurityChange) MatchIgnore(ignorePath, ignoreLine string) bool {
-	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) && strings.Contains(ignoreLine, strings.ToLower(c.Id))
-
+	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) &&
+		strings.Contains(ignoreLine, "security")
 }
 
 func (c SecurityChange) GetId() string {

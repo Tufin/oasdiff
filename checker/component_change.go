@@ -17,7 +17,8 @@ type ComponentChange struct {
 }
 
 func (c ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
-	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) && strings.Contains(ignoreLine, strings.ToLower(c.Id))
+	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) &&
+		strings.Contains(ignoreLine, "components")
 }
 
 func (c ComponentChange) GetId() string {
