@@ -7,7 +7,7 @@ type Source struct {
 	Stdin bool
 }
 
-func GetSource(path string) Source {
+func NewSource(path string) Source {
 	stdin := path == "-"
 	if stdin {
 		path = "stdin"
@@ -19,7 +19,7 @@ func GetSource(path string) Source {
 	}
 }
 
-func (source Source) Out() string {
+func (source *Source) Out() string {
 	if source.Stdin {
 		return source.Path
 	}
