@@ -39,3 +39,15 @@ func TestIntersection_Empty(t *testing.T) {
 	s.Add("y")
 	require.Empty(t, s.Intersection(utils.StringSet{}))
 }
+
+func TestStringSet_Plus(t *testing.T) {
+	s := utils.StringSet{}
+	s.Add("x")
+	require.Empty(t, s.Plus(s))
+}
+
+func TestStringSet_Equals(t *testing.T) {
+	s := utils.StringSet{}
+	s.Add("x")
+	require.True(t, s.Equals(s))
+}
