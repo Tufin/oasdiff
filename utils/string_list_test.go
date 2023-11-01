@@ -11,8 +11,10 @@ func Test_StringList(t *testing.T) {
 	l := utils.StringList{}
 	require.True(t, l.Empty())
 	require.Equal(t, l.String(), "")
-	l.Set("b,a")
-	l.Sort()
+	require.NoError(t, l.Set("b,a"))
+	require.Equal(t, l.String(), "b, a")
+	l = l.Sort()
+	require.Equal(t, l.String(), "a, b")
 	require.True(t, l.Contains("a"))
 	require.True(t, l.Contains("b"))
 	require.True(t, l.Minus(l).ToStringSet().Empty())
