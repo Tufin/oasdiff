@@ -1,4 +1,4 @@
-package formatters
+package formatters_test
 
 import (
 	"os"
@@ -6,11 +6,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/formatters"
 )
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	// prepare formatter and test changes
-	formatter := GitHubActionsFormatter{}
+	formatter := formatters.GitHubActionsFormatter{}
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
@@ -20,7 +21,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(testChanges, RenderOpts{})
+	output, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id::This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -28,7 +29,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_MultipleLevels(t *testing.T) {
 	// prepare formatter and test changes
-	formatter := GitHubActionsFormatter{}
+	formatter := formatters.GitHubActionsFormatter{}
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
@@ -48,7 +49,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_MultipleLevels(t *testing.
 	}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(testChanges, RenderOpts{})
+	output, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id::This is a breaking change.\n::warning title=change_id::This is a warning.\n::notice title=change_id::This is a notice.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -56,7 +57,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_MultipleLevels(t *testing.
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_MultilineText(t *testing.T) {
 	// prepare formatter and test changes
-	formatter := GitHubActionsFormatter{}
+	formatter := formatters.GitHubActionsFormatter{}
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
@@ -66,7 +67,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_MultilineText(t *testing.T
 	}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(testChanges, RenderOpts{})
+	output, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id::This is a breaking change.%0AThis is a second line.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -74,7 +75,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_MultilineText(t *testing.T
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_FileLocation(t *testing.T) {
 	// prepare formatter and test changes
-	formatter := GitHubActionsFormatter{}
+	formatter := formatters.GitHubActionsFormatter{}
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:              "change_id",
@@ -89,7 +90,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_FileLocation(t *testing.T)
 	}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(testChanges, RenderOpts{})
+	output, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id,file=openapi.json,col=6,endColumn=11,line=21,endLine=26::This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -103,7 +104,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	_ = os.Setenv("GITHUB_OUTPUT", tempFile.Name())
 
 	// prepare formatter and test changes
-	formatter := GitHubActionsFormatter{}
+	formatter := formatters.GitHubActionsFormatter{}
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
@@ -128,7 +129,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(testChanges, RenderOpts{})
+	output, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
 	assert.NoError(t, err)
 	_ = os.Unsetenv("GITHUB_OUTPUT")
 	expectedOutput := "::error title=change_id::This is a breaking change.\n::error title=change_id::This is a second breaking change.\n::warning title=change_id::This is a warning.\n::notice title=change_id::This is a notice.\n"
@@ -140,4 +141,24 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	assert.Contains(t, string(outputFile), "error_count=2\n")
 	assert.Contains(t, string(outputFile), "warning_count=1\n")
 	assert.Contains(t, string(outputFile), "info_count=1\n")
+}
+
+func TestGitHubActionsFormatterr_NotImplemented(t *testing.T) {
+	formatter := formatters.GitHubActionsFormatter{}
+
+	var err error
+	_, err = formatter.RenderDiff(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+
+	_, err = formatter.RenderSummary(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+
+	_, err = formatter.RenderChangelog(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+
+	_, err = formatter.RenderChecks(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+
+	_, err = formatter.RenderFlatten(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
 }

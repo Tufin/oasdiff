@@ -3,13 +3,12 @@ package formatters
 import (
 	"fmt"
 
-	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/report"
 )
 
 type HTMLFormatter struct {
+	notImplementedFormatter
 }
 
 func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
@@ -19,26 +18,6 @@ func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 	}
 
 	return []byte(reportAsString), nil
-}
-
-func (f HTMLFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f HTMLFormatter) RenderBreakingChanges(checker.Changes, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f HTMLFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f HTMLFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f HTMLFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
-	return notImplemented()
 }
 
 func (f HTMLFormatter) SupportedOutputs() []Output {
