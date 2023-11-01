@@ -17,7 +17,7 @@ var githubActionsSeverity = map[checker.Level]string{
 }
 
 type GitHubActionsFormatter struct {
-	NotImplementedFormatter
+	notImplementedFormatter
 }
 
 func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {

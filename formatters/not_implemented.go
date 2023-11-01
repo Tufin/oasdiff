@@ -8,24 +8,24 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-type NotImplementedFormatter struct{}
+type notImplementedFormatter struct{}
 
-func (f NotImplementedFormatter) RenderDiff(*diff.Diff, RenderOpts) ([]byte, error) {
+func (f notImplementedFormatter) RenderDiff(*diff.Diff, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
-func (f NotImplementedFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
+func (f notImplementedFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
-func (f NotImplementedFormatter) RenderBreakingChanges(checker.Changes, RenderOpts) ([]byte, error) {
+func (f notImplementedFormatter) RenderBreakingChanges(checker.Changes, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
-func (f NotImplementedFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
+func (f notImplementedFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
-func (f NotImplementedFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
+func (f notImplementedFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
-func (f NotImplementedFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
+func (f notImplementedFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
 

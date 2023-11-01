@@ -11,7 +11,7 @@ import (
 )
 
 type TEXTFormatter struct {
-	NotImplementedFormatter
+	notImplementedFormatter
 	Localizer checker.Localizer
 }
 

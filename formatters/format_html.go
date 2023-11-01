@@ -8,7 +8,7 @@ import (
 )
 
 type HTMLFormatter struct {
-	NotImplementedFormatter
+	notImplementedFormatter
 }
 
 func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {

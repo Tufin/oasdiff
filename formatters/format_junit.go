@@ -36,7 +36,7 @@ type JUnitFailure struct {
 }
 
 type JUnitFormatter struct {
-	NotImplementedFormatter
+	notImplementedFormatter
 }
 
 func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
