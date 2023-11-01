@@ -69,7 +69,3 @@ func DefaultFormatterOpts() FormatterOpts {
 		Language: LangDefault,
 	}
 }
-
-func notImplemented() ([]byte, error) {
-	return nil, fmt.Errorf("not implemented")
-}
