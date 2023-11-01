@@ -142,3 +142,23 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	assert.Contains(t, string(outputFile), "warning_count=1\n")
 	assert.Contains(t, string(outputFile), "info_count=1\n")
 }
+
+func TestGitHubActionsFormatterr_NotImplemented(t *testing.T) {
+	formatter := formatters.GitHubActionsFormatter{}
+
+	var err error
+	_, err = formatter.RenderDiff(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+
+	_, err = formatter.RenderSummary(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+
+	_, err = formatter.RenderChangelog(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+
+	_, err = formatter.RenderChecks(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+
+	_, err = formatter.RenderFlatten(nil, formatters.RenderOpts{})
+	assert.Error(t, err)
+}
