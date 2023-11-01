@@ -50,13 +50,16 @@ Each line in the configuration file should contain two parts:
 For example:
 ```
 GET /api/{domain}/{project}/badges/security-score removed the success response with the status '200'
+```
+Or, for a component change:
+```
 components removed the schema 'rules'
 ```
 
-The line may contain additional info, like this:
+The required parts may appear in any order, in lower or upper case, and the configuration line may contain additional text, like this:
 ```
- - 12.01.2023 In the GET /api/{domain}/{project}/badges/security-score, we removed the success response with the status '200'
- - 31.10.2023 In components, removed the schema 'network-policies'
+ - 12.01.2023 In GET /api/{domain}/{project}/badges/security-score we removed the success response with the status '200'
+ - 31.10.2023 Removed the schema 'network-policies' from components
 
 ```
 
