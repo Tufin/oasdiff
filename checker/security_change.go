@@ -55,6 +55,10 @@ func (SecurityChange) GetPath() string {
 	return ""
 }
 
+func (c SecurityChange) GetSource() string {
+	return c.Source
+}
+
 func (c SecurityChange) GetSourceFile() string {
 	return c.SourceFile
 }

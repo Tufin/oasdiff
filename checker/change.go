@@ -8,6 +8,7 @@ type Change interface {
 	GetOperation() string
 	GetOperationId() string
 	GetPath() string
+	GetSource() string
 	GetSourceFile() string
 	GetSourceLine() int
 	GetSourceLineEnd() int

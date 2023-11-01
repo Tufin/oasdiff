@@ -62,6 +62,10 @@ func (c ApiChange) GetPath() string {
 	return c.Path
 }
 
+func (c ApiChange) GetSource() string {
+	return c.Source
+}
+
 func (c ApiChange) GetSourceFile() string {
 	return c.SourceFile
 }

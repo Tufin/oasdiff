@@ -55,6 +55,10 @@ func (ComponentChange) GetPath() string {
 	return ""
 }
 
+func (c ComponentChange) GetSource() string {
+	return c.Source
+}
+
 func (c ComponentChange) GetSourceFile() string {
 	return c.SourceFile
 }
