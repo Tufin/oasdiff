@@ -37,11 +37,7 @@ func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs Changes, ignore
 	ignoredErrs := make([]bool, len(errs))
 	for ignoreScanner.Scan() {
 		ignoreLine := strings.ToLower(ignoreScanner.Text())
-
 		ignorePath := ignoreLinePath(ignoreLine)
-		if ignorePath == "" {
-			continue
-		}
 
 		for errIndex, err := range errs {
 			if err.GetLevel() != level {

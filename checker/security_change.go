@@ -2,11 +2,12 @@ package checker
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/TwiN/go-color"
 )
 
-// SecurityChange represnts a change in the Security Section (not to be confised with components/securitySchemes)
+// SecurityChange represents a change in the Security Section (not to be confised with components/securitySchemes)
 type SecurityChange struct {
 	Id      string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text    string `json:"text,omitempty" yaml:"text,omitempty"`
@@ -21,8 +22,9 @@ type SecurityChange struct {
 	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
-func (SecurityChange) MatchIgnore(ignorePath, ignoreLine string) bool {
-	return false
+func (c SecurityChange) MatchIgnore(ignorePath, ignoreLine string) bool {
+	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) &&
+		strings.Contains(ignoreLine, "security")
 }
 
 func (c SecurityChange) GetId() string {
