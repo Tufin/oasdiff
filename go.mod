@@ -3,7 +3,7 @@ module github.com/tufin/oasdiff
 go 1.21
 
 require (
-	cloud.google.com/go v0.110.9
+	cloud.google.com/go v0.110.10
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.120.0
 	github.com/oasdiff/go-common v0.2.18
