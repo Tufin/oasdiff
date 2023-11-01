@@ -13,18 +13,23 @@ type notImplementedFormatter struct{}
 func (f notImplementedFormatter) RenderDiff(*diff.Diff, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
+
 func (f notImplementedFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
+
 func (f notImplementedFormatter) RenderBreakingChanges(checker.Changes, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
+
 func (f notImplementedFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
+
 func (f notImplementedFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
+
 func (f notImplementedFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }

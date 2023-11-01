@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/formatters"
 )
 
-func TestHtmlFormatter_RenderBreakingChanges_Normal(t *testing.T) {
+func TestHtmlFormatter_RenderDiff(t *testing.T) {
 	formatter := formatters.HTMLFormatter{}
 
 	out, err := formatter.RenderDiff(nil, formatters.RenderOpts{})
@@ -18,16 +18,14 @@ func TestHtmlFormatter_RenderBreakingChanges_Normal(t *testing.T) {
 
 }
 
-func TestHtmlFormatter_RenderBreakingChanges_NotImplemented(t *testing.T) {
+func TestHtmlFormatter_NotImplemented(t *testing.T) {
 	formatter := formatters.HTMLFormatter{}
 
-	testChanges := checker.Changes{}
-
 	var err error
-	_, err = formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	_, err = formatter.RenderBreakingChanges(checker.Changes{}, formatters.RenderOpts{})
 	assert.Error(t, err)
 
-	_, err = formatter.RenderChangelog(testChanges, formatters.RenderOpts{})
+	_, err = formatter.RenderChangelog(checker.Changes{}, formatters.RenderOpts{})
 	assert.Error(t, err)
 
 	_, err = formatter.RenderChecks([]formatters.Check{}, formatters.RenderOpts{})
