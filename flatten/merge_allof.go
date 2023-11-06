@@ -52,71 +52,149 @@ type SchemaCollection struct {
 	WriteOnly            []bool
 }
 
-// state will be used to handle circular refs
-type state struct{}
+type state struct {
+
+	// maps original schemas to their merged result schema.
+	mergedSchemas map[*openapi3.Schema]*openapi3.Schema
+
+	// indicates wheter a reference is circular (true) or non-circular.
+	refs map[string]bool
+
+	// after mergeInternal is executed, circularAllOf contains all SchemaRefs which have circular allof.
+	circularAllOf openapi3.SchemaRefs
+}
+
+func newState() *state {
+	return &state{
+		mergedSchemas: map[*openapi3.Schema]*openapi3.Schema{},
+		refs:          map[string]bool{},
+		circularAllOf: openapi3.SchemaRefs{},
+	}
+}
 
 func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
-	result, err := mergeInternal(&state{}, &schema)
+	state := newState()
+	result, err := mergeInternal(state, &schema)
 	if err != nil {
 		return nil, err
 	}
+
+	for _, schema := range state.circularAllOf {
+		err := mergeCircularAllOf(state, schema)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return result.Value, nil
 }
 
+func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
+	schemaRefs := openapi3.SchemaRefs{baseSchemaRef}
+	schemaRefs = append(schemaRefs, baseSchemaRef.Value.AllOf...)
+	err := flattenSchemas(state, baseSchemaRef, schemaRefs)
+	if err != nil {
+		return err
+	}
+	baseSchemaRef.Value.AllOf = nil
+	return nil
+}
+
 // Merge replaces objects under AllOf with a flattened equivalent
-func mergeInternal(state *state, baseSchemaRef *openapi3.SchemaRef) (*openapi3.SchemaRef, error) {
-	if baseSchemaRef == nil {
+func mergeInternal(state *state, base *openapi3.SchemaRef) (*openapi3.SchemaRef, error) {
+	if base == nil {
 		return nil, nil
 	}
 
-	result := openapi3.NewSchemaRef("", openapi3.NewSchema())
-	schema := result.Value
+	// return cached result if this schema has already been merged
+	cached, ok := state.mergedSchemas[base.Value]
+	if ok {
+		return openapi3.NewSchemaRef(base.Ref, cached), nil
+	}
 
-	// copy all non SchemaRef fields from baseSchema to result schema
-	copy(baseSchemaRef.Value, schema)
+	result := openapi3.NewSchemaRef(base.Ref, openapi3.NewSchema())
+
+	// map original schema to result
+	state.mergedSchemas[base.Value] = result.Value
+
+	// copy all non SchemaRef fields from base schema to result schema
+	copy(base.Value, result.Value)
 
 	// merge all fields of type SchemaRef
-	allOf, err := mergeSchemaRefs(state, baseSchemaRef.Value.AllOf)
+	allOf, err := mergeSchemaRefs(state, base.Value.AllOf)
 	if err != nil {
 		return nil, err
 	}
-	schema.AnyOf, err = mergeSchemaRefs(state, baseSchemaRef.Value.AnyOf)
+	result.Value.OneOf, err = mergeSchemaRefs(state, base.Value.OneOf)
 	if err != nil {
 		return nil, err
 	}
-	schema.OneOf, err = mergeSchemaRefs(state, baseSchemaRef.Value.OneOf)
+	result.Value.Items, err = mergeInternal(state, base.Value.Items)
 	if err != nil {
 		return nil, err
 	}
-	schema.Items, err = mergeInternal(state, baseSchemaRef.Value.Items)
+	result.Value.AnyOf, err = mergeSchemaRefs(state, base.Value.AnyOf)
 	if err != nil {
 		return nil, err
 	}
-	schema.Not, err = mergeInternal(state, baseSchemaRef.Value.Not)
+	result.Value.Not, err = mergeInternal(state, base.Value.Not)
 	if err != nil {
 		return nil, err
 	}
-	schema.Properties, err = mergeProperties(state, baseSchemaRef.Value.Properties)
+	result.Value.Properties, err = mergeProperties(state, base.Value.Properties)
 	if err != nil {
 		return nil, err
 	}
-	schema.AdditionalProperties, err = mergeAdditionalProperties(state, baseSchemaRef.Value.AdditionalProperties)
+	result.Value.AdditionalProperties, err = mergeAdditionalProperties(state, base.Value.AdditionalProperties)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(allOf) == 0 {
+	if len(base.Value.AllOf) == 0 {
 		return result, nil
 	}
+	updateRefs(state, base.Value.AllOf)
+	if isAllOfCircular(state, base.Value.AllOf) {
+		state.circularAllOf = append(state.circularAllOf, result)
+		result.Value.AllOf = allOf
+		return result, nil
+	}
+
 	// flatten merged schemas into a single equivalent schema
-	schemaRefs := openapi3.SchemaRefs{result}
-	schemaRefs = append(schemaRefs, allOf...)
-	err = flattenSchemas(state, result, schemaRefs)
+	toFlatten := openapi3.SchemaRefs{result}
+	toFlatten = append(toFlatten, allOf...)
+	err = flattenSchemas(state, result, toFlatten)
 	if err != nil {
 		return nil, err
 	}
 
 	return result, nil
+}
+
+func updateRefs(state *state, srefs openapi3.SchemaRefs) {
+	for _, s := range srefs {
+		if s.Ref != "" {
+			_, ok := state.refs[s.Ref]
+			if ok {
+				continue
+			}
+			_, ok = state.mergedSchemas[s.Value]
+			state.refs[s.Ref] = ok
+		}
+	}
+}
+
+func isAllOfCircular(state *state, srefs openapi3.SchemaRefs) bool {
+	for _, s := range srefs {
+		if s.Ref == "" {
+			continue
+		}
+		isCircular, ok := state.refs[s.Ref]
+		if ok && isCircular {
+			return true
+		}
+	}
+	return false
 }
 
 // copy non-mergeable fields from source schema to destination schema
