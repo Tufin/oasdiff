@@ -1651,3 +1651,26 @@ func TestMerge_Required(t *testing.T) {
 		})
 	}
 }
+
+func TestMerge_CircularRefOneOf_Failure(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular1.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["AWSEnvironmentSettings"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+
+	require.Equal(t, "#/components/schemas/AWSEnvironmentSettings", merged.OneOf[0].Ref)
+	require.Equal(t, &merged, &merged.OneOf[0].Value)
+
+	require.Equal(t, "string", merged.Properties["serviceEndpoints"].Value.Type)
+	require.Equal(t, "string", merged.Properties["region"].Value.Type)
+}
+
+func loadSpec(t *testing.T, path string) *openapi3.T {
+	ctx := context.Background()
+	sl := openapi3.NewLoader()
+	doc, err := sl.LoadFromFile(path)
+	require.NoError(t, err, "loading test file")
+	err = doc.Validate(ctx)
+	require.NoError(t, err)
+	return doc
+}
