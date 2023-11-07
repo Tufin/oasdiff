@@ -79,6 +79,10 @@ func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
 		return nil, err
 	}
 
+	if len(state.circularAllOf) == 0 {
+		return result.Value, nil
+	}
+
 	for _, schema := range state.circularAllOf {
 		err := mergeCircularAllOf(state, schema)
 		if err != nil {
