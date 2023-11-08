@@ -52,95 +52,211 @@ type SchemaCollection struct {
 	WriteOnly            []bool
 }
 
+// state will be used to handle circular refs
+type state struct{}
+
+func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
+	result, err := mergeInternal(&state{}, &schema)
+	if err != nil {
+		return nil, err
+	}
+	return result.Value, nil
+}
+
 // Merge replaces objects under AllOf with a flattened equivalent
-func Merge(baseSchema openapi3.Schema) (*openapi3.Schema, error) {
-	allOfSchemas, err := getAllOfSchemas(baseSchema)
-	if err != nil {
-		return &openapi3.Schema{}, err
+func mergeInternal(state *state, baseSchemaRef *openapi3.SchemaRef) (*openapi3.SchemaRef, error) {
+	if baseSchemaRef == nil {
+		return nil, nil
 	}
-	schemas := []*openapi3.Schema{&baseSchema}
-	schemas = append(schemas, allOfSchemas...)
-	result, err := flattenSchemas(schemas)
+
+	result := openapi3.NewSchemaRef("", openapi3.NewSchema())
+	schema := result.Value
+
+	// copy all non SchemaRef fields from baseSchema to result schema
+	copy(baseSchemaRef.Value, schema)
+
+	// merge all fields of type SchemaRef
+	allOf, err := mergeSchemaRefs(state, baseSchemaRef.Value.AllOf)
 	if err != nil {
-		return &openapi3.Schema{}, err
+		return nil, err
 	}
+	schema.AnyOf, err = mergeSchemaRefs(state, baseSchemaRef.Value.AnyOf)
+	if err != nil {
+		return nil, err
+	}
+	schema.OneOf, err = mergeSchemaRefs(state, baseSchemaRef.Value.OneOf)
+	if err != nil {
+		return nil, err
+	}
+	schema.Items, err = mergeInternal(state, baseSchemaRef.Value.Items)
+	if err != nil {
+		return nil, err
+	}
+	schema.Not, err = mergeInternal(state, baseSchemaRef.Value.Not)
+	if err != nil {
+		return nil, err
+	}
+	schema.Properties, err = mergeProperties(state, baseSchemaRef.Value.Properties)
+	if err != nil {
+		return nil, err
+	}
+	schema.AdditionalProperties, err = mergeAdditionalProperties(state, baseSchemaRef.Value.AdditionalProperties)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(allOf) == 0 {
+		return result, nil
+	}
+	// flatten merged schemas into a single equivalent schema
+	schemaRefs := openapi3.SchemaRefs{result}
+	schemaRefs = append(schemaRefs, allOf...)
+	err = flattenSchemas(state, result, schemaRefs)
+	if err != nil {
+		return nil, err
+	}
+
 	return result, nil
 }
 
-func getAllOfSchemas(schema openapi3.Schema) ([]*openapi3.Schema, error) {
-	schemas := []*openapi3.Schema{}
-	if schema.AllOf == nil {
-		return schemas, nil
+// copy non-mergeable fields from source schema to destination schema
+// (fields that are not of type SchemaRef and therefore should not be merged)
+func copy(src *openapi3.Schema, dst *openapi3.Schema) {
+	dst.Title = src.Title
+	dst.Type = src.Type
+	dst.Format = src.Format
+	dst.Description = src.Description
+	dst.Type = src.Type
+	dst.Enum = src.Enum
+	dst.UniqueItems = src.UniqueItems
+	dst.ExclusiveMax = src.ExclusiveMax
+	dst.ExclusiveMin = src.ExclusiveMin
+	dst.Nullable = src.Nullable
+	dst.ReadOnly = src.ReadOnly
+	dst.WriteOnly = src.WriteOnly
+	dst.Min = src.Min
+	dst.Max = src.Max
+	dst.MultipleOf = src.MultipleOf
+	dst.MinLength = src.MinLength
+	if src.MaxLength != nil {
+		dst.MaxLength = openapi3.Uint64Ptr(*src.MaxLength)
 	}
-	for _, schema := range schema.AllOf {
-		merged, err := Merge(*schema.Value)
+	dst.Pattern = src.Pattern
+	dst.MinItems = src.MinItems
+	if src.MaxItems != nil {
+		dst.MaxItems = openapi3.Uint64Ptr(*src.MaxItems)
+	}
+	dst.Required = src.Required
+	dst.MinProps = src.MinProps
+	if src.MaxProps != nil {
+		dst.MaxProps = openapi3.Uint64Ptr(*src.MaxProps)
+	}
+}
+
+func mergeAdditionalProperties(state *state, ap openapi3.AdditionalProperties) (openapi3.AdditionalProperties, error) {
+	result := openapi3.AdditionalProperties{}
+	if ap.Schema != nil && ap.Schema.Value != nil {
+		merged, err := mergeInternal(state, ap.Schema)
 		if err != nil {
-			return schemas, err
+			return result, err
 		}
-		schemas = append(schemas, merged)
+		result.Schema = merged
 	}
-	return schemas, nil
+	value := true
+	ptr := &value
+	if ap.Has != nil {
+		*ptr = *ap.Has
+	} else {
+		ptr = nil
+	}
+	result.Has = ptr
+	return result, nil
 }
 
-func flattenSchemas(schemas []*openapi3.Schema) (*openapi3.Schema, error) {
-	result := openapi3.NewSchema()
-	collection := collect(schemas)
-
-	result.Title = collection.Title[0]
-	result.Description = collection.Description[0]
-	result, err := resolveFormat(result, &collection)
-	if err != nil {
-		return result, err
+func mergeProperties(state *state, props openapi3.Schemas) (openapi3.Schemas, error) {
+	if props == nil {
+		return nil, nil
 	}
-	result, err = resolveType(result, &collection)
-	if err != nil {
-		return result, err
+	result := openapi3.Schemas{}
+	for k, v := range props {
+		merged, err := mergeInternal(state, v)
+		if err != nil {
+			return nil, err
+		}
+		result[k] = merged
 	}
-	result = resolveNumberRange(result, &collection)
-	result.MinLength = findMaxValue(collection.MinLength)
-	result.MaxLength = findMinValue(collection.MaxLength)
-	result.MinItems = findMaxValue(collection.MinItems)
-	result.MaxItems = findMinValue(collection.MaxItems)
-	result.MinProps = findMaxValue(collection.MinProps)
-	result.MaxProps = findMinValue(collection.MaxProps)
-	result.Pattern = resolvePattern(collection.Pattern)
-	result.Nullable = !hasFalse(collection.Nullable)
-	result.ReadOnly = hasTrue(collection.ReadOnly)
-	result.WriteOnly = hasTrue(collection.WriteOnly)
-
-	enums, err := resolveEnum(collection.Enum)
-	if err != nil {
-		return result, err
-	}
-	result.Enum = enums
-	result = resolveMultipleOf(result, &collection)
-	result.Required = resolveRequired(collection.Required)
-	result, err = resolveItems(result, &collection)
-	if err != nil {
-		return result, err
-	}
-	result.UniqueItems = resolveUniqueItems(collection.UniqueItems)
-	result, err = resolveProperties(result, &collection)
-	if err != nil {
-		return result, err
-	}
-
-	result, err = resolveOneOf(result, &collection)
-	if err != nil {
-		return result, err
-	}
-
-	result, err = resolveAnyOf(result, &collection)
-	if err != nil {
-		return result, err
-	}
-
-	result, err = resolveNot(result, &collection)
-	if err != nil {
-		return result, err
-	}
-
 	return result, nil
+}
+
+func mergeSchemaRefs(state *state, srefs openapi3.SchemaRefs) (openapi3.SchemaRefs, error) {
+	if srefs == nil {
+		return nil, nil
+	}
+	result := openapi3.SchemaRefs{}
+	for _, s := range srefs {
+		merged, err := mergeInternal(state, s)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, merged)
+	}
+	return result, nil
+}
+
+// Given a list of schemas that are free of AllOf or nested AllOf components as input,
+// the function produces a single equivalent schema in the resultRef parameter.
+func flattenSchemas(state *state, result *openapi3.SchemaRef, schemas []*openapi3.SchemaRef) error {
+
+	collection := collect(schemas)
+	var err error
+
+	result.Value.Title = collection.Title[0]
+	result.Value.Description = collection.Description[0]
+	result.Value = resolveNumberRange(result.Value, &collection)
+	result.Value.MinLength = findMaxValue(collection.MinLength)
+	result.Value.MaxLength = findMinValue(collection.MaxLength)
+	result.Value.MinItems = findMaxValue(collection.MinItems)
+	result.Value.MaxItems = findMinValue(collection.MaxItems)
+	result.Value.MinProps = findMaxValue(collection.MinProps)
+	result.Value.MaxProps = findMinValue(collection.MaxProps)
+	result.Value.Pattern = resolvePattern(collection.Pattern)
+	result.Value.Nullable = !hasFalse(collection.Nullable)
+	result.Value.ReadOnly = hasTrue(collection.ReadOnly)
+	result.Value.WriteOnly = hasTrue(collection.WriteOnly)
+	result.Value.Required = resolveRequired(collection.Required)
+	result.Value = resolveMultipleOf(result.Value, &collection)
+	result.Value.UniqueItems = resolveUniqueItems(collection.UniqueItems)
+
+	result.Value.Enum, err = resolveEnum(collection.Enum)
+	if err != nil {
+		return err
+	}
+	result.Value, err = resolveFormat(result.Value, &collection)
+	if err != nil {
+		return err
+	}
+	result.Value, err = resolveType(result.Value, &collection)
+	if err != nil {
+		return err
+	}
+	result.Value, err = resolveItems(state, result.Value, &collection)
+	if err != nil {
+		return err
+	}
+	result.Value, err = resolveProperties(state, result.Value, &collection)
+	if err != nil {
+		return err
+	}
+	result.Value, err = resolveOneOf(state, result.Value, &collection)
+	if err != nil {
+		return err
+	}
+	result.Value, err = resolveAnyOf(state, result.Value, &collection)
+	if err != nil {
+		return err
+	}
+	result.Value, err = resolveNot(state, result.Value, &collection)
+	return err
 }
 
 func hasTrue(values []bool) bool {
@@ -198,26 +314,24 @@ func resolveNumberRange(schema *openapi3.Schema, collection *SchemaCollection) *
 	return schema
 }
 
-func resolveItems(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-	items := []*openapi3.Schema{}
-	for _, s := range collection.Items {
-		if s != nil {
-			items = append(items, s.Value)
+func resolveItems(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+
+	items := openapi3.SchemaRefs{}
+	for _, sref := range collection.Items {
+		if sref != nil {
+			items = append(items, sref)
 		}
 	}
 	if len(items) == 0 {
 		schema.Items = nil
 		return schema, nil
 	}
-
-	res, err := flattenSchemas(items)
+	result := openapi3.NewSchemaRef("", openapi3.NewSchema())
+	err := flattenSchemas(state, result, items)
 	if err != nil {
-		return schema, err
+		return nil, err
 	}
-	ref := openapi3.SchemaRef{
-		Value: res,
-	}
-	schema.Items = &ref
+	schema.Items = result
 	return schema, nil
 }
 
@@ -293,10 +407,10 @@ func hasFalseValue(ap []openapi3.AdditionalProperties) bool {
 }
 
 // resolve properties which have additionalProperties that are set to false.
-func resolveFalseProps(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+func resolveFalseProps(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
 	schema = resolveFalseAdditionalProps(schema, collection)
 	propsToMerge := getFalsePropsKeys(collection)
-	return mergeProps(schema, collection, propsToMerge)
+	return mergeProps(state, schema, collection, propsToMerge)
 }
 
 func resolveFalseAdditionalProps(schema *openapi3.Schema, collection *SchemaCollection) *openapi3.Schema {
@@ -306,36 +420,36 @@ func resolveFalseAdditionalProps(schema *openapi3.Schema, collection *SchemaColl
 }
 
 // if there are additionalProperties which are Schemas, they are merged to a single Schema.
-func resolveNonFalseAdditionalProps(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-	additionalSchemas := []*openapi3.Schema{}
+
+func resolveNonFalseAdditionalProps(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+	additionalSchemas := openapi3.SchemaRefs{}
 	for _, ap := range collection.AdditionalProperties {
-		if ap.Schema != nil && ap.Schema.Value != nil {
-			additionalSchemas = append(additionalSchemas, ap.Schema.Value)
+		if ap.Schema != nil {
+			additionalSchemas = append(additionalSchemas, ap.Schema)
 		}
 	}
 
 	var schemaRef *openapi3.SchemaRef
 	if len(additionalSchemas) > 0 {
-		result, err := flattenSchemas(additionalSchemas)
+		result := openapi3.NewSchemaRef("", openapi3.NewSchema())
+		err := flattenSchemas(state, result, additionalSchemas)
 		if err != nil {
-			return schema, err
+			return nil, err
 		}
-		schemaRef = &openapi3.SchemaRef{
-			Value: result,
-		}
+		schemaRef = result
 	}
 	schema.AdditionalProperties.Has = nil
 	schema.AdditionalProperties.Schema = schemaRef
 	return schema, nil
 }
 
-func resolveNonFalseProps(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-	result, err := resolveNonFalseAdditionalProps(schema, collection)
+func resolveNonFalseProps(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+	result, err := resolveNonFalseAdditionalProps(state, schema, collection)
 	if err != nil {
-		return &openapi3.Schema{}, err
+		return nil, err
 	}
 	propsToMerge := getNonFalsePropsKeys(collection)
-	return mergeProps(result, collection, propsToMerge)
+	return mergeProps(state, result, collection, propsToMerge)
 }
 
 // the output is the intersection of all properties keys of schemas which have additionalProperties set to false.
@@ -380,38 +494,32 @@ func getUniqueStrings(input []string) []string {
 	return result
 }
 
-func resolveProperties(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+func resolveProperties(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
 	if hasFalseValue(collection.AdditionalProperties) {
-		return resolveFalseProps(schema, collection)
+		return resolveFalseProps(state, schema, collection)
 	} else {
-		return resolveNonFalseProps(schema, collection)
+		return resolveNonFalseProps(state, schema, collection)
 	}
 }
 
-func mergeProps(schema *openapi3.Schema, collection *SchemaCollection, propsToMerge []string) (*openapi3.Schema, error) {
-	propsToSchemasMap := map[string][]*openapi3.Schema{}
+func mergeProps(state *state, schema *openapi3.Schema, collection *SchemaCollection, propsToMerge []string) (*openapi3.Schema, error) {
+	propsToSchemasMap := map[string]openapi3.SchemaRefs{}
 	for _, schema := range collection.Properties {
 		for propKey, schemaRef := range schema {
 			if containsString(propsToMerge, propKey) {
-				propMergedSchema, err := Merge(*schemaRef.Value)
-				if err != nil {
-					return &openapi3.Schema{}, err
-				}
-				propsToSchemasMap[propKey] = append(propsToSchemasMap[propKey], propMergedSchema)
+				propsToSchemasMap[propKey] = append(propsToSchemasMap[propKey], schemaRef)
 			}
 		}
 	}
 
 	result := make(openapi3.Schemas)
 	for prop, schemas := range propsToSchemasMap {
-		mergedProp, err := flattenSchemas(schemas)
+		flattened := openapi3.NewSchemaRef("", openapi3.NewSchema())
+		err := flattenSchemas(state, flattened, schemas)
 		if err != nil {
-			return &openapi3.Schema{}, err
+			return nil, err
 		}
-		ref := openapi3.SchemaRef{
-			Value: mergedProp,
-		}
-		result[prop] = &ref
+		result[prop] = flattened
 	}
 
 	if len(result) == 0 {
@@ -435,7 +543,7 @@ func resolveEnum(values [][]interface{}) ([]interface{}, error) {
 	}
 	intersection = findIntersectionOfArrays(nonEmptyEnum)
 	if len(intersection) == 0 {
-		return intersection, errors.New("unable to resolve Enum conflict: intersection of values must be non-empty")
+		return nil, errors.New("unable to resolve Enum conflict: intersection of values must be non-empty")
 	}
 	return intersection, nil
 }
@@ -656,37 +764,40 @@ func resolveRequired(values [][]string) []string {
 	return uniqueValues
 }
 
-func collect(schemas []*openapi3.Schema) SchemaCollection {
+func collect(schemas []*openapi3.SchemaRef) SchemaCollection {
 	collection := SchemaCollection{}
 	for _, s := range schemas {
-		collection.Not = append(collection.Not, s.Not)
-		collection.AnyOf = append(collection.AnyOf, s.AnyOf)
-		collection.OneOf = append(collection.OneOf, s.OneOf)
-		collection.Title = append(collection.Title, s.Title)
-		collection.Type = append(collection.Type, s.Type)
-		collection.Format = append(collection.Format, s.Format)
-		collection.Description = append(collection.Description, s.Description)
-		collection.Enum = append(collection.Enum, s.Enum)
-		collection.UniqueItems = append(collection.UniqueItems, s.UniqueItems)
-		collection.ExclusiveMin = append(collection.ExclusiveMin, s.ExclusiveMin)
-		collection.ExclusiveMax = append(collection.ExclusiveMax, s.ExclusiveMax)
-		collection.Min = append(collection.Min, s.Min)
-		collection.Max = append(collection.Max, s.Max)
-		collection.MultipleOf = append(collection.MultipleOf, s.MultipleOf)
-		collection.MinLength = append(collection.MinLength, s.MinLength)
-		collection.MaxLength = append(collection.MaxLength, s.MaxLength)
-		collection.Pattern = append(collection.Pattern, s.Pattern)
-		collection.MinItems = append(collection.MinItems, s.MinItems)
-		collection.MaxItems = append(collection.MaxItems, s.MaxItems)
-		collection.Items = append(collection.Items, s.Items)
-		collection.Required = append(collection.Required, s.Required)
-		collection.Properties = append(collection.Properties, s.Properties)
-		collection.MinProps = append(collection.MinProps, s.MinProps)
-		collection.MaxProps = append(collection.MaxProps, s.MaxProps)
-		collection.AdditionalProperties = append(collection.AdditionalProperties, s.AdditionalProperties)
-		collection.Nullable = append(collection.Nullable, s.Nullable)
-		collection.ReadOnly = append(collection.ReadOnly, s.ReadOnly)
-		collection.WriteOnly = append(collection.WriteOnly, s.WriteOnly)
+		if s == nil {
+			continue
+		}
+		collection.Not = append(collection.Not, s.Value.Not)
+		collection.AnyOf = append(collection.AnyOf, s.Value.AnyOf)
+		collection.OneOf = append(collection.OneOf, s.Value.OneOf)
+		collection.Title = append(collection.Title, s.Value.Title)
+		collection.Type = append(collection.Type, s.Value.Type)
+		collection.Format = append(collection.Format, s.Value.Format)
+		collection.Description = append(collection.Description, s.Value.Description)
+		collection.Enum = append(collection.Enum, s.Value.Enum)
+		collection.UniqueItems = append(collection.UniqueItems, s.Value.UniqueItems)
+		collection.ExclusiveMin = append(collection.ExclusiveMin, s.Value.ExclusiveMin)
+		collection.ExclusiveMax = append(collection.ExclusiveMax, s.Value.ExclusiveMax)
+		collection.Min = append(collection.Min, s.Value.Min)
+		collection.Max = append(collection.Max, s.Value.Max)
+		collection.MultipleOf = append(collection.MultipleOf, s.Value.MultipleOf)
+		collection.MinLength = append(collection.MinLength, s.Value.MinLength)
+		collection.MaxLength = append(collection.MaxLength, s.Value.MaxLength)
+		collection.Pattern = append(collection.Pattern, s.Value.Pattern)
+		collection.MinItems = append(collection.MinItems, s.Value.MinItems)
+		collection.MaxItems = append(collection.MaxItems, s.Value.MaxItems)
+		collection.Items = append(collection.Items, s.Value.Items)
+		collection.Required = append(collection.Required, s.Value.Required)
+		collection.Properties = append(collection.Properties, s.Value.Properties)
+		collection.MinProps = append(collection.MinProps, s.Value.MinProps)
+		collection.MaxProps = append(collection.MaxProps, s.Value.MaxProps)
+		collection.AdditionalProperties = append(collection.AdditionalProperties, s.Value.AdditionalProperties)
+		collection.Nullable = append(collection.Nullable, s.Value.Nullable)
+		collection.ReadOnly = append(collection.ReadOnly, s.Value.ReadOnly)
+		collection.WriteOnly = append(collection.WriteOnly, s.Value.WriteOnly)
 	}
 	return collection
 }
@@ -711,51 +822,38 @@ func getCombinations(groups []openapi3.SchemaRefs) []openapi3.SchemaRefs {
 	return result
 }
 
-func mergeCombinations(combinations []openapi3.SchemaRefs) ([]*openapi3.Schema, error) {
-	merged := []*openapi3.Schema{}
+func flattenCombinations(state *state, combinations []openapi3.SchemaRefs) ([]*openapi3.SchemaRef, error) {
+	flattened := []*openapi3.SchemaRef{}
 	for _, combination := range combinations {
-		schemas := []*openapi3.Schema{}
-		for _, ref := range combination {
-			schemas = append(schemas, ref.Value)
-		}
-		schema, err := flattenSchemas(schemas)
+		result := openapi3.NewSchemaRef("", openapi3.NewSchema())
+		err := flattenSchemas(state, result, combination)
 		if err != nil {
 			continue
 		}
-		merged = append(merged, schema)
+		flattened = append(flattened, result)
 	}
-	if len(merged) == 0 {
-		return merged, errors.New("unable to resolve combined schema")
+	if len(flattened) == 0 {
+		return nil, errors.New("unable to resolve combined schema")
 	}
-	return merged, nil
+	return flattened, nil
 }
 
-func resolveNot(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-	refs := filterNilSchemaRef(collection.Not)
-	if len(refs) == 0 {
+func resolveNot(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+	result := filterNilSchemaRef(collection.Not)
+	if len(result) == 0 {
 		return schema, nil
 	}
-	for _, ref := range refs {
-		merged, err := Merge(*ref.Value)
-		if err != nil {
-			return &openapi3.Schema{}, err
-		}
-		ref.Value = merged
-	}
-
-	if len(refs) == 1 {
-		schema.Not = refs[0]
+	if len(result) == 1 {
+		schema.Not = result[0]
 		return schema, nil
 	}
-	schema.Not = &openapi3.SchemaRef{
-		Value: &openapi3.Schema{
-			AnyOf: refs,
-		},
-	}
+	schema.Not = openapi3.NewSchemaRef("", &openapi3.Schema{
+		AnyOf: result,
+	})
 	return schema, nil
 }
 
-func filterNilSchemaRef(refs []*openapi3.SchemaRef) []*openapi3.SchemaRef {
+func filterNilSchemaRef(refs openapi3.SchemaRefs) openapi3.SchemaRefs {
 	result := []*openapi3.SchemaRef{}
 	for _, v := range refs {
 		if v != nil {
@@ -775,60 +873,35 @@ func filterEmptySchemaRefs(groups []openapi3.SchemaRefs) []openapi3.SchemaRefs {
 	return result
 }
 
-func resolveAnyOf(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-	refs, err := resolveCombinations(collection.AnyOf)
+func resolveAnyOf(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+	refs, err := resolveCombinations(state, collection.AnyOf)
 	schema.AnyOf = refs
 	return schema, err
 }
 
-func resolveOneOf(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
-	refs, err := resolveCombinations(collection.OneOf)
+func resolveOneOf(state *state, schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
+	refs, err := resolveCombinations(state, collection.OneOf)
 	schema.OneOf = refs
 	return schema, err
 }
 
-func mergeSchemaRefs(sr []openapi3.SchemaRefs) ([]openapi3.SchemaRefs, error) {
-	result := []openapi3.SchemaRefs{}
-	for _, refs := range sr {
-		r := openapi3.SchemaRefs{}
-		for _, ref := range refs {
-			merged, err := Merge(*ref.Value)
-			if err != nil {
-				return result, err
-			}
-			r = append(r, &openapi3.SchemaRef{Value: merged})
-		}
-		result = append(result, r)
-	}
-	return result, nil
-}
-
-func resolveCombinations(collection []openapi3.SchemaRefs) (openapi3.SchemaRefs, error) {
+func resolveCombinations(state *state, collection []openapi3.SchemaRefs) (openapi3.SchemaRefs, error) {
 	groups := filterEmptySchemaRefs(collection)
 	if len(groups) == 0 {
 		return nil, nil
 	}
-	groups, err := mergeSchemaRefs(groups)
-	if err != nil {
-		return openapi3.SchemaRefs{}, err
-	}
-	// there is only one schema, no need for calculating combinations.
+
+	// there is only one group of schemas, no need for calculating combinations.
 	if len(groups) == 1 {
 		return groups[0], nil
 	}
 
 	combinations := getCombinations(groups)
-	mergedCombinations, err := mergeCombinations(combinations)
+	flattenedCombinations, err := flattenCombinations(state, combinations)
 	if err != nil {
 		return nil, err
 	}
-	var refs openapi3.SchemaRefs
-	for _, merged := range mergedCombinations {
-		refs = append(refs, &openapi3.SchemaRef{
-			Value: merged,
-		})
-	}
-	return refs, err
+	return flattenedCombinations, nil
 }
 
 func findIntersection(arrays ...[]string) []string {

@@ -120,7 +120,7 @@ func mergeSchemas(schemas openapi3.Schemas) (openapi3.Schemas, error) {
 		if s == nil || s.Value == nil {
 			continue
 		}
-		m, err := Merge(*s.Value)
+		m, err := Merge(*s)
 		if err != nil {
 			return schemas, err
 		}
@@ -188,7 +188,7 @@ func mergeParameter(p *openapi3.Parameter) (*openapi3.Parameter, error) {
 	if p.Schema == nil || p.Schema.Value == nil {
 		return p, nil
 	}
-	m, err := Merge(*p.Schema.Value)
+	m, err := Merge(*p.Schema)
 	if err != nil {
 		return p, err
 	}
@@ -206,7 +206,7 @@ func mergeContent(content openapi3.Content) (openapi3.Content, error) {
 		if mediaType == nil || mediaType.Schema == nil || mediaType.Schema.Value == nil {
 			continue
 		}
-		m, err := Merge(*mediaType.Schema.Value)
+		m, err := Merge(*mediaType.Schema)
 		if err != nil {
 			return content, err
 		}
