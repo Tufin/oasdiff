@@ -57,7 +57,7 @@ type state struct {
 	// maps original schemas to their merged result schema.
 	mergedSchemas map[*openapi3.Schema]*openapi3.Schema
 
-	// indicates wheter a reference is circular (true) or non-circular.
+	// indicates whether a reference is circular (true) or non-circular.
 	refs map[string]bool
 
 	// after mergeInternal is executed, circularAllOf contains all SchemaRefs which have circular allof.
@@ -121,8 +121,35 @@ func mergeInternal(state *state, base *openapi3.SchemaRef) (*openapi3.SchemaRef,
 	// map original schema to result
 	state.mergedSchemas[base.Value] = result.Value
 
-	// copy all non SchemaRef fields from base schema to result schema
-	copy(base.Value, result.Value)
+	result.Value.Title = base.Value.Title
+	result.Value.Type = base.Value.Type
+	result.Value.Format = base.Value.Format
+	result.Value.Description = base.Value.Description
+	result.Value.Type = base.Value.Type
+	result.Value.Enum = base.Value.Enum
+	result.Value.UniqueItems = base.Value.UniqueItems
+	result.Value.ExclusiveMax = base.Value.ExclusiveMax
+	result.Value.ExclusiveMin = base.Value.ExclusiveMin
+	result.Value.Nullable = base.Value.Nullable
+	result.Value.ReadOnly = base.Value.ReadOnly
+	result.Value.WriteOnly = base.Value.WriteOnly
+	result.Value.Min = base.Value.Min
+	result.Value.Max = base.Value.Max
+	result.Value.MultipleOf = base.Value.MultipleOf
+	result.Value.MinLength = base.Value.MinLength
+	if base.Value.MaxLength != nil {
+		result.Value.MaxLength = openapi3.Uint64Ptr(*base.Value.MaxLength)
+	}
+	result.Value.Pattern = base.Value.Pattern
+	result.Value.MinItems = base.Value.MinItems
+	if base.Value.MaxItems != nil {
+		result.Value.MaxItems = openapi3.Uint64Ptr(*base.Value.MaxItems)
+	}
+	result.Value.Required = base.Value.Required
+	result.Value.MinProps = base.Value.MinProps
+	if base.Value.MaxProps != nil {
+		result.Value.MaxProps = openapi3.Uint64Ptr(*base.Value.MaxProps)
+	}
 
 	// merge all fields of type SchemaRef
 	allOf, err := mergeSchemaRefs(state, base.Value.AllOf)
@@ -199,40 +226,6 @@ func isAllOfCircular(state *state, srefs openapi3.SchemaRefs) bool {
 		}
 	}
 	return false
-}
-
-// copy non-mergeable fields from source schema to destination schema
-// (fields that are not of type SchemaRef and therefore should not be merged)
-func copy(src *openapi3.Schema, dst *openapi3.Schema) {
-	dst.Title = src.Title
-	dst.Type = src.Type
-	dst.Format = src.Format
-	dst.Description = src.Description
-	dst.Type = src.Type
-	dst.Enum = src.Enum
-	dst.UniqueItems = src.UniqueItems
-	dst.ExclusiveMax = src.ExclusiveMax
-	dst.ExclusiveMin = src.ExclusiveMin
-	dst.Nullable = src.Nullable
-	dst.ReadOnly = src.ReadOnly
-	dst.WriteOnly = src.WriteOnly
-	dst.Min = src.Min
-	dst.Max = src.Max
-	dst.MultipleOf = src.MultipleOf
-	dst.MinLength = src.MinLength
-	if src.MaxLength != nil {
-		dst.MaxLength = openapi3.Uint64Ptr(*src.MaxLength)
-	}
-	dst.Pattern = src.Pattern
-	dst.MinItems = src.MinItems
-	if src.MaxItems != nil {
-		dst.MaxItems = openapi3.Uint64Ptr(*src.MaxItems)
-	}
-	dst.Required = src.Required
-	dst.MinProps = src.MinProps
-	if src.MaxProps != nil {
-		dst.MaxProps = openapi3.Uint64Ptr(*src.MaxProps)
-	}
 }
 
 func mergeAdditionalProperties(state *state, ap openapi3.AdditionalProperties) (openapi3.AdditionalProperties, error) {
