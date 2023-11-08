@@ -7,9 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/diff"
 )
 
 var githubActionsSeverity = map[checker.Level]string{
@@ -19,14 +17,7 @@ var githubActionsSeverity = map[checker.Level]string{
 }
 
 type GitHubActionsFormatter struct {
-}
-
-func (f GitHubActionsFormatter) RenderDiff(*diff.Diff, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f GitHubActionsFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
-	return notImplemented()
+	notImplementedFormatter
 }
 
 func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
@@ -70,18 +61,6 @@ func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, o
 	}
 
 	return buf.Bytes(), nil
-}
-
-func (f GitHubActionsFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f GitHubActionsFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f GitHubActionsFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
-	return notImplemented()
 }
 
 func (f GitHubActionsFormatter) SupportedOutputs() []Output {

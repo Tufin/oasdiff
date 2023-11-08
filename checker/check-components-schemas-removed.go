@@ -19,7 +19,7 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 			Id:     APISchemasRemovedId,
 			Level:  config.getLogLevel(APISchemasRemovedId, INFO),
 			Text:   config.Localize(APISchemasRemovedId, ColorizedValue(deletedSchema)),
-			Source: "", // TODO: get the file name
+			Source: "Components",
 		})
 	}
 	return result

@@ -24,7 +24,7 @@ Spec can be a path to a file, a URL or '-' to read standard input.
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			flags.spec = load.GetSource(args[0])
+			flags.spec = load.NewSource(args[0])
 
 			// by now flags have been parsed successfully, so we don't need to show usage on any errors
 			cmd.Root().SilenceUsage = true

@@ -35,8 +35,8 @@ type runner func(flags Flags, stdout io.Writer) (bool, *ReturnError)
 func getRun(flags Flags, runner runner) cobra.PositionalArgs {
 	return func(cmd *cobra.Command, args []string) error {
 
-		flags.setBase(load.GetSource(args[0]))
-		flags.setRevision(load.GetSource(args[1]))
+		flags.setBase(load.NewSource(args[0]))
+		flags.setRevision(load.NewSource(args[1]))
 
 		// by now flags have been parsed successfully so we don't need to show usage on any errors
 		cmd.Root().SilenceUsage = true
