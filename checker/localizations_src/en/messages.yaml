@@ -264,3 +264,14 @@ request-required-property-became-write-only: the request required property %s be
 request-required-property-became-not-write-only: the request required property %s became not write-only
 new-required-request-default-parameter-to-existing-path: added the new required %s request parameter %s to all path's operations
 new-optional-request-default-parameter-to-existing-path: added the new optional %s request parameter %s to all path's operations
+added-required-request-body-description: a new required request body was added
+api-deprecated-sunset-parse-description: invalid or missing sunset extension
+endpoint-added-description: a new endpoint was added
+api-global-security-added-description: a new security scheme was added under security
+api-global-security-removed-description: a security scheme was deleted under security
+api-global-security-scope-added-description: a new scope was added to a security scheme under security
+api-global-security-scope-removed-description: a scope was deleted from a security scheme under security
+api-operation-id-added-description: an operation ID was added to an endpoint
+api-operation-id-removed-description: an operation ID was deleted from an endpoint
+api-path-removed-before-sunset-description: an endpoint was deleted before sunset date
+api-path-removed-without-deprecation-description: an endpoint was deleted without deprecation

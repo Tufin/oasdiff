@@ -28,7 +28,7 @@ func TestHtmlFormatter_NotImplemented(t *testing.T) {
 	_, err = formatter.RenderChangelog(checker.Changes{}, formatters.RenderOpts{})
 	assert.Error(t, err)
 
-	_, err = formatter.RenderChecks([]formatters.Check{}, formatters.RenderOpts{})
+	_, err = formatter.RenderChecks(formatters.Checks{}, formatters.RenderOpts{})
 	assert.Error(t, err)
 
 	_, err = formatter.RenderFlatten(nil, formatters.RenderOpts{})

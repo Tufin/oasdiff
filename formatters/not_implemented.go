@@ -26,7 +26,7 @@ func (f notImplementedFormatter) RenderChangelog(checker.Changes, RenderOpts) ([
 	return notImplemented()
 }
 
-func (f notImplementedFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
+func (f notImplementedFormatter) RenderChecks(Checks, RenderOpts) ([]byte, error) {
 	return notImplemented()
 }
 

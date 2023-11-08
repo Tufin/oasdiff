@@ -89,7 +89,7 @@ func ExampleGetPathsDiff() {
 	}
 
 	c := checker.GetDefaultChecks()
-	c.Localize = checker.NewLocalizer("en", "en")
+	c.Localize = checker.NewDefaultLocalizer()
 	errs := checker.CheckBackwardCompatibility(c, diffRes, operationsSources)
 
 	// process configuration file for ignoring errors

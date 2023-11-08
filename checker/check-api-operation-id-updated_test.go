@@ -72,7 +72,7 @@ func TestOperationIdAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-operation-id-added",
+		Id:          checker.APIOperationIdAddId,
 		Text:        "api operation id 'NewOperationId' was added",
 		Comment:     "",
 		Level:       checker.INFO,

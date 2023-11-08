@@ -19,7 +19,7 @@ func getSunsetDate(Extensions map[string]interface{}) (string, civil.Date, error
 	if !ok {
 		sunsetJson, ok := Extensions[diff.SunsetExtension].(json.RawMessage)
 		if !ok {
-			return "", civil.Date{}, errors.New("sunset header not found")
+			return "", civil.Date{}, errors.New("sunset extension not found")
 		}
 		if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
 			return "", civil.Date{}, errors.New("unmarshal failed")

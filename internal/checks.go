@@ -3,10 +3,12 @@ package internal
 import (
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/formatters"
 	"golang.org/x/exp/slices"
 )
@@ -41,7 +43,7 @@ func getChecksCmd() *cobra.Command {
 		},
 	}
 
-	enumWithOptions(&cmd, newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
+	enumWithOptions(&cmd, newEnumValue(localizations.GetSupportedLanguages(), localizations.LangDefault, &flags.lang), "lang", "l", "language for localized output")
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChecks), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumSliceValue([]string{"info", "warn", "error"}, nil, &flags.severity), "severity", "s", "list of severities to include (experimental)")
 	cmd.PersistentFlags().StringSliceVarP(&flags.tags, "tags", "t", []string{}, "list of tags to include, eg. parameter, request (experimental)")
@@ -51,18 +53,17 @@ func getChecksCmd() *cobra.Command {
 }
 
 func runChecks(stdout io.Writer, flags ChecksFlags) *ReturnError {
+	return outputChecks(stdout, flags, getRules(flags.required, checker.NewLocalizer(flags.lang)))
+}
 
-	rules := []checker.BackwardCompatibilityRule{}
-	if flags.required == "all" {
-		rules = checker.GetAllRules()
-	} else if flags.required == "false" {
-		rules = checker.GetOptionalRules()
-	} else if flags.required == "true" {
-		rules = checker.GetRequiredRules()
-	}
-
-	if err := outputChecks(stdout, flags, rules); err != nil {
-		return err
+func getRules(required string, l checker.Localizer) []checker.BackwardCompatibilityRule {
+	switch required {
+	case "all":
+		return checker.GetAllRules(l)
+	case "false":
+		return checker.GetOptionalRules(l)
+	case "true":
+		return checker.GetRequiredRules(l)
 	}
 
 	return nil
@@ -78,7 +79,7 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 	}
 
 	// filter rules
-	checks := make([]formatters.Check, 0, len(rules))
+	checks := make(formatters.Checks, 0, len(rules))
 	for _, rule := range rules {
 		// severity
 		if len(flags.severity) > 0 {
@@ -113,9 +114,12 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 			Description: rule.Description,
 			Required:    rule.Required,
 		})
+
+		sort.Sort(checks)
 	}
 
 	// render
+	sort.Sort(checks)
 	bytes, err := formatter.RenderChecks(checks, formatters.RenderOpts{})
 	if err != nil {
 		return getErrFailedPrint("checks "+flags.format, err)

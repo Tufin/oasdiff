@@ -1,7 +1,5 @@
 package formatters
 
-const LangDefault = "en"
-
 type Format string
 
 const (

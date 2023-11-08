@@ -8,11 +8,22 @@ import (
 
 type Localizer func(key string, args ...interface{}) string
 
-func NewLocalizer(locale string, fallbackLocale string) Localizer {
-	locales := localizations.New(locale, fallbackLocale)
+func NewDefaultLocalizer() Localizer {
+	return NewLocalizer(localizations.LangDefault)
+}
 
-	return func(key string, args ...interface{}) string {
-		pattern := locales.Get("messages." + key)
+func NewLocalizer(locale string) Localizer {
+	locales := localizations.New(locale, localizations.LangDefault)
+
+	return func(originalKey string, args ...interface{}) string {
+		key := "messages." + originalKey
+		pattern := locales.Get(key)
+
+		// if key not found, return original key
+		// TODO: improve localizations to return error when key not found
+		if pattern == key {
+			return originalKey
+		}
 
 		return fmt.Sprintf(pattern, args...)
 	}

@@ -29,7 +29,7 @@ func (f YAMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts)
 	return printYAML(changes)
 }
 
-func (f YAMLFormatter) RenderChecks(checks []Check, opts RenderOpts) ([]byte, error) {
+func (f YAMLFormatter) RenderChecks(checks Checks, opts RenderOpts) ([]byte, error) {
 	return printYAML(checks)
 }
 

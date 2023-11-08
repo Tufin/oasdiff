@@ -43,7 +43,7 @@ func TestYamlFormatter_RenderChangelog(t *testing.T) {
 func TestYamlFormatter_RenderChecks(t *testing.T) {
 	formatter := formatters.YAMLFormatter{}
 
-	checks := []formatters.Check{
+	checks := formatters.Checks{
 		{
 			Id:          "change_id",
 			Level:       "info",
