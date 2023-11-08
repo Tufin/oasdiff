@@ -29,7 +29,7 @@ func (f JSONFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts)
 	return printJSON(changes)
 }
 
-func (f JSONFormatter) RenderChecks(checks []Check, opts RenderOpts) ([]byte, error) {
+func (f JSONFormatter) RenderChecks(checks Checks, opts RenderOpts) ([]byte, error) {
 	return printJSON(checks)
 }
 

@@ -43,7 +43,7 @@ func TestJsonFormatter_RenderChangelog(t *testing.T) {
 func TestJsonFormatter_RenderChecks(t *testing.T) {
 	formatter := formatters.JSONFormatter{}
 
-	checks := []formatters.Check{
+	checks := formatters.Checks{
 		{
 			Id:          "change_id",
 			Level:       "info",

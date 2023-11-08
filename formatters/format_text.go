@@ -69,7 +69,7 @@ func (f TEXTFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts)
 	return result.Bytes(), nil
 }
 
-func (f TEXTFormatter) RenderChecks(checks []Check, opts RenderOpts) ([]byte, error) {
+func (f TEXTFormatter) RenderChecks(checks Checks, opts RenderOpts) ([]byte, error) {
 	result := bytes.NewBuffer(nil)
 
 	w := tabwriter.NewWriter(result, 1, 1, 1, ' ', 0)

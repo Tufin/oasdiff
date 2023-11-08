@@ -275,5 +275,5 @@ func Test_FlattenInvalid(t *testing.T) {
 }
 
 func Test_Checks(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff checks"), io.Discard, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff checks -l ru"), io.Discard, io.Discard))
 }

@@ -44,7 +44,7 @@ func getConfig() *diff.Config {
 func TestBreaking_DeletedPath(t *testing.T) {
 	errs := d(t, getConfig(), 1, 701)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-path-removed-without-deprecation", errs[0].GetId())
+	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[0].GetId())
 }
 
 // BC: deleting an operation is breaking

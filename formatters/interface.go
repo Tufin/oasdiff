@@ -5,6 +5,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
 )
@@ -15,7 +16,7 @@ type Formatter interface {
 	RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, error)
 	RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error)
 	RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error)
-	RenderChecks(checks []Check, opts RenderOpts) ([]byte, error)
+	RenderChecks(checks Checks, opts RenderOpts) ([]byte, error)
 	RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte, error)
 	SupportedOutputs() []Output
 }
@@ -40,7 +41,7 @@ func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 		return JSONFormatter{}, nil
 	case FormatText:
 		return TEXTFormatter{
-			Localizer: checker.NewLocalizer(opts.Language, LangDefault),
+			Localizer: checker.NewLocalizer(opts.Language),
 		}, nil
 	case FormatHTML:
 		return HTMLFormatter{}, nil
@@ -66,6 +67,6 @@ func SupportedFormatsByContentType(output Output) []string {
 // DefaultFormatterOpts returns the default formatter options (e.g. colors, CI mode, etc.)
 func DefaultFormatterOpts() FormatterOpts {
 	return FormatterOpts{
-		Language: LangDefault,
+		Language: localizations.LangDefault,
 	}
 }

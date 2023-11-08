@@ -7,6 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/formatters"
 )
@@ -35,7 +36,7 @@ func getChangelogCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
 	cmd.PersistentFlags().BoolVarP(&flags.flatten, "flatten", "", false, "merge subschemas under allOf before diff")
-	enumWithOptions(&cmd, newEnumValue([]string{LangEn, LangRu}, LangDefault, &flags.lang), "lang", "l", "language for localized output")
+	enumWithOptions(&cmd, newEnumValue(localizations.GetSupportedLanguages(), localizations.LangDefault, &flags.lang), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().StringVarP(&flags.errIgnoreFile, "err-ignore", "", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().StringVarP(&flags.warnIgnoreFile, "warn-ignore", "", "", "configuration file for ignoring warnings")
 	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks --required false' to see options)")
@@ -63,7 +64,7 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 	}
 
 	bcConfig := checker.GetAllChecks(flags.getIncludeChecks(), flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
-	bcConfig.Localize = checker.NewLocalizer(flags.getLang(), LangDefault)
+	bcConfig.Localize = checker.NewLocalizer(flags.getLang())
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffReport, operationsSources, level),

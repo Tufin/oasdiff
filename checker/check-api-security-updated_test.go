@@ -20,7 +20,7 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.SecurityChange{
-		Id:      "api-global-security-added",
+		Id:      checker.APIGlobalSecurityAddedCheckId,
 		Text:    "the security scheme 'petstore_auth' was added to the API",
 		Comment: "",
 		Level:   checker.INFO,
@@ -40,7 +40,7 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.SecurityChange{
-		Id:      "api-global-security-removed",
+		Id:      checker.APIGlobalSecurityRemovedCheckId,
 		Text:    "the security scheme 'petstore_auth' was removed from the API",
 		Comment: "",
 		Level:   checker.INFO,
@@ -61,7 +61,7 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.SecurityChange{
-		Id:      "api-global-security-scope-removed",
+		Id:      checker.APIGlobalSecurityScopeRemovedId,
 		Text:    "the security scope 'read:pets' was removed from the global security scheme 'petstore_auth'",
 		Comment: "",
 		Level:   checker.INFO,
@@ -82,7 +82,7 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.SecurityChange{
-		Id:      "api-global-security-scope-added",
+		Id:      checker.APIGlobalSecurityScopeAddedId,
 		Text:    "the security scope 'read:pets' was added to the global security scheme 'petstore_auth'",
 		Comment: "",
 		Level:   checker.INFO,
@@ -102,7 +102,7 @@ func TestAPISecurityAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-security-added",
+		Id:          checker.APISecurityAddedCheckId,
 		Text:        "the endpoint scheme security 'petstore_auth' was added to the API",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -125,7 +125,7 @@ func TestAPISecurityDeleted(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-security-removed",
+		Id:          checker.APISecurityRemovedCheckId,
 		Text:        "the endpoint scheme security 'petstore_auth' was removed from the API",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -148,7 +148,7 @@ func TestAPISecurityScopeRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-security-scope-removed",
+		Id:          checker.APISecurityScopeRemovedId,
 		Text:        "the security scope 'read:pets' was removed from the endpoint's security scheme 'petstore_auth'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -171,7 +171,7 @@ func TestAPISecurityScopeAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APISecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-security-scope-added",
+		Id:          checker.APISecurityScopeAddedId,
 		Text:        "the security scope 'read:pets' was added to the endpoint's security scheme 'petstore_auth'",
 		Comment:     "",
 		Level:       checker.INFO,

@@ -6,12 +6,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/formatters"
 )
 
 func TestTextFormatter_RenderBreakingChanges(t *testing.T) {
 	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: formatters.LangDefault,
+		Language: localizations.LangDefault,
 	})
 	require.NoError(t, err)
 
@@ -30,7 +31,7 @@ func TestTextFormatter_RenderBreakingChanges(t *testing.T) {
 
 func TestTextFormatter_RenderChangelog(t *testing.T) {
 	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: formatters.LangDefault,
+		Language: localizations.LangDefault,
 	})
 	require.NoError(t, err)
 
@@ -49,11 +50,11 @@ func TestTextFormatter_RenderChangelog(t *testing.T) {
 
 func TestTextFormatter_RenderChecks(t *testing.T) {
 	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: formatters.LangDefault,
+		Language: localizations.LangDefault,
 	})
 	require.NoError(t, err)
 
-	checks := []formatters.Check{
+	checks := formatters.Checks{
 		{
 			Id:          "change_id",
 			Level:       "info",
@@ -69,7 +70,7 @@ func TestTextFormatter_RenderChecks(t *testing.T) {
 
 func TestTextFormatter_RenderDiff(t *testing.T) {
 	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: formatters.LangDefault,
+		Language: localizations.LangDefault,
 	})
 	require.NoError(t, err)
 
@@ -80,7 +81,7 @@ func TestTextFormatter_RenderDiff(t *testing.T) {
 
 func TestTextFormatter_NotImplemented(t *testing.T) {
 	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: formatters.LangDefault,
+		Language: localizations.LangDefault,
 	})
 	require.NoError(t, err)
 
