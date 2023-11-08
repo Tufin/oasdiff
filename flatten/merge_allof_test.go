@@ -1652,7 +1652,7 @@ func TestMerge_Required(t *testing.T) {
 	}
 }
 
-func TestMerge_CircularRefOneOf_Failure(t *testing.T) {
+func TestMerge_CircularAllOf(t *testing.T) {
 	doc := loadSpec(t, "testdata/circular1.yaml")
 	merged, err := flatten.Merge(*doc.Components.Schemas["AWSEnvironmentSettings"])
 	require.NoError(t, err)
