@@ -4,9 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/diff"
 )
 
 type JUnitTestSuites struct {
@@ -38,14 +36,7 @@ type JUnitFailure struct {
 }
 
 type JUnitFormatter struct {
-}
-
-func (f JUnitFormatter) RenderDiff(*diff.Diff, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f JUnitFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
-	return notImplemented()
+	notImplementedFormatter
 }
 
 func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
@@ -90,18 +81,6 @@ func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts Rend
 	}
 
 	return []byte(xml.Header + string(output)), nil
-}
-
-func (f JUnitFormatter) RenderChangelog(checker.Changes, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f JUnitFormatter) RenderChecks([]Check, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
-func (f JUnitFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
-	return notImplemented()
 }
 
 func (f JUnitFormatter) SupportedOutputs() []Output {

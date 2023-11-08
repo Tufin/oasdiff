@@ -8,7 +8,7 @@ import (
 )
 
 func TestLoadSpecInfo(t *testing.T) {
-	_, err := load.LoadSpecInfo(MockLoader{}, load.GetSource("openapi-test1.yaml"))
+	_, err := load.LoadSpecInfo(MockLoader{}, load.NewSource("openapi-test1.yaml"))
 	require.NoError(t, err)
 }
 

@@ -179,6 +179,14 @@ func Test_BreakingChangesIgnoreErrsAndWarns(t *testing.T) {
 	require.Len(t, bc, 4)
 }
 
+func Test_BreakingChangesIgnoreErrsApiSchemaOptional(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --err-ignore ../data/ignore-err-example.txt --warn-ignore ../data/ignore-warn-example.txt --include-checks api-schema-removed --format json"), &stdout, io.Discard))
+	bc := []checker.ApiChange{}
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
+	require.Len(t, bc, 4)
+}
+
 func Test_BreakingChangesInvalidIgnoreFile(t *testing.T) {
 	require.Equal(t, 121, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --err-ignore no-file"), io.Discard, io.Discard))
 }

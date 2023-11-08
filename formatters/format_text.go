@@ -5,22 +5,18 @@ import (
 	"fmt"
 	"text/tabwriter"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/report"
 )
 
 type TEXTFormatter struct {
+	notImplementedFormatter
 	Localizer checker.Localizer
 }
 
 func (f TEXTFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return []byte(report.GetTextReportAsString(diff)), nil
-}
-
-func (f TEXTFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, error) {
-	return notImplemented()
 }
 
 func (f TEXTFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
@@ -84,10 +80,6 @@ func (f TEXTFormatter) RenderChecks(checks []Check, opts RenderOpts) ([]byte, er
 	_ = w.Flush()
 
 	return result.Bytes(), nil
-}
-
-func (f TEXTFormatter) RenderFlatten(*openapi3.T, RenderOpts) ([]byte, error) {
-	return notImplemented()
 }
 
 func (f TEXTFormatter) SupportedOutputs() []Output {

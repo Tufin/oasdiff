@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/utils"
 )
 
 func TestIgnore(t *testing.T) {
@@ -51,4 +52,18 @@ func TestIgnoreOnlyIncludedSubpaths(t *testing.T) {
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
 	require.Contains(t, e0.Path, "/resource/new") //see that new breaking change was kept even though it is a substring of newest
+}
+
+func TestIgnoreComponent(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 3)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-schema-removed"}), d, osm)
+	require.Equal(t, 8, len(errs))
+
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt")
+	require.NoError(t, err)
+	require.Equal(t, 5, len(errs))
 }
