@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: Circular Reference Example
+  version: 1.0.0
+paths:
+  /sample:
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudEnvironmentSettings'
+      responses:
+        '200':
+          description: Ok
+          
+components:
+  schemas:
+    CloudEnvironmentSettings:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/AWSEnvironmentSettings'
+      properties:
+        serviceEndpoints:
+          type: string
+      description: a
+
+    AWSEnvironmentSettings:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CloudEnvironmentSettings'
+        - type: object
+          properties:
+            region:
+              type: string
+      description: b
