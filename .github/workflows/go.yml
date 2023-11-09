@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        go: ['1.21.1']
+        go: ['1.21.4']
         os:
         - ubuntu-latest
         - windows-latest
@@ -23,7 +23,7 @@ jobs:
     name: ${{ matrix.go }} on ${{ matrix.os }}
     steps:
 
-    - uses: actions/setup-go@v3
+    - uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.go }}
 

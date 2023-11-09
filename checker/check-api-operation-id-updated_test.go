@@ -22,7 +22,7 @@ func TestOperationIdRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-operation-id-removed",
+		Id:          checker.APIOperationIdRemovedId,
 		Text:        "api operation id 'createOneGroup' removed and replaced with ''",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -47,7 +47,7 @@ func TestOperationIdUpdated(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-operation-id-removed",
+		Id:          checker.APIOperationIdRemovedId,
 		Text:        "api operation id 'createOneGroup' removed and replaced with 'newOperationId'",
 		Comment:     "",
 		Level:       checker.INFO,

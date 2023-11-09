@@ -45,7 +45,7 @@ func TestBreaking_RemoveBeforeSunset(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-removed-before-sunset", errs[0].GetId())
+	require.Equal(t, checker.APIRemovedBeforeSunsetId, errs[0].GetId())
 }
 
 // BC: deleting an operation without sunset date is breaking
@@ -62,7 +62,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-path-sunset-parse", errs[0].GetId())
+	require.Equal(t, checker.APIPathSunsetParseId, errs[0].GetId())
 }
 
 // BC: deleting an operation after sunset date is not breaking
@@ -96,7 +96,7 @@ func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-deprecated-sunset-parse", errs[0].GetId())
+	require.Equal(t, checker.APIDeprecatedSunsetParseId, errs[0].GetId())
 }
 
 // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking
@@ -147,8 +147,8 @@ func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.Len(t, errs, 2)
-	require.Equal(t, errs[0].GetId(), "api-path-removed-without-deprecation")
-	require.Equal(t, errs[1].GetId(), "api-path-removed-without-deprecation")
+	require.Equal(t, errs[0].GetId(), checker.APIPathRemovedWithoutDeprecationId)
+	require.Equal(t, errs[1].GetId(), checker.APIPathRemovedWithoutDeprecationId)
 }
 
 // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for draft level
@@ -203,8 +203,8 @@ func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.Len(t, errs, 2)
-	require.Equal(t, errs[0].GetId(), "api-path-removed-without-deprecation")
-	require.Equal(t, errs[1].GetId(), "api-path-removed-without-deprecation")
+	require.Equal(t, errs[0].GetId(), checker.APIPathRemovedWithoutDeprecationId)
+	require.Equal(t, errs[1].GetId(), checker.APIPathRemovedWithoutDeprecationId)
 }
 
 func toJson(t *testing.T, value string) json.RawMessage {
@@ -283,7 +283,7 @@ func TestBreaking_DeprecationPathMixed(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-path-removed-before-sunset", errs[0].GetId())
+	require.Equal(t, checker.APIPathRemovedBeforeSunsetId, errs[0].GetId())
 }
 
 // BC: deleting sunset header for a deprecated endpoint is breaking
@@ -317,7 +317,7 @@ func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-path-removed-before-sunset", errs[0].GetId())
+	require.Equal(t, checker.APIPathRemovedBeforeSunsetId, errs[0].GetId())
 }
 
 // CL: path operations that became deprecated

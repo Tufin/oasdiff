@@ -74,8 +74,8 @@ func TestBreaking_DeletedTag(t *testing.T) {
 	require.Len(t, r, 6)
 	require.Equal(t, "response-body-type-changed", r[0].GetId())
 	require.Equal(t, "response-success-status-removed", r[1].GetId())
-	require.Equal(t, "api-path-removed-without-deprecation", r[2].GetId())
-	require.Equal(t, "api-path-removed-without-deprecation", r[3].GetId())
+	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[2].GetId())
+	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[3].GetId())
 	require.Equal(t, "optional-response-header-removed", r[4].GetId())
 	require.Equal(t, "request-parameter-removed", r[5].GetId())
 }
@@ -284,7 +284,7 @@ func TestBreaking_OperationIdAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-added")
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APIOperationIdAddId)
 }
 
 // BC: adding a required property to response is not breaking
