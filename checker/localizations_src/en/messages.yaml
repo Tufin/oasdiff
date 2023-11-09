@@ -287,3 +287,12 @@ api-security-component-oauth-scope-changed-description: scope modified in OAuth 
 api-security-component-oauth-scope-removed-description: scope deleted from OAuth flow under components/securitySchemes
 api-security-component-oauth-token-url-changed-description: token URL modified in OAuth flow under components/securitySchemes
 api-security-component-oauth-url-changed-description: auth URL modified in OAuth flow under components/securitySchemes
+api-security-component-removed-description: security scheme deleted under components/securitySchemes
+api-security-component-type-changed-description: security scheme type modified under components/securitySchemes
+api-security-removed-description: security requirements deleted from endpoint
+api-security-scope-added-description: scope added to an endpoint's security scheme
+api-security-scope-removed-description: scope deleted from an endpoint's security scheme
+api-sunset-date-changed-too-small-description: modified sunset date doesn't meet min required deprecation days
+api-sunset-date-too-small-description: deprecated endpoint sunset before min required deprecation days
+api-tag-added-description: endpoint tag added
+api-tag-removed-description: endpoint tag deleted

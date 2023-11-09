@@ -272,7 +272,7 @@ func TestBreaking_TagAdded(t *testing.T) {
 	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-tag-added")
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APITagAddedId)
 }
 
 // BC: adding an operation ID is not breaking
