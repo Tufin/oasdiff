@@ -1,6 +1,6 @@
 module github.com/tufin/oasdiff
 
-go 1.21.3
+go 1.21.4
 
 require (
 	cloud.google.com/go v0.110.10
