@@ -114,8 +114,6 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 			Description: rule.Description,
 			Required:    rule.Required,
 		})
-
-		sort.Sort(checks)
 	}
 
 	// render

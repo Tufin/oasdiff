@@ -59,7 +59,7 @@ func TestBreaking_DeletedOp(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-removed-without-deprecation", errs[0].GetId())
+	require.Equal(t, checker.APIRemovedWithoutDeprecationId, errs[0].GetId())
 }
 
 // BC: adding a required request body is breaking
@@ -76,7 +76,7 @@ func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "added-required-request-body", errs[0].GetId())
+	require.Equal(t, checker.AddedRequiredRequestBodyId, errs[0].GetId())
 }
 
 // BC: changing an existing request body from optional to required is breaking
@@ -289,14 +289,14 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-operation-id-removed"}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.APIOperationIdRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-operation-id-removed", errs[0].GetId())
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-operation-id-removed")
+	require.Equal(t, checker.APIOperationIdRemovedId, errs[0].GetId())
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APIOperationIdRemovedId)
 }
 
 // BC: removing/updating an enum in request body is breaking (optional)
@@ -620,15 +620,15 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	checks := checker.GetChecks(utils.StringList{"api-schema-removed"})
+	checks := checker.GetChecks(utils.StringList{checker.APISchemasRemovedId})
 	errs := checker.CheckBackwardCompatibility(checks, d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
 	require.NotEmpty(t, errs)
-	require.Equal(t, "api-schema-removed", errs[0].GetId())
+	require.Equal(t, checker.APISchemasRemovedId, errs[0].GetId())
 	require.Equal(t, "removed the schema 'network-policies'", errs[0].GetText())
-	require.Equal(t, "api-schema-removed", errs[1].GetId())
+	require.Equal(t, checker.APISchemasRemovedId, errs[1].GetId())
 	require.Equal(t, "removed the schema 'rules'", errs[1].GetText())
 }
 

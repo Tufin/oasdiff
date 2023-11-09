@@ -60,7 +60,7 @@ func TestIgnoreComponent(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-schema-removed"}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.APISchemasRemovedId}), d, osm)
 	require.Equal(t, 8, len(errs))
 
 	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt")
