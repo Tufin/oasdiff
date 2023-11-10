@@ -165,7 +165,7 @@ func TestBreaking_NewPathParam(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 
 	require.Len(t, errs, 1)
-	require.Equal(t, "new-request-path-parameter", errs[0].GetId())
+	require.Equal(t, checker.NewRequestPathParameterId, errs[0].GetId())
 }
 
 // BC: new required header param is breaking
@@ -181,7 +181,7 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "new-required-request-parameter", errs[0].GetId())
+	require.Equal(t, checker.NewRequiredRequestParameterId, errs[0].GetId())
 }
 
 // BC: changing an existing header param from optional to required is breaking
@@ -423,7 +423,7 @@ func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
 	}
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "optional-response-header-removed", errs[0].GetId())
+	require.Equal(t, checker.OptionalResponseHeaderRemovedId, errs[0].GetId())
 }
 
 // BC: deleting a media-type from response is breaking

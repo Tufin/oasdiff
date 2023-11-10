@@ -149,8 +149,8 @@ response-required-property-removed: удалено обязательное по
 response-required-property-added: добавил требуемое свойство %s в ответ со статусом %s
 response-success-status-removed: удален успешный (2xx) статус ответа %s
 response-non-success-status-removed: удален неуспешный (не 2xx) статус ответа %s
-request-allOf-modified: изменено allOf для поля запроса %s
-request-allOf-modified-comment: Это предупреждение, потому что очень сложно алгоритмически автоматизированно проверить правильность изменения allOf на обратную совместимость.
+request-all-of-modified: изменено allOf для поля запроса %s
+request-all-of-modified-comment: Это предупреждение, потому что очень сложно алгоритмически автоматизированно проверить правильность изменения allOf на обратную совместимость.
 response-body-max-increased: у тела ответа max увеличен с %s до %s
 response-property-max-increased: у поля ответа %s max увеличен с %s до %s для ответа со статусом %s
 response-body-min-decreased: у тела ответа min уменьшено с %s до %s

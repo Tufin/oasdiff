@@ -76,7 +76,7 @@ func TestBreaking_DeletedTag(t *testing.T) {
 	require.Equal(t, "response-success-status-removed", r[1].GetId())
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[2].GetId())
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[3].GetId())
-	require.Equal(t, "optional-response-header-removed", r[4].GetId())
+	require.Equal(t, checker.OptionalResponseHeaderRemovedId, r[4].GetId())
 	require.Equal(t, "request-parameter-removed", r[5].GetId())
 }
 
