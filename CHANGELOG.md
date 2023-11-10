@@ -15,6 +15,11 @@ The changes are categorized into three levels:
 The changelog is actually an extension of the breaking changes output with additional `INFO`-level changes.  
 See [the breaking-changes documentation](BREAKING-CHANGES.md) for additional options that can be also be used with changelog command.
 
+To see the full list of supported changes, run:
+```
+oasdiff checks
+```
+
 ### Output Formats
 The default changelog format is human-readable text.  
 You can specify the `--format` flag to output the changelog as json or yaml.
