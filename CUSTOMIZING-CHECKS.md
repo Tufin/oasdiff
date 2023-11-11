@@ -10,6 +10,10 @@
     ```
     go-localize -input checker/localizations_src -output checker/localizations
     ```   
+    To install go-localize:
+    ```
+    go install github.com/m1/go-localize@latest
+    ```
 3. Make sure that [checker/localizations/localizations.go](checker/localizations/localizations.go) contains the new messages
 
 ## Write the Checker Function
