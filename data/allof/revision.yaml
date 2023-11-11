@@ -35,11 +35,15 @@ paths:
               allOf:
                 - type: object
                   properties:
+                    prop1:
+                      type: string
+                - type: object
+                  properties:
                     prop2:
                       type: boolean
                 - type: object
                   properties:
-                    prop3:
+                    prop1:
                       type: string
   /api/v1.0/groups/{groupId}:
     get:
