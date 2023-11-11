@@ -22,7 +22,7 @@ func TestTagAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APITagUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-tag-added",
+		Id:          checker.APITagAddedId,
 		Text:        "api tag 'newTag' added",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -88,9 +88,9 @@ func TestTagUpdated(t *testing.T) {
 			}, errs[cl])
 		}
 
-		if errs[cl].GetId() == "api-tag-added" {
+		if errs[cl].GetId() == checker.APITagAddedId {
 			require.Equal(t, checker.ApiChange{
-				Id:          "api-tag-added",
+				Id:          checker.APITagAddedId,
 				Text:        "api tag 'newTag' added",
 				Comment:     "",
 				Level:       checker.INFO,

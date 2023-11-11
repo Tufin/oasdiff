@@ -25,7 +25,7 @@ func TestNewRequestNonPathParameter_DetectsNewPathsAndNewOperations(t *testing.T
 
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
-	require.Equal(t, "new-optional-request-parameter", e0.Id)
+	require.Equal(t, checker.NewOptionalRequestParameterId, e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test1", e0.Path)
 	require.Equal(t, checker.INFO, e0.Level)
@@ -33,7 +33,7 @@ func TestNewRequestNonPathParameter_DetectsNewPathsAndNewOperations(t *testing.T
 
 	require.IsType(t, checker.ApiChange{}, errs[1])
 	e1 := errs[1].(checker.ApiChange)
-	require.Equal(t, "new-optional-request-parameter", e1.Id)
+	require.Equal(t, checker.NewOptionalRequestParameterId, e1.Id)
 	require.Equal(t, "GET", e1.Operation)
 	require.Equal(t, "/api/test2", e1.Path)
 	require.Equal(t, checker.INFO, e1.Level)
@@ -41,7 +41,7 @@ func TestNewRequestNonPathParameter_DetectsNewPathsAndNewOperations(t *testing.T
 
 	require.IsType(t, checker.ApiChange{}, errs[2])
 	e2 := errs[2].(checker.ApiChange)
-	require.Equal(t, "new-optional-request-parameter", e2.Id)
+	require.Equal(t, checker.NewOptionalRequestParameterId, e2.Id)
 	require.Equal(t, "GET", e2.Operation)
 	require.Equal(t, "/api/test3", e2.Path)
 	require.Equal(t, checker.INFO, e2.Level)

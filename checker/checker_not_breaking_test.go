@@ -76,7 +76,7 @@ func TestBreaking_DeletedTag(t *testing.T) {
 	require.Equal(t, "response-success-status-removed", r[1].GetId())
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[2].GetId())
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[3].GetId())
-	require.Equal(t, "optional-response-header-removed", r[4].GetId())
+	require.Equal(t, checker.OptionalResponseHeaderRemovedId, r[4].GetId())
 	require.Equal(t, "request-parameter-removed", r[5].GetId())
 }
 
@@ -272,7 +272,7 @@ func TestBreaking_TagAdded(t *testing.T) {
 	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "api-tag-added")
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APITagAddedId)
 }
 
 // BC: adding an operation ID is not breaking

@@ -25,7 +25,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "new-required-request-default-parameter-to-existing-path",
+			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
 			Text:        "added the new required 'query' request parameter 'version' to all path's operations",
 			Comment:     "",
 			Level:       3,
@@ -35,7 +35,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Source:      "../data/request_params/required-request-params.yaml",
 		},
 		{
-			Id:          "new-required-request-default-parameter-to-existing-path",
+			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
 			Text:        "added the new required 'query' request parameter 'version' to all path's operations",
 			Comment:     "",
 			Level:       3,
@@ -45,7 +45,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Source:      "../data/request_params/required-request-params.yaml",
 		},
 		{
-			Id:          "new-required-request-default-parameter-to-existing-path",
+			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
 			Text:        "added the new required 'query' request parameter 'id' to all path's operations",
 			Comment:     "",
 			Level:       3,
@@ -55,7 +55,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Source:      "../data/request_params/required-request-params.yaml",
 		},
 		{
-			Id:          "new-required-request-default-parameter-to-existing-path",
+			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
 			Text:        "added the new required 'header' request parameter 'If-None-Match' to all path's operations",
 			Comment:     "",
 			Level:       3,
@@ -65,7 +65,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Source:      "../data/request_params/required-request-params.yaml",
 		},
 		{
-			Id:          "new-optional-request-default-parameter-to-existing-path",
+			Id:          checker.NewOptionalRequestDefaultParameterToExistingPathId,
 			Text:        "added the new optional 'query' request parameter 'optionalQueryParam' to all path's operations",
 			Comment:     "",
 			Level:       1,
@@ -75,7 +75,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Source:      "../data/request_params/required-request-params.yaml",
 		},
 		{
-			Id:          "new-optional-request-default-parameter-to-existing-path",
+			Id:          checker.NewOptionalRequestDefaultParameterToExistingPathId,
 			Text:        "added the new optional 'query' request parameter 'optionalQueryParam' to all path's operations",
 			Comment:     "",
 			Level:       1,
@@ -85,7 +85,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Source:      "../data/request_params/required-request-params.yaml",
 		},
 		{
-			Id:          "new-optional-request-default-parameter-to-existing-path",
+			Id:          checker.NewOptionalRequestDefaultParameterToExistingPathId,
 			Text:        "added the new optional 'header' request parameter 'optionalHeaderParam' to all path's operations",
 			Comment:     "",
 			Level:       1,

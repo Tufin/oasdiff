@@ -44,7 +44,7 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
-		Id:      "api-security-component-type-changed",
+		Id:      checker.APIComponentsSecurityTypeUpdatedId,
 		Text:    "the component security scheme 'petstore_auth' type changed from 'oauth2' to 'http'",
 		Comment: "",
 		Level:   checker.INFO,
@@ -84,7 +84,7 @@ func TestComponentSecurityRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
-		Id:      "api-security-component-removed",
+		Id:      checker.APIComponentsSecurityRemovedId,
 		Text:    "the component security scheme 'BasicAuth' was removed",
 		Comment: "",
 		Level:   checker.INFO,

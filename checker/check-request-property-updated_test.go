@@ -20,7 +20,7 @@ func TestRequiredRequestPropertyAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "new-required-request-property",
+		Id:          checker.NewRequiredRequestPropertyId,
 		Text:        "added the new required request property 'description'",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -42,7 +42,7 @@ func TestRequiredRequestPropertiesAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "new-required-request-property",
+			Id:          checker.NewRequiredRequestPropertyId,
 			Text:        "added the new required request property 'description'",
 			Level:       checker.ERR,
 			Operation:   "POST",
@@ -51,7 +51,7 @@ func TestRequiredRequestPropertiesAdded(t *testing.T) {
 			OperationId: "addProduct",
 		},
 		{
-			Id:          "new-optional-request-property",
+			Id:          checker.NewOptionalRequestPropertyId,
 			Text:        "added the new optional request property 'info'",
 			Level:       checker.INFO,
 			Operation:   "POST",
@@ -74,7 +74,7 @@ func TestRequiredOptionalPropertyAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "new-optional-request-property",
+		Id:          checker.NewOptionalRequestPropertyId,
 		Text:        "added the new optional request property 'description'",
 		Level:       checker.INFO,
 		Operation:   "POST",

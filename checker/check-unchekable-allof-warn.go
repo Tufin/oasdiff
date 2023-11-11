@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	RequestAllOfModifiedId  = "request-allOf-modified"
-	ResponseAllOfModifiedId = "response-allOf-modified"
+	RequestAllOfModifiedId  = "request-all-of-modified"
+	ResponseAllOfModifiedId = "response-all-of-modified"
 )
 
 func UncheckedRequestAllOfWarnCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {

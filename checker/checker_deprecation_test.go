@@ -337,7 +337,7 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
-	require.Equal(t, "endpoint-deprecated", e0.Id)
+	require.Equal(t, checker.EndpointDeprecatedId, e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
 }
@@ -359,7 +359,7 @@ func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
-	require.Equal(t, "endpoint-reactivated", e0.Id)
+	require.Equal(t, checker.EndpointReactivatedId, e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
 }
@@ -379,7 +379,7 @@ func TestBreaking_InvaidStability(t *testing.T) {
 
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
-	require.Equal(t, "parsing-error", e0.Id)
+	require.Equal(t, checker.ParseErrorId, e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
 }
