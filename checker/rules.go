@@ -341,10 +341,6 @@ func GetAllRules(l Localizer) []BackwardCompatibilityRule {
 		// ResponseNonSuccessStatusUpdatedCheck
 		newBackwardCompatibilityRule(l, ResponseNonSuccessStatusRemovedId, ERR, false, ResponseNonSuccessStatusUpdatedCheck),
 		newBackwardCompatibilityRule(l, ResponseNonSuccessStatusAddedId, INFO, false, ResponseNonSuccessStatusUpdatedCheck),
-		// UncheckedRequestAllOfWarnCheck
-		newBackwardCompatibilityRule(l, RequestAllOfModifiedId, WARN, true, UncheckedRequestAllOfWarnCheck),
-		// UncheckedResponseAllOfWarnCheck
-		newBackwardCompatibilityRule(l, ResponseAllOfModifiedId, WARN, true, UncheckedResponseAllOfWarnCheck),
 		// APIOperationIdUpdatedCheck
 		newBackwardCompatibilityRule(l, APIOperationIdRemovedId, ERR, false, APIOperationIdUpdatedCheck),
 		newBackwardCompatibilityRule(l, APIOperationIdAddId, INFO, false, APIOperationIdUpdatedCheck),
