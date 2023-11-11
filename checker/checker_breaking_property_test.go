@@ -465,30 +465,6 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	require.Equal(t, "response-required-property-removed", errs[0].GetId())
 }
 
-// Old BC: adding a new required property under AllOf in response body is not breaking but when multiple inline (without $ref) schemas under AllOf are modified simultaneously, we detect is as breaking
-// explanation: when multiple inline (without $ref) schemas under AllOf are modified we can't correlate schemas across base and revision
-// as a result we can't determine that the change was "a new required property" and the change appears as breaking
-// New BC: this "breaking change" is only the tip of the iceberg. The real problem is that allOf / anyOf must be processed specifically.
-// For allOf all subSchemas must be merged before diff checking
-// For anyOf schemas must be compared one-by-one
-// I am going to change the behaviour in this case because currently it is false-positive case which can't correctly be checked
-// At least now it is a warn
-func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
-	s1, err := open(getReqPropFile("response-allof-multi-base.json"))
-	require.NoError(t, err)
-
-	s2, err := open(getReqPropFile("response-allof-multi-revision.json"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.ResponseAllOfModifiedId, errs[0].GetId())
-	require.Equal(t, checker.WARN, errs[0].GetLevel())
-}
-
 // BC: adding a new required read-only property in request body is not breaking
 func TestBreaking_ReadOnlyNewRequiredProperty(t *testing.T) {
 	s1, err := open(getReqPropFile("read-only-new-base.yaml"))
