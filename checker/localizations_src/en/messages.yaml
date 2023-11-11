@@ -306,3 +306,19 @@ new-required-request-parameter-description: required request parameter added to 
 new-required-request-property-description: required property added to request
 optional-response-header-removed-description: optional response header deleted
 parsing-error-description: invalid stability level
+request-body-all-of-added-description: sub-schema added to allOf in request body 
+request-body-all-of-removed-description: sub-schema deleted from allOf in request body
+request-body-any-of-added-description: sub-schema added to anyOf in request body 
+request-body-any-of-removed-description: sub-schema deleted from anyOf in request body
+request-body-became-enum-description: request body restricted to a closed list of values with enum
+request-body-became-not-nullable-description: null excluded as a possible value in request body
+request-body-became-nullable-description: null added as a possible value in request body
+request-body-became-optional-description: request body became optional
+request-body-became-required-description: request body became required
+request-body-default-value-added-description: request body default value set
+request-body-default-value-changed-description: request body default value modified
+request-body-default-value-removed-description: request body default value unset
+request-body-discriminator-added-description: request body discriminator added
+request-body-discriminator-mapping-added-description: request body discriminator mapping added
+request-body-discriminator-mapping-changed-description: request body discriminator mapping changed
+request-body-discriminator-mapping-deleted-description: request body discriminator mapping deleted

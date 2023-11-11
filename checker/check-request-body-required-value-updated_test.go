@@ -22,7 +22,7 @@ func TestRequestBodyBecameRequired(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.RequestBodyRequiredUpdatedCheck), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-became-required",
+		Id:          checker.RequestBodyBecameRequiredId,
 		Text:        "request body became required",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -47,7 +47,7 @@ func TestRequestBodyBecameOptional(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestBodyRequiredUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-became-optional",
+		Id:          checker.RequestBodyBecameOptionalId,
 		Text:        "request body became optional",
 		Comment:     "",
 		Level:       checker.INFO,
