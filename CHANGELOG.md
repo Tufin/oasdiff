@@ -8,12 +8,12 @@ oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/open
 ```
 
 The changes are categorized into three levels:
-- `INFO` - Changes which are not breaking yet still important to know about
-- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
 - `ERR` - Errors are definite breaking changes which should be avoided
+- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
+- `INFO` - Changes which are not breaking yet still important to know about
 
-The changelog is actually an extension of the breaking changes output with additional `INFO`-level changes.  
-See [the breaking-changes documentation](BREAKING-CHANGES.md) for additional options that can be also be used with changelog command.
+The changelog is an extension of the breaking changes output with additional `INFO`-level changes.  
+See [the breaking changes documentation](BREAKING-CHANGES.md) for additional options that can be also be used with changelog command.
 
 To see the full list of supported changes, run:
 ```

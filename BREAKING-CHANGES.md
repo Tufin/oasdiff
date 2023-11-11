@@ -1,34 +1,37 @@
 ## Breaking Changes
 A breaking change is a change to a component, such as a server, that could break a dependent component, such as a client, for example deleting an endpoint. 
-When working with OpenAPI, breaking-changes can be caught by monitoring changes to the specification.
+When working with OpenAPI, breaking changes can be caught by monitoring changes to the specification.
 
-**Oasdiff detects over 100 kinds of breaking changes**.  
-To see the full list, run:
-```
-oasdiff checks --severity warn,error
-```
-
-To detect breaking-changes between two specs run oasdiff with the `breaking` command:
+To detect breaking changes between two specs run oasdiff with the `breaking` command:
 ```
 oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-There are two levels of breaking changes:
-- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
+### Breaking Changes Checks
+Oasdiff detects over 100 kinds of breaking changes categorized into two levels:
 - `ERR` - Errors are definite breaking changes which should be avoided
+- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
 
-To exit with return code 1 when any ERR-level breaking changes are found, add the `--fail-on ERR` flag.  
-To exit with return code 1 even if only WARN-level breaking changes are found, add the `--fail-on WARN` flag.
+To see the full list of breaking changes that are supported by oasdiff, run:
+```
+oasdiff checks --severity warn,error
+```
+
+### Preventing Breaking Changes
+A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect breaking changes.  
+In order to prevent breaking changes, oasdiff can be configured to return an error if any breaking change is found:
+- To exit with return code 1 when any ERR-level breaking changes are found, add the `--fail-on ERR` flag.  
+- To exit with return code 1 even if only WARN-level breaking changes are found, add the `--fail-on WARN` flag.
 
 ### Output Formats
-The default output format is human-readable text.  
-You can specify the `--format` flag to output breaking-changes in json, yaml, githubactions or junit formats.
+By default, breaking changes are displayed as human-readable text.  
+You can specify the `--format` flag to output breaking changes in other formats: json, yaml, githubactions or junit.
 
 ### API Stability Levels
-When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking-change error.  
-oasdiff provides this feature through the `x-stability-level` extension.  
+When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking change error.  
+You can define an endpoint's stability level with the `x-stability-level` extension.  
 There are four stability levels: `draft`->`alpha`->`beta`->`stable`.  
-APIs with the levels `draft` or `alpha` can be changed freely without triggering a breaking-change error.  
+APIs with the levels `draft` or `alpha` can be changed freely without triggering a breaking change error.  
 Stability level may be increased, but not decreased, like this: `draft`->`alpha`->`beta`->`stable`.  
 APIs with no stability level will trigger breaking changes errors upon relevant change.  
 APIs with no stability level can be changed to any stability level.  
@@ -41,15 +44,16 @@ Example:
    ```
 
 ### Deprecating APIs
-oasdiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
+Before deleting an endpoint, it is recommended to give consumers a heads-up in the form of "deprecation". 
+Oasdiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
 
 ### Ignoring Specific Breaking Changes
 Sometimes, you want to allow certain breaking changes, for example, when your spec and service are out-of-sync and you need to correct the spec.  
 Oasdiff allows you define breaking changes that you want to ignore in a configuration file.  
 You can specify the configuration file name in the oasdiff command-line with the `--warn-ignore` flag for WARNINGS or the `--err-ignore` flag for ERRORS.  
 Each line in the configuration file should contain two parts:
-1. method and path (the first field in the line beginning with slash) to ignore a change to an endpoint, or the keyword 'components' to ignore a change in components
-2. description of the breaking change
+1. Method and path (the first field in the line beginning with slash) to ignore a change to an endpoint, or the keyword 'components' to ignore a change in components
+2. Description of the breaking change
 
 For example:
 ```
@@ -76,23 +80,24 @@ This method allows adding new entries to enums used in responses which is very u
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
-### Optional Breaking-Changes Checks
-You can use the `--include-checks` flag to include optional checks for breaking-changes.  
-Use the `oasdiff checks --required false` command to see the list of optional checks.  
-
-For example:
+### Optional Breaking Changes Checks
+Oasdiff supports a few optional breaking changes checks which can be added with the `--include-checks` flag. For example:
 ```
 oasdiff breaking data/openapi-test1.yaml data/openapi-test3.yaml --include-checks response-non-success-status-removed
 ```
+To see a list of optional checks, run:
+```
+oasdiff checks --required false
+```
 
 ### Localization
-To display changes in other languages use the `--lang` flag.  
+To display changes in other languages, use the `--lang` flag.  
 Currently English and Russian are supported.  
 [Please improve oasdiff by adding your own language](https://github.com/Tufin/oasdiff/issues/383).
 
-### Customizing Breaking-Changes Checks
+### Customizing Breaking Changes Checks
 If you encounter a change that isn't considered breaking by oasdiff you may:
-1. Check if the change is already available as an [optional breaking-changes check](#optional-breaking-changes-checks).  
+1. Check if the change is already available as an [optional breaking changes check](#optional-breaking-changes-checks).  
 2. Add a [custom check](CUSTOMIZING-CHECKS.md)
 
 ### Examples

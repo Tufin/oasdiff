@@ -34,8 +34,8 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Path parameter renaming](#path-parameter-renaming)
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
 - [Excluding endpoints](#excluding-specific-endpoints)
-- [Extending breaking-changes with custom checks](CUSTOMIZING-CHECKS.md)
-- Localization: display breaking-changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
+- [Extending breaking changes with custom checks](CUSTOMIZING-CHECKS.md)
+- Localization: display breaking changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
 
 
 ## Install with Go
@@ -163,7 +163,7 @@ Replace `$(pwd)/data` by the path that contains your files.
 Note that the spec paths must begin with `/`.  
 
 ## OpenAPI Diff, Breaking Changes and Changelog as a Service
-oasdiff is also available a service.
+Oasdiff is also available a service.
 See: https://github.com/oasdiff/oasdiff-service
 
 ## Diff Output Formats
@@ -175,7 +175,7 @@ If you wish to include additional details in non-YAML formats, please open an is
 
 ## Paths vs. Endpoints
 OpenAPI Specification has a hierarchical model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
-oasdiff respects this hierarchy and displays a hierarchical diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
+Oasdiff respects this hierarchy and displays a hierarchical diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
 ```yaml
 paths:
     deleted:
@@ -187,7 +187,7 @@ paths:
                 modified:
                     GET:
 ```
-oasdiff also outputs an alternate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
+Oasdiff also outputs an alternate simplified diff per "endpoint" which is a combination of Path + Operation, for example:
 ```yaml
 endpoints:
     deleted:
@@ -224,7 +224,7 @@ Sometimes paths prefixes need to be modified, for example, to create a new versi
 - /api/v1/...
 - /api/v2/...
 
-oasdiff allows comparison of API specifications with modified prefixes by stripping and/or prepending path prefixes.  
+Oasdiff allows comparison of API specifications with modified prefixes by stripping and/or prepending path prefixes.  
 In the example above you could compare the files as follows:
 ```
 oasdiff diff original.yaml new.yaml --strip-prefix-base /api/v1 --prefix-base /api/v2
@@ -237,7 +237,7 @@ Note that stripping precedes prepending.
 
 ## Path Parameter Renaming
 Sometimes developers decide to change names of path parameters, for example, in order to follow a certain naming convention.  
-oasdiff supports path parameter renaming by default.  
+Oasdiff supports path parameter renaming by default.  
 [Learn more](MATCHING-ENDPOINTS.md) about how oasdiff supports path parameter renaming.
 
 ## Excluding Specific Kinds of Changes 
@@ -268,7 +268,7 @@ diff.Get(&diff.Config{}, spec1, spec2)
 
 
 ### OpenAPI References
-oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
+Oasdiff expects [OpenAPI References](https://swagger.io/docs/specification/using-ref/) to be resolved.  
 References are normally resolved automatically when you load the spec. In other cases you can resolve refs using [Loader.ResolveRefsIn](https://pkg.go.dev/github.com/getkin/kin-openapi/openapi3#Loader.ResolveRefsIn).
 
 ## Requests for enhancements
