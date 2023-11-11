@@ -20,7 +20,7 @@ func TestRequestBodyDefaultValueChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-default-value-changed",
+		Id:          checker.RequestBodyDefaultValueChangedId,
 		Text:        "the request body 'text/plain' default value changed from 'Default' to 'NewDefault'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -70,7 +70,7 @@ func TestRequestBodyDefaultValueAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
 	require.ElementsMatch(t, []checker.ApiChange{{
-		Id:          "request-body-default-value-added",
+		Id:          checker.RequestBodyDefaultValueAddedId,
 		Text:        "the request body 'text/plain' default value 'Default' was added",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -104,7 +104,7 @@ func TestRequestBodyDefaultValueRemoving(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
 	require.ElementsMatch(t, []checker.ApiChange{{
-		Id:          "request-body-default-value-removed",
+		Id:          checker.RequestBodyDefaultValueRemovedId,
 		Text:        "the request body 'text/plain' default value 'Default' was removed",
 		Comment:     "",
 		Level:       checker.INFO,

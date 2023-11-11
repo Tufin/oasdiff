@@ -65,7 +65,7 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "request-body-became-optional")
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.RequestBodyBecameOptionalId)
 }
 
 // BC: deleting a tag is not breaking

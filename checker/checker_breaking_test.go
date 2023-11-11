@@ -97,7 +97,7 @@ func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-body-became-required", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyBecameRequiredId, errs[0].GetId())
 }
 
 // BC: deleting an enum value is breaking
@@ -661,7 +661,7 @@ func TestBreaking_RequestPropertyAnyOfRemoved(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.Equal(t, "request-body-any-of-removed", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyAnyOfRemovedId, errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
 	require.Equal(t, "removed 'Rabbit' from the request body 'anyOf' list", errs[0].GetText())
 
@@ -704,7 +704,7 @@ func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.Equal(t, "request-body-all-of-added", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyAllOfAddedId, errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
 	require.Equal(t, "added 'Rabbit' to the request body 'allOf' list", errs[0].GetText())
 
@@ -726,7 +726,7 @@ func TestBreaking_RequestPropertyAllOfRemoved(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.Equal(t, "request-body-all-of-removed", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyAllOfRemovedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 	require.Equal(t, "removed 'Rabbit' from the request body 'allOf' list", errs[0].GetText())
 

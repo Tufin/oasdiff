@@ -132,7 +132,7 @@ func TestBreaking_ReqBodyBecameEnum(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-body-became-enum", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyBecameEnumId, errs[0].GetId())
 }
 
 // BC: adding an enum value to request body is not breaking
@@ -161,7 +161,7 @@ func TestBreaking_ReqBodyBecameEnumAndTypeChanged(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 2)
-	require.Equal(t, "request-body-became-enum", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyBecameEnumId, errs[0].GetId())
 	require.Equal(t, "request-body-type-changed", errs[1].GetId())
 }
 

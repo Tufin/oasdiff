@@ -23,7 +23,7 @@ func TestRequestDiscriminatorUpdatedCheckAdded(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "request-body-discriminator-added",
+			Id:          checker.RequestBodyDiscriminatorAddedId,
 			Text:        "added request discriminator",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -131,7 +131,7 @@ func TestRequestDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "request-body-discriminator-mapping-added",
+			Id:          checker.RequestBodyDiscriminatorMappingAddedId,
 			Text:        "added '[cats]' mapping keys to the request discriminator",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -141,7 +141,7 @@ func TestRequestDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "request-body-discriminator-mapping-deleted",
+			Id:          checker.RequestBodyDiscriminatorMappingDeletedId,
 			Text:        "removed '[cat]' mapping keys from the request discriminator",
 			Comment:     "",
 			Level:       checker.INFO,

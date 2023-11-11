@@ -23,7 +23,7 @@ func TestRequestPropertyAllOfAdded(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "request-body-all-of-added",
+			Id:          checker.RequestBodyAllOfAddedId,
 			Text:        "added 'Rabbit' to the request body 'allOf' list",
 			Comment:     "",
 			Level:       checker.ERR,
@@ -59,7 +59,7 @@ func TestRequestPropertyAllOfRemoved(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "request-body-all-of-removed",
+			Id:          checker.RequestBodyAllOfRemovedId,
 			Text:        "removed 'Rabbit' from the request body 'allOf' list",
 			Comment:     "",
 			Level:       checker.WARN,
