@@ -485,7 +485,7 @@ func TestBreaking_RespBodyNewAllOfMultiRequiredProperty(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-allOf-modified", errs[0].GetId())
+	require.Equal(t, checker.ResponseAllOfModifiedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 }
 
