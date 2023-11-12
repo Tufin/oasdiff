@@ -76,7 +76,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-header-property-became-required", errs[0].GetId())
+	require.Equal(t, checker.RequestHeaderPropertyBecameRequiredId, errs[0].GetId())
 }
 
 // BC: changing an existing property in request header to optional is not breaking
@@ -178,7 +178,7 @@ func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-became-enum", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyBecameEnumId, errs[0].GetId())
 }
 
 // BC: changing an existing header param to enum is breaking
@@ -194,7 +194,7 @@ func TestBreaking_ReqParameterBecameEnum(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-became-enum", errs[0].GetId())
+	require.Equal(t, checker.RequestParameterBecameEnumId, errs[0].GetId())
 }
 
 // BC: changing an existing property in request header to enum is breaking
@@ -210,7 +210,7 @@ func TestBreaking_ReqParameterHeaderPropertyBecameEnum(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-header-property-became-enum", errs[0].GetId())
+	require.Equal(t, checker.RequestHeaderPropertyBecameEnumId, errs[0].GetId())
 }
 
 // BC: changing a response body to nullable is breaking
@@ -242,7 +242,7 @@ func TestBreaking_ReqBodyPropertyNotNullable(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-became-not-nullable", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyBecomeNotNullableId, errs[0].GetId())
 }
 
 // BC: changing a response property to nullable is breaking
@@ -346,7 +346,7 @@ func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-became-required", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
 }
 
 // BC: adding a new required property in request body is breaking
@@ -591,7 +591,7 @@ func TestBreaking_Body(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-became-required", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
 }
 
 // BC: changing an existing property in request body items to required is breaking
@@ -607,7 +607,7 @@ func TestBreaking_Items(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-became-required", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
 }
 
 // BC: changing an existing property in request body anyOf to required is breaking
@@ -623,7 +623,7 @@ func TestBreaking_AnyOf(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-became-required", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
 }
 
 // BC: changing an existing property under another property in request body to required is breaking
@@ -639,7 +639,7 @@ func TestBreaking_NestedProp(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-became-required", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
 }
 
 // BC: changing a response property to optional under AllOf, AnyOf or OneOf is breaking

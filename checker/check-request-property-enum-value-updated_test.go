@@ -24,7 +24,7 @@ func TestRequestPropertyEnumValueRemovedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-enum-value-removed",
+		Id:          checker.RequestPropertyEnumValueRemovedId,
 		Level:       checker.ERR,
 		Text:        "removed the enum value 'bird' of the request property 'category'",
 		Operation:   "POST",
@@ -50,7 +50,7 @@ func TestRequestPropertyEnumValueAddedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-enum-value-added",
+		Id:          checker.RequestPropertyEnumValueAddedId,
 		Level:       checker.INFO,
 		Text:        "added the new 'bird' enum value to the request property 'category'",
 		Operation:   "POST",

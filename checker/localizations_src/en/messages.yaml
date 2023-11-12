@@ -266,10 +266,10 @@ new-optional-request-default-parameter-to-existing-path: added the new optional 
 added-required-request-body-description: required request body added
 api-deprecated-sunset-parse-description: endpoint deprecated with invalid or missing sunset date
 endpoint-added-description: endpoint added
-api-global-security-added-description: security scheme added under security
-api-global-security-removed-description: security scheme deleted under security
-api-global-security-scope-added-description: scope added to a security scheme under security
-api-global-security-scope-removed-description: scope deleted from a security scheme under security
+api-global-security-added-description: security scheme added in security
+api-global-security-removed-description: security scheme deleted in security
+api-global-security-scope-added-description: scope added to a security scheme in security
+api-global-security-scope-removed-description: scope deleted from a security scheme in security
 api-operation-id-added-description: operation ID added to an endpoint
 api-operation-id-removed-description: operation ID deleted from an endpoint
 api-path-removed-before-sunset-description: path and endpoint deleted before sunset date
@@ -277,16 +277,16 @@ api-path-removed-without-deprecation-description: path and endpoint deleted with
 api-path-sunset-parse-description: path and endpoint deleted with invalid or missing sunset date
 api-removed-before-sunset-description: endpoint deleted before sunset date
 api-removed-without-deprecation-description: endpoint deleted without deprecation
-api-schema-removed-description: schema deleted under components/schemas
+api-schema-removed-description: schema deleted from components/schemas
 api-security-added-description: security requirements added to endpoint
-api-security-component-added-description: security scheme added under components/securitySchemes
-api-security-component-oauth-scope-added-description: scope added to OAuth flow under components/securitySchemes
-api-security-component-oauth-scope-changed-description: scope modified in OAuth flow under components/securitySchemes
-api-security-component-oauth-scope-removed-description: scope deleted from OAuth flow under components/securitySchemes
-api-security-component-oauth-token-url-changed-description: token URL modified in OAuth flow under components/securitySchemes
-api-security-component-oauth-url-changed-description: auth URL modified in OAuth flow under components/securitySchemes
-api-security-component-removed-description: security scheme deleted under components/securitySchemes
-api-security-component-type-changed-description: security scheme type modified under components/securitySchemes
+api-security-component-added-description: security scheme added in components/securitySchemes
+api-security-component-oauth-scope-added-description: scope added to OAuth flow in components/securitySchemes
+api-security-component-oauth-scope-changed-description: scope modified in OAuth flow in components/securitySchemes
+api-security-component-oauth-scope-removed-description: scope deleted from OAuth flow in components/securitySchemes
+api-security-component-oauth-token-url-changed-description: token URL modified in OAuth flow in components/securitySchemes
+api-security-component-oauth-url-changed-description: auth URL modified in OAuth flow in components/securitySchemes
+api-security-component-removed-description: security scheme deleted in components/securitySchemes
+api-security-component-type-changed-description: security scheme type modified in components/securitySchemes
 api-security-removed-description: security requirements deleted from endpoint
 api-security-scope-added-description: scope added to an endpoint's security scheme
 api-security-scope-removed-description: scope deleted from an endpoint's security scheme
@@ -306,11 +306,11 @@ new-required-request-parameter-description: required request parameter added to 
 new-required-request-property-description: required property added to request
 optional-response-header-removed-description: optional response header deleted
 parsing-error-description: invalid stability level
-request-body-all-of-added-description: sub-schema added to allOf in request body 
+request-body-all-of-added-description: sub-schema added to allOf in request body
 request-body-all-of-removed-description: sub-schema deleted from allOf in request body
-request-body-any-of-added-description: sub-schema added to anyOf in request body 
+request-body-any-of-added-description: sub-schema added to anyOf in request body
 request-body-any-of-removed-description: sub-schema deleted from anyOf in request body
-request-body-became-enum-description: request body restricted to a closed list of values with enum
+request-body-became-enum-description: request body restricted to enum
 request-body-became-not-nullable-description: null excluded as a possible value in request body
 request-body-became-nullable-description: null added as a possible value in request body
 request-body-became-optional-description: request body became optional
@@ -322,3 +322,83 @@ request-body-discriminator-added-description: request body discriminator added
 request-body-discriminator-mapping-added-description: request body discriminator mapping added
 request-body-discriminator-mapping-changed-description: request body discriminator mapping changed
 request-body-discriminator-mapping-deleted-description: request body discriminator mapping deleted
+request-body-discriminator-property-name-changed-description: request body discriminator property name changed
+request-body-discriminator-removed-description: request body discriminator deleted
+request-body-enum-value-removed-description: request body enum value deleted
+request-body-max-decreased-description: request body max decreased
+request-body-max-increased-description: request body max increased
+request-body-max-length-decreased-description: request body max length decreased
+request-body-max-length-increased-description: request body max length increased
+request-body-max-length-set-description: request body max length set
+request-body-max-set-description: request body max set
+request-body-media-type-added-description: request body media-type added
+request-body-media-type-removed-description: request body media-type deleted
+request-body-min-decreased-description: request body min decreased
+request-body-min-increased-description: request body min increased
+request-body-min-items increased-description: request body min items increased
+request-body-min-items set-description: request body min items set
+request-body-min-length-decreased-description: request body min length decreased
+request-body-min-length-increased-description: request body min length increased
+request-body-min-set-description: request body min set
+request-body-one-of-added-description: sub-schema added to oneOf in request body
+request-body-one-of-removed-description: sub-schema deleted from oneOf in request body
+request-body-type-changed-description: request body type changed
+request-header-property-became-enum-description: request header property restricted to enum
+request-header-property-became-required-description: request header property became required
+request-optional-property-became-not-read-only-description: request optional property became not read-only
+request-optional-property-became-not-write-only-description: request optional property became not write-only
+request-optional-property-became-read-only-description: request optional property became read-only
+request-optional-property-became-write-only-description: request optional property became write-only
+request-parameter-became-enum-description: request parameter restricted to enum
+request-parameter-became-optional-description: request parameter became optional
+request-parameter-became-required-description: request parameter became required
+request-parameter-default-value-added-description: request parameter default value set
+request-parameter-default-value-changed-description: request parameter default value changed
+request-parameter-default-value-removed-description:  request parameter default value unset
+request-parameter-enum-value-added-description: request parameter enum value added
+request-parameter-enum-value-removed-description: request parameter enum value deleted
+request-parameter-max-decreased-description: request parameter max decreased
+request-parameter-max-increased-description: request parameter max increased
+request-parameter-max-items-decreased-description: request parameter max items decreased
+request-parameter-max-items-increased-description: request parameter max items increased
+request-parameter-max-length-decreased-description: request parameter max length decreased
+request-parameter-max-length-increased-description: request parameter max length increased
+request-parameter-max-length-set-description: request parameter max length set
+request-parameter-max-set-description: request parameter max set
+request-parameter-min-decreased-description: request parameter min decreased
+request-parameter-min-increased-description: request parameter min increased
+request-parameter-min-items-decreased-description: request parameter min items decreased
+request-parameter-min-items-increased-description: request parameter min items increased
+request-parameter-min-items-set-description: request parameter min items set
+request-parameter-min-length-decreased-description: request parameter min length decreased
+request-parameter-min-length-increased-description: request parameter min length increased
+request-parameter-min-set-description: request parameter min set
+request-parameter-pattern-added-description: request parameter pattern set
+request-parameter-pattern-changed-description: request parameter pattern changed
+request-parameter-pattern-removed-description: request parameter pattern unset
+request-parameter-removed-description: request parameter deleted
+request-parameter-type-changed-description: request parameter type changed
+request-parameter-x-extensible-enum-value-removed-description: request parameter-x-extensible-enum value deleted
+request-property-all-of-added-description: sub-schema added to allOf in request property 
+request-property-all-of-removed-description: sub-schema deleted from allOf in request property 
+request-property-any-of-added-description: sub-schema deleted from anyOf in request property
+request-property-any-of-removed-description: sub-schema deleted from anyOf in request property
+request-property-became-enum-description: request property restricted to enum
+request-property-became-not-nullable-description: request property became not nullable
+request-property-became-nullable-description: request property became nullable
+request-property-became-optional-description: request property became optional
+request-property-became-required-description: request property became required
+request-property-default-value-added-description: request property default value set
+request-property-default-value-changed-description: request property default-value changed
+request-property-default-value-removed-description: request property default-value unset
+request-property-discriminator-added-description: request property discriminator added
+request-property-discriminator-mapping-added-description: request property discriminator mapping added
+request-property-discriminator-mapping-changed-description: request property discriminator mapping changed
+request-property-discriminator-mapping-deleted-description: request property discriminator mapping deleted
+request-property-discriminator-property-name-changed-description: request property discriminator property name changed
+request-property-discriminator-removed-description: request property discriminator removed
+request-property-enum-value-added-description: request property enum value added
+request-property-enum-value-removed-description: request property enum value removed
+request-property-max-decreased-description: request property max decreased
+request-property-max-increased-description: request property max increased
+request-property-max-length-decreased-description: request property max length decreased

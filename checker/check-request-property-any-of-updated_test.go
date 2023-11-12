@@ -33,7 +33,7 @@ func TestRequestPropertyAnyOfAdded(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "request-property-any-of-added",
+			Id:          checker.RequestPropertyAnyOfAddedId,
 			Text:        "added 'Breed3' to the '/anyOf[#/components/schemas/Dog]/breed' request property 'anyOf' list",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -69,7 +69,7 @@ func TestRequestPropertyAnyOfRemoved(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "request-property-any-of-removed",
+			Id:          checker.RequestPropertyAnyOfRemovedId,
 			Text:        "removed 'Breed3' from the '/anyOf[#/components/schemas/Dog]/breed' request property 'anyOf' list",
 			Comment:     "",
 			Level:       checker.ERR,

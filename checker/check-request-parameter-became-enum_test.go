@@ -20,7 +20,7 @@ func TestRequestParameterBecameEnum(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterBecameEnumCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-became-enum",
+		Id:          checker.RequestParameterBecameEnumId,
 		Text:        "the 'path' request parameter 'groupId' was restricted to a list of enum values",
 		Comment:     "",
 		Level:       checker.ERR,

@@ -25,7 +25,7 @@ func TestBreaking_RequestMaxLengthSmaller(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-max-length-decreased", errs[0].GetId())
+	require.Equal(t, checker.RequestParameterMaxLengthDecreasedId, errs[0].GetId())
 }
 
 // BC: reducing max length in response is not breaking
@@ -122,7 +122,7 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-max-length-set", errs[0].GetId())
+	require.Equal(t, checker.RequestParameterMaxLengthSetId, errs[0].GetId())
 }
 
 // BC: changing max length in response from nil to any value is not breaking

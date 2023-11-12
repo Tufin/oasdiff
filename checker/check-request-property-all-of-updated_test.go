@@ -33,7 +33,7 @@ func TestRequestPropertyAllOfAdded(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "request-property-all-of-added",
+			Id:          checker.RequestPropertyAllOfAddedId,
 			Text:        "added 'Breed3' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list",
 			Comment:     "",
 			Level:       checker.ERR,
@@ -69,7 +69,7 @@ func TestRequestPropertyAllOfRemoved(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "request-property-all-of-removed",
+			Id:          checker.RequestPropertyAllOfRemovedId,
 			Text:        "removed 'Breed3' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list",
 			Comment:     "",
 			Level:       checker.WARN,

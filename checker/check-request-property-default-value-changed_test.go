@@ -45,7 +45,7 @@ func TestRequestPropertyDefaultValueChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-default-value-changed",
+		Id:          checker.RequestPropertyDefaultValueChangedId,
 		Text:        "the 'price' request property default value changed from '10.00' to '20.00'",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -79,7 +79,7 @@ func TestRequestBodyDefaultValueAdded(t *testing.T) {
 		Source:      "../data/checker/request_body_default_value_changed_base.yaml",
 		OperationId: "createProduct",
 	}, {
-		Id:          "request-property-default-value-added",
+		Id:          checker.RequestPropertyDefaultValueAddedId,
 		Text:        "the 'price' request property default value '10.00' was added",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -113,7 +113,7 @@ func TestRequestBodyDefaultValueRemoving(t *testing.T) {
 		Source:      "../data/checker/request_body_default_value_changed_base.yaml",
 		OperationId: "createProduct",
 	}, {
-		Id:          "request-property-default-value-removed",
+		Id:          checker.RequestPropertyDefaultValueRemovedId,
 		Text:        "the 'price' request property default value '10.00' was removed",
 		Level:       checker.INFO,
 		Operation:   "POST",

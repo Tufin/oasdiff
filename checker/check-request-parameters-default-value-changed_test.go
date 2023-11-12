@@ -20,7 +20,7 @@ func TestRequestParameterDefaultValueChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterDefaultValueChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-default-value-changed",
+		Id:          checker.RequestParameterDefaultValueChangedId,
 		Text:        "for the 'query' request parameter 'category', default value was changed from 'default_category' to 'updated_category'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -45,7 +45,7 @@ func TestRequestParameterDefaultValueAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterDefaultValueChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-default-value-added",
+		Id:          checker.RequestParameterDefaultValueAddedId,
 		Text:        "for the 'query' request parameter 'category', default value 'default_category' was added",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -70,7 +70,7 @@ func TestRequestParameterDefaultValueRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterDefaultValueChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-default-value-removed",
+		Id:          checker.RequestParameterDefaultValueRemovedId,
 		Text:        "for the 'query' request parameter 'category', default value 'default_category' was removed",
 		Comment:     "",
 		Level:       checker.ERR,

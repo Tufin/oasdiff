@@ -74,7 +74,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxLengthDecreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize("request-property-max-length-decreased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
+								Text:        config.Localize(RequestPropertyMaxLengthDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -84,7 +84,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxLengthIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize("request-property-max-length-increased", ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+								Text:        config.Localize(RequestPropertyMaxLengthIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
