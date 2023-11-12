@@ -21,7 +21,7 @@ func TestRequestParameterEnumValueRemovedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterEnumValueUpdatedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-enum-value-removed",
+		Id:          checker.RequestParameterEnumValueRemovedId,
 		Text:        "removed the enum value 'available' from the 'query' request parameter 'status'",
 		Level:       checker.ERR,
 		Operation:   "GET",
@@ -44,7 +44,7 @@ func TestRequestParameterEnumValueAddedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterEnumValueUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-enum-value-added",
+		Id:          checker.RequestParameterEnumValueAddedId,
 		Text:        "added the new enum value 'available' to the 'query' request parameter 'status'",
 		Level:       checker.INFO,
 		Operation:   "GET",

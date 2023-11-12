@@ -22,7 +22,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-type-changed",
+		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'path' request parameter 'groupId', the type/format was changed from 'string'/'none' to 'int'/'none'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -47,7 +47,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-type-changed",
+		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'query' request parameter 'token', the type/format was changed from 'string'/'uuid' to 'int'/'uuid'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -72,7 +72,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-type-changed",
+		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'header' request parameter 'X-Request-ID', the type/format was changed from 'string'/'uuid' to 'int'/'uuid'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -97,7 +97,7 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-type-changed",
+		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'path' request parameter 'groupId', the type/format was changed from 'string'/'none' to 'string'/'uuid'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -122,7 +122,7 @@ func TestRequestQueryParamFormatChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-type-changed",
+		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'query' request parameter 'token', the type/format was changed from 'string'/'uuid' to 'string'/'uri'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -147,7 +147,7 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-parameter-type-changed",
+		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'header' request parameter 'X-Request-ID', the type/format was changed from 'string'/'uuid' to 'string'/'uri'",
 		Comment:     "",
 		Level:       checker.ERR,

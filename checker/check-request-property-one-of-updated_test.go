@@ -23,7 +23,7 @@ func TestRequestPropertyOneOfAdded(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "request-body-one-of-added",
+			Id:          checker.RequestBodyOneOfAddedId,
 			Text:        "added 'Rabbit' to the request body 'oneOf' list",
 			Comment:     "",
 			Level:       checker.INFO,

@@ -23,7 +23,7 @@ func TestRequestOptionalPropertyBecameWriteOnly(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-optional-property-became-write-only",
+		Id:          checker.RequestOptionalPropertyBecameWriteOnlyCheckId,
 		Text:        "the request optional property 'name' became write-only",
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -48,7 +48,7 @@ func TestRequestOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-optional-property-became-not-write-only",
+		Id:          checker.RequestOptionalPropertyBecameNonWriteOnlyCheckId,
 		Text:        "the request optional property 'name' became not write-only",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -73,7 +73,7 @@ func TestRequestOptionalPropertyBecameReadOnly(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-optional-property-became-read-only",
+		Id:          checker.RequestOptionalPropertyBecameReadOnlyCheckId,
 		Text:        "the request optional property 'name' became read-only",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -98,7 +98,7 @@ func TestRequestOptionalPropertyBecameNonReadOnly(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-optional-property-became-not-read-only",
+		Id:          checker.RequestOptionalPropertyBecameNonReadOnlyCheckId,
 		Text:        "the request optional property 'name' became not read-only",
 		Level:       checker.INFO,
 		Operation:   "POST",

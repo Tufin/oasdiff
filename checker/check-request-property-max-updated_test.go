@@ -24,7 +24,7 @@ func TestRequestPropertyMaxDecreasedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxDecreasedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-max-decreased",
+		Id:          checker.RequestPropertyMaxDecreasedId,
 		Level:       checker.ERR,
 		Text:        "the 'name' request property's max was decreased to '10.00'",
 		Operation:   "POST",
@@ -50,7 +50,7 @@ func TestRequestPropertyMaxIncreasingCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxDecreasedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-max-increased",
+		Id:          checker.RequestPropertyMaxIncreasedId,
 		Level:       checker.INFO,
 		Text:        "the 'name' request property's max was increased from '15.00' to '20.00'",
 		Operation:   "POST",

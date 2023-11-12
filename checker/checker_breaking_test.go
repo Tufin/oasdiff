@@ -105,7 +105,7 @@ func TestBreaking_DeletedEnum(t *testing.T) {
 	errs := d(t, getConfig(), 702, 1)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-enum-value-removed", errs[0].GetId())
+	require.Equal(t, checker.RequestParameterEnumValueRemovedId, errs[0].GetId())
 }
 
 // BC: added an enum value to response breaking
@@ -198,7 +198,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t,
 		checker.ApiChange{
-			Id:        "request-parameter-became-required",
+			Id:        checker.RequestParameterBecomeRequiredId,
 			Text:      "the 'header' request parameter 'network-policies' became required",
 			Comment:   "",
 			Level:     checker.ERR,
@@ -517,7 +517,7 @@ func TestBreaking_ModifyParameterPattern(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-pattern-changed", errs[0].GetId())
+	require.Equal(t, checker.RequestParameterPatternChangedId, errs[0].GetId())
 }
 
 // BC: modifying a pattern to ".*" in a schema is not breaking
@@ -548,7 +548,7 @@ func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-default-value-changed", errs[0].GetId())
+	require.Equal(t, checker.RequestParameterDefaultValueChangedId, errs[0].GetId())
 	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'X' to 'Y'", errs[0].GetText())
 }
 
@@ -566,7 +566,7 @@ func TestBreaking_SettingOptionalParamDefaultValue(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-parameter-default-value-added", errs[0].GetId())
+	require.Equal(t, checker.RequestParameterDefaultValueAddedId, errs[0].GetId())
 	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was added", errs[0].GetText())
 }
 
@@ -665,7 +665,7 @@ func TestBreaking_RequestPropertyAnyOfRemoved(t *testing.T) {
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
 	require.Equal(t, "removed 'Rabbit' from the request body 'anyOf' list", errs[0].GetText())
 
-	require.Equal(t, "request-property-any-of-removed", errs[1].GetId())
+	require.Equal(t, checker.RequestPropertyAnyOfRemovedId, errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
 	require.Equal(t, "removed 'Breed3' from the '/anyOf[#/components/schemas/Dog]/breed' request property 'anyOf' list", errs[1].GetText())
 }
@@ -708,7 +708,7 @@ func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
 	require.Equal(t, "added 'Rabbit' to the request body 'allOf' list", errs[0].GetText())
 
-	require.Equal(t, "request-property-all-of-added", errs[1].GetId())
+	require.Equal(t, checker.RequestPropertyAllOfAddedId, errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
 	require.Equal(t, "added 'Breed3' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
 }
@@ -730,7 +730,7 @@ func TestBreaking_RequestPropertyAllOfRemoved(t *testing.T) {
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 	require.Equal(t, "removed 'Rabbit' from the request body 'allOf' list", errs[0].GetText())
 
-	require.Equal(t, "request-property-all-of-removed", errs[1].GetId())
+	require.Equal(t, checker.RequestPropertyAllOfRemovedId, errs[1].GetId())
 	require.Equal(t, checker.WARN, errs[1].GetLevel())
 	require.Equal(t, "removed 'Breed3' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
 }

@@ -20,7 +20,7 @@ func TestRequestPropertyBecameNotNullable(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyBecameNotNullableCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-became-not-nullable",
+		Id:          checker.RequestPropertyBecomeNotNullableId,
 		Text:        "the request property 'name' became not nullable",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -43,7 +43,7 @@ func TestRequestPropertyBecameNullable(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyBecameNotNullableCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-became-nullable",
+		Id:          checker.RequestPropertyBecomeNullableId,
 		Text:        "the request property 'name' became nullable",
 		Comment:     "",
 		Level:       checker.INFO,

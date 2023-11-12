@@ -81,7 +81,7 @@ func TestRequestPropertyMaxLengthDecreasedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxLengthUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-max-length-decreased",
+		Id:          checker.RequestPropertyMaxLengthDecreasedId,
 		Text:        "the 'description' request property's maxLength was decreased to '50'",
 		Level:       checker.ERR,
 		Operation:   "POST",

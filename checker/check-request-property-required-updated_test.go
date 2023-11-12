@@ -21,7 +21,7 @@ func TestRequestPropertyMarkedRequired(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyRequiredUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-became-required",
+		Id:          checker.RequestPropertyBecameRequiredId,
 		Text:        "the request property 'name' became required",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -44,7 +44,7 @@ func TestRequestPropertyMarkedOptional(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyRequiredUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-became-optional",
+		Id:          checker.RequestPropertyBecameOptionalId,
 		Text:        "the request property 'name' became optional",
 		Level:       checker.INFO,
 		Operation:   "POST",

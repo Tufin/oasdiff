@@ -77,7 +77,7 @@ func TestBreaking_DeletedTag(t *testing.T) {
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[2].GetId())
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[3].GetId())
 	require.Equal(t, checker.OptionalResponseHeaderRemovedId, r[4].GetId())
-	require.Equal(t, "request-parameter-removed", r[5].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[5].GetId())
 }
 
 // BC: adding an enum value is not breaking
@@ -86,10 +86,10 @@ func TestBreaking_AddedEnum(t *testing.T) {
 	require.Len(t, r, 6)
 	require.Equal(t, "response-success-status-removed", r[0].GetId())
 	require.Equal(t, "response-success-status-removed", r[1].GetId())
-	require.Equal(t, "request-parameter-removed", r[2].GetId())
-	require.Equal(t, "request-parameter-removed", r[3].GetId())
-	require.Equal(t, "request-parameter-removed", r[4].GetId())
-	require.Equal(t, "request-parameter-removed", r[5].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[2].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[3].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[4].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[5].GetId())
 }
 
 // BC: changing extensions is not breaking
@@ -98,10 +98,10 @@ func TestBreaking_ModifiedExtension(t *testing.T) {
 	require.Len(t, r, 6)
 	require.Equal(t, "response-success-status-removed", r[0].GetId())
 	require.Equal(t, "response-success-status-removed", r[1].GetId())
-	require.Equal(t, "request-parameter-removed", r[2].GetId())
-	require.Equal(t, "request-parameter-removed", r[3].GetId())
-	require.Equal(t, "request-parameter-removed", r[4].GetId())
-	require.Equal(t, "request-parameter-removed", r[5].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[2].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[3].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[4].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[5].GetId())
 }
 
 // BC: changing comments is not breaking
@@ -110,10 +110,10 @@ func TestBreaking_Comments(t *testing.T) {
 	require.Len(t, r, 6)
 	require.Equal(t, "response-success-status-removed", r[0].GetId())
 	require.Equal(t, "response-success-status-removed", r[1].GetId())
-	require.Equal(t, "request-parameter-removed", r[2].GetId())
-	require.Equal(t, "request-parameter-removed", r[3].GetId())
-	require.Equal(t, "request-parameter-removed", r[4].GetId())
-	require.Equal(t, "request-parameter-removed", r[5].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[2].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[3].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[4].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[5].GetId())
 }
 
 // BC: new optional header param is not breaking
@@ -142,7 +142,7 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	require.NoError(t, err)
 	changes := checker.CheckBackwardCompatibilityUntilLevel(checker.GetDefaultChecks(), d, osm, checker.INFO)
 	require.NotEmpty(t, changes)
-	require.Equal(t, "request-parameter-became-optional", changes[0].GetId())
+	require.Equal(t, checker.RequestParameterBecomeOptionalId, changes[0].GetId())
 	require.Len(t, changes, 1)
 }
 
@@ -168,18 +168,18 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 func TestBreaking_OperationID(t *testing.T) {
 	r := d(t, getConfig(), 3, 1)
 	require.Len(t, r, 3)
-	require.Equal(t, "request-parameter-max-length-decreased", r[0].GetId())
-	require.Equal(t, "request-parameter-enum-value-removed", r[1].GetId())
-	require.Equal(t, "request-parameter-pattern-added", r[2].GetId())
+	require.Equal(t, checker.RequestParameterMaxLengthDecreasedId, r[0].GetId())
+	require.Equal(t, checker.RequestParameterEnumValueRemovedId, r[1].GetId())
+	require.Equal(t, checker.RequestParameterPatternAddedId, r[2].GetId())
 }
 
 // BC: changing a link to operation ID is not breaking
 func TestBreaking_LinkOperationID(t *testing.T) {
 	r := d(t, getConfig(), 3, 1)
 	require.Len(t, r, 3)
-	require.Equal(t, "request-parameter-max-length-decreased", r[0].GetId())
-	require.Equal(t, "request-parameter-enum-value-removed", r[1].GetId())
-	require.Equal(t, "request-parameter-pattern-added", r[2].GetId())
+	require.Equal(t, checker.RequestParameterMaxLengthDecreasedId, r[0].GetId())
+	require.Equal(t, checker.RequestParameterEnumValueRemovedId, r[1].GetId())
+	require.Equal(t, checker.RequestParameterPatternAddedId, r[2].GetId())
 }
 
 // BC: adding a media-type to response is not breaking
