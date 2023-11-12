@@ -21,7 +21,7 @@ oasdiff checks --severity warn,error
 A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect breaking changes.  
 In order to prevent breaking changes, oasdiff can be configured to return an error if any breaking change is found:
 - To exit with return code 1 when any ERR-level breaking changes are found, add the `--fail-on ERR` flag.  
-- To exit with return code 1 even if only WARN-level breaking changes are found, add the `--fail-on WARN` flag.
+- To exit with return code 1 when any breaking changes are found, WARN-level or ERR-level, add the `--fail-on WARN` flag.
 
 ### Output Formats
 By default, breaking changes are displayed as human-readable text.  
