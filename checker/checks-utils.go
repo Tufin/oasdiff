@@ -9,6 +9,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+func comment(id string) string {
+	return id + "-comment"
+}
+
 func propertyFullName(propertyPath string, propertyNames ...string) string {
 	propertyFullName := strings.Join(propertyNames, "/")
 	if propertyPath != "" {

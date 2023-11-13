@@ -96,7 +96,7 @@ func TestRequiredRequestPropertyRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-removed",
+		Id:          checker.RequestPropertyRemovedId,
 		Text:        "removed the request property 'description'",
 		Level:       checker.WARN,
 		Operation:   "POST",

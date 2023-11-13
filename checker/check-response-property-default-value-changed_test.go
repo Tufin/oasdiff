@@ -19,7 +19,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
 	require.ElementsMatch(t, []checker.ApiChange{{
-		Id:          "response-property-default-value-changed",
+		Id:          checker.ResponsePropertyDefaultValueChangedId,
 		Text:        "the 'created' response's property default value changed from '2020-01-01T00:00:00Z' to '2020-02-01T00:00:00Z' for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -28,7 +28,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 		Source:      "../data/checker/response_property_default_value_changed_revision.yaml",
 		OperationId: "createOneGroup",
 	}, {
-		Id:          "response-property-default-value-changed",
+		Id:          checker.ResponsePropertyDefaultValueChangedId,
 		Text:        "the 'enabled' response's property default value changed from 'false' to 'true' for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -52,7 +52,7 @@ func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-body-default-value-changed",
+		Id:          checker.ResponseBodyDefaultValueChangedId,
 		Text:        "the response body 'text/plain' default value changed from 'Error' to 'new default value' for the status '404'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -78,7 +78,7 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
 	require.ElementsMatch(t, []checker.ApiChange{{
-		Id:          "response-body-default-value-added",
+		Id:          checker.ResponseBodyDefaultValueAddedId,
 		Text:        "the response body 'text/plain' default value 'Error' was added for the status '404'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -87,7 +87,7 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 		Source:      "../data/checker/response_property_default_value_changed_base.yaml",
 		OperationId: "createOneGroup",
 	}, {
-		Id:          "response-property-default-value-added",
+		Id:          checker.ResponsePropertyDefaultValueAddedId,
 		Text:        "the 'created' response's property default value '2020-01-01T00:00:00Z' was added for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -113,7 +113,7 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
 	require.ElementsMatch(t, []checker.ApiChange{{
-		Id:          "response-body-default-value-removed",
+		Id:          checker.ResponseBodyDefaultValueRemovedId,
 		Text:        "the response body 'text/plain' default value 'Error' was removed for the status '404'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -122,7 +122,7 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 		Source:      "../data/checker/response_property_default_value_changed_base.yaml",
 		OperationId: "createOneGroup",
 	}, {
-		Id:          "response-property-default-value-removed",
+		Id:          checker.ResponsePropertyDefaultValueRemovedId,
 		Text:        "the 'created' response's property default value '2020-01-01T00:00:00Z' was removed for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,

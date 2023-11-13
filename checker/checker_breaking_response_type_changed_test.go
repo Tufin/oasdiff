@@ -24,7 +24,7 @@ func TestBreaking_RespTypeStringToNumber(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-type-changed", errs[0].GetId())
+	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the response's body type/format changed from 'string'/'none' to 'number'/'none' for status '200'", errs[0].GetText())
 }
 
@@ -44,7 +44,7 @@ func TestBreaking_RespTypeNumberToString(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-type-changed", errs[0].GetId())
+	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the response's body type/format changed from 'number'/'none' to 'string'/'none' for status '200'", errs[0].GetText())
 }
 
@@ -82,7 +82,7 @@ func TestBreaking_RespTypeIntegerToNumber(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-type-changed", errs[0].GetId())
+	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the response's body type/format changed from 'integer'/'none' to 'number'/'none' for status '200'", errs[0].GetText())
 }
 

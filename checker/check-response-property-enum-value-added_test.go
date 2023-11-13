@@ -22,7 +22,7 @@ func TestResponsePropertyEnumValueAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyEnumValueAddedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-property-enum-value-added",
+		Id:          checker.ResponsePropertyEnumValueAddedId,
 		Text:        "added the new 'Test' enum value to the 'data/typeEnum' response property for the response status '200'",
 		Comment:     "Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.",
 		Level:       checker.WARN,
@@ -47,7 +47,7 @@ func TestResponseWriteOnlyPropertyEnumValueAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyEnumValueAddedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-write-only-property-enum-value-added",
+		Id:          checker.ResponseWriteOnlyPropertyEnumValueAddedId,
 		Text:        "added the new 'Test' enum value to the 'data/writeOnlyEnum' response write-only property for the response status '200'",
 		Level:       checker.INFO,
 		Operation:   "POST",

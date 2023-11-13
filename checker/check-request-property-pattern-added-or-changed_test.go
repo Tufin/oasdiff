@@ -22,7 +22,7 @@ func TestRequestPropertyPatternChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyPatternUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-pattern-changed",
+		Id:          checker.RequestPropertyPatternChangedId,
 		Text:        "changed the pattern of the request property 'name' from '^\\w+$' to '^[\\w\\s]+$'",
 		Level:       checker.WARN,
 		Operation:   "POST",
@@ -45,7 +45,7 @@ func TestRequestPropertyPatternAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyPatternUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-pattern-added",
+		Id:          checker.RequestPropertyPatternAddedId,
 		Text:        "added the pattern '^\\w+$' to the request property 'name'",
 		Level:       checker.WARN,
 		Operation:   "POST",
@@ -68,7 +68,7 @@ func TestRequestPropertyPatternRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyPatternUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-pattern-removed",
+		Id:          checker.RequestPropertyPatternRemovedId,
 		Text:        "removed the pattern '^\\w+$' from the request property 'name'",
 		Level:       checker.INFO,
 		Operation:   "POST",

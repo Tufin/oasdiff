@@ -163,6 +163,7 @@ api-global-security-removed: the security scheme %s was removed from the API
 api-global-security-scope-removed: the security scope %s was removed from the global security scheme %s
 api-global-security-scope-added: the security scope %s was added to the global security scheme %s
 api-security-scope-removed: the security scope %s was removed from the endpoint's security scheme %s
+api-stability-decreased-description: endpoint stability level decreased
 api-security-scope-added: the security scope %s was added to the endpoint's security scheme %s
 api-security-component-type-changed: the component security scheme %s type changed from %s to %s
 api-security-component-oauth-url-changed: the component security scheme %s oauth url changed from %s to %s
@@ -402,3 +403,113 @@ request-property-enum-value-removed-description: request property enum value rem
 request-property-max-decreased-description: request property max decreased
 request-property-max-increased-description: request property max increased
 request-property-max-length-decreased-description: request property max length decreased
+request-property-max-length-increased-description: request property max length increased
+request-property-max-length-set-description: request property max length set
+request-property-max-set-description: request property max set
+request-property-min-decreased-description: request property min decreased
+request-property-min-increased-description: request property min increased
+request-property-min-items-increased-description: request property min items increased
+request-property-min-items-set-description: request property min items set
+request-property-min-length-decreased-description: request property min length decreased
+request-property-min-length-increased-description: request property min length increased
+request-property-min-set-description: request property min set
+request-property-one-of-added-description: sub-schema added to oneOf in request property
+request-property-one-of-removed-description: sub-schema deleted from oneOf in request property
+request-property-pattern-added-description: request property pattern set
+request-property-pattern-changed-description: request property pattern changed
+request-property-pattern-removed-description: request property pattern unset
+request-property-removed-description: request property removed
+request-property-type-changed-description: request property type changed
+request-property-x-extensible-enum-value-removed-description: request property x-extensible-enum value removed
+request-required-property-became-not-read-only-description: request required property became not read-only
+request-required-property-became-not-write-only-description: request required property became not write-only
+request-required-property-became-read-only-description: request required property became read-only
+request-required-property-became-write-only-description: request required property became write-only
+required-response-header-removed-description: required response header removed
+response-body-all-of-added-description: sub-schema added to allOf in response body
+response-body-all-of-removed-description: sub-schema removed from allOf in response body
+response-body-any-of-added-description: sub-schema added to anyOf in response body
+response-body-any-of-removed-description: sub-schema removed from anyOf in response body
+response-body-became-nullable-description: response body became nullable
+response-body-default-value-added-description: response body default value set
+response-body-default-value-changed-description: response body default value changed
+response-body-default-value-removed-description: response body default value unset
+response-body-discriminator-added-description: response body discriminator added
+response-body-discriminator-mapping-added-description: response body discriminator mapping added
+response-body-discriminator-mapping-changed-description: response body discriminator mapping changed
+response-body-discriminator-mapping-deleted-description: response body discriminator mapping deleted
+response-body-discriminator-property-name-changed-description: response body discriminator property name changed
+response-body-discriminator-removed-description: response body discriminator removed
+response-body-max-increased-description: response body max increased
+response-body-max-length-increased-description: response body max length increased
+response-body-max-length-unset-description: response body max length unset
+response-body-min-decreased-description: response body min decreased
+response-body-min-items-decreased-description: response body min items decreased
+response-body-min-items-unset-description: response body min items unset
+response-body-min-length-decreased-description: response body min length decreased
+response-body-one-of-added-description: sub-schema added to oneOf in response body
+response-body-one-of-removed-description: sub-schema removed from oneOf in response body
+response-body-type-changed-description: response body type changed
+response-header-became-optional-description: response header became optional
+response-media-type-added-description: response media type added
+response-media-type-removed-description: response media type removed
+response-mediatype-enum-value-removed-description: response mediatype enum value removed
+response-non-success-status-added-description: response non-success status added
+response-non-success-status-removed-description: response non-success status removed
+response-optional-property-added-description: response optional property added
+response-optional-property-became-not-read-only-description: response optional property became not read-only
+response-optional-property-became-not-write-only-description: response optional property became not write-only
+response-optional-property-became-read-only-description: response optional property became read-only
+response-optional-property-became-write-only-description: response optional property became write-only
+response-optional-property-removed-description: response optional property removed
+response-optional-write-only-property-added-description: response optional write-only property added
+response-optional-write-only-property-removed-description: response optional write-only property removed
+response-property-all-of-added-description: sub-schema added to allOf in response property
+response-property-all-of-removed-description: sub-schema removed from allOf in response property
+response-property-any-of-added-description: sub-schema added to anyOf in response property
+response-property-any-of-removed-description: sub-schema removed from anyOf in response property
+response-property-became-nullable-description: response property became nullable
+response-property-became-optional-description: response property became optional
+response-property-became-required-description: response property became required
+response-property-default-value-added-description: response property default value set
+response-property-default-value-changed-description: response property default value changed
+response-property-default-value-removed-description: response property default value unset
+response-property-discriminator-added-description: response property discriminator added
+response-property-discriminator-mapping-added-description: response property discriminator mapping added
+response-property-discriminator-mapping-changed-description: response property discriminator mapping changed
+response-property-discriminator-mapping-deleted-description: response property discriminator mapping deleted
+response-property-discriminator-property-name-changed-description: response property discriminator property name changed
+response-property-discriminator-removed-description: response property discriminator removed
+response-property-enum-value-added-description: response property enum value added
+response-property-enum-value-removed-description: response property enum value removed
+response-property-max-increased-description: response property max increased
+response-property-max-length-increased-description: response property max length increased
+response-property-max-length-unset-description: response property max length unset
+response-property-min-decreased-description: response property min decreased
+response-property-min-items-decreased-description: response property min items decreased
+response-property-min-items-unset-description: response property min items unset
+response-property-min-length-decreased-description: response property min length decreased
+response-property-one-of-added-description: sub-schema added to oneOf in response property
+response-property-one-of-removed-description: sub-schema removed from oneOf in response property
+response-property-pattern-added-description: response property pattern set
+response-property-pattern-changed-description: response property pattern changed
+response-property-pattern-removed-description: response property pattern unset
+response-property-type-changed-description: response property type changed
+response-required-property-added-description: response required property added
+response-required-property-became-not-read-only-description: response required property became not read-only
+response-required-property-became-not-write-only-description: response required property became not write-only
+response-required-property-became-read-only-description: response required property became read-only
+response-required-property-became-write-only-description: response required property became write-only
+response-required-property-removed-description: response required property removed
+response-required-write-only-property-added-description: response required write-only property added
+response-required-write-only-property-removed-description: response required write-only property removed
+response-success-status-added-description: response success status added
+response-success-status-removed-description: response success status removed
+response-write-only-property-became-optional-description: response write-only property became optional
+response-write-only-property-became-required-description: response write-only property became required
+response-write-only-property-enum-value-added-description: response write-only property enum value added
+sunset-deleted-description: sunset deleted
+unparseable-parameter-from-x-extensible-enum-description: unparseable x-extensible-enum in original request parameter
+unparseable-parameter-to-x-extensible-enum-description: unparseable x-extensible-enum in revised request parameter
+unparseable-property-from-x-extensible-enum-description: unparseable x-extensible-enum in original request property
+unparseable-property-to-x-extensible-enum-description: unparseable x-extensible-enum in revised request property

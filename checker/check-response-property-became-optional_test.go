@@ -19,7 +19,7 @@ func TestResponsePropertyBecameOptionalCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyBecameOptionalCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-property-became-optional",
+		Id:          checker.ResponsePropertyBecameOptionalId,
 		Text:        "the response property 'data/name' became optional for the status '200'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -44,7 +44,7 @@ func TestResponseWriteOnlyPropertyBecameOptionalCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyBecameOptionalCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-write-only-property-became-optional",
+		Id:          checker.ResponseWriteOnlyPropertyBecameOptionalId,
 		Text:        "the response write-only property 'data/name' became optional for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,

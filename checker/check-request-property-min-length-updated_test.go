@@ -22,7 +22,7 @@ func TestRequestPropertyMinLengthDecreased(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMinLengthUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-min-length-decreased",
+		Id:          checker.RequestPropertyMinLengthDecreasedId,
 		Text:        "the 'name' request property's minLength was decreased from '3' to '2'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -47,7 +47,7 @@ func TestRequestPropertyMinLengthIncreased(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMinLengthUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-min-length-increased",
+		Id:          checker.RequestPropertyMinLengthIncreasedId,
 		Text:        "the 'name' request property's minLength was increased from '3' to '5'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -72,7 +72,7 @@ func TestRequestBodyMinLengthIncreased(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMinLengthUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-min-length-increased",
+		Id:          checker.RequestBodyMinLengthIncreasedId,
 		Text:        "the request's body minLength was increased from '10' to '100'",
 		Comment:     "",
 		Level:       checker.ERR,
@@ -97,7 +97,7 @@ func TestRequestBodyMinLengthDecreased(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMinLengthUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-min-length-decreased",
+		Id:          checker.RequestBodyMinLengthDecreasedId,
 		Text:        "the request's body minLength was decreased from '10' to '1'",
 		Comment:     "",
 		Level:       checker.INFO,

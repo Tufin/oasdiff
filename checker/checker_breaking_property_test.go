@@ -116,7 +116,7 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-property-became-optional", errs[0].GetId())
+	require.Equal(t, checker.ResponsePropertyBecameOptionalId, errs[0].GetId())
 }
 
 // BC: changing a request body to enum is breaking
@@ -162,7 +162,7 @@ func TestBreaking_ReqBodyBecameEnumAndTypeChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.RequestBodyBecameEnumId, errs[0].GetId())
-	require.Equal(t, "request-body-type-changed", errs[1].GetId())
+	require.Equal(t, checker.RequestBodyTypeChangedId, errs[1].GetId())
 }
 
 // BC: changing an existing property in request body to enum is breaking
@@ -226,7 +226,7 @@ func TestBreaking_RespBodyNullable(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-body-became-nullable", errs[0].GetId())
+	require.Equal(t, checker.ResponseBodyBecameNullableId, errs[0].GetId())
 }
 
 // BC: changing a request property to not nullable is breaking
@@ -258,7 +258,7 @@ func TestBreaking_RespBodyPropertyNullable(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-property-became-nullable", errs[0].GetId())
+	require.Equal(t, checker.ResponsePropertyBecameNullableId, errs[0].GetId())
 }
 
 // BC: changing an embedded response property to nullable is breaking
@@ -274,7 +274,7 @@ func TestBreaking_RespBodyEmbeddedPropertyNullable(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-property-became-nullable", errs[0].GetId())
+	require.Equal(t, checker.ResponsePropertyBecameNullableId, errs[0].GetId())
 }
 
 // BC: changing a required property in response body to optional and also deleting it is breaking
@@ -378,7 +378,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-removed", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 }
 
@@ -394,7 +394,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Contains(t, errs, checker.ApiChange{
-		Id:          "request-property-removed",
+		Id:          checker.RequestPropertyRemovedId,
 		Text:        "removed the request property 'roleAssignments/items/role'",
 		Comment:     "",
 		Level:       checker.WARN,
@@ -432,7 +432,7 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-required-property-removed", errs[0].GetId())
+	require.Equal(t, checker.ResponseRequiredPropertyRemovedId, errs[0].GetId())
 }
 
 // BC: adding a new required property under AllOf in response body is not breaking
@@ -462,7 +462,7 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-required-property-removed", errs[0].GetId())
+	require.Equal(t, checker.ResponseRequiredPropertyRemovedId, errs[0].GetId())
 }
 
 // BC: adding a new required read-only property in request body is not breaking
@@ -506,7 +506,7 @@ func TestBreaking_WriteOnlyDeleteRequiredProperty(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-removed", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 }
 
@@ -523,11 +523,11 @@ func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 3)
-	require.Equal(t, "request-property-removed", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
-	require.Equal(t, "response-optional-property-removed", errs[1].GetId())
+	require.Equal(t, checker.ResponseOptionalPropertyRemovedId, errs[1].GetId())
 	require.Equal(t, checker.WARN, errs[1].GetLevel())
-	require.Equal(t, "response-optional-property-removed", errs[2].GetId())
+	require.Equal(t, checker.ResponseOptionalPropertyRemovedId, errs[2].GetId())
 	require.Equal(t, checker.WARN, errs[2].GetLevel())
 }
 
@@ -572,9 +572,9 @@ func TestBreaking_RequiredPropertyWriteOnlyDisabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
-	require.Equal(t, "response-required-property-became-not-write-only", errs[0].GetId())
+	require.Equal(t, checker.ResponseRequiredPropertyBecameNonWriteOnlyId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
-	require.Equal(t, "response-required-property-became-not-write-only", errs[1].GetId())
+	require.Equal(t, checker.ResponseRequiredPropertyBecameNonWriteOnlyId, errs[1].GetId())
 	require.Equal(t, checker.WARN, errs[1].GetLevel())
 }
 

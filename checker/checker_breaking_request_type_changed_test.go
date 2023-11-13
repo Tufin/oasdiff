@@ -24,7 +24,7 @@ func TestBreaking_ReqTypeStringToNumber(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-body-type-changed", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format changed from 'string'/'none' to 'number'/'none'", errs[0].GetText())
 }
 
@@ -44,7 +44,7 @@ func TestBreaking_ReqTypeNumberToString(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-body-type-changed", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format changed from 'number'/'none' to 'string'/'none'", errs[0].GetText())
 }
 
@@ -64,7 +64,7 @@ func TestBreaking_ReqTypeNumberToInteger(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-body-type-changed", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format changed from 'number'/'none' to 'integer'/'none'", errs[0].GetText())
 }
 
@@ -103,6 +103,6 @@ func TestBreaking_ReqTypeNumberToInt32(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-body-type-changed", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format changed from 'number'/'none' to 'integer'/'int32'", errs[0].GetText())
 }

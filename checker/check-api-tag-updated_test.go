@@ -48,7 +48,7 @@ func TestTagRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "api-tag-removed",
+		Id:          checker.APITagRemovedId,
 		Text:        "api tag 'Test' removed",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -75,9 +75,9 @@ func TestTagUpdated(t *testing.T) {
 	require.Len(t, errs, 2)
 	for cl := range errs {
 		require.Equal(t, checker.INFO, errs[cl].GetLevel())
-		if errs[cl].GetId() == "api-tag-removed" {
+		if errs[cl].GetId() == checker.APITagRemovedId {
 			require.Equal(t, checker.ApiChange{
-				Id:          "api-tag-removed",
+				Id:          checker.APITagRemovedId,
 				Text:        "api tag 'Test' removed",
 				Comment:     "",
 				Level:       checker.INFO,

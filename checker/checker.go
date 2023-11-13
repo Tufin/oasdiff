@@ -11,6 +11,10 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+const (
+	APIStabilityDecreasedId = "api-stability-decreased"
+)
+
 type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes
 
 type BackwardCompatibilityRule struct {
@@ -47,6 +51,9 @@ func CheckBackwardCompatibilityUntilLevel(config Config, diffReport *diff.Diff, 
 	result = removeDraftAndAlphaOperationsDiffs(diffReport, result, operationsSources)
 
 	for _, check := range config.Checks {
+		if check == nil {
+			continue
+		}
 		errs := check(diffReport, operationsSources, config)
 		result = append(result, errs...)
 	}
@@ -118,7 +125,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 				result = append(result, ApiChange{
-					Id:          "parsing-error",
+					Id:          ParseErrorId,
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
 					Operation:   operation,
@@ -132,7 +139,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
 				result = append(result, ApiChange{
-					Id:          "parsing-error",
+					Id:          ParseErrorId,
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
 					Operation:   operation,
@@ -148,7 +155,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				baseStability == STABILITY_ALPHA && revisionStability != STABILITY_ALPHA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
 				revisionStability == "" && baseStability != "" {
 				result = append(result, ApiChange{
-					Id:          "api-stability-decreased",
+					Id:          APIStabilityDecreasedId,
 					Level:       ERR,
 					Text:        fmt.Sprintf("stability level decreased from '%s' to '%s'", baseStability, revisionStability),
 					Operation:   operation,
@@ -173,7 +180,7 @@ func newParsingError(result Changes,
 	path string,
 	source string) Changes {
 	result = append(result, ApiChange{
-		Id:          "parsing-error",
+		Id:          ParseErrorId,
 		Level:       ERR,
 		Text:        fmt.Sprintf("parsing error %s", err.Error()),
 		Operation:   operation,

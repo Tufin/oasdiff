@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	ResponseMediaTypeUpdatedId = "response-media-type-removed"
+	ResponseMediaTypeRemovedId = "response-media-type-removed"
 	ResponseMediaTypeAddedId   = "response-media-type-added"
 )
 
@@ -35,9 +35,9 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 				}
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeDeleted {
 					result = append(result, ApiChange{
-						Id:          ResponseMediaTypeUpdatedId,
+						Id:          ResponseMediaTypeRemovedId,
 						Level:       ERR,
-						Text:        config.Localize(ResponseMediaTypeUpdatedId, ColorizedValue(mediaType), ColorizedValue(responseStatus)),
+						Text:        config.Localize(ResponseMediaTypeRemovedId, ColorizedValue(mediaType), ColorizedValue(responseStatus)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

@@ -26,7 +26,7 @@ func TestRequestBodyMaxLengthDecreasedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxLengthUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-max-length-increased",
+		Id:          checker.RequestBodyMaxLengthIncreasedId,
 		Text:        "the request's body maxLength was increased from '50' to '100'",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -54,7 +54,7 @@ func TestRequestBodyMaxLengthIncreasedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxLengthUpdatedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-max-length-decreased",
+		Id:          checker.RequestBodyMaxLengthDecreasedId,
 		Text:        "the request's body maxLength was decreased to '50'",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -108,7 +108,7 @@ func TestRequestPropertyMaxLengthIncreasedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxLengthUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-max-length-increased",
+		Id:          checker.RequestPropertyMaxLengthIncreasedId,
 		Text:        "the 'description' request property's maxLength was increased from '50' to '100'",
 		Level:       checker.INFO,
 		Operation:   "POST",

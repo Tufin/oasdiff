@@ -23,7 +23,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "response-body-one-of-added",
+			Id:          checker.ResponseBodyOneOfAddedId,
 			Text:        "added 'Rabbit' to the response body 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -33,7 +33,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 			OperationId: "listPets",
 		},
 		{
-			Id:          "response-property-one-of-added",
+			Id:          checker.ResponsePropertyOneOfAddedId,
 			Text:        "added 'Breed3' to the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -43,7 +43,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 			OperationId: "listPets",
 		},
 		{
-			Id:          "response-property-one-of-added",
+			Id:          checker.ResponsePropertyOneOfAddedId,
 			Text:        "added 'RevisionSchema[1]:Dark brown types' to the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -69,7 +69,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "response-body-one-of-removed",
+			Id:          checker.ResponseBodyOneOfRemovedId,
 			Text:        "removed 'Rabbit' from the response body 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -79,7 +79,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 			OperationId: "listPets",
 		},
 		{
-			Id:          "response-property-one-of-removed",
+			Id:          checker.ResponsePropertyOneOfRemovedId,
 			Text:        "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -89,7 +89,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 			OperationId: "listPets",
 		},
 		{
-			Id:          "response-property-one-of-removed",
+			Id:          checker.ResponsePropertyOneOfRemovedId,
 			Text:        "removed 'BaseSchema[1]:Dark brown types' from the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,

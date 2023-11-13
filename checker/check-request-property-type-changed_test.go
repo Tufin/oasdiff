@@ -23,7 +23,7 @@ func TestRequestBodyTypeChangedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-type-changed",
+		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
 		Text:        "the request's body type/format changed from 'object'/'none' to 'array'/'none'",
 		Operation:   "POST",
@@ -48,7 +48,7 @@ func TestRequestBodyFormatChangedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-type-changed",
+		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
 		Text:        "the request's body type/format changed from 'object'/'none' to 'object'/'uuid'",
 		Operation:   "POST",
@@ -71,7 +71,7 @@ func TestRequestPropertyTypeChangedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-type-changed",
+		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
 		Text:        "the 'age' request property type/format changed from 'integer'/'int32' to 'string'/'string'",
 		Operation:   "POST",
@@ -94,7 +94,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-type-changed",
+		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
 		Text:        "the 'colors' request property type/format changed from 'array'/'none' to 'object'/'none'",
 		Operation:   "POST",
@@ -103,7 +103,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 		OperationId: "addDog",
 	}, errs[0])
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-type-changed",
+		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
 		Text:        "the request's body type/format changed from 'array'/'none' to 'object'/'none'",
 		Operation:   "POST",
@@ -126,7 +126,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-type-changed",
+		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
 		Text:        "the 'colors' request property type/format changed from 'object'/'none' to 'array'/'none'",
 		Operation:   "POST",
@@ -135,7 +135,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 		OperationId: "addDog",
 	}, errs[0])
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-type-changed",
+		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
 		Text:        "the request's body type/format changed from 'object'/'none' to 'array'/'none'",
 		Operation:   "POST",
@@ -160,7 +160,7 @@ func TestRequestPropertyFormatChangedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-type-changed",
+		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
 		Text:        "the 'age' request property type/format changed from 'integer'/'int32' to 'integer'/'uuid'",
 		Operation:   "POST",
@@ -185,7 +185,7 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-property-type-changed",
+		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.INFO,
 		Text:        "the 'age' request property type/format changed from 'integer'/'int32' to 'number'/'int32'",
 		Operation:   "POST",
