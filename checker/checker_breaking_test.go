@@ -439,7 +439,7 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.ResponseMediaTypeUpdatedId, errs[0].GetId())
+	require.Equal(t, checker.ResponseMediaTypeRemovedId, errs[0].GetId())
 }
 
 // BC: deleting a pattern from a schema is not breaking

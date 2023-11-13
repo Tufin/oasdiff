@@ -43,7 +43,7 @@ func TestDeleteNewMediaType(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseMediaTypeUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.ResponseMediaTypeUpdatedId,
+		Id:          checker.ResponseMediaTypeRemovedId,
 		Text:        "removed the media type 'application/xml' for the response with the status '200'",
 		Comment:     "",
 		Level:       checker.ERR,

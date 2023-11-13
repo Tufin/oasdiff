@@ -253,7 +253,7 @@ func GetAllRules(l Localizer) []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(l, RequiredResponseHeaderRemovedId, ERR, true, ResponseHeaderRemovedCheck),
 		newBackwardCompatibilityRule(l, OptionalResponseHeaderRemovedId, WARN, true, ResponseHeaderRemovedCheck),
 		// ResponseMediaTypeUpdatedCheck
-		newBackwardCompatibilityRule(l, ResponseMediaTypeUpdatedId, ERR, true, ResponseMediaTypeUpdatedCheck),
+		newBackwardCompatibilityRule(l, ResponseMediaTypeRemovedId, ERR, true, ResponseMediaTypeUpdatedCheck),
 		newBackwardCompatibilityRule(l, ResponseMediaTypeAddedId, INFO, true, ResponseMediaTypeUpdatedCheck),
 		// ResponseOptionalPropertyUpdatedCheck
 		newBackwardCompatibilityRule(l, ResponseOptionalPropertyRemovedId, WARN, true, ResponseOptionalPropertyUpdatedCheck),
