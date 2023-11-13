@@ -36,6 +36,8 @@ func GetAllRules(l Localizer) []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(l, APIGlobalSecurityAddedCheckId, INFO, true, APISecurityUpdatedCheck),
 		newBackwardCompatibilityRule(l, APIGlobalSecurityScopeAddedId, INFO, true, APISecurityUpdatedCheck),
 		newBackwardCompatibilityRule(l, APIGlobalSecurityScopeRemovedId, INFO, true, APISecurityUpdatedCheck),
+		// Stability Descreased Check is run as part of CheckBackwardCompatibility
+		newBackwardCompatibilityRule(l, APIStabilityDecreasedId, ERR, true, nil),
 		// APIDeprecationCheck
 		newBackwardCompatibilityRule(l, EndpointReactivatedId, INFO, true, APIDeprecationCheck),
 		newBackwardCompatibilityRule(l, APIDeprecatedSunsetParseId, ERR, true, APIDeprecationCheck),

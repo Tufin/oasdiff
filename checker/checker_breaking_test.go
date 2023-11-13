@@ -113,8 +113,8 @@ func TestBreaking_AddedResponseEnum(t *testing.T) {
 	errs := d(t, getConfig(), 703, 704)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
-	require.Equal(t, "response-property-enum-value-added", errs[0].GetId())
-	require.Equal(t, "response-property-enum-value-added", errs[1].GetId())
+	require.Equal(t, checker.ResponsePropertyEnumValueAddedId, errs[0].GetId())
+	require.Equal(t, checker.ResponsePropertyEnumValueAddedId, errs[1].GetId())
 }
 
 func deleteParam(op *openapi3.Operation, in string, name string) {
@@ -221,7 +221,7 @@ func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-header-became-optional", errs[0].GetId())
+	require.Equal(t, checker.ResponseHeaderBecameOptionalId, errs[0].GetId())
 }
 
 // BC: removing an existing required response header is breaking as error
@@ -240,7 +240,7 @@ func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 	}
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "required-response-header-removed", errs[0].GetId())
+	require.Equal(t, checker.RequiredResponseHeaderRemovedId, errs[0].GetId())
 }
 
 // BC: removing an existing response with successful status is breaking
@@ -258,7 +258,7 @@ func TestBreaking_ResponseSuccessStatusUpdated(t *testing.T) {
 	}
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-success-status-removed", errs[0].GetId())
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, errs[0].GetId())
 }
 
 // BC: removing an existing response with non-successful status is breaking (optional)
@@ -270,13 +270,13 @@ func TestBreaking_ResponseNonSuccessStatusUpdated(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"response-non-success-status-removed"}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.ResponseNonSuccessStatusRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-non-success-status-removed", errs[0].GetId())
+	require.Equal(t, checker.ResponseNonSuccessStatusRemovedId, errs[0].GetId())
 }
 
 // BC: removing/updating an operation id is breaking (optional)
@@ -329,13 +329,13 @@ func TestBreaking_ResponsePropertyEnumRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"response-property-enum-value-removed"}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.ResponsePropertyEnumValueRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
-	require.Equal(t, "response-property-enum-value-removed", errs[0].GetId())
+	require.Equal(t, checker.ResponsePropertyEnumValueRemovedId, errs[0].GetId())
 }
 
 // BC: removing/updating a tag is breaking (optional)
@@ -347,13 +347,13 @@ func TestBreaking_TagRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"api-tag-removed"}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.APITagRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "api-tag-removed", errs[0].GetId())
+	require.Equal(t, checker.APITagRemovedId, errs[0].GetId())
 }
 
 // BC: removing/updating a media type enum in response (optional)
@@ -366,13 +366,13 @@ func TestBreaking_ResponseMediaTypeEnumRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"response-mediatype-enum-value-removed"}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.ResponseMediaTypeEnumValueRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-mediatype-enum-value-removed", errs[0].GetId())
+	require.Equal(t, checker.ResponseMediaTypeEnumValueRemovedId, errs[0].GetId())
 }
 
 // BC: removing an existing response with unparseable status is not breaking
@@ -439,7 +439,7 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-media-type-removed", errs[0].GetId())
+	require.Equal(t, checker.ResponseMediaTypeUpdatedId, errs[0].GetId())
 }
 
 // BC: deleting a pattern from a schema is not breaking
@@ -501,7 +501,7 @@ func TestBreaking_ModifyPattern(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "request-property-pattern-changed", errs[0].GetId())
+	require.Equal(t, checker.RequestPropertyPatternChangedId, errs[0].GetId())
 }
 
 // BC: modifying a pattern in request parameter is breaking
@@ -682,11 +682,11 @@ func TestBreaking_RequestPropertyOneOfRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 
 	require.Len(t, errs, 2)
-	require.Equal(t, "request-body-one-of-removed", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyOneOfRemovedId, errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
 	require.Equal(t, "removed 'Rabbit' from the request body 'oneOf' list", errs[0].GetText())
 
-	require.Equal(t, "request-property-one-of-removed", errs[1].GetId())
+	require.Equal(t, checker.RequestPropertyOneOfRemovedId, errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
 	require.Equal(t, "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list", errs[1].GetText())
 }

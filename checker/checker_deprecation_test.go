@@ -300,7 +300,7 @@ func TestBreaking_SunsetDeletedForDeprecatedEndpoint(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, "sunset-deleted", errs[0].GetId())
+	require.Equal(t, checker.APISunsetDeletedId, errs[0].GetId())
 }
 
 // test sunset date without double quotes, see https://github.com/Tufin/oasdiff/pull/198/files

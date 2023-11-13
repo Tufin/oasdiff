@@ -72,8 +72,8 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 func TestBreaking_DeletedTag(t *testing.T) {
 	r := d(t, getConfig(), 1, 5)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-body-type-changed", r[0].GetId())
-	require.Equal(t, "response-success-status-removed", r[1].GetId())
+	require.Equal(t, checker.ResponseBodyTypeChangedId, r[0].GetId())
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[1].GetId())
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[2].GetId())
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[3].GetId())
 	require.Equal(t, checker.OptionalResponseHeaderRemovedId, r[4].GetId())
@@ -84,8 +84,8 @@ func TestBreaking_DeletedTag(t *testing.T) {
 func TestBreaking_AddedEnum(t *testing.T) {
 	r := d(t, getConfig(), 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-success-status-removed", r[0].GetId())
-	require.Equal(t, "response-success-status-removed", r[1].GetId())
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[0].GetId())
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[1].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[2].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[3].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[4].GetId())
@@ -96,8 +96,8 @@ func TestBreaking_AddedEnum(t *testing.T) {
 func TestBreaking_ModifiedExtension(t *testing.T) {
 	r := d(t, getConfig(), 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-success-status-removed", r[0].GetId())
-	require.Equal(t, "response-success-status-removed", r[1].GetId())
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[0].GetId())
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[1].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[2].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[3].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[4].GetId())
@@ -108,8 +108,8 @@ func TestBreaking_ModifiedExtension(t *testing.T) {
 func TestBreaking_Comments(t *testing.T) {
 	r := d(t, getConfig(), 1, 3)
 	require.Len(t, r, 6)
-	require.Equal(t, "response-success-status-removed", r[0].GetId())
-	require.Equal(t, "response-success-status-removed", r[1].GetId())
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[0].GetId())
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[1].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[2].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[3].GetId())
 	require.Equal(t, checker.RequestParameterRemovedId, r[4].GetId())

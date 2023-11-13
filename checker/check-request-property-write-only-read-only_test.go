@@ -123,7 +123,7 @@ func TestRequestRequiredPropertyBecameWriteOnly(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-required-property-became-write-only",
+		Id:          checker.RequestRequiredPropertyBecameWriteOnlyCheckId,
 		Text:        "the request required property 'id' became write-only",
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -148,7 +148,7 @@ func TestRequestRequiredPropertyBecameNotWriteOnly(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-required-property-became-not-write-only",
+		Id:          checker.RequestRequiredPropertyBecameNonWriteOnlyCheckId,
 		Text:        "the request required property 'id' became not write-only",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -173,7 +173,7 @@ func TestRequestRequiredPropertyBecameReadOnly(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-required-property-became-read-only",
+		Id:          checker.RequestRequiredPropertyBecameReadOnlyCheckId,
 		Text:        "the request required property 'id' became read-only",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -198,7 +198,7 @@ func TestRequestRequiredPropertyBecameNonReadOnly(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-required-property-became-not-read-only",
+		Id:          checker.RequestRequiredPropertyBecameNonReadOnlyCheckId,
 		Text:        "the request required property 'id' became not read-only",
 		Level:       checker.INFO,
 		Operation:   "POST",

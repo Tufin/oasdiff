@@ -23,7 +23,7 @@ func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 
-		Id:          "response-optional-property-became-write-only",
+		Id:          checker.ResponseOptionalPropertyBecameWriteOnlyId,
 		Text:        "the response optional property 'data/name' became write-only for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -49,7 +49,7 @@ func TestResponseOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 
-		Id:          "response-optional-property-became-not-write-only",
+		Id:          checker.ResponseOptionalPropertyBecameNonWriteOnlyId,
 		Text:        "the response optional property 'data/writeOnlyName' became not write-only for the status '200'",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -74,7 +74,7 @@ func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 
-		Id:          "response-optional-property-became-read-only",
+		Id:          checker.ResponseOptionalPropertyBecameReadOnlyId,
 		Text:        "the response optional property 'data/id' became read-only for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -101,7 +101,7 @@ func TestResponseOptionalPropertyBecameNonReadOnly(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 
-		Id:          "response-optional-property-became-not-read-only",
+		Id:          checker.ResponseOptionalPropertyBecameNonReadOnlyId,
 		Text:        "the response optional property 'data/id' became not read-only for the status '200'",
 		Comment:     "",
 		Level:       checker.INFO,

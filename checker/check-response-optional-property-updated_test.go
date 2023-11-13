@@ -20,7 +20,7 @@ func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-optional-property-removed",
+		Id:          checker.ResponseOptionalPropertyRemovedId,
 		Text:        "removed the optional property 'data/id' from the response with the '200' status",
 		Comment:     "",
 		Level:       checker.WARN,
@@ -44,7 +44,7 @@ func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-optional-property-added",
+		Id:          checker.ResponseOptionalPropertyAddedId,
 		Text:        "added the optional property 'data/id' to the response with the '200' status",
 		Comment:     "",
 		Level:       checker.INFO,
@@ -68,7 +68,7 @@ func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-optional-write-only-property-removed",
+		Id:          checker.ResponseOptionalWriteOnlyPropertyRemovedId,
 		Text:        "removed the optional write-only property 'data/id' from the response with the '200' status",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -92,7 +92,7 @@ func TestResponseOptionalWriteOnlyPropertyAddedCheck(t *testing.T) {
 
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "response-optional-write-only-property-added",
+		Id:          checker.ResponseOptionalWriteOnlyPropertyAddedId,
 		Text:        "added the optional write-only property 'data/id' to the response with the '200' status",
 		Level:       checker.INFO,
 		Operation:   "POST",

@@ -23,7 +23,7 @@ func TestResponseDiscriminatorUpdatedCheckAdded(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "response-body-discriminator-added",
+			Id:          checker.ResponseBodyDiscriminatorAddedId,
 			Text:        "added response discriminator for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -33,7 +33,7 @@ func TestResponseDiscriminatorUpdatedCheckAdded(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "response-property-discriminator-added",
+			Id:          checker.ResponsePropertyDiscriminatorAddedId,
 			Text:        "added discriminator to '/oneOf[#/components/schemas/Dog]/breed' response property for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -59,7 +59,7 @@ func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "response-body-discriminator-removed",
+			Id:          checker.ResponseBodyDiscriminatorRemovedId,
 			Text:        "removed response discriminator for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -69,7 +69,7 @@ func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "response-property-discriminator-removed",
+			Id:          checker.ResponsePropertyDiscriminatorRemovedId,
 			Text:        "removed discriminator from '/oneOf[#/components/schemas/Dog]/breed' response property for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -95,7 +95,7 @@ func TestResponseDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "response-body-discriminator-property-name-changed",
+			Id:          checker.ResponseBodyDiscriminatorPropertyNameChangedId,
 			Text:        "response discriminator property name changed from 'petType' to 'petType2' for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -105,7 +105,7 @@ func TestResponseDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "response-property-discriminator-property-name-changed",
+			Id:          checker.ResponsePropertyDiscriminatorPropertyNameChangedId,
 			Text:        "response discriminator property name changed for '/oneOf[#/components/schemas/Dog]/breed' response property from 'name' to 'name2' for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -131,7 +131,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
-			Id:          "response-body-discriminator-mapping-added",
+			Id:          checker.ResponseBodyDiscriminatorMappingAddedId,
 			Text:        "added '[cats]' mapping keys to the response discriminator for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -141,7 +141,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "response-body-discriminator-mapping-deleted",
+			Id:          checker.ResponseBodyDiscriminatorMappingDeletedId,
 			Text:        "removed '[cat]' mapping keys from the response discriminator for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -151,7 +151,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "response-property-discriminator-mapping-added",
+			Id:          checker.ResponsePropertyDiscriminatorMappingAddedId,
 			Text:        "added '[breed1Code]' discriminator mapping keys to the '/oneOf[#/components/schemas/Dog]/breed' response property for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -161,7 +161,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "response-property-discriminator-mapping-changed",
+			Id:          checker.ResponsePropertyDiscriminatorMappingChangedId,
 			Text:        "mapped value for discriminator key 'breed2' changed from '#/components/schemas/Breed2' to '#/components/schemas/Breed3' for '/oneOf[#/components/schemas/Dog]/breed' response property for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,
@@ -171,7 +171,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			OperationId: "updatePets",
 		},
 		{
-			Id:          "response-property-discriminator-mapping-deleted",
+			Id:          checker.ResponsePropertyDiscriminatorMappingDeletedId,
 			Text:        "removed '[breed1]' discriminator mapping keys from the '/oneOf[#/components/schemas/Dog]/breed' response property for the response status 200",
 			Comment:     "",
 			Level:       checker.INFO,

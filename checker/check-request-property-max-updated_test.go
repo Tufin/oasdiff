@@ -78,7 +78,7 @@ func TestRequestBodyMaxIncreasingCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxDecreasedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-max-increased",
+		Id:          checker.RequestBodyMaxIncreasedId,
 		Level:       checker.INFO,
 		Text:        "the request's body max was increased from '20.00' to '25.00'",
 		Operation:   "POST",
@@ -106,7 +106,7 @@ func TestRequestBodyMaxDecreasedCheck(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxDecreasedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          "request-body-max-decreased",
+		Id:          checker.RequestBodyMaxDecreasedId,
 		Level:       checker.ERR,
 		Text:        "the request's body max was decreased to '20.00'",
 		Operation:   "POST",

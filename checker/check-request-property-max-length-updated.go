@@ -38,7 +38,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestBodyMaxLengthDecreasedId,
 								Level:       ERR,
-								Text:        config.Localize("request-body-max-length-decreased", ColorizedValue(maxLengthDiff.To)),
+								Text:        config.Localize(RequestBodyMaxLengthDecreasedId, ColorizedValue(maxLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -48,7 +48,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestBodyMaxLengthIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize("request-body-max-length-increased", ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+								Text:        config.Localize(RequestBodyMaxLengthIncreasedId, ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
