@@ -8,9 +8,7 @@ type Endpoint struct {
 type ChangesByEndpoint map[Endpoint]*Changes
 
 type GroupedChanges struct {
-	APIChanges       ChangesByEndpoint
-	ComponentChanges Changes
-	SecurityChanges  Changes
+	APIChanges ChangesByEndpoint
 }
 
 func newGroupedChanges() GroupedChanges {
