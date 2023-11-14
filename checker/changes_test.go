@@ -25,15 +25,35 @@ var changes = checker.Changes{
 		Operation: "GET",
 		Path:      "/test",
 	},
+	checker.ComponentChange{
+		Id:      "component-added",
+		Text:    "component added",
+		Comment: "",
+		Level:   checker.INFO,
+	},
+	checker.SecurityChange{
+		Id:      "security-added",
+		Text:    "security added",
+		Comment: "",
+		Level:   checker.INFO,
+	},
 }
 
 func TestChanges_Sort(t *testing.T) {
 	sort.Sort(changes)
-	require.False(t, changes[1].IsBreaking())
+}
+
+func TestChanges_IsBreaking(t *testing.T) {
+	for _, c := range changes {
+		require.True(t, c.IsBreaking() == (c.GetLevel() != checker.INFO))
+	}
 }
 
 func TestChanges_Count(t *testing.T) {
-	require.Equal(t, map[checker.Level]int{checker.INFO: 1, checker.ERR: 1}, changes.GetLevelCount())
+	lc := changes.GetLevelCount()
+	require.Equal(t, 3, lc[checker.INFO])
+	require.Equal(t, 0, lc[checker.WARN])
+	require.Equal(t, 1, lc[checker.ERR])
 }
 
 func TestChanges_Group(t *testing.T) {
