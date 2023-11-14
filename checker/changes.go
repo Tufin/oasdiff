@@ -2,9 +2,13 @@ package checker
 
 type Changes []Change
 
+func (changes Changes) Group() GroupedChanges {
+	return groupChanges(changes)
+}
+
 func (changes Changes) HasLevelOrHigher(level Level) bool {
-	for _, e := range changes {
-		if e.GetLevel() >= level {
+	for _, change := range changes {
+		if change.GetLevel() >= level {
 			return true
 		}
 	}
@@ -13,8 +17,8 @@ func (changes Changes) HasLevelOrHigher(level Level) bool {
 
 func (changes Changes) GetLevelCount() map[Level]int {
 	counts := map[Level]int{}
-	for _, err := range changes {
-		level := err.GetLevel()
+	for _, change := range changes {
+		level := change.GetLevel()
 		counts[level] = counts[level] + 1
 	}
 	return counts

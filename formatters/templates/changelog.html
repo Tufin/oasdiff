@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <style>
+        .h1 {
+            margin: 1em 0 0.5em 0;
+            color: #343434;
+            font-weight: normal;
+            font-family: 'Ultra', sans-serif;
+            font-size: 36px;
+            line-height: 42px;
+            text-transform: uppercase;
+        }
+
+        .h2 {
+            margin: 1em 0 0.5em 0;
+            color: #343434;
+            font-weight: normal;
+            font-size: 30px;
+            line-height: 40px;
+            font-family: 'Orienta', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="">
+        <div class="h1">Changes between X and Y</div>
+        {{ range $endpoint, $changes := .APIChanges }}
+        <div class="">
+            <div class="">
+                <a class="h2" target="_self"
+                    href=""><span
+                        class="">
+                        <h6 class="">{{ $endpoint.Operation }}<!-- --> <!-- -->{{ $endpoint.Path }}
+                        </h6>
+                    </span>
+                </a>
+                <div class="">Updated</div>
+            </div>
+            <ul class="">
+                {{ range $changes }}
+                <li class="">{{ .Text }}</li>
+                {{ end }}
+            </ul>
+        </div>
+        {{ end }}
+    </section>
+</body>
+
+</html>
