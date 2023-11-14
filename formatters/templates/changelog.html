@@ -2,50 +2,94 @@
 
 <head>
     <style>
-        .h1 {
+        .title {
             margin: 1em 0 0.5em 0;
-            color: #343434;
-            font-weight: normal;
             font-family: 'Ultra', sans-serif;
             font-size: 36px;
-            line-height: 42px;
             text-transform: uppercase;
         }
 
-        .h2 {
-            margin: 1em 0 0.5em 0;
-            color: #343434;
-            font-weight: normal;
-            font-size: 30px;
-            line-height: 40px;
-            font-family: 'Orienta', sans-serif;
+        .path {
+            color: #016BF8;
         }
+
+        .endpoint {
+            color: #21313c;
+            font-family: Euclid Circular A,Helvetica Neue,Helvetica,Arial,sans-serif;
+            line-height: 24px;
+            margin: 22px 0;
+        }        
+
+        .endpoint-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .change-type {
+            box-sizing: border-box;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 16px;
+            border-radius: 5px;
+            height: 18px;
+            padding-left: 6px;
+            padding-right: 6px;
+            text-transform: uppercase;
+            border: 1px solid;
+            letter-spacing: 1px;
+            background-color: #E3FCF7;
+            border-color: #C0FAE6;
+            color: #00684A;
+            margin-top: 2px;
+        }
+
+        .change {
+        }
+
+        .breaking {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 5px;
+        }
+
+        .breaking-icon {
+            color: #DB3030;
+        }
+
+        .endpoint-changes {
+        }
+
     </style>
 </head>
 
 <body>
-    <section class="">
-        <div class="h1">Changes between X and Y</div>
-        {{ range $endpoint, $changes := .APIChanges }}
-        <div class="">
-            <div class="">
-                <a class="h2" target="_self"
-                    href=""><span
-                        class="">
-                        <h6 class="">{{ $endpoint.Operation }}<!-- --> <!-- -->{{ $endpoint.Path }}
-                        </h6>
-                    </span>
-                </a>
-                <div class="">Updated</div>
-            </div>
-            <ul class="">
-                {{ range $changes }}
-                <li class="">{{ .Text }}</li>
-                {{ end }}
-            </ul>
+    <div class="title">Changelog</div>
+    {{ range $endpoint, $changes := .APIChanges }}
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <a class="path" target="_self" href="">
+                <span class="">
+                    <div class="">{{ $endpoint.Operation }}<!-- --> <!-- -->{{ $endpoint.Path }}</div>
+                </span>
+            </a>
+            <div class="change-type">Updated</div>
         </div>
-        {{ end }}
-    </section>
+        <ul class="endpoint-changes">
+            {{ range $changes }}
+            <li class="change">
+            {{ if .IsBreaking }}
+            <div class="breaking">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
+            </div>
+            {{ end }}
+            {{ .GetText }}
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
 </body>
 
 </html>
