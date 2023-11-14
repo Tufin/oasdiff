@@ -29,14 +29,10 @@ func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 var changelog string
 
 func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	tmpl, err := template.New("changelog").Parse(changelog)
-	if err != nil {
-		return nil, err
-	}
+	tmpl := template.Must(template.New("changelog").Parse(changelog))
 
 	var out bytes.Buffer
-	err = tmpl.Execute(&out, changes.Group())
-	if err != nil {
+	if err := tmpl.Execute(&out, changes.Group()); err != nil {
 		return nil, err
 	}
 
