@@ -39,7 +39,7 @@ func TestLoad_FileWindows(t *testing.T) {
 }
 
 func TestLoad_URI(t *testing.T) {
-	_, err := load.From(MockLoader{}, load.NewSource("http://localhost/data/openapi-test1.yaml"))
+	_, err := load.From(MockLoader{}, load.NewSource("https://localhost/data/openapi-test1.yaml"))
 	require.NoError(t, err)
 }
 
