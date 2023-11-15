@@ -87,7 +87,7 @@ func (c ApiChange) LocalizedError(l Localizer) string {
 }
 
 func (c ApiChange) PrettyErrorText(l Localizer) string {
-	if IsPipedOutput() {
+	if isColorOn() {
 		return c.LocalizedError(l)
 	}
 

@@ -40,7 +40,7 @@ func (level Level) String() string {
 }
 
 func (level Level) PrettyString() string {
-	if IsPipedOutput() {
+	if isColorOn() {
 		return level.String()
 	}
 
