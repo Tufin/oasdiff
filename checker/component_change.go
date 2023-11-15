@@ -22,6 +22,10 @@ type ComponentChange struct {
 	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
+func (c ComponentChange) IsBreaking() bool {
+	return c.GetLevel().IsBreaking()
+}
+
 func (c ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
 	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) &&
 		strings.Contains(ignoreLine, "components")

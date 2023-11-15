@@ -1,6 +1,7 @@
 package checker
 
 type Change interface {
+	IsBreaking() bool
 	GetId() string
 	GetText() string
 	GetComment() string

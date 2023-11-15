@@ -1,0 +1,128 @@
+<html>
+
+<head>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/euclid-circular-a');
+
+        .title {
+            margin: 1em 0 0.5em 0;
+            font-family: 'Ultra', sans-serif;
+            font-size: 36px;
+            text-transform: uppercase;
+        }
+
+        .path {
+            color: #016BF8;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Euclid Circular A','Helvetica Neue',Helvetica,Arial,sans-serif;
+        }
+
+        .endpoint {
+            color: #21313c;
+            font-family: Euclid Circular A,Helvetica Neue,Helvetica,Arial,sans-serif;
+            line-height: 24px;
+            margin: 22px 0;
+        }        
+
+        .endpoint-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .change-type {
+            box-sizing: border-box;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 16px;
+            border-radius: 5px;
+            height: 18px;
+            padding-left: 6px;
+            padding-right: 6px;
+            text-transform: uppercase;
+            border: 1px solid;
+            letter-spacing: 1px;
+            background-color: #E3FCF7;
+            border-color: #C0FAE6;
+            color: #00684A;
+            margin-top: 2px;
+        }
+
+        .change {
+        }
+
+        .breaking {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 5px;
+        }
+
+        .breaking-icon {
+            color: #DB3030;
+        }
+
+        .endpoint-changes {
+        }
+
+        .tooltip {
+            position:relative; /* making the .tooltip span a container for the tooltip text */
+        }
+
+        .tooltip:before {
+            content: attr(data-text); /* here's the magic */
+            position:absolute;
+
+            /* vertically center */
+            top:50%;
+            transform:translateY(-50%);
+
+            /* move to right */
+            left:100%;
+            margin-left:15px; /* and add a small left margin */
+
+            /* basic styles */
+            width:200px;
+            padding:10px;
+            border-radius:10px;
+            background:#000;
+            color: #fff;
+            text-align:center;
+
+            display:none; /* hide by default */
+        }        
+
+        .tooltip:hover:before {
+            display:block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title">Changelog</div>
+    {{ range $endpoint, $changes := .APIChanges }}
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <span class="path">
+                <div class="">{{ $endpoint.Operation }}<!-- --> <!-- -->{{ $endpoint.Path }}</div>
+            </span>
+            <div class="change-type">Updated</div>
+        </div>
+        <ul class="endpoint-changes">
+            {{ range $changes }}
+            <li class="change">
+            {{ if .IsBreaking }}
+            <div class="breaking tooltip" data-text="Breaking Change">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
+            </div>
+            {{ end }}
+            {{ .GetText }}
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
+</body>
+
+</html>
