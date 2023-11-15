@@ -8,35 +8,31 @@ import (
 )
 
 func TestLoadSpecInfo(t *testing.T) {
-	_, err := load.LoadSpecInfo(MockLoader{}, load.NewSource("openapi-test1.yaml"))
+	_, err := load.LoadSpecInfo(MockLoader{}, load.NewSource("../data/openapi-test1.yaml"))
 	require.NoError(t, err)
 }
 
 func TestLoadGlob_OK(t *testing.T) {
-	_, err := load.FromGlob(MockLoader{}, RelativeDataPath+"*.yaml")
+	_, err := load.FromGlob(MockLoader{}, "../data/*.yaml")
 	require.NoError(t, err)
 }
 
 func TestLoadGlob_InvalidSpec(t *testing.T) {
-	_, err := load.FromGlob(MockLoader{}, RelativeDataPath+"ignore-err-example.txt")
-	require.Error(t, err)
-	require.Equal(t, "error unmarshaling JSON: while decoding JSON: json: cannot unmarshal string into Go value of type openapi3.TBis", err.Error())
+	_, err := load.FromGlob(MockLoader{}, "../data/ignore-err-example.txt")
+	require.EqualError(t, err, "error unmarshaling JSON: while decoding JSON: json: cannot unmarshal string into Go value of type openapi3.TBis")
 }
 
 func TestLoadGlob_Invalid(t *testing.T) {
 	_, err := load.FromGlob(MockLoader{}, "[*")
-	require.Error(t, err)
-	require.Equal(t, "syntax error in pattern", err.Error())
+	require.EqualError(t, err, "syntax error in pattern")
 }
 
 func TestLoadGlob_URL(t *testing.T) {
 	_, err := load.FromGlob(MockLoader{}, "http://localhost/openapi-test1.yaml")
-	require.Error(t, err)
-	require.Equal(t, "no matching files (should be a glob, not a URL)", err.Error())
+	require.EqualError(t, err, "no matching files (should be a glob, not a URL)")
 }
 
 func TestLoadGlob_NoFiles(t *testing.T) {
-	_, err := load.FromGlob(MockLoader{}, RelativeDataPath+"*.xxx")
-	require.Error(t, err)
-	require.Equal(t, "no matching files", err.Error())
+	_, err := load.FromGlob(MockLoader{}, "../data/*.xxx")
+	require.EqualError(t, err, "no matching files")
 }
