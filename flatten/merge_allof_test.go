@@ -10,6 +10,117 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// identical Default fields are merged successfully
+func TestMerge_Default(t *testing.T) {
+	merged, err := flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type: "object",
+						},
+					},
+				},
+			},
+		})
+
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, nil, merged.Default)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: 10,
+						},
+					},
+				},
+			},
+		})
+
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, 10, merged.Default)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: 10,
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: 10,
+						},
+					},
+				},
+			},
+		})
+
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, 10, merged.Default)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: "abc",
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: "abc",
+						},
+					},
+				},
+			},
+		})
+
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, "abc", merged.Default)
+}
+
+// Conflicting Default values cannot be resolved
+func TestMerge_DefaultFailure(t *testing.T) {
+	_, err := flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: 10,
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: "abc",
+						},
+					},
+				},
+			},
+		})
+
+	require.EqualError(t, err, flatten.DefaultErrorMessage)
+}
+
 // verify that if all ReadOnly fields are set to false, then the ReadOnly field in the merged schema is false.
 func TestMerge_ReadOnlyIsSetToFalse(t *testing.T) {
 	merged, err := flatten.Merge(
