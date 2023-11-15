@@ -11,14 +11,12 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-const RelativeDataPath = "../data/"
-
 func (mockLoader MockLoader) LoadFromFile(path string) (*openapi3.T, error) {
-	return openapi3.NewLoader().LoadFromFile(RelativeDataPath + path)
+	return openapi3.NewLoader().LoadFromFile(path)
 }
 
 func (mockLoader MockLoader) LoadFromURI(location *url.URL) (*openapi3.T, error) {
-	return openapi3.NewLoader().LoadFromFile(RelativeDataPath + location.Path)
+	return openapi3.NewLoader().LoadFromFile(".." + location.Path)
 }
 
 func (mockLoader MockLoader) LoadFromStdin() (*openapi3.T, error) {
@@ -28,18 +26,28 @@ func (mockLoader MockLoader) LoadFromStdin() (*openapi3.T, error) {
 type MockLoader struct{}
 
 func TestLoad_File(t *testing.T) {
-	_, err := load.From(MockLoader{}, load.NewSource("openapi-test1.yaml"))
+	_, err := load.From(MockLoader{}, load.NewSource("../data/openapi-test1.yaml"))
 	require.NoError(t, err)
 }
 
+func TestLoad_FileWindows(t *testing.T) {
+	_, err := load.From(MockLoader{}, load.NewSource(`C:\dev\OpenApi\spec2.yaml`))
+	require.EqualError(t, err, "open C:\\dev\\OpenApi\\spec2.yaml: no such file or directory")
+}
+
 func TestLoad_URI(t *testing.T) {
-	_, err := load.From(MockLoader{}, load.NewSource("http://localhost/openapi-test1.yaml"))
+	_, err := load.From(MockLoader{}, load.NewSource("http://localhost/data/openapi-test1.yaml"))
 	require.NoError(t, err)
 }
 
 func TestLoad_URIError(t *testing.T) {
 	_, err := load.From(MockLoader{}, load.NewSource("http://localhost/null"))
-	require.Error(t, err)
+	require.EqualError(t, err, "open ../null: no such file or directory")
+}
+
+func TestLoad_URIBadScheme(t *testing.T) {
+	_, err := load.From(MockLoader{}, load.NewSource("ftp://localhost/null"))
+	require.EqualError(t, err, "open ftp://localhost/null: no such file or directory")
 }
 
 func TestLoad_Stdin(t *testing.T) {

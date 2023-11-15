@@ -1,6 +1,7 @@
 package load
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -20,7 +21,7 @@ func From(loader Loader, source Source) (*openapi3.T, error) {
 		return loader.LoadFromStdin()
 	}
 
-	uri, err := url.ParseRequestURI(source.Path)
+	uri, err := isValidURL(source.Path)
 	if err == nil {
 		return loadFromURI(loader, uri)
 	}
@@ -34,4 +35,29 @@ func loadFromURI(loader Loader, uri *url.URL) (*openapi3.T, error) {
 		return nil, err
 	}
 	return oas, nil
+}
+
+func isValidURL(rawURL string) (*url.URL, error) {
+	url, err := url.ParseRequestURI(rawURL)
+	if err != nil {
+		return nil, err
+	}
+
+	if !isValidScheme(url.Scheme) {
+		return nil, fmt.Errorf("invalid scheme: %s", url.Scheme)
+	}
+
+	return url, nil
+}
+
+func isValidScheme(scheme string) bool {
+
+	switch scheme {
+	case "http":
+	case "https":
+	default:
+		return false
+	}
+
+	return true
 }
