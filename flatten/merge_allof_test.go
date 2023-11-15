@@ -15,6 +15,16 @@ func TestMerge_Default(t *testing.T) {
 	merged, err := flatten.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
+				Default: 10,
+			},
+		})
+
+	require.NoError(t, err)
+	require.Equal(t, 10, merged.Default)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
