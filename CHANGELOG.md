@@ -22,7 +22,7 @@ oasdiff checks
 
 ### Output Formats
 The default changelog format is human-readable text.  
-You can specify the `--format` flag to output the changelog as json or yaml.
+You can specify the `--format` flag to output the changelog as json, yaml or html.
 
 ### Customizing the Changelog
 If you encounter a change that isn't logged by oasdiff you may add a [custom check](CUSTOMIZING-CHECKS.md).
