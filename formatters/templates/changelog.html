@@ -66,6 +66,36 @@
         .endpoint-changes {
         }
 
+        .tooltip {
+            position:relative; /* making the .tooltip span a container for the tooltip text */
+        }
+
+        .tooltip:before {
+            content: attr(data-text); /* here's the magic */
+            position:absolute;
+
+            /* vertically center */
+            top:50%;
+            transform:translateY(-50%);
+
+            /* move to right */
+            left:100%;
+            margin-left:15px; /* and add a small left margin */
+
+            /* basic styles */
+            width:200px;
+            padding:10px;
+            border-radius:10px;
+            background:#000;
+            color: #fff;
+            text-align:center;
+
+            display:none; /* hide by default */
+        }        
+
+        .tooltip:hover:before {
+            display:block;
+        }
     </style>
 </head>
 
@@ -74,18 +104,16 @@
     {{ range $endpoint, $changes := .APIChanges }}
     <div class="endpoint">
         <div class="endpoint-header">
-            <a class="path" target="_self" href="">
-                <span class="">
-                    <div class="">{{ $endpoint.Operation }}<!-- --> <!-- -->{{ $endpoint.Path }}</div>
-                </span>
-            </a>
+            <span class="path">
+                <div class="">{{ $endpoint.Operation }}<!-- --> <!-- -->{{ $endpoint.Path }}</div>
+            </span>
             <div class="change-type">Updated</div>
         </div>
         <ul class="endpoint-changes">
             {{ range $changes }}
             <li class="change">
             {{ if .IsBreaking }}
-            <div class="breaking">
+            <div class="breaking tooltip" data-text="Breaking Change">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
             </div>
             {{ end }}
