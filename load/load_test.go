@@ -32,7 +32,10 @@ func TestLoad_File(t *testing.T) {
 
 func TestLoad_FileWindows(t *testing.T) {
 	_, err := load.From(MockLoader{}, load.NewSource(`C:\dev\OpenApi\spec2.yaml`))
-	require.EqualError(t, err, "open C:\\dev\\OpenApi\\spec2.yaml: no such file or directory")
+	require.Condition(t, func() (success bool) {
+		return err.Error() == "open C:\\dev\\OpenApi\\spec2.yaml: no such file or directory" ||
+			err.Error() == "open C:/dev/OpenApi/spec2.yaml: The system cannot find the path specified."
+	})
 }
 
 func TestLoad_URI(t *testing.T) {
@@ -42,12 +45,18 @@ func TestLoad_URI(t *testing.T) {
 
 func TestLoad_URIError(t *testing.T) {
 	_, err := load.From(MockLoader{}, load.NewSource("http://localhost/null"))
-	require.EqualError(t, err, "open ../null: no such file or directory")
+	require.Condition(t, func() (success bool) {
+		return err.Error() == "open ../null: no such file or directory" ||
+			err.Error() == "open ../null: The system cannot find the file specified."
+	})
 }
 
 func TestLoad_URIBadScheme(t *testing.T) {
 	_, err := load.From(MockLoader{}, load.NewSource("ftp://localhost/null"))
-	require.EqualError(t, err, "open ftp://localhost/null: no such file or directory")
+	require.Condition(t, func() (success bool) {
+		return err.Error() == "open ftp://localhost/null: no such file or directory" ||
+			err.Error() == "open ftp://localhost/null: The filename, directory name, or volume label syntax is incorrect."
+	})
 }
 
 func TestLoad_Stdin(t *testing.T) {
