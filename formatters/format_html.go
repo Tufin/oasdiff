@@ -39,7 +39,7 @@ func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts,
 	tmpl := template.Must(template.New("changelog").Parse(changelog))
 
 	var out bytes.Buffer
-	if err := tmpl.Execute(&out, TemplateData{checker.NewGroupedChanges(changes), specInfoPair.GetBaseVersion(), specInfoPair.GetRevisionVersion()}); err != nil {
+	if err := tmpl.Execute(&out, TemplateData{checker.GroupChanges(changes), specInfoPair.GetBaseVersion(), specInfoPair.GetRevisionVersion()}); err != nil {
 		return nil, err
 	}
 

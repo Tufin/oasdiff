@@ -7,11 +7,7 @@ type Endpoint struct {
 
 type ChangesByEndpoint map[Endpoint]*Changes
 
-func NewGroupedChanges(changes Changes) ChangesByEndpoint {
-	return groupChanges(changes)
-}
-
-func groupChanges(changes Changes) ChangesByEndpoint {
+func GroupChanges(changes Changes) ChangesByEndpoint {
 
 	apiChanges := ChangesByEndpoint{}
 

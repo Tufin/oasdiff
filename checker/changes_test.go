@@ -57,5 +57,5 @@ func TestChanges_Count(t *testing.T) {
 }
 
 func TestChanges_Group(t *testing.T) {
-	require.Contains(t, checker.NewGroupedChanges(changes), checker.Endpoint{Path: "/test", Operation: "GET"})
+	require.Contains(t, checker.GroupChanges(changes), checker.Endpoint{Path: "/test", Operation: "GET"})
 }
