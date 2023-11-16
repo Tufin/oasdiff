@@ -8,7 +8,6 @@
             margin: 1em 0 0.5em 0;
             font-family: 'Ultra', sans-serif;
             font-size: 36px;
-            text-transform: uppercase;
         }
 
         .path {
@@ -100,7 +99,7 @@
 </head>
 
 <body>
-    <div class="title">Changelog</div>
+    <div class="title">API Changelog {{ .BaseVersion }} vs. {{ .RevisionVersion }} </div>
     {{ range $endpoint, $changes := .APIChanges }}
     <div class="endpoint">
         <div class="endpoint-header">

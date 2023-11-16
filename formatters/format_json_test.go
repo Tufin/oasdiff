@@ -35,7 +35,7 @@ func TestJsonFormatter_RenderChangelog(t *testing.T) {
 		},
 	}
 
-	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{})
+	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
 	require.NoError(t, err)
 	require.Equal(t, string(out), "[{\"id\":\"change_id\",\"text\":\"This is a breaking change.\",\"level\":3}]")
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 	"gopkg.in/yaml.v3"
 )
 
@@ -25,7 +26,7 @@ func (f YAMLFormatter) RenderBreakingChanges(changes checker.Changes, opts Rende
 	return printYAML(changes)
 }
 
-func (f YAMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f YAMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	return printYAML(changes)
 }
 

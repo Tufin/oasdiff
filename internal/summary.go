@@ -41,16 +41,16 @@ func runSummary(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
-	diffReport, _, err := calcDiff(flags)
+	diffResult, err := calcDiff(flags)
 	if err != nil {
 		return false, err
 	}
 
-	if err := outputSummary(stdout, diffReport, flags.getFormat()); err != nil {
+	if err := outputSummary(stdout, diffResult.diffReport, flags.getFormat()); err != nil {
 		return false, err
 	}
 
-	return flags.getFailOnDiff() && !diffReport.Empty(), nil
+	return flags.getFailOnDiff() && !diffResult.diffReport.Empty(), nil
 }
 
 func outputSummary(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {

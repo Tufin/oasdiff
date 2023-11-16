@@ -2,10 +2,6 @@ package checker
 
 type Changes []Change
 
-func (changes Changes) Group() GroupedChanges {
-	return groupChanges(changes)
-}
-
 func (changes Changes) HasLevelOrHigher(level Level) bool {
 	for _, change := range changes {
 		if change.GetLevel() >= level {

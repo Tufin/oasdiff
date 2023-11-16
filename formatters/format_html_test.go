@@ -30,7 +30,7 @@ func TestHtmlFormatter_RenderChangelog(t *testing.T) {
 		},
 	}
 
-	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{})
+	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, string(out))
 }

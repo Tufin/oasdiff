@@ -49,16 +49,16 @@ func runDiff(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 		flags.addExcludeElements(diff.ExcludeEndpointsOption)
 	}
 
-	diffReport, _, err := calcDiff(flags)
+	diffResult, err := calcDiff(flags)
 	if err != nil {
 		return false, err
 	}
 
-	if err := outputDiff(stdout, diffReport, flags.getFormat()); err != nil {
+	if err := outputDiff(stdout, diffResult.diffReport, flags.getFormat()); err != nil {
 		return false, err
 	}
 
-	return flags.getFailOnDiff() && !diffReport.Empty(), nil
+	return flags.getFailOnDiff() && !diffResult.diffReport.Empty(), nil
 }
 
 func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnError {
@@ -80,7 +80,7 @@ func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnE
 	return nil
 }
 
-func calcDiff(flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
+func calcDiff(flags Flags) (*diffResult, *ReturnError) {
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
@@ -92,15 +92,29 @@ func calcDiff(flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError
 	return normalDiff(loader, flags)
 }
 
-func normalDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
+type diffResult struct {
+	diffReport        *diff.Diff
+	operationsSources *diff.OperationsSourcesMap
+	specInfoPair      *load.SpecInfoPair
+}
+
+func newDiffResult(d *diff.Diff, o *diff.OperationsSourcesMap, s *load.SpecInfoPair) *diffResult {
+	return &diffResult{
+		diffReport:        d,
+		operationsSources: o,
+		specInfoPair:      s,
+	}
+}
+
+func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 	s1, err := load.LoadSpecInfo(loader, flags.getBase())
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("base", flags.getBase(), err)
+		return nil, getErrFailedToLoadSpec("base", flags.getBase(), err)
 	}
 
 	s2, err := load.LoadSpecInfo(loader, flags.getRevision())
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
+		return nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
 	}
 
 	if flags.getBase().Stdin && flags.getRevision().Stdin {
@@ -110,49 +124,49 @@ func normalDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSo
 
 	if flags.getFlatten() {
 		if err := mergeAllOf("base", []*load.SpecInfo{s1}, flags.getBase()); err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 
 		if err := mergeAllOf("revision", []*load.SpecInfo{s2}, flags.getRevision()); err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 	}
 
 	diffReport, operationsSources, err := diff.GetWithOperationsSourcesMap(flags.toConfig(), s1, s2)
 	if err != nil {
-		return nil, nil, getErrDiffFailed(err)
+		return nil, getErrDiffFailed(err)
 	}
 
-	return diffReport, operationsSources, nil
+	return newDiffResult(diffReport, operationsSources, load.NewSpecInfoPair(s1, s2)), nil
 }
 
-func composedDiff(loader load.Loader, flags Flags) (*diff.Diff, *diff.OperationsSourcesMap, *ReturnError) {
+func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 	s1, err := load.FromGlob(loader, flags.getBase().Path)
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpecs("base", flags.getBase().Path, err)
+		return nil, getErrFailedToLoadSpecs("base", flags.getBase().Path, err)
 	}
 
 	s2, err := load.FromGlob(loader, flags.getRevision().Path)
 	if err != nil {
-		return nil, nil, getErrFailedToLoadSpecs("revision", flags.getRevision().Path, err)
+		return nil, getErrFailedToLoadSpecs("revision", flags.getRevision().Path, err)
 	}
 
 	if flags.getFlatten() {
 		if err := mergeAllOf("base", s1, flags.getBase()); err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 
 		if err := mergeAllOf("revision", s2, flags.getRevision()); err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 	}
 
 	diffReport, operationsSources, err := diff.GetPathsDiff(flags.toConfig(), s1, s2)
 	if err != nil {
-		return nil, nil, getErrDiffFailed(err)
+		return nil, getErrDiffFailed(err)
 	}
 
-	return diffReport, operationsSources, nil
+	return newDiffResult(diffReport, operationsSources, nil), nil
 }
 
 func mergeAllOf(title string, specInfos []*load.SpecInfo, source load.Source) *ReturnError {
