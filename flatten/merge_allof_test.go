@@ -1715,8 +1715,30 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 }
 
 func TestMergeAllOf_Pattern(t *testing.T) {
-
 	merged, err := flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				Pattern: "abc",
+			}})
+	require.NoError(t, err)
+	require.Equal(t, "abc", merged.Pattern)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Pattern: "abc",
+						},
+					},
+				},
+			}})
+	require.NoError(t, err)
+	require.Equal(t, "abc", merged.Pattern)
+
+	merged, err = flatten.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
