@@ -1800,9 +1800,7 @@ func TestMerge_CircularAllOf(t *testing.T) {
 	merged, err := flatten.Merge(*doc.Components.Schemas["AWSEnvironmentSettings"])
 	require.NoError(t, err)
 	require.Empty(t, merged.AllOf)
-
-	require.Equal(t, "#/components/schemas/AWSEnvironmentSettings", merged.OneOf[0].Ref)
-	require.Equal(t, &merged, &merged.OneOf[0].Value)
+	require.Empty(t, merged.OneOf)
 
 	require.Equal(t, "string", merged.Properties["serviceEndpoints"].Value.Type)
 	require.Equal(t, "string", merged.Properties["region"].Value.Type)

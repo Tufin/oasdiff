@@ -90,9 +90,23 @@ func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
 		if err != nil {
 			return nil, err
 		}
+		pruneFields(schema)
 	}
 
 	return result.Value, nil
+}
+
+// remove fields while maintaining an equivalent schema.
+func pruneFields(schema *openapi3.SchemaRef) {
+
+	prunedOneOf := openapi3.SchemaRefs{}
+	for _, sref := range schema.Value.OneOf {
+		if sref.Value != schema.Value {
+			prunedOneOf = append(prunedOneOf, sref)
+		}
+	}
+
+	schema.Value.OneOf = prunedOneOf
 }
 
 func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
