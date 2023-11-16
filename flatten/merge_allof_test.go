@@ -1806,6 +1806,17 @@ func TestMerge_CircularAllOf(t *testing.T) {
 	require.Equal(t, "string", merged.Properties["region"].Value.Type)
 }
 
+func TestMerge_PruneOneOf(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular2.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["AWSEnvironmentSettings"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+	require.NotEmpty(t, merged.OneOf)
+	require.Equal(t, "string", merged.OneOf[0].Value.Properties["prop1"].Value.Type)
+	require.Equal(t, "string", merged.Properties["serviceEndpoints"].Value.Type)
+	require.Equal(t, "string", merged.Properties["region"].Value.Type)
+}
+
 func loadSpec(t *testing.T, path string) *openapi3.T {
 	ctx := context.Background()
 	sl := openapi3.NewLoader()
