@@ -50,7 +50,7 @@ func runBreakingChanges(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 	return getChangelog(flags, stdout, checker.WARN)
 }
 
-func outputBreakingChanges(config checker.Config, format string, lang string, stdout io.Writer, errs checker.Changes, level checker.Level) *ReturnError {
+func outputBreakingChanges(format string, lang string, stdout io.Writer, errs checker.Changes) *ReturnError {
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
 		Language: lang,

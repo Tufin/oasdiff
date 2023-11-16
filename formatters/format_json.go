@@ -8,6 +8,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 type JSONFormatter struct {
@@ -25,7 +26,7 @@ func (f JSONFormatter) RenderBreakingChanges(changes checker.Changes, opts Rende
 	return printJSON(changes)
 }
 
-func (f JSONFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f JSONFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	return printJSON(changes)
 }
 

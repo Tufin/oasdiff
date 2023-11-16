@@ -60,7 +60,7 @@ func TestJUnitFormatter_NotImplemented(t *testing.T) {
 	_, err = formatter.RenderSummary(nil, formatters.RenderOpts{})
 	assert.Error(t, err)
 
-	_, err = formatter.RenderChangelog(nil, formatters.RenderOpts{})
+	_, err = formatter.RenderChangelog(nil, formatters.RenderOpts{}, nil)
 	assert.Error(t, err)
 
 	_, err = formatter.RenderChecks(nil, formatters.RenderOpts{})

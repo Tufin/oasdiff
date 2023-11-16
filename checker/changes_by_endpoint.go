@@ -7,30 +7,25 @@ type Endpoint struct {
 
 type ChangesByEndpoint map[Endpoint]*Changes
 
-type GroupedChanges struct {
-	APIChanges ChangesByEndpoint
+func NewGroupedChanges(changes Changes) ChangesByEndpoint {
+	return groupChanges(changes)
 }
 
-func newGroupedChanges() GroupedChanges {
-	return GroupedChanges{
-		APIChanges: ChangesByEndpoint{},
-	}
-}
+func groupChanges(changes Changes) ChangesByEndpoint {
 
-func groupChanges(changes Changes) GroupedChanges {
-
-	result := newGroupedChanges()
+	apiChanges := ChangesByEndpoint{}
 
 	for _, change := range changes {
 		switch change.(type) {
 		case ApiChange:
 			ep := Endpoint{Path: change.GetPath(), Operation: change.GetOperation()}
-			if c, ok := result.APIChanges[ep]; ok {
+			if c, ok := apiChanges[ep]; ok {
 				*c = append(*c, change)
 			} else {
-				result.APIChanges[ep] = &Changes{change}
+				apiChanges[ep] = &Changes{change}
 			}
 		}
 	}
-	return result
+
+	return apiChanges
 }

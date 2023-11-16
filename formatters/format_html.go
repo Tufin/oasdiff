@@ -9,6 +9,7 @@ import (
 
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
 )
 
@@ -28,11 +29,17 @@ func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 //go:embed templates/changelog.html
 var changelog string
 
-func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+type TemplateData struct {
+	APIChanges      checker.ChangesByEndpoint
+	BaseVersion     string
+	RevisionVersion string
+}
+
+func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	tmpl := template.Must(template.New("changelog").Parse(changelog))
 
 	var out bytes.Buffer
-	if err := tmpl.Execute(&out, changes.Group()); err != nil {
+	if err := tmpl.Execute(&out, TemplateData{checker.NewGroupedChanges(changes), specInfoPair.GetBaseVersion(), specInfoPair.GetRevisionVersion()}); err != nil {
 		return nil, err
 	}
 
