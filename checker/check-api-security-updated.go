@@ -26,7 +26,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 			Id:     APIGlobalSecurityAddedCheckId,
 			Level:  INFO,
 			Text:   config.Localize(APIGlobalSecurityAddedCheckId, ColorizedValue(addedSecurity)),
-			Source: "",
+			Source: SecurityChangeSource,
 		})
 	}
 
@@ -35,7 +35,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 			Id:     APIGlobalSecurityRemovedCheckId,
 			Level:  INFO,
 			Text:   config.Localize(APIGlobalSecurityRemovedCheckId, ColorizedValue(removedSecurity)),
-			Source: "",
+			Source: SecurityChangeSource,
 		})
 	}
 
@@ -46,7 +46,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 					Id:     APIGlobalSecurityScopeAddedId,
 					Level:  INFO,
 					Text:   config.Localize(APIGlobalSecurityScopeAddedId, ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
-					Source: "",
+					Source: SecurityChangeSource,
 				})
 			}
 			for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
@@ -54,7 +54,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 					Id:     APIGlobalSecurityScopeRemovedId,
 					Level:  INFO,
 					Text:   config.Localize(APIGlobalSecurityScopeRemovedId, ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
-					Source: "",
+					Source: SecurityChangeSource,
 				})
 			}
 		}

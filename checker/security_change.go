@@ -7,6 +7,8 @@ import (
 	"github.com/TwiN/go-color"
 )
 
+const SecurityChangeSource = "Security"
+
 // SecurityChange represents a change in the Security Section (not to be confised with components/securitySchemes)
 type SecurityChange struct {
 	Id      string `json:"id,omitempty" yaml:"id,omitempty"`

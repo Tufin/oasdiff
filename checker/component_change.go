@@ -7,6 +7,8 @@ import (
 	"github.com/TwiN/go-color"
 )
 
+const ComponentChangeSource = "Components"
+
 // ComponentChange represnts a change in the Components Section: https://swagger.io/docs/specification/components/
 type ComponentChange struct {
 	Id      string `json:"id,omitempty" yaml:"id,omitempty"`

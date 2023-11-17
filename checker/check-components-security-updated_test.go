@@ -26,7 +26,7 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 		Text:    "the component security scheme 'petstore_auth' oauth url changed from 'http://example.org/api/oauth/dialog' to 'http://example.new.org/api/oauth/dialog'",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "",
+		Source:  checker.ComponentChangeSource,
 	}, errs[0])
 }
 
@@ -48,7 +48,7 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 		Text:    "the component security scheme 'petstore_auth' type changed from 'oauth2' to 'http'",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "",
+		Source:  checker.ComponentChangeSource,
 	}, errs[0])
 }
 
@@ -68,7 +68,7 @@ func TestComponentSecurityAdded(t *testing.T) {
 		Text:    "the component security scheme 'BasicAuth' was added",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "",
+		Source:  checker.ComponentChangeSource,
 	}, errs[0])
 }
 
@@ -88,7 +88,7 @@ func TestComponentSecurityRemoved(t *testing.T) {
 		Text:    "the component security scheme 'BasicAuth' was removed",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "",
+		Source:  checker.ComponentChangeSource,
 	}, errs[0])
 }
 
@@ -110,7 +110,7 @@ func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 		Text:    "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was added",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "",
+		Source:  checker.ComponentChangeSource,
 	}, errs[0])
 }
 
@@ -133,7 +133,7 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 		Text:    "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was removed",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "",
+		Source:  checker.ComponentChangeSource,
 	}, errs[0])
 }
 
@@ -155,6 +155,6 @@ func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 		Text:    "the component security scheme 'petstore_auth' oauth scope 'read:pets' was updated from 'read your pets' to 'grants access to pets (deprecated)'",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "",
+		Source:  checker.ComponentChangeSource,
 	}, errs[0])
 }
