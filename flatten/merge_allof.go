@@ -98,15 +98,12 @@ func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
 
 // remove fields while maintaining an equivalent schema.
 func pruneFields(schema *openapi3.SchemaRef) {
-
-	prunedOneOf := openapi3.SchemaRefs{}
-	for _, sref := range schema.Value.OneOf {
-		if sref.Value != schema.Value {
-			prunedOneOf = append(prunedOneOf, sref)
-		}
+	if len(schema.Value.OneOf) == 1 && schema.Value.OneOf[0].Value == schema.Value {
+		schema.Value.OneOf = nil
 	}
-
-	schema.Value.OneOf = prunedOneOf
+	if len(schema.Value.AnyOf) == 1 && schema.Value.AnyOf[0].Value == schema.Value {
+		schema.Value.AnyOf = nil
+	}
 }
 
 func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
