@@ -1806,15 +1806,40 @@ func TestMerge_CircularAllOf(t *testing.T) {
 	require.Equal(t, "string", merged.Properties["region"].Value.Type)
 }
 
-func TestMerge_PruneOneOf(t *testing.T) {
+// A single OneOf field is pruned if it references it's parent schema
+func TestMerge_OneOfIsPruned(t *testing.T) {
 	doc := loadSpec(t, "testdata/circular2.yaml")
-	merged, err := flatten.Merge(*doc.Components.Schemas["AWSEnvironmentSettings"])
+	merged, err := flatten.Merge(*doc.Components.Schemas["OneOf_Is_Pruned_B"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+	require.Empty(t, merged.OneOf)
+}
+
+// A single OneOf field is not pruned if it does not reference it's parent schema
+func TestMerge_OneOfIsNotPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular2.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["OneOf_Is_Not_Pruned_B"])
 	require.NoError(t, err)
 	require.Empty(t, merged.AllOf)
 	require.NotEmpty(t, merged.OneOf)
-	require.Equal(t, "string", merged.OneOf[0].Value.Properties["prop1"].Value.Type)
-	require.Equal(t, "string", merged.Properties["serviceEndpoints"].Value.Type)
-	require.Equal(t, "string", merged.Properties["region"].Value.Type)
+}
+
+// A single AnyOf field is pruned if it references it's parent schema
+func TestMerge_AnyOfIsPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular2.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["AnyOf_Is_Pruned_B"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+	require.Empty(t, merged.AnyOf)
+}
+
+// A single AnyOf field is not pruned if it does not reference it's parent schema
+func TestMerge_AnyOfIsNotPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular2.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["AnyOf_Is_Not_Pruned_B"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+	require.NotEmpty(t, merged.AnyOf)
 }
 
 func loadSpec(t *testing.T, path string) *openapi3.T {
