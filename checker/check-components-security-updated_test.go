@@ -29,6 +29,27 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	}, errs[0])
 }
 
+// CL: changing security component token url
+func TestComponentSecurityOauthTokenUpdated(t *testing.T) {
+	s1, err := open("../data/checker/component_security_updated_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/component_security_updated_base.yaml")
+	require.NoError(t, err)
+
+	s2.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Implicit.TokenURL = "http://example.new.org/api/oauth/dialog"
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ComponentChange{
+		Id:        checker.APIComponentsSecurityOauthTokenUrlUpdatedId,
+		Text:      "the component security scheme 'petstore_auth' oauth token url changed from '' to 'http://example.new.org/api/oauth/dialog'",
+		Level:     checker.INFO,
+		Component: checker.ComponentSecuritySchemes,
+	}, errs[0])
+}
+
 // CL: changing security component type
 func TestComponentSecurityTypeUpdated(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
