@@ -81,7 +81,7 @@ func (c ComponentChange) GetSourceColumnEnd() int {
 }
 
 func (c ComponentChange) LocalizedError(l Localizer) string {
-	return fmt.Sprintf("%s, %s components %s [%s]. %s", c.Level, l("in"), c.Text, c.Id, c.Comment)
+	return fmt.Sprintf("%s, %s components/%s %s [%s]. %s", c.Level, l("in"), c.Component, c.Text, c.Id, c.Comment)
 }
 
 func (c ComponentChange) PrettyErrorText(l Localizer) string {
