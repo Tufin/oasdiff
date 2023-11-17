@@ -24,7 +24,6 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 		Text:    "the security scheme 'petstore_auth' was added to the API",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "Security",
 	}, errs[0])
 }
 
@@ -44,7 +43,6 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 		Text:    "the security scheme 'petstore_auth' was removed from the API",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "Security",
 	}, errs[0])
 }
 
@@ -65,7 +63,6 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 		Text:    "the security scope 'read:pets' was removed from the global security scheme 'petstore_auth'",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "Security",
 	}, errs[0])
 }
 
@@ -86,7 +83,6 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 		Text:    "the security scope 'read:pets' was added to the global security scheme 'petstore_auth'",
 		Comment: "",
 		Level:   checker.INFO,
-		Source:  "Security",
 	}, errs[0])
 }
 

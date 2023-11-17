@@ -15,6 +15,8 @@ const (
 	APIComponentSecurityOauthScopeUpdatedId         = "api-security-component-oauth-scope-changed"
 )
 
+const ComponentSecuritySchemes = "securitySchemes"
+
 func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, updatedSecurityName string) Changes {
 	result := make(Changes, 0)
 
@@ -28,47 +30,47 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 
 	if urlDiff := updatedSecurity.OAuthFlowsDiff.ImplicitDiff.AuthorizationURLDiff; urlDiff != nil {
 		result = append(result, ComponentChange{
-			Id:     APIComponentsSecurityComponentOauthUrlUpdatedId,
-			Level:  INFO,
-			Text:   config.Localize(APIComponentsSecurityComponentOauthUrlUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(urlDiff.From), ColorizedValue(urlDiff.To)),
-			Source: ComponentChangeSource,
+			Id:        APIComponentsSecurityComponentOauthUrlUpdatedId,
+			Level:     INFO,
+			Text:      config.Localize(APIComponentsSecurityComponentOauthUrlUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(urlDiff.From), ColorizedValue(urlDiff.To)),
+			Component: ComponentSecuritySchemes,
 		})
 	}
 
 	if tokenDiff := updatedSecurity.OAuthFlowsDiff.ImplicitDiff.TokenURLDiff; tokenDiff != nil {
 		result = append(result, ComponentChange{
-			Id:     APIComponentsSecurityOauthTokenUrlUpdatedId,
-			Level:  INFO,
-			Text:   config.Localize(APIComponentsSecurityOauthTokenUrlUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(tokenDiff.From), ColorizedValue(tokenDiff.To)),
-			Source: ComponentChangeSource,
+			Id:        APIComponentsSecurityOauthTokenUrlUpdatedId,
+			Level:     INFO,
+			Text:      config.Localize(APIComponentsSecurityOauthTokenUrlUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(tokenDiff.From), ColorizedValue(tokenDiff.To)),
+			Component: ComponentSecuritySchemes,
 		})
 	}
 
 	if scopesDiff := updatedSecurity.OAuthFlowsDiff.ImplicitDiff.ScopesDiff; scopesDiff != nil {
 		for _, addedScope := range scopesDiff.Added {
 			result = append(result, ComponentChange{
-				Id:     APIComponentSecurityOauthScopeAddedId,
-				Level:  INFO,
-				Text:   config.Localize(APIComponentSecurityOauthScopeAddedId, ColorizedValue(updatedSecurityName), ColorizedValue(addedScope)),
-				Source: ComponentChangeSource,
+				Id:        APIComponentSecurityOauthScopeAddedId,
+				Level:     INFO,
+				Text:      config.Localize(APIComponentSecurityOauthScopeAddedId, ColorizedValue(updatedSecurityName), ColorizedValue(addedScope)),
+				Component: ComponentSecuritySchemes,
 			})
 		}
 
 		for _, removedScope := range scopesDiff.Deleted {
 			result = append(result, ComponentChange{
-				Id:     APIComponentSecurityOauthScopeRemovedId,
-				Level:  INFO,
-				Text:   config.Localize(APIComponentSecurityOauthScopeRemovedId, ColorizedValue(updatedSecurityName), ColorizedValue(removedScope)),
-				Source: ComponentChangeSource,
+				Id:        APIComponentSecurityOauthScopeRemovedId,
+				Level:     INFO,
+				Text:      config.Localize(APIComponentSecurityOauthScopeRemovedId, ColorizedValue(updatedSecurityName), ColorizedValue(removedScope)),
+				Component: ComponentSecuritySchemes,
 			})
 		}
 
 		for name, modifiedScope := range scopesDiff.Modified {
 			result = append(result, ComponentChange{
-				Id:     APIComponentSecurityOauthScopeUpdatedId,
-				Level:  INFO,
-				Text:   config.Localize(APIComponentSecurityOauthScopeUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(name), ColorizedValue(modifiedScope.From), ColorizedValue(modifiedScope.To)),
-				Source: ComponentChangeSource,
+				Id:        APIComponentSecurityOauthScopeUpdatedId,
+				Level:     INFO,
+				Text:      config.Localize(APIComponentSecurityOauthScopeUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(name), ColorizedValue(modifiedScope.From), ColorizedValue(modifiedScope.To)),
+				Component: ComponentSecuritySchemes,
 			})
 		}
 
@@ -85,19 +87,19 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 
 	for _, updatedSecurity := range diffReport.ComponentsDiff.SecuritySchemesDiff.Added {
 		result = append(result, ComponentChange{
-			Id:     APIComponentsSecurityAddedId,
-			Level:  INFO,
-			Text:   config.Localize(APIComponentsSecurityAddedId, ColorizedValue(updatedSecurity)),
-			Source: ComponentChangeSource,
+			Id:        APIComponentsSecurityAddedId,
+			Level:     INFO,
+			Text:      config.Localize(APIComponentsSecurityAddedId, ColorizedValue(updatedSecurity)),
+			Component: ComponentSecuritySchemes,
 		})
 	}
 
 	for _, updatedSecurity := range diffReport.ComponentsDiff.SecuritySchemesDiff.Deleted {
 		result = append(result, ComponentChange{
-			Id:     APIComponentsSecurityRemovedId,
-			Level:  INFO,
-			Text:   config.Localize(APIComponentsSecurityRemovedId, ColorizedValue(updatedSecurity)),
-			Source: ComponentChangeSource,
+			Id:        APIComponentsSecurityRemovedId,
+			Level:     INFO,
+			Text:      config.Localize(APIComponentsSecurityRemovedId, ColorizedValue(updatedSecurity)),
+			Component: ComponentSecuritySchemes,
 		})
 	}
 
@@ -106,10 +108,10 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 
 		if updatedSecurity.TypeDiff != nil {
 			result = append(result, ComponentChange{
-				Id:     APIComponentsSecurityTypeUpdatedId,
-				Level:  INFO,
-				Text:   config.Localize(APIComponentsSecurityTypeUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(updatedSecurity.TypeDiff.From), ColorizedValue(updatedSecurity.TypeDiff.To)),
-				Source: ComponentChangeSource,
+				Id:        APIComponentsSecurityTypeUpdatedId,
+				Level:     INFO,
+				Text:      config.Localize(APIComponentsSecurityTypeUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(updatedSecurity.TypeDiff.From), ColorizedValue(updatedSecurity.TypeDiff.To)),
+				Component: ComponentSecuritySchemes,
 			})
 		}
 	}

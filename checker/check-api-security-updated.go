@@ -23,19 +23,17 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 	for _, addedSecurity := range diffReport.SecurityDiff.Added {
 		result = append(result, SecurityChange{
-			Id:     APIGlobalSecurityAddedCheckId,
-			Level:  INFO,
-			Text:   config.Localize(APIGlobalSecurityAddedCheckId, ColorizedValue(addedSecurity)),
-			Source: SecurityChangeSource,
+			Id:    APIGlobalSecurityAddedCheckId,
+			Level: INFO,
+			Text:  config.Localize(APIGlobalSecurityAddedCheckId, ColorizedValue(addedSecurity)),
 		})
 	}
 
 	for _, removedSecurity := range diffReport.SecurityDiff.Deleted {
 		result = append(result, SecurityChange{
-			Id:     APIGlobalSecurityRemovedCheckId,
-			Level:  INFO,
-			Text:   config.Localize(APIGlobalSecurityRemovedCheckId, ColorizedValue(removedSecurity)),
-			Source: SecurityChangeSource,
+			Id:    APIGlobalSecurityRemovedCheckId,
+			Level: INFO,
+			Text:  config.Localize(APIGlobalSecurityRemovedCheckId, ColorizedValue(removedSecurity)),
 		})
 	}
 
@@ -43,18 +41,16 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 		for securitySchemeName, updatedSecuritySchemeScopes := range updatedSecurity {
 			for _, addedScope := range updatedSecuritySchemeScopes.Added {
 				result = append(result, SecurityChange{
-					Id:     APIGlobalSecurityScopeAddedId,
-					Level:  INFO,
-					Text:   config.Localize(APIGlobalSecurityScopeAddedId, ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
-					Source: SecurityChangeSource,
+					Id:    APIGlobalSecurityScopeAddedId,
+					Level: INFO,
+					Text:  config.Localize(APIGlobalSecurityScopeAddedId, ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
 				})
 			}
 			for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
 				result = append(result, SecurityChange{
-					Id:     APIGlobalSecurityScopeRemovedId,
-					Level:  INFO,
-					Text:   config.Localize(APIGlobalSecurityScopeRemovedId, ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
-					Source: SecurityChangeSource,
+					Id:    APIGlobalSecurityScopeRemovedId,
+					Level: INFO,
+					Text:  config.Localize(APIGlobalSecurityScopeRemovedId, ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
 				})
 			}
 		}

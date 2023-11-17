@@ -12,7 +12,6 @@ var changes = checker.Changes{
 	checker.ApiChange{
 		Id:        "api-deleted",
 		Text:      "API deleted",
-		Comment:   "",
 		Level:     checker.ERR,
 		Operation: "GET",
 		Path:      "/test",
@@ -20,7 +19,6 @@ var changes = checker.Changes{
 	checker.ApiChange{
 		Id:        "api-added",
 		Text:      "API added",
-		Comment:   "",
 		Level:     checker.INFO,
 		Operation: "GET",
 		Path:      "/test",
@@ -28,13 +26,11 @@ var changes = checker.Changes{
 	checker.ComponentChange{
 		Id:      "component-added",
 		Text:    "component added",
-		Comment: "",
 		Level:   checker.INFO,
 	},
 	checker.SecurityChange{
 		Id:      "security-added",
 		Text:    "security added",
-		Comment: "",
 		Level:   checker.INFO,
 	},
 }
