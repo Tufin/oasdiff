@@ -24,14 +24,14 @@ var changes = checker.Changes{
 		Path:      "/test",
 	},
 	checker.ComponentChange{
-		Id:      "component-added",
-		Text:    "component added",
-		Level:   checker.INFO,
+		Id:    "component-added",
+		Text:  "component added",
+		Level: checker.INFO,
 	},
 	checker.SecurityChange{
-		Id:      "security-added",
-		Text:    "security added",
-		Level:   checker.INFO,
+		Id:    "security-added",
+		Text:  "security added",
+		Level: checker.INFO,
 	},
 }
 
