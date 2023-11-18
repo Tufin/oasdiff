@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  title: Circular Reference Example
+  version: 1.0.0
+paths:
+  /sample:
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OneOf_Is_Pruned_A'
+      responses:
+        '200':
+          description: Ok
+          
+components:
+  schemas:
+    OneOf_Is_Pruned_A:
+      type: object
+      oneOf: 
+        - $ref: '#/components/schemas/OneOf_Is_Pruned_B'
+    
+    OneOf_Is_Pruned_B:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/OneOf_Is_Pruned_A'
+
+    OneOf_Is_Not_Pruned_A:
+      type: object
+      oneOf: 
+        - type: object
+    
+    OneOf_Is_Not_Pruned_B:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/OneOf_Is_Not_Pruned_A'  
+
+    AnyOf_Is_Pruned_A:
+      type: object
+      anyOf: 
+        - $ref: '#/components/schemas/AnyOf_Is_Pruned_B'
+    
+    AnyOf_Is_Pruned_B:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/AnyOf_Is_Pruned_A'
+
+    AnyOf_Is_Not_Pruned_A:
+      type: object
+      anyOf: 
+        - type: object
+    
+    AnyOf_Is_Not_Pruned_B:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/AnyOf_Is_Not_Pruned_A'        

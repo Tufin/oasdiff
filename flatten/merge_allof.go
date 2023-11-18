@@ -90,9 +90,20 @@ func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
 		if err != nil {
 			return nil, err
 		}
+		pruneFields(schema)
 	}
 
 	return result.Value, nil
+}
+
+// remove fields while maintaining an equivalent schema.
+func pruneFields(schema *openapi3.SchemaRef) {
+	if len(schema.Value.OneOf) == 1 && schema.Value.OneOf[0].Value == schema.Value {
+		schema.Value.OneOf = nil
+	}
+	if len(schema.Value.AnyOf) == 1 && schema.Value.AnyOf[0].Value == schema.Value {
+		schema.Value.AnyOf = nil
+	}
 }
 
 func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
@@ -630,8 +641,20 @@ func resolveEnum(values [][]interface{}) ([]interface{}, error) {
 }
 
 func resolvePattern(values []string) string {
+	patterns := []string{}
+	for _, v := range values {
+		if len(v) > 0 {
+			patterns = append(patterns, v)
+		}
+	}
+	if len(patterns) == 0 {
+		return ""
+	}
+	if len(patterns) == 1 {
+		return patterns[0]
+	}
 	var pattern strings.Builder
-	for _, p := range values {
+	for _, p := range patterns {
 		if len(p) > 0 {
 			if !isPatternResolved(p) {
 				pattern.WriteString(fmt.Sprintf("(?=%s)", p))
