@@ -9,11 +9,12 @@ import (
 
 // ComponentChange represnts a change in the Components Section: https://swagger.io/docs/specification/components/
 type ComponentChange struct {
-	Id      string `json:"id,omitempty" yaml:"id,omitempty"`
-	Text    string `json:"text,omitempty" yaml:"text,omitempty"`
-	Comment string `json:"comment,omitempty" yaml:"comment,omitempty"`
-	Level   Level  `json:"level" yaml:"level"`
-	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
+	Id        string `json:"id,omitempty" yaml:"id,omitempty"`
+	Text      string `json:"text,omitempty" yaml:"text,omitempty"`
+	Comment   string `json:"comment,omitempty" yaml:"comment,omitempty"`
+	Level     Level  `json:"level" yaml:"level"`
+	Source    string `json:"source,omitempty" yaml:"source,omitempty"`
+	Component string `json:"component,omitempty" yaml:"component,omitempty"`
 
 	SourceFile      string `json:"-" yaml:"-"`
 	SourceLine      int    `json:"-" yaml:"-"`
@@ -80,7 +81,7 @@ func (c ComponentChange) GetSourceColumnEnd() int {
 }
 
 func (c ComponentChange) LocalizedError(l Localizer) string {
-	return fmt.Sprintf("%s, %s components %s [%s]. %s", c.Level, l("in"), c.Text, c.Id, c.Comment)
+	return fmt.Sprintf("%s, %s components/%s %s [%s]. %s", c.Level, l("in"), c.Component, c.Text, c.Id, c.Comment)
 }
 
 func (c ComponentChange) PrettyErrorText(l Localizer) string {
@@ -92,9 +93,9 @@ func (c ComponentChange) PrettyErrorText(l Localizer) string {
 	if c.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] \t\n\t%s components\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Text, comment)
+	return fmt.Sprintf("%s\t[%s] \t\n\t%s components/%s\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Component, c.Text, comment)
 }
 
 func (c ComponentChange) Error() string {
-	return fmt.Sprintf("%s, in components %s [%s]. %s", c.Level, c.Text, c.Id, c.Comment)
+	return fmt.Sprintf("%s, in components/%s %s [%s]. %s", c.Level, c.Component, c.Text, c.Id, c.Comment)
 }

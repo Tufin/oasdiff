@@ -18,15 +18,16 @@ func TestTextFormatter_RenderBreakingChanges(t *testing.T) {
 
 	testChanges := checker.Changes{
 		checker.ComponentChange{
-			Id:    "change_id",
-			Text:  "This is a breaking change.",
-			Level: checker.ERR,
+			Id:        "change_id",
+			Text:      "This is a breaking change.",
+			Level:     checker.ERR,
+			Component: "test",
 		},
 	}
 
 	out, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
 	require.NoError(t, err)
-	require.Equal(t, string(out), "1 breaking changes: 1 error, 0 warning\nerror, in components This is a breaking change. [change_id]. \n\n")
+	require.Equal(t, string(out), "1 breaking changes: 1 error, 0 warning\nerror, in components/test This is a breaking change. [change_id]. \n\n")
 }
 
 func TestTextFormatter_RenderChangelog(t *testing.T) {
@@ -37,15 +38,16 @@ func TestTextFormatter_RenderChangelog(t *testing.T) {
 
 	testChanges := checker.Changes{
 		checker.ComponentChange{
-			Id:    "change_id",
-			Text:  "This is a breaking change.",
-			Level: checker.ERR,
+			Id:        "change_id",
+			Text:      "This is a breaking change.",
+			Level:     checker.ERR,
+			Component: "test",
 		},
 	}
 
 	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
 	require.NoError(t, err)
-	require.Equal(t, string(out), "1 changes: 1 error, 0 warning, 0 info\nerror, in components This is a breaking change. [change_id]. \n\n")
+	require.Equal(t, string(out), "1 changes: 1 error, 0 warning, 0 info\nerror, in components/test This is a breaking change. [change_id]. \n\n")
 }
 
 func TestTextFormatter_RenderChecks(t *testing.T) {

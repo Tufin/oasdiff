@@ -27,6 +27,12 @@ type BackwardCompatibilityRule struct {
 
 var pipedOutput *bool
 
+func SetPipedOutput(val *bool) *bool {
+	save := pipedOutput
+	pipedOutput = val
+	return save
+}
+
 func IsPipedOutput() bool {
 	if pipedOutput != nil {
 		return *pipedOutput
