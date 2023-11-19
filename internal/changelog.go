@@ -10,6 +10,7 @@ import (
 	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/formatters"
+	"github.com/tufin/oasdiff/load"
 )
 
 func getChangelogCmd() *cobra.Command {
@@ -59,7 +60,7 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 
 	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
-	diffReport, operationsSources, err := calcDiff(flags)
+	diffResult, err := calcDiff(flags)
 	if err != nil {
 		return false, err
 	}
@@ -68,7 +69,7 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 	bcConfig.Localize = checker.NewLocalizer(flags.getLang())
 
 	errs, returnErr := filterIgnored(
-		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffReport, operationsSources, level),
+		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffResult.diffReport, diffResult.operationsSources, level),
 		flags.getWarnIgnoreFile(), flags.getErrIgnoreFile())
 
 	if returnErr != nil {
@@ -77,12 +78,12 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 
 	if level == checker.WARN {
 		// breaking changes
-		if returnErr := outputBreakingChanges(bcConfig, flags.getFormat(), flags.getLang(), stdout, errs, level); returnErr != nil {
+		if returnErr := outputBreakingChanges(flags.getFormat(), flags.getLang(), stdout, errs); returnErr != nil {
 			return false, returnErr
 		}
 	} else {
 		// changelog
-		if returnErr := outputChangelog(bcConfig, flags.getFormat(), flags.getLang(), stdout, errs, level); returnErr != nil {
+		if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
 			return false, returnErr
 		}
 	}
@@ -119,7 +120,7 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 	return errs, nil
 }
 
-func outputChangelog(config checker.Config, format string, lang string, stdout io.Writer, errs checker.Changes, level checker.Level) *ReturnError {
+func outputChangelog(format string, lang string, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
 		Language: lang,
@@ -129,7 +130,7 @@ func outputChangelog(config checker.Config, format string, lang string, stdout i
 	}
 
 	// render
-	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{})
+	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{}, specInfoPair)
 	if err != nil {
 		return getErrFailedPrint("changelog "+format, err)
 	}

@@ -6,6 +6,7 @@ import (
 
 const (
 	APISchemasRemovedId = "api-schema-removed"
+	ComponentSchemas    = "schemas"
 )
 
 func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
@@ -16,10 +17,10 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 
 	for _, deletedSchema := range diffReport.ComponentsDiff.SchemasDiff.Deleted {
 		result = append(result, ComponentChange{
-			Id:     APISchemasRemovedId,
-			Level:  config.getLogLevel(APISchemasRemovedId, INFO),
-			Text:   config.Localize(APISchemasRemovedId, ColorizedValue(deletedSchema)),
-			Source: "Components",
+			Id:        APISchemasRemovedId,
+			Level:     config.getLogLevel(APISchemasRemovedId, INFO),
+			Text:      config.Localize(APISchemasRemovedId, ColorizedValue(deletedSchema)),
+			Component: ComponentSchemas,
 		})
 	}
 	return result

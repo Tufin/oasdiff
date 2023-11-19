@@ -22,6 +22,10 @@ type SecurityChange struct {
 	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
+func (c SecurityChange) IsBreaking() bool {
+	return c.GetLevel().IsBreaking()
+}
+
 func (c SecurityChange) MatchIgnore(ignorePath, ignoreLine string) bool {
 	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) &&
 		strings.Contains(ignoreLine, "security")

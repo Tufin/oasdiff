@@ -24,10 +24,11 @@ func TestSummaryOutputFormats(t *testing.T) {
 
 func TestChangelogOutputFormats(t *testing.T) {
 	supportedFormats := SupportedFormatsByContentType(OutputChangelog)
-	assert.Len(t, supportedFormats, 3)
+	assert.Len(t, supportedFormats, 4)
 	assert.Contains(t, supportedFormats, string(FormatYAML))
 	assert.Contains(t, supportedFormats, string(FormatJSON))
 	assert.Contains(t, supportedFormats, string(FormatText))
+	assert.Contains(t, supportedFormats, string(FormatHTML))
 }
 
 func TestBreakingChangesOutputFormats(t *testing.T) {

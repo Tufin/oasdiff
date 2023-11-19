@@ -39,6 +39,10 @@ func (level Level) String() string {
 	}
 }
 
+func (level Level) IsBreaking() bool {
+	return level == ERR || level == WARN
+}
+
 func (level Level) PrettyString() string {
 	if isColorOn() {
 		return level.String()

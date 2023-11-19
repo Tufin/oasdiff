@@ -7,6 +7,7 @@ import (
 
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/report"
 )
 
@@ -43,7 +44,7 @@ func (f TEXTFormatter) RenderBreakingChanges(changes checker.Changes, opts Rende
 	return result.Bytes(), nil
 }
 
-func (f TEXTFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f TEXTFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	result := bytes.NewBuffer(nil)
 
 	if len(changes) > 0 {

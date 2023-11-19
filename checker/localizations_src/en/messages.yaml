@@ -167,6 +167,7 @@ api-stability-decreased-description: endpoint stability level decreased
 api-security-scope-added: the security scope %s was added to the endpoint's security scheme %s
 api-security-component-type-changed: the component security scheme %s type changed from %s to %s
 api-security-component-oauth-url-changed: the component security scheme %s oauth url changed from %s to %s
+api-security-component-oauth-token-url-changed: the component security scheme %s oauth token url changed from %s to %s
 api-security-component-added: the component security scheme %s was added
 api-security-component-removed: the component security scheme %s was removed
 api-security-component-oauth-scope-added: the component security scheme %s oauth scope %s was added

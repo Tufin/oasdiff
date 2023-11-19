@@ -25,6 +25,10 @@ type ApiChange struct {
 	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
+func (c ApiChange) IsBreaking() bool {
+	return c.GetLevel().IsBreaking()
+}
+
 func (c ApiChange) MatchIgnore(ignorePath, ignoreLine string) bool {
 	if ignorePath == "" {
 		return false

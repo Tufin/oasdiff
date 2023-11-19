@@ -15,7 +15,24 @@ func TestHtmlFormatter_RenderDiff(t *testing.T) {
 	out, err := formatter.RenderDiff(nil, formatters.RenderOpts{})
 	require.NoError(t, err)
 	require.Equal(t, string(out), "<p>No changes</p>\n")
+}
 
+func TestHtmlFormatter_RenderChangelog(t *testing.T) {
+	formatter := formatters.HTMLFormatter{}
+
+	testChanges := checker.Changes{
+		checker.ApiChange{
+			Path:      "/test",
+			Operation: "GET",
+			Id:        "change_id",
+			Text:      "This is a breaking change.",
+			Level:     checker.ERR,
+		},
+	}
+
+	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
+	require.NoError(t, err)
+	require.NotEmpty(t, string(out))
 }
 
 func TestHtmlFormatter_NotImplemented(t *testing.T) {
@@ -23,9 +40,6 @@ func TestHtmlFormatter_NotImplemented(t *testing.T) {
 
 	var err error
 	_, err = formatter.RenderBreakingChanges(checker.Changes{}, formatters.RenderOpts{})
-	assert.Error(t, err)
-
-	_, err = formatter.RenderChangelog(checker.Changes{}, formatters.RenderOpts{})
 	assert.Error(t, err)
 
 	_, err = formatter.RenderChecks(formatters.Checks{}, formatters.RenderOpts{})

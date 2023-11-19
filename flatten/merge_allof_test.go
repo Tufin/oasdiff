@@ -10,6 +10,127 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// identical Default fields are merged successfully
+func TestMerge_Default(t *testing.T) {
+	merged, err := flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				Default: 10,
+			},
+		})
+
+	require.NoError(t, err)
+	require.Equal(t, 10, merged.Default)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type: "object",
+						},
+					},
+				},
+			},
+		})
+
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, nil, merged.Default)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: 10,
+						},
+					},
+				},
+			},
+		})
+
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, 10, merged.Default)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: 10,
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: 10,
+						},
+					},
+				},
+			},
+		})
+
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, 10, merged.Default)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: "abc",
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: "abc",
+						},
+					},
+				},
+			},
+		})
+
+	require.NoError(t, err)
+	require.Nil(t, merged.AllOf)
+	require.Equal(t, "abc", merged.Default)
+}
+
+// Conflicting Default values cannot be resolved
+func TestMerge_DefaultFailure(t *testing.T) {
+	_, err := flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: 10,
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Default: "abc",
+						},
+					},
+				},
+			},
+		})
+
+	require.EqualError(t, err, flatten.DefaultErrorMessage)
+}
+
 // verify that if all ReadOnly fields are set to false, then the ReadOnly field in the merged schema is false.
 func TestMerge_ReadOnlyIsSetToFalse(t *testing.T) {
 	merged, err := flatten.Merge(
@@ -1594,8 +1715,30 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 }
 
 func TestMergeAllOf_Pattern(t *testing.T) {
-
 	merged, err := flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				Pattern: "abc",
+			}})
+	require.NoError(t, err)
+	require.Equal(t, "abc", merged.Pattern)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:    "object",
+							Pattern: "abc",
+						},
+					},
+				},
+			}})
+	require.NoError(t, err)
+	require.Equal(t, "abc", merged.Pattern)
+
+	merged, err = flatten.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1657,12 +1800,46 @@ func TestMerge_CircularAllOf(t *testing.T) {
 	merged, err := flatten.Merge(*doc.Components.Schemas["AWSEnvironmentSettings"])
 	require.NoError(t, err)
 	require.Empty(t, merged.AllOf)
-
-	require.Equal(t, "#/components/schemas/AWSEnvironmentSettings", merged.OneOf[0].Ref)
-	require.Equal(t, &merged, &merged.OneOf[0].Value)
+	require.Empty(t, merged.OneOf)
 
 	require.Equal(t, "string", merged.Properties["serviceEndpoints"].Value.Type)
 	require.Equal(t, "string", merged.Properties["region"].Value.Type)
+}
+
+// A single OneOf field is pruned if it references it's parent schema
+func TestMerge_OneOfIsPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular2.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["OneOf_Is_Pruned_B"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+	require.Empty(t, merged.OneOf)
+}
+
+// A single OneOf field is not pruned if it does not reference it's parent schema
+func TestMerge_OneOfIsNotPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular2.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["OneOf_Is_Not_Pruned_B"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+	require.NotEmpty(t, merged.OneOf)
+}
+
+// A single AnyOf field is pruned if it references it's parent schema
+func TestMerge_AnyOfIsPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular2.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["AnyOf_Is_Pruned_B"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+	require.Empty(t, merged.AnyOf)
+}
+
+// A single AnyOf field is not pruned if it does not reference it's parent schema
+func TestMerge_AnyOfIsNotPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/circular2.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["AnyOf_Is_Not_Pruned_B"])
+	require.NoError(t, err)
+	require.Empty(t, merged.AllOf)
+	require.NotEmpty(t, merged.AnyOf)
 }
 
 func loadSpec(t *testing.T, path string) *openapi3.T {

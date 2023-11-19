@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -13,7 +14,7 @@ import (
 const (
 	FormatErrorMessage  = "unable to resolve Format conflict using default resolver: all Format values must be identical"
 	TypeErrorMessage    = "unable to resolve Type conflict: all Type values must be identical"
-	FormatResolverError = ""
+	DefaultErrorMessage = "unable to resolve Default conflict: all Default values must be identical"
 
 	FormatInt32  = "int32"
 	FormatInt64  = "int64"
@@ -50,6 +51,7 @@ type SchemaCollection struct {
 	Nullable             []bool
 	ReadOnly             []bool
 	WriteOnly            []bool
+	Default              []interface{}
 }
 
 type state struct {
@@ -88,9 +90,20 @@ func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
 		if err != nil {
 			return nil, err
 		}
+		pruneFields(schema)
 	}
 
 	return result.Value, nil
+}
+
+// remove fields while maintaining an equivalent schema.
+func pruneFields(schema *openapi3.SchemaRef) {
+	if len(schema.Value.OneOf) == 1 && schema.Value.OneOf[0].Value == schema.Value {
+		schema.Value.OneOf = nil
+	}
+	if len(schema.Value.AnyOf) == 1 && schema.Value.AnyOf[0].Value == schema.Value {
+		schema.Value.AnyOf = nil
+	}
 }
 
 func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
@@ -137,6 +150,7 @@ func mergeInternal(state *state, base *openapi3.SchemaRef) (*openapi3.SchemaRef,
 	result.Value.Max = base.Value.Max
 	result.Value.MultipleOf = base.Value.MultipleOf
 	result.Value.MinLength = base.Value.MinLength
+	result.Value.Default = base.Value.Default
 	if base.Value.MaxLength != nil {
 		result.Value.MaxLength = openapi3.Uint64Ptr(*base.Value.MaxLength)
 	}
@@ -301,7 +315,10 @@ func flattenSchemas(state *state, result *openapi3.SchemaRef, schemas []*openapi
 	result.Value.Required = resolveRequired(collection.Required)
 	result.Value = resolveMultipleOf(result.Value, &collection)
 	result.Value.UniqueItems = resolveUniqueItems(collection.UniqueItems)
-
+	result.Value.Default, err = resolveDefault(&collection)
+	if err != nil {
+		return err
+	}
 	result.Value.Enum, err = resolveEnum(collection.Enum)
 	if err != nil {
 		return err
@@ -624,8 +641,20 @@ func resolveEnum(values [][]interface{}) ([]interface{}, error) {
 }
 
 func resolvePattern(values []string) string {
+	patterns := []string{}
+	for _, v := range values {
+		if len(v) > 0 {
+			patterns = append(patterns, v)
+		}
+	}
+	if len(patterns) == 0 {
+		return ""
+	}
+	if len(patterns) == 1 {
+		return patterns[0]
+	}
 	var pattern strings.Builder
-	for _, p := range values {
+	for _, p := range patterns {
 		if len(p) > 0 {
 			if !isPatternResolved(p) {
 				pattern.WriteString(fmt.Sprintf("(?=%s)", p))
@@ -873,6 +902,7 @@ func collect(schemas []*openapi3.SchemaRef) SchemaCollection {
 		collection.Nullable = append(collection.Nullable, s.Value.Nullable)
 		collection.ReadOnly = append(collection.ReadOnly, s.Value.ReadOnly)
 		collection.WriteOnly = append(collection.WriteOnly, s.Value.WriteOnly)
+		collection.Default = append(collection.Default, s.Value.Default)
 	}
 	return collection
 }
@@ -1007,4 +1037,23 @@ func findIntersection(arrays ...[]string) []string {
 	}
 
 	return intersection
+}
+
+func resolveDefault(collection *SchemaCollection) (interface{}, error) {
+	values := make([]interface{}, 0)
+	for _, v := range collection.Default {
+		if v != nil {
+			values = append(values, v)
+		}
+	}
+	if len(values) == 0 {
+		return nil, nil
+	}
+	first := values[0]
+	for _, v := range values {
+		if !reflect.DeepEqual(first, v) {
+			return nil, errors.New(DefaultErrorMessage)
+		}
+	}
+	return first, nil
 }
