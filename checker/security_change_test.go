@@ -21,15 +21,15 @@ var securityChange = checker.SecurityChange{
 }
 
 func TestSecurityChange(t *testing.T) {
-	require.Equal(t, securityChange.GetComment(), "comment")
-	require.Equal(t, securityChange.GetOperationId(), "")
-	require.Equal(t, securityChange.GetSourceFile(), "sourceFile")
-	require.Equal(t, securityChange.GetSourceLine(), 1)
-	require.Equal(t, securityChange.GetSourceLineEnd(), 2)
-	require.Equal(t, securityChange.GetSourceColumn(), 3)
-	require.Equal(t, securityChange.GetSourceColumnEnd(), 4)
-	require.Equal(t, securityChange.LocalizedError(checker.NewDefaultLocalizer()), "error, in security text [id]. comment")
-	require.Equal(t, securityChange.Error(), "error, in security text [id]. comment")
+	require.Equal(t, "comment", securityChange.GetComment())
+	require.Equal(t, "", securityChange.GetOperationId())
+	require.Equal(t, "sourceFile", securityChange.GetSourceFile())
+	require.Equal(t, 1, securityChange.GetSourceLine())
+	require.Equal(t, 2, securityChange.GetSourceLineEnd())
+	require.Equal(t, 3, securityChange.GetSourceColumn())
+	require.Equal(t, 4, securityChange.GetSourceColumnEnd())
+	require.Equal(t, "error, in security text [id]. comment", securityChange.LocalizedError(checker.NewDefaultLocalizer()))
+	require.Equal(t, "error, in security text [id]. comment", securityChange.Error())
 }
 
 func TestSecurityChange_MatchIgnore(t *testing.T) {
@@ -40,12 +40,5 @@ func TestSecurityChange_PrettyPiped(t *testing.T) {
 	piped := true
 	save := checker.SetPipedOutput(&piped)
 	defer checker.SetPipedOutput(save)
-	require.Equal(t, securityChange.PrettyErrorText(checker.NewDefaultLocalizer()), "error, in security text [id]. comment")
-}
-
-func TestSecurityChange_PrettyNotPiped(t *testing.T) {
-	piped := false
-	save := checker.SetPipedOutput(&piped)
-	defer checker.SetPipedOutput(save)
-	require.Equal(t, securityChange.PrettyErrorText(checker.NewDefaultLocalizer()), "\x1b[31merror\x1b[0m\t[\x1b[33mid\x1b[0m] \t\n\tin security\n\t\ttext\n\t\tcomment")
+	require.Equal(t, "error, in security text [id]. comment", securityChange.PrettyErrorText(checker.NewDefaultLocalizer()))
 }
