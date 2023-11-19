@@ -1,3 +1,5 @@
+//go:build unix
+
 package checker_test
 
 import (
