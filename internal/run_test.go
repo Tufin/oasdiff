@@ -277,3 +277,7 @@ func Test_FlattenInvalid(t *testing.T) {
 func Test_Checks(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff checks -l ru"), io.Discard, io.Discard))
 }
+
+func Test_PartialSpec(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff https://raw.githubusercontent.com/CVEProject/cve-services/dev/api-docs/openapi.json https://raw.githubusercontent.com/CVEProject/cve-services/dev/api-docs/openapi.json --include-path-params"), io.Discard, io.Discard))
+}

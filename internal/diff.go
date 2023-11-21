@@ -84,6 +84,7 @@ func calcDiff(flags Flags) (*diffResult, *ReturnError) {
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
+	loader.ReadFromURIFunc = load.ReaderFunc
 
 	if flags.getComposed() {
 		return composedDiff(loader, flags)
