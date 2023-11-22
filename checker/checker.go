@@ -25,10 +25,6 @@ type BackwardCompatibilityRule struct {
 	Handler     BackwardCompatibilityCheck `json:"-" yaml:"-"`
 }
 
-func isColorOn() bool {
-	return isPipedOutput()
-}
-
 var pipedOutput *bool
 
 func SetPipedOutput(val *bool) *bool {

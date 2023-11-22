@@ -84,7 +84,7 @@ func (c SecurityChange) LocalizedError(l Localizer) string {
 }
 
 func (c SecurityChange) PrettyErrorText(l Localizer) string {
-	if isColorOn() {
+	if IsPipedOutput() {
 		return c.LocalizedError(l)
 	}
 

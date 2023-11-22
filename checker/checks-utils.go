@@ -23,7 +23,7 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 
 func ColorizedValue(arg interface{}) string {
 	str := interfaceToString(arg)
-	if isColorOn() {
+	if IsPipedOutput() {
 		return fmt.Sprintf("'%s'", str)
 	}
 	return color.InBold(fmt.Sprintf("'%s'", str))
