@@ -28,6 +28,7 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 						Id:          RequestParameterRemovedId,
 						Level:       WARN,
 						Text:        config.Localize(RequestParameterRemovedId, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

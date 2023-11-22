@@ -45,6 +45,7 @@ func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operations
 						Id:          id,
 						Level:       level,
 						Text:        config.Localize(id, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Args:        []any{paramLocation, paramName},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

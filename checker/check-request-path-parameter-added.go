@@ -32,6 +32,7 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 						Id:          NewRequestPathParameterId,
 						Level:       ERR,
 						Text:        config.Localize(NewRequestPathParameterId, ColorizedValue(paramName)),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

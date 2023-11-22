@@ -43,6 +43,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 						Text: config.Localize(
 							RequestBodyAllOfAddedId,
 							ColorizedValue(mediaTypeDiff.SchemaDiff.AllOfDiff.Added.String())),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -57,6 +58,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 						Text: config.Localize(
 							RequestBodyAllOfRemovedId,
 							ColorizedValue(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted.String())),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -79,6 +81,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 									RequestPropertyAllOfAddedId,
 									ColorizedValue(propertyDiff.AllOfDiff.Added.String()),
 									ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -94,6 +97,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 									RequestPropertyAllOfRemovedId,
 									ColorizedValue(propertyDiff.AllOfDiff.Deleted.String()),
 									ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

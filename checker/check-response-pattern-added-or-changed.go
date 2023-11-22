@@ -61,6 +61,7 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 								Id:          id,
 								Level:       INFO,
 								Text:        text,
+								Args:        []any{},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

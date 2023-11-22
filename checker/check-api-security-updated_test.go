@@ -100,6 +100,7 @@ func TestAPISecurityAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APISecurityAddedCheckId,
 		Text:        "the endpoint scheme security 'petstore_auth' was added to the API",
+		Args:        []any{"petstore_auth"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -123,6 +124,7 @@ func TestAPISecurityDeleted(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APISecurityRemovedCheckId,
 		Text:        "the endpoint scheme security 'petstore_auth' was removed from the API",
+		Args:        []any{"petstore_auth"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -146,6 +148,7 @@ func TestAPISecurityScopeRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APISecurityScopeRemovedId,
 		Text:        "the security scope 'read:pets' was removed from the endpoint's security scheme 'petstore_auth'",
+		Args:        []any{"read:pets", "petstore_auth"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -169,6 +172,7 @@ func TestAPISecurityScopeAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APISecurityScopeAddedId,
 		Text:        "the security scope 'read:pets' was added to the endpoint's security scheme 'petstore_auth'",
+		Args:        []any{"read:pets", "petstore_auth"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

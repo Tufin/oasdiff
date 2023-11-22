@@ -43,6 +43,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 							Id:          RequestPropertyBecameEnumId,
 							Level:       ERR,
 							Text:        config.Localize(RequestPropertyBecameEnumId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Args:        []any{},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

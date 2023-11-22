@@ -43,6 +43,7 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 									Id:          ResponsePropertyEnumValueRemovedId,
 									Level:       config.getLogLevel(ResponsePropertyEnumValueRemovedId, INFO),
 									Text:        config.Localize(ResponsePropertyEnumValueRemovedId, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Args:        []any{},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

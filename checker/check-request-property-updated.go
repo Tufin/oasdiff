@@ -34,10 +34,12 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 						if !propertyItem.ReadOnly {
 							source := (*operationsSources)[operationItem.Revision]
+							fullName := propertyFullName(propertyPath, propertyName)
 							result = append(result, ApiChange{
 								Id:          RequestPropertyRemovedId,
 								Level:       WARN,
-								Text:        config.Localize(RequestPropertyRemovedId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Text:        config.Localize(RequestPropertyRemovedId, ColorizedValue(fullName)),
+								Args:        []any{fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -57,6 +59,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 								Id:          NewRequiredRequestPropertyId,
 								Level:       ERR,
 								Text:        config.Localize(NewRequiredRequestPropertyId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -67,6 +70,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 								Id:          NewOptionalRequestPropertyId,
 								Level:       INFO,
 								Text:        config.Localize(NewOptionalRequestPropertyId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

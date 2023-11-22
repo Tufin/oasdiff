@@ -49,6 +49,7 @@ func RequestParameterMinUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 						Id:          id,
 						Level:       level,
 						Text:        config.Localize(id, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

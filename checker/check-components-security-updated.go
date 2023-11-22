@@ -33,6 +33,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			Id:        APIComponentsSecurityComponentOauthUrlUpdatedId,
 			Level:     INFO,
 			Text:      config.Localize(APIComponentsSecurityComponentOauthUrlUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(urlDiff.From), ColorizedValue(urlDiff.To)),
+			Args:      []any{updatedSecurityName, urlDiff.From, urlDiff.To},
 			Component: ComponentSecuritySchemes,
 		})
 	}
@@ -42,6 +43,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 			Id:        APIComponentsSecurityOauthTokenUrlUpdatedId,
 			Level:     INFO,
 			Text:      config.Localize(APIComponentsSecurityOauthTokenUrlUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(tokenDiff.From), ColorizedValue(tokenDiff.To)),
+			Args:      []any{updatedSecurityName, tokenDiff.From, tokenDiff.To},
 			Component: ComponentSecuritySchemes,
 		})
 	}
@@ -52,6 +54,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 				Id:        APIComponentSecurityOauthScopeAddedId,
 				Level:     INFO,
 				Text:      config.Localize(APIComponentSecurityOauthScopeAddedId, ColorizedValue(updatedSecurityName), ColorizedValue(addedScope)),
+				Args:      []any{updatedSecurityName, addedScope},
 				Component: ComponentSecuritySchemes,
 			})
 		}
@@ -61,6 +64,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 				Id:        APIComponentSecurityOauthScopeRemovedId,
 				Level:     INFO,
 				Text:      config.Localize(APIComponentSecurityOauthScopeRemovedId, ColorizedValue(updatedSecurityName), ColorizedValue(removedScope)),
+				Args:      []any{updatedSecurityName, removedScope},
 				Component: ComponentSecuritySchemes,
 			})
 		}
@@ -70,6 +74,7 @@ func checkOAuthUpdates(updatedSecurity *diff.SecuritySchemeDiff, config Config, 
 				Id:        APIComponentSecurityOauthScopeUpdatedId,
 				Level:     INFO,
 				Text:      config.Localize(APIComponentSecurityOauthScopeUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(name), ColorizedValue(modifiedScope.From), ColorizedValue(modifiedScope.To)),
+				Args:      []any{updatedSecurityName, name, modifiedScope.From, modifiedScope.To},
 				Component: ComponentSecuritySchemes,
 			})
 		}
@@ -90,6 +95,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 			Id:        APIComponentsSecurityAddedId,
 			Level:     INFO,
 			Text:      config.Localize(APIComponentsSecurityAddedId, ColorizedValue(updatedSecurity)),
+			Args:      []any{updatedSecurity},
 			Component: ComponentSecuritySchemes,
 		})
 	}
@@ -99,6 +105,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 			Id:        APIComponentsSecurityRemovedId,
 			Level:     INFO,
 			Text:      config.Localize(APIComponentsSecurityRemovedId, ColorizedValue(updatedSecurity)),
+			Args:      []any{updatedSecurity},
 			Component: ComponentSecuritySchemes,
 		})
 	}
@@ -111,6 +118,7 @@ func APIComponentsSecurityUpdatedCheck(diffReport *diff.Diff, operationsSources 
 				Id:        APIComponentsSecurityTypeUpdatedId,
 				Level:     INFO,
 				Text:      config.Localize(APIComponentsSecurityTypeUpdatedId, ColorizedValue(updatedSecurityName), ColorizedValue(updatedSecurity.TypeDiff.From), ColorizedValue(updatedSecurity.TypeDiff.To)),
+				Args:      []any{updatedSecurityName, updatedSecurity.TypeDiff.From, updatedSecurity.TypeDiff.To},
 				Component: ComponentSecuritySchemes,
 			})
 		}

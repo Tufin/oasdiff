@@ -64,6 +64,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 								Id:          ResponsePropertyBecameNullableId,
 								Level:       ERR,
 								Text:        config.Localize(ResponsePropertyBecameNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Args:        []any{},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

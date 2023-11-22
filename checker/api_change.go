@@ -11,6 +11,7 @@ import (
 type ApiChange struct {
 	Id          string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text        string `json:"text,omitempty" yaml:"text,omitempty"`
+	Args        []any
 	Comment     string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level       Level  `json:"level" yaml:"level"`
 	Operation   string `json:"operation,omitempty" yaml:"operation,omitempty"`

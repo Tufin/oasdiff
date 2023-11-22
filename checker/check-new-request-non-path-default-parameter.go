@@ -43,6 +43,7 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 						Id:          id,
 						Level:       level,
 						Text:        config.Localize(id, ColorizedValue(paramLoc), ColorizedValue(param.Value.Name)),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.OperationID,
 						Path:        path,

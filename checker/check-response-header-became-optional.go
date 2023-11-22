@@ -43,6 +43,7 @@ func ResponseHeaderBecameOptionalCheck(diffReport *diff.Diff, operationsSources 
 						Id:          ResponseHeaderBecameOptionalId,
 						Level:       ERR,
 						Text:        config.Localize(ResponseHeaderBecameOptionalId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

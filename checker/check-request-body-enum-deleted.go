@@ -45,6 +45,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 						Id:          RequestBodyEnumValueRemovedId,
 						Level:       config.getLogLevel(RequestBodyEnumValueRemovedId, INFO),
 						Text:        config.Localize(RequestBodyEnumValueRemovedId, ColorizedValue(enumVal)),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

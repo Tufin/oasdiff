@@ -47,6 +47,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 								Id:          NewRequiredRequestHeaderPropertyId,
 								Level:       ERR,
 								Text:        config.Localize(NewRequiredRequestHeaderPropertyId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
+								Args:        []any{},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

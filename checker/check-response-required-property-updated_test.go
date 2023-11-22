@@ -47,6 +47,7 @@ func TestResponseRequiredPropertyRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseRequiredPropertyRemovedId,
 		Text:        "removed the required property 'data/new' from the response with the '200' status",
+		Args:        []any{"data/new", "200"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -73,6 +74,7 @@ func TestResponseRequiredWriteOnlyPropertyAdded(t *testing.T) {
 
 		Id:          checker.ResponseRequiredWriteOnlyPropertyAddedId,
 		Text:        "added the required write-only property 'data/new' to the response with the '200' status",
+		Args:        []any{"data/new", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -98,6 +100,7 @@ func TestResponseRequiredWriteOnlyPropertyRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseRequiredWriteOnlyPropertyRemovedId,
 		Text:        "removed the required write-only property 'data/new' from the response with the '200' status",
+		Args:        []any{"data/new", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

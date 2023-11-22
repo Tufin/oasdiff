@@ -39,6 +39,7 @@ func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *d
 						Id:          RequestParameterBecameEnumId,
 						Level:       ERR,
 						Text:        config.Localize(RequestParameterBecameEnumId, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

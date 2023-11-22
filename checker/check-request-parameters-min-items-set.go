@@ -40,6 +40,7 @@ func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *
 						Id:          RequestParameterMinItemsSetId,
 						Level:       WARN,
 						Text:        config.Localize(RequestParameterMinItemsSetId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
+						Args:        []any{},
 						Comment:     config.Localize(comment(RequestParameterMinItemsSetId)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

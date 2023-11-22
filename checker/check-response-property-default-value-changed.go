@@ -33,6 +33,7 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 					Id:          messageId,
 					Level:       INFO,
 					Text:        config.Localize(messageId, a...),
+					Args:        []any{},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

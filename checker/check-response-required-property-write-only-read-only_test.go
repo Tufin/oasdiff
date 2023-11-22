@@ -25,6 +25,7 @@ func TestResponseRequiredPropertyBecameWriteOnly(t *testing.T) {
 
 		Id:          "response-required-property-became-write-only",
 		Text:        "the response required property 'data/name' became write-only for the status '200'",
+		Args:        []any{"data/name", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -51,6 +52,7 @@ func TestResponseRequiredPropertyBecameNotWriteOnly(t *testing.T) {
 
 		Id:          checker.ResponseRequiredPropertyBecameNonWriteOnlyId,
 		Text:        "the response required property 'data/writeOnlyName' became not write-only for the status '200'",
+		Args:        []any{"data/writeOnlyName", "200"},
 		Comment:     "It is valid only if the property was always returned before the specification has been changed",
 		Level:       checker.WARN,
 		Operation:   "POST",
@@ -77,6 +79,7 @@ func TestResponseRequiredPropertyBecameReadOnly(t *testing.T) {
 
 		Id:          checker.ResponseRequiredPropertyBecameReadOnlyId,
 		Text:        "the response required property 'data/id' became read-only for the status '200'",
+		Args:        []any{"data/id", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -104,6 +107,7 @@ func TestResponseRequiredPropertyBecameNonReadOnly(t *testing.T) {
 
 		Id:          checker.ResponseRequiredPropertyBecameNonReadOnlyId,
 		Text:        "the response required property 'data/id' became not read-only for the status '200'",
+		Args:        []any{"data/id", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

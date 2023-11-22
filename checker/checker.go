@@ -135,6 +135,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 					Id:          ParseErrorId,
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
+					Args:        []any{},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -149,6 +150,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 					Id:          ParseErrorId,
 					Level:       ERR,
 					Text:        fmt.Sprintf("parsing error %s", err.Error()),
+					Args:        []any{},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -164,6 +166,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				result = append(result, ApiChange{
 					Id:          APIStabilityDecreasedId,
 					Level:       ERR,
+					Args:        []any{},
 					Text:        fmt.Sprintf("stability level decreased from '%s' to '%s'", baseStability, revisionStability),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,

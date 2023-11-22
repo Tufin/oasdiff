@@ -29,6 +29,7 @@ func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 					Id:          messageId,
 					Level:       ERR,
 					Text:        config.Localize(messageId, a...),
+					Args:        []any{},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

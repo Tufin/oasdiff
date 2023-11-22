@@ -11,6 +11,7 @@ import (
 type ComponentChange struct {
 	Id        string `json:"id,omitempty" yaml:"id,omitempty"`
 	Text      string `json:"text,omitempty" yaml:"text,omitempty"`
+	Args      []any  `json:"-" yaml:"-"`
 	Comment   string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level     Level  `json:"level" yaml:"level"`
 	Source    string `json:"source,omitempty" yaml:"source,omitempty"`

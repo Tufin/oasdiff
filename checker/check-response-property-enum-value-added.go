@@ -55,6 +55,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 									Id:          id,
 									Level:       level,
 									Text:        config.Localize(id, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Args:        []any{},
 									Comment:     comment,
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,

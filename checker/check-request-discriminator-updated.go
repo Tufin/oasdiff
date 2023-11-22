@@ -43,6 +43,7 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 					Id:          messageId,
 					Level:       INFO,
 					Text:        config.Localize(messageId, a...),
+					Args:        []any{},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

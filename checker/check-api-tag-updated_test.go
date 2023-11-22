@@ -24,6 +24,7 @@ func TestTagAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APITagAddedId,
 		Text:        "api tag 'newTag' added",
+		Args:        []any{"newTag"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -50,6 +51,7 @@ func TestTagRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APITagRemovedId,
 		Text:        "api tag 'Test' removed",
+		Args:        []any{"Test"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -79,6 +81,7 @@ func TestTagUpdated(t *testing.T) {
 			require.Equal(t, checker.ApiChange{
 				Id:          checker.APITagRemovedId,
 				Text:        "api tag 'Test' removed",
+				Args:        []any{"Test"},
 				Comment:     "",
 				Level:       checker.INFO,
 				Operation:   "POST",
@@ -92,6 +95,7 @@ func TestTagUpdated(t *testing.T) {
 			require.Equal(t, checker.ApiChange{
 				Id:          checker.APITagAddedId,
 				Text:        "api tag 'newTag' added",
+				Args:        []any{"newTag"},
 				Comment:     "",
 				Level:       checker.INFO,
 				Operation:   "POST",
