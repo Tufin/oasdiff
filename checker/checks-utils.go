@@ -29,6 +29,14 @@ func ColorizedValue(arg interface{}) string {
 	return color.InBold(fmt.Sprintf("'%s'", str))
 }
 
+func ColorizedValues(args []any) []any {
+	result := make([]any, len(args))
+	for i, arg := range args {
+		result[i] = ColorizedValue(arg)
+	}
+	return result
+}
+
 func interfaceToString(arg interface{}) string {
 	if arg == nil {
 		return "undefined"
@@ -233,11 +241,4 @@ func IsDecreased(from interface{}, to interface{}) bool {
 		return fromFloat64 > toFloat64
 	}
 	return false
-}
-
-func empty2none(a interface{}) interface{} {
-	if a == nil || a == "" {
-		return ColorizedValue("none")
-	}
-	return ColorizedValue(a)
 }

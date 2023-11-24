@@ -39,7 +39,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 								Id:          RequestBodyMinIncreasedId,
 								Level:       ERR,
 								Text:        config.Localize(RequestBodyMinIncreasedId, ColorizedValue(minDiff.To)),
-								Args:        []any{},
+								Args:        []any{minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -50,7 +50,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 								Id:          RequestBodyMinDecreasedId,
 								Level:       INFO,
 								Text:        config.Localize(RequestBodyMinDecreasedId, ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
-								Args:        []any{},
+								Args:        []any{minDiff.From, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -71,12 +71,15 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							minDiff.To == nil {
 							return
 						}
+
+						fullName := propertyFullName(propertyPath, propertyName)
+
 						if IsIncreasedValue(minDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinIncreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMinIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyMinIncreasedId, ColorizedValue(fullName), ColorizedValue(minDiff.To)),
+								Args:        []any{fullName, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -86,8 +89,8 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMinDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyMinDecreasedId, ColorizedValue(fullName), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Args:        []any{fullName, minDiff.From, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

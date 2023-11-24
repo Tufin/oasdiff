@@ -25,6 +25,7 @@ func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
 
 		Id:          checker.ResponseOptionalPropertyBecameWriteOnlyId,
 		Text:        "the response optional property 'data/name' became write-only for the status '200'",
+		Args:        []any{"data/name", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -51,6 +52,7 @@ func TestResponseOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 
 		Id:          checker.ResponseOptionalPropertyBecameNonWriteOnlyId,
 		Text:        "the response optional property 'data/writeOnlyName' became not write-only for the status '200'",
+		Args:        []any{"data/writeOnlyName", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -76,6 +78,7 @@ func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
 
 		Id:          checker.ResponseOptionalPropertyBecameReadOnlyId,
 		Text:        "the response optional property 'data/id' became read-only for the status '200'",
+		Args:        []any{"data/id", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -103,6 +106,7 @@ func TestResponseOptionalPropertyBecameNonReadOnly(t *testing.T) {
 
 		Id:          checker.ResponseOptionalPropertyBecameNonReadOnlyId,
 		Text:        "the response optional property 'data/id' became not read-only for the status '200'",
+		Args:        []any{"data/id", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

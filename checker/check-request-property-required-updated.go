@@ -49,7 +49,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							Id:          RequestPropertyBecameRequiredId,
 							Level:       ERR,
 							Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(changedRequiredPropertyName)),
-							Args:        []any{},
+							Args:        []any{changedRequiredPropertyName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -72,7 +72,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							Id:          RequestPropertyBecameOptionalId,
 							Level:       INFO,
 							Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(changedRequiredPropertyName)),
-							Args:        []any{},
+							Args:        []any{changedRequiredPropertyName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -100,11 +100,14 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								// it is a new property, checked by the new-required-request-property check
 								continue
 							}
+
+							fullName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
+
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecameRequiredId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(fullName)),
+								Args:        []any{fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -123,11 +126,14 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								// it is a new property, checked by the new-required-request-property check
 								continue
 							}
+
+							fullName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
+
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecameOptionalId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(fullName)),
+								Args:        []any{fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

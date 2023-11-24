@@ -23,7 +23,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Text:        "for the 'path' request parameter 'groupId', the type/format was changed from 'string'/'none' to 'int'/'none'",
+		Text:        "for the 'path' request parameter 'groupId', the type/format was changed from 'string'/'' to 'int'/''",
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -98,7 +98,7 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Text:        "for the 'path' request parameter 'groupId', the type/format was changed from 'string'/'none' to 'string'/'uuid'",
+		Text:        "for the 'path' request parameter 'groupId', the type/format was changed from 'string'/'' to 'string'/'uuid'",
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",

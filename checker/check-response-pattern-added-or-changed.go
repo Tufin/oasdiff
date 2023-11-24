@@ -46,22 +46,26 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 								return
 							}
 
+							fullName := propertyFullName(propertyPath, propertyName)
+
 							id := ResponsePropertyPatternChangedId
-							text := config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.From), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
+							text := config.Localize(id, ColorizedValue(fullName), ColorizedValue(patternDiff.From), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
+							args := []any{fullName, patternDiff.From, patternDiff.To, responseStatus}
 							if patternDiff.To == "" || patternDiff.To == nil {
 								id = ResponsePropertyPatternRemovedId
-								text = config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.From), ColorizedValue(responseStatus))
-
+								text = config.Localize(id, ColorizedValue(fullName), ColorizedValue(patternDiff.From), ColorizedValue(responseStatus))
+								args = []any{fullName, patternDiff.From, responseStatus}
 							} else if patternDiff.From == "" || patternDiff.From == nil {
 								id = ResponsePropertyPatternAddedId
-								text = config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
+								text = config.Localize(id, ColorizedValue(fullName), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
+								args = []any{fullName, patternDiff.To, responseStatus}
 							}
 
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
 								Text:        text,
-								Args:        []any{},
+								Args:        args,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

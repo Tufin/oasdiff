@@ -47,7 +47,7 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 								ResponseBodyOneOfAddedId,
 								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String()),
 								responseStatus),
-							Args:        []any{},
+							Args:        []any{mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String(), responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -63,7 +63,7 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 								ResponseBodyOneOfRemovedId,
 								ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String()),
 								responseStatus),
-							Args:        []any{},
+							Args:        []any{mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String(), responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -78,6 +78,8 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 								return
 							}
 
+							fullName := propertyFullName(propertyPath, propertyName)
+
 							if len(propertyDiff.OneOfDiff.Added) > 0 {
 								result = append(result, ApiChange{
 									Id:    ResponsePropertyOneOfAddedId,
@@ -85,9 +87,9 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 									Text: config.Localize(
 										ResponsePropertyOneOfAddedId,
 										ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
-										ColorizedValue(propertyFullName(propertyPath, propertyName)),
+										ColorizedValue(fullName),
 										responseStatus),
-									Args:        []any{},
+									Args:        []any{propertyDiff.OneOfDiff.Added.String(), fullName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -102,9 +104,9 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 									Text: config.Localize(
 										ResponsePropertyOneOfRemovedId,
 										ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
-										ColorizedValue(propertyFullName(propertyPath, propertyName)),
+										ColorizedValue(fullName),
 										responseStatus),
-									Args:        []any{},
+									Args:        []any{propertyDiff.OneOfDiff.Deleted.String(), fullName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

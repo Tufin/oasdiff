@@ -24,6 +24,7 @@ func TestResponsePropertyEnumValueRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyEnumValueRemovedId,
 		Text:        "removed the 'TYPE2' enum value from the 'data/typeEnum' response property for the response status '200'",
+		Args:        []any{"TYPE2", "data/typeEnum", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -48,6 +49,7 @@ func TestResponseWriteOnlyPropertyEnumValueRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyEnumValueRemovedId,
 		Text:        "removed the 'TYPE2' enum value from the 'data/writeOnlyEnum' response property for the response status '200'",
+		Args:        []any{"TYPE2", "data/writeOnlyEnum", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

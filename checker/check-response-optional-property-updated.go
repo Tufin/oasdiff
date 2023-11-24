@@ -50,11 +50,14 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								// covered by response-required-property-removed
 								return
 							}
+
+							fullName := propertyFullName(propertyPath, propertyName)
+
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Args:        []any{},
+								Text:        config.Localize(id, ColorizedValue(fullName), ColorizedValue(responseStatus)),
+								Args:        []any{fullName, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -73,11 +76,14 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								// covered by response-required-property-added
 								return
 							}
+
+							fullName := propertyFullName(propertyPath, propertyName)
+
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
 								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Args:        []any{},
+								Args:        []any{fullName, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

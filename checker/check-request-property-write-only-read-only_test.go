@@ -25,6 +25,7 @@ func TestRequestOptionalPropertyBecameWriteOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestOptionalPropertyBecameWriteOnlyCheckId,
 		Text:        "the request optional property 'name' became write-only",
+		Args:        []any{"name"},
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Level:       checker.INFO,
@@ -51,6 +52,7 @@ func TestRequestOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 		Id:          checker.RequestOptionalPropertyBecameNonWriteOnlyCheckId,
 		Text:        "the request optional property 'name' became not write-only",
 		Level:       checker.INFO,
+		Args:        []any{"name"},
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
@@ -75,6 +77,7 @@ func TestRequestOptionalPropertyBecameReadOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestOptionalPropertyBecameReadOnlyCheckId,
 		Text:        "the request optional property 'name' became read-only",
+		Args:        []any{"name"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -100,6 +103,7 @@ func TestRequestOptionalPropertyBecameNonReadOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestOptionalPropertyBecameNonReadOnlyCheckId,
 		Text:        "the request optional property 'name' became not read-only",
+		Args:        []any{"name"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -125,6 +129,7 @@ func TestRequestRequiredPropertyBecameWriteOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestRequiredPropertyBecameWriteOnlyCheckId,
 		Text:        "the request required property 'id' became write-only",
+		Args:        []any{"id"},
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Level:       checker.INFO,
@@ -150,6 +155,7 @@ func TestRequestRequiredPropertyBecameNotWriteOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestRequiredPropertyBecameNonWriteOnlyCheckId,
 		Text:        "the request required property 'id' became not write-only",
+		Args:        []any{"id"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -175,6 +181,7 @@ func TestRequestRequiredPropertyBecameReadOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestRequiredPropertyBecameReadOnlyCheckId,
 		Text:        "the request required property 'id' became read-only",
+		Args:        []any{"id"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -200,6 +207,7 @@ func TestRequestRequiredPropertyBecameNonReadOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestRequiredPropertyBecameNonReadOnlyCheckId,
 		Text:        "the request required property 'id' became not read-only",
+		Args:        []any{"id"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

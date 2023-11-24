@@ -25,6 +25,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyOneOfAddedId,
 			Text:        "added 'Rabbit' to the response body 'oneOf' list for the response status 200",
+			Args:        []any{"Rabbit", "200"},
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -35,6 +36,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyOneOfAddedId,
 			Text:        "added 'Breed3' to the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
+			Args:        []any{"Breed3", "/oneOf[#/components/schemas/Dog]/breed", "200"},
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -45,6 +47,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyOneOfAddedId,
 			Text:        "added 'RevisionSchema[1]:Dark brown types' to the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
+			Args:        []any{"RevisionSchema[1]:Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -71,6 +74,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyOneOfRemovedId,
 			Text:        "removed 'Rabbit' from the response body 'oneOf' list for the response status 200",
+			Args:        []any{"Rabbit", "200"},
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -81,6 +85,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyOneOfRemovedId,
 			Text:        "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' response property 'oneOf' list for the response status 200",
+			Args:        []any{"Breed3", "/oneOf[#/components/schemas/Dog]/breed", "200"},
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
@@ -91,6 +96,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyOneOfRemovedId,
 			Text:        "removed 'BaseSchema[1]:Dark brown types' from the '/oneOf[#/components/schemas/Fox]/breed' response property 'oneOf' list for the response status 200",
+			Args:        []any{"BaseSchema[1]:Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
 			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",

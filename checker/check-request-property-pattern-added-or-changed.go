@@ -36,13 +36,14 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 						}
 
 						source := (*operationsSources)[operationItem.Revision]
+						fullName := propertyFullName(propertyPath, propertyName)
 
 						if patternDiff.To == "" {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyPatternRemovedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyPatternRemovedId, patternDiff.From, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyPatternRemovedId, patternDiff.From, ColorizedValue(fullName)),
+								Args:        []any{patternDiff.From, fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -52,8 +53,8 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          RequestPropertyPatternAddedId,
 								Level:       WARN,
-								Text:        config.Localize(RequestPropertyPatternAddedId, patternDiff.To, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyPatternAddedId, patternDiff.To, ColorizedValue(fullName)),
+								Args:        []any{patternDiff.To, fullName},
 								Comment:     config.Localize("pattern-changed-warn-comment"),
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -70,8 +71,8 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          RequestPropertyPatternChangedId,
 								Level:       level,
-								Text:        config.Localize(RequestPropertyPatternChangedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), patternDiff.From, patternDiff.To),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyPatternChangedId, ColorizedValue(fullName), patternDiff.From, patternDiff.To),
+								Args:        []any{fullName, patternDiff.From, patternDiff.To},
 								Comment:     comment,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

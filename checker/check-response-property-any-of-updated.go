@@ -47,7 +47,7 @@ func ResponsePropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 								ResponseBodyAnyOfAddedId,
 								ColorizedValue(mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String()),
 								responseStatus),
-							Args:        []any{},
+							Args:        []any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String(), responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -63,7 +63,7 @@ func ResponsePropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 								ResponseBodyAnyOfRemovedId,
 								ColorizedValue(mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String()),
 								responseStatus),
-							Args:        []any{},
+							Args:        []any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String(), responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -79,15 +79,18 @@ func ResponsePropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 							}
 
 							if len(propertyDiff.AnyOfDiff.Added) > 0 {
+
+								fullName := propertyFullName(propertyPath, propertyName)
+
 								result = append(result, ApiChange{
 									Id:    ResponsePropertyAnyOfAddedId,
 									Level: INFO,
 									Text: config.Localize(
 										ResponsePropertyAnyOfAddedId,
 										ColorizedValue(propertyDiff.AnyOfDiff.Added.String()),
-										ColorizedValue(propertyFullName(propertyPath, propertyName)),
+										ColorizedValue(fullName),
 										responseStatus),
-									Args:        []any{},
+									Args:        []any{propertyDiff.AnyOfDiff.Added.String(), fullName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -96,15 +99,18 @@ func ResponsePropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 							}
 
 							if len(propertyDiff.AnyOfDiff.Deleted) > 0 {
+
+								fullName := propertyFullName(propertyPath, propertyName)
+
 								result = append(result, ApiChange{
 									Id:    ResponsePropertyAnyOfRemovedId,
 									Level: INFO,
 									Text: config.Localize(
 										ResponsePropertyAnyOfRemovedId,
 										ColorizedValue(propertyDiff.AnyOfDiff.Deleted.String()),
-										ColorizedValue(propertyFullName(propertyPath, propertyName)),
+										ColorizedValue(fullName),
 										responseStatus),
-									Args:        []any{},
+									Args:        []any{propertyDiff.AnyOfDiff.Deleted.String(), fullName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

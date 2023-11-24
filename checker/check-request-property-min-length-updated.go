@@ -39,7 +39,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								Id:          RequestBodyMinLengthIncreasedId,
 								Level:       ERR,
 								Text:        config.Localize(RequestBodyMinLengthIncreasedId, ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-								Args:        []any{},
+								Args:        []any{minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -50,7 +50,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								Id:          RequestBodyMinLengthDecreasedId,
 								Level:       INFO,
 								Text:        config.Localize(RequestBodyMinLengthDecreasedId, ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-								Args:        []any{},
+								Args:        []any{minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -72,12 +72,14 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							return
 						}
 
+						fullName := propertyFullName(propertyPath, propertyName)
+
 						if IsDecreasedValue(minLengthDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinLengthDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMinLengthDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyMinLengthDecreasedId, ColorizedValue(fullName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+								Args:        []any{fullName, minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -87,8 +89,8 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinLengthIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyMinLengthIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyMinLengthIncreasedId, ColorizedValue(fullName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+								Args:        []any{fullName, minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

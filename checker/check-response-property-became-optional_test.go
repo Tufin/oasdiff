@@ -21,6 +21,7 @@ func TestResponsePropertyBecameOptionalCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyBecameOptionalId,
 		Text:        "the response property 'data/name' became optional for the status '200'",
+		Args:        []any{"data/name", "200"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -46,6 +47,7 @@ func TestResponseWriteOnlyPropertyBecameOptionalCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseWriteOnlyPropertyBecameOptionalId,
 		Text:        "the response write-only property 'data/name' became optional for the status '200'",
+		Args:        []any{"data/name", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

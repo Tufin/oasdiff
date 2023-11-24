@@ -43,8 +43,8 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          ResponseBodyTypeChangedId,
 								Level:       ERR,
-								Text:        config.Localize(ResponseBodyTypeChangedId, empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
-								Args:        []any{},
+								Text:        config.Localize(ResponseBodyTypeChangedId, ColorizedValue(typeDiff.From), ColorizedValue(formatDiff.From), ColorizedValue(typeDiff.To), ColorizedValue(formatDiff.To), ColorizedValue(responseStatus)),
+								Args:        []any{typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -69,8 +69,8 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 								result = append(result, ApiChange{
 									Id:          ResponsePropertyTypeChangedId,
 									Level:       ERR,
-									Text:        config.Localize(ResponsePropertyTypeChangedId, empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To), ColorizedValue(responseStatus)),
-									Args:        []any{},
+									Text:        config.Localize(ResponsePropertyTypeChangedId, ColorizedValue(typeDiff.From), ColorizedValue(formatDiff.From), ColorizedValue(typeDiff.To), ColorizedValue(formatDiff.To), ColorizedValue(responseStatus)),
+									Args:        []any{typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

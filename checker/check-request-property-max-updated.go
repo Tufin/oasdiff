@@ -39,7 +39,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 								Id:          RequestBodyMaxDecreasedId,
 								Level:       ERR,
 								Text:        config.Localize(RequestBodyMaxDecreasedId, ColorizedValue(maxDiff.To)),
-								Args:        []any{},
+								Args:        []any{maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -50,7 +50,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 								Id:          RequestBodyMaxIncreasedId,
 								Level:       INFO,
 								Text:        config.Localize(RequestBodyMaxIncreasedId, ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
-								Args:        []any{},
+								Args:        []any{maxDiff.From, maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -71,12 +71,15 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							maxDiff.To == nil {
 							return
 						}
+
+						fullName := propertyFullName(propertyPath, propertyName)
+
 						if IsDecreasedValue(maxDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxDecreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMaxDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyMaxDecreasedId, ColorizedValue(fullName), ColorizedValue(maxDiff.To)),
+								Args:        []any{fullName, maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -86,8 +89,8 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMaxIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyMaxIncreasedId, ColorizedValue(fullName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+								Args:        []any{fullName, maxDiff.From, maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

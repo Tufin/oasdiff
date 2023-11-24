@@ -39,8 +39,8 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, ApiChange{
 							Id:          RequestBodyTypeChangedId,
 							Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-							Text:        config.Localize(RequestBodyTypeChangedId, empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
-							Args:        []any{},
+							Text:        config.Localize(RequestBodyTypeChangedId, ColorizedValue(typeDiff.From), ColorizedValue(formatDiff.From), ColorizedValue(typeDiff.To), ColorizedValue(formatDiff.To)),
+							Args:        []any{typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -65,11 +65,12 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 
 						if !typeDiff.Empty() || !formatDiff.Empty() {
 							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+							fullName := propertyFullName(propertyPath, propertyName)
 							result = append(result, ApiChange{
 								Id:          RequestPropertyTypeChangedId,
 								Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-								Text:        config.Localize(RequestPropertyTypeChangedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyTypeChangedId, ColorizedValue(fullName), ColorizedValue(typeDiff.From), ColorizedValue(formatDiff.From), ColorizedValue(typeDiff.To), ColorizedValue(formatDiff.To)),
+								Args:        []any{fullName, typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

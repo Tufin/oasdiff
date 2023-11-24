@@ -74,7 +74,7 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          RequestParameterTypeChangedId,
 						Level:       ERR,
-						Text:        config.Localize(RequestParameterTypeChangedId, ColorizedValue(paramLocation), ColorizedValue(paramName), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+						Text:        config.Localize(RequestParameterTypeChangedId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(typeDiff.From), ColorizedValue(formatDiff.From), ColorizedValue(typeDiff.To), ColorizedValue(formatDiff.To)),
 						Args:        []any{},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

@@ -49,11 +49,11 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 					defaultValueDiff := mediaTypeDiff.SchemaDiff.DefaultDiff
 
 					if defaultValueDiff.From == nil {
-						appendResultItem(RequestBodyDefaultValueAddedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.To))
+						appendResultItem(RequestBodyDefaultValueAddedId, ColorizedValue(mediaType), ColorizedValue(defaultValueDiff.To))
 					} else if defaultValueDiff.To == nil {
-						appendResultItem(RequestBodyDefaultValueRemovedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.From))
+						appendResultItem(RequestBodyDefaultValueRemovedId, ColorizedValue(mediaType), ColorizedValue(defaultValueDiff.From))
 					} else {
-						appendResultItem(RequestBodyDefaultValueChangedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To))
+						appendResultItem(RequestBodyDefaultValueChangedId, ColorizedValue(mediaType), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To))
 					}
 				}
 
@@ -67,11 +67,11 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 						defaultValueDiff := propertyDiff.DefaultDiff
 
 						if defaultValueDiff.From == nil {
-							appendResultItem(RequestPropertyDefaultValueAddedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.To))
+							appendResultItem(RequestPropertyDefaultValueAddedId, ColorizedValue(propertyName), ColorizedValue(defaultValueDiff.To))
 						} else if defaultValueDiff.To == nil {
-							appendResultItem(RequestPropertyDefaultValueRemovedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.From))
+							appendResultItem(RequestPropertyDefaultValueRemovedId, ColorizedValue(propertyName), ColorizedValue(defaultValueDiff.From))
 						} else {
-							appendResultItem(RequestPropertyDefaultValueChangedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To))
+							appendResultItem(RequestPropertyDefaultValueChangedId, ColorizedValue(propertyName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To))
 						}
 					})
 			}

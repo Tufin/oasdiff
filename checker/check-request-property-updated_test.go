@@ -22,6 +22,7 @@ func TestRequiredRequestPropertyAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.NewRequiredRequestPropertyId,
 		Text:        "added the new required request property 'description'",
+		Args:        []any{"description"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
@@ -44,6 +45,7 @@ func TestRequiredRequestPropertiesAdded(t *testing.T) {
 		{
 			Id:          checker.NewRequiredRequestPropertyId,
 			Text:        "added the new required request property 'description'",
+			Args:        []any{"description"},
 			Level:       checker.ERR,
 			Operation:   "POST",
 			Path:        "/products",
@@ -53,6 +55,7 @@ func TestRequiredRequestPropertiesAdded(t *testing.T) {
 		{
 			Id:          checker.NewOptionalRequestPropertyId,
 			Text:        "added the new optional request property 'info'",
+			Args:        []any{"info"},
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/products",
@@ -76,6 +79,7 @@ func TestRequiredOptionalPropertyAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.NewOptionalRequestPropertyId,
 		Text:        "added the new optional request property 'description'",
+		Args:        []any{"description"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
@@ -98,6 +102,7 @@ func TestRequiredRequestPropertyRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyRemovedId,
 		Text:        "removed the request property 'description'",
+		Args:        []any{"description"},
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/products",

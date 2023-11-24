@@ -23,6 +23,7 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 
 		Id:          checker.ResponseRequiredPropertyAddedId,
 		Text:        "added the required property 'data/new' to the response with the '200' status",
+		Args:        []any{"data/new", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

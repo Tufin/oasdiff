@@ -54,12 +54,15 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 						if propertyItem.ReadOnly {
 							return
 						}
+
+						fullName := propertyFullName(propertyPath, propertyName)
+
 						if slices.Contains(parent.Revision.Required, propertyName) {
 							result = append(result, ApiChange{
 								Id:          NewRequiredRequestPropertyId,
 								Level:       ERR,
-								Text:        config.Localize(NewRequiredRequestPropertyId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Text:        config.Localize(NewRequiredRequestPropertyId, ColorizedValue(fullName)),
+								Args:        []any{fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -69,8 +72,8 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:          NewOptionalRequestPropertyId,
 								Level:       INFO,
-								Text:        config.Localize(NewOptionalRequestPropertyId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Text:        config.Localize(NewOptionalRequestPropertyId, ColorizedValue(fullName)),
+								Args:        []any{fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

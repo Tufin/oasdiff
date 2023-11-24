@@ -21,6 +21,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.ResponsePropertyDefaultValueChangedId,
 		Text:        "the 'created' response's property default value changed from '2020-01-01T00:00:00Z' to '2020-02-01T00:00:00Z' for the status '200'",
+		Args:        []any{"created", "2020-01-01T00:00:00Z", "2020-02-01T00:00:00Z", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -30,6 +31,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueChangedId,
 		Text:        "the 'enabled' response's property default value changed from 'false' to 'true' for the status '200'",
+		Args:        []any{"enabled", false, true, "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -54,6 +56,7 @@ func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseBodyDefaultValueChangedId,
 		Text:        "the response body 'text/plain' default value changed from 'Error' to 'new default value' for the status '404'",
+		Args:        []any{"text/plain", "Error", "new default value", "404"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -80,6 +83,7 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.ResponseBodyDefaultValueAddedId,
 		Text:        "the response body 'text/plain' default value 'Error' was added for the status '404'",
+		Args:        []any{"text/plain", "Error", "404"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -89,6 +93,7 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueAddedId,
 		Text:        "the 'created' response's property default value '2020-01-01T00:00:00Z' was added for the status '200'",
+		Args:        []any{"created", "2020-01-01T00:00:00Z", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -115,6 +120,7 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.ResponseBodyDefaultValueRemovedId,
 		Text:        "the response body 'text/plain' default value 'Error' was removed for the status '404'",
+		Args:        []any{"text/plain", "Error", "404"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -124,6 +130,7 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueRemovedId,
 		Text:        "the 'created' response's property default value '2020-01-01T00:00:00Z' was removed for the status '200'",
+		Args:        []any{"created", "2020-01-01T00:00:00Z", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

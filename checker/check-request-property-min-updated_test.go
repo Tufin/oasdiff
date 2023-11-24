@@ -23,6 +23,7 @@ func TestRequestPropertyMinIncreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMinIncreasedId,
 		Text:        "the 'age' request property's min was increased to '15.00'",
+		Args:        []any{"age", 15.0},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/pets",
@@ -46,6 +47,7 @@ func TestRequestPropertyMinDecreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMinDecreasedId,
 		Text:        "the 'age' request property's min was decreased from '15.00' to '10.00'",
+		Args:        []any{"age", 15.0, 10.0},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",

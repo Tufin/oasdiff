@@ -62,11 +62,13 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								id = ResponseOptionalPropertyBecameWriteOnlyId
 							}
 
+							fullName := propertyFullName(propertyPath, propertyName)
+
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Args:        []any{},
+								Text:        config.Localize(id, ColorizedValue(fullName), ColorizedValue(responseStatus)),
+								Args:        []any{fullName, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -96,11 +98,13 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								id = ResponseOptionalPropertyBecameReadOnlyId
 							}
 
+							fullName := propertyFullName(propertyPath, propertyName)
+
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Args:        []any{},
+								Text:        config.Localize(id, ColorizedValue(fullName), ColorizedValue(responseStatus)),
+								Args:        []any{fullName, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
