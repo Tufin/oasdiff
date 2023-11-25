@@ -22,6 +22,7 @@ func TestRequestParameterMinIncreased(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMinIncreasedId,
 		Text:        "for the 'path' request parameter 'groupId', the min was increased from '1.00' to '10.00'",
+		Args:        []any{"path", "groupId", 1.0, 10.0},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -44,6 +45,7 @@ func TestRequestParameterMinDecreased(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMinDecreasedId,
 		Text:        "for the 'path' request parameter 'groupId', the min was decreased from '10.00' to '1.00'",
+		Args:        []any{"path", "groupId", 10.0, 1.0},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

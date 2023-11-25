@@ -34,8 +34,8 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 				result = append(result, ApiChange{
 					Id:          messageId,
 					Level:       INFO,
-					Text:        config.Localize(messageId, a...),
-					Args:        []any{},
+					Text:        config.Localize(messageId, ColorizedValues(a)...),
+					Args:        a,
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -49,11 +49,11 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 					defaultValueDiff := mediaTypeDiff.SchemaDiff.DefaultDiff
 
 					if defaultValueDiff.From == nil {
-						appendResultItem(RequestBodyDefaultValueAddedId, ColorizedValue(mediaType), ColorizedValue(defaultValueDiff.To))
+						appendResultItem(RequestBodyDefaultValueAddedId, mediaType, defaultValueDiff.To)
 					} else if defaultValueDiff.To == nil {
-						appendResultItem(RequestBodyDefaultValueRemovedId, ColorizedValue(mediaType), ColorizedValue(defaultValueDiff.From))
+						appendResultItem(RequestBodyDefaultValueRemovedId, mediaType, defaultValueDiff.From)
 					} else {
-						appendResultItem(RequestBodyDefaultValueChangedId, ColorizedValue(mediaType), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To))
+						appendResultItem(RequestBodyDefaultValueChangedId, mediaType, defaultValueDiff.From, defaultValueDiff.To)
 					}
 				}
 
@@ -67,11 +67,11 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 						defaultValueDiff := propertyDiff.DefaultDiff
 
 						if defaultValueDiff.From == nil {
-							appendResultItem(RequestPropertyDefaultValueAddedId, ColorizedValue(propertyName), ColorizedValue(defaultValueDiff.To))
+							appendResultItem(RequestPropertyDefaultValueAddedId, propertyName, defaultValueDiff.To)
 						} else if defaultValueDiff.To == nil {
-							appendResultItem(RequestPropertyDefaultValueRemovedId, ColorizedValue(propertyName), ColorizedValue(defaultValueDiff.From))
+							appendResultItem(RequestPropertyDefaultValueRemovedId, propertyName, defaultValueDiff.From)
 						} else {
-							appendResultItem(RequestPropertyDefaultValueChangedId, ColorizedValue(propertyName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To))
+							appendResultItem(RequestPropertyDefaultValueChangedId, propertyName, defaultValueDiff.From, defaultValueDiff.To)
 						}
 					})
 			}

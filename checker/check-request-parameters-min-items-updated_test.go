@@ -22,6 +22,7 @@ func TestRequestParameterMinItemsIncreased(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMinItemsIncreasedId,
 		Text:        "for the 'query' request parameter 'category', the minItems was increased from '2' to '3'",
+		Args:        []any{"query", "category", uint64(2), uint64(3)},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -44,6 +45,7 @@ func TestRequestParameterMinItemsDecreased(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMinItemsDecreasedId,
 		Text:        "for the 'query' request parameter 'category', the minItems was decreased from '3' to '2'",
+		Args:        []any{"query", "category", uint64(3), uint64(2)},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

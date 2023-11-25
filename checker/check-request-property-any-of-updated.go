@@ -43,7 +43,7 @@ func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 						Text: config.Localize(
 							RequestBodyAnyOfAddedId,
 							ColorizedValue(mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String())),
-						Args:        []any{},
+						Args:        []any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String()},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -58,7 +58,7 @@ func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 						Text: config.Localize(
 							RequestBodyAnyOfRemovedId,
 							ColorizedValue(mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String())),
-						Args:        []any{},
+						Args:        []any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String()},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -73,6 +73,8 @@ func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 							return
 						}
 
+						fullName := propertyFullName(propertyPath, propertyName)
+
 						if len(propertyDiff.AnyOfDiff.Added) > 0 {
 							result = append(result, ApiChange{
 								Id:    RequestPropertyAnyOfAddedId,
@@ -80,8 +82,8 @@ func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 								Text: config.Localize(
 									RequestPropertyAnyOfAddedId,
 									ColorizedValue(propertyDiff.AnyOfDiff.Added.String()),
-									ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+									ColorizedValue(fullName)),
+								Args:        []any{propertyDiff.AnyOfDiff.Added.String(), fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -96,8 +98,8 @@ func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 								Text: config.Localize(
 									RequestPropertyAnyOfRemovedId,
 									ColorizedValue(propertyDiff.AnyOfDiff.Deleted.String()),
-									ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+									ColorizedValue(fullName)),
+								Args:        []any{propertyDiff.AnyOfDiff.Deleted.String(), fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

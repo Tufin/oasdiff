@@ -28,6 +28,7 @@ func TestRequestBodyMaxLengthDecreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMaxLengthIncreasedId,
 		Text:        "the request's body maxLength was increased from '50' to '100'",
+		Args:        []any{maxLength, newMaxLength},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",
@@ -56,6 +57,7 @@ func TestRequestBodyMaxLengthIncreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMaxLengthDecreasedId,
 		Text:        "the request's body maxLength was decreased to '50'",
+		Args:        []any{newMaxLength},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/pets",
@@ -83,6 +85,7 @@ func TestRequestPropertyMaxLengthDecreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMaxLengthDecreasedId,
 		Text:        "the 'description' request property's maxLength was decreased to '50'",
+		Args:        []any{"description", newMaxLength},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/pets",
@@ -110,6 +113,7 @@ func TestRequestPropertyMaxLengthIncreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMaxLengthIncreasedId,
 		Text:        "the 'description' request property's maxLength was increased from '50' to '100'",
+		Args:        []any{"description", maxLength, newMaxLength},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",

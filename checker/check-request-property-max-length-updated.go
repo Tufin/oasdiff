@@ -39,7 +39,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								Id:          RequestBodyMaxLengthDecreasedId,
 								Level:       ERR,
 								Text:        config.Localize(RequestBodyMaxLengthDecreasedId, ColorizedValue(maxLengthDiff.To)),
-								Args:        []any{},
+								Args:        []any{maxLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -50,7 +50,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								Id:          RequestBodyMaxLengthIncreasedId,
 								Level:       INFO,
 								Text:        config.Localize(RequestBodyMaxLengthIncreasedId, ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
-								Args:        []any{},
+								Args:        []any{maxLengthDiff.From, maxLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -72,12 +72,14 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							return
 						}
 
+						fullName := propertyFullName(propertyPath, propertyName)
+
 						if IsDecreasedValue(maxLengthDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxLengthDecreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMaxLengthDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyMaxLengthDecreasedId, ColorizedValue(fullName), ColorizedValue(maxLengthDiff.To)),
+								Args:        []any{fullName, maxLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -87,8 +89,8 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxLengthIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMaxLengthIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyMaxLengthIncreasedId, ColorizedValue(fullName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+								Args:        []any{fullName, maxLengthDiff.From, maxLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

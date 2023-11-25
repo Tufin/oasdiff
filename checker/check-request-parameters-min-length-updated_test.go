@@ -23,6 +23,7 @@ func TestRequestParameterMinLengthIncreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMinLengthIncreasedId,
 		Text:        "for the 'query' request parameter 'name', the minLength was increased from '3' to '5'",
+		Args:        []any{"query", "name", uint64(3), uint64(5)},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/test",
@@ -46,6 +47,7 @@ func TestRequestParameterMinLengthDecreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMinLengthDecreasedId,
 		Text:        "for the 'query' request parameter 'name', the minLength was decreased from '5' to '3'",
+		Args:        []any{"query", "name", uint64(5), uint64(3)},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/test",

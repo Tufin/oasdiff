@@ -24,6 +24,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'path' request parameter 'groupId', the type/format was changed from 'string'/'' to 'int'/''",
+		Args:        []any{"path", "groupId", "string", "", "int", ""},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -49,6 +50,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'query' request parameter 'token', the type/format was changed from 'string'/'uuid' to 'int'/'uuid'",
+		Args:        []any{"query", "token", "string", "uuid", "int", "uuid"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -74,6 +76,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'header' request parameter 'X-Request-ID', the type/format was changed from 'string'/'uuid' to 'int'/'uuid'",
+		Args:        []any{"header", "X-Request-ID", "string", "uuid", "int", "uuid"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -99,6 +102,7 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'path' request parameter 'groupId', the type/format was changed from 'string'/'' to 'string'/'uuid'",
+		Args:        []any{"path", "groupId", "string", "", "string", "uuid"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -124,6 +128,7 @@ func TestRequestQueryParamFormatChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'query' request parameter 'token', the type/format was changed from 'string'/'uuid' to 'string'/'uri'",
+		Args:        []any{"query", "token", "string", "uuid", "string", "uri"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -149,6 +154,7 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Text:        "for the 'header' request parameter 'X-Request-ID', the type/format was changed from 'string'/'uuid' to 'string'/'uri'",
+		Args:        []any{"header", "X-Request-ID", "string", "uuid", "string", "uri"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",

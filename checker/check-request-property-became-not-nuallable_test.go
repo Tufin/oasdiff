@@ -22,6 +22,7 @@ func TestRequestPropertyBecameNotNullable(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecomeNotNullableId,
 		Text:        "the request property 'name' became not nullable",
+		Args:        []any{"name"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -45,6 +46,7 @@ func TestRequestPropertyBecameNullable(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecomeNullableId,
 		Text:        "the request property 'name' became nullable",
+		Args:        []any{"name"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

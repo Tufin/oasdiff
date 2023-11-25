@@ -42,8 +42,8 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 				result = append(result, ApiChange{
 					Id:          messageId,
 					Level:       INFO,
-					Text:        config.Localize(messageId, a...),
-					Args:        []any{},
+					Text:        config.Localize(messageId, ColorizedValues(a)...),
+					Args:        a,
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -94,7 +94,7 @@ func processDiscriminatorDiffForRequest(
 		if propertyName == "" {
 			appendResultItem(messageIdPrefix + "-added")
 		} else {
-			appendResultItem(messageIdPrefix+"-added", ColorizedValue(propertyName))
+			appendResultItem(messageIdPrefix+"-added", propertyName)
 		}
 		return
 	}
@@ -102,7 +102,7 @@ func processDiscriminatorDiffForRequest(
 		if propertyName == "" {
 			appendResultItem(messageIdPrefix + "-removed")
 		} else {
-			appendResultItem(messageIdPrefix+"-removed", ColorizedValue(propertyName))
+			appendResultItem(messageIdPrefix+"-removed", propertyName)
 		}
 		return
 	}
@@ -110,13 +110,13 @@ func processDiscriminatorDiffForRequest(
 	if discriminatorDiff.PropertyNameDiff != nil {
 		if propertyName == "" {
 			appendResultItem(messageIdPrefix+"-property-name-changed",
-				ColorizedValue(discriminatorDiff.PropertyNameDiff.From),
-				ColorizedValue(discriminatorDiff.PropertyNameDiff.To))
+				discriminatorDiff.PropertyNameDiff.From,
+				discriminatorDiff.PropertyNameDiff.To)
 		} else {
 			appendResultItem(messageIdPrefix+"-property-name-changed",
-				ColorizedValue(propertyName),
-				ColorizedValue(discriminatorDiff.PropertyNameDiff.From),
-				ColorizedValue(discriminatorDiff.PropertyNameDiff.To))
+				propertyName,
+				discriminatorDiff.PropertyNameDiff.From,
+				discriminatorDiff.PropertyNameDiff.To)
 		}
 	}
 
@@ -124,37 +124,37 @@ func processDiscriminatorDiffForRequest(
 		if len(discriminatorDiff.MappingDiff.Added) > 0 {
 			if propertyName == "" {
 				appendResultItem(messageIdPrefix+"-mapping-added",
-					ColorizedValue(discriminatorDiff.MappingDiff.Added))
+					discriminatorDiff.MappingDiff.Added)
 			} else {
 				appendResultItem(messageIdPrefix+"-mapping-added",
-					ColorizedValue(discriminatorDiff.MappingDiff.Added),
-					ColorizedValue(propertyName))
+					discriminatorDiff.MappingDiff.Added,
+					propertyName)
 			}
 		}
 
 		if len(discriminatorDiff.MappingDiff.Deleted) > 0 {
 			if propertyName == "" {
 				appendResultItem(messageIdPrefix+"-mapping-deleted",
-					ColorizedValue(discriminatorDiff.MappingDiff.Deleted))
+					discriminatorDiff.MappingDiff.Deleted)
 			} else {
 				appendResultItem(messageIdPrefix+"-mapping-deleted",
-					ColorizedValue(discriminatorDiff.MappingDiff.Deleted),
-					ColorizedValue(propertyName))
+					discriminatorDiff.MappingDiff.Deleted,
+					propertyName)
 			}
 		}
 
 		for k, v := range discriminatorDiff.MappingDiff.Modified {
 			if propertyName == "" {
 				appendResultItem(messageIdPrefix+"-mapping-changed",
-					ColorizedValue(k),
-					ColorizedValue(v.From),
-					ColorizedValue(v.To))
+					k,
+					v.From,
+					v.To)
 			} else {
 				appendResultItem(messageIdPrefix+"-mapping-changed",
-					ColorizedValue(k),
-					ColorizedValue(v.From),
-					ColorizedValue(v.To),
-					ColorizedValue(propertyName))
+					k,
+					v.From,
+					v.To,
+					propertyName)
 
 			}
 		}

@@ -36,12 +36,14 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							return
 						}
 
+						fullName := propertyFullName(propertyPath, propertyName)
+
 						for _, enumVal := range enumDiff.Deleted {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyEnumValueRemovedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(fullName)),
+								Args:        []any{enumVal, fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -53,8 +55,8 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyEnumValueAddedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyEnumValueAddedId, ColorizedValue(enumVal), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Text:        config.Localize(RequestPropertyEnumValueAddedId, ColorizedValue(enumVal), ColorizedValue(fullName)),
+								Args:        []any{enumVal, fullName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -49,7 +49,7 @@ func RequestParameterMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSour
 						Id:          id,
 						Level:       level,
 						Text:        config.Localize(id, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-						Args:        []any{},
+						Args:        []any{paramLocation, paramName, minLengthDiff.From, minLengthDiff.To},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
