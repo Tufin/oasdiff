@@ -22,6 +22,7 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 	require.Equal(t, checker.SecurityChange{
 		Id:      checker.APIGlobalSecurityAddedCheckId,
 		Text:    "the security scheme 'petstore_auth' was added to the API",
+		Args:    []any{"petstore_auth"},
 		Comment: "",
 		Level:   checker.INFO,
 	}, errs[0])
@@ -41,6 +42,7 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 	require.Equal(t, checker.SecurityChange{
 		Id:      checker.APIGlobalSecurityRemovedCheckId,
 		Text:    "the security scheme 'petstore_auth' was removed from the API",
+		Args:    []any{"petstore_auth"},
 		Comment: "",
 		Level:   checker.INFO,
 	}, errs[0])
@@ -61,6 +63,7 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 	require.Equal(t, checker.SecurityChange{
 		Id:      checker.APIGlobalSecurityScopeRemovedId,
 		Text:    "the security scope 'read:pets' was removed from the global security scheme 'petstore_auth'",
+		Args:    []any{"read:pets", "petstore_auth"},
 		Comment: "",
 		Level:   checker.INFO,
 	}, errs[0])
@@ -81,6 +84,7 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 	require.Equal(t, checker.SecurityChange{
 		Id:      checker.APIGlobalSecurityScopeAddedId,
 		Text:    "the security scope 'read:pets' was added to the global security scheme 'petstore_auth'",
+		Args:    []any{"read:pets", "petstore_auth"},
 		Comment: "",
 		Level:   checker.INFO,
 	}, errs[0])
