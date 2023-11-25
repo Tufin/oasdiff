@@ -78,7 +78,7 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 								return
 							}
 
-							fullName := propertyFullName(propertyPath, propertyName)
+							propName := propertyFullName(propertyPath, propertyName)
 
 							if len(propertyDiff.OneOfDiff.Added) > 0 {
 								result = append(result, ApiChange{
@@ -87,9 +87,9 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 									Text: config.Localize(
 										ResponsePropertyOneOfAddedId,
 										ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
-										ColorizedValue(fullName),
+										ColorizedValue(propName),
 										responseStatus),
-									Args:        []any{propertyDiff.OneOfDiff.Added.String(), fullName, responseStatus},
+									Args:        []any{propertyDiff.OneOfDiff.Added.String(), propName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -104,9 +104,9 @@ func ResponsePropertyOneOfUpdated(diffReport *diff.Diff, operationsSources *diff
 									Text: config.Localize(
 										ResponsePropertyOneOfRemovedId,
 										ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
-										ColorizedValue(fullName),
+										ColorizedValue(propName),
 										responseStatus),
-									Args:        []any{propertyDiff.OneOfDiff.Deleted.String(), fullName, responseStatus},
+									Args:        []any{propertyDiff.OneOfDiff.Deleted.String(), propName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

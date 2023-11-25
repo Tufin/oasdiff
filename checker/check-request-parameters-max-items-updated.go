@@ -49,7 +49,7 @@ func RequestParameterMaxItemsUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						Id:          id,
 						Level:       level,
 						Text:        config.Localize(id, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxItemsDiff.From), ColorizedValue(maxItemsDiff.To)),
-						Args:        []any{},
+						Args:        []any{paramLocation, paramName, maxItemsDiff.From, maxItemsDiff.To},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

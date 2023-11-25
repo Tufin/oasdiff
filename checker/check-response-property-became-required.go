@@ -81,13 +81,13 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 									continue
 								}
 
-								fullName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
+								propName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
 
 								result = append(result, ApiChange{
 									Id:          id,
 									Level:       INFO,
-									Text:        config.Localize(id, ColorizedValue(fullName), ColorizedValue(responseStatus)),
-									Args:        []any{fullName, responseStatus},
+									Text:        config.Localize(id, ColorizedValue(propName), ColorizedValue(responseStatus)),
+									Args:        []any{propName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

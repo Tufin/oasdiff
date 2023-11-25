@@ -66,14 +66,14 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							return
 						}
 
-						fullName := propertyFullName(propertyPath, propertyName)
+						propName := propertyFullName(propertyPath, propertyName)
 
 						if nullableDiff.From == true {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecomeNotNullableId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyBecomeNotNullableId, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(RequestPropertyBecomeNotNullableId, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								Path:        path,
 								Source:      source,
@@ -83,8 +83,8 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecomeNullableId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyBecomeNullableId, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(RequestPropertyBecomeNullableId, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								Path:        path,
 								Source:      source,

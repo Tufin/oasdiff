@@ -72,14 +72,14 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							return
 						}
 
-						fullName := propertyFullName(propertyPath, propertyName)
+						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsDecreasedValue(minLengthDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinLengthDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMinLengthDecreasedId, ColorizedValue(fullName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-								Args:        []any{fullName, minLengthDiff.From, minLengthDiff.To},
+								Text:        config.Localize(RequestPropertyMinLengthDecreasedId, ColorizedValue(propName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+								Args:        []any{propName, minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -89,8 +89,8 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinLengthIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyMinLengthIncreasedId, ColorizedValue(fullName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-								Args:        []any{fullName, minLengthDiff.From, minLengthDiff.To},
+								Text:        config.Localize(RequestPropertyMinLengthIncreasedId, ColorizedValue(propName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
+								Args:        []any{propName, minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

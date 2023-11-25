@@ -72,14 +72,14 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							return
 						}
 
-						fullName := propertyFullName(propertyPath, propertyName)
+						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsDecreasedValue(maxDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxDecreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMaxDecreasedId, ColorizedValue(fullName), ColorizedValue(maxDiff.To)),
-								Args:        []any{fullName, maxDiff.To},
+								Text:        config.Localize(RequestPropertyMaxDecreasedId, ColorizedValue(propName), ColorizedValue(maxDiff.To)),
+								Args:        []any{propName, maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -89,8 +89,8 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMaxIncreasedId, ColorizedValue(fullName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
-								Args:        []any{fullName, maxDiff.From, maxDiff.To},
+								Text:        config.Localize(RequestPropertyMaxIncreasedId, ColorizedValue(propName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
+								Args:        []any{propName, maxDiff.From, maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

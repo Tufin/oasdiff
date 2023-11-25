@@ -22,6 +22,7 @@ func TestRequestBodyMediaTypeAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMediaTypeAddedId,
 		Text:        "added the media type application/json to the request body",
+		Args:        []any{"application/json"},
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -45,6 +46,7 @@ func TestRequestBodyMediaTypeRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMediaTypeRemovedId,
 		Text:        "removed the media type application/json from the request body",
+		Args:        []any{"application/json"},
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",

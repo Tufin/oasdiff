@@ -51,7 +51,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							return
 						}
 
-						fullName := propertyFullName(propertyPath, propertyName)
+						propName := propertyFullName(propertyPath, propertyName)
 
 						if slices.Contains(parent.Base.Required, propertyName) {
 							id := RequestRequiredPropertyBecameNonWriteOnlyCheckId
@@ -62,8 +62,8 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(id, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -79,8 +79,8 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          id,
 							Level:       INFO,
-							Text:        config.Localize(id, ColorizedValue(fullName)),
-							Args:        []any{fullName},
+							Text:        config.Localize(id, ColorizedValue(propName)),
+							Args:        []any{propName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -100,7 +100,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							return
 						}
 
-						fullName := propertyFullName(propertyPath, propertyName)
+						propName := propertyFullName(propertyPath, propertyName)
 
 						if slices.Contains(parent.Base.Required, propertyName) {
 							id := RequestRequiredPropertyBecameNonReadOnlyCheckId
@@ -110,8 +110,8 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(id, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -127,8 +127,8 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          id,
 							Level:       INFO,
-							Text:        config.Localize(id, ColorizedValue(fullName)),
-							Args:        []any{fullName},
+							Text:        config.Localize(id, ColorizedValue(propName)),
+							Args:        []any{propName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -72,14 +72,14 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							return
 						}
 
-						fullName := propertyFullName(propertyPath, propertyName)
+						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsIncreasedValue(minDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinIncreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMinIncreasedId, ColorizedValue(fullName), ColorizedValue(minDiff.To)),
-								Args:        []any{fullName, minDiff.To},
+								Text:        config.Localize(RequestPropertyMinIncreasedId, ColorizedValue(propName), ColorizedValue(minDiff.To)),
+								Args:        []any{propName, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -89,8 +89,8 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMinDecreasedId, ColorizedValue(fullName), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
-								Args:        []any{fullName, minDiff.From, minDiff.To},
+								Text:        config.Localize(RequestPropertyMinDecreasedId, ColorizedValue(propName), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Args:        []any{propName, minDiff.From, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

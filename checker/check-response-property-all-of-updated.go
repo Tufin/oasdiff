@@ -80,7 +80,7 @@ func ResponsePropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 
 							if len(propertyDiff.AllOfDiff.Added) > 0 {
 
-								fullName := propertyFullName(propertyPath, propertyName)
+								propName := propertyFullName(propertyPath, propertyName)
 
 								result = append(result, ApiChange{
 									Id:    ResponsePropertyAllOfAddedId,
@@ -88,9 +88,9 @@ func ResponsePropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 									Text: config.Localize(
 										ResponsePropertyAllOfAddedId,
 										ColorizedValue(propertyDiff.AllOfDiff.Added.String()),
-										ColorizedValue(fullName),
+										ColorizedValue(propName),
 										responseStatus),
-									Args:        []any{propertyDiff.AllOfDiff.Added.String(), fullName, responseStatus},
+									Args:        []any{propertyDiff.AllOfDiff.Added.String(), propName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -100,7 +100,7 @@ func ResponsePropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 
 							if len(propertyDiff.AllOfDiff.Deleted) > 0 {
 
-								fullName := propertyFullName(propertyPath, propertyName)
+								propName := propertyFullName(propertyPath, propertyName)
 
 								result = append(result, ApiChange{
 									Id:    ResponsePropertyAllOfRemovedId,
@@ -108,9 +108,9 @@ func ResponsePropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 									Text: config.Localize(
 										ResponsePropertyAllOfRemovedId,
 										ColorizedValue(propertyDiff.AllOfDiff.Deleted.String()),
-										ColorizedValue(fullName),
+										ColorizedValue(propName),
 										responseStatus),
-									Args:        []any{propertyDiff.AllOfDiff.Deleted.String(), fullName, responseStatus},
+									Args:        []any{propertyDiff.AllOfDiff.Deleted.String(), propName, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

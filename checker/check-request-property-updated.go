@@ -34,12 +34,12 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 						if !propertyItem.ReadOnly {
 							source := (*operationsSources)[operationItem.Revision]
-							fullName := propertyFullName(propertyPath, propertyName)
+							propName := propertyFullName(propertyPath, propertyName)
 							result = append(result, ApiChange{
 								Id:          RequestPropertyRemovedId,
 								Level:       WARN,
-								Text:        config.Localize(RequestPropertyRemovedId, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(RequestPropertyRemovedId, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -55,14 +55,14 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							return
 						}
 
-						fullName := propertyFullName(propertyPath, propertyName)
+						propName := propertyFullName(propertyPath, propertyName)
 
 						if slices.Contains(parent.Revision.Required, propertyName) {
 							result = append(result, ApiChange{
 								Id:          NewRequiredRequestPropertyId,
 								Level:       ERR,
-								Text:        config.Localize(NewRequiredRequestPropertyId, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(NewRequiredRequestPropertyId, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -72,8 +72,8 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:          NewOptionalRequestPropertyId,
 								Level:       INFO,
-								Text:        config.Localize(NewOptionalRequestPropertyId, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(NewOptionalRequestPropertyId, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

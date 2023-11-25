@@ -101,13 +101,13 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 
-							fullName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
+							propName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
 
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecameRequiredId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -127,13 +127,13 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 
-							fullName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
+							propName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
 
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecameOptionalId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(fullName)),
-								Args:        []any{fullName},
+								Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(propName)),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
