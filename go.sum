@@ -36,8 +36,8 @@ github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826/go.mod h1:TaXosZuwdSHYgviHp1DAtfrULt5eUgsSMsZf+YrPgl8=
 github.com/oasdiff/go-common v0.2.27 h1:KrXKvOZOAt9BkgYgGOe8cqof+P5L/ASGihQNMSeF2vk=
 github.com/oasdiff/go-common v0.2.27/go.mod h1:aF7FmHg0gJrOkWfnAQGkssImYgPwzmzYS+iXXpN6XSg=
-github.com/oasdiff/telemetry v0.1.1 h1:DpWMzjrPLQS5T/1t4OJIyw20P3wxB3AAOa8VlKBVtqY=
-github.com/oasdiff/telemetry v0.1.1/go.mod h1:FBsQ9k09Fje4SYQpBFC4KdyZKxF/zPRevEwsZzA3bu4=
+github.com/oasdiff/telemetry v0.1.2 h1:hkmA5YTISVF2/zWa23y29WdPws1Q53pyLOFYMHXoZ1U=
+github.com/oasdiff/telemetry v0.1.2/go.mod h1:Y0DaW/CasxZ+vzR54btj430XsL6DGF+rMbJkRld6u3M=
 github.com/perimeterx/marshmallow v1.1.5 h1:a2LALqQ1BlHM8PZblsDdidgv1mWi1DgC2UmX50IvK2s=
 github.com/perimeterx/marshmallow v1.1.5/go.mod h1:dsXbUu8CRzfYP5a87xpp0xq9S3u0Vchtcl8we9tYaXw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

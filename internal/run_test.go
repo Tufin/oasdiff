@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/oasdiff/telemetry/model"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/internal"
@@ -25,7 +26,7 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	os.Setenv("OASDIFF_NO_TELEMETRY", "1")
+	os.Setenv(model.EnvNoTelemetry, "1")
 }
 func Test_InvalidCmd(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff invalid"), io.Discard, io.Discard))
