@@ -9,7 +9,7 @@ const (
 	RequestPropertyBecameOptionalId = "request-property-became-optional"
 )
 
-func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -79,7 +79,6 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							Source:      source,
 						})
 					}
-
 				}
 
 				CheckModifiedPropertiesDiff(

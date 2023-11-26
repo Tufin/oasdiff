@@ -11,7 +11,7 @@ const (
 	RequestPropertyOneOfRemovedId = "request-property-one-of-removed"
 )
 
-func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result

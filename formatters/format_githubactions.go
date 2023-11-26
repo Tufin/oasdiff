@@ -18,6 +18,7 @@ var githubActionsSeverity = map[checker.Level]string{
 
 type GitHubActionsFormatter struct {
 	notImplementedFormatter
+	Localizer checker.Localizer
 }
 
 func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
@@ -55,7 +56,7 @@ func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, o
 		}
 
 		// all annotated messages must be one-line, due to GitHub Actions limitations
-		message := StripANSIEscapeCodes([]byte(strings.ReplaceAll(change.GetText(), "\n", "%0A")))
+		message := strings.ReplaceAll(change.GetUncolorizedText(f.Localizer), "\n", "%0A")
 
 		buf.WriteString(fmt.Sprintf("::%s %s::%s\n", githubActionsSeverity[change.GetLevel()], strings.Join(params, ","), message))
 	}

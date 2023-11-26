@@ -28,17 +28,16 @@ func TestSecurityChange(t *testing.T) {
 	require.Equal(t, 2, securityChange.GetSourceLineEnd())
 	require.Equal(t, 3, securityChange.GetSourceColumn())
 	require.Equal(t, 4, securityChange.GetSourceColumnEnd())
-	require.Equal(t, "error, in security text [id]. comment", securityChange.LocalizedError(checker.NewDefaultLocalizer()))
-	require.Equal(t, "error, in security text [id]. comment", securityChange.Error())
+	require.Equal(t, "error, in security text [id]. comment", securityChange.LocalizedError(MockLocalizer))
 }
 
 func TestSecurityChange_MatchIgnore(t *testing.T) {
-	require.True(t, securityChange.MatchIgnore("", "error, in security text [id]. comment"))
+	require.True(t, securityChange.MatchIgnore("", "error, in security text [id]. comment", MockLocalizer))
 }
 
 func TestSecurityChange_PrettyPiped(t *testing.T) {
 	piped := true
 	save := checker.SetPipedOutput(&piped)
 	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error, in security text [id]. comment", securityChange.PrettyErrorText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "error, in security text [id]. comment", securityChange.PrettyErrorText(MockLocalizer))
 }

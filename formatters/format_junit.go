@@ -37,6 +37,7 @@ type JUnitFailure struct {
 
 type JUnitFormatter struct {
 	notImplementedFormatter
+	Localizer checker.Localizer
 }
 
 func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
@@ -57,7 +58,7 @@ func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts Rend
 			Time:      "0",
 			Failure: &JUnitFailure{
 				Message: "Breaking change detected",
-				CDATA:   StripANSIEscapeCodesStr(change.GetText()),
+				CDATA:   change.GetUncolorizedText(f.Localizer),
 			},
 		}
 		testSuite.TestCases = append(testSuite.TestCases, testCase)

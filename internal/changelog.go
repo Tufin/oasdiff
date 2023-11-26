@@ -70,7 +70,7 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffResult.diffReport, diffResult.operationsSources, level),
-		flags.getWarnIgnoreFile(), flags.getErrIgnoreFile())
+		flags.getWarnIgnoreFile(), flags.getErrIgnoreFile(), bcConfig.Localize)
 
 	if returnErr != nil {
 		return false, returnErr
@@ -99,11 +99,11 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 	return false, nil
 }
 
-func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile string) (checker.Changes, *ReturnError) {
+func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile string, l checker.Localizer) (checker.Changes, *ReturnError) {
 
 	if warnIgnoreFile != "" {
 		var err error
-		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnoreFile)
+		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnoreFile, l)
 		if err != nil {
 			return nil, getErrCantProcessIgnoreFile("warn", err)
 		}
@@ -111,7 +111,7 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 
 	if errIgnoreFile != "" {
 		var err error
-		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnoreFile)
+		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnoreFile, l)
 		if err != nil {
 			return nil, getErrCantProcessIgnoreFile("err", err)
 		}

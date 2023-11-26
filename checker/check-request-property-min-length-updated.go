@@ -11,7 +11,7 @@ const (
 	RequestPropertyMinLengthDecreasedId = "request-property-min-length-decreased"
 )
 
-func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -97,7 +97,6 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								Source:      source,
 							})
 						}
-
 					})
 			}
 		}

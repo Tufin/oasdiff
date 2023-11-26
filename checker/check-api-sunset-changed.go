@@ -13,7 +13,7 @@ const (
 	APISunsetDateChangedTooSmallId = "api-sunset-date-changed-too-small"
 )
 
-func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -123,7 +123,7 @@ const (
 	STABILITY_STABLE = "stable"
 )
 
-func getDeprecationDays(config Config, stability string) int {
+func getDeprecationDays(config *Config, stability string) int {
 	switch stability {
 	case STABILITY_DRAFT:
 		return 0

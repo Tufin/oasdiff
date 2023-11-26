@@ -9,7 +9,7 @@ const (
 	ResponsePropertyMaxLengthIncreasedId = "response-property-max-length-increased"
 )
 
-func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -81,9 +81,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 							})
 						})
 				}
-
 			}
-
 		}
 	}
 	return result

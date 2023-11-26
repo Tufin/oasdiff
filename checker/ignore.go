@@ -24,7 +24,7 @@ func ignoreLinePath(ignoreLine string) string {
 	return ignoreComponents[pathIndex]
 }
 
-func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs Changes, ignoreFile string) (Changes, error) {
+func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs Changes, ignoreFile string, l Localizer) (Changes, error) {
 	result := make(Changes, 0)
 
 	ignore, err := os.Open(ignoreFile)
@@ -44,7 +44,7 @@ func ProcessIgnoredBackwardCompatibilityErrors(level Level, errs Changes, ignore
 				continue
 			}
 
-			if err.MatchIgnore(ignorePath, ignoreLine) {
+			if err.MatchIgnore(ignorePath, ignoreLine, l) {
 				ignoredErrs[errIndex] = true
 			}
 		}

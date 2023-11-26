@@ -58,6 +58,8 @@ func TestOperationIdUpdated(t *testing.T) {
 		Source:      "../data/checker/operation_id_removed_base.yaml",
 		OperationId: "createOneGroup",
 	}, errs[0])
+
+	require.Equal(t, "api operation id 'createOneGroup' removed and replaced with 'newOperationId'", errs[0].GetText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding a new operation id

@@ -45,11 +45,17 @@ func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 			Localizer: checker.NewLocalizer(opts.Language),
 		}, nil
 	case FormatHTML:
-		return HTMLFormatter{}, nil
+		return HTMLFormatter{
+			Localizer: checker.NewLocalizer(opts.Language),
+		}, nil
 	case FormatGithubActions:
-		return GitHubActionsFormatter{}, nil
+		return GitHubActionsFormatter{
+			Localizer: checker.NewLocalizer(opts.Language),
+		}, nil
 	case FormatJUnit:
-		return JUnitFormatter{}, nil
+		return JUnitFormatter{
+			Localizer: checker.NewLocalizer(opts.Language),
+		}, nil
 	default:
 		return nil, fmt.Errorf("unsupported format: %s", f)
 	}

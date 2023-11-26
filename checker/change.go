@@ -3,7 +3,8 @@ package checker
 type Change interface {
 	IsBreaking() bool
 	GetId() string
-	GetText() string
+	GetText(l Localizer) string
+	GetUncolorizedText(l Localizer) string
 	GetComment() string
 	GetLevel() Level
 	GetOperation() string
@@ -14,8 +15,7 @@ type Change interface {
 	GetSourceLineEnd() int
 	GetSourceColumn() int
 	GetSourceColumnEnd() int
-	MatchIgnore(ignorePath, ignoreLine string) bool
+	MatchIgnore(ignorePath, ignoreLine string, l Localizer) bool
 	LocalizedError(l Localizer) string
 	PrettyErrorText(l Localizer) string
-	Error() string
 }

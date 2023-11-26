@@ -29,18 +29,17 @@ func TestComponentChange(t *testing.T) {
 	require.Equal(t, 2, componentChange.GetSourceLineEnd())
 	require.Equal(t, 3, componentChange.GetSourceColumn())
 	require.Equal(t, 4, componentChange.GetSourceColumnEnd())
-	require.Equal(t, "error, in components/component text [id]. comment", componentChange.LocalizedError(checker.NewDefaultLocalizer()))
-	require.Equal(t, "error, in components/component text [id]. comment", componentChange.PrettyErrorText(checker.NewDefaultLocalizer()))
-	require.Equal(t, "error, in components/component text [id]. comment", componentChange.Error())
+	require.Equal(t, "error, in components/component text [id]. comment", componentChange.LocalizedError(MockLocalizer))
+	require.Equal(t, "error, in components/component text [id]. comment", componentChange.PrettyErrorText(MockLocalizer))
 }
 
 func TestComponentChange_MatchIgnore(t *testing.T) {
-	require.True(t, componentChange.MatchIgnore("", "error, in components/component text [id]. comment"))
+	require.True(t, componentChange.MatchIgnore("", "error, in components/component text [id]. comment", MockLocalizer))
 }
 
 func TestComponentChange_PrettyPiped(t *testing.T) {
 	piped := true
 	save := checker.SetPipedOutput(&piped)
 	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error, in components/component text [id]. comment", componentChange.PrettyErrorText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "error, in components/component text [id]. comment", componentChange.PrettyErrorText(MockLocalizer))
 }

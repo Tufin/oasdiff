@@ -27,8 +27,8 @@ func (c SecurityChange) IsBreaking() bool {
 	return c.GetLevel().IsBreaking()
 }
 
-func (c SecurityChange) MatchIgnore(ignorePath, ignoreLine string) bool {
-	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) &&
+func (c SecurityChange) MatchIgnore(ignorePath, ignoreLine string, l Localizer) bool {
+	return strings.Contains(ignoreLine, strings.ToLower(c.GetUncolorizedText(l))) &&
 		strings.Contains(ignoreLine, "security")
 }
 
@@ -36,8 +36,12 @@ func (c SecurityChange) GetId() string {
 	return c.Id
 }
 
-func (c SecurityChange) GetText() string {
-	return c.Text
+func (c SecurityChange) GetText(l Localizer) string {
+	return l(c.Id, ColorizedValues(c.Args)...)
+}
+
+func (c SecurityChange) GetUncolorizedText(l Localizer) string {
+	return l(c.Id, QuotedValues(c.Args)...)
 }
 
 func (c SecurityChange) GetComment() string {
@@ -94,8 +98,4 @@ func (c SecurityChange) PrettyErrorText(l Localizer) string {
 		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
 	}
 	return fmt.Sprintf("%s\t[%s] \t\n\t%s security\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Text, comment)
-}
-
-func (c SecurityChange) Error() string {
-	return fmt.Sprintf("%s, in security %s [%s]. %s", c.Level, c.Text, c.Id, c.Comment)
 }

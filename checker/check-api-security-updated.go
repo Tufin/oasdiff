@@ -15,7 +15,7 @@ const (
 	APIGlobalSecurityScopeRemovedId = "api-global-security-scope-removed"
 )
 
-func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.SecurityDiff == nil {
 		return result
@@ -64,7 +64,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 }
 
-func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 
 	result = append(result, checkGlobalSecurity(diffReport, operationsSources, config)...)

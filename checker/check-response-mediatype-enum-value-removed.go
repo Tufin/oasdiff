@@ -8,7 +8,7 @@ const (
 	ResponseMediaTypeEnumValueRemovedId = "response-mediatype-enum-value-removed"
 )
 
-func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -55,9 +55,7 @@ func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 							Source:      source,
 						})
 					}
-
 				}
-
 			}
 		}
 	}

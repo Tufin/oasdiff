@@ -15,7 +15,7 @@ const (
 	APIStabilityDecreasedId = "api-stability-decreased"
 )
 
-type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes
+type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes
 
 type BackwardCompatibilityRule struct {
 	Id          string
@@ -44,18 +44,18 @@ func IsPipedOutput() bool {
 	return *pipedOutput
 }
 
-func CheckBackwardCompatibility(config Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) Changes {
+func CheckBackwardCompatibility(config *Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) Changes {
 	return CheckBackwardCompatibilityUntilLevel(config, diffReport, operationsSources, WARN)
 }
 
-func CheckBackwardCompatibilityUntilLevel(config Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) Changes {
+func CheckBackwardCompatibilityUntilLevel(config *Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) Changes {
 	result := make(Changes, 0)
 
 	if diffReport == nil {
 		return result
 	}
 
-	result = removeDraftAndAlphaOperationsDiffs(diffReport, result, operationsSources)
+	result = removeDraftAndAlphaOperationsDiffs(config, diffReport, result, operationsSources)
 
 	for _, check := range config.Checks {
 		if check == nil {
@@ -76,7 +76,7 @@ func CheckBackwardCompatibilityUntilLevel(config Config, diffReport *diff.Diff, 
 	return filteredResult
 }
 
-func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, operationsSources *diff.OperationsSourcesMap) Changes {
+func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, result Changes, operationsSources *diff.OperationsSourcesMap) Changes {
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -89,7 +89,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 			baseStability, err := getStabilityLevel(pathDiff.Base[path].Operations()[operation].Extensions)
 			source := (*operationsSources)[pathDiff.Base[path].Operations()[operation]]
 			if err != nil {
-				result = newParsingError(result, err, operation, operationItem, path, source)
+				result = newParsingError(config, result, err, operation, operationItem, path, source)
 				continue
 			}
 			if !(baseStability == STABILITY_DRAFT || baseStability == STABILITY_ALPHA) {
@@ -116,7 +116,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 			baseStability, err := getStabilityLevel(operationItem.Extensions)
 			source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 			if err != nil {
-				result = newParsingError(result, err, operation, operationItem, path, source)
+				result = newParsingError(config, result, err, operation, operationItem, path, source)
 				continue
 			}
 			if !(baseStability == STABILITY_DRAFT || baseStability == STABILITY_ALPHA) {
@@ -183,7 +183,8 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 	return result
 }
 
-func newParsingError(result Changes,
+func newParsingError(config *Config,
+	result Changes,
 	err error,
 	operation string,
 	operationItem *openapi3.Operation,

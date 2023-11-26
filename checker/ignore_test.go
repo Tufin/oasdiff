@@ -18,7 +18,7 @@ func TestIgnore(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Equal(t, 6, len(errs))
 
-	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt")
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt", checker.NewDefaultLocalizer())
 	require.NoError(t, err)
 	require.Equal(t, 5, len(errs))
 }
@@ -32,7 +32,7 @@ func TestIgnoreSubpath(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Equal(t, 3, len(errs))
 
-	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example-2.txt")
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example-2.txt", checker.NewDefaultLocalizer())
 	require.NoError(t, err)
 	require.Equal(t, 0, len(errs))
 }
@@ -46,7 +46,7 @@ func TestIgnoreOnlyIncludedSubpaths(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Equal(t, 2, len(errs)) // detect new and newest were deleted
 
-	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example-3.txt")
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example-3.txt", checker.NewDefaultLocalizer())
 	require.NoError(t, err)
 	require.Equal(t, 1, len(errs))
 	require.IsType(t, checker.ApiChange{}, errs[0])
@@ -63,7 +63,7 @@ func TestIgnoreComponent(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.APISchemasRemovedId}), d, osm)
 	require.Equal(t, 8, len(errs))
 
-	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt")
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt", checker.NewDefaultLocalizer())
 	require.NoError(t, err)
 	require.Equal(t, 5, len(errs))
 }

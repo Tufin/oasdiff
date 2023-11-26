@@ -88,19 +88,17 @@ func ExampleGetPathsDiff() {
 		return
 	}
 
-	c := checker.GetDefaultChecks()
-	c.Localize = checker.NewDefaultLocalizer()
-	errs := checker.CheckBackwardCompatibility(c, diffRes, operationsSources)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), diffRes, operationsSources)
 
 	// process configuration file for ignoring errors
-	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt")
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt", checker.NewDefaultLocalizer())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ignore errors failed with %v", err)
 		return
 	}
 
 	// process configuration file for ignoring warnings
-	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, "../data/ignore-warn-example.txt")
+	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, "../data/ignore-warn-example.txt", checker.NewDefaultLocalizer())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ignore warnings failed with %v", err)
 		return
@@ -108,10 +106,11 @@ func ExampleGetPathsDiff() {
 
 	// pretty print breaking changes errors
 	if len(errs) > 0 {
+		localizer := checker.NewDefaultLocalizer()
 		count := errs.GetLevelCount()
-		fmt.Print(c.Localize("total-errors", len(errs), count[checker.ERR], "error", count[checker.WARN], "warning"))
+		fmt.Print(localizer("total-errors", len(errs), count[checker.ERR], "error", count[checker.WARN], "warning"))
 		for _, bcerr := range errs {
-			fmt.Printf("%s\n\n", strings.TrimRight(bcerr.PrettyErrorText(c.Localize), " "))
+			fmt.Printf("%s\n\n", strings.TrimRight(bcerr.PrettyErrorText(localizer), " "))
 		}
 	}
 

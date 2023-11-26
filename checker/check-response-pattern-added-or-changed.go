@@ -10,7 +10,7 @@ const (
 	ResponsePropertyPatternRemovedId = "response-property-pattern-removed"
 )
 
-func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -71,7 +71,6 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 								Path:        path,
 								Source:      source,
 							})
-
 						})
 				}
 			}

@@ -48,7 +48,7 @@ func (e Errors) Swap(i, j int) {
 	e[i], e[j] = e[j], e[i]
 }
 
-func Run(config Config, source string, spec *load.SpecInfo) Errors {
+func Run(config *Config, source string, spec *load.SpecInfo) Errors {
 	result := make(Errors, 0)
 
 	if spec == nil {

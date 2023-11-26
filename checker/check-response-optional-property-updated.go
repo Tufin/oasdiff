@@ -13,7 +13,7 @@ const (
 	ResponseOptionalWriteOnlyPropertyAddedId   = "response-optional-write-only-property-added"
 )
 
-func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -90,7 +90,6 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								Source:      source,
 							})
 						})
-
 				}
 			}
 		}

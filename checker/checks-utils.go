@@ -21,6 +21,11 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 	return propertyFullName
 }
 
+func QuotedValue(arg interface{}) string {
+	str := interfaceToString(arg)
+	return fmt.Sprintf("'%s'", str)
+}
+
 func ColorizedValue(arg interface{}) string {
 	str := interfaceToString(arg)
 	if IsPipedOutput() {
@@ -33,6 +38,14 @@ func ColorizedValues(args []any) []any {
 	result := make([]any, len(args))
 	for i, arg := range args {
 		result[i] = ColorizedValue(arg)
+	}
+	return result
+}
+
+func QuotedValues(args []any) []any {
+	result := make([]any, len(args))
+	for i, arg := range args {
+		result[i] = QuotedValue(arg)
 	}
 	return result
 }

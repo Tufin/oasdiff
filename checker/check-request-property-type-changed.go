@@ -9,7 +9,7 @@ const (
 	RequestPropertyTypeChangedId = "request-property-type-changed"
 )
 
-func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -46,7 +46,6 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 							Path:        path,
 							Source:      source,
 						})
-
 					}
 				}
 

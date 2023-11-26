@@ -28,8 +28,8 @@ func (c ComponentChange) IsBreaking() bool {
 	return c.GetLevel().IsBreaking()
 }
 
-func (c ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
-	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) &&
+func (c ComponentChange) MatchIgnore(ignorePath, ignoreLine string, l Localizer) bool {
+	return strings.Contains(ignoreLine, strings.ToLower(c.GetUncolorizedText(l))) &&
 		strings.Contains(ignoreLine, "components")
 }
 
@@ -37,8 +37,12 @@ func (c ComponentChange) GetId() string {
 	return c.Id
 }
 
-func (c ComponentChange) GetText() string {
-	return c.Text
+func (c ComponentChange) GetText(l Localizer) string {
+	return l(c.Id, ColorizedValues(c.Args)...)
+}
+
+func (c ComponentChange) GetUncolorizedText(l Localizer) string {
+	return l(c.Id, QuotedValues(c.Args)...)
 }
 
 func (c ComponentChange) GetComment() string {
@@ -95,8 +99,4 @@ func (c ComponentChange) PrettyErrorText(l Localizer) string {
 		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
 	}
 	return fmt.Sprintf("%s\t[%s] \t\n\t%s components/%s\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Component, c.Text, comment)
-}
-
-func (c ComponentChange) Error() string {
-	return fmt.Sprintf("%s, in components/%s %s [%s]. %s", c.Level, c.Component, c.Text, c.Id, c.Comment)
 }
