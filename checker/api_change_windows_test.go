@@ -11,5 +11,5 @@ func TestApiChange_PrettyNotPipedWindows(t *testing.T) {
 	piped := false
 	save := checker.SetPipedOutput(&piped)
 	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error\t[id] at source\t\n\tin API GET /test\n\t\ttext\n\t\tcomment", apiChange.PrettyErrorText(MockLocalizer))
+	require.Equal(t, "error\t[change_id] at source\t\n\tin API GET /test\n\t\tThis is a breaking change.\n\t\tcomment", apiChange.PrettyErrorText(MockLocalizer))
 }
