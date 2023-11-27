@@ -37,11 +37,18 @@ func (changes Changes) Less(i, j int) bool {
 		return iv.GetOperation() < jv.GetOperation()
 	case iv.GetId() != jv.GetId():
 		return iv.GetId() < jv.GetId()
-	case iv.GetText() != jv.GetText():
-		return iv.GetText() < jv.GetText()
+	case len(iv.GetArgs()) != len(jv.GetArgs()):
+		return len(iv.GetArgs()) < len(jv.GetArgs())
 	default:
-		return iv.GetComment() < jv.GetComment()
+		for i, arg := range iv.GetArgs() {
+			ia := interfaceToString(arg)
+			ja := interfaceToString(jv.GetArgs()[i])
+			if ia != ja {
+				return ia < ja
+			}
+		}
 	}
+	return true
 }
 
 func (changes Changes) Swap(i, j int) {

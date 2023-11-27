@@ -41,6 +41,10 @@ func (c ComponentChange) GetText(l Localizer) string {
 	return l(c.Id, ColorizedValues(c.Args)...)
 }
 
+func (c ComponentChange) GetArgs() []any {
+	return c.Args
+}
+
 func (c ComponentChange) GetUncolorizedText(l Localizer) string {
 	return l(c.Id, QuotedValues(c.Args)...)
 }

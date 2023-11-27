@@ -48,6 +48,10 @@ func (c ApiChange) GetText(l Localizer) string {
 	return l(c.Id, ColorizedValues(c.Args)...)
 }
 
+func (c ApiChange) GetArgs() []any {
+	return c.Args
+}
+
 func (c ApiChange) GetUncolorizedText(l Localizer) string {
 	return l(c.Id, QuotedValues(c.Args)...)
 }

@@ -40,6 +40,10 @@ func (c SecurityChange) GetText(l Localizer) string {
 	return l(c.Id, ColorizedValues(c.Args)...)
 }
 
+func (c SecurityChange) GetArgs() []any {
+	return c.Args
+}
+
 func (c SecurityChange) GetUncolorizedText(l Localizer) string {
 	return l(c.Id, QuotedValues(c.Args)...)
 }

@@ -4,6 +4,7 @@ type Change interface {
 	IsBreaking() bool
 	GetId() string
 	GetText(l Localizer) string
+	GetArgs() []any
 	GetUncolorizedText(l Localizer) string
 	GetComment() string
 	GetLevel() Level
