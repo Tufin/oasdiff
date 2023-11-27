@@ -37,9 +37,13 @@ func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 
 	switch f {
 	case FormatYAML:
-		return YAMLFormatter{}, nil
+		return YAMLFormatter{
+			Localizer: checker.NewLocalizer(opts.Language),
+		}, nil
 	case FormatJSON:
-		return JSONFormatter{}, nil
+		return JSONFormatter{
+			Localizer: checker.NewLocalizer(opts.Language),
+		}, nil
 	case FormatText:
 		return TEXTFormatter{
 			Localizer: checker.NewLocalizer(opts.Language),

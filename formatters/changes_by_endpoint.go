@@ -7,12 +7,6 @@ type Endpoint struct {
 	Operation string
 }
 
-type Change struct {
-	IsBreaking bool
-	Text       string
-}
-type Changes []Change
-
 type ChangesByEndpoint map[Endpoint]*Changes
 
 func GroupChanges(changes checker.Changes, l checker.Localizer) ChangesByEndpoint {

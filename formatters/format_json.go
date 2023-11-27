@@ -12,6 +12,7 @@ import (
 )
 
 type JSONFormatter struct {
+	Localizer checker.Localizer
 }
 
 func (f JSONFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
@@ -23,11 +24,11 @@ func (f JSONFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, 
 }
 
 func (f JSONFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	return printJSON(changes)
+	return printJSON(NewChanges(changes, f.Localizer))
 }
 
 func (f JSONFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
-	return printJSON(changes)
+	return printJSON(NewChanges(changes, f.Localizer))
 }
 
 func (f JSONFormatter) RenderChecks(checks Checks, opts RenderOpts) ([]byte, error) {
@@ -52,5 +53,5 @@ func printJSON(output interface{}) ([]byte, error) {
 		return nil, fmt.Errorf("failed to marshal JSON: %w", err)
 	}
 
-	return StripANSIEscapeCodes(bytes), nil
+	return bytes, nil
 }

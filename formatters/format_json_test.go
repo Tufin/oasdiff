@@ -8,9 +8,11 @@ import (
 	"github.com/tufin/oasdiff/formatters"
 )
 
-func TestJsonFormatter_RenderBreakingChanges(t *testing.T) {
-	formatter := formatters.JSONFormatter{}
+var jsonFormatter = formatters.JSONFormatter{
+	Localizer: MockLocalizer,
+}
 
+func TestJsonFormatter_RenderBreakingChanges(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
@@ -19,14 +21,12 @@ func TestJsonFormatter_RenderBreakingChanges(t *testing.T) {
 		},
 	}
 
-	out, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	out, err := jsonFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
 	require.NoError(t, err)
 	require.Equal(t, string(out), "[{\"id\":\"change_id\",\"text\":\"This is a breaking change.\",\"level\":3}]")
 }
 
 func TestJsonFormatter_RenderChangelog(t *testing.T) {
-	formatter := formatters.JSONFormatter{}
-
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
@@ -35,14 +35,12 @@ func TestJsonFormatter_RenderChangelog(t *testing.T) {
 		},
 	}
 
-	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
+	out, err := jsonFormatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
 	require.NoError(t, err)
 	require.Equal(t, string(out), "[{\"id\":\"change_id\",\"text\":\"This is a breaking change.\",\"level\":3}]")
 }
 
 func TestJsonFormatter_RenderChecks(t *testing.T) {
-	formatter := formatters.JSONFormatter{}
-
 	checks := formatters.Checks{
 		{
 			Id:          "change_id",
@@ -52,31 +50,25 @@ func TestJsonFormatter_RenderChecks(t *testing.T) {
 		},
 	}
 
-	out, err := formatter.RenderChecks(checks, formatters.RenderOpts{})
+	out, err := jsonFormatter.RenderChecks(checks, formatters.RenderOpts{})
 	require.NoError(t, err)
 	require.Equal(t, string(out), "[{\"id\":\"change_id\",\"level\":\"info\",\"description\":\"This is a breaking change.\",\"reuired\":true}]")
 }
 
 func TestJsonFormatter_RenderDiff(t *testing.T) {
-	formatter := formatters.JSONFormatter{}
-
-	out, err := formatter.RenderDiff(nil, formatters.RenderOpts{})
+	out, err := jsonFormatter.RenderDiff(nil, formatters.RenderOpts{})
 	require.NoError(t, err)
 	require.Empty(t, string(out))
 }
 
 func TestJsonFormatter_RenderFlatten(t *testing.T) {
-	formatter := formatters.JSONFormatter{}
-
-	out, err := formatter.RenderFlatten(nil, formatters.RenderOpts{})
+	out, err := jsonFormatter.RenderFlatten(nil, formatters.RenderOpts{})
 	require.NoError(t, err)
 	require.Empty(t, string(out))
 }
 
 func TestJsonFormatter_RenderSummary(t *testing.T) {
-	formatter := formatters.JSONFormatter{}
-
-	out, err := formatter.RenderSummary(nil, formatters.RenderOpts{})
+	out, err := jsonFormatter.RenderSummary(nil, formatters.RenderOpts{})
 	require.NoError(t, err)
 	require.Equal(t, string(out), `{"diff":false}`)
 }
