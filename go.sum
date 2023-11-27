@@ -34,8 +34,8 @@ github.com/mailru/easyjson v0.7.7 h1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0
 github.com/mailru/easyjson v0.7.7/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9M+97sNutRR1RKhG96O6jWumTTnw=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826/go.mod h1:TaXosZuwdSHYgviHp1DAtfrULt5eUgsSMsZf+YrPgl8=
-github.com/oasdiff/go-common v0.2.27 h1:KrXKvOZOAt9BkgYgGOe8cqof+P5L/ASGihQNMSeF2vk=
-github.com/oasdiff/go-common v0.2.27/go.mod h1:aF7FmHg0gJrOkWfnAQGkssImYgPwzmzYS+iXXpN6XSg=
+github.com/oasdiff/go-common v0.2.28 h1:pXz8i6NA36A9lVmmBhghGngbRkvZ/eGwxiH6BSrsdZI=
+github.com/oasdiff/go-common v0.2.28/go.mod h1:aF7FmHg0gJrOkWfnAQGkssImYgPwzmzYS+iXXpN6XSg=
 github.com/oasdiff/telemetry v0.1.2 h1:hkmA5YTISVF2/zWa23y29WdPws1Q53pyLOFYMHXoZ1U=
 github.com/oasdiff/telemetry v0.1.2/go.mod h1:Y0DaW/CasxZ+vzR54btj430XsL6DGF+rMbJkRld6u3M=
 github.com/perimeterx/marshmallow v1.1.5 h1:a2LALqQ1BlHM8PZblsDdidgv1mWi1DgC2UmX50IvK2s=
