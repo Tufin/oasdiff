@@ -73,7 +73,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:    RequestPropertyAllOfAddedId,
 								Level: ERR,
-								
+
 								Args:        []any{propertyDiff.AllOfDiff.Added.String(), propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -84,8 +84,8 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 
 						if len(propertyDiff.AllOfDiff.Deleted) > 0 {
 							result = append(result, ApiChange{
-								Id:    RequestPropertyAllOfRemovedId,
-								Level: WARN,
+								Id:          RequestPropertyAllOfRemovedId,
+								Level:       WARN,
 								Args:        []any{propertyDiff.AllOfDiff.Deleted.String(), propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

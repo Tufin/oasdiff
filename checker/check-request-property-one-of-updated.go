@@ -38,8 +38,8 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 
 				if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Added) > 0 {
 					result = append(result, ApiChange{
-						Id:    RequestBodyOneOfAddedId,
-						Level: INFO,
+						Id:          RequestBodyOneOfAddedId,
+						Level:       INFO,
 						Args:        []any{mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String()},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
@@ -50,8 +50,8 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 
 				if mediaTypeDiff.SchemaDiff.OneOfDiff != nil && len(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted) > 0 {
 					result = append(result, ApiChange{
-						Id:    RequestBodyOneOfRemovedId,
-						Level: ERR,
+						Id:          RequestBodyOneOfRemovedId,
+						Level:       ERR,
 						Args:        []any{mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String()},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
@@ -71,8 +71,8 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 
 						if len(propertyDiff.OneOfDiff.Added) > 0 {
 							result = append(result, ApiChange{
-								Id:    RequestPropertyOneOfAddedId,
-								Level: INFO,
+								Id:          RequestPropertyOneOfAddedId,
+								Level:       INFO,
 								Args:        []any{propertyDiff.OneOfDiff.Added.String(), propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -83,8 +83,8 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 
 						if len(propertyDiff.OneOfDiff.Deleted) > 0 {
 							result = append(result, ApiChange{
-								Id:    RequestPropertyOneOfRemovedId,
-								Level: ERR,
+								Id:          RequestPropertyOneOfRemovedId,
+								Level:       ERR,
 								Args:        []any{propertyDiff.OneOfDiff.Deleted.String(), propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

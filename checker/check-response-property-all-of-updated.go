@@ -41,8 +41,8 @@ func ResponsePropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 
 					if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Added) > 0 {
 						result = append(result, ApiChange{
-							Id:    ResponseBodyAllOfAddedId,
-							Level: INFO,
+							Id:          ResponseBodyAllOfAddedId,
+							Level:       INFO,
 							Args:        []any{mediaTypeDiff.SchemaDiff.AllOfDiff.Added.String(), responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -53,8 +53,8 @@ func ResponsePropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 
 					if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted) > 0 {
 						result = append(result, ApiChange{
-							Id:    ResponseBodyAllOfRemovedId,
-							Level: INFO,
+							Id:          ResponseBodyAllOfRemovedId,
+							Level:       INFO,
 							Args:        []any{mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted.String(), responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -73,8 +73,8 @@ func ResponsePropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 							if len(propertyDiff.AllOfDiff.Added) > 0 {
 
 								result = append(result, ApiChange{
-									Id:    ResponsePropertyAllOfAddedId,
-									Level: INFO,
+									Id:          ResponsePropertyAllOfAddedId,
+									Level:       INFO,
 									Args:        []any{propertyDiff.AllOfDiff.Added.String(), propertyFullName(propertyPath, propertyName), responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
@@ -86,8 +86,8 @@ func ResponsePropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 							if len(propertyDiff.AllOfDiff.Deleted) > 0 {
 
 								result = append(result, ApiChange{
-									Id:    ResponsePropertyAllOfRemovedId,
-									Level: INFO,
+									Id:          ResponsePropertyAllOfRemovedId,
+									Level:       INFO,
 									Args:        []any{propertyDiff.AllOfDiff.Deleted.String(), propertyFullName(propertyPath, propertyName), responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
