@@ -40,9 +40,6 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:    RequestBodyOneOfAddedId,
 						Level: INFO,
-						Text: config.Localize(
-							RequestBodyOneOfAddedId,
-							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String())),
 						Args:        []any{mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String()},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
@@ -55,9 +52,6 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:    RequestBodyOneOfRemovedId,
 						Level: ERR,
-						Text: config.Localize(
-							RequestBodyOneOfRemovedId,
-							ColorizedValue(mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String())),
 						Args:        []any{mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String()},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
@@ -79,10 +73,6 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:    RequestPropertyOneOfAddedId,
 								Level: INFO,
-								Text: config.Localize(
-									RequestPropertyOneOfAddedId,
-									ColorizedValue(propertyDiff.OneOfDiff.Added.String()),
-									ColorizedValue(propName)),
 								Args:        []any{propertyDiff.OneOfDiff.Added.String(), propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -95,10 +85,6 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:    RequestPropertyOneOfRemovedId,
 								Level: ERR,
-								Text: config.Localize(
-									RequestPropertyOneOfRemovedId,
-									ColorizedValue(propertyDiff.OneOfDiff.Deleted.String()),
-									ColorizedValue(propName)),
 								Args:        []any{propertyDiff.OneOfDiff.Deleted.String(), propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

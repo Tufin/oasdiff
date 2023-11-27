@@ -39,8 +39,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 								result = append(result, ApiChange{
 									Id:          ResponseBodyMinLengthDecreasedId,
 									Level:       ERR,
-									Text:        config.Localize(ResponseBodyMinLengthDecreasedId, ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
-									Args:        []any{},
+									Args:        []any{minLengthDiff.From, minLengthDiff.To},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -72,8 +71,7 @@ func ResponsePropertyMinLengthDecreasedCheck(diffReport *diff.Diff, operationsSo
 							result = append(result, ApiChange{
 								Id:          ResponsePropertyMinLengthDecreasedId,
 								Level:       ERR,
-								Text:        config.Localize(ResponsePropertyMinLengthDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To), ColorizedValue(responseStatus)),
-								Args:        []any{},
+								Args:        []any{propertyFullName(propertyPath, propertyName), minLengthDiff.From, minLengthDiff.To, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

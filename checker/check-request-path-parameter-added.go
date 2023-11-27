@@ -31,8 +31,7 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, ApiChange{
 						Id:          NewRequestPathParameterId,
 						Level:       ERR,
-						Text:        config.Localize(NewRequestPathParameterId, ColorizedValue(paramName)),
-						Args:        []any{},
+						Args:        []any{paramName},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

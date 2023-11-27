@@ -23,7 +23,6 @@ func TestOperationIdRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdRemovedId,
-		Text:        "api operation id 'createOneGroup' removed and replaced with ''",
 		Args:        []any{"createOneGroup", ""},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -49,7 +48,6 @@ func TestOperationIdUpdated(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdRemovedId,
-		Text:        "api operation id 'createOneGroup' removed and replaced with 'newOperationId'",
 		Args:        []any{"createOneGroup", "newOperationId"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -77,7 +75,6 @@ func TestOperationIdAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdAddId,
-		Text:        "api operation id 'NewOperationId' was added",
 		Args:        []any{"NewOperationId"},
 		Comment:     "",
 		Level:       checker.INFO,

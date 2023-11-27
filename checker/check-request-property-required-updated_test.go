@@ -22,7 +22,6 @@ func TestRequestPropertyMarkedRequired(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecameRequiredId,
-		Text:        "the request property 'name' became required",
 		Args:        []any{"name"},
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -46,7 +45,6 @@ func TestRequestPropertyMarkedOptional(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecameOptionalId,
-		Text:        "the request property 'name' became optional",
 		Args:        []any{"name"},
 		Level:       checker.INFO,
 		Operation:   "POST",

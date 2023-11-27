@@ -19,7 +19,6 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 		result = append(result, ApiChange{
 			Id:          EndpointAddedId,
 			Level:       INFO,
-			Text:        config.Localize(EndpointAddedId),
 			Operation:   opName,
 			OperationId: opConfig.OperationID,
 			Path:        path,

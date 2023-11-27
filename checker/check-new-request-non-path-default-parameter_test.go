@@ -26,7 +26,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
-			Text:        "added the new required 'query' request parameter 'version' to all path's operations",
 			Args:        []any{"query", "version"},
 			Comment:     "",
 			Level:       3,
@@ -37,7 +36,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 		},
 		{
 			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
-			Text:        "added the new required 'query' request parameter 'version' to all path's operations",
 			Args:        []any{"query", "version"},
 			Comment:     "",
 			Level:       3,
@@ -48,7 +46,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 		},
 		{
 			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
-			Text:        "added the new required 'query' request parameter 'id' to all path's operations",
 			Args:        []any{"query", "id"},
 			Comment:     "",
 			Level:       3,
@@ -59,7 +56,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 		},
 		{
 			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
-			Text:        "added the new required 'header' request parameter 'If-None-Match' to all path's operations",
 			Args:        []any{"header", "If-None-Match"},
 			Comment:     "",
 			Level:       3,
@@ -70,7 +66,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 		},
 		{
 			Id:          checker.NewOptionalRequestDefaultParameterToExistingPathId,
-			Text:        "added the new optional 'query' request parameter 'optionalQueryParam' to all path's operations",
 			Args:        []any{"query", "optionalQueryParam"},
 			Comment:     "",
 			Level:       1,
@@ -81,7 +76,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 		},
 		{
 			Id:          checker.NewOptionalRequestDefaultParameterToExistingPathId,
-			Text:        "added the new optional 'query' request parameter 'optionalQueryParam' to all path's operations",
 			Args:        []any{"query", "optionalQueryParam"},
 			Comment:     "",
 			Level:       1,
@@ -92,7 +86,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 		},
 		{
 			Id:          checker.NewOptionalRequestDefaultParameterToExistingPathId,
-			Text:        "added the new optional 'header' request parameter 'optionalHeaderParam' to all path's operations",
 			Args:        []any{"header", "optionalHeaderParam"},
 			Comment:     "",
 			Level:       1,

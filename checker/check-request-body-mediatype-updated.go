@@ -31,7 +31,6 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 				result = append(result, ApiChange{
 					Id:          RequestBodyMediaTypeAddedId,
 					Level:       INFO,
-					Text:        config.Localize(RequestBodyMediaTypeAddedId, mediaType),
 					Args:        []any{mediaType},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
@@ -45,7 +44,6 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 				result = append(result, ApiChange{
 					Id:          RequestBodyMediaTypeRemovedId,
 					Level:       ERR,
-					Text:        config.Localize(RequestBodyMediaTypeRemovedId, mediaType),
 					Args:        []any{mediaType},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,

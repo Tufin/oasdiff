@@ -2,7 +2,6 @@ package checker
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
@@ -58,8 +57,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							result = append(result, ApiChange{
 								Id:          UnparseablePropertyFromXExtensibleEnumId,
 								Level:       ERR,
-								Text:        fmt.Sprintf("unparseable x-extensible-enum of the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Args:        []any{propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -72,8 +70,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							result = append(result, ApiChange{
 								Id:          UnparseablePropertyToXExtensibleEnumId,
 								Level:       ERR,
-								Text:        fmt.Sprintf("unparseable x-extensible-enum of the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Args:        []any{propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -96,8 +93,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							result = append(result, ApiChange{
 								Id:          RequestPropertyXExtensibleEnumValueRemovedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyXExtensibleEnumValueRemovedId, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Args:        []any{enumVal, propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

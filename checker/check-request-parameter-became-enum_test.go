@@ -21,7 +21,6 @@ func TestRequestParameterBecameEnum(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterBecameEnumId,
-		Text:        "the 'path' request parameter 'groupId' was restricted to a list of enum values",
 		Args:        []any{"path", "groupId"},
 		Comment:     "",
 		Level:       checker.ERR,

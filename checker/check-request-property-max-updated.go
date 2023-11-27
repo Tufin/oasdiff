@@ -38,7 +38,6 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestBodyMaxDecreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestBodyMaxDecreasedId, ColorizedValue(maxDiff.To)),
 								Args:        []any{maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -49,7 +48,6 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestBodyMaxIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestBodyMaxIncreasedId, ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 								Args:        []any{maxDiff.From, maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -78,7 +76,6 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxDecreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMaxDecreasedId, ColorizedValue(propName), ColorizedValue(maxDiff.To)),
 								Args:        []any{propName, maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -89,7 +86,6 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMaxIncreasedId, ColorizedValue(propName), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
 								Args:        []any{propName, maxDiff.From, maxDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

@@ -133,9 +133,8 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 				result = append(result, ApiChange{
 					Id:          ParseErrorId,
+					Args:        []any{err.Error()},
 					Level:       ERR,
-					Text:        fmt.Sprintf("parsing error %s", err.Error()),
-					Args:        []any{},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -148,9 +147,8 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
 				result = append(result, ApiChange{
 					Id:          ParseErrorId,
+					Args:        []any{err.Error()},
 					Level:       ERR,
-					Text:        fmt.Sprintf("parsing error %s", err.Error()),
-					Args:        []any{},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -165,9 +163,8 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 				revisionStability == "" && baseStability != "" {
 				result = append(result, ApiChange{
 					Id:          APIStabilityDecreasedId,
+					Args:        []any{baseStability, revisionStability},
 					Level:       ERR,
-					Args:        []any{},
-					Text:        fmt.Sprintf("stability level decreased from '%s' to '%s'", baseStability, revisionStability),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -192,8 +189,8 @@ func newParsingError(config *Config,
 	source string) Changes {
 	result = append(result, ApiChange{
 		Id:          ParseErrorId,
+		Args:        []any{err.Error()},
 		Level:       ERR,
-		Text:        fmt.Sprintf("parsing error %s", err.Error()),
 		Operation:   operation,
 		OperationId: operationItem.OperationID,
 		Path:        path,

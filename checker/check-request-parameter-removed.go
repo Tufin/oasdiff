@@ -27,7 +27,6 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, ApiChange{
 						Id:          RequestParameterRemovedId,
 						Level:       WARN,
-						Text:        config.Localize(RequestParameterRemovedId, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 						Args:        []any{paramLocation, paramName},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

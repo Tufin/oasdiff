@@ -39,7 +39,6 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, ApiChange{
 							Id:          RequestBodyTypeChangedId,
 							Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-							Text:        config.Localize(RequestBodyTypeChangedId, ColorizedValue(typeDiff.From), ColorizedValue(formatDiff.From), ColorizedValue(typeDiff.To), ColorizedValue(formatDiff.To)),
 							Args:        []any{typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -64,12 +63,10 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 
 						if !typeDiff.Empty() || !formatDiff.Empty() {
 							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
-							propName := propertyFullName(propertyPath, propertyName)
 							result = append(result, ApiChange{
 								Id:          RequestPropertyTypeChangedId,
 								Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-								Text:        config.Localize(RequestPropertyTypeChangedId, ColorizedValue(propName), ColorizedValue(typeDiff.From), ColorizedValue(formatDiff.From), ColorizedValue(typeDiff.To), ColorizedValue(formatDiff.To)),
-								Args:        []any{propName, typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
+								Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

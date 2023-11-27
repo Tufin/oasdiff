@@ -40,8 +40,7 @@ func RequestParameterMaxLengthSetCheck(diffReport *diff.Diff, operationsSources 
 					result = append(result, ApiChange{
 						Id:          RequestParameterMaxLengthSetId,
 						Level:       WARN,
-						Text:        config.Localize(RequestParameterMaxLengthSetId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.To)),
-						Args:        []any{},
+						Args:        []any{paramLocation, paramName, maxLengthDiff.To},
 						Comment:     config.Localize(comment(RequestParameterMaxLengthSetId)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

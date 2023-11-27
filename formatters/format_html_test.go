@@ -1,6 +1,7 @@
 package formatters_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -19,8 +20,12 @@ func MockLocalizer(id string, args ...interface{}) string {
 		return "This is a notice."
 	case "change_two_lines_id":
 		return "This is a breaking change.\nThis is a second line."
+	case "total-errors":
+		return fmt.Sprintf("%d breaking changes: %d %s, %d %s\n", args...)
+	case "total-changes":
+		return fmt.Sprintf("%d changes: %d %s, %d %s, %d %s\n", args...)
 	default:
-		return ""
+		return id
 	}
 }
 
@@ -40,7 +45,6 @@ func TestHtmlFormatter_RenderChangelog(t *testing.T) {
 			Path:      "/test",
 			Operation: "GET",
 			Id:        "change_id",
-			Text:      "This is a breaking change.",
 			Level:     checker.ERR,
 		},
 	}

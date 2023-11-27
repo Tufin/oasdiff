@@ -199,7 +199,6 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	require.Equal(t,
 		checker.ApiChange{
 			Id:        checker.RequestParameterBecomeRequiredId,
-			Text:      "the 'header' request parameter 'network-policies' became required",
 			Args:      []any{"header", "network-policies"},
 			Comment:   "",
 			Level:     checker.ERR,

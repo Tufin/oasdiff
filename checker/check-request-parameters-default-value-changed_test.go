@@ -21,7 +21,6 @@ func TestRequestParameterDefaultValueChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterDefaultValueChangedId,
-		Text:        "for the 'query' request parameter 'category', default value was changed from 'default_category' to 'updated_category'",
 		Args:        []any{"query", "category", "default_category", "updated_category"},
 		Comment:     "",
 		Level:       checker.ERR,
@@ -47,7 +46,6 @@ func TestRequestParameterDefaultValueAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterDefaultValueAddedId,
-		Text:        "for the 'query' request parameter 'category', default value 'default_category' was added",
 		Args:        []any{"query", "category", "default_category"},
 		Comment:     "",
 		Level:       checker.ERR,
@@ -73,7 +71,6 @@ func TestRequestParameterDefaultValueRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterDefaultValueRemovedId,
-		Text:        "for the 'query' request parameter 'category', default value 'default_category' was removed",
 		Args:        []any{"query", "category", "default_category"},
 		Comment:     "",
 		Level:       checker.ERR,

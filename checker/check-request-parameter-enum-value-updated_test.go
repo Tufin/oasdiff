@@ -22,7 +22,6 @@ func TestRequestParameterEnumValueRemovedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterEnumValueRemovedId,
-		Text:        "removed the enum value 'available' from the 'query' request parameter 'status'",
 		Args:        []any{"available", "query", "status"},
 		Level:       checker.ERR,
 		Operation:   "GET",
@@ -46,7 +45,6 @@ func TestRequestParameterEnumValueAddedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterEnumValueAddedId,
-		Text:        "added the new enum value 'available' to the 'query' request parameter 'status'",
 		Args:        []any{"available", "query", "status"},
 		Level:       checker.INFO,
 		Operation:   "GET",

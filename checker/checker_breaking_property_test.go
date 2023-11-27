@@ -395,7 +395,6 @@ func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Contains(t, errs, checker.ApiChange{
 		Id:          checker.RequestPropertyRemovedId,
-		Text:        "removed the request property 'roleAssignments/items/role'",
 		Args:        []any{"roleAssignments/items/role"},
 		Comment:     "",
 		Level:       checker.WARN,

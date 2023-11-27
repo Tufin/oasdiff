@@ -40,8 +40,7 @@ func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          RequiredResponseHeaderRemovedId,
 							Level:       ERR,
-							Text:        config.Localize(RequiredResponseHeaderRemovedId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
-							Args:        []any{},
+							Args:        []any{headerName, responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -51,8 +50,7 @@ func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          OptionalResponseHeaderRemovedId,
 							Level:       WARN,
-							Text:        config.Localize(OptionalResponseHeaderRemovedId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
-							Args:        []any{},
+							Args:        []any{headerName, responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

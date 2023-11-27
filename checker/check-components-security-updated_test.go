@@ -23,7 +23,6 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
 		Id:        checker.APIComponentsSecurityComponentOauthUrlUpdatedId,
-		Text:      "the component security scheme 'petstore_auth' oauth url changed from 'http://example.org/api/oauth/dialog' to 'http://example.new.org/api/oauth/dialog'",
 		Args:      []any{"petstore_auth", "http://example.org/api/oauth/dialog", "http://example.new.org/api/oauth/dialog"},
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
@@ -45,7 +44,6 @@ func TestComponentSecurityOauthTokenUpdated(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
 		Id:        checker.APIComponentsSecurityOauthTokenUrlUpdatedId,
-		Text:      "the component security scheme 'petstore_auth' oauth token url changed from '' to 'http://example.new.org/api/oauth/dialog'",
 		Args:      []any{"petstore_auth", "", "http://example.new.org/api/oauth/dialog"},
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
@@ -67,7 +65,6 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
 		Id:        checker.APIComponentsSecurityTypeUpdatedId,
-		Text:      "the component security scheme 'petstore_auth' type changed from 'oauth2' to 'http'",
 		Args:      []any{"petstore_auth", "oauth2", "http"},
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
@@ -87,7 +84,6 @@ func TestComponentSecurityAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
 		Id:        checker.APIComponentsSecurityAddedId,
-		Text:      "the component security scheme 'BasicAuth' was added",
 		Args:      []any{"BasicAuth"},
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
@@ -107,7 +103,6 @@ func TestComponentSecurityRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
 		Id:        checker.APIComponentsSecurityRemovedId,
-		Text:      "the component security scheme 'BasicAuth' was removed",
 		Args:      []any{"BasicAuth"},
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
@@ -129,7 +124,6 @@ func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
 		Id:        checker.APIComponentSecurityOauthScopeAddedId,
-		Text:      "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was added",
 		Args:      []any{"petstore_auth", "admin:pets"},
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
@@ -152,7 +146,6 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
 		Id:        "api-security-component-oauth-scope-removed",
-		Text:      "the component security scheme 'petstore_auth' oauth scope 'admin:pets' was removed",
 		Args:      []any{"petstore_auth", "admin:pets"},
 		Comment:   "",
 		Level:     checker.INFO,
@@ -175,7 +168,6 @@ func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
 		Id:        "api-security-component-oauth-scope-changed",
-		Text:      "the component security scheme 'petstore_auth' oauth scope 'read:pets' was updated from 'read your pets' to 'grants access to pets (deprecated)'",
 		Args:      []any{"petstore_auth", "read:pets", "read your pets", "grants access to pets (deprecated)"},
 		Comment:   "",
 		Level:     checker.INFO,

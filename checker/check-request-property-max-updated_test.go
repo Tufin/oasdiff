@@ -26,7 +26,6 @@ func TestRequestPropertyMaxDecreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMaxDecreasedId,
 		Level:       checker.ERR,
-		Text:        "the 'name' request property's max was decreased to '10.00'",
 		Args:        []any{"name", 10.0},
 		Operation:   "POST",
 		Path:        "/pets",
@@ -53,7 +52,6 @@ func TestRequestPropertyMaxIncreasingCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMaxIncreasedId,
 		Level:       checker.INFO,
-		Text:        "the 'name' request property's max was increased from '15.00' to '20.00'",
 		Args:        []any{"name", 15.0, 20.0},
 		Operation:   "POST",
 		Path:        "/pets",
@@ -82,7 +80,6 @@ func TestRequestBodyMaxIncreasingCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMaxIncreasedId,
 		Level:       checker.INFO,
-		Text:        "the request's body max was increased from '20.00' to '25.00'",
 		Args:        []any{20.0, 25.0},
 		Operation:   "POST",
 		Path:        "/pets",
@@ -111,7 +108,6 @@ func TestRequestBodyMaxDecreasedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMaxDecreasedId,
 		Level:       checker.ERR,
-		Text:        "the request's body max was decreased to '20.00'",
 		Args:        []any{20.0},
 		Operation:   "POST",
 		Path:        "/pets",

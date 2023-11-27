@@ -23,7 +23,6 @@ func TestRequestBodyBecameRequired(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyBecameRequiredId,
-		Text:        "request body became required",
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
@@ -48,7 +47,6 @@ func TestRequestBodyBecameOptional(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyBecameOptionalId,
-		Text:        "request body became optional",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",

@@ -38,8 +38,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          ResponseBodyMaxLengthUnsetId,
 								Level:       ERR,
-								Text:        config.Localize(ResponseBodyMaxLengthUnsetId, ColorizedValue(maxLengthDiff.From)),
-								Args:        []any{},
+								Args:        []any{maxLengthDiff.From},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -66,8 +65,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          ResponsePropertyMaxLengthUnsetId,
 								Level:       ERR,
-								Text:        config.Localize(ResponsePropertyMaxLengthUnsetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(responseStatus)),
-								Args:        []any{},
+								Args:        []any{propertyFullName(propertyPath, propertyName), maxLengthDiff.From, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

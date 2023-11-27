@@ -35,8 +35,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, ApiChange{
 							Id:          RequestBodyMaxLengthSetId,
 							Level:       WARN,
-							Text:        config.Localize(RequestBodyMaxLengthSetId, ColorizedValue(maxLengthDiff.To)),
-							Args:        []any{},
+							Args:        []any{maxLengthDiff.To},
 							Comment:     config.Localize(comment(RequestBodyMaxLengthSetId)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -64,8 +63,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, ApiChange{
 							Id:          RequestPropertyMaxLengthSetId,
 							Level:       WARN,
-							Text:        config.Localize(RequestPropertyMaxLengthSetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
-							Args:        []any{},
+							Args:        []any{propertyFullName(propertyPath, propertyName), maxLengthDiff.To},
 							Comment:     config.Localize(comment(RequestPropertyMaxLengthSetId)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

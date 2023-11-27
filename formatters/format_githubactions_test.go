@@ -104,12 +104,10 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 		},
 		checker.ComponentChange{
 			Id:    "warning_id",
-			Text:  "This is a warning.",
 			Level: checker.WARN,
 		},
 		checker.ComponentChange{
 			Id:    "notice_id",
-			Text:  "This is a notice.",
 			Level: checker.INFO,
 		},
 	}

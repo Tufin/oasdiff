@@ -21,7 +21,6 @@ func TestRequestParameterMaxLengthIncreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMaxLengthIncreasedId,
-		Text:        "for the 'query' request parameter 'category', the maxLength was increased from '10' to '15'",
 		Args:        []any{"query", "category", uint64(10), uint64(15)},
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -44,7 +43,6 @@ func TestRequestParameterMaxLengthDecreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMaxLengthDecreasedId,
-		Text:        "for the 'query' request parameter 'category', the maxLength was decreased from '15' to '10'",
 		Args:        []any{"query", "category", uint64(15), uint64(10)},
 		Level:       checker.ERR,
 		Operation:   "POST",

@@ -42,7 +42,6 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          RequestPropertyPatternRemovedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyPatternRemovedId, patternDiff.From, ColorizedValue(propName)),
 								Args:        []any{patternDiff.From, propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -53,7 +52,6 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          RequestPropertyPatternAddedId,
 								Level:       WARN,
-								Text:        config.Localize(RequestPropertyPatternAddedId, patternDiff.To, ColorizedValue(propName)),
 								Args:        []any{patternDiff.To, propName},
 								Comment:     config.Localize("pattern-changed-warn-comment"),
 								Operation:   operation,
@@ -71,7 +69,6 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          RequestPropertyPatternChangedId,
 								Level:       level,
-								Text:        config.Localize(RequestPropertyPatternChangedId, ColorizedValue(propName), patternDiff.From, patternDiff.To),
 								Args:        []any{propName, patternDiff.From, patternDiff.To},
 								Comment:     comment,
 								Operation:   operation,

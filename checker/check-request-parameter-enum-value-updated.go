@@ -39,7 +39,6 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          RequestParameterEnumValueRemovedId,
 							Level:       ERR,
-							Text:        config.Localize(RequestParameterEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Args:        []any{enumVal, paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -51,7 +50,6 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          RequestParameterEnumValueAddedId,
 							Level:       INFO,
-							Text:        config.Localize(RequestParameterEnumValueAddedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Args:        []any{enumVal, paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

@@ -32,7 +32,6 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 				result = append(result, ApiChange{
 					Id:          APITagRemovedId,
 					Level:       config.getLogLevel(APITagRemovedId, INFO),
-					Text:        config.Localize(APITagRemovedId, ColorizedValue(tag)),
 					Args:        []any{tag},
 					Operation:   operation,
 					OperationId: op.OperationID,
@@ -46,7 +45,6 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 				result = append(result, ApiChange{
 					Id:          APITagAddedId,
 					Level:       config.getLogLevel(APITagAddedId, INFO),
-					Text:        config.Localize(APITagAddedId, ColorizedValue(tag)),
 					Args:        []any{tag},
 					Operation:   operation,
 					OperationId: op.OperationID,

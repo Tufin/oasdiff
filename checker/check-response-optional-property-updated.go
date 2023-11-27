@@ -51,13 +51,10 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								return
 							}
 
-							propName := propertyFullName(propertyPath, propertyName)
-
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        config.Localize(id, ColorizedValue(propName), ColorizedValue(responseStatus)),
-								Args:        []any{propName, responseStatus},
+								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -77,13 +74,10 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								return
 							}
 
-							propName := propertyFullName(propertyPath, propertyName)
-
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
-								Args:        []any{propName, responseStatus},
+								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

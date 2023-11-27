@@ -39,8 +39,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 						result = append(result, ApiChange{
 							Id:          RequestHeaderPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        config.Localize(RequestHeaderPropertyBecameEnumId, ColorizedValue(paramName)),
-							Args:        []any{},
+							Args:        []any{paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -59,8 +58,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestHeaderPropertyBecameEnumId,
 								Level:       ERR,
-								Text:        config.Localize(RequestHeaderPropertyBecameEnumId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Args:        []any{},
+								Args:        []any{paramName, propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

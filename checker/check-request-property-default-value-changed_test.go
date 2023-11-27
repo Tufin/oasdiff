@@ -21,7 +21,6 @@ func TestRequestBodyDefaultValueChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyDefaultValueChangedId,
-		Text:        "the request body 'text/plain' default value changed from 'Default' to 'NewDefault'",
 		Args:        []any{"text/plain", "Default", "NewDefault"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -47,7 +46,6 @@ func TestRequestPropertyDefaultValueChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyDefaultValueChangedId,
-		Text:        "the 'price' request property default value changed from '10.00' to '20.00'",
 		Args:        []any{"price", 10.0, 20.0},
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -73,7 +71,6 @@ func TestRequestBodyDefaultValueAdded(t *testing.T) {
 	require.Len(t, errs, 2)
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.RequestBodyDefaultValueAddedId,
-		Text:        "the request body 'text/plain' default value 'Default' was added",
 		Args:        []any{"text/plain", "Default"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -83,7 +80,6 @@ func TestRequestBodyDefaultValueAdded(t *testing.T) {
 		OperationId: "createProduct",
 	}, {
 		Id:          checker.RequestPropertyDefaultValueAddedId,
-		Text:        "the 'price' request property default value '10.00' was added",
 		Args:        []any{"price", 10.0},
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -109,7 +105,6 @@ func TestRequestBodyDefaultValueRemoving(t *testing.T) {
 	require.Len(t, errs, 2)
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.RequestBodyDefaultValueRemovedId,
-		Text:        "the request body 'text/plain' default value 'Default' was removed",
 		Args:        []any{"text/plain", "Default"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -119,7 +114,6 @@ func TestRequestBodyDefaultValueRemoving(t *testing.T) {
 		OperationId: "createProduct",
 	}, {
 		Id:          checker.RequestPropertyDefaultValueRemovedId,
-		Text:        "the 'price' request property default value '10.00' was removed",
 		Args:        []any{"price", 10.0},
 		Level:       checker.INFO,
 		Operation:   "POST",

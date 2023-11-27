@@ -39,8 +39,7 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 								result = append(result, ApiChange{
 									Id:          ResponseBodyMaxIncreasedId,
 									Level:       ERR,
-									Text:        config.Localize(ResponseBodyMaxIncreasedId, ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To)),
-									Args:        []any{},
+									Args:        []any{maxDiff.From, maxDiff.To},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -72,8 +71,7 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 							result = append(result, ApiChange{
 								Id:          ResponsePropertyMaxIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(ResponsePropertyMaxIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxDiff.From), ColorizedValue(maxDiff.To), ColorizedValue(responseStatus)),
-								Args:        []any{},
+								Args:        []any{propertyFullName(propertyPath, propertyName), maxDiff.From, maxDiff.To, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

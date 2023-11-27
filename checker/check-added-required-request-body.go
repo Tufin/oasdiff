@@ -27,7 +27,6 @@ func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *dif
 				result = append(result, ApiChange{
 					Id:          AddedRequiredRequestBodyId,
 					Level:       ERR,
-					Text:        config.Localize(AddedRequiredRequestBodyId),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

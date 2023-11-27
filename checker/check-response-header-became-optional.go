@@ -42,8 +42,7 @@ func ResponseHeaderBecameOptionalCheck(diffReport *diff.Diff, operationsSources 
 					result = append(result, ApiChange{
 						Id:          ResponseHeaderBecameOptionalId,
 						Level:       ERR,
-						Text:        config.Localize(ResponseHeaderBecameOptionalId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
-						Args:        []any{},
+						Args:        []any{headerName, responseStatus},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

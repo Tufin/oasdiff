@@ -29,19 +29,16 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 			source := (*operationsSources)[op]
 
 			id := APIOperationIdRemovedId
-			text := config.Localize(id, ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID))
 			args := []any{operationItem.Base.OperationID, operationItem.Revision.OperationID}
 			if operationItem.OperationIDDiff.From == nil || operationItem.OperationIDDiff.From == "" {
 				id = APIOperationIdAddId
 				op = pathItem.Revision.Operations()[operation]
-				text = config.Localize(id, ColorizedValue(operationItem.Revision.OperationID))
 				args = []any{operationItem.Revision.OperationID}
 			}
 
 			result = append(result, ApiChange{
 				Id:          id,
 				Level:       config.getLogLevel(id, INFO),
-				Text:        text,
 				Args:        args,
 				Operation:   operation,
 				OperationId: op.OperationID,

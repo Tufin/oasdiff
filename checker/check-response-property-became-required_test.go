@@ -20,7 +20,6 @@ func TestResponsePropertyBecameRequiredlCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyBecameRequiredId,
-		Text:        "the response property 'data/name' became required for the status '200'",
 		Args:        []any{"data/name", "200"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -46,7 +45,6 @@ func TestResponseWriteOnlyPropertyBecameRequiredCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseWriteOnlyPropertyBecameRequiredId,
-		Text:        "the response write-only property 'data/name' became required for the status '200'",
 		Args:        []any{"data/name", "200"},
 		Comment:     "",
 		Level:       checker.INFO,

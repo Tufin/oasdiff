@@ -38,7 +38,6 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestBodyMinLengthIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestBodyMinLengthIncreasedId, ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Args:        []any{minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -49,7 +48,6 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestBodyMinLengthDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestBodyMinLengthDecreasedId, ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Args:        []any{minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -78,7 +76,6 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinLengthDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMinLengthDecreasedId, ColorizedValue(propName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Args:        []any{propName, minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -89,7 +86,6 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinLengthIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyMinLengthIncreasedId, ColorizedValue(propName), ColorizedValue(minLengthDiff.From), ColorizedValue(minLengthDiff.To)),
 								Args:        []any{propName, minLengthDiff.From, minLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

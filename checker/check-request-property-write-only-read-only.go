@@ -62,7 +62,6 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(propName)),
 								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -79,7 +78,6 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          id,
 							Level:       INFO,
-							Text:        config.Localize(id, ColorizedValue(propName)),
 							Args:        []any{propName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -110,7 +108,6 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(propName)),
 								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -127,7 +124,6 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          id,
 							Level:       INFO,
-							Text:        config.Localize(id, ColorizedValue(propName)),
 							Args:        []any{propName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

@@ -23,7 +23,6 @@ func TestRequestPropertyMinLengthDecreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMinLengthDecreasedId,
-		Text:        "the 'name' request property's minLength was decreased from '3' to '2'",
 		Args:        []any{"name", uint64(3), uint64(2)},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -49,7 +48,6 @@ func TestRequestPropertyMinLengthIncreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMinLengthIncreasedId,
-		Text:        "the 'name' request property's minLength was increased from '3' to '5'",
 		Args:        []any{"name", uint64(3), uint64(5)},
 		Comment:     "",
 		Level:       checker.ERR,
@@ -75,7 +73,6 @@ func TestRequestBodyMinLengthIncreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMinLengthIncreasedId,
-		Text:        "the request's body minLength was increased from '10' to '100'",
 		Args:        []any{uint64(10), uint64(100)},
 		Comment:     "",
 		Level:       checker.ERR,
@@ -101,7 +98,6 @@ func TestRequestBodyMinLengthDecreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMinLengthDecreasedId,
-		Text:        "the request's body minLength was decreased from '10' to '1'",
 		Args:        []any{uint64(10), uint64(1)},
 		Comment:     "",
 		Level:       checker.INFO,

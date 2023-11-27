@@ -52,8 +52,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							result = append(result, ApiChange{
 								Id:          RequestHeaderPropertyBecameRequiredId,
 								Level:       ERR,
-								Text:        config.Localize(RequestHeaderPropertyBecameRequiredId, ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
-								Args:        []any{},
+								Args:        []any{paramName, changedRequiredPropertyName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -79,8 +78,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								result = append(result, ApiChange{
 									Id:          RequestHeaderPropertyBecameRequiredId,
 									Level:       ERR,
-									Text:        config.Localize(RequestHeaderPropertyBecameRequiredId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
-									Args:        []any{},
+									Args:        []any{paramName, propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

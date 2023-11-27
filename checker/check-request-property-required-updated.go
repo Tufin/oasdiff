@@ -48,7 +48,6 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						result = append(result, ApiChange{
 							Id:          RequestPropertyBecameRequiredId,
 							Level:       ERR,
-							Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(changedRequiredPropertyName)),
 							Args:        []any{changedRequiredPropertyName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -71,7 +70,6 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						result = append(result, ApiChange{
 							Id:          RequestPropertyBecameOptionalId,
 							Level:       INFO,
-							Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(changedRequiredPropertyName)),
 							Args:        []any{changedRequiredPropertyName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -100,13 +98,10 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 
-							propName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
-
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecameRequiredId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(propName)),
-								Args:        []any{propName},
+								Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -126,13 +121,10 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 
-							propName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
-
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecameOptionalId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(propName)),
-								Args:        []any{propName},
+								Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

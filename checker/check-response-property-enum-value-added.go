@@ -50,14 +50,11 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 								comment = ""
 							}
 
-							propName := propertyFullName(propertyPath, propertyName)
-
 							for _, enumVal := range enumDiff.Added {
 								result = append(result, ApiChange{
 									Id:          id,
 									Level:       level,
-									Text:        config.Localize(id, enumVal, ColorizedValue(propName), ColorizedValue(responseStatus)),
-									Args:        []any{enumVal, propName, responseStatus},
+									Args:        []any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
 									Comment:     comment,
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,

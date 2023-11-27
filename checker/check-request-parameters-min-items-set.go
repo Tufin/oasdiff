@@ -39,8 +39,7 @@ func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          RequestParameterMinItemsSetId,
 						Level:       WARN,
-						Text:        config.Localize(RequestParameterMinItemsSetId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
-						Args:        []any{},
+						Args:        []any{paramLocation, paramName, minItemsDiff.To},
 						Comment:     config.Localize(comment(RequestParameterMinItemsSetId)),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

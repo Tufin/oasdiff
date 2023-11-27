@@ -57,7 +57,6 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 					result = append(result, ApiChange{
 						Id:          id,
 						Level:       config.getLogLevel(id, defaultLevel),
-						Text:        config.Localize(id, ColorizedValue(responseStatus)),
 						Args:        []any{responseStatus},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
@@ -78,7 +77,6 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 					result = append(result, ApiChange{
 						Id:          addedId,
 						Level:       config.getLogLevel(addedId, INFO),
-						Text:        config.Localize(addedId, ColorizedValue(responseStatus)),
 						Args:        []any{responseStatus},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

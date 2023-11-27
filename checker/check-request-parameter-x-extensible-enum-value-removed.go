@@ -2,7 +2,6 @@ package checker
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
@@ -58,8 +57,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 						result = append(result, ApiChange{
 							Id:          UnparsableParameterFromXExtensibleEnumId,
 							Level:       ERR,
-							Text:        fmt.Sprintf("unparseable x-extensible-enum of the %s request parameter %s", ColorizedValue(paramLocation), ColorizedValue(paramName)),
-							Args:        []any{},
+							Args:        []any{paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -72,8 +70,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 						result = append(result, ApiChange{
 							Id:          UnparsableParameterToXExtensibleEnumId,
 							Level:       ERR,
-							Text:        fmt.Sprintf("unparseable x-extensible-enum of the %s request parameter %s", ColorizedValue(paramLocation), ColorizedValue(paramName)),
-							Args:        []any{},
+							Args:        []any{paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -93,8 +90,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 						result = append(result, ApiChange{
 							Id:          RequestParameterXExtensibleEnumValueRemovedId,
 							Level:       ERR,
-							Text:        config.Localize(RequestParameterXExtensibleEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
-							Args:        []any{},
+							Args:        []any{enumVal, paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -47,8 +47,7 @@ func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 						result = append(result, ApiChange{
 							Id:          ResponseMediaTypeEnumValueRemovedId,
 							Level:       config.getLogLevel(ResponseMediaTypeEnumValueRemovedId, ERR),
-							Text:        config.Localize(ResponseMediaTypeEnumValueRemovedId, mediaType, ColorizedValue(enumVal)),
-							Args:        []any{},
+							Args:        []any{mediaType, enumVal},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

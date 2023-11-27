@@ -39,7 +39,6 @@ func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.O
 				result = append(result, ApiChange{
 					Id:          RequestBodyBecameEnumId,
 					Level:       ERR,
-					Text:        config.Localize(RequestBodyBecameEnumId),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

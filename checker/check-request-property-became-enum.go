@@ -42,8 +42,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 						result = append(result, ApiChange{
 							Id:          RequestPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        config.Localize(RequestPropertyBecameEnumId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-							Args:        []any{},
+							Args:        []any{propertyFullName(propertyPath, propertyName)},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -41,7 +41,6 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						result = append(result, ApiChange{
 							Id:          RequestParameterPatternAddedId,
 							Level:       WARN,
-							Text:        config.Localize(RequestParameterPatternAddedId, patternDiff.To, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Args:        []any{patternDiff.To, paramLocation, paramName},
 							Comment:     config.Localize("pattern-changed-warn-comment"),
 							Operation:   operation,
@@ -53,7 +52,6 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						result = append(result, ApiChange{
 							Id:          RequestParameterPatternRemovedId,
 							Level:       INFO,
-							Text:        config.Localize(RequestParameterPatternRemovedId, patternDiff.From, ColorizedValue(paramLocation), ColorizedValue(paramName)),
 							Args:        []any{patternDiff.From, paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -70,7 +68,6 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						result = append(result, ApiChange{
 							Id:          RequestParameterPatternChangedId,
 							Level:       level,
-							Text:        config.Localize(RequestParameterPatternChangedId, ColorizedValue(paramLocation), ColorizedValue(paramName), patternDiff.From, patternDiff.To),
 							Args:        []any{paramLocation, paramName, patternDiff.From, patternDiff.To},
 							Comment:     comment,
 							Operation:   operation,

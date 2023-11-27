@@ -39,7 +39,6 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:        RequestBodyBecomeNotNullableId,
 							Level:     ERR,
-							Text:      config.Localize(RequestBodyBecomeNotNullableId),
 							Operation: operation,
 							Path:      path,
 							Source:    source,
@@ -50,7 +49,6 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:        RequestBodyBecomeNullableId,
 							Level:     INFO,
-							Text:      config.Localize(RequestBodyBecomeNullableId),
 							Operation: operation,
 							Path:      path,
 							Source:    source,
@@ -74,7 +72,6 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:        RequestPropertyBecomeNotNullableId,
 								Level:     ERR,
-								Text:      config.Localize(RequestPropertyBecomeNotNullableId, ColorizedValue(propName)),
 								Args:      []any{propName},
 								Operation: operation,
 								Path:      path,
@@ -86,7 +83,6 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:        RequestPropertyBecomeNullableId,
 								Level:     INFO,
-								Text:      config.Localize(RequestPropertyBecomeNullableId, ColorizedValue(propName)),
 								Args:      []any{propName},
 								Operation: operation,
 								Path:      path,

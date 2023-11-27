@@ -37,7 +37,6 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 					result = append(result, ApiChange{
 						Id:          ResponseMediaTypeRemovedId,
 						Level:       ERR,
-						Text:        config.Localize(ResponseMediaTypeRemovedId, ColorizedValue(mediaType), ColorizedValue(responseStatus)),
 						Args:        []any{mediaType, responseStatus},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
@@ -49,7 +48,6 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 					result = append(result, ApiChange{
 						Id:          ResponseMediaTypeAddedId,
 						Level:       INFO,
-						Text:        config.Localize(ResponseMediaTypeAddedId, ColorizedValue(mediaType), ColorizedValue(responseStatus)),
 						Args:        []any{mediaType, responseStatus},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

@@ -49,22 +49,18 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 							propName := propertyFullName(propertyPath, propertyName)
 
 							id := ResponsePropertyPatternChangedId
-							text := config.Localize(id, ColorizedValue(propName), ColorizedValue(patternDiff.From), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
 							args := []any{propName, patternDiff.From, patternDiff.To, responseStatus}
 							if patternDiff.To == "" || patternDiff.To == nil {
 								id = ResponsePropertyPatternRemovedId
-								text = config.Localize(id, ColorizedValue(propName), ColorizedValue(patternDiff.From), ColorizedValue(responseStatus))
 								args = []any{propName, patternDiff.From, responseStatus}
 							} else if patternDiff.From == "" || patternDiff.From == nil {
 								id = ResponsePropertyPatternAddedId
-								text = config.Localize(id, ColorizedValue(propName), ColorizedValue(patternDiff.To), ColorizedValue(responseStatus))
 								args = []any{propName, patternDiff.To, responseStatus}
 							}
 
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        text,
 								Args:        args,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

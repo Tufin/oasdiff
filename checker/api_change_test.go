@@ -8,7 +8,7 @@ import (
 )
 
 var apiChange = checker.ApiChange{
-	Id:              "breaking-id",
+	Id:              "change_id",
 	Args:            []any{},
 	Comment:         "comment",
 	Level:           checker.ERR,
@@ -24,7 +24,7 @@ var apiChange = checker.ApiChange{
 }
 
 func TestApiChange(t *testing.T) {
-	require.Equal(t, "breaking-id", apiChange.GetId())
+	require.Equal(t, "change_id", apiChange.GetId())
 	require.Equal(t, "This is a breaking change.", apiChange.GetText(MockLocalizer))
 	require.Equal(t, "comment", apiChange.GetComment())
 	require.Equal(t, checker.ERR, apiChange.GetLevel())
@@ -36,12 +36,12 @@ func TestApiChange(t *testing.T) {
 	require.Equal(t, 2, apiChange.GetSourceLineEnd())
 	require.Equal(t, 3, apiChange.GetSourceColumn())
 	require.Equal(t, 4, apiChange.GetSourceColumnEnd())
-	require.Equal(t, "error at source, in API GET /test This is a breaking change. [breaking-id]. comment", apiChange.LocalizedError(MockLocalizer))
+	require.Equal(t, "error at source, in API GET /test This is a breaking change. [change_id]. comment", apiChange.LocalizedError(MockLocalizer))
 }
 
 func MockLocalizer(originalKey string, args ...interface{}) string {
 	switch originalKey {
-	case "breaking-id":
+	case "change_id":
 		return "This is a breaking change."
 	default:
 		return originalKey
@@ -50,12 +50,12 @@ func MockLocalizer(originalKey string, args ...interface{}) string {
 }
 
 func TestApiChange_MatchIgnore(t *testing.T) {
-	require.True(t, apiChange.MatchIgnore("/test", "error at source, in api get /test this is a breaking change. [breaking-id]. comment", MockLocalizer))
+	require.True(t, apiChange.MatchIgnore("/test", "error at source, in api get /test this is a breaking change. [change_id]. comment", MockLocalizer))
 }
 
 func TestApiChange_PrettyPiped(t *testing.T) {
 	piped := true
 	save := checker.SetPipedOutput(&piped)
 	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error at source, in API GET /test This is a breaking change. [breaking-id]. comment", apiChange.PrettyErrorText(MockLocalizer))
+	require.Equal(t, "error at source, in API GET /test This is a breaking change. [change_id]. comment", apiChange.PrettyErrorText(MockLocalizer))
 }

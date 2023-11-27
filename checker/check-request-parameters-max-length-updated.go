@@ -48,7 +48,6 @@ func RequestParameterMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSour
 					result = append(result, ApiChange{
 						Id:          id,
 						Level:       level,
-						Text:        config.Localize(id, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 						Args:        []any{paramLocation, paramName, maxLengthDiff.From, maxLengthDiff.To},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,

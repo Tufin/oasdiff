@@ -25,7 +25,6 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 		result = append(result, SecurityChange{
 			Id:    APIGlobalSecurityAddedCheckId,
 			Level: INFO,
-			Text:  config.Localize(APIGlobalSecurityAddedCheckId, ColorizedValue(addedSecurity)),
 			Args:  []any{addedSecurity},
 		})
 	}
@@ -34,7 +33,6 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 		result = append(result, SecurityChange{
 			Id:    APIGlobalSecurityRemovedCheckId,
 			Level: INFO,
-			Text:  config.Localize(APIGlobalSecurityRemovedCheckId, ColorizedValue(removedSecurity)),
 			Args:  []any{removedSecurity},
 		})
 	}
@@ -45,7 +43,6 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, SecurityChange{
 					Id:    APIGlobalSecurityScopeAddedId,
 					Level: INFO,
-					Text:  config.Localize(APIGlobalSecurityScopeAddedId, ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
 					Args:  []any{addedScope, securitySchemeName},
 				})
 			}
@@ -53,7 +50,6 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, SecurityChange{
 					Id:    APIGlobalSecurityScopeRemovedId,
 					Level: INFO,
-					Text:  config.Localize(APIGlobalSecurityScopeRemovedId, ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
 					Args:  []any{deletedScope, securitySchemeName},
 				})
 			}
@@ -92,7 +88,6 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				result = append(result, ApiChange{
 					Id:          APISecurityAddedCheckId,
 					Level:       INFO,
-					Text:        config.Localize(APISecurityAddedCheckId, ColorizedValue(addedSecurity)),
 					Args:        []any{addedSecurity},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
@@ -108,7 +103,6 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				result = append(result, ApiChange{
 					Id:          APISecurityRemovedCheckId,
 					Level:       INFO,
-					Text:        config.Localize(APISecurityRemovedCheckId, ColorizedValue(deletedSecurity)),
 					Args:        []any{deletedSecurity},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
@@ -126,7 +120,6 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 						result = append(result, ApiChange{
 							Id:          APISecurityScopeAddedId,
 							Level:       INFO,
-							Text:        config.Localize(APISecurityScopeAddedId, ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
 							Args:        []any{addedScope, securitySchemeName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -138,7 +131,6 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 						result = append(result, ApiChange{
 							Id:          APISecurityScopeRemovedId,
 							Level:       INFO,
-							Text:        config.Localize(APISecurityScopeRemovedId, ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
 							Args:        []any{deletedScope, securitySchemeName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

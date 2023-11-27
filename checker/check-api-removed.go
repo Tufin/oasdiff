@@ -32,7 +32,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIPathRemovedWithoutDeprecationId,
 					Level:       ERR,
-					Text:        config.Localize(APIPathRemovedWithoutDeprecationId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -46,7 +45,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIPathSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Args:        []any{rawDate, err},
 					Operation:   operation,
 					OperationId: op.OperationID,
@@ -60,7 +58,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIPathRemovedBeforeSunsetId,
 					Level:       ERR,
-					Text:        config.Localize(APIPathRemovedBeforeSunsetId, date),
 					Args:        []any{date},
 					Operation:   operation,
 					OperationId: op.OperationID,
@@ -82,7 +79,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIRemovedWithoutDeprecationId,
 					Level:       ERR,
-					Text:        config.Localize(APIRemovedWithoutDeprecationId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -96,7 +92,6 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIPathSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
 					Args:        []any{rawDate, err},
 					Operation:   operation,
 					OperationId: op.OperationID,
@@ -110,7 +105,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				result = append(result, ApiChange{
 					Id:          APIRemovedBeforeSunsetId,
 					Level:       ERR,
-					Text:        config.Localize(APIRemovedBeforeSunsetId, date),
+					Args:        []any{date},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,

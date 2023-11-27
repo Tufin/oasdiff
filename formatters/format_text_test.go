@@ -6,56 +6,42 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/checker/localizations"
 	"github.com/tufin/oasdiff/formatters"
 )
 
-func TestTextFormatter_RenderBreakingChanges(t *testing.T) {
-	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: localizations.LangDefault,
-	})
-	require.NoError(t, err)
+var textFormatter = formatters.TEXTFormatter{
+	Localizer: MockLocalizer,
+}
 
+func TestTextFormatter_RenderBreakingChanges(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:        "change_id",
-			Text:      "This is a breaking change.",
 			Level:     checker.ERR,
 			Component: "test",
 		},
 	}
 
-	out, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	out, err := textFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
 	require.NoError(t, err)
-	require.Equal(t, string(out), "1 breaking changes: 1 error, 0 warning\nerror, in components/test This is a breaking change. [change_id]. \n\n")
+	require.Equal(t, "1 breaking changes: 1 error, 0 warning\nerror, in components/test This is a breaking change. [change_id]. \n\n", string(out))
 }
 
 func TestTextFormatter_RenderChangelog(t *testing.T) {
-	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: localizations.LangDefault,
-	})
-	require.NoError(t, err)
-
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:        "change_id",
-			Text:      "This is a breaking change.",
 			Level:     checker.ERR,
 			Component: "test",
 		},
 	}
 
-	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
+	out, err := textFormatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
 	require.NoError(t, err)
-	require.Equal(t, string(out), "1 changes: 1 error, 0 warning, 0 info\nerror, in components/test This is a breaking change. [change_id]. \n\n")
+	require.Equal(t, "1 changes: 1 error, 0 warning, 0 info\nerror, in components/test This is a breaking change. [change_id]. \n\n", string(out))
 }
 
 func TestTextFormatter_RenderChecks(t *testing.T) {
-	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: localizations.LangDefault,
-	})
-	require.NoError(t, err)
-
 	checks := formatters.Checks{
 		{
 			Id:          "change_id",
@@ -65,31 +51,23 @@ func TestTextFormatter_RenderChecks(t *testing.T) {
 		},
 	}
 
-	out, err := formatter.RenderChecks(checks, formatters.RenderOpts{})
+	out, err := textFormatter.RenderChecks(checks, formatters.RenderOpts{})
 	require.NoError(t, err)
 	require.Equal(t, string(out), "ID        DESCRIPTION                LEVEL\nchange_id This is a breaking change. info\n")
 }
 
 func TestTextFormatter_RenderDiff(t *testing.T) {
-	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: localizations.LangDefault,
-	})
-	require.NoError(t, err)
-
-	out, err := formatter.RenderDiff(nil, formatters.RenderOpts{})
+	out, err := textFormatter.RenderDiff(nil, formatters.RenderOpts{})
 	require.NoError(t, err)
 	require.Equal(t, string(out), "No changes\n")
 }
 
 func TestTextFormatter_NotImplemented(t *testing.T) {
-	formatter, err := formatters.Lookup("text", formatters.FormatterOpts{
-		Language: localizations.LangDefault,
-	})
-	require.NoError(t, err)
+	var err error
 
-	_, err = formatter.RenderFlatten(nil, formatters.RenderOpts{})
+	_, err = textFormatter.RenderFlatten(nil, formatters.RenderOpts{})
 	assert.Error(t, err)
 
-	_, err = formatter.RenderSummary(nil, formatters.RenderOpts{})
+	_, err = textFormatter.RenderSummary(nil, formatters.RenderOpts{})
 	assert.Error(t, err)
 }

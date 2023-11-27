@@ -51,7 +51,6 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(changedRequiredPropertyName), ColorizedValue(responseStatus)),
 								Args:        []any{changedRequiredPropertyName, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -81,13 +80,10 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 									continue
 								}
 
-								propName := propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))
-
 								result = append(result, ApiChange{
 									Id:          id,
 									Level:       INFO,
-									Text:        config.Localize(id, ColorizedValue(propName), ColorizedValue(responseStatus)),
-									Args:        []any{propName, responseStatus},
+									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

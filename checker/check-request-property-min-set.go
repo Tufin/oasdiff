@@ -35,8 +35,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          RequestBodyMinSetId,
 							Level:       WARN,
-							Text:        config.Localize(RequestBodyMinSetId, ColorizedValue(minDiff.To)),
-							Args:        []any{},
+							Args:        []any{minDiff.To},
 							Comment:     config.Localize(comment(RequestBodyMinSetId)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
@@ -64,8 +63,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          RequestPropertyMinSetId,
 							Level:       WARN,
-							Text:        config.Localize(RequestPropertyMinSetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
-							Args:        []any{},
+							Args:        []any{propertyFullName(propertyPath, propertyName), minDiff.To},
 							Comment:     config.Localize(comment(RequestPropertyMinSetId)),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,

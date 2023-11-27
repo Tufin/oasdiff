@@ -44,8 +44,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          RequestBodyEnumValueRemovedId,
 						Level:       config.getLogLevel(RequestBodyEnumValueRemovedId, INFO),
-						Text:        config.Localize(RequestBodyEnumValueRemovedId, ColorizedValue(enumVal)),
-						Args:        []any{},
+						Args:        []any{enumVal},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

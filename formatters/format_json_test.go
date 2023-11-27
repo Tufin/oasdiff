@@ -16,7 +16,6 @@ func TestJsonFormatter_RenderBreakingChanges(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
-			Text:  "This is a breaking change.",
 			Level: checker.ERR,
 		},
 	}
@@ -30,7 +29,6 @@ func TestJsonFormatter_RenderChangelog(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
-			Text:  "This is a breaking change.",
 			Level: checker.ERR,
 		},
 	}

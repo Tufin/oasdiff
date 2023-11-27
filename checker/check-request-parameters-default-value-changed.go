@@ -28,7 +28,6 @@ func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 				result = append(result, ApiChange{
 					Id:          messageId,
 					Level:       ERR,
-					Text:        config.Localize(messageId, ColorizedValues(a)...),
 					Args:        a,
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,

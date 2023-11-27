@@ -38,7 +38,6 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestBodyMinIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestBodyMinIncreasedId, ColorizedValue(minDiff.To)),
 								Args:        []any{minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -49,7 +48,6 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestBodyMinDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestBodyMinDecreasedId, ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
 								Args:        []any{minDiff.From, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -78,7 +76,6 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinIncreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMinIncreasedId, ColorizedValue(propName), ColorizedValue(minDiff.To)),
 								Args:        []any{propName, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -89,7 +86,6 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMinDecreasedId, ColorizedValue(propName), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
 								Args:        []any{propName, minDiff.From, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

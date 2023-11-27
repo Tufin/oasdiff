@@ -16,7 +16,6 @@ func TestJUnitFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
-			Text:  "This is a breaking change.",
 			Level: checker.ERR,
 		},
 	}

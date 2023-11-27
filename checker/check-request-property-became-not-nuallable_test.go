@@ -21,7 +21,6 @@ func TestRequestPropertyBecameNotNullable(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecomeNotNullableId,
-		Text:        "the request property 'name' became not nullable",
 		Args:        []any{"name"},
 		Comment:     "",
 		Level:       checker.ERR,
@@ -45,7 +44,6 @@ func TestRequestPropertyBecameNullable(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecomeNullableId,
-		Text:        "the request property 'name' became nullable",
 		Args:        []any{"name"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -73,7 +71,6 @@ func TestRequestBodyBecameNullable(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyBecomeNullableId,
-		Text:        "the request's body became nullable",
 		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -99,7 +96,6 @@ func TestRequestBodyBecameNotNullable(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyBecomeNotNullableId,
-		Text:        "the request's body became not nullable",
 		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",

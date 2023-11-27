@@ -24,7 +24,6 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseSuccessStatusAddedId,
-		Text:        "added the success response with the status '201'",
 		Args:        []any{"201"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -51,7 +50,6 @@ func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseNonSuccessStatusAddedId,
-		Text:        "added the non-success response with the status '400'",
 		Args:        []any{"400"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -78,7 +76,6 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseNonSuccessStatusRemovedId,
-		Text:        "removed the non-success response with the status '409'",
 		Args:        []any{"409"},
 		Comment:     "",
 		Level:       checker.INFO,
@@ -105,7 +102,6 @@ func TestResponseSuccessStatusRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseSuccessStatusRemovedId,
-		Text:        "removed the success response with the status '200'",
 		Args:        []any{"200"},
 		Comment:     "",
 		Level:       checker.ERR,

@@ -24,7 +24,6 @@ func TestRequestPropertyAllOfAdded(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          checker.RequestBodyAllOfAddedId,
-			Text:        "added 'Rabbit' to the request body 'allOf' list",
 			Args:        []any{"Rabbit"},
 			Comment:     "",
 			Level:       checker.ERR,
@@ -35,7 +34,6 @@ func TestRequestPropertyAllOfAdded(t *testing.T) {
 		},
 		{
 			Id:          checker.RequestPropertyAllOfAddedId,
-			Text:        "added 'Breed3' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list",
 			Args:        []any{"Breed3", "/allOf[#/components/schemas/Dog]/breed"},
 			Comment:     "",
 			Level:       checker.ERR,
@@ -62,7 +60,6 @@ func TestRequestPropertyAllOfRemoved(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          checker.RequestBodyAllOfRemovedId,
-			Text:        "removed 'Rabbit' from the request body 'allOf' list",
 			Args:        []any{"Rabbit"},
 			Comment:     "",
 			Level:       checker.WARN,
@@ -73,7 +70,6 @@ func TestRequestPropertyAllOfRemoved(t *testing.T) {
 		},
 		{
 			Id:          checker.RequestPropertyAllOfRemovedId,
-			Text:        "removed 'Breed3' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list",
 			Args:        []any{"Breed3", "/allOf[#/components/schemas/Dog]/breed"},
 			Comment:     "",
 			Level:       checker.WARN,

@@ -38,7 +38,6 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestBodyMaxLengthDecreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestBodyMaxLengthDecreasedId, ColorizedValue(maxLengthDiff.To)),
 								Args:        []any{maxLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -49,7 +48,6 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestBodyMaxLengthIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestBodyMaxLengthIncreasedId, ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 								Args:        []any{maxLengthDiff.From, maxLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -78,7 +76,6 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxLengthDecreasedId,
 								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMaxLengthDecreasedId, ColorizedValue(propName), ColorizedValue(maxLengthDiff.To)),
 								Args:        []any{propName, maxLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -89,7 +86,6 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMaxLengthIncreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMaxLengthIncreasedId, ColorizedValue(propName), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
 								Args:        []any{propName, maxLengthDiff.From, maxLengthDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

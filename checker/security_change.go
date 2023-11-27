@@ -10,7 +10,6 @@ import (
 // SecurityChange represents a change in the Security Section (not to be confised with components/securitySchemes)
 type SecurityChange struct {
 	Id      string `json:"id,omitempty" yaml:"id,omitempty"`
-	Text    string `json:"text,omitempty" yaml:"text,omitempty"`
 	Args    []any  `json:"-" yaml:"-"`
 	Comment string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level   Level  `json:"level" yaml:"level"`
@@ -93,7 +92,7 @@ func (c SecurityChange) GetSourceColumnEnd() int {
 }
 
 func (c SecurityChange) LocalizedError(l Localizer) string {
-	return fmt.Sprintf("%s, %s security %s [%s]. %s", c.Level, l("in"), c.Text, c.Id, c.Comment)
+	return fmt.Sprintf("%s, %s security %s [%s]. %s", c.Level, l("in"), c.GetText(l), c.Id, c.Comment)
 }
 
 func (c SecurityChange) PrettyErrorText(l Localizer) string {
@@ -105,5 +104,5 @@ func (c SecurityChange) PrettyErrorText(l Localizer) string {
 	if c.Comment != "" {
 		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
 	}
-	return fmt.Sprintf("%s\t[%s] \t\n\t%s security\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Text, comment)
+	return fmt.Sprintf("%s\t[%s] \t\n\t%s security\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.GetText(l), comment)
 }
