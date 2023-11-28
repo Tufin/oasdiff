@@ -53,7 +53,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 								Id:          RequestPropertyPatternAddedId,
 								Level:       WARN,
 								Args:        []any{patternDiff.To, propName},
-								Comment:     config.Localize("pattern-changed-warn-comment"),
+								Comment:     PatternChangedCommentId,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -61,7 +61,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							})
 						} else {
 							level := WARN
-							comment := config.Localize("pattern-changed-warn-comment")
+							comment := PatternChangedCommentId
 							if patternDiff.To == ".*" {
 								level = INFO
 								comment = ""

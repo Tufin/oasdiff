@@ -6,7 +6,7 @@ type Change interface {
 	GetText(l Localizer) string
 	GetArgs() []any
 	GetUncolorizedText(l Localizer) string
-	GetComment() string
+	GetComment(l Localizer) string
 	GetLevel() Level
 	GetOperation() string
 	GetOperationId() string

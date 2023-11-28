@@ -24,7 +24,6 @@ func TestOperationIdRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdRemovedId,
 		Args:        []any{"createOneGroup", ""},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -49,7 +48,6 @@ func TestOperationIdUpdated(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdRemovedId,
 		Args:        []any{"createOneGroup", "newOperationId"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -76,7 +74,6 @@ func TestOperationIdAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdAddId,
 		Args:        []any{"NewOperationId"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

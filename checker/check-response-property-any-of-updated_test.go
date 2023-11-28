@@ -25,7 +25,6 @@ func TestResponsePropertyAnyOfAdded(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyAnyOfAddedId,
 			Args:        []any{"Rabbit", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -35,7 +34,6 @@ func TestResponsePropertyAnyOfAdded(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyAnyOfAddedId,
 			Args:        []any{"Breed3", "/anyOf[#/components/schemas/Dog]/breed", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -61,7 +59,6 @@ func TestResponsePropertyAnyOfRemoved(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyAnyOfRemovedId,
 			Args:        []any{"Rabbit", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -71,7 +68,6 @@ func TestResponsePropertyAnyOfRemoved(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyAnyOfRemovedId,
 			Args:        []any{"Breed3", "/anyOf[#/components/schemas/Dog]/breed", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",

@@ -22,7 +22,7 @@ func NewChanges(originalChanges checker.Changes, l checker.Localizer) Changes {
 		changes[i] = Change{
 			Id:          change.GetId(),
 			Text:        change.GetText(l),
-			Comment:     change.GetComment(),
+			Comment:     change.GetComment(l),
 			Level:       change.GetLevel(),
 			Operation:   change.GetOperation(),
 			OperationId: change.GetOperationId(),

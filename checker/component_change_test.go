@@ -21,7 +21,7 @@ var componentChange = checker.ComponentChange{
 }
 
 func TestComponentChange(t *testing.T) {
-	require.Equal(t, "comment", componentChange.GetComment())
+	require.Equal(t, "comment", componentChange.GetComment(MockLocalizer))
 	require.Equal(t, "", componentChange.GetOperationId())
 	require.Equal(t, "sourceFile", componentChange.GetSourceFile())
 	require.Equal(t, 1, componentChange.GetSourceLine())

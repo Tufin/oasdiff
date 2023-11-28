@@ -21,7 +21,6 @@ func TestResponsePropertyBecameRequiredlCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyBecameRequiredId,
 		Args:        []any{"data/name", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -46,7 +45,6 @@ func TestResponseWriteOnlyPropertyBecameRequiredCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseWriteOnlyPropertyBecameRequiredId,
 		Args:        []any{"data/name", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

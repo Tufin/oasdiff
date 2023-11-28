@@ -8,6 +8,7 @@ const (
 	RequestParameterPatternAddedId   = "request-parameter-pattern-added"
 	RequestParameterPatternRemovedId = "request-parameter-pattern-removed"
 	RequestParameterPatternChangedId = "request-parameter-pattern-changed"
+	PatternChangedCommentId          = "pattern-changed-warn-comment"
 )
 
 func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -42,7 +43,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							Id:          RequestParameterPatternAddedId,
 							Level:       WARN,
 							Args:        []any{patternDiff.To, paramLocation, paramName},
-							Comment:     config.Localize("pattern-changed-warn-comment"),
+							Comment:     PatternChangedCommentId,
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -60,7 +61,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						})
 					} else {
 						level := WARN
-						comment := config.Localize("pattern-changed-warn-comment")
+						comment := PatternChangedCommentId
 						if patternDiff.To == ".*" {
 							level = INFO
 							comment = ""

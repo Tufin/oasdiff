@@ -21,7 +21,6 @@ func TestResponsePropertyBecameOptionalCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyBecameOptionalId,
 		Args:        []any{"data/name", "200"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -46,7 +45,6 @@ func TestResponseWriteOnlyPropertyBecameOptionalCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseWriteOnlyPropertyBecameOptionalId,
 		Args:        []any{"data/name", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

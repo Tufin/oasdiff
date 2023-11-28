@@ -24,7 +24,6 @@ func TestBreaking_HeaderParamBecameRequired(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:        checker.RequestParameterBecomeRequiredId,
 		Args:      []any{"header", "network-policies"},
-		Comment:   "",
 		Level:     checker.ERR,
 		Operation: "GET",
 		Path:      "/api/{domain}/{project}/install-command",
@@ -47,7 +46,6 @@ func TestBreaking_HeaderParamBecameOptional(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:        checker.RequestParameterBecomeOptionalId,
 		Args:      []any{"header", "network-policies"},
-		Comment:   "",
 		Level:     checker.INFO,
 		Operation: "GET",
 		Path:      "/api/{domain}/{project}/install-command",

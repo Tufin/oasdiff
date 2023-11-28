@@ -21,7 +21,6 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.ResponsePropertyDefaultValueChangedId,
 		Args:        []any{"created", "2020-01-01T00:00:00Z", "2020-02-01T00:00:00Z", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -30,7 +29,6 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueChangedId,
 		Args:        []any{"enabled", false, true, "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -54,7 +52,6 @@ func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseBodyDefaultValueChangedId,
 		Args:        []any{"text/plain", "Error", "new default value", "404"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -80,7 +77,6 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.ResponseBodyDefaultValueAddedId,
 		Args:        []any{"text/plain", "Error", "404"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -89,7 +85,6 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueAddedId,
 		Args:        []any{"created", "2020-01-01T00:00:00Z", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -115,7 +110,6 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.ResponseBodyDefaultValueRemovedId,
 		Args:        []any{"text/plain", "Error", "404"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -124,7 +118,6 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueRemovedId,
 		Args:        []any{"created", "2020-01-01T00:00:00Z", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

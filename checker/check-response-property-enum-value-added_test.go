@@ -24,13 +24,14 @@ func TestResponsePropertyEnumValueAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyEnumValueAddedId,
 		Args:        []any{"Test", "data/typeEnum", "200"},
-		Comment:     "Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.",
+		Comment:     checker.ResponsePropertyEnumValueAddedId + "-comment",
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      "../data/checker/response_property_enum_added_base.yaml",
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.", errs[0].GetComment(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding an enum value to a response write-only property

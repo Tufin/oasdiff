@@ -22,7 +22,6 @@ func TestRequestBodyDefaultValueChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyDefaultValueChangedId,
 		Args:        []any{"text/plain", "Default", "NewDefault"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
@@ -72,7 +71,6 @@ func TestRequestBodyDefaultValueAdded(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.RequestBodyDefaultValueAddedId,
 		Args:        []any{"text/plain", "Default"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
@@ -106,7 +104,6 @@ func TestRequestBodyDefaultValueRemoving(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{{
 		Id:          checker.RequestBodyDefaultValueRemovedId,
 		Args:        []any{"text/plain", "Default"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",

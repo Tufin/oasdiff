@@ -27,7 +27,6 @@ func singleCheckConfig(c checker.BackwardCompatibilityCheck) *checker.Config {
 		Checks:              []checker.BackwardCompatibilityCheck{c},
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
-		Localize:            checker.NewDefaultLocalizer(),
 	}
 }
 

@@ -26,7 +26,6 @@ func TestResponseDiscriminatorUpdatedCheckAdded(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyDiscriminatorAddedId,
 			Args:        []any{"200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -36,7 +35,6 @@ func TestResponseDiscriminatorUpdatedCheckAdded(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyDiscriminatorAddedId,
 			Args:        []any{"/oneOf[#/components/schemas/Dog]/breed", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -62,7 +60,6 @@ func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyDiscriminatorRemovedId,
 			Args:        []any{"200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -72,7 +69,6 @@ func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyDiscriminatorRemovedId,
 			Args:        []any{"/oneOf[#/components/schemas/Dog]/breed", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -98,7 +94,6 @@ func TestResponseDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyDiscriminatorPropertyNameChangedId,
 			Args:        []any{"petType", "petType2", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -108,7 +103,6 @@ func TestResponseDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyDiscriminatorPropertyNameChangedId,
 			Args:        []any{"/oneOf[#/components/schemas/Dog]/breed", "name", "name2", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -134,7 +128,6 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyDiscriminatorMappingAddedId,
 			Args:        []any{utils.StringList{"cats"}, "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -144,7 +137,6 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyDiscriminatorMappingDeletedId,
 			Args:        []any{utils.StringList{"cat"}, "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -154,7 +146,6 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyDiscriminatorMappingAddedId,
 			Args:        []any{utils.StringList{"breed1Code"}, "/oneOf[#/components/schemas/Dog]/breed", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -164,7 +155,6 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyDiscriminatorMappingChangedId,
 			Args:        []any{"breed2", "#/components/schemas/Breed2", "#/components/schemas/Breed3", "/oneOf[#/components/schemas/Dog]/breed", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -174,7 +164,6 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyDiscriminatorMappingDeletedId,
 			Args:        []any{utils.StringList{"breed1"}, "/oneOf[#/components/schemas/Dog]/breed", "200"},
-			Comment:     "",
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",

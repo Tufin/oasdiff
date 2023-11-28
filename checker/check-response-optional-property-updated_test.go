@@ -22,7 +22,6 @@ func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseOptionalPropertyRemovedId,
 		Args:        []any{"data/id", "200"},
-		Comment:     "",
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -46,7 +45,6 @@ func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseOptionalPropertyAddedId,
 		Args:        []any{"data/id", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

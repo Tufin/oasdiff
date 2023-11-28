@@ -44,7 +44,7 @@ func (c ApiChange) GetId() string {
 }
 
 func (c ApiChange) GetText(l Localizer) string {
-	return l(c.Id, ColorizedValues(c.Args)...)
+	return l(c.Id, colorizedValues(c.Args)...)
 }
 
 func (c ApiChange) GetArgs() []any {
@@ -52,11 +52,11 @@ func (c ApiChange) GetArgs() []any {
 }
 
 func (c ApiChange) GetUncolorizedText(l Localizer) string {
-	return l(c.Id, QuotedValues(c.Args)...)
+	return l(c.Id, quotedValues(c.Args)...)
 }
 
-func (c ApiChange) GetComment() string {
-	return c.Comment
+func (c ApiChange) GetComment(l Localizer) string {
+	return l(c.Comment)
 }
 
 func (c ApiChange) GetLevel() Level {
@@ -100,7 +100,7 @@ func (c ApiChange) GetSourceColumnEnd() int {
 }
 
 func (c ApiChange) LocalizedError(l Localizer) string {
-	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", c.Level, l("at"), c.Source, l("in"), c.Operation, c.Path, c.GetText(l), c.Id, c.Comment)
+	return fmt.Sprintf("%s %s %s, %s API %s %s %s [%s]. %s", c.Level, l("at"), c.Source, l("in"), c.Operation, c.Path, c.GetText(l), c.Id, c.GetComment(l))
 }
 
 func (c ApiChange) PrettyErrorText(l Localizer) string {
@@ -108,9 +108,9 @@ func (c ApiChange) PrettyErrorText(l Localizer) string {
 		return c.LocalizedError(l)
 	}
 
-	comment := ""
-	if c.Comment != "" {
-		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
+	comment := c.GetComment(l)
+	if comment != "" {
+		comment = fmt.Sprintf("\n\t\t%s", c.GetComment(l))
 	}
 	return fmt.Sprintf("%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("at"), c.Source, l("in"), color.InGreen(c.Operation), color.InGreen(c.Path), c.GetText(l), comment)
 }

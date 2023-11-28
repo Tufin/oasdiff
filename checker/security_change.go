@@ -36,7 +36,7 @@ func (c SecurityChange) GetId() string {
 }
 
 func (c SecurityChange) GetText(l Localizer) string {
-	return l(c.Id, ColorizedValues(c.Args)...)
+	return l(c.Id, colorizedValues(c.Args)...)
 }
 
 func (c SecurityChange) GetArgs() []any {
@@ -44,11 +44,11 @@ func (c SecurityChange) GetArgs() []any {
 }
 
 func (c SecurityChange) GetUncolorizedText(l Localizer) string {
-	return l(c.Id, QuotedValues(c.Args)...)
+	return l(c.Id, quotedValues(c.Args)...)
 }
 
-func (c SecurityChange) GetComment() string {
-	return c.Comment
+func (c SecurityChange) GetComment(l Localizer) string {
+	return l(c.Comment)
 }
 
 func (c SecurityChange) GetLevel() Level {

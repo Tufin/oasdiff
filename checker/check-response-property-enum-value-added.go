@@ -41,7 +41,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 
 							id := ResponsePropertyEnumValueAddedId
 							level := WARN
-							comment := config.Localize(comment(ResponsePropertyEnumValueAddedId))
+							comment := commentId(ResponsePropertyEnumValueAddedId)
 
 							if propertyDiff.Revision.WriteOnly {
 								// Document write-only enum update

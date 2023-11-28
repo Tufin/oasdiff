@@ -35,7 +35,6 @@ func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, le
 		LogLevelOverrides:   levelOverrides,
 		MinSunsetBetaDays:   minSunsetBetaDays,
 		MinSunsetStableDays: minSunsetStableDays,
-		Localize:            NewDefaultLocalizer(),
 	}
 }
 

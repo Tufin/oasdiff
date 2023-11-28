@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func comment(id string) string {
+func commentId(id string) string {
 	return id + "-comment"
 }
 
@@ -21,12 +21,7 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 	return propertyFullName
 }
 
-func QuotedValue(arg interface{}) string {
-	str := interfaceToString(arg)
-	return fmt.Sprintf("'%s'", str)
-}
-
-func ColorizedValue(arg interface{}) string {
+func colorizedValue(arg interface{}) string {
 	str := interfaceToString(arg)
 	if IsPipedOutput() {
 		return fmt.Sprintf("'%s'", str)
@@ -34,18 +29,18 @@ func ColorizedValue(arg interface{}) string {
 	return color.InBold(fmt.Sprintf("'%s'", str))
 }
 
-func ColorizedValues(args []any) []any {
+func colorizedValues(args []any) []any {
 	result := make([]any, len(args))
 	for i, arg := range args {
-		result[i] = ColorizedValue(arg)
+		result[i] = colorizedValue(arg)
 	}
 	return result
 }
 
-func QuotedValues(args []any) []any {
+func quotedValues(args []any) []any {
 	result := make([]any, len(args))
 	for i, arg := range args {
-		result[i] = QuotedValue(arg)
+		result[i] = fmt.Sprintf("'%s'", interfaceToString(arg))
 	}
 	return result
 }

@@ -25,7 +25,6 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseSuccessStatusAddedId,
 		Args:        []any{"201"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -51,7 +50,6 @@ func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseNonSuccessStatusAddedId,
 		Args:        []any{"400"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -77,7 +75,6 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseNonSuccessStatusRemovedId,
 		Args:        []any{"409"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -103,7 +100,6 @@ func TestResponseSuccessStatusRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseSuccessStatusRemovedId,
 		Args:        []any{"200"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

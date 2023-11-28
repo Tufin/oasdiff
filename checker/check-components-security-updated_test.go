@@ -147,7 +147,6 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	require.Equal(t, checker.ComponentChange{
 		Id:        "api-security-component-oauth-scope-removed",
 		Args:      []any{"petstore_auth", "admin:pets"},
-		Comment:   "",
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
 	}, errs[0])
@@ -169,7 +168,6 @@ func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 	require.Equal(t, checker.ComponentChange{
 		Id:        "api-security-component-oauth-scope-changed",
 		Args:      []any{"petstore_auth", "read:pets", "read your pets", "grants access to pets (deprecated)"},
-		Comment:   "",
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
 	}, errs[0])

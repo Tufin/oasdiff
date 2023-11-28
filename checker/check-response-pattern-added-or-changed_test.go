@@ -25,7 +25,6 @@ func TestResponsePropertyPatternChanged(t *testing.T) {
 
 		Id:          checker.ResponsePropertyPatternChangedId,
 		Args:        []any{"data/created", "^[a-z]+$", "^(?:([a-z]+-)*([a-z]+)?)$", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -51,7 +50,6 @@ func TestResponsePropertyPatternAdded(t *testing.T) {
 
 		Id:          checker.ResponsePropertyPatternAddedId,
 		Args:        []any{"data/created", "^[a-z]+$", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -77,7 +75,6 @@ func TestResponsePropertyPatternRemoved(t *testing.T) {
 
 		Id:          checker.ResponsePropertyPatternRemovedId,
 		Args:        []any{"data/created", "^[a-z]+$", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

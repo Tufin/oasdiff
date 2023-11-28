@@ -25,7 +25,6 @@ func TestRequestPropertyAllOfAdded(t *testing.T) {
 		{
 			Id:          checker.RequestBodyAllOfAddedId,
 			Args:        []any{"Rabbit"},
-			Comment:     "",
 			Level:       checker.ERR,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -35,7 +34,6 @@ func TestRequestPropertyAllOfAdded(t *testing.T) {
 		{
 			Id:          checker.RequestPropertyAllOfAddedId,
 			Args:        []any{"Breed3", "/allOf[#/components/schemas/Dog]/breed"},
-			Comment:     "",
 			Level:       checker.ERR,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -61,7 +59,6 @@ func TestRequestPropertyAllOfRemoved(t *testing.T) {
 		{
 			Id:          checker.RequestBodyAllOfRemovedId,
 			Args:        []any{"Rabbit"},
-			Comment:     "",
 			Level:       checker.WARN,
 			Operation:   "POST",
 			Path:        "/pets",
@@ -71,7 +68,6 @@ func TestRequestPropertyAllOfRemoved(t *testing.T) {
 		{
 			Id:          checker.RequestPropertyAllOfRemovedId,
 			Args:        []any{"Breed3", "/allOf[#/components/schemas/Dog]/breed"},
-			Comment:     "",
 			Level:       checker.WARN,
 			Operation:   "POST",
 			Path:        "/pets",

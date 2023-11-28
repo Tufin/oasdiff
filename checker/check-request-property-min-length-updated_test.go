@@ -24,7 +24,6 @@ func TestRequestPropertyMinLengthDecreased(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMinLengthDecreasedId,
 		Args:        []any{"name", uint64(3), uint64(2)},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
@@ -49,7 +48,6 @@ func TestRequestPropertyMinLengthIncreased(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMinLengthIncreasedId,
 		Args:        []any{"name", uint64(3), uint64(5)},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
@@ -74,7 +72,6 @@ func TestRequestBodyMinLengthIncreased(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMinLengthIncreasedId,
 		Args:        []any{uint64(10), uint64(100)},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
@@ -99,7 +96,6 @@ func TestRequestBodyMinLengthDecreased(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMinLengthDecreasedId,
 		Args:        []any{uint64(10), uint64(1)},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",

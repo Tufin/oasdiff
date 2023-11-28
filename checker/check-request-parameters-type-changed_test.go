@@ -24,7 +24,6 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Args:        []any{"path", "groupId", "string", "", "int", ""},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -49,7 +48,6 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Args:        []any{"query", "token", "string", "uuid", "int", "uuid"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -74,7 +72,6 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Args:        []any{"header", "X-Request-ID", "string", "uuid", "int", "uuid"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -99,7 +96,6 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Args:        []any{"path", "groupId", "string", "", "string", "uuid"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -124,7 +120,6 @@ func TestRequestQueryParamFormatChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Args:        []any{"query", "token", "string", "uuid", "string", "uri"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -149,7 +144,6 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
 		Args:        []any{"header", "X-Request-ID", "string", "uuid", "string", "uri"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

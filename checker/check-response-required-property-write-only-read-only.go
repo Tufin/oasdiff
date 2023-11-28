@@ -58,7 +58,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 
 							id := ResponseRequiredPropertyBecameNonWriteOnlyId
 							level := WARN
-							comment := config.Localize(comment(ResponseRequiredPropertyBecameNonWriteOnlyId))
+							comment := commentId(ResponseRequiredPropertyBecameNonWriteOnlyId)
 
 							if writeOnlyDiff.To == true {
 								id = ResponseRequiredPropertyBecameWriteOnlyId

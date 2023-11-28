@@ -75,7 +75,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						if IsIncreasedValue(minDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinIncreasedId,
-								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								Level:       conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
 								Args:        []any{propName, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,

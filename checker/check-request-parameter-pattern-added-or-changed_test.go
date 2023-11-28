@@ -21,15 +21,15 @@ func TestRequestParameterPatternChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterPatternAddedOrChangedCheck), d, osm, checker.WARN)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestParameterPatternChangedId,
-		Args:        []any{"query", "category", "^\\w+$", "^[\\w\\s]+$"},
-		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')",
-		Level:       checker.WARN,
-		Operation:   "POST",
-		Path:        "/test",
-		Source:      "../data/checker/request_parameter_pattern_added_or_changed_base.yaml",
-		OperationId: "",
+		Id:        checker.RequestParameterPatternChangedId,
+		Args:      []any{"query", "category", "^\\w+$", "^[\\w\\s]+$"},
+		Comment:   checker.PatternChangedCommentId,
+		Level:     checker.WARN,
+		Operation: "POST",
+		Path:      "/test",
+		Source:    "../data/checker/request_parameter_pattern_added_or_changed_base.yaml",
 	}, errs[0])
+	require.Equal(t, "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')", errs[0].GetComment(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding pattern to request parameters
@@ -44,15 +44,15 @@ func TestRequestParameterPatternAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterPatternAddedOrChangedCheck), d, osm, checker.WARN)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestParameterPatternAddedId,
-		Args:        []any{"^\\w+$", "query", "category"},
-		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')",
-		Level:       checker.WARN,
-		Operation:   "POST",
-		Path:        "/test",
-		Source:      "../data/checker/request_parameter_pattern_added_or_changed_base.yaml",
-		OperationId: "",
+		Id:        checker.RequestParameterPatternAddedId,
+		Args:      []any{"^\\w+$", "query", "category"},
+		Comment:   checker.PatternChangedCommentId,
+		Level:     checker.WARN,
+		Operation: "POST",
+		Path:      "/test",
+		Source:    "../data/checker/request_parameter_pattern_added_or_changed_base.yaml",
 	}, errs[0])
+	require.Equal(t, "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')", errs[0].GetComment(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing pattern from request parameters
@@ -67,12 +67,11 @@ func TestRequestParameterPatternRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterPatternAddedOrChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestParameterPatternRemovedId,
-		Args:        []any{"^\\w+$", "query", "category"},
-		Level:       checker.INFO,
-		Operation:   "POST",
-		Path:        "/test",
-		Source:      "../data/checker/request_parameter_pattern_added_or_changed_revision.yaml",
-		OperationId: "",
+		Id:        checker.RequestParameterPatternRemovedId,
+		Args:      []any{"^\\w+$", "query", "category"},
+		Level:     checker.INFO,
+		Operation: "POST",
+		Path:      "/test",
+		Source:    "../data/checker/request_parameter_pattern_added_or_changed_revision.yaml",
 	}, errs[0])
 }

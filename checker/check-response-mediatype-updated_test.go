@@ -22,7 +22,6 @@ func TestAddNewMediaType(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseMediaTypeAddedId,
 		Args:        []any{"application/xml", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -45,7 +44,6 @@ func TestDeleteNewMediaType(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseMediaTypeRemovedId,
 		Args:        []any{"application/xml", "200"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

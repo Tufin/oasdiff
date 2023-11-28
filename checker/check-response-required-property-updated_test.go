@@ -23,7 +23,6 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 
 		Id:          checker.ResponseRequiredPropertyAddedId,
 		Args:        []any{"data/new", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -47,7 +46,6 @@ func TestResponseRequiredPropertyRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseRequiredPropertyRemovedId,
 		Args:        []any{"data/new", "200"},
-		Comment:     "",
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -73,7 +71,6 @@ func TestResponseRequiredWriteOnlyPropertyAdded(t *testing.T) {
 
 		Id:          checker.ResponseRequiredWriteOnlyPropertyAddedId,
 		Args:        []any{"data/new", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -98,7 +95,6 @@ func TestResponseRequiredWriteOnlyPropertyRemoved(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseRequiredWriteOnlyPropertyRemovedId,
 		Args:        []any{"data/new", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

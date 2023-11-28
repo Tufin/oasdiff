@@ -25,7 +25,6 @@ func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
 
 		Id:          checker.ResponseOptionalPropertyBecameWriteOnlyId,
 		Args:        []any{"data/name", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -76,7 +75,6 @@ func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
 
 		Id:          checker.ResponseOptionalPropertyBecameReadOnlyId,
 		Args:        []any{"data/id", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -103,7 +101,6 @@ func TestResponseOptionalPropertyBecameNonReadOnly(t *testing.T) {
 
 		Id:          checker.ResponseOptionalPropertyBecameNonReadOnlyId,
 		Args:        []any{"data/id", "200"},
-		Comment:     "",
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

@@ -60,3 +60,11 @@ func (level Level) PrettyString() string {
 		return color.InGray(levelName)
 	}
 }
+
+func conditionalError(isConditionSatisfied bool, defaultLevel Level) Level {
+	if isConditionSatisfied {
+		return ERR
+	}
+
+	return defaultLevel
+}

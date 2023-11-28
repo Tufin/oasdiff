@@ -41,7 +41,7 @@ func RequestParameterMaxLengthSetCheck(diffReport *diff.Diff, operationsSources 
 						Id:          RequestParameterMaxLengthSetId,
 						Level:       WARN,
 						Args:        []any{paramLocation, paramName, maxLengthDiff.To},
-						Comment:     config.Localize(comment(RequestParameterMaxLengthSetId)),
+						Comment:     commentId(RequestParameterMaxLengthSetId),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

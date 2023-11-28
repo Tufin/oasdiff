@@ -200,7 +200,6 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 		checker.ApiChange{
 			Id:        checker.RequestParameterBecomeRequiredId,
 			Args:      []any{"header", "network-policies"},
-			Comment:   "",
 			Level:     checker.ERR,
 			Operation: "GET",
 			Path:      "/api/{domain}/{project}/install-command",

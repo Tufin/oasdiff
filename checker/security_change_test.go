@@ -20,7 +20,7 @@ var securityChange = checker.SecurityChange{
 }
 
 func TestSecurityChange(t *testing.T) {
-	require.Equal(t, "comment", securityChange.GetComment())
+	require.Equal(t, "comment", securityChange.GetComment(MockLocalizer))
 	require.Equal(t, "", securityChange.GetOperationId())
 	require.Equal(t, "sourceFile", securityChange.GetSourceFile())
 	require.Equal(t, 1, securityChange.GetSourceLine())

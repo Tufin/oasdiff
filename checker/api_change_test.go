@@ -10,7 +10,7 @@ import (
 var apiChange = checker.ApiChange{
 	Id:              "change_id",
 	Args:            []any{},
-	Comment:         "comment",
+	Comment:         "comment_id",
 	Level:           checker.ERR,
 	Operation:       "GET",
 	OperationId:     "123",
@@ -26,7 +26,7 @@ var apiChange = checker.ApiChange{
 func TestApiChange(t *testing.T) {
 	require.Equal(t, "change_id", apiChange.GetId())
 	require.Equal(t, "This is a breaking change.", apiChange.GetText(MockLocalizer))
-	require.Equal(t, "comment", apiChange.GetComment())
+	require.Equal(t, "comment", apiChange.GetComment(MockLocalizer))
 	require.Equal(t, checker.ERR, apiChange.GetLevel())
 	require.Equal(t, "GET", apiChange.GetOperation())
 	require.Equal(t, "123", apiChange.GetOperationId())
@@ -43,6 +43,8 @@ func MockLocalizer(originalKey string, args ...interface{}) string {
 	switch originalKey {
 	case "change_id":
 		return "This is a breaking change."
+	case "comment_id":
+		return "comment"
 	default:
 		return originalKey
 	}

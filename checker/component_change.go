@@ -37,7 +37,7 @@ func (c ComponentChange) GetId() string {
 }
 
 func (c ComponentChange) GetText(l Localizer) string {
-	return l(c.Id, ColorizedValues(c.Args)...)
+	return l(c.Id, colorizedValues(c.Args)...)
 }
 
 func (c ComponentChange) GetArgs() []any {
@@ -45,11 +45,11 @@ func (c ComponentChange) GetArgs() []any {
 }
 
 func (c ComponentChange) GetUncolorizedText(l Localizer) string {
-	return l(c.Id, QuotedValues(c.Args)...)
+	return l(c.Id, quotedValues(c.Args)...)
 }
 
-func (c ComponentChange) GetComment() string {
-	return c.Comment
+func (c ComponentChange) GetComment(l Localizer) string {
+	return l(c.Comment)
 }
 
 func (c ComponentChange) GetLevel() Level {
