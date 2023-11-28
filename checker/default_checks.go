@@ -39,7 +39,7 @@ func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, le
 }
 
 func optionalChecks() map[string]BackwardCompatibilityCheck {
-	optionalRules := GetOptionalRules(NewDefaultLocalizer())
+	optionalRules := GetOptionalRules()
 
 	result := make(map[string]BackwardCompatibilityCheck, len(optionalRules))
 	for _, rule := range optionalRules {
@@ -65,7 +65,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 
 	result := []BackwardCompatibilityCheck{}
 	m := utils.StringSet{}
-	for _, rule := range GetRequiredRules(NewDefaultLocalizer()) {
+	for _, rule := range GetRequiredRules() {
 		pStr := fmt.Sprintf("%v", rule.Handler)
 		if !m.Contains(pStr) {
 			m.Add(pStr)

@@ -44,7 +44,7 @@ func (level Level) IsBreaking() bool {
 }
 
 func (level Level) PrettyString() string {
-	if IsPipedOutput() {
+	if isPipedOutput() {
 		return level.String()
 	}
 

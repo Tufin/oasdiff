@@ -17,14 +17,6 @@ const (
 
 type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes
 
-type BackwardCompatibilityRule struct {
-	Id          string
-	Level       Level
-	Description string
-	Required    bool
-	Handler     BackwardCompatibilityCheck `json:"-" yaml:"-"`
-}
-
 var pipedOutput *bool
 
 func SetPipedOutput(val *bool) *bool {
@@ -33,7 +25,7 @@ func SetPipedOutput(val *bool) *bool {
 	return save
 }
 
-func IsPipedOutput() bool {
+func isPipedOutput() bool {
 	if pipedOutput != nil {
 		return *pipedOutput
 	}

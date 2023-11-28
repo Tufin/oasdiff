@@ -13,6 +13,10 @@ func commentId(id string) string {
 	return id + "-comment"
 }
 
+func descriptionId(id string) string {
+	return id + "-description"
+}
+
 func propertyFullName(propertyPath string, propertyNames ...string) string {
 	propertyFullName := strings.Join(propertyNames, "/")
 	if propertyPath != "" {
@@ -23,7 +27,7 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 
 func colorizedValue(arg interface{}) string {
 	str := interfaceToString(arg)
-	if IsPipedOutput() {
+	if isPipedOutput() {
 		return fmt.Sprintf("'%s'", str)
 	}
 	return color.InBold(fmt.Sprintf("'%s'", str))

@@ -76,7 +76,7 @@ func (f TEXTFormatter) RenderChecks(checks Checks, opts RenderOpts) ([]byte, err
 	w := tabwriter.NewWriter(result, 1, 1, 1, ' ', 0)
 	_, _ = fmt.Fprintln(w, "ID\tDESCRIPTION\tLEVEL")
 	for _, check := range checks {
-		_, _ = fmt.Fprintln(w, check.Id+"\t"+check.Description+"\t"+check.Level)
+		_, _ = fmt.Fprintln(w, check.Id+"\t"+f.Localizer(check.Description)+"\t"+check.Level)
 	}
 	_ = w.Flush()
 
