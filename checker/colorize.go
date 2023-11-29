@@ -12,18 +12,19 @@ const (
 	ColorAlways ColorMode = iota
 	ColorNever
 	ColorAuto
+	ColorInvalid
 )
 
-func NewColorMode(color string) ColorMode {
+func NewColorMode(color string) (ColorMode, error) {
 	switch color {
 	case "always":
-		return ColorAlways
+		return ColorAlways, nil
 	case "never":
-		return ColorNever
+		return ColorNever, nil
 	case "auto":
-		return ColorAuto
+		return ColorAuto, nil
 	default:
-		return ColorNever
+		return ColorInvalid, fmt.Errorf("invalid color mode: %s", color)
 	}
 }
 

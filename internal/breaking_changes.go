@@ -61,7 +61,12 @@ func outputBreakingChanges(format string, lang string, color string, stdout io.W
 	}
 
 	// render
-	bytes, err := formatter.RenderBreakingChanges(errs, formatters.RenderOpts{ColorMode: checker.NewColorMode(color)})
+	colorMode, err := checker.NewColorMode(color)
+	if err != nil {
+		return getErrInvalidColorMode(err)
+	}
+
+	bytes, err := formatter.RenderBreakingChanges(errs, formatters.RenderOpts{ColorMode: colorMode})
 	if err != nil {
 		return getErrFailedPrint("breaking "+format, err)
 	}

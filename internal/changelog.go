@@ -131,7 +131,12 @@ func outputChangelog(format string, lang string, color string, stdout io.Writer,
 	}
 
 	// render
-	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{ColorMode: checker.NewColorMode(color)}, specInfoPair)
+	colorMode, err := checker.NewColorMode(color)
+	if err != nil {
+		return getErrInvalidColorMode(err)
+	}
+
+	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{ColorMode: colorMode}, specInfoPair)
 	if err != nil {
 		return getErrFailedPrint("changelog "+format, err)
 	}
