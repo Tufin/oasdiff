@@ -34,7 +34,7 @@ var htmlFormatter = formatters.HTMLFormatter{
 }
 
 func TestHtmlFormatter_RenderDiff(t *testing.T) {
-	out, err := htmlFormatter.RenderDiff(nil, formatters.RenderOpts{})
+	out, err := htmlFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	require.NoError(t, err)
 	require.Equal(t, string(out), "<p>No changes</p>\n")
 }
@@ -49,22 +49,22 @@ func TestHtmlFormatter_RenderChangelog(t *testing.T) {
 		},
 	}
 
-	out, err := htmlFormatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
+	out, err := htmlFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, string(out))
 }
 
 func TestHtmlFormatter_NotImplemented(t *testing.T) {
 	var err error
-	_, err = htmlFormatter.RenderBreakingChanges(checker.Changes{}, formatters.RenderOpts{})
+	_, err = htmlFormatter.RenderBreakingChanges(checker.Changes{}, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = htmlFormatter.RenderChecks(formatters.Checks{}, formatters.RenderOpts{})
+	_, err = htmlFormatter.RenderChecks(formatters.Checks{}, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = htmlFormatter.RenderFlatten(nil, formatters.RenderOpts{})
+	_, err = htmlFormatter.RenderFlatten(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = htmlFormatter.RenderSummary(nil, formatters.RenderOpts{})
+	_, err = htmlFormatter.RenderSummary(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 }

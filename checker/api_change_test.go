@@ -25,7 +25,6 @@ var apiChange = checker.ApiChange{
 
 func TestApiChange(t *testing.T) {
 	require.Equal(t, "change_id", apiChange.GetId())
-	require.Equal(t, "This is a breaking change.", apiChange.GetText(MockLocalizer))
 	require.Equal(t, "comment", apiChange.GetComment(MockLocalizer))
 	require.Equal(t, checker.ERR, apiChange.GetLevel())
 	require.Equal(t, "GET", apiChange.GetOperation())
@@ -36,7 +35,7 @@ func TestApiChange(t *testing.T) {
 	require.Equal(t, 2, apiChange.GetSourceLineEnd())
 	require.Equal(t, 3, apiChange.GetSourceColumn())
 	require.Equal(t, 4, apiChange.GetSourceColumnEnd())
-	require.Equal(t, "error at source, in API GET /test This is a breaking change. [change_id]. comment", apiChange.LocalizedError(MockLocalizer))
+	require.Equal(t, "error at source, in API GET /test This is a breaking change. [change_id]. comment", apiChange.SingleLineError(MockLocalizer, checker.ColorNever))
 }
 
 func MockLocalizer(originalKey string, args ...interface{}) string {
@@ -59,5 +58,5 @@ func TestApiChange_PrettyPiped(t *testing.T) {
 	piped := true
 	save := checker.SetPipedOutput(&piped)
 	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error at source, in API GET /test This is a breaking change. [change_id]. comment", apiChange.PrettyErrorText(MockLocalizer))
+	require.Equal(t, "error at source, in API GET /test This is a breaking change. [change_id]. comment", apiChange.SingleLineError(MockLocalizer, checker.ColorAuto))
 }

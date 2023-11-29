@@ -1,6 +1,7 @@
 package checker
 
 type Change interface {
+	GetSection() string
 	IsBreaking() bool
 	GetId() string
 	GetText(l Localizer) string
@@ -18,6 +19,6 @@ type Change interface {
 	GetSourceColumn() int
 	GetSourceColumnEnd() int
 	MatchIgnore(ignorePath, ignoreLine string, l Localizer) bool
-	LocalizedError(l Localizer) string
-	PrettyErrorText(l Localizer) string
+	SingleLineError(l Localizer, colorMode ColorMode) string
+	MultiLineError(l Localizer, colorMode ColorMode) string
 }

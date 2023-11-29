@@ -23,6 +23,10 @@ type ComponentChange struct {
 	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
+func (c ComponentChange) GetSection() string {
+	return "components"
+}
+
 func (c ComponentChange) IsBreaking() bool {
 	return c.GetLevel().IsBreaking()
 }
@@ -92,18 +96,20 @@ func (c ComponentChange) GetSourceColumnEnd() int {
 	return c.SourceColumnEnd
 }
 
-func (c ComponentChange) LocalizedError(l Localizer) string {
-	return fmt.Sprintf("%s, %s components/%s %s [%s]. %s", c.Level, l("in"), c.Component, c.GetText(l), c.Id, c.Comment)
+func (c ComponentChange) SingleLineError(l Localizer, colorMode ColorMode) string {
+	const format = "%s, %s components/%s %s [%s]. %s"
+
+	if isColorEnabled(colorMode) {
+		return fmt.Sprintf(format, c.Level.PrettyString(), l("in"), c.Component, c.GetText(l), color.InYellow(c.Id), c.GetComment(l))
+	}
+	return fmt.Sprintf(format, c.Level.String(), l("in"), c.Component, c.GetUncolorizedText(l), c.Id, c.GetComment(l))
 }
 
-func (c ComponentChange) PrettyErrorText(l Localizer) string {
-	if isPipedOutput() {
-		return c.LocalizedError(l)
-	}
+func (c ComponentChange) MultiLineError(l Localizer, colorMode ColorMode) string {
+	const format = "%s\t[%s] \t\n\t%s components/%s\n\t\t%s%s"
 
-	comment := ""
-	if c.Comment != "" {
-		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
+	if isColorEnabled(colorMode) {
+		return fmt.Sprintf(format, c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Component, c.GetText(l), multiLineComment(c.GetComment(l)))
 	}
-	return fmt.Sprintf("%s\t[%s] \t\n\t%s components/%s\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Component, c.GetText(l), comment)
+	return fmt.Sprintf(format, c.Level.String(), c.Id, l("in"), c.Component, c.GetUncolorizedText(l), multiLineComment(c.GetComment(l)))
 }

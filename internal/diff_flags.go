@@ -72,6 +72,10 @@ func (flags *DiffFlags) getLang() string {
 	return ""
 }
 
+func (flags *DiffFlags) getColor() string {
+	return ""
+}
+
 func (flags *DiffFlags) getWarnIgnoreFile() string {
 	return ""
 }

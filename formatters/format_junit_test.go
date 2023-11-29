@@ -21,7 +21,7 @@ func TestJUnitFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	}
 
 	// check output
-	output, err := jUnitFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := jUnitFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	expectedOutput := `<?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
@@ -38,7 +38,7 @@ func TestJUnitFormatter_RenderBreakingChanges_Success(t *testing.T) {
 	testChanges := checker.Changes{}
 
 	// check output
-	output, err := jUnitFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := jUnitFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	expectedOutput := `<?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
@@ -52,18 +52,18 @@ func TestJUnitFormatter_RenderBreakingChanges_Success(t *testing.T) {
 func TestJUnitFormatter_NotImplemented(t *testing.T) {
 
 	var err error
-	_, err = jUnitFormatter.RenderDiff(nil, formatters.RenderOpts{})
+	_, err = jUnitFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = jUnitFormatter.RenderSummary(nil, formatters.RenderOpts{})
+	_, err = jUnitFormatter.RenderSummary(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = jUnitFormatter.RenderChangelog(nil, formatters.RenderOpts{}, nil)
+	_, err = jUnitFormatter.RenderChangelog(nil, formatters.NewRenderOpts(), nil)
 	assert.Error(t, err)
 
-	_, err = jUnitFormatter.RenderChecks(nil, formatters.RenderOpts{})
+	_, err = jUnitFormatter.RenderChecks(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = jUnitFormatter.RenderFlatten(nil, formatters.RenderOpts{})
+	_, err = jUnitFormatter.RenderFlatten(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 }

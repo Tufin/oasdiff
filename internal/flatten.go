@@ -79,7 +79,7 @@ func outputFlattenedSpec(stdout io.Writer, spec *openapi3.T, format string) *Ret
 	}
 
 	// render
-	bytes, err := formatter.RenderFlatten(spec, formatters.RenderOpts{})
+	bytes, err := formatter.RenderFlatten(spec, formatters.NewRenderOpts())
 	if err != nil {
 		return getErrFailedPrint("flatten "+format, err)
 	}

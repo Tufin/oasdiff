@@ -55,7 +55,7 @@ func TestOperationIdUpdated(t *testing.T) {
 		OperationId: "createOneGroup",
 	}, errs[0])
 
-	require.Equal(t, "api operation id 'createOneGroup' removed and replaced with 'newOperationId'", errs[0].GetText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "api operation id 'createOneGroup' removed and replaced with 'newOperationId'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding a new operation id

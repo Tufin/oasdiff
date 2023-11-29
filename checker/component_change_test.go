@@ -28,8 +28,8 @@ func TestComponentChange(t *testing.T) {
 	require.Equal(t, 2, componentChange.GetSourceLineEnd())
 	require.Equal(t, 3, componentChange.GetSourceColumn())
 	require.Equal(t, 4, componentChange.GetSourceColumnEnd())
-	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.LocalizedError(MockLocalizer))
-	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.PrettyErrorText(MockLocalizer))
+	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorNever))
+	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorNever))
 }
 
 func TestComponentChange_MatchIgnore(t *testing.T) {
@@ -40,5 +40,5 @@ func TestComponentChange_PrettyPiped(t *testing.T) {
 	piped := true
 	save := checker.SetPipedOutput(&piped)
 	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.PrettyErrorText(MockLocalizer))
+	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorAuto))
 }

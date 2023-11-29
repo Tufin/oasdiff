@@ -22,9 +22,9 @@ func TestTextFormatter_RenderBreakingChanges(t *testing.T) {
 		},
 	}
 
-	out, err := textFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	out, err := textFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	require.NoError(t, err)
-	require.Equal(t, "1 breaking changes: 1 error, 0 warning\nerror, in components/test This is a breaking change. [change_id]. \n\n", string(out))
+	require.Equal(t, "1 breaking changes: 1 error, 0 warning\nerror\t[change_id] \t\n\tin components/test\n\t\tThis is a breaking change.\n\n", string(out))
 }
 
 func TestTextFormatter_RenderChangelog(t *testing.T) {
@@ -36,9 +36,9 @@ func TestTextFormatter_RenderChangelog(t *testing.T) {
 		},
 	}
 
-	out, err := textFormatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
+	out, err := textFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	require.NoError(t, err)
-	require.Equal(t, "1 changes: 1 error, 0 warning, 0 info\nerror, in components/test This is a breaking change. [change_id]. \n\n", string(out))
+	require.Equal(t, "1 changes: 1 error, 0 warning, 0 info\nerror\t[change_id] \t\n\tin components/test\n\t\tThis is a breaking change.\n\n", string(out))
 }
 
 func TestTextFormatter_RenderChecks(t *testing.T) {
@@ -51,13 +51,13 @@ func TestTextFormatter_RenderChecks(t *testing.T) {
 		},
 	}
 
-	out, err := textFormatter.RenderChecks(checks, formatters.RenderOpts{})
+	out, err := textFormatter.RenderChecks(checks, formatters.NewRenderOpts())
 	require.NoError(t, err)
 	require.Equal(t, string(out), "ID        DESCRIPTION                LEVEL\nchange_id This is a breaking change. info\n")
 }
 
 func TestTextFormatter_RenderDiff(t *testing.T) {
-	out, err := textFormatter.RenderDiff(nil, formatters.RenderOpts{})
+	out, err := textFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	require.NoError(t, err)
 	require.Equal(t, string(out), "No changes\n")
 }
@@ -65,9 +65,9 @@ func TestTextFormatter_RenderDiff(t *testing.T) {
 func TestTextFormatter_NotImplemented(t *testing.T) {
 	var err error
 
-	_, err = textFormatter.RenderFlatten(nil, formatters.RenderOpts{})
+	_, err = textFormatter.RenderFlatten(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = textFormatter.RenderSummary(nil, formatters.RenderOpts{})
+	_, err = textFormatter.RenderSummary(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 }

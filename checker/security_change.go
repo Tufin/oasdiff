@@ -22,6 +22,10 @@ type SecurityChange struct {
 	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
+func (c SecurityChange) GetSection() string {
+	return "security"
+}
+
 func (c SecurityChange) IsBreaking() bool {
 	return c.GetLevel().IsBreaking()
 }
@@ -91,18 +95,21 @@ func (c SecurityChange) GetSourceColumnEnd() int {
 	return c.SourceColumnEnd
 }
 
-func (c SecurityChange) LocalizedError(l Localizer) string {
-	return fmt.Sprintf("%s, %s security %s [%s]. %s", c.Level, l("in"), c.GetText(l), c.Id, c.Comment)
+func (c SecurityChange) SingleLineError(l Localizer, colorMode ColorMode) string {
+	const format = "%s, %s security %s [%s]. %s"
+
+	if isColorEnabled(colorMode) {
+		return fmt.Sprintf(format, c.Level.PrettyString(), l("in"), c.GetText(l), color.InYellow(c.Id), c.GetComment(l))
+	}
+	return fmt.Sprintf(format, c.Level.String(), l("in"), c.GetUncolorizedText(l), c.Id, c.GetComment(l))
 }
 
-func (c SecurityChange) PrettyErrorText(l Localizer) string {
-	if isPipedOutput() {
-		return c.LocalizedError(l)
+func (c SecurityChange) MultiLineError(l Localizer, colorMode ColorMode) string {
+	const format = "%s\t[%s] \t\n\t%s security\n\t\t%s%s"
+
+	if isColorEnabled(colorMode) {
+		return fmt.Sprintf(format, c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.GetText(l), multiLineComment(c.GetComment(l)))
 	}
 
-	comment := ""
-	if c.Comment != "" {
-		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
-	}
-	return fmt.Sprintf("%s\t[%s] \t\n\t%s security\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.GetText(l), comment)
+	return fmt.Sprintf(format, c.Level.String(), c.Id, l("in"), c.GetUncolorizedText(l), multiLineComment(c.GetComment(l)))
 }

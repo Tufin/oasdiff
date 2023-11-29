@@ -79,12 +79,12 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 
 	if level == checker.WARN {
 		// breaking changes
-		if returnErr := outputBreakingChanges(flags.getFormat(), flags.getLang(), stdout, errs); returnErr != nil {
+		if returnErr := outputBreakingChanges(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs); returnErr != nil {
 			return false, returnErr
 		}
 	} else {
 		// changelog
-		if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
+		if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
 			return false, returnErr
 		}
 	}
@@ -121,7 +121,7 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 	return errs, nil
 }
 
-func outputChangelog(format string, lang string, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
+func outputChangelog(format string, lang string, color string, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
 		Language: lang,
@@ -131,7 +131,7 @@ func outputChangelog(format string, lang string, stdout io.Writer, errs checker.
 	}
 
 	// render
-	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{}, specInfoPair)
+	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{ColorMode: checker.NewColorMode(color)}, specInfoPair)
 	if err != nil {
 		return getErrFailedPrint("changelog "+format, err)
 	}

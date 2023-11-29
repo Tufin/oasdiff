@@ -26,6 +26,7 @@ var formatters = map[Format]Formatter{
 	FormatYAML:          YAMLFormatter{},
 	FormatJSON:          JSONFormatter{},
 	FormatText:          TEXTFormatter{},
+	FormatSingleLine:    SingleLineFormatter{},
 	FormatHTML:          HTMLFormatter{},
 	FormatGithubActions: GitHubActionsFormatter{},
 	FormatJUnit:         JUnitFormatter{},
@@ -47,6 +48,10 @@ func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 		}, nil
 	case FormatText:
 		return TEXTFormatter{
+			Localizer: l,
+		}, nil
+	case FormatSingleLine:
+		return SingleLineFormatter{
 			Localizer: l,
 		}, nil
 	case FormatHTML:

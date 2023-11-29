@@ -79,6 +79,10 @@ func (flags *ChangelogFlags) getLang() string {
 	return flags.lang
 }
 
+func (flags *ChangelogFlags) getColor() string {
+	return flags.color
+}
+
 func (flags *ChangelogFlags) getWarnIgnoreFile() string {
 	return flags.warnIgnoreFile
 }

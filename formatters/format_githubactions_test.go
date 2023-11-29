@@ -22,7 +22,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id::This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -45,7 +45,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_MultipleLevels(t *testing.
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id::This is a breaking change.\n::warning title=warning_id::This is a warning.\n::notice title=notice_id::This is a notice.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -60,7 +60,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_MultilineText(t *testing.T
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_two_lines_id::This is a breaking change.%0AThis is a second line.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -80,7 +80,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_FileLocation(t *testing.T)
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id,file=openapi.json,col=6,endColumn=11,line=21,endLine=26::This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -113,7 +113,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	_ = os.Unsetenv("GITHUB_OUTPUT")
 	expectedOutput := "::error title=change_id::This is a breaking change.\n::error title=change_id::This is a breaking change.\n::warning title=warning_id::This is a warning.\n::notice title=notice_id::This is a notice.\n"
@@ -129,18 +129,18 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 
 func TestGitHubActionsFormatterr_NotImplemented(t *testing.T) {
 	var err error
-	_, err = gitHubFormatter.RenderDiff(nil, formatters.RenderOpts{})
+	_, err = gitHubFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = gitHubFormatter.RenderSummary(nil, formatters.RenderOpts{})
+	_, err = gitHubFormatter.RenderSummary(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = gitHubFormatter.RenderChangelog(nil, formatters.RenderOpts{}, nil)
+	_, err = gitHubFormatter.RenderChangelog(nil, formatters.NewRenderOpts(), nil)
 	assert.Error(t, err)
 
-	_, err = gitHubFormatter.RenderChecks(nil, formatters.RenderOpts{})
+	_, err = gitHubFormatter.RenderChecks(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = gitHubFormatter.RenderFlatten(nil, formatters.RenderOpts{})
+	_, err = gitHubFormatter.RenderFlatten(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 }

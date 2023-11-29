@@ -20,9 +20,9 @@ func TestYamlFormatter_RenderBreakingChanges(t *testing.T) {
 		},
 	}
 
-	out, err := yamlFormatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	out, err := yamlFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	require.NoError(t, err)
-	require.Equal(t, string(out), "- id: change_id\n  text: This is a breaking change.\n  level: 3\n")
+	require.Equal(t, "- id: change_id\n  text: This is a breaking change.\n  level: 3\n  section: components\n", string(out))
 }
 
 func TestYamlFormatter_RenderChangelog(t *testing.T) {
@@ -33,9 +33,9 @@ func TestYamlFormatter_RenderChangelog(t *testing.T) {
 		},
 	}
 
-	out, err := yamlFormatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
+	out, err := yamlFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	require.NoError(t, err)
-	require.Equal(t, string(out), "- id: change_id\n  text: This is a breaking change.\n  level: 3\n")
+	require.Equal(t, "- id: change_id\n  text: This is a breaking change.\n  level: 3\n  section: components\n", string(out))
 }
 
 func TestYamlFormatter_RenderChecks(t *testing.T) {
@@ -48,25 +48,25 @@ func TestYamlFormatter_RenderChecks(t *testing.T) {
 		},
 	}
 
-	out, err := yamlFormatter.RenderChecks(checks, formatters.RenderOpts{})
+	out, err := yamlFormatter.RenderChecks(checks, formatters.NewRenderOpts())
 	require.NoError(t, err)
-	require.Equal(t, string(out), "- id: change_id\n  level: info\n  description: This is a breaking change.\n  reuired: true\n")
+	require.Equal(t, "- id: change_id\n  level: info\n  description: This is a breaking change.\n  reuired: true\n", string(out))
 }
 
 func TestYamlFormatter_RenderDiff(t *testing.T) {
-	out, err := yamlFormatter.RenderDiff(nil, formatters.RenderOpts{})
+	out, err := yamlFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	require.NoError(t, err)
 	require.Empty(t, string(out))
 }
 
 func TestYamlFormatter_RenderFlatten(t *testing.T) {
-	out, err := yamlFormatter.RenderFlatten(nil, formatters.RenderOpts{})
+	out, err := yamlFormatter.RenderFlatten(nil, formatters.NewRenderOpts())
 	require.NoError(t, err)
 	require.Empty(t, string(out))
 }
 
 func TestYamlFormatter_RenderSummary(t *testing.T) {
-	out, err := yamlFormatter.RenderSummary(nil, formatters.RenderOpts{})
+	out, err := yamlFormatter.RenderSummary(nil, formatters.NewRenderOpts())
 	require.NoError(t, err)
 	require.Equal(t, string(out), "diff: false\n")
 }

@@ -26,6 +26,13 @@ func NewLevel(level string) (Level, error) {
 	return INFO, fmt.Errorf("invalid level %s", level)
 }
 
+func (level Level) StringCond(colorMode ColorMode) string {
+	if isColorEnabled(colorMode) {
+		return level.PrettyString()
+	}
+	return level.String()
+}
+
 func (level Level) String() string {
 	switch level {
 	case ERR:
@@ -39,15 +46,7 @@ func (level Level) String() string {
 	}
 }
 
-func (level Level) IsBreaking() bool {
-	return level == ERR || level == WARN
-}
-
 func (level Level) PrettyString() string {
-	if isPipedOutput() {
-		return level.String()
-	}
-
 	levelName := level.String()
 	switch level {
 	case ERR:
@@ -59,6 +58,10 @@ func (level Level) PrettyString() string {
 	default:
 		return color.InGray(levelName)
 	}
+}
+
+func (level Level) IsBreaking() bool {
+	return level == ERR || level == WARN
 }
 
 func conditionalError(isConditionSatisfied bool, defaultLevel Level) Level {

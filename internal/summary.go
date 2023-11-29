@@ -61,7 +61,7 @@ func outputSummary(stdout io.Writer, diffReport *diff.Diff, format string) *Retu
 	}
 
 	// render
-	bytes, err := formatter.RenderSummary(diffReport, formatters.RenderOpts{})
+	bytes, err := formatter.RenderSummary(diffReport, formatters.NewRenderOpts())
 	if err != nil {
 		return getErrFailedPrint("summary "+format, err)
 	}

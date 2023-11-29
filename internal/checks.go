@@ -118,7 +118,7 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 
 	// render
 	sort.Sort(checks)
-	bytes, err := formatter.RenderChecks(checks, formatters.RenderOpts{})
+	bytes, err := formatter.RenderChecks(checks, formatters.NewRenderOpts())
 	if err != nil {
 		return getErrFailedPrint("checks "+flags.format, err)
 	}

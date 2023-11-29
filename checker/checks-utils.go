@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/TwiN/go-color"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 )
@@ -23,30 +22,6 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 		propertyFullName = propertyPath + "/" + propertyFullName
 	}
 	return propertyFullName
-}
-
-func colorizedValue(arg interface{}) string {
-	str := interfaceToString(arg)
-	if isPipedOutput() {
-		return fmt.Sprintf("'%s'", str)
-	}
-	return color.InBold(fmt.Sprintf("'%s'", str))
-}
-
-func colorizedValues(args []any) []any {
-	result := make([]any, len(args))
-	for i, arg := range args {
-		result[i] = colorizedValue(arg)
-	}
-	return result
-}
-
-func quotedValues(args []any) []any {
-	result := make([]any, len(args))
-	for i, arg := range args {
-		result[i] = fmt.Sprintf("'%s'", interfaceToString(arg))
-	}
-	return result
 }
 
 func interfaceToString(arg interface{}) string {

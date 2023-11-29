@@ -27,7 +27,7 @@ func TestSecurityChange(t *testing.T) {
 	require.Equal(t, 2, securityChange.GetSourceLineEnd())
 	require.Equal(t, 3, securityChange.GetSourceColumn())
 	require.Equal(t, 4, securityChange.GetSourceColumnEnd())
-	require.Equal(t, "error, in security This is a breaking change. [change_id]. comment", securityChange.LocalizedError(MockLocalizer))
+	require.Equal(t, "error, in security This is a breaking change. [change_id]. comment", securityChange.SingleLineError(MockLocalizer, checker.ColorNever))
 }
 
 func TestSecurityChange_MatchIgnore(t *testing.T) {
@@ -38,5 +38,5 @@ func TestSecurityChange_PrettyPiped(t *testing.T) {
 	piped := true
 	save := checker.SetPipedOutput(&piped)
 	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error, in security This is a breaking change. [change_id]. comment", securityChange.PrettyErrorText(MockLocalizer))
+	require.Equal(t, "error, in security This is a breaking change. [change_id]. comment", securityChange.SingleLineError(MockLocalizer, checker.ColorAuto))
 }
