@@ -5,12 +5,19 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/formatters"
 )
 
 var gitHubFormatter = formatters.GitHubActionsFormatter{
 	Localizer: MockLocalizer,
+}
+
+func TestGithubActionsLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatGithubActions), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.GitHubActionsFormatter{}, f)
 }
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {

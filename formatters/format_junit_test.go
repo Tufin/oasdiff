@@ -4,12 +4,19 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/formatters"
 )
 
 var jUnitFormatter = formatters.JUnitFormatter{
 	Localizer: MockLocalizer,
+}
+
+func TestJUnitLineLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatJUnit), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.JUnitFormatter{}, f)
 }
 
 func TestJUnitFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {

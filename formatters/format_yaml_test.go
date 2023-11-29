@@ -12,6 +12,12 @@ var yamlFormatter = formatters.YAMLFormatter{
 	Localizer: MockLocalizer,
 }
 
+func TestYamlLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatYAML), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.YAMLFormatter{}, f)
+}
+
 func TestYamlFormatter_RenderBreakingChanges(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{

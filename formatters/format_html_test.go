@@ -33,6 +33,12 @@ var htmlFormatter = formatters.HTMLFormatter{
 	Localizer: MockLocalizer,
 }
 
+func TestHtmlLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatHTML), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.HTMLFormatter{}, f)
+}
+
 func TestHtmlFormatter_RenderDiff(t *testing.T) {
 	out, err := htmlFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	require.NoError(t, err)

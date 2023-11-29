@@ -12,6 +12,12 @@ var jsonFormatter = formatters.JSONFormatter{
 	Localizer: MockLocalizer,
 }
 
+func TestJsonLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatJSON), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.JSONFormatter{}, f)
+}
+
 func TestJsonFormatter_RenderBreakingChanges(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{

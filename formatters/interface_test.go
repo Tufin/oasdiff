@@ -1,44 +1,51 @@
-package formatters
+package formatters_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/tufin/oasdiff/formatters"
 )
 
+func TestUnsupportedLookup(t *testing.T) {
+	_, err := formatters.Lookup(string("invalid"), formatters.DefaultFormatterOpts())
+	require.Error(t, err)
+}
+
 func TestDiffOutputFormats(t *testing.T) {
-	supportedFormats := SupportedFormatsByContentType(OutputDiff)
+	supportedFormats := formatters.SupportedFormatsByContentType(formatters.OutputDiff)
 	assert.Len(t, supportedFormats, 4)
-	assert.Contains(t, supportedFormats, string(FormatYAML))
-	assert.Contains(t, supportedFormats, string(FormatJSON))
-	assert.Contains(t, supportedFormats, string(FormatText))
-	assert.Contains(t, supportedFormats, string(FormatHTML))
+	assert.Contains(t, supportedFormats, string(formatters.FormatYAML))
+	assert.Contains(t, supportedFormats, string(formatters.FormatJSON))
+	assert.Contains(t, supportedFormats, string(formatters.FormatText))
+	assert.Contains(t, supportedFormats, string(formatters.FormatHTML))
 }
 
 func TestSummaryOutputFormats(t *testing.T) {
-	supportedFormats := SupportedFormatsByContentType(OutputSummary)
+	supportedFormats := formatters.SupportedFormatsByContentType(formatters.OutputSummary)
 	assert.Len(t, supportedFormats, 2)
-	assert.Contains(t, supportedFormats, string(FormatYAML))
-	assert.Contains(t, supportedFormats, string(FormatJSON))
+	assert.Contains(t, supportedFormats, string(formatters.FormatYAML))
+	assert.Contains(t, supportedFormats, string(formatters.FormatJSON))
 }
 
 func TestChangelogOutputFormats(t *testing.T) {
-	supportedFormats := SupportedFormatsByContentType(OutputChangelog)
+	supportedFormats := formatters.SupportedFormatsByContentType(formatters.OutputChangelog)
 	assert.Len(t, supportedFormats, 5)
-	assert.Contains(t, supportedFormats, string(FormatYAML))
-	assert.Contains(t, supportedFormats, string(FormatJSON))
-	assert.Contains(t, supportedFormats, string(FormatText))
-	assert.Contains(t, supportedFormats, string(FormatSingleLine))
-	assert.Contains(t, supportedFormats, string(FormatHTML))
+	assert.Contains(t, supportedFormats, string(formatters.FormatYAML))
+	assert.Contains(t, supportedFormats, string(formatters.FormatJSON))
+	assert.Contains(t, supportedFormats, string(formatters.FormatText))
+	assert.Contains(t, supportedFormats, string(formatters.FormatSingleLine))
+	assert.Contains(t, supportedFormats, string(formatters.FormatHTML))
 }
 
 func TestBreakingChangesOutputFormats(t *testing.T) {
-	supportedFormats := SupportedFormatsByContentType(OutputBreaking)
+	supportedFormats := formatters.SupportedFormatsByContentType(formatters.OutputBreaking)
 	assert.Len(t, supportedFormats, 6)
-	assert.Contains(t, supportedFormats, string(FormatYAML))
-	assert.Contains(t, supportedFormats, string(FormatJSON))
-	assert.Contains(t, supportedFormats, string(FormatText))
-	assert.Contains(t, supportedFormats, string(FormatSingleLine))
-	assert.Contains(t, supportedFormats, string(FormatGithubActions))
-	assert.Contains(t, supportedFormats, string(FormatJUnit))
+	assert.Contains(t, supportedFormats, string(formatters.FormatYAML))
+	assert.Contains(t, supportedFormats, string(formatters.FormatJSON))
+	assert.Contains(t, supportedFormats, string(formatters.FormatText))
+	assert.Contains(t, supportedFormats, string(formatters.FormatSingleLine))
+	assert.Contains(t, supportedFormats, string(formatters.FormatGithubActions))
+	assert.Contains(t, supportedFormats, string(formatters.FormatJUnit))
 }

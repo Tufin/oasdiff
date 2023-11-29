@@ -13,6 +13,12 @@ var textFormatter = formatters.TEXTFormatter{
 	Localizer: MockLocalizer,
 }
 
+func TestTextLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatText), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.TEXTFormatter{}, f)
+}
+
 func TestTextFormatter_RenderBreakingChanges(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{

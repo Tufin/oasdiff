@@ -13,6 +13,12 @@ var singleLineFormatter = formatters.SingleLineFormatter{
 	Localizer: MockLocalizer,
 }
 
+func TestSingleLineLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatSingleLine), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.SingleLineFormatter{}, f)
+}
+
 func TestSingleLineFormatter_RenderBreakingChanges(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{
