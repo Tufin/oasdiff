@@ -21,6 +21,12 @@ type GitHubActionsFormatter struct {
 	Localizer checker.Localizer
 }
 
+func newGitHubActionsFormatter(l checker.Localizer) GitHubActionsFormatter {
+	return GitHubActionsFormatter{
+		Localizer: l,
+	}
+}
+
 func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
 	var buf bytes.Buffer
 

@@ -18,6 +18,12 @@ type HTMLFormatter struct {
 	Localizer checker.Localizer
 }
 
+func newHTMLFormatter(l checker.Localizer) HTMLFormatter {
+	return HTMLFormatter{
+		Localizer: l,
+	}
+}
+
 func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	reportAsString, err := report.GetHTMLReportAsString(diff)
 	if err != nil {

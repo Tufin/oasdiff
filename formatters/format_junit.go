@@ -40,6 +40,12 @@ type JUnitFormatter struct {
 	Localizer checker.Localizer
 }
 
+func newJUnitFormatter(l checker.Localizer) JUnitFormatter {
+	return JUnitFormatter{
+		Localizer: l,
+	}
+}
+
 func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
 	var testSuite = JUnitTestSuite{
 		Package:   "com.oasdiff",

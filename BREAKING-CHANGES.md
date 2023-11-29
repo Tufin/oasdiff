@@ -24,8 +24,14 @@ In order to prevent breaking changes, oasdiff can be configured to return an err
 - To exit with return code 1 when any breaking changes are found, WARN-level or ERR-level, add the `--fail-on WARN` flag.
 
 ### Output Formats
-By default, breaking changes are displayed as human-readable text.  
-You can specify the `--format` flag to output breaking changes in other formats: json, yaml, githubactions or junit.
+By default, breaking changes are displayed as human-readable text with [color](#color).  
+You can specify the `--format` flag to output breaking changes in other formats: `json`, `yaml`, `githubactions` or `junit`.  
+An additional format `singleline` displays each breaking change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
+
+### Color
+When outputting breaking changes to a Unix terminal, oasdiff automatically adds colors with ANSI color codes.  
+If output is piped into another process or redirected to a file, oasdiff disables color.  
+To control color manually, use the `color` flag with `always` or `never`.
 
 ### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking change error.  

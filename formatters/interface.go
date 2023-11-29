@@ -39,33 +39,19 @@ func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 
 	switch f {
 	case FormatYAML:
-		return YAMLFormatter{
-			Localizer: l,
-		}, nil
+		return newYAMLFormatter(l), nil
 	case FormatJSON:
-		return JSONFormatter{
-			Localizer: l,
-		}, nil
+		return newJSONFormatter(l), nil
 	case FormatText:
-		return TEXTFormatter{
-			Localizer: l,
-		}, nil
+		return newTEXTFormatter(l), nil
 	case FormatSingleLine:
-		return SingleLineFormatter{
-			Localizer: l,
-		}, nil
+		return newSingleLineFormatter(l), nil
 	case FormatHTML:
-		return HTMLFormatter{
-			Localizer: l,
-		}, nil
+		return newHTMLFormatter(l), nil
 	case FormatGithubActions:
-		return GitHubActionsFormatter{
-			Localizer: l,
-		}, nil
+		return newGitHubActionsFormatter(l), nil
 	case FormatJUnit:
-		return JUnitFormatter{
-			Localizer: l,
-		}, nil
+		return newJUnitFormatter(l), nil
 	default:
 		return nil, fmt.Errorf("unsupported format: %s", f)
 	}
