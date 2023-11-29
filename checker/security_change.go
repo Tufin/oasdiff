@@ -13,7 +13,6 @@ type SecurityChange struct {
 	Args    []any  `json:"-" yaml:"-"`
 	Comment string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level   Level  `json:"level" yaml:"level"`
-	Source  string `json:"source,omitempty" yaml:"source,omitempty"`
 
 	SourceFile      string `json:"-" yaml:"-"`
 	SourceLine      int    `json:"-" yaml:"-"`
@@ -72,7 +71,7 @@ func (SecurityChange) GetPath() string {
 }
 
 func (c SecurityChange) GetSource() string {
-	return c.Source
+	return ""
 }
 
 func (c SecurityChange) GetSourceFile() string {

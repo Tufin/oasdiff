@@ -126,7 +126,7 @@ func (c ApiChange) MultiLineError(l Localizer, colorMode ColorMode) string {
 
 func multiLineComment(comment string) string {
 	if comment == "" {
-		return comment
+		return ""
 	}
 	return fmt.Sprintf("\n\t\t%s", comment)
 }

@@ -11,7 +11,6 @@ var componentChange = checker.ComponentChange{
 	Id:              "change_id",
 	Comment:         "comment",
 	Level:           checker.ERR,
-	Source:          "source",
 	Component:       "component",
 	SourceFile:      "sourceFile",
 	SourceLine:      1,
@@ -21,8 +20,10 @@ var componentChange = checker.ComponentChange{
 }
 
 func TestComponentChange(t *testing.T) {
+	require.Equal(t, "components", componentChange.GetSection())
 	require.Equal(t, "comment", componentChange.GetComment(MockLocalizer))
 	require.Equal(t, "", componentChange.GetOperationId())
+	require.Equal(t, "", componentChange.GetSource())
 	require.Equal(t, "sourceFile", componentChange.GetSourceFile())
 	require.Equal(t, 1, componentChange.GetSourceLine())
 	require.Equal(t, 2, componentChange.GetSourceLineEnd())
@@ -36,9 +37,14 @@ func TestComponentChange_MatchIgnore(t *testing.T) {
 	require.True(t, componentChange.MatchIgnore("", "error, in components/component this is a breaking change. [change_id]. comment", MockLocalizer))
 }
 
-func TestComponentChange_PrettyPiped(t *testing.T) {
-	piped := true
-	save := checker.SetPipedOutput(&piped)
-	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorAuto))
+func TestComponentChange_SingleLineError(t *testing.T) {
+	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorNever))
+}
+
+func TestComponentChange_SingleLineError_WithColor(t *testing.T) {
+	require.Equal(t, "\x1b[31merror\x1b[0m, in components/component This is a breaking change. [\x1b[33mchange_id\x1b[0m]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorAlways))
+}
+
+func TestComponentChange_MultiLineError_NoColor(t *testing.T) {
+	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorNever))
 }

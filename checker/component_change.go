@@ -13,7 +13,6 @@ type ComponentChange struct {
 	Args      []any  `json:"-" yaml:"-"`
 	Comment   string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level     Level  `json:"level" yaml:"level"`
-	Source    string `json:"source,omitempty" yaml:"source,omitempty"`
 	Component string `json:"component,omitempty" yaml:"component,omitempty"`
 
 	SourceFile      string `json:"-" yaml:"-"`
@@ -73,7 +72,7 @@ func (ComponentChange) GetPath() string {
 }
 
 func (c ComponentChange) GetSource() string {
-	return c.Source
+	return ""
 }
 
 func (c ComponentChange) GetSourceFile() string {

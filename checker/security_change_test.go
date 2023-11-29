@@ -11,7 +11,7 @@ var securityChange = checker.SecurityChange{
 	Id:              "change_id",
 	Comment:         "comment",
 	Level:           checker.ERR,
-	Source:          "source",
+	Args:            []any{1},
 	SourceFile:      "sourceFile",
 	SourceLine:      1,
 	SourceLineEnd:   2,
@@ -20,8 +20,11 @@ var securityChange = checker.SecurityChange{
 }
 
 func TestSecurityChange(t *testing.T) {
+	require.Equal(t, "security", securityChange.GetSection())
 	require.Equal(t, "comment", securityChange.GetComment(MockLocalizer))
 	require.Equal(t, "", securityChange.GetOperationId())
+	require.Equal(t, "", securityChange.GetSource())
+	require.Equal(t, []any{1}, securityChange.GetArgs())
 	require.Equal(t, "sourceFile", securityChange.GetSourceFile())
 	require.Equal(t, 1, securityChange.GetSourceLine())
 	require.Equal(t, 2, securityChange.GetSourceLineEnd())
@@ -34,9 +37,14 @@ func TestSecurityChange_MatchIgnore(t *testing.T) {
 	require.True(t, securityChange.MatchIgnore("", "error, in security this is a breaking change. [change_id]. comment", MockLocalizer))
 }
 
-func TestSecurityChange_PrettyPiped(t *testing.T) {
-	piped := true
-	save := checker.SetPipedOutput(&piped)
-	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error, in security This is a breaking change. [change_id]. comment", securityChange.SingleLineError(MockLocalizer, checker.ColorAuto))
+func TestSecurityChange_SingleLineError(t *testing.T) {
+	require.Equal(t, "error, in security This is a breaking change. [change_id]. comment", securityChange.SingleLineError(MockLocalizer, checker.ColorNever))
+}
+
+func TestSecurityChange_SingleLineError_WithColor(t *testing.T) {
+	require.Equal(t, "\x1b[31merror\x1b[0m, in security This is a breaking change. [\x1b[33mchange_id\x1b[0m]. comment", securityChange.SingleLineError(MockLocalizer, checker.ColorAlways))
+}
+
+func TestSecurityChange_MultiLineError_NoColor(t *testing.T) {
+	require.Equal(t, "error\t[change_id] \t\n\tin security\n\t\tThis is a breaking change.\n\t\tcomment", securityChange.MultiLineError(MockLocalizer, checker.ColorNever))
 }
