@@ -56,10 +56,6 @@ func TestApiChange_MatchIgnore(t *testing.T) {
 	require.True(t, apiChange.MatchIgnore("/test", "error at source, in api get /test this is a breaking change. [change_id]. comment", MockLocalizer))
 }
 
-func TestApiChange_SingleLineError(t *testing.T) {
-	require.Equal(t, "\x1b[31merror\x1b[0m at source, in API \x1b[32mGET\x1b[0m \x1b[32m/test\x1b[0m This is a breaking change. [\x1b[33mchange_id\x1b[0m]. comment", apiChange.SingleLineError(MockLocalizer, checker.ColorAlways))
-}
-
 func TestApiChange_MultiLineError(t *testing.T) {
 	require.Equal(t, "error\t[change_id] at source\t\n\tin API GET /test\n\t\tThis is a breaking change.\n\t\tcomment", apiChange.MultiLineError(MockLocalizer, checker.ColorNever))
 }

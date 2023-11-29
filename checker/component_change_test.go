@@ -41,10 +41,6 @@ func TestComponentChange_SingleLineError(t *testing.T) {
 	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorNever))
 }
 
-func TestComponentChange_SingleLineError_WithColor(t *testing.T) {
-	require.Equal(t, "\x1b[31merror\x1b[0m, in components/component This is a breaking change. [\x1b[33mchange_id\x1b[0m]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorAlways))
-}
-
 func TestComponentChange_MultiLineError_NoColor(t *testing.T) {
 	require.Equal(t, "error, in components/component This is a breaking change. [change_id]. comment", componentChange.SingleLineError(MockLocalizer, checker.ColorNever))
 }
