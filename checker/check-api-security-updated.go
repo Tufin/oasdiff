@@ -15,7 +15,7 @@ const (
 	APIGlobalSecurityScopeRemovedId = "api-global-security-scope-removed"
 )
 
-func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.SecurityDiff == nil {
 		return result
@@ -25,7 +25,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 		result = append(result, SecurityChange{
 			Id:    APIGlobalSecurityAddedCheckId,
 			Level: INFO,
-			Text:  config.Localize(APIGlobalSecurityAddedCheckId, ColorizedValue(addedSecurity)),
+			Args:  []any{addedSecurity},
 		})
 	}
 
@@ -33,7 +33,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 		result = append(result, SecurityChange{
 			Id:    APIGlobalSecurityRemovedCheckId,
 			Level: INFO,
-			Text:  config.Localize(APIGlobalSecurityRemovedCheckId, ColorizedValue(removedSecurity)),
+			Args:  []any{removedSecurity},
 		})
 	}
 
@@ -43,14 +43,14 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, SecurityChange{
 					Id:    APIGlobalSecurityScopeAddedId,
 					Level: INFO,
-					Text:  config.Localize(APIGlobalSecurityScopeAddedId, ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
+					Args:  []any{addedScope, securitySchemeName},
 				})
 			}
 			for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
 				result = append(result, SecurityChange{
 					Id:    APIGlobalSecurityScopeRemovedId,
 					Level: INFO,
-					Text:  config.Localize(APIGlobalSecurityScopeRemovedId, ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
+					Args:  []any{deletedScope, securitySchemeName},
 				})
 			}
 		}
@@ -60,7 +60,7 @@ func checkGlobalSecurity(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 }
 
-func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 
 	result = append(result, checkGlobalSecurity(diffReport, operationsSources, config)...)
@@ -88,7 +88,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				result = append(result, ApiChange{
 					Id:          APISecurityAddedCheckId,
 					Level:       INFO,
-					Text:        config.Localize(APISecurityAddedCheckId, ColorizedValue(addedSecurity)),
+					Args:        []any{addedSecurity},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -103,7 +103,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				result = append(result, ApiChange{
 					Id:          APISecurityRemovedCheckId,
 					Level:       INFO,
-					Text:        config.Localize(APISecurityRemovedCheckId, ColorizedValue(deletedSecurity)),
+					Args:        []any{deletedSecurity},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -120,7 +120,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 						result = append(result, ApiChange{
 							Id:          APISecurityScopeAddedId,
 							Level:       INFO,
-							Text:        config.Localize(APISecurityScopeAddedId, ColorizedValue(addedScope), ColorizedValue(securitySchemeName)),
+							Args:        []any{addedScope, securitySchemeName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -131,7 +131,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 						result = append(result, ApiChange{
 							Id:          APISecurityScopeRemovedId,
 							Level:       INFO,
-							Text:        config.Localize(APISecurityScopeRemovedId, ColorizedValue(deletedScope), ColorizedValue(securitySchemeName)),
+							Args:        []any{deletedScope, securitySchemeName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

@@ -21,5 +21,5 @@ func loadFrom(t *testing.T, path string) *load.SpecInfo {
 func TestRun(t *testing.T) {
 
 	const source = "../data/lint/openapi.yaml"
-	require.Empty(t, lint.Run(*lint.DefaultConfig(), source, loadFrom(t, source)))
+	require.Empty(t, lint.Run(lint.DefaultConfig(), source, loadFrom(t, source)))
 }

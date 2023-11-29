@@ -9,7 +9,7 @@ const (
 	NewOptionalRequestParameterId = "new-optional-request-parameter"
 )
 
-func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -41,7 +41,7 @@ func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *d
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        config.Localize(id, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+								Args:        []any{paramLocation, paramName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -6,11 +6,11 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
-func GetDefaultChecks() Config {
+func GetDefaultChecks() *Config {
 	return GetChecks(utils.StringList{})
 }
 
-func GetChecks(includeChecks utils.StringList) Config {
+func GetChecks(includeChecks utils.StringList) *Config {
 	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks), BetaDeprecationDays, StableDeprecationDays)
 }
 
@@ -25,22 +25,21 @@ func LevelOverrides(includeChecks utils.StringList) map[string]Level {
 	return result
 }
 
-func GetAllChecks(includeChecks utils.StringList, deprecationDaysBeta int, deprecationDaysStable int) Config {
+func GetAllChecks(includeChecks utils.StringList, deprecationDaysBeta int, deprecationDaysStable int) *Config {
 	return getBackwardCompatibilityCheckConfig(allChecks(), LevelOverrides(includeChecks), deprecationDaysBeta, deprecationDaysStable)
 }
 
-func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, levelOverrides map[string]Level, minSunsetBetaDays int, minSunsetStableDays int) Config {
-	return Config{
+func getBackwardCompatibilityCheckConfig(checks []BackwardCompatibilityCheck, levelOverrides map[string]Level, minSunsetBetaDays int, minSunsetStableDays int) *Config {
+	return &Config{
 		Checks:              checks,
 		LogLevelOverrides:   levelOverrides,
 		MinSunsetBetaDays:   minSunsetBetaDays,
 		MinSunsetStableDays: minSunsetStableDays,
-		Localize:            NewDefaultLocalizer(),
 	}
 }
 
 func optionalChecks() map[string]BackwardCompatibilityCheck {
-	optionalRules := GetOptionalRules(NewDefaultLocalizer())
+	optionalRules := GetOptionalRules()
 
 	result := make(map[string]BackwardCompatibilityCheck, len(optionalRules))
 	for _, rule := range optionalRules {
@@ -66,7 +65,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 
 	result := []BackwardCompatibilityCheck{}
 	m := utils.StringSet{}
-	for _, rule := range GetRequiredRules(NewDefaultLocalizer()) {
+	for _, rule := range GetRequiredRules() {
 		pStr := fmt.Sprintf("%v", rule.Handler)
 		if !m.Contains(pStr) {
 			m.Add(pStr)

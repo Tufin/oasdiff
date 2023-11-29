@@ -11,7 +11,7 @@ const (
 	RequestPropertyMinDecreasedId = "request-property-min-decreased"
 )
 
-func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -38,7 +38,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestBodyMinIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestBodyMinIncreasedId, ColorizedValue(minDiff.To)),
+								Args:        []any{minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -48,7 +48,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestBodyMinDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestBodyMinDecreasedId, ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Args:        []any{minDiff.From, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -69,11 +69,14 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							minDiff.To == nil {
 							return
 						}
+
+						propName := propertyFullName(propertyPath, propertyName)
+
 						if IsIncreasedValue(minDiff) {
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinIncreasedId,
-								Level:       ConditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Text:        config.Localize(RequestPropertyMinIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.To)),
+								Level:       conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								Args:        []any{propName, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -83,14 +86,13 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, ApiChange{
 								Id:          RequestPropertyMinDecreasedId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyMinDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minDiff.From), ColorizedValue(minDiff.To)),
+								Args:        []any{propName, minDiff.From, minDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
 								Source:      source,
 							})
 						}
-
 					})
 			}
 		}

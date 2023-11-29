@@ -25,7 +25,7 @@ func TestBreaking_ReqTypeStringToNumber(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "the request's body type/format changed from 'string'/'none' to 'number'/'none'", errs[0].GetText())
+	require.Equal(t, "the request's body type/format changed from 'string'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing request's body schema type from number to string is breaking
@@ -45,7 +45,7 @@ func TestBreaking_ReqTypeNumberToString(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "the request's body type/format changed from 'number'/'none' to 'string'/'none'", errs[0].GetText())
+	require.Equal(t, "the request's body type/format changed from 'number'/'' to 'string'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing request's body schema type from number to integer is breaking
@@ -65,7 +65,7 @@ func TestBreaking_ReqTypeNumberToInteger(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "the request's body type/format changed from 'number'/'none' to 'integer'/'none'", errs[0].GetText())
+	require.Equal(t, "the request's body type/format changed from 'number'/'' to 'integer'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing request's body schema type from integer to number is not breaking
@@ -104,5 +104,5 @@ func TestBreaking_ReqTypeNumberToInt32(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "the request's body type/format changed from 'number'/'none' to 'integer'/'int32'", errs[0].GetText())
+	require.Equal(t, "the request's body type/format changed from 'number'/'' to 'integer'/'int32'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

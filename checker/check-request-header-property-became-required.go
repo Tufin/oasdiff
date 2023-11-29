@@ -8,7 +8,7 @@ const (
 	RequestHeaderPropertyBecameRequiredId = "request-header-property-became-required"
 )
 
-func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -52,7 +52,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							result = append(result, ApiChange{
 								Id:          RequestHeaderPropertyBecameRequiredId,
 								Level:       ERR,
-								Text:        config.Localize(RequestHeaderPropertyBecameRequiredId, ColorizedValue(paramName), ColorizedValue(changedRequiredPropertyName)),
+								Args:        []any{paramName, changedRequiredPropertyName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -78,7 +78,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								result = append(result, ApiChange{
 									Id:          RequestHeaderPropertyBecameRequiredId,
 									Level:       ERR,
-									Text:        config.Localize(RequestHeaderPropertyBecameRequiredId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+									Args:        []any{paramName, propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

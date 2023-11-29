@@ -8,7 +8,7 @@ const (
 	RequestHeaderPropertyBecameEnumId = "request-header-property-became-enum"
 )
 
-func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -39,7 +39,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 						result = append(result, ApiChange{
 							Id:          RequestHeaderPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        config.Localize(RequestHeaderPropertyBecameEnumId, ColorizedValue(paramName)),
+							Args:        []any{paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -58,7 +58,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, ApiChange{
 								Id:          RequestHeaderPropertyBecameEnumId,
 								Level:       ERR,
-								Text:        config.Localize(RequestHeaderPropertyBecameEnumId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{paramName, propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

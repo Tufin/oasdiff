@@ -9,7 +9,7 @@ const (
 	NewOptionalRequestDefaultParameterToExistingPathId = "new-optional-request-default-parameter-to-existing-path"
 )
 
-func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil || len(diffReport.PathsDiff.Modified) == 0 {
 		return result
@@ -42,7 +42,7 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 					result = append(result, ApiChange{
 						Id:          id,
 						Level:       level,
-						Text:        config.Localize(id, ColorizedValue(paramLoc), ColorizedValue(param.Value.Name)),
+						Args:        []any{paramLoc, param.Value.Name},
 						Operation:   operation,
 						OperationId: operationItem.OperationID,
 						Path:        path,

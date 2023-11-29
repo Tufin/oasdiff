@@ -8,7 +8,7 @@ const (
 	RequestParameterTypeChangedId = "request-parameter-type-changed"
 )
 
-func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -74,7 +74,7 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          RequestParameterTypeChangedId,
 						Level:       ERR,
-						Text:        config.Localize(RequestParameterTypeChangedId, ColorizedValue(paramLocation), ColorizedValue(paramName), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+						Args:        []any{paramLocation, paramName, typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

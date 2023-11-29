@@ -11,7 +11,7 @@ const (
 	RequestPropertyBecomeNullableId    = "request-property-became-nullable"
 )
 
-func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -37,22 +37,22 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 				if mediaTypeDiff.SchemaDiff.NullableDiff != nil {
 					if mediaTypeDiff.SchemaDiff.NullableDiff.From == true {
 						result = append(result, ApiChange{
-							Id:          RequestBodyBecomeNotNullableId,
-							Level:       ERR,
-							Text:        config.Localize(RequestBodyBecomeNotNullableId),
-							Operation:   operation,
-							Path:        path,
-							Source:      source,
+							Id:        RequestBodyBecomeNotNullableId,
+							Level:     ERR,
+							Operation: operation,
+							Path:      path,
+							Source:    source,
+
 							OperationId: operationItem.Revision.OperationID,
 						})
 					} else if mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
 						result = append(result, ApiChange{
-							Id:          RequestBodyBecomeNullableId,
-							Level:       INFO,
-							Text:        config.Localize(RequestBodyBecomeNullableId),
-							Operation:   operation,
-							Path:        path,
-							Source:      source,
+							Id:        RequestBodyBecomeNullableId,
+							Level:     INFO,
+							Operation: operation,
+							Path:      path,
+							Source:    source,
+
 							OperationId: operationItem.Revision.OperationID,
 						})
 					}
@@ -65,24 +65,29 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						if nullableDiff == nil {
 							return
 						}
+
+						propName := propertyFullName(propertyPath, propertyName)
+
 						if nullableDiff.From == true {
 							result = append(result, ApiChange{
-								Id:          RequestPropertyBecomeNotNullableId,
-								Level:       ERR,
-								Text:        config.Localize(RequestPropertyBecomeNotNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Operation:   operation,
-								Path:        path,
-								Source:      source,
+								Id:        RequestPropertyBecomeNotNullableId,
+								Level:     ERR,
+								Args:      []any{propName},
+								Operation: operation,
+								Path:      path,
+								Source:    source,
+
 								OperationId: operationItem.Revision.OperationID,
 							})
 						} else if nullableDiff.To == true {
 							result = append(result, ApiChange{
-								Id:          RequestPropertyBecomeNullableId,
-								Level:       INFO,
-								Text:        config.Localize(RequestPropertyBecomeNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
-								Operation:   operation,
-								Path:        path,
-								Source:      source,
+								Id:        RequestPropertyBecomeNullableId,
+								Level:     INFO,
+								Args:      []any{propName},
+								Operation: operation,
+								Path:      path,
+								Source:    source,
+
 								OperationId: operationItem.Revision.OperationID,
 							})
 						}

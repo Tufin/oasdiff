@@ -8,7 +8,7 @@ const (
 	RequestPropertyBecameEnumId = "request-property-became-enum"
 )
 
-func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -42,7 +42,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 						result = append(result, ApiChange{
 							Id:          RequestPropertyBecameEnumId,
 							Level:       ERR,
-							Text:        config.Localize(RequestPropertyBecameEnumId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Args:        []any{propertyFullName(propertyPath, propertyName)},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

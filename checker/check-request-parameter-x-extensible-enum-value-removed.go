@@ -2,7 +2,6 @@ package checker
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
@@ -14,7 +13,7 @@ const (
 	RequestParameterXExtensibleEnumValueRemovedId = "request-parameter-x-extensible-enum-value-removed"
 )
 
-func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -58,7 +57,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 						result = append(result, ApiChange{
 							Id:          UnparsableParameterFromXExtensibleEnumId,
 							Level:       ERR,
-							Text:        fmt.Sprintf("unparseable x-extensible-enum of the %s request parameter %s", ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Args:        []any{paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -71,7 +70,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 						result = append(result, ApiChange{
 							Id:          UnparsableParameterToXExtensibleEnumId,
 							Level:       ERR,
-							Text:        fmt.Sprintf("unparseable x-extensible-enum of the %s request parameter %s", ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Args:        []any{paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -91,7 +90,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 						result = append(result, ApiChange{
 							Id:          RequestParameterXExtensibleEnumValueRemovedId,
 							Level:       ERR,
-							Text:        config.Localize(RequestParameterXExtensibleEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Args:        []any{enumVal, paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

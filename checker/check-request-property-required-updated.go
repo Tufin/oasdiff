@@ -9,7 +9,7 @@ const (
 	RequestPropertyBecameOptionalId = "request-property-became-optional"
 )
 
-func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -48,7 +48,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						result = append(result, ApiChange{
 							Id:          RequestPropertyBecameRequiredId,
 							Level:       ERR,
-							Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(changedRequiredPropertyName)),
+							Args:        []any{changedRequiredPropertyName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -70,14 +70,13 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						result = append(result, ApiChange{
 							Id:          RequestPropertyBecameOptionalId,
 							Level:       INFO,
-							Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(changedRequiredPropertyName)),
+							Args:        []any{changedRequiredPropertyName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
 							Source:      source,
 						})
 					}
-
 				}
 
 				CheckModifiedPropertiesDiff(
@@ -98,10 +97,11 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								// it is a new property, checked by the new-required-request-property check
 								continue
 							}
+
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecameRequiredId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyBecameRequiredId, ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -120,10 +120,11 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								// it is a new property, checked by the new-required-request-property check
 								continue
 							}
+
 							result = append(result, ApiChange{
 								Id:          RequestPropertyBecameOptionalId,
 								Level:       INFO,
-								Text:        config.Localize(RequestPropertyBecameOptionalId, ColorizedValue(propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)))),
+								Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

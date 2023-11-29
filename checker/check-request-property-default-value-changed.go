@@ -13,7 +13,7 @@ const (
 	RequestPropertyDefaultValueChangedId = "request-property-default-value-changed"
 )
 
-func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -34,7 +34,7 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 				result = append(result, ApiChange{
 					Id:          messageId,
 					Level:       INFO,
-					Text:        config.Localize(messageId, a...),
+					Args:        a,
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -48,11 +48,11 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 					defaultValueDiff := mediaTypeDiff.SchemaDiff.DefaultDiff
 
 					if defaultValueDiff.From == nil {
-						appendResultItem(RequestBodyDefaultValueAddedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.To))
+						appendResultItem(RequestBodyDefaultValueAddedId, mediaType, defaultValueDiff.To)
 					} else if defaultValueDiff.To == nil {
-						appendResultItem(RequestBodyDefaultValueRemovedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.From))
+						appendResultItem(RequestBodyDefaultValueRemovedId, mediaType, defaultValueDiff.From)
 					} else {
-						appendResultItem(RequestBodyDefaultValueChangedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To))
+						appendResultItem(RequestBodyDefaultValueChangedId, mediaType, defaultValueDiff.From, defaultValueDiff.To)
 					}
 				}
 
@@ -66,11 +66,11 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 						defaultValueDiff := propertyDiff.DefaultDiff
 
 						if defaultValueDiff.From == nil {
-							appendResultItem(RequestPropertyDefaultValueAddedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.To))
+							appendResultItem(RequestPropertyDefaultValueAddedId, propertyName, defaultValueDiff.To)
 						} else if defaultValueDiff.To == nil {
-							appendResultItem(RequestPropertyDefaultValueRemovedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.From))
+							appendResultItem(RequestPropertyDefaultValueRemovedId, propertyName, defaultValueDiff.From)
 						} else {
-							appendResultItem(RequestPropertyDefaultValueChangedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To))
+							appendResultItem(RequestPropertyDefaultValueChangedId, propertyName, defaultValueDiff.From, defaultValueDiff.To)
 						}
 					})
 			}

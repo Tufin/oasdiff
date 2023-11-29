@@ -8,7 +8,7 @@ const (
 	RequestParameterMaxSetId = "request-parameter-max-set"
 )
 
-func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -40,8 +40,8 @@ func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.
 					result = append(result, ApiChange{
 						Id:          RequestParameterMaxSetId,
 						Level:       WARN,
-						Text:        config.Localize(RequestParameterMaxSetId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(maxDiff.To)),
-						Comment:     config.Localize(comment(RequestParameterMaxSetId)),
+						Args:        []any{paramLocation, paramName, maxDiff.To},
+						Comment:     commentId(RequestParameterMaxSetId),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

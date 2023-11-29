@@ -24,8 +24,7 @@ func TestResponseRequiredPropertyBecameWriteOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 
 		Id:          "response-required-property-became-write-only",
-		Text:        "the response required property 'data/name' became write-only for the status '200'",
-		Comment:     "",
+		Args:        []any{"data/name", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -50,14 +49,16 @@ func TestResponseRequiredPropertyBecameNotWriteOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 
 		Id:          checker.ResponseRequiredPropertyBecameNonWriteOnlyId,
-		Text:        "the response required property 'data/writeOnlyName' became not write-only for the status '200'",
-		Comment:     "It is valid only if the property was always returned before the specification has been changed",
+		Args:        []any{"data/writeOnlyName", "200"},
+		Comment:     checker.ResponseRequiredPropertyBecameNonWriteOnlyId + "-comment",
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      "../data/checker/response_required_property_write_only_read_only_base.yaml",
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "It is valid only if the property was always returned before the specification has been changed", errs[0].GetComment(checker.NewDefaultLocalizer()))
+	require.Equal(t, "the response required property 'data/writeOnlyName' became not write-only for the status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing required response property to read-only
@@ -76,8 +77,7 @@ func TestResponseRequiredPropertyBecameReadOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 
 		Id:          checker.ResponseRequiredPropertyBecameReadOnlyId,
-		Text:        "the response required property 'data/id' became read-only for the status '200'",
-		Comment:     "",
+		Args:        []any{"data/id", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -103,8 +103,7 @@ func TestResponseRequiredPropertyBecameNonReadOnly(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 
 		Id:          checker.ResponseRequiredPropertyBecameNonReadOnlyId,
-		Text:        "the response required property 'data/id' became not read-only for the status '200'",
-		Comment:     "",
+		Args:        []any{"data/id", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

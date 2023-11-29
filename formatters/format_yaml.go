@@ -12,6 +12,7 @@ import (
 )
 
 type YAMLFormatter struct {
+	Localizer checker.Localizer
 }
 
 func (f YAMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
@@ -23,11 +24,11 @@ func (f YAMLFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, 
 }
 
 func (f YAMLFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	return printYAML(changes)
+	return printYAML(NewChanges(changes, f.Localizer))
 }
 
 func (f YAMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
-	return printYAML(changes)
+	return printYAML(NewChanges(changes, f.Localizer))
 }
 
 func (f YAMLFormatter) RenderChecks(checks Checks, opts RenderOpts) ([]byte, error) {
@@ -52,5 +53,5 @@ func printYAML(output interface{}) ([]byte, error) {
 		return nil, fmt.Errorf("failed to marshal YAML: %w", err)
 	}
 
-	return StripANSIEscapeCodes(bytes), nil
+	return bytes, nil
 }

@@ -9,7 +9,7 @@ const (
 	RequestPropertyMinItemsSetId = "request-property-min-items-set"
 )
 
-func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -35,8 +35,8 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, ApiChange{
 							Id:          RequestBodyMinItemsSetId,
 							Level:       WARN,
-							Text:        config.Localize(RequestBodyMinItemsSetId, ColorizedValue(minItemsDiff.To)),
-							Comment:     config.Localize(comment(RequestBodyMinItemsSetId)),
+							Args:        []any{minItemsDiff.To},
+							Comment:     commentId(RequestBodyMinItemsSetId),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -63,8 +63,8 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, ApiChange{
 							Id:          RequestPropertyMinItemsSetId,
 							Level:       WARN,
-							Text:        config.Localize(RequestPropertyMinItemsSetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
-							Comment:     config.Localize(comment(RequestPropertyMinItemsSetId)),
+							Args:        []any{propertyFullName(propertyPath, propertyName), minItemsDiff.To},
+							Comment:     commentId(RequestPropertyMinItemsSetId),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

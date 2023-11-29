@@ -11,26 +11,22 @@ import (
 var changes = checker.Changes{
 	checker.ApiChange{
 		Id:        "api-deleted",
-		Text:      "API deleted",
 		Level:     checker.ERR,
 		Operation: "GET",
 		Path:      "/test",
 	},
 	checker.ApiChange{
 		Id:        "api-added",
-		Text:      "API added",
 		Level:     checker.INFO,
 		Operation: "GET",
 		Path:      "/test",
 	},
 	checker.ComponentChange{
 		Id:    "component-added",
-		Text:  "component added",
 		Level: checker.INFO,
 	},
 	checker.SecurityChange{
 		Id:    "security-added",
-		Text:  "security added",
 		Level: checker.INFO,
 	},
 }
@@ -50,8 +46,4 @@ func TestChanges_Count(t *testing.T) {
 	require.Equal(t, 3, lc[checker.INFO])
 	require.Equal(t, 0, lc[checker.WARN])
 	require.Equal(t, 1, lc[checker.ERR])
-}
-
-func TestChanges_Group(t *testing.T) {
-	require.Contains(t, checker.GroupChanges(changes), checker.Endpoint{Path: "/test", Operation: "GET"})
 }

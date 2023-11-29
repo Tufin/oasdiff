@@ -8,7 +8,7 @@ const (
 	RequestBodyEnumValueRemovedId = "request-body-enum-value-removed"
 )
 
-func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -44,7 +44,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          RequestBodyEnumValueRemovedId,
 						Level:       config.getLogLevel(RequestBodyEnumValueRemovedId, INFO),
-						Text:        config.Localize(RequestBodyEnumValueRemovedId, ColorizedValue(enumVal)),
+						Args:        []any{enumVal},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

@@ -4,7 +4,6 @@ package checker
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"sort"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -15,46 +14,20 @@ const (
 	APIStabilityDecreasedId = "api-stability-decreased"
 )
 
-type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes
+type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes
 
-type BackwardCompatibilityRule struct {
-	Id          string
-	Level       Level
-	Description string
-	Required    bool
-	Handler     BackwardCompatibilityCheck `json:"-" yaml:"-"`
-}
-
-var pipedOutput *bool
-
-func SetPipedOutput(val *bool) *bool {
-	save := pipedOutput
-	pipedOutput = val
-	return save
-}
-
-func IsPipedOutput() bool {
-	if pipedOutput != nil {
-		return *pipedOutput
-	}
-	fi, _ := os.Stdout.Stat()
-	a := (fi.Mode() & os.ModeCharDevice) == 0
-	pipedOutput = &a
-	return *pipedOutput
-}
-
-func CheckBackwardCompatibility(config Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) Changes {
+func CheckBackwardCompatibility(config *Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) Changes {
 	return CheckBackwardCompatibilityUntilLevel(config, diffReport, operationsSources, WARN)
 }
 
-func CheckBackwardCompatibilityUntilLevel(config Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) Changes {
+func CheckBackwardCompatibilityUntilLevel(config *Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) Changes {
 	result := make(Changes, 0)
 
 	if diffReport == nil {
 		return result
 	}
 
-	result = removeDraftAndAlphaOperationsDiffs(diffReport, result, operationsSources)
+	result = removeDraftAndAlphaOperationsDiffs(config, diffReport, result, operationsSources)
 
 	for _, check := range config.Checks {
 		if check == nil {
@@ -75,7 +48,7 @@ func CheckBackwardCompatibilityUntilLevel(config Config, diffReport *diff.Diff, 
 	return filteredResult
 }
 
-func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, operationsSources *diff.OperationsSourcesMap) Changes {
+func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, result Changes, operationsSources *diff.OperationsSourcesMap) Changes {
 	if diffReport.PathsDiff == nil {
 		return result
 	}
@@ -88,7 +61,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 			baseStability, err := getStabilityLevel(pathDiff.Base[path].Operations()[operation].Extensions)
 			source := (*operationsSources)[pathDiff.Base[path].Operations()[operation]]
 			if err != nil {
-				result = newParsingError(result, err, operation, operationItem, path, source)
+				result = newParsingError(config, result, err, operation, operationItem, path, source)
 				continue
 			}
 			if !(baseStability == STABILITY_DRAFT || baseStability == STABILITY_ALPHA) {
@@ -115,7 +88,7 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 			baseStability, err := getStabilityLevel(operationItem.Extensions)
 			source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 			if err != nil {
-				result = newParsingError(result, err, operation, operationItem, path, source)
+				result = newParsingError(config, result, err, operation, operationItem, path, source)
 				continue
 			}
 			if !(baseStability == STABILITY_DRAFT || baseStability == STABILITY_ALPHA) {
@@ -132,8 +105,8 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 				result = append(result, ApiChange{
 					Id:          ParseErrorId,
+					Args:        []any{err.Error()},
 					Level:       ERR,
-					Text:        fmt.Sprintf("parsing error %s", err.Error()),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -146,8 +119,8 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
 				result = append(result, ApiChange{
 					Id:          ParseErrorId,
+					Args:        []any{err.Error()},
 					Level:       ERR,
-					Text:        fmt.Sprintf("parsing error %s", err.Error()),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -162,8 +135,8 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 				revisionStability == "" && baseStability != "" {
 				result = append(result, ApiChange{
 					Id:          APIStabilityDecreasedId,
+					Args:        []any{baseStability, revisionStability},
 					Level:       ERR,
-					Text:        fmt.Sprintf("stability level decreased from '%s' to '%s'", baseStability, revisionStability),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -179,7 +152,8 @@ func removeDraftAndAlphaOperationsDiffs(diffReport *diff.Diff, result Changes, o
 	return result
 }
 
-func newParsingError(result Changes,
+func newParsingError(config *Config,
+	result Changes,
 	err error,
 	operation string,
 	operationItem *openapi3.Operation,
@@ -187,8 +161,8 @@ func newParsingError(result Changes,
 	source string) Changes {
 	result = append(result, ApiChange{
 		Id:          ParseErrorId,
+		Args:        []any{err.Error()},
 		Level:       ERR,
-		Text:        fmt.Sprintf("parsing error %s", err.Error()),
 		Operation:   operation,
 		OperationId: operationItem.OperationID,
 		Path:        path,

@@ -23,8 +23,7 @@ func TestOperationIdRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdRemovedId,
-		Text:        "api operation id 'createOneGroup' removed and replaced with ''",
-		Comment:     "",
+		Args:        []any{"createOneGroup", ""},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -48,14 +47,15 @@ func TestOperationIdUpdated(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdRemovedId,
-		Text:        "api operation id 'createOneGroup' removed and replaced with 'newOperationId'",
-		Comment:     "",
+		Args:        []any{"createOneGroup", "newOperationId"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      "../data/checker/operation_id_removed_base.yaml",
 		OperationId: "createOneGroup",
 	}, errs[0])
+
+	require.Equal(t, "api operation id 'createOneGroup' removed and replaced with 'newOperationId'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding a new operation id
@@ -73,8 +73,7 @@ func TestOperationIdAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.APIOperationIdAddId,
-		Text:        "api operation id 'NewOperationId' was added",
-		Comment:     "",
+		Args:        []any{"NewOperationId"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

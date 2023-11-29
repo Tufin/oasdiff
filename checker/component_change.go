@@ -10,10 +10,9 @@ import (
 // ComponentChange represnts a change in the Components Section: https://swagger.io/docs/specification/components/
 type ComponentChange struct {
 	Id        string `json:"id,omitempty" yaml:"id,omitempty"`
-	Text      string `json:"text,omitempty" yaml:"text,omitempty"`
+	Args      []any  `json:"-" yaml:"-"`
 	Comment   string `json:"comment,omitempty" yaml:"comment,omitempty"`
 	Level     Level  `json:"level" yaml:"level"`
-	Source    string `json:"source,omitempty" yaml:"source,omitempty"`
 	Component string `json:"component,omitempty" yaml:"component,omitempty"`
 
 	SourceFile      string `json:"-" yaml:"-"`
@@ -23,12 +22,16 @@ type ComponentChange struct {
 	SourceColumnEnd int    `json:"-" yaml:"-"`
 }
 
+func (c ComponentChange) GetSection() string {
+	return "components"
+}
+
 func (c ComponentChange) IsBreaking() bool {
 	return c.GetLevel().IsBreaking()
 }
 
-func (c ComponentChange) MatchIgnore(ignorePath, ignoreLine string) bool {
-	return strings.Contains(ignoreLine, strings.ToLower(GetUncolorizedText(c))) &&
+func (c ComponentChange) MatchIgnore(ignorePath, ignoreLine string, l Localizer) bool {
+	return strings.Contains(ignoreLine, strings.ToLower(c.GetUncolorizedText(l))) &&
 		strings.Contains(ignoreLine, "components")
 }
 
@@ -36,12 +39,20 @@ func (c ComponentChange) GetId() string {
 	return c.Id
 }
 
-func (c ComponentChange) GetText() string {
-	return c.Text
+func (c ComponentChange) GetText(l Localizer) string {
+	return l(c.Id, colorizedValues(c.Args)...)
 }
 
-func (c ComponentChange) GetComment() string {
-	return c.Comment
+func (c ComponentChange) GetArgs() []any {
+	return c.Args
+}
+
+func (c ComponentChange) GetUncolorizedText(l Localizer) string {
+	return l(c.Id, quotedValues(c.Args)...)
+}
+
+func (c ComponentChange) GetComment(l Localizer) string {
+	return l(c.Comment)
 }
 
 func (c ComponentChange) GetLevel() Level {
@@ -57,6 +68,10 @@ func (ComponentChange) GetOperationId() string {
 }
 
 func (ComponentChange) GetPath() string {
+	return ""
+}
+
+func (c ComponentChange) GetSource() string {
 	return ""
 }
 
@@ -80,22 +95,20 @@ func (c ComponentChange) GetSourceColumnEnd() int {
 	return c.SourceColumnEnd
 }
 
-func (c ComponentChange) LocalizedError(l Localizer) string {
-	return fmt.Sprintf("%s, %s components/%s %s [%s]. %s", c.Level, l("in"), c.Component, c.Text, c.Id, c.Comment)
+func (c ComponentChange) SingleLineError(l Localizer, colorMode ColorMode) string {
+	const format = "%s, %s components/%s %s [%s]. %s"
+
+	if isColorEnabled(colorMode) {
+		return fmt.Sprintf(format, c.Level.PrettyString(), l("in"), c.Component, c.GetText(l), color.InYellow(c.Id), c.GetComment(l))
+	}
+	return fmt.Sprintf(format, c.Level.String(), l("in"), c.Component, c.GetUncolorizedText(l), c.Id, c.GetComment(l))
 }
 
-func (c ComponentChange) PrettyErrorText(l Localizer) string {
-	if IsPipedOutput() {
-		return c.LocalizedError(l)
-	}
+func (c ComponentChange) MultiLineError(l Localizer, colorMode ColorMode) string {
+	const format = "%s\t[%s] \t\n\t%s components/%s\n\t\t%s%s"
 
-	comment := ""
-	if c.Comment != "" {
-		comment = fmt.Sprintf("\n\t\t%s", c.Comment)
+	if isColorEnabled(colorMode) {
+		return fmt.Sprintf(format, c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Component, c.GetText(l), multiLineComment(c.GetComment(l)))
 	}
-	return fmt.Sprintf("%s\t[%s] \t\n\t%s components/%s\n\t\t%s%s", c.Level.PrettyString(), color.InYellow(c.Id), l("in"), c.Component, c.Text, comment)
-}
-
-func (c ComponentChange) Error() string {
-	return fmt.Sprintf("%s, in components/%s %s [%s]. %s", c.Level, c.Component, c.Text, c.Id, c.Comment)
+	return fmt.Sprintf(format, c.Level.String(), c.Id, l("in"), c.Component, c.GetUncolorizedText(l), multiLineComment(c.GetComment(l)))
 }

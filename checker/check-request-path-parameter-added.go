@@ -8,7 +8,7 @@ const (
 	NewRequestPathParameterId = "new-request-path-parameter"
 )
 
-func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -31,7 +31,7 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, ApiChange{
 						Id:          NewRequestPathParameterId,
 						Level:       ERR,
-						Text:        config.Localize(NewRequestPathParameterId, ColorizedValue(paramName)),
+						Args:        []any{paramName},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

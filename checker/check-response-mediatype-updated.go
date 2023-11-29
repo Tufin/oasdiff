@@ -9,7 +9,7 @@ const (
 	ResponseMediaTypeAddedId   = "response-media-type-added"
 )
 
-func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -37,7 +37,7 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 					result = append(result, ApiChange{
 						Id:          ResponseMediaTypeRemovedId,
 						Level:       ERR,
-						Text:        config.Localize(ResponseMediaTypeRemovedId, ColorizedValue(mediaType), ColorizedValue(responseStatus)),
+						Args:        []any{mediaType, responseStatus},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -48,7 +48,7 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 					result = append(result, ApiChange{
 						Id:          ResponseMediaTypeAddedId,
 						Level:       INFO,
-						Text:        config.Localize(ResponseMediaTypeAddedId, ColorizedValue(mediaType), ColorizedValue(responseStatus)),
+						Args:        []any{mediaType, responseStatus},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

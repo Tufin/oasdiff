@@ -15,6 +15,7 @@ import (
 
 type HTMLFormatter struct {
 	notImplementedFormatter
+	Localizer checker.Localizer
 }
 
 func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
@@ -30,7 +31,7 @@ func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 var changelog string
 
 type TemplateData struct {
-	APIChanges      checker.ChangesByEndpoint
+	APIChanges      ChangesByEndpoint
 	BaseVersion     string
 	RevisionVersion string
 }
@@ -39,7 +40,7 @@ func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts,
 	tmpl := template.Must(template.New("changelog").Parse(changelog))
 
 	var out bytes.Buffer
-	if err := tmpl.Execute(&out, TemplateData{checker.GroupChanges(changes), specInfoPair.GetBaseVersion(), specInfoPair.GetRevisionVersion()}); err != nil {
+	if err := tmpl.Execute(&out, TemplateData{GroupChanges(changes, f.Localizer), specInfoPair.GetBaseVersion(), specInfoPair.GetRevisionVersion()}); err != nil {
 		return nil, err
 	}
 

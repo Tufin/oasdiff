@@ -9,7 +9,7 @@ const (
 	ComponentSchemas    = "schemas"
 )
 
-func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.ComponentsDiff.SchemasDiff == nil {
 		return result
@@ -19,7 +19,7 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 		result = append(result, ComponentChange{
 			Id:        APISchemasRemovedId,
 			Level:     config.getLogLevel(APISchemasRemovedId, INFO),
-			Text:      config.Localize(APISchemasRemovedId, ColorizedValue(deletedSchema)),
+			Args:      []any{deletedSchema},
 			Component: ComponentSchemas,
 		})
 	}

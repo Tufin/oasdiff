@@ -9,7 +9,7 @@ const (
 	EndpointAddedId = "endpoint-added"
 )
 
-func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -19,7 +19,6 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 		result = append(result, ApiChange{
 			Id:          EndpointAddedId,
 			Level:       INFO,
-			Text:        config.Localize(EndpointAddedId),
 			Operation:   opName,
 			OperationId: opConfig.OperationID,
 			Path:        path,

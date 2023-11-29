@@ -1,11 +1,14 @@
 package formatters
 
+import "github.com/tufin/oasdiff/checker"
+
 type Format string
 
 const (
 	FormatYAML          Format = "yaml"
 	FormatJSON          Format = "json"
 	FormatText          Format = "text"
+	FormatSingleLine    Format = "singleline"
 	FormatHTML          Format = "html"
 	FormatGithubActions Format = "githubactions"
 	FormatJUnit         Format = "junit"
@@ -19,4 +22,11 @@ type FormatterOpts struct {
 
 // RenderOpts can be used to pass properties to the renderer method
 type RenderOpts struct {
+	ColorMode checker.ColorMode
+}
+
+func NewRenderOpts() RenderOpts {
+	return RenderOpts{
+		ColorMode: checker.ColorAuto,
+	}
 }

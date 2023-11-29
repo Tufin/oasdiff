@@ -9,7 +9,7 @@ const (
 	APITagAddedId   = "api-tag-added"
 )
 
-func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -32,7 +32,7 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 				result = append(result, ApiChange{
 					Id:          APITagRemovedId,
 					Level:       config.getLogLevel(APITagRemovedId, INFO),
-					Text:        config.Localize(APITagRemovedId, ColorizedValue(tag)),
+					Args:        []any{tag},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -45,15 +45,13 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 				result = append(result, ApiChange{
 					Id:          APITagAddedId,
 					Level:       config.getLogLevel(APITagAddedId, INFO),
-					Text:        config.Localize(APITagAddedId, ColorizedValue(tag)),
+					Args:        []any{tag},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
 					Source:      source,
 				})
-
 			}
-
 		}
 	}
 	return result

@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"fmt"
 	"time"
 
 	"cloud.google.com/go/civil"
@@ -16,7 +15,7 @@ const (
 	EndpointDeprecatedId       = "endpoint-deprecated"
 )
 
-func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -39,7 +38,6 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, ApiChange{
 					Id:          EndpointReactivatedId,
 					Level:       INFO,
-					Text:        config.Localize(EndpointReactivatedId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -53,7 +51,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, ApiChange{
 					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
+					Args:        []any{rawDate, err},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -69,7 +67,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, ApiChange{
 					Id:          ParseErrorId,
 					Level:       ERR,
-					Text:        fmt.Sprintf("parsing error %s", err.Error()),
+					Args:        []any{err.Error()},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -84,7 +82,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				result = append(result, ApiChange{
 					Id:          APISunsetDateTooSmallId,
 					Level:       ERR,
-					Text:        config.Localize(APISunsetDateTooSmallId, date, deprecationDays),
+					Args:        []any{date, deprecationDays},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -97,7 +95,6 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			result = append(result, ApiChange{
 				Id:          EndpointDeprecatedId,
 				Level:       INFO,
-				Text:        config.Localize(EndpointDeprecatedId),
 				Operation:   operation,
 				OperationId: op.OperationID,
 				Path:        path,

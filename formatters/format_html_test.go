@@ -1,6 +1,7 @@
 package formatters_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,45 +10,67 @@ import (
 	"github.com/tufin/oasdiff/formatters"
 )
 
-func TestHtmlFormatter_RenderDiff(t *testing.T) {
-	formatter := formatters.HTMLFormatter{}
+func MockLocalizer(id string, args ...interface{}) string {
+	switch id {
+	case "change_id":
+		return "This is a breaking change."
+	case "warning_id":
+		return "This is a warning."
+	case "notice_id":
+		return "This is a notice."
+	case "change_two_lines_id":
+		return "This is a breaking change.\nThis is a second line."
+	case "total-errors":
+		return fmt.Sprintf("%d breaking changes: %d %s, %d %s\n", args...)
+	case "total-changes":
+		return fmt.Sprintf("%d changes: %d %s, %d %s, %d %s\n", args...)
+	default:
+		return id
+	}
+}
 
-	out, err := formatter.RenderDiff(nil, formatters.RenderOpts{})
+var htmlFormatter = formatters.HTMLFormatter{
+	Localizer: MockLocalizer,
+}
+
+func TestHtmlLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatHTML), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.HTMLFormatter{}, f)
+}
+
+func TestHtmlFormatter_RenderDiff(t *testing.T) {
+	out, err := htmlFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	require.NoError(t, err)
 	require.Equal(t, string(out), "<p>No changes</p>\n")
 }
 
 func TestHtmlFormatter_RenderChangelog(t *testing.T) {
-	formatter := formatters.HTMLFormatter{}
-
 	testChanges := checker.Changes{
 		checker.ApiChange{
 			Path:      "/test",
 			Operation: "GET",
 			Id:        "change_id",
-			Text:      "This is a breaking change.",
 			Level:     checker.ERR,
 		},
 	}
 
-	out, err := formatter.RenderChangelog(testChanges, formatters.RenderOpts{}, nil)
+	out, err := htmlFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, string(out))
 }
 
 func TestHtmlFormatter_NotImplemented(t *testing.T) {
-	formatter := formatters.HTMLFormatter{}
-
 	var err error
-	_, err = formatter.RenderBreakingChanges(checker.Changes{}, formatters.RenderOpts{})
+	_, err = htmlFormatter.RenderBreakingChanges(checker.Changes{}, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = formatter.RenderChecks(formatters.Checks{}, formatters.RenderOpts{})
+	_, err = htmlFormatter.RenderChecks(formatters.Checks{}, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = formatter.RenderFlatten(nil, formatters.RenderOpts{})
+	_, err = htmlFormatter.RenderFlatten(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = formatter.RenderSummary(nil, formatters.RenderOpts{})
+	_, err = htmlFormatter.RenderSummary(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 }

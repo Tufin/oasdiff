@@ -10,7 +10,7 @@ const (
 	RequestParameterDefaultValueRemovedId = "request-parameter-default-value-removed"
 )
 
-func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -28,7 +28,7 @@ func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 				result = append(result, ApiChange{
 					Id:          messageId,
 					Level:       ERR,
-					Text:        config.Localize(messageId, a...),
+					Args:        a,
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -58,11 +58,11 @@ func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 					}
 
 					if defaultValueDiff.From == nil {
-						appendResultItem(RequestParameterDefaultValueAddedId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.To))
+						appendResultItem(RequestParameterDefaultValueAddedId, paramLocation, paramName, defaultValueDiff.To)
 					} else if defaultValueDiff.To == nil {
-						appendResultItem(RequestParameterDefaultValueRemovedId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From))
+						appendResultItem(RequestParameterDefaultValueRemovedId, paramLocation, paramName, defaultValueDiff.From)
 					} else {
-						appendResultItem(RequestParameterDefaultValueChangedId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(defaultValueDiff.From), ColorizedValue(defaultValueDiff.To))
+						appendResultItem(RequestParameterDefaultValueChangedId, paramLocation, paramName, defaultValueDiff.From, defaultValueDiff.To)
 					}
 				}
 			}

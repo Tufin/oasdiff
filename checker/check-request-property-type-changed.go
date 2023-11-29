@@ -9,7 +9,7 @@ const (
 	RequestPropertyTypeChangedId = "request-property-type-changed"
 )
 
-func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -38,14 +38,13 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 
 						result = append(result, ApiChange{
 							Id:          RequestBodyTypeChangedId,
-							Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-							Text:        config.Localize(RequestBodyTypeChangedId, empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+							Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
+							Args:        []any{typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
 							Source:      source,
 						})
-
 					}
 				}
 
@@ -66,8 +65,8 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
 							result = append(result, ApiChange{
 								Id:          RequestPropertyTypeChangedId,
-								Level:       ConditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-								Text:        config.Localize(RequestPropertyTypeChangedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), empty2none(typeDiff.From), empty2none(formatDiff.From), empty2none(typeDiff.To), empty2none(formatDiff.To)),
+								Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
+								Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

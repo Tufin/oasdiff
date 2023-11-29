@@ -9,7 +9,7 @@ const (
 	RequestPropertyMinItemsIncreasedId = "request-property-min-items-increased"
 )
 
-func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -36,7 +36,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          RequestBodyMinItemsIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestBodyMinItemsIncreasedId, ColorizedValue(minItemsDiff.To)),
+								Args:        []any{minItemsDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -67,7 +67,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          RequestPropertyMinItemsIncreasedId,
 							Level:       ERR,
-							Text:        config.Localize(RequestPropertyMinItemsIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.To)),
+							Args:        []any{propertyFullName(propertyPath, propertyName), minItemsDiff.To},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

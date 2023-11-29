@@ -69,7 +69,7 @@ func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnE
 	}
 
 	// render
-	bytes, err := formatter.RenderDiff(diffReport, formatters.RenderOpts{})
+	bytes, err := formatter.RenderDiff(diffReport, formatters.NewRenderOpts())
 	if err != nil {
 		return getErrFailedPrint("diff "+format, err)
 	}

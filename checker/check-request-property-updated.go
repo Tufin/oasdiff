@@ -12,7 +12,7 @@ const (
 	NewOptionalRequestPropertyId = "new-optional-request-property"
 )
 
-func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -37,7 +37,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:          RequestPropertyRemovedId,
 								Level:       WARN,
-								Text:        config.Localize(RequestPropertyRemovedId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -52,11 +52,14 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 						if propertyItem.ReadOnly {
 							return
 						}
+
+						propName := propertyFullName(propertyPath, propertyName)
+
 						if slices.Contains(parent.Revision.Required, propertyName) {
 							result = append(result, ApiChange{
 								Id:          NewRequiredRequestPropertyId,
 								Level:       ERR,
-								Text:        config.Localize(NewRequiredRequestPropertyId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -66,7 +69,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, ApiChange{
 								Id:          NewOptionalRequestPropertyId,
 								Level:       INFO,
-								Text:        config.Localize(NewOptionalRequestPropertyId, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

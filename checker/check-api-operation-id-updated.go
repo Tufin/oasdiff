@@ -9,7 +9,7 @@ const (
 	APIOperationIdAddId     = "api-operation-id-added"
 )
 
-func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -29,17 +29,17 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 			source := (*operationsSources)[op]
 
 			id := APIOperationIdRemovedId
-			text := config.Localize(id, ColorizedValue(operationItem.Base.OperationID), ColorizedValue(operationItem.Revision.OperationID))
+			args := []any{operationItem.Base.OperationID, operationItem.Revision.OperationID}
 			if operationItem.OperationIDDiff.From == nil || operationItem.OperationIDDiff.From == "" {
 				id = APIOperationIdAddId
 				op = pathItem.Revision.Operations()[operation]
-				text = config.Localize(id, ColorizedValue(operationItem.Revision.OperationID))
+				args = []any{operationItem.Revision.OperationID}
 			}
 
 			result = append(result, ApiChange{
 				Id:          id,
 				Level:       config.getLogLevel(id, INFO),
-				Text:        text,
+				Args:        args,
 				Operation:   operation,
 				OperationId: op.OperationID,
 				Path:        path,

@@ -25,6 +25,13 @@ func getErrFailedToLoadSpec(what string, source load.Source, err error) *ReturnE
 	}
 }
 
+func getErrFailedToFlattenSpec(what string, source load.Source, err error) *ReturnError {
+	return &ReturnError{
+		error: fmt.Errorf("failed to flatten %s spec from %s with %v", what, source.Out(), err),
+		Code:  102,
+	}
+}
+
 func getErrFailedToLoadSpecs(what string, path string, err error) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("failed to load %s specs from glob %q with %v", what, path, err),
@@ -81,16 +88,16 @@ func getErrUnsupportedChecksFormat(format string) *ReturnError {
 	}
 }
 
+func getErrInvalidColorMode(err error) *ReturnError {
+	return &ReturnError{
+		error: err,
+		Code:  114,
+	}
+}
+
 func getErrCantProcessIgnoreFile(what string, err error) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("can't process %s ignore file %v", what, err),
 		Code:  121,
-	}
-}
-
-func getErrFailedToFlattenSpec(what string, source load.Source, err error) *ReturnError {
-	return &ReturnError{
-		error: fmt.Errorf("failed to flatten %s spec from %s with %v", what, source.Out(), err),
-		Code:  102,
 	}
 }

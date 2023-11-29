@@ -27,6 +27,7 @@ type ChangelogFlags struct {
 	warnIgnoreFile           string
 	deprecationDaysBeta      int
 	deprecationDaysStable    int
+	color                    string
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
@@ -76,6 +77,10 @@ func (flags *ChangelogFlags) getDeprecationDaysStable() int {
 
 func (flags *ChangelogFlags) getLang() string {
 	return flags.lang
+}
+
+func (flags *ChangelogFlags) getColor() string {
+	return flags.color
 }
 
 func (flags *ChangelogFlags) getWarnIgnoreFile() string {

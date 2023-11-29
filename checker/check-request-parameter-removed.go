@@ -8,7 +8,7 @@ const (
 	RequestParameterRemovedId = "request-parameter-removed"
 )
 
-func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -27,7 +27,7 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 					result = append(result, ApiChange{
 						Id:          RequestParameterRemovedId,
 						Level:       WARN,
-						Text:        config.Localize(RequestParameterRemovedId, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Args:        []any{paramLocation, paramName},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

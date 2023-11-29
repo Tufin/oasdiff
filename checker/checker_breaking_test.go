@@ -199,8 +199,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	require.Equal(t,
 		checker.ApiChange{
 			Id:        checker.RequestParameterBecomeRequiredId,
-			Text:      "the 'header' request parameter 'network-policies' became required",
-			Comment:   "",
+			Args:      []any{"header", "network-policies"},
 			Level:     checker.ERR,
 			Operation: "GET",
 			Path:      "/api/{domain}/{project}/install-command",
@@ -549,7 +548,7 @@ func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterDefaultValueChangedId, errs[0].GetId())
-	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'X' to 'Y'", errs[0].GetText())
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'X' to 'Y'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: setting the default value of an optional request parameter is breaking
@@ -567,7 +566,7 @@ func TestBreaking_SettingOptionalParamDefaultValue(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterDefaultValueAddedId, errs[0].GetId())
-	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was added", errs[0].GetText())
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing the default value of an optional request parameter is breaking
@@ -585,7 +584,7 @@ func TestBreaking_RemovingOptionalParamDefaultValue(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-parameter-default-value-removed", errs[0].GetId())
-	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was removed", errs[0].GetText())
+	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: modifying the default value of a required request parameter is not breaking
@@ -627,9 +626,9 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 	}
 	require.NotEmpty(t, errs)
 	require.Equal(t, checker.APISchemasRemovedId, errs[0].GetId())
-	require.Equal(t, "removed the schema 'network-policies'", errs[0].GetText())
+	require.Equal(t, "removed the schema 'network-policies'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, checker.APISchemasRemovedId, errs[1].GetId())
-	require.Equal(t, "removed the schema 'rules'", errs[1].GetText())
+	require.Equal(t, "removed the schema 'rules'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing a media type from request body is breaking
@@ -645,7 +644,7 @@ func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Equal(t, "request-body-media-type-removed", errs[0].GetId())
-	require.Equal(t, "removed the media type application/json from the request body", errs[0].GetText())
+	require.Equal(t, "removed the media type 'application/json' from the request body", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing 'anyOf' schema from the request body or request body property is breaking
@@ -663,11 +662,11 @@ func TestBreaking_RequestPropertyAnyOfRemoved(t *testing.T) {
 
 	require.Equal(t, checker.RequestBodyAnyOfRemovedId, errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
-	require.Equal(t, "removed 'Rabbit' from the request body 'anyOf' list", errs[0].GetText())
+	require.Equal(t, "removed 'Rabbit' from the request body 'anyOf' list", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 
 	require.Equal(t, checker.RequestPropertyAnyOfRemovedId, errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
-	require.Equal(t, "removed 'Breed3' from the '/anyOf[#/components/schemas/Dog]/breed' request property 'anyOf' list", errs[1].GetText())
+	require.Equal(t, "removed 'Breed3' from the '/anyOf[#/components/schemas/Dog]/breed' request property 'anyOf' list", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing 'oneOf' schema from the request body or request body property is breaking
@@ -684,11 +683,11 @@ func TestBreaking_RequestPropertyOneOfRemoved(t *testing.T) {
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.RequestBodyOneOfRemovedId, errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
-	require.Equal(t, "removed 'Rabbit' from the request body 'oneOf' list", errs[0].GetText())
+	require.Equal(t, "removed 'Rabbit' from the request body 'oneOf' list", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 
 	require.Equal(t, checker.RequestPropertyOneOfRemovedId, errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
-	require.Equal(t, "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list", errs[1].GetText())
+	require.Equal(t, "removed 'Breed3' from the '/oneOf[#/components/schemas/Dog]/breed' request property 'oneOf' list", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: adding 'allOf' subschema to the request body or request body property is breaking
@@ -706,11 +705,11 @@ func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
 
 	require.Equal(t, checker.RequestBodyAllOfAddedId, errs[0].GetId())
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
-	require.Equal(t, "added 'Rabbit' to the request body 'allOf' list", errs[0].GetText())
+	require.Equal(t, "added 'Rabbit' to the request body 'allOf' list", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 
 	require.Equal(t, checker.RequestPropertyAllOfAddedId, errs[1].GetId())
 	require.Equal(t, checker.ERR, errs[1].GetLevel())
-	require.Equal(t, "added 'Breed3' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
+	require.Equal(t, "added 'Breed3' to the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing 'allOf' subschema from the request body or request body property is breaking with warn
@@ -728,9 +727,9 @@ func TestBreaking_RequestPropertyAllOfRemoved(t *testing.T) {
 
 	require.Equal(t, checker.RequestBodyAllOfRemovedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
-	require.Equal(t, "removed 'Rabbit' from the request body 'allOf' list", errs[0].GetText())
+	require.Equal(t, "removed 'Rabbit' from the request body 'allOf' list", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 
 	require.Equal(t, checker.RequestPropertyAllOfRemovedId, errs[1].GetId())
 	require.Equal(t, checker.WARN, errs[1].GetLevel())
-	require.Equal(t, "removed 'Breed3' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetText())
+	require.Equal(t, "removed 'Breed3' from the '/allOf[#/components/schemas/Dog]/breed' request property 'allOf' list", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

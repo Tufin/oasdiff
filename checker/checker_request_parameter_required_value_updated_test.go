@@ -23,8 +23,7 @@ func TestBreaking_HeaderParamBecameRequired(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:        checker.RequestParameterBecomeRequiredId,
-		Text:      "the 'header' request parameter 'network-policies' became required",
-		Comment:   "",
+		Args:      []any{"header", "network-policies"},
 		Level:     checker.ERR,
 		Operation: "GET",
 		Path:      "/api/{domain}/{project}/install-command",
@@ -46,8 +45,7 @@ func TestBreaking_HeaderParamBecameOptional(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:        checker.RequestParameterBecomeOptionalId,
-		Text:      "the 'header' request parameter 'network-policies' became optional",
-		Comment:   "",
+		Args:      []any{"header", "network-policies"},
 		Level:     checker.INFO,
 		Operation: "GET",
 		Path:      "/api/{domain}/{project}/install-command",

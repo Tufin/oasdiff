@@ -8,11 +8,10 @@ import (
 )
 
 var securityChange = checker.SecurityChange{
-	Id:              "id",
-	Text:            "text",
+	Id:              "change_id",
 	Comment:         "comment",
 	Level:           checker.ERR,
-	Source:          "source",
+	Args:            []any{1},
 	SourceFile:      "sourceFile",
 	SourceLine:      1,
 	SourceLineEnd:   2,
@@ -21,24 +20,27 @@ var securityChange = checker.SecurityChange{
 }
 
 func TestSecurityChange(t *testing.T) {
-	require.Equal(t, "comment", securityChange.GetComment())
+	require.Equal(t, "security", securityChange.GetSection())
+	require.Equal(t, "comment", securityChange.GetComment(MockLocalizer))
 	require.Equal(t, "", securityChange.GetOperationId())
+	require.Equal(t, "", securityChange.GetSource())
+	require.Equal(t, []any{1}, securityChange.GetArgs())
 	require.Equal(t, "sourceFile", securityChange.GetSourceFile())
 	require.Equal(t, 1, securityChange.GetSourceLine())
 	require.Equal(t, 2, securityChange.GetSourceLineEnd())
 	require.Equal(t, 3, securityChange.GetSourceColumn())
 	require.Equal(t, 4, securityChange.GetSourceColumnEnd())
-	require.Equal(t, "error, in security text [id]. comment", securityChange.LocalizedError(checker.NewDefaultLocalizer()))
-	require.Equal(t, "error, in security text [id]. comment", securityChange.Error())
+	require.Equal(t, "error, in security This is a breaking change. [change_id]. comment", securityChange.SingleLineError(MockLocalizer, checker.ColorNever))
 }
 
 func TestSecurityChange_MatchIgnore(t *testing.T) {
-	require.True(t, securityChange.MatchIgnore("", "error, in security text [id]. comment"))
+	require.True(t, securityChange.MatchIgnore("", "error, in security this is a breaking change. [change_id]. comment", MockLocalizer))
 }
 
-func TestSecurityChange_PrettyPiped(t *testing.T) {
-	piped := true
-	save := checker.SetPipedOutput(&piped)
-	defer checker.SetPipedOutput(save)
-	require.Equal(t, "error, in security text [id]. comment", securityChange.PrettyErrorText(checker.NewDefaultLocalizer()))
+func TestSecurityChange_SingleLineError(t *testing.T) {
+	require.Equal(t, "error, in security This is a breaking change. [change_id]. comment", securityChange.SingleLineError(MockLocalizer, checker.ColorNever))
+}
+
+func TestSecurityChange_MultiLineError_NoColor(t *testing.T) {
+	require.Equal(t, "error\t[change_id] \t\n\tin security\n\t\tThis is a breaking change.\n\t\tcomment", securityChange.MultiLineError(MockLocalizer, checker.ColorNever))
 }

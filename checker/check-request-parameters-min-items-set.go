@@ -8,7 +8,7 @@ const (
 	RequestParameterMinItemsSetId = "request-parameter-min-items-set"
 )
 
-func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -39,8 +39,8 @@ func RequestParameterMinItemsSetCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          RequestParameterMinItemsSetId,
 						Level:       WARN,
-						Text:        config.Localize(RequestParameterMinItemsSetId, ColorizedValue(paramLocation), ColorizedValue(paramName), ColorizedValue(minItemsDiff.To)),
-						Comment:     config.Localize(comment(RequestParameterMinItemsSetId)),
+						Args:        []any{paramLocation, paramName, minItemsDiff.To},
+						Comment:     commentId(RequestParameterMinItemsSetId),
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

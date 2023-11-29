@@ -21,8 +21,7 @@ func TestResponseSchemaTypeChangedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseBodyTypeChangedId,
-		Text:        "the response's body type/format changed from 'string'/'none' to 'object'/'none' for status '200'",
-		Comment:     "",
+		Args:        []any{"string", "", "object", "", "200"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -46,8 +45,7 @@ func TestResponsePropertyTypeChangedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyTypeChangedId,
-		Text:        "the response's property type/format changed from 'string'/'none' to 'integer'/'none' for status '200'",
-		Comment:     "",
+		Args:        []any{"string", "", "integer", "", "200"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -71,8 +69,7 @@ func TestResponsePropertyFormatChangedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyTypeChangedId,
-		Text:        "the response's property type/format changed from 'string'/'hostname' to 'string'/'uuid' for status '200'",
-		Comment:     "",
+		Args:        []any{"string", "hostname", "string", "uuid", "200"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

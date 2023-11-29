@@ -9,7 +9,7 @@ const (
 	RequestPropertyMaxLengthSetId = "request-property-max-length-set"
 )
 
-func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -35,8 +35,8 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, ApiChange{
 							Id:          RequestBodyMaxLengthSetId,
 							Level:       WARN,
-							Text:        config.Localize(RequestBodyMaxLengthSetId, ColorizedValue(maxLengthDiff.To)),
-							Comment:     config.Localize(comment(RequestBodyMaxLengthSetId)),
+							Args:        []any{maxLengthDiff.To},
+							Comment:     commentId(RequestBodyMaxLengthSetId),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -63,8 +63,8 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, ApiChange{
 							Id:          RequestPropertyMaxLengthSetId,
 							Level:       WARN,
-							Text:        config.Localize(RequestPropertyMaxLengthSetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.To)),
-							Comment:     config.Localize(comment(RequestPropertyMaxLengthSetId)),
+							Args:        []any{propertyFullName(propertyPath, propertyName), maxLengthDiff.To},
+							Comment:     commentId(RequestPropertyMaxLengthSetId),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

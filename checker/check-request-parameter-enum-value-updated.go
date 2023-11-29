@@ -9,7 +9,7 @@ const (
 	RequestParameterEnumValueRemovedId = "request-parameter-enum-value-removed"
 )
 
-func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -39,7 +39,7 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          RequestParameterEnumValueRemovedId,
 							Level:       ERR,
-							Text:        config.Localize(RequestParameterEnumValueRemovedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Args:        []any{enumVal, paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -50,7 +50,7 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          RequestParameterEnumValueAddedId,
 							Level:       INFO,
-							Text:        config.Localize(RequestParameterEnumValueAddedId, ColorizedValue(enumVal), ColorizedValue(paramLocation), ColorizedValue(paramName)),
+							Args:        []any{enumVal, paramLocation, paramName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

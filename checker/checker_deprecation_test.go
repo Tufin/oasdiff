@@ -22,12 +22,11 @@ func getDeprecationFile(file string) string {
 	return fmt.Sprintf("../data/deprecation/%s", file)
 }
 
-func singleCheckConfig(c checker.BackwardCompatibilityCheck) checker.Config {
-	return checker.Config{
+func singleCheckConfig(c checker.BackwardCompatibilityCheck) *checker.Config {
+	return &checker.Config{
 		Checks:              []checker.BackwardCompatibilityCheck{c},
 		MinSunsetBetaDays:   31,
 		MinSunsetStableDays: 180,
-		Localize:            checker.NewDefaultLocalizer(),
 	}
 }
 

@@ -21,8 +21,7 @@ func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseOptionalPropertyRemovedId,
-		Text:        "removed the optional property 'data/id' from the response with the '200' status",
-		Comment:     "",
+		Args:        []any{"data/id", "200"},
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -45,8 +44,7 @@ func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseOptionalPropertyAddedId,
-		Text:        "added the optional property 'data/id' to the response with the '200' status",
-		Comment:     "",
+		Args:        []any{"data/id", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -69,7 +67,7 @@ func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseOptionalWriteOnlyPropertyRemovedId,
-		Text:        "removed the optional write-only property 'data/id' from the response with the '200' status",
+		Args:        []any{"data/id", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -93,7 +91,7 @@ func TestResponseOptionalWriteOnlyPropertyAddedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseOptionalWriteOnlyPropertyAddedId,
-		Text:        "added the optional write-only property 'data/id' to the response with the '200' status",
+		Args:        []any{"data/id", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

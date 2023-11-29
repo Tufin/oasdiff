@@ -4,23 +4,31 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/formatters"
 )
 
+var jUnitFormatter = formatters.JUnitFormatter{
+	Localizer: MockLocalizer,
+}
+
+func TestJUnitLineLookup(t *testing.T) {
+	f, err := formatters.Lookup(string(formatters.FormatJUnit), formatters.DefaultFormatterOpts())
+	require.NoError(t, err)
+	require.IsType(t, formatters.JUnitFormatter{}, f)
+}
+
 func TestJUnitFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
-	// prepare formatter and test changes
-	formatter := formatters.JUnitFormatter{}
 	testChanges := checker.Changes{
 		checker.ComponentChange{
 			Id:    "change_id",
-			Text:  "This is a breaking change.",
 			Level: checker.ERR,
 		},
 	}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := jUnitFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	expectedOutput := `<?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
@@ -34,12 +42,10 @@ func TestJUnitFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 }
 
 func TestJUnitFormatter_RenderBreakingChanges_Success(t *testing.T) {
-	// prepare formatter and test changes
-	formatter := formatters.JUnitFormatter{}
 	testChanges := checker.Changes{}
 
 	// check output
-	output, err := formatter.RenderBreakingChanges(testChanges, formatters.RenderOpts{})
+	output, err := jUnitFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	expectedOutput := `<?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
@@ -51,21 +57,20 @@ func TestJUnitFormatter_RenderBreakingChanges_Success(t *testing.T) {
 }
 
 func TestJUnitFormatter_NotImplemented(t *testing.T) {
-	formatter := formatters.GitHubActionsFormatter{}
 
 	var err error
-	_, err = formatter.RenderDiff(nil, formatters.RenderOpts{})
+	_, err = jUnitFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = formatter.RenderSummary(nil, formatters.RenderOpts{})
+	_, err = jUnitFormatter.RenderSummary(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = formatter.RenderChangelog(nil, formatters.RenderOpts{}, nil)
+	_, err = jUnitFormatter.RenderChangelog(nil, formatters.NewRenderOpts(), nil)
 	assert.Error(t, err)
 
-	_, err = formatter.RenderChecks(nil, formatters.RenderOpts{})
+	_, err = jUnitFormatter.RenderChecks(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = formatter.RenderFlatten(nil, formatters.RenderOpts{})
+	_, err = jUnitFormatter.RenderFlatten(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 }

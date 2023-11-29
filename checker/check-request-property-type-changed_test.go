@@ -25,7 +25,7 @@ func TestRequestBodyTypeChangedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
-		Text:        "the request's body type/format changed from 'object'/'none' to 'array'/'none'",
+		Args:        []any{"object", "", "array", ""},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_type_changed_base.yaml",
@@ -50,7 +50,7 @@ func TestRequestBodyFormatChangedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
-		Text:        "the request's body type/format changed from 'object'/'none' to 'object'/'uuid'",
+		Args:        []any{"object", "", "object", "uuid"},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_type_changed_base.yaml",
@@ -73,7 +73,7 @@ func TestRequestPropertyTypeChangedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
-		Text:        "the 'age' request property type/format changed from 'integer'/'int32' to 'string'/'string'",
+		Args:        []any{"age", "integer", "int32", "string", "string"},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_type_changed_revision.yaml",
@@ -96,7 +96,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
-		Text:        "the 'colors' request property type/format changed from 'array'/'none' to 'object'/'none'",
+		Args:        []any{"colors", "array", "", "object", ""},
 		Operation:   "POST",
 		Path:        "/dogs",
 		Source:      "../data/checker/request_property_type_changed_revision_array_to_object.yaml",
@@ -105,7 +105,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
-		Text:        "the request's body type/format changed from 'array'/'none' to 'object'/'none'",
+		Args:        []any{"array", "", "object", ""},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_type_changed_revision_array_to_object.yaml",
@@ -128,7 +128,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
-		Text:        "the 'colors' request property type/format changed from 'object'/'none' to 'array'/'none'",
+		Args:        []any{"colors", "object", "", "array", ""},
 		Operation:   "POST",
 		Path:        "/dogs",
 		Source:      "../data/checker/request_property_type_changed_base_array_to_object.yaml",
@@ -137,7 +137,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
-		Text:        "the request's body type/format changed from 'object'/'none' to 'array'/'none'",
+		Args:        []any{"object", "", "array", ""},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_type_changed_base_array_to_object.yaml",
@@ -162,7 +162,7 @@ func TestRequestPropertyFormatChangedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
-		Text:        "the 'age' request property type/format changed from 'integer'/'int32' to 'integer'/'uuid'",
+		Args:        []any{"age", "integer", "int32", "integer", "uuid"},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_type_changed_base.yaml",
@@ -187,7 +187,7 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.INFO,
-		Text:        "the 'age' request property type/format changed from 'integer'/'int32' to 'number'/'int32'",
+		Args:        []any{"age", "integer", "int32", "number", "int32"},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_type_changed_base.yaml",

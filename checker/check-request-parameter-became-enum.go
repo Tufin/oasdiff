@@ -8,7 +8,7 @@ const (
 	RequestParameterBecameEnumId = "request-parameter-became-enum"
 )
 
-func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -38,7 +38,7 @@ func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *d
 					result = append(result, ApiChange{
 						Id:          RequestParameterBecameEnumId,
 						Level:       ERR,
-						Text:        config.Localize(RequestParameterBecameEnumId, ColorizedValue(paramLocation), ColorizedValue(paramName)),
+						Args:        []any{paramLocation, paramName},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

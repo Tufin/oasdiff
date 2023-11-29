@@ -9,7 +9,7 @@ const (
 	ResponsePropertyMaxLengthIncreasedId = "response-property-max-length-increased"
 )
 
-func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -39,7 +39,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 								result = append(result, ApiChange{
 									Id:          ResponseBodyMaxLengthIncreasedId,
 									Level:       ERR,
-									Text:        config.Localize(ResponseBodyMaxLengthIncreasedId, ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To)),
+									Args:        []any{maxLengthDiff.From, maxLengthDiff.To},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -71,7 +71,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 							result = append(result, ApiChange{
 								Id:          ResponsePropertyMaxLengthIncreasedId,
 								Level:       ERR,
-								Text:        config.Localize(ResponsePropertyMaxLengthIncreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(maxLengthDiff.From), ColorizedValue(maxLengthDiff.To), ColorizedValue(responseStatus)),
+								Args:        []any{propertyFullName(propertyPath, propertyName), maxLengthDiff.From, maxLengthDiff.To, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -79,9 +79,7 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 							})
 						})
 				}
-
 			}
-
 		}
 	}
 	return result

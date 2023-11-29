@@ -53,17 +53,17 @@ func getChecksCmd() *cobra.Command {
 }
 
 func runChecks(stdout io.Writer, flags ChecksFlags) *ReturnError {
-	return outputChecks(stdout, flags, getRules(flags.required, checker.NewLocalizer(flags.lang)))
+	return outputChecks(stdout, flags, getRules(flags.required))
 }
 
-func getRules(required string, l checker.Localizer) []checker.BackwardCompatibilityRule {
+func getRules(required string) []checker.BackwardCompatibilityRule {
 	switch required {
 	case "all":
-		return checker.GetAllRules(l)
+		return checker.GetAllRules()
 	case "false":
-		return checker.GetOptionalRules(l)
+		return checker.GetOptionalRules()
 	case "true":
-		return checker.GetRequiredRules(l)
+		return checker.GetRequiredRules()
 	}
 
 	return nil
@@ -118,7 +118,7 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 
 	// render
 	sort.Sort(checks)
-	bytes, err := formatter.RenderChecks(checks, formatters.RenderOpts{})
+	bytes, err := formatter.RenderChecks(checks, formatters.NewRenderOpts())
 	if err != nil {
 		return getErrFailedPrint("checks "+flags.format, err)
 	}

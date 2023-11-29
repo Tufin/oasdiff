@@ -2,7 +2,6 @@ package checker
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
@@ -14,7 +13,7 @@ const (
 	RequestPropertyXExtensibleEnumValueRemovedId = "request-property-x-extensible-enum-value-removed"
 )
 
-func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -58,7 +57,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							result = append(result, ApiChange{
 								Id:          UnparseablePropertyFromXExtensibleEnumId,
 								Level:       ERR,
-								Text:        fmt.Sprintf("unparseable x-extensible-enum of the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -71,7 +70,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							result = append(result, ApiChange{
 								Id:          UnparseablePropertyToXExtensibleEnumId,
 								Level:       ERR,
-								Text:        fmt.Sprintf("unparseable x-extensible-enum of the request property %s", ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -94,7 +93,7 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							result = append(result, ApiChange{
 								Id:          RequestPropertyXExtensibleEnumValueRemovedId,
 								Level:       ERR,
-								Text:        config.Localize(RequestPropertyXExtensibleEnumValueRemovedId, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{enumVal, propertyFullName(propertyPath, propertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

@@ -21,8 +21,7 @@ func TestRequestParameterMaxItemsIncreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMaxItemsIncreasedId,
-		Text:        "for the 'query' request parameter 'category', the maxItems was increased from '10' to '20'",
-		Comment:     "",
+		Args:        []any{"query", "category", uint64(10), uint64(20)},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -44,8 +43,7 @@ func TestRequestParameterMaxItemsDecreased(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterMaxItemsDecreasedId,
-		Text:        "for the 'query' request parameter 'category', the maxItems was decreased from '20' to '10'",
-		Comment:     "",
+		Args:        []any{"query", "category", uint64(20), uint64(10)},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

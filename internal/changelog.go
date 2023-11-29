@@ -43,6 +43,7 @@ func getChangelogCmd() *cobra.Command {
 	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks --required false' to see options)")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysBeta, "deprecation-days-beta", "", checker.BetaDeprecationDays, "min days required between deprecating a beta resource and removing it")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysStable, "deprecation-days-stable", "", checker.StableDeprecationDays, "min days required between deprecating a stable resource and removing it")
+	enumWithOptions(&cmd, newEnumValue([]string{"auto", "always", "never"}, "auto", &flags.color), "color", "", "when to output colored escape sequences")
 
 	return &cmd
 }
@@ -65,11 +66,12 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 	}
 
 	bcConfig := checker.GetAllChecks(flags.getIncludeChecks(), flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
-	bcConfig.Localize = checker.NewLocalizer(flags.getLang())
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffResult.diffReport, diffResult.operationsSources, level),
-		flags.getWarnIgnoreFile(), flags.getErrIgnoreFile())
+		flags.getWarnIgnoreFile(),
+		flags.getErrIgnoreFile(),
+		checker.NewLocalizer(flags.getLang()))
 
 	if returnErr != nil {
 		return false, returnErr
@@ -77,12 +79,12 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 
 	if level == checker.WARN {
 		// breaking changes
-		if returnErr := outputBreakingChanges(flags.getFormat(), flags.getLang(), stdout, errs); returnErr != nil {
+		if returnErr := outputBreakingChanges(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs); returnErr != nil {
 			return false, returnErr
 		}
 	} else {
 		// changelog
-		if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
+		if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
 			return false, returnErr
 		}
 	}
@@ -98,11 +100,11 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 	return false, nil
 }
 
-func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile string) (checker.Changes, *ReturnError) {
+func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile string, l checker.Localizer) (checker.Changes, *ReturnError) {
 
 	if warnIgnoreFile != "" {
 		var err error
-		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnoreFile)
+		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.WARN, errs, warnIgnoreFile, l)
 		if err != nil {
 			return nil, getErrCantProcessIgnoreFile("warn", err)
 		}
@@ -110,7 +112,7 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 
 	if errIgnoreFile != "" {
 		var err error
-		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnoreFile)
+		errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, errIgnoreFile, l)
 		if err != nil {
 			return nil, getErrCantProcessIgnoreFile("err", err)
 		}
@@ -119,7 +121,7 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 	return errs, nil
 }
 
-func outputChangelog(format string, lang string, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
+func outputChangelog(format string, lang string, color string, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
 		Language: lang,
@@ -129,7 +131,12 @@ func outputChangelog(format string, lang string, stdout io.Writer, errs checker.
 	}
 
 	// render
-	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{}, specInfoPair)
+	colorMode, err := checker.NewColorMode(color)
+	if err != nil {
+		return getErrInvalidColorMode(err)
+	}
+
+	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{ColorMode: colorMode}, specInfoPair)
 	if err != nil {
 		return getErrFailedPrint("changelog "+format, err)
 	}

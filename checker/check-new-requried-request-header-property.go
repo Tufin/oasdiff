@@ -10,7 +10,7 @@ const (
 	NewRequiredRequestHeaderPropertyId = "new-required-request-header-property"
 )
 
-func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -46,7 +46,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          NewRequiredRequestHeaderPropertyId,
 								Level:       ERR,
-								Text:        config.Localize(NewRequiredRequestHeaderPropertyId, ColorizedValue(paramName), ColorizedValue(propertyFullName(propertyPath, newPropertyName))),
+								Args:        []any{paramName, propertyFullName(propertyPath, newPropertyName)},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

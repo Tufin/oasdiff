@@ -4,13 +4,16 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/TwiN/go-color"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 )
 
-func comment(id string) string {
+func commentId(id string) string {
 	return id + "-comment"
+}
+
+func descriptionId(id string) string {
+	return id + "-description"
 }
 
 func propertyFullName(propertyPath string, propertyNames ...string) string {
@@ -19,14 +22,6 @@ func propertyFullName(propertyPath string, propertyNames ...string) string {
 		propertyFullName = propertyPath + "/" + propertyFullName
 	}
 	return propertyFullName
-}
-
-func ColorizedValue(arg interface{}) string {
-	str := interfaceToString(arg)
-	if IsPipedOutput() {
-		return fmt.Sprintf("'%s'", str)
-	}
-	return color.InBold(fmt.Sprintf("'%s'", str))
 }
 
 func interfaceToString(arg interface{}) string {
@@ -233,11 +228,4 @@ func IsDecreased(from interface{}, to interface{}) bool {
 		return fromFloat64 > toFloat64
 	}
 	return false
-}
-
-func empty2none(a interface{}) interface{} {
-	if a == nil || a == "" {
-		return ColorizedValue("none")
-	}
-	return ColorizedValue(a)
 }

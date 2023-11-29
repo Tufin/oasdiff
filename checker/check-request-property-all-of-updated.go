@@ -11,7 +11,7 @@ const (
 	RequestPropertyAllOfRemovedId = "request-property-all-of-removed"
 )
 
-func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -38,11 +38,9 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 
 				if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Added) > 0 {
 					result = append(result, ApiChange{
-						Id:    RequestBodyAllOfAddedId,
-						Level: ERR,
-						Text: config.Localize(
-							RequestBodyAllOfAddedId,
-							ColorizedValue(mediaTypeDiff.SchemaDiff.AllOfDiff.Added.String())),
+						Id:          RequestBodyAllOfAddedId,
+						Level:       ERR,
+						Args:        []any{mediaTypeDiff.SchemaDiff.AllOfDiff.Added.String()},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -52,11 +50,9 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 
 				if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted) > 0 {
 					result = append(result, ApiChange{
-						Id:    RequestBodyAllOfRemovedId,
-						Level: WARN,
-						Text: config.Localize(
-							RequestBodyAllOfRemovedId,
-							ColorizedValue(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted.String())),
+						Id:          RequestBodyAllOfRemovedId,
+						Level:       WARN,
+						Args:        []any{mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted.String()},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
@@ -71,14 +67,14 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 							return
 						}
 
+						propName := propertyFullName(propertyPath, propertyName)
+
 						if len(propertyDiff.AllOfDiff.Added) > 0 {
 							result = append(result, ApiChange{
 								Id:    RequestPropertyAllOfAddedId,
 								Level: ERR,
-								Text: config.Localize(
-									RequestPropertyAllOfAddedId,
-									ColorizedValue(propertyDiff.AllOfDiff.Added.String()),
-									ColorizedValue(propertyFullName(propertyPath, propertyName))),
+
+								Args:        []any{propertyDiff.AllOfDiff.Added.String(), propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -88,12 +84,9 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 
 						if len(propertyDiff.AllOfDiff.Deleted) > 0 {
 							result = append(result, ApiChange{
-								Id:    RequestPropertyAllOfRemovedId,
-								Level: WARN,
-								Text: config.Localize(
-									RequestPropertyAllOfRemovedId,
-									ColorizedValue(propertyDiff.AllOfDiff.Deleted.String()),
-									ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Id:          RequestPropertyAllOfRemovedId,
+								Level:       WARN,
+								Args:        []any{propertyDiff.AllOfDiff.Deleted.String(), propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

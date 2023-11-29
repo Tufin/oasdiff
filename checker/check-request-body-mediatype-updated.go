@@ -9,7 +9,7 @@ const (
 	RequestBodyMediaTypeRemovedId = "request-body-media-type-removed"
 )
 
-func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -31,7 +31,7 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 				result = append(result, ApiChange{
 					Id:          RequestBodyMediaTypeAddedId,
 					Level:       INFO,
-					Text:        config.Localize(RequestBodyMediaTypeAddedId, mediaType),
+					Args:        []any{mediaType},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -44,14 +44,13 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 				result = append(result, ApiChange{
 					Id:          RequestBodyMediaTypeRemovedId,
 					Level:       ERR,
-					Text:        config.Localize(RequestBodyMediaTypeRemovedId, mediaType),
+					Args:        []any{mediaType},
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
 					Source:      source,
 				})
 			}
-
 		}
 	}
 	return result

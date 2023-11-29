@@ -22,15 +22,15 @@ func TestRequestPropertyPatternChanged(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyPatternUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestPropertyPatternChangedId,
-		Text:        "changed the pattern of the request property 'name' from '^\\w+$' to '^[\\w\\s]+$'",
-		Level:       checker.WARN,
-		Operation:   "POST",
-		Path:        "/test",
-		Source:      "../data/checker/request_property_pattern_added_or_changed_revision.yaml",
-		OperationId: "",
-		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')",
+		Id:        checker.RequestPropertyPatternChangedId,
+		Args:      []any{"name", "^\\w+$", "^[\\w\\s]+$"},
+		Level:     checker.WARN,
+		Operation: "POST",
+		Path:      "/test",
+		Source:    "../data/checker/request_property_pattern_added_or_changed_revision.yaml",
+		Comment:   checker.PatternChangedCommentId,
 	}, errs[0])
+	require.Equal(t, "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')", errs[0].GetComment(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding request property pattern
@@ -45,15 +45,15 @@ func TestRequestPropertyPatternAdded(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyPatternUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestPropertyPatternAddedId,
-		Text:        "added the pattern '^\\w+$' to the request property 'name'",
-		Level:       checker.WARN,
-		Operation:   "POST",
-		Path:        "/test",
-		Source:      "../data/checker/request_property_pattern_added_or_changed_base.yaml",
-		OperationId: "",
-		Comment:     "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')",
+		Id:        checker.RequestPropertyPatternAddedId,
+		Args:      []any{"^\\w+$", "name"},
+		Level:     checker.WARN,
+		Operation: "POST",
+		Path:      "/test",
+		Source:    "../data/checker/request_property_pattern_added_or_changed_base.yaml",
+		Comment:   checker.PatternChangedCommentId,
 	}, errs[0])
+	require.Equal(t, "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')", errs[0].GetComment(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing request property pattern
@@ -68,12 +68,11 @@ func TestRequestPropertyPatternRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyPatternUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestPropertyPatternRemovedId,
-		Text:        "removed the pattern '^\\w+$' from the request property 'name'",
-		Level:       checker.INFO,
-		Operation:   "POST",
-		Path:        "/test",
-		Source:      "../data/checker/request_property_pattern_added_or_changed_revision.yaml",
-		OperationId: "",
+		Id:        checker.RequestPropertyPatternRemovedId,
+		Args:      []any{"^\\w+$", "name"},
+		Level:     checker.INFO,
+		Operation: "POST",
+		Path:      "/test",
+		Source:    "../data/checker/request_property_pattern_added_or_changed_revision.yaml",
 	}, errs[0])
 }

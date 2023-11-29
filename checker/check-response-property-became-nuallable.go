@@ -9,7 +9,7 @@ const (
 	ResponseBodyBecameNullableId     = "response-body-became-nullable"
 )
 
-func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -41,7 +41,6 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 						result = append(result, ApiChange{
 							Id:          ResponseBodyBecameNullableId,
 							Level:       ERR,
-							Text:        config.Localize(ResponseBodyBecameNullableId),
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -63,7 +62,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, ApiChange{
 								Id:          ResponsePropertyBecameNullableId,
 								Level:       ERR,
-								Text:        config.Localize(ResponsePropertyBecameNullableId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

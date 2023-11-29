@@ -9,7 +9,7 @@ const (
 	ResponsePropertyMinItemsUnsetId = "response-property-min-items-unset"
 )
 
-func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -38,7 +38,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          ResponseBodyMinItemsUnsetId,
 								Level:       ERR,
-								Text:        config.Localize(ResponseBodyMinItemsUnsetId, ColorizedValue(minItemsDiff.From)),
+								Args:        []any{minItemsDiff.From},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -65,7 +65,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, ApiChange{
 								Id:          ResponsePropertyMinItemsUnsetId,
 								Level:       ERR,
-								Text:        config.Localize(ResponsePropertyMinItemsUnsetId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(responseStatus)),
+								Args:        []any{propertyFullName(propertyPath, propertyName), minItemsDiff.From, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

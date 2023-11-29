@@ -12,7 +12,7 @@ const (
 	ResponseRequiredPropertyBecameNonReadOnlyId  = "response-required-property-became-not-read-only"
 )
 
-func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -58,7 +58,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 
 							id := ResponseRequiredPropertyBecameNonWriteOnlyId
 							level := WARN
-							comment := config.Localize(comment(ResponseRequiredPropertyBecameNonWriteOnlyId))
+							comment := commentId(ResponseRequiredPropertyBecameNonWriteOnlyId)
 
 							if writeOnlyDiff.To == true {
 								id = ResponseRequiredPropertyBecameWriteOnlyId
@@ -69,7 +69,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
 								Comment:     comment,
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
@@ -105,7 +105,7 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       level,
-								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,

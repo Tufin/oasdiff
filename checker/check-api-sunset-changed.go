@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"fmt"
 	"time"
 
 	"cloud.google.com/go/civil"
@@ -13,7 +12,7 @@ const (
 	APISunsetDateChangedTooSmallId = "api-sunset-date-changed-too-small"
 )
 
-func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -35,7 +34,6 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          APISunsetDeletedId,
 					Level:       ERR,
-					Text:        config.Localize(APISunsetDeletedId),
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -54,7 +52,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
+					Args:        []any{rawDate, err},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -68,7 +66,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Text:        config.Localize(APIDeprecatedSunsetParseId, rawDate, err),
+					Args:        []any{rawDate, err},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -84,7 +82,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          ParseErrorId,
 					Level:       ERR,
-					Text:        fmt.Sprintf("parsing error %s", err.Error()),
+					Args:        []any{err.Error()},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -99,7 +97,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 				result = append(result, ApiChange{
 					Id:          APISunsetDateChangedTooSmallId,
 					Level:       ERR,
-					Text:        config.Localize(APISunsetDateChangedTooSmallId, baseDate, date, baseDate, deprecationDays),
+					Args:        []any{baseDate, date, baseDate, deprecationDays},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -119,7 +117,7 @@ const (
 	STABILITY_STABLE = "stable"
 )
 
-func getDeprecationDays(config Config, stability string) int {
+func getDeprecationDays(config *Config, stability string) int {
 	switch stability {
 	case STABILITY_DRAFT:
 		return 0

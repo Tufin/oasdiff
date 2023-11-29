@@ -24,21 +24,11 @@ func (f TEXTFormatter) RenderBreakingChanges(changes checker.Changes, opts Rende
 	result := bytes.NewBuffer(nil)
 
 	if len(changes) > 0 {
-		count := changes.GetLevelCount()
-		title := f.Localizer(
-			"total-errors",
-			len(changes),
-			count[checker.ERR],
-			checker.ERR.PrettyString(),
-			count[checker.WARN],
-			checker.WARN.PrettyString(),
-		)
-
-		_, _ = fmt.Fprint(result, title)
+		_, _ = fmt.Fprint(result, getBreakingTitle(changes, f.Localizer, opts.ColorMode))
 	}
 
 	for _, c := range changes {
-		_, _ = fmt.Fprintf(result, "%s\n\n", c.PrettyErrorText(f.Localizer))
+		_, _ = fmt.Fprintf(result, "%s\n\n", c.MultiLineError(f.Localizer, opts.ColorMode))
 	}
 
 	return result.Bytes(), nil
@@ -48,23 +38,11 @@ func (f TEXTFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts,
 	result := bytes.NewBuffer(nil)
 
 	if len(changes) > 0 {
-		count := changes.GetLevelCount()
-		title := f.Localizer(
-			"total-changes",
-			len(changes),
-			count[checker.ERR],
-			checker.ERR.PrettyString(),
-			count[checker.WARN],
-			checker.WARN.PrettyString(),
-			count[checker.INFO],
-			checker.INFO.PrettyString(),
-		)
-
-		_, _ = fmt.Fprint(result, title)
+		_, _ = fmt.Fprint(result, getChangelogTitle(changes, f.Localizer, opts.ColorMode))
 	}
 
 	for _, c := range changes {
-		_, _ = fmt.Fprintf(result, "%s\n\n", c.PrettyErrorText(f.Localizer))
+		_, _ = fmt.Fprintf(result, "%s\n\n", c.MultiLineError(f.Localizer, opts.ColorMode))
 	}
 
 	return result.Bytes(), nil
@@ -76,7 +54,7 @@ func (f TEXTFormatter) RenderChecks(checks Checks, opts RenderOpts) ([]byte, err
 	w := tabwriter.NewWriter(result, 1, 1, 1, ' ', 0)
 	_, _ = fmt.Fprintln(w, "ID\tDESCRIPTION\tLEVEL")
 	for _, check := range checks {
-		_, _ = fmt.Fprintln(w, check.Id+"\t"+check.Description+"\t"+check.Level)
+		_, _ = fmt.Fprintln(w, check.Id+"\t"+f.Localizer(check.Description)+"\t"+check.Level)
 	}
 	_ = w.Flush()
 

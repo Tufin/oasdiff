@@ -42,6 +42,7 @@ func getBreakingChangesCmd() *cobra.Command {
 	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks --required false' to see options)")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysBeta, "deprecation-days-beta", "", checker.BetaDeprecationDays, "min days required between deprecating a beta resource and removing it")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysStable, "deprecation-days-stable", "", checker.StableDeprecationDays, "min days required between deprecating a stable resource and removing it")
+	enumWithOptions(&cmd, newEnumValue([]string{"auto", "always", "never"}, "auto", &flags.color), "color", "", "when to output colored escape sequences")
 
 	return &cmd
 }
@@ -50,7 +51,7 @@ func runBreakingChanges(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 	return getChangelog(flags, stdout, checker.WARN)
 }
 
-func outputBreakingChanges(format string, lang string, stdout io.Writer, errs checker.Changes) *ReturnError {
+func outputBreakingChanges(format string, lang string, color string, stdout io.Writer, errs checker.Changes) *ReturnError {
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
 		Language: lang,
@@ -60,7 +61,12 @@ func outputBreakingChanges(format string, lang string, stdout io.Writer, errs ch
 	}
 
 	// render
-	bytes, err := formatter.RenderBreakingChanges(errs, formatters.RenderOpts{})
+	colorMode, err := checker.NewColorMode(color)
+	if err != nil {
+		return getErrInvalidColorMode(err)
+	}
+
+	bytes, err := formatter.RenderBreakingChanges(errs, formatters.RenderOpts{ColorMode: colorMode})
 	if err != nil {
 		return getErrFailedPrint("breaking "+format, err)
 	}

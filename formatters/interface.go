@@ -26,6 +26,7 @@ var formatters = map[Format]Formatter{
 	FormatYAML:          YAMLFormatter{},
 	FormatJSON:          JSONFormatter{},
 	FormatText:          TEXTFormatter{},
+	FormatSingleLine:    SingleLineFormatter{},
 	FormatHTML:          HTMLFormatter{},
 	FormatGithubActions: GitHubActionsFormatter{},
 	FormatJUnit:         JUnitFormatter{},
@@ -34,22 +35,37 @@ var formatters = map[Format]Formatter{
 // Lookup returns a formatter by its name
 func Lookup(format string, opts FormatterOpts) (Formatter, error) {
 	f := Format(format)
+	l := checker.NewLocalizer(opts.Language)
 
 	switch f {
 	case FormatYAML:
-		return YAMLFormatter{}, nil
+		return YAMLFormatter{
+			Localizer: l,
+		}, nil
 	case FormatJSON:
-		return JSONFormatter{}, nil
+		return JSONFormatter{
+			Localizer: l,
+		}, nil
 	case FormatText:
 		return TEXTFormatter{
-			Localizer: checker.NewLocalizer(opts.Language),
+			Localizer: l,
+		}, nil
+	case FormatSingleLine:
+		return SingleLineFormatter{
+			Localizer: l,
 		}, nil
 	case FormatHTML:
-		return HTMLFormatter{}, nil
+		return HTMLFormatter{
+			Localizer: l,
+		}, nil
 	case FormatGithubActions:
-		return GitHubActionsFormatter{}, nil
+		return GitHubActionsFormatter{
+			Localizer: l,
+		}, nil
 	case FormatJUnit:
-		return JUnitFormatter{}, nil
+		return JUnitFormatter{
+			Localizer: l,
+		}, nil
 	default:
 		return nil, fmt.Errorf("unsupported format: %s", f)
 	}

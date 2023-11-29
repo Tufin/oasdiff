@@ -9,7 +9,7 @@ const (
 	OptionalResponseHeaderRemovedId = "optional-response-header-removed"
 )
 
-func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -40,7 +40,7 @@ func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          RequiredResponseHeaderRemovedId,
 							Level:       ERR,
-							Text:        config.Localize(RequiredResponseHeaderRemovedId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Args:        []any{headerName, responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -50,7 +50,7 @@ func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 						result = append(result, ApiChange{
 							Id:          OptionalResponseHeaderRemovedId,
 							Level:       WARN,
-							Text:        config.Localize(OptionalResponseHeaderRemovedId, ColorizedValue(headerName), ColorizedValue(responseStatus)),
+							Args:        []any{headerName, responseStatus},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

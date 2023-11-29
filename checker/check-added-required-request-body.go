@@ -8,7 +8,7 @@ const (
 	AddedRequiredRequestBodyId = "added-required-request-body"
 )
 
-func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -27,7 +27,6 @@ func AddedRequiredRequestBodyCheck(diffReport *diff.Diff, operationsSources *dif
 				result = append(result, ApiChange{
 					Id:          AddedRequiredRequestBodyId,
 					Level:       ERR,
-					Text:        config.Localize(AddedRequiredRequestBodyId),
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,

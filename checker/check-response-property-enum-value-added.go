@@ -9,7 +9,7 @@ const (
 	ResponseWriteOnlyPropertyEnumValueAddedId = "response-write-only-property-enum-value-added"
 )
 
-func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -41,7 +41,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 
 							id := ResponsePropertyEnumValueAddedId
 							level := WARN
-							comment := config.Localize(comment(ResponsePropertyEnumValueAddedId))
+							comment := commentId(ResponsePropertyEnumValueAddedId)
 
 							if propertyDiff.Revision.WriteOnly {
 								// Document write-only enum update
@@ -54,7 +54,7 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 								result = append(result, ApiChange{
 									Id:          id,
 									Level:       level,
-									Text:        config.Localize(id, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Args:        []any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
 									Comment:     comment,
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,

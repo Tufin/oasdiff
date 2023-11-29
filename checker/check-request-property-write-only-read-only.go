@@ -16,7 +16,7 @@ const (
 	RequestRequiredPropertyBecameNonReadOnlyCheckId  = "request-required-property-became-not-read-only"
 )
 
-func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -51,15 +51,18 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							return
 						}
 
+						propName := propertyFullName(propertyPath, propertyName)
+
 						if slices.Contains(parent.Base.Required, propertyName) {
 							id := RequestRequiredPropertyBecameNonWriteOnlyCheckId
 							if writeOnlyDiff.To == true {
 								id = RequestRequiredPropertyBecameWriteOnlyCheckId
 							}
+
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -75,7 +78,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          id,
 							Level:       INFO,
-							Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Args:        []any{propName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -94,6 +97,9 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							// removed properties processed by the RequestOptionalPropertyUpdatedCheck check
 							return
 						}
+
+						propName := propertyFullName(propertyPath, propertyName)
+
 						if slices.Contains(parent.Base.Required, propertyName) {
 							id := RequestRequiredPropertyBecameNonReadOnlyCheckId
 							if readOnlyDiff.To == true {
@@ -102,7 +108,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, ApiChange{
 								Id:          id,
 								Level:       INFO,
-								Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+								Args:        []any{propName},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -118,7 +124,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						result = append(result, ApiChange{
 							Id:          id,
 							Level:       INFO,
-							Text:        config.Localize(id, ColorizedValue(propertyFullName(propertyPath, propertyName))),
+							Args:        []any{propName},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,

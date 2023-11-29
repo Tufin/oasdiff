@@ -8,7 +8,7 @@ const (
 	ResponsePropertyEnumValueRemovedId = "response-property-enum-value-removed"
 )
 
-func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -42,7 +42,7 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 								result = append(result, ApiChange{
 									Id:          ResponsePropertyEnumValueRemovedId,
 									Level:       config.getLogLevel(ResponsePropertyEnumValueRemovedId, INFO),
-									Text:        config.Localize(ResponsePropertyEnumValueRemovedId, enumVal, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(responseStatus)),
+									Args:        []any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -51,7 +51,6 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 							}
 						})
 				}
-
 			}
 		}
 	}

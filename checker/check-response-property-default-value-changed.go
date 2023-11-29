@@ -13,7 +13,7 @@ const (
 	ResponsePropertyDefaultValueChangedId = "response-property-default-value-changed"
 )
 
-func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -32,7 +32,7 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 				result = append(result, ApiChange{
 					Id:          messageId,
 					Level:       INFO,
-					Text:        config.Localize(messageId, a...),
+					Args:        a,
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
@@ -51,11 +51,11 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 					if mediaTypeDiff.SchemaDiff != nil && mediaTypeDiff.SchemaDiff.DefaultDiff != nil {
 						defaultValueDiff := mediaTypeDiff.SchemaDiff.DefaultDiff
 						if defaultValueDiff.From == nil {
-							appendResultItem(ResponseBodyDefaultValueAddedId, ColorizedValue(mediaType), ColorizedValue(defaultValueDiff.To), ColorizedValue(responseStatus))
+							appendResultItem(ResponseBodyDefaultValueAddedId, mediaType, defaultValueDiff.To, responseStatus)
 						} else if defaultValueDiff.To == nil {
-							appendResultItem(ResponseBodyDefaultValueRemovedId, ColorizedValue(mediaType), ColorizedValue(defaultValueDiff.From), ColorizedValue(responseStatus))
+							appendResultItem(ResponseBodyDefaultValueRemovedId, mediaType, defaultValueDiff.From, responseStatus)
 						} else {
-							appendResultItem(ResponseBodyDefaultValueChangedId, ColorizedValue(mediaType), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To), ColorizedValue(responseStatus))
+							appendResultItem(ResponseBodyDefaultValueChangedId, mediaType, defaultValueDiff.From, defaultValueDiff.To, responseStatus)
 						}
 					}
 
@@ -68,11 +68,11 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 
 							defaultValueDiff := propertyDiff.DefaultDiff
 							if defaultValueDiff.From == nil {
-								appendResultItem(ResponsePropertyDefaultValueAddedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.To), ColorizedValue(responseStatus))
+								appendResultItem(ResponsePropertyDefaultValueAddedId, propertyName, defaultValueDiff.To, responseStatus)
 							} else if defaultValueDiff.To == nil {
-								appendResultItem(ResponsePropertyDefaultValueRemovedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.From), ColorizedValue(responseStatus))
+								appendResultItem(ResponsePropertyDefaultValueRemovedId, propertyName, defaultValueDiff.From, responseStatus)
 							} else {
-								appendResultItem(ResponsePropertyDefaultValueChangedId, ColorizedValue(propertyName), empty2none(defaultValueDiff.From), empty2none(defaultValueDiff.To), ColorizedValue(responseStatus))
+								appendResultItem(ResponsePropertyDefaultValueChangedId, propertyName, defaultValueDiff.From, defaultValueDiff.To, responseStatus)
 							}
 						})
 				}

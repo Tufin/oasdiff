@@ -9,7 +9,7 @@ const (
 	ResponsePropertyMinItemsDecreasedId = "response-property-min-items-decreased"
 )
 
-func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config Config) Changes {
+func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -39,7 +39,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 								result = append(result, ApiChange{
 									Id:          ResponseBodyMinItemsDecreasedId,
 									Level:       ERR,
-									Text:        config.Localize(ResponseBodyMinItemsDecreasedId, ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To)),
+									Args:        []any{minItemsDiff.From, minItemsDiff.To},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -71,7 +71,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 							result = append(result, ApiChange{
 								Id:          ResponsePropertyMinItemsDecreasedId,
 								Level:       ERR,
-								Text:        config.Localize(ResponsePropertyMinItemsDecreasedId, ColorizedValue(propertyFullName(propertyPath, propertyName)), ColorizedValue(minItemsDiff.From), ColorizedValue(minItemsDiff.To), ColorizedValue(responseStatus)),
+								Args:        []any{propertyFullName(propertyPath, propertyName), minItemsDiff.From, minItemsDiff.To, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
