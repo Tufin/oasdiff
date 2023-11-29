@@ -15,6 +15,12 @@ type YAMLFormatter struct {
 	Localizer checker.Localizer
 }
 
+func newYAMLFormatter(l checker.Localizer) YAMLFormatter {
+	return YAMLFormatter{
+		Localizer: l,
+	}
+}
+
 func (f YAMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return printYAML(diff)
 }

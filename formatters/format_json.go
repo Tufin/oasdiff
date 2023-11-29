@@ -15,6 +15,12 @@ type JSONFormatter struct {
 	Localizer checker.Localizer
 }
 
+func newJSONFormatter(l checker.Localizer) JSONFormatter {
+	return JSONFormatter{
+		Localizer: l,
+	}
+}
+
 func (f JSONFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return printJSON(diff)
 }

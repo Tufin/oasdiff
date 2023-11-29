@@ -80,4 +80,6 @@ func TestOperationIdAdded(t *testing.T) {
 		Source:      "../data/checker/operation_id_added_base.yaml",
 		OperationId: "NewOperationId",
 	}, errs[0])
+
+	require.Equal(t, "api operation id 'NewOperationId' was added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

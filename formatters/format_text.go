@@ -16,6 +16,12 @@ type TEXTFormatter struct {
 	Localizer checker.Localizer
 }
 
+func newTEXTFormatter(l checker.Localizer) TEXTFormatter {
+	return TEXTFormatter{
+		Localizer: l,
+	}
+}
+
 func (f TEXTFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, error) {
 	return []byte(report.GetTextReportAsString(diff)), nil
 }

@@ -32,6 +32,7 @@ func TestRequestPropertyEnumValueRemovedCheck(t *testing.T) {
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_enum_value_updated_base.yaml",
 	}, errs[0])
+	require.Equal(t, "removed the enum value 'bird' of the request property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding request property enum values
@@ -58,4 +59,5 @@ func TestRequestPropertyEnumValueAddedCheck(t *testing.T) {
 		Path:        "/pets",
 		Source:      "../data/checker/request_property_enum_value_updated_base.yaml",
 	}, errs[0])
+	require.Equal(t, "added the new 'bird' enum value to the request property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
