@@ -23,12 +23,12 @@ oasdiff checks
 ### Output Formats
 By default, changes are displayed as human-readable text with [color](#color).  
 You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, `html`, `githubactions` or `junit`.  
-An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
+An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](BREAKING-CHANGES.md#ignoring-specific-breaking-changes)
 
 ### Color
 When outputting changes to a Unix terminal, oasdiff automatically adds colors with ANSI color codes.  
 If output is piped into another process or redirected to a file, oasdiff disables color.  
-To control color manually, use the `color` flag with `always` or `never`.
+To control color manually, use the `--color` flag with `always` or `never`.
 
 ### Customizing the Changelog
 If you encounter a change that isn't logged by oasdiff you may add a [custom check](CUSTOMIZING-CHECKS.md).

@@ -31,7 +31,7 @@ An additional format `singleline` displays each breaking change on a single line
 ### Color
 When outputting breaking changes to a Unix terminal, oasdiff automatically adds colors with ANSI color codes.  
 If output is piped into another process or redirected to a file, oasdiff disables color.  
-To control color manually, use the `color` flag with `always` or `never`.
+To control color manually, use the `--color` flag with `always` or `never`.
 
 ### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking change error.  
