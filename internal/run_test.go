@@ -278,3 +278,13 @@ func Test_FlattenInvalid(t *testing.T) {
 func Test_Checks(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff checks -l ru"), io.Discard, io.Discard))
 }
+
+func Test_Color(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/allof/simple.yaml ../data/allof/revision.yaml --color always"), io.Discard, io.Discard))
+}
+
+func Test_ColorWithNonTextFormat(t *testing.T) {
+	var stderr bytes.Buffer
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff changelog ../data/allof/simple.yaml ../data/allof/revision.yaml -f yaml --color always"), io.Discard, &stderr))
+	require.Equal(t, "Error: --color flag is only relevant with 'text' or 'singleline' formats\n", stderr.String())
+}

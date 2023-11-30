@@ -43,7 +43,7 @@ func getChangelogCmd() *cobra.Command {
 	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalChecks(), nil, &flags.includeChecks), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks --required false' to see options)")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysBeta, "deprecation-days-beta", "", checker.BetaDeprecationDays, "min days required between deprecating a beta resource and removing it")
 	cmd.PersistentFlags().IntVarP(&flags.deprecationDaysStable, "deprecation-days-stable", "", checker.StableDeprecationDays, "min days required between deprecating a stable resource and removing it")
-	enumWithOptions(&cmd, newEnumValue([]string{"auto", "always", "never"}, "auto", &flags.color), "color", "", "when to output colored escape sequences")
+	enumWithOptions(&cmd, newEnumValue([]string{"auto", "always", "never"}, "auto", &flags.color), "color", "", "when to colorize textual output")
 
 	return &cmd
 }

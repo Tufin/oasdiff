@@ -25,6 +25,9 @@ func getParseArgs(flags Flags) cobra.PositionalArgs {
 				return errors.New("can't read from stdin in composed mode")
 			}
 		}
+		if err := checkColor(cmd); err != nil {
+			return err
+		}
 
 		return nil
 	}
@@ -53,4 +56,17 @@ func getRun(flags Flags, runner runner) cobra.PositionalArgs {
 
 		return nil
 	}
+}
+
+func checkColor(cmd *cobra.Command) error {
+
+	if colorPassed := cmd.Flags().Changed("color"); !colorPassed {
+		return nil
+	}
+
+	if format, _ := cmd.Flags().GetString("format"); format == "text" || format == "singleline" {
+		return nil
+	}
+
+	return errors.New(`--color flag is only relevant with 'text' or 'singleline' formats`)
 }

@@ -29,9 +29,9 @@ You can specify the `--format` flag to output breaking changes in other formats:
 An additional format `singleline` displays each breaking change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
 
 ### Color
-When outputting breaking changes to a Unix terminal, oasdiff automatically adds colors with ANSI color codes.  
+When outputting breaking changes to a Unix terminal, oasdiff automatically adds colors with ANSI color escape sequences.  
 If output is piped into another process or redirected to a file, oasdiff disables color.  
-To control color manually, use the `color` flag with `always` or `never`.
+To control color manually, use the `--color` flag with `always` or `never`.
 
 ### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking change error.  
