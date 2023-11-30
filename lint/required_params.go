@@ -14,7 +14,7 @@ func RequiredParamsCheck(source string, s *load.SpecInfo) []*Error {
 		return result
 	}
 
-	for path, pathItem := range s.Spec.Paths {
+	for path, pathItem := range s.Spec.Paths.Map() {
 		for _, parameter := range pathItem.Parameters {
 			if !parameter.Value.Required {
 				continue

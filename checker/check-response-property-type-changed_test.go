@@ -37,7 +37,7 @@ func TestResponsePropertyTypeChangedCheck(t *testing.T) {
 	s2, err := open("../data/checker/response_schema_type_changed_revision.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["200"].Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Type = "integer"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("200").Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Type = "integer"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -61,7 +61,7 @@ func TestResponsePropertyFormatChangedCheck(t *testing.T) {
 	s2, err := open("../data/checker/response_schema_format_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["200"].Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Format = "uuid"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("200").Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Format = "uuid"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

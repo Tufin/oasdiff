@@ -2,6 +2,7 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // ComponentsDiff describes the changes between a pair of component objects: https://swagger.io/specification/#components-object
@@ -51,7 +52,7 @@ func getComponentsDiffInternal(config *Config, state *state, s1, s2 openapi3.Com
 		return result, err
 	}
 
-	result.ResponsesDiff, err = getResponsesDiff(config, state, s1.Responses, s2.Responses)
+	result.ResponsesDiff, err = getResponsesDiff(config, state, utils.ReponseeBodiesToResponses(s1.Responses), utils.ReponseeBodiesToResponses(s2.Responses))
 	if err != nil {
 		return result, err
 	}

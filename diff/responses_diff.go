@@ -36,7 +36,7 @@ func newResponsesDiff() *ResponsesDiff {
 	}
 }
 
-func getResponsesDiff(config *Config, state *state, responses1, responses2 openapi3.Responses) (*ResponsesDiff, error) {
+func getResponsesDiff(config *Config, state *state, responses1, responses2 *openapi3.Responses) (*ResponsesDiff, error) {
 
 	defer state.setDirection(state.direction)
 	state.setDirection(directionResponse)
@@ -53,12 +53,12 @@ func getResponsesDiff(config *Config, state *state, responses1, responses2 opena
 	return diff, nil
 }
 
-func getResponsesDiffInternal(config *Config, state *state, responses1, responses2 openapi3.Responses) (*ResponsesDiff, error) {
+func getResponsesDiffInternal(config *Config, state *state, responses1, responses2 *openapi3.Responses) (*ResponsesDiff, error) {
 
 	result := newResponsesDiff()
 
-	for responseValue1, responseRef1 := range responses1 {
-		if responseRef2, ok := responses2[responseValue1]; ok {
+	for responseValue1, responseRef1 := range responses1.Map() {
+		if responseRef2, ok := responses2.Map()[responseValue1]; ok {
 			value1, err := derefResponse(responseRef1)
 			if err != nil {
 				return nil, err
@@ -81,8 +81,8 @@ func getResponsesDiffInternal(config *Config, state *state, responses1, response
 		}
 	}
 
-	for responseValue2 := range responses2 {
-		if _, ok := responses1[responseValue2]; !ok {
+	for responseValue2 := range responses2.Map() {
+		if _, ok := responses1.Map()[responseValue2]; !ok {
 			result.Added = append(result.Added, responseValue2)
 		}
 	}

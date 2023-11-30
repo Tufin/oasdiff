@@ -29,7 +29,7 @@ func SchemaCheck(source string, spec *load.SpecInfo) []*Error {
 
 	s := newState(source)
 
-	for _, path := range spec.Spec.Paths {
+	for _, path := range spec.Spec.Paths.Map() {
 		result = append(result, checkParameters(path.Parameters, s)...)
 		result = append(result, checkOperations(path.Operations(), s)...)
 	}
@@ -49,7 +49,7 @@ func checkOperations(operations map[string]*openapi3.Operation, s *state) []*Err
 			}
 		}
 
-		for _, response := range op.Responses {
+		for _, response := range op.Responses.Map() {
 			for _, mediaType := range response.Value.Content {
 				result = append(result, checkSchemaRef(mediaType.Schema, s)...)
 			}
@@ -59,7 +59,7 @@ func checkOperations(operations map[string]*openapi3.Operation, s *state) []*Err
 		}
 
 		for _, callback := range op.Callbacks {
-			for _, pathItem := range *callback.Value {
+			for _, pathItem := range callback.Value.Map() {
 				result = append(result, checkParameters(pathItem.Parameters, s)...)
 				result = append(result, checkOperations(pathItem.Operations(), s)...)
 			}

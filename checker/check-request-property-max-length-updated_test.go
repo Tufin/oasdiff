@@ -17,8 +17,8 @@ func TestRequestBodyMaxLengthDecreasedCheck(t *testing.T) {
 
 	maxLength := uint64(50)
 	newMaxLength := uint64(100)
-	s1.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.MaxLength = &maxLength
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.MaxLength = &newMaxLength
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.MaxLength = &maxLength
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.MaxLength = &newMaxLength
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -45,8 +45,8 @@ func TestRequestBodyMaxLengthIncreasedCheck(t *testing.T) {
 
 	maxLength := uint64(100)
 	newMaxLength := uint64(50)
-	s1.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.MaxLength = &maxLength
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.MaxLength = &newMaxLength
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.MaxLength = &maxLength
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.MaxLength = &newMaxLength
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -73,8 +73,8 @@ func TestRequestPropertyMaxLengthDecreasedCheck(t *testing.T) {
 
 	maxLength := uint64(100)
 	newMaxLength := uint64(50)
-	s1.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &maxLength
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &newMaxLength
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &maxLength
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &newMaxLength
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 
@@ -100,8 +100,8 @@ func TestRequestPropertyMaxLengthIncreasedCheck(t *testing.T) {
 
 	maxLength := uint64(50)
 	newMaxLength := uint64(100)
-	s1.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &maxLength
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &newMaxLength
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &maxLength
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &newMaxLength
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 

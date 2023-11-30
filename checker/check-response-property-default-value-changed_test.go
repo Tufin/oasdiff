@@ -44,7 +44,7 @@ func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 	s2, err := open("../data/checker/response_property_default_value_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["404"].Value.Content["text/plain"].Schema.Value.Default = "new default value"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("404").Value.Content["text/plain"].Schema.Value.Default = "new default value"
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
@@ -67,7 +67,7 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 	s2, err := open("../data/checker/response_property_default_value_changed_base.yaml")
 	require.NoError(t, err)
 
-	s1.Spec.Paths["/api/v1.0/groups"].Post.Responses["404"].Value.Content["text/plain"].Schema.Value.Default = nil
+	s1.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("404").Value.Content["text/plain"].Schema.Value.Default = nil
 	s1.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["created"].Value.Default = nil
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
@@ -100,7 +100,7 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 	s2, err := open("../data/checker/response_property_default_value_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["404"].Value.Content["text/plain"].Schema.Value.Default = nil
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("404").Value.Content["text/plain"].Schema.Value.Default = nil
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["created"].Value.Default = nil
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)

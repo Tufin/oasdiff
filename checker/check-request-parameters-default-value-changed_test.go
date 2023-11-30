@@ -37,7 +37,7 @@ func TestRequestParameterDefaultValueAdded(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_default_value_changed_base.yaml")
 	require.NoError(t, err)
 
-	s1.Spec.Paths["/api/v1.0/groups"].Post.Parameters[1].Value.Schema.Value.Default = nil
+	s1.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Default = nil
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -61,7 +61,7 @@ func TestRequestParameterDefaultValueRemoved(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_default_value_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[1].Value.Schema.Value.Default = nil
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Default = nil
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

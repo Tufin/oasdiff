@@ -118,13 +118,15 @@ func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 	alpha := toJson(t, checker.STABILITY_ALPHA)
-	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = alpha
-	s1.Spec.Paths["/api/test"].Post.Extensions["x-stability-level"] = alpha
+	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = alpha
+	extensions := map[string]interface{}{}
+	extensions["x-stability-level"] = alpha
+	s1.Spec.Paths.Value("/api/test").Post.Extensions = extensions
 
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths, "/api/test")
+	delete(s2.Spec.Paths.Map(), "/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -140,7 +142,7 @@ func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths, "/api/test")
+	delete(s2.Spec.Paths.Map(), "/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -155,11 +157,11 @@ func TestBreaking_DeprecationForDraft(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 	draft := toJson(t, checker.STABILITY_DRAFT)
-	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
+	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
 
 	s2, err := open(getDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
 	require.NoError(t, err)
-	s2.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
+	s2.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -172,13 +174,15 @@ func TestBreaking_RemovedPathForDraft(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 	draft := toJson(t, checker.STABILITY_DRAFT)
-	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
-	s1.Spec.Paths["/api/test"].Post.Extensions["x-stability-level"] = draft
+	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
+	extensions := map[string]interface{}{}
+	extensions["x-stability-level"] = draft
+	s1.Spec.Paths.Value("/api/test").Post.Extensions = extensions
 
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths, "/api/test")
+	delete(s2.Spec.Paths.Map(), "/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -191,12 +195,12 @@ func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 	draft := toJson(t, checker.STABILITY_DRAFT)
-	s1.Spec.Paths["/api/test"].Get.Extensions["x-stability-level"] = draft
+	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
 
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths, "/api/test")
+	delete(s2.Spec.Paths.Map(), "/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -220,7 +224,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 
 	s2, err := open(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
-	s2.Spec.Paths["/api/test"].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(9).String())
+	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(9).String())
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -241,7 +245,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	s2, err := open(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/test"].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
+	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

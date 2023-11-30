@@ -22,11 +22,11 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 	}
 
 	for _, path := range diffReport.PathsDiff.Deleted {
-		if diffReport.PathsDiff.Base[path] == nil || diffReport.PathsDiff.Base[path].Operations() == nil {
+		if diffReport.PathsDiff.Base.Value(path) == nil || diffReport.PathsDiff.Base.Value(path).Operations() == nil {
 			continue
 		}
-		for operation := range diffReport.PathsDiff.Base[path].Operations() {
-			op := diffReport.PathsDiff.Base[path].Operations()[operation]
+		for operation := range diffReport.PathsDiff.Base.Value(path).Operations() {
+			op := diffReport.PathsDiff.Base.Value(path).Operations()[operation]
 			if !op.Deprecated {
 				source := "original_source=" + (*operationsSources)[op]
 				result = append(result, ApiChange{

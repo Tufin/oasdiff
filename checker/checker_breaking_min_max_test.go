@@ -15,10 +15,10 @@ func TestBreaking_RequestMaxLengthSmaller(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxLengthFrom := uint64(13)
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthFrom
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthFrom
 
 	maxLengthTo := uint64(11)
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthTo
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthTo
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -34,10 +34,10 @@ func TestBreaking_ResponseMaxLengthSmaller(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxLengthFrom := uint64(13)
-	s1.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
+	s1.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
 
 	maxLengthTo := uint64(11)
-	s2.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -50,8 +50,8 @@ func TestBreaking_RequestMinLengthSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinLength = uint64(13)
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinLength = uint64(11)
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinLength = uint64(13)
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinLength = uint64(11)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -64,8 +64,8 @@ func TestBreaking_MinLengthSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinLength = uint64(13)
-	s2.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinLength = uint64(11)
+	s1.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MinLength = uint64(13)
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MinLength = uint64(11)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -79,10 +79,10 @@ func TestBreaking_RequestMaxLengthGreater(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxLengthFrom := uint64(13)
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthFrom
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthFrom
 
 	maxLengthTo := uint64(14)
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthTo
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthTo
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -96,10 +96,10 @@ func TestBreaking_ResponseMaxLengthGreater(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxLengthFrom := uint64(13)
-	s1.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
+	s1.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
 
 	maxLengthTo := uint64(14)
-	s2.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -112,10 +112,10 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = nil
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = nil
 
 	maxLengthTo := uint64(14)
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthTo
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthTo
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -130,10 +130,10 @@ func TestBreaking_ResponseMaxLengthFromNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = nil
+	s1.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = nil
 
 	maxLengthTo := uint64(14)
-	s2.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthTo
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -147,9 +147,9 @@ func TestBreaking_RequestMaxLengthToNil(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxLengthFrom := uint64(13)
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthFrom
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = &maxLengthFrom
 
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = nil
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = nil
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -163,9 +163,9 @@ func TestBreaking_ResponseMaxLengthToNil(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxLengthFrom := uint64(13)
-	s1.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
+	s1.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = &maxLengthFrom
 
-	s2.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = nil
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = nil
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -180,8 +180,8 @@ func TestBreaking_MaxLengthBothNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = nil
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = nil
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = nil
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MaxLength = nil
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -194,8 +194,8 @@ func TestBreaking_ResponseMaxLengthBothNil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = nil
-	s2.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MaxLength = nil
+	s1.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = nil
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MaxLength = nil
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -208,8 +208,8 @@ func TestBreaking_RequestMinItemsSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinItems = 13
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinItems = 11
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinItems = 13
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinItems = 11
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -222,8 +222,8 @@ func TestBreaking_ResponseMinItemsSmaller(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinItems = 13
-	s2.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinItems = 11
+	s1.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MinItems = 13
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MinItems = 11
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -238,8 +238,8 @@ func TestBreaking_RequeatMinItemsGreater(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinItems = 13
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinItems = 14
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinItems = 13
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.MinItems = 14
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -252,8 +252,8 @@ func TestBreaking_ResponseMinItemsGreater(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinItems = 13
-	s2.Spec.Paths[securityScorePath].Get.Responses["201"].Value.Content["application/xml"].Schema.Value.MinItems = 14
+	s1.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MinItems = 13
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Value("201").Value.Content["application/xml"].Schema.Value.MinItems = 14
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -267,10 +267,10 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxFrom := float64(13)
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.Max = &maxFrom
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.Max = &maxFrom
 
 	maxTo := float64(11)
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.Max = &maxTo
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInPath, "domain").Schema.Value.Max = &maxTo
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -284,10 +284,10 @@ func TestBreaking_MaxSmallerInResponse(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxFrom := float64(13)
-	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.Max = &maxFrom
+	s1.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.Max = &maxFrom
 
 	maxTo := float64(11)
-	s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.Max = &maxTo
+	s2.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers["X-RateLimit-Limit"].Value.Schema.Value.Max = &maxTo
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)

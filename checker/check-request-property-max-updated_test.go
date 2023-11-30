@@ -16,7 +16,7 @@ func TestRequestPropertyMaxDecreasedCheck(t *testing.T) {
 	require.NoError(t, err)
 
 	max := float64(10)
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.Max = &max
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.Max = &max
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -42,7 +42,7 @@ func TestRequestPropertyMaxIncreasingCheck(t *testing.T) {
 	require.NoError(t, err)
 
 	max := float64(20)
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.Max = &max
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.Max = &max
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -69,8 +69,8 @@ func TestRequestBodyMaxIncreasingCheck(t *testing.T) {
 
 	max := float64(20)
 	newMax := float64(25)
-	s1.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Max = &max
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Max = &newMax
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Max = &max
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Max = &newMax
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -97,8 +97,8 @@ func TestRequestBodyMaxDecreasedCheck(t *testing.T) {
 
 	max := float64(25)
 	newMax := float64(20)
-	s1.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Max = &max
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Max = &newMax
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Max = &max
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Max = &newMax
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

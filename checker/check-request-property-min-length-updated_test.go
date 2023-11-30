@@ -15,7 +15,7 @@ func TestRequestPropertyMinLengthDecreased(t *testing.T) {
 	s2, err := open("../data/checker/request_property_min_length_decreased_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/products"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.MinLength = uint64(2)
+	s2.Spec.Paths.Value("/products").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.MinLength = uint64(2)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -39,7 +39,7 @@ func TestRequestPropertyMinLengthIncreased(t *testing.T) {
 	s2, err := open("../data/checker/request_property_min_length_decreased_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/products"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.MinLength = uint64(5)
+	s2.Spec.Paths.Value("/products").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.MinLength = uint64(5)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -63,7 +63,7 @@ func TestRequestBodyMinLengthIncreased(t *testing.T) {
 	s2, err := open("../data/checker/request_property_min_length_decreased_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/products"].Post.RequestBody.Value.Content["application/json"].Schema.Value.MinLength = uint64(100)
+	s2.Spec.Paths.Value("/products").Post.RequestBody.Value.Content["application/json"].Schema.Value.MinLength = uint64(100)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -87,7 +87,7 @@ func TestRequestBodyMinLengthDecreased(t *testing.T) {
 	s2, err := open("../data/checker/request_property_min_length_decreased_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/products"].Post.RequestBody.Value.Content["application/json"].Schema.Value.MinLength = uint64(1)
+	s2.Spec.Paths.Value("/products").Post.RequestBody.Value.Content["application/json"].Schema.Value.MinLength = uint64(1)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

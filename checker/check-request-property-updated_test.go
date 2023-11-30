@@ -68,7 +68,7 @@ func TestRequiredOptionalPropertyAdded(t *testing.T) {
 	s2, err := open("../data/checker/request_property_added_revision.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/products"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Required = []string{"name"}
+	s2.Spec.Paths.Value("/products").Post.RequestBody.Value.Content["application/json"].Schema.Value.Required = []string{"name"}
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)

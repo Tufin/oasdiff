@@ -15,7 +15,7 @@ func PathParamsCheck(source string, s *load.SpecInfo) []*Error {
 		return result
 	}
 
-	for path, pathItem := range s.Spec.Paths {
+	for path, pathItem := range s.Spec.Paths.Map() {
 		pathParamsFromURL := getPathParamsFromURL(path)
 
 		pathParams := utils.StringSet{}

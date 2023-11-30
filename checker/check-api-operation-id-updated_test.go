@@ -15,7 +15,7 @@ func TestOperationIdRemoved(t *testing.T) {
 	s2, err := open("../data/checker/operation_id_removed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.OperationID = ""
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.OperationID = ""
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -39,7 +39,7 @@ func TestOperationIdUpdated(t *testing.T) {
 	s2, err := open("../data/checker/operation_id_removed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.OperationID = "newOperationId"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.OperationID = "newOperationId"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -65,7 +65,7 @@ func TestOperationIdAdded(t *testing.T) {
 	s2, err := open("../data/checker/operation_id_added_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.OperationID = "NewOperationId"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.OperationID = "NewOperationId"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig().WithCheckBreaking(), s1, s2)
 	require.NoError(t, err)
