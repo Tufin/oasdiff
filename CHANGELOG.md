@@ -26,7 +26,7 @@ You can specify the `--format` flag to output changes in other formats: `json`, 
 An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](BREAKING-CHANGES.md#ignoring-specific-breaking-changes)
 
 ### Color
-When outputting changes to a Unix terminal, oasdiff automatically adds colors with ANSI color codes.  
+When outputting changes to a Unix terminal, oasdiff automatically adds colors with ANSI color escape sequences.  
 If output is piped into another process or redirected to a file, oasdiff disables color.  
 To control color manually, use the `--color` flag with `always` or `never`.
 
