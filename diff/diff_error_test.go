@@ -178,25 +178,25 @@ func TestDiff_ComponentRequestBodiesNil(t *testing.T) {
 	require.EqualError(t, err, "request body reference is nil")
 }
 
-// func TestDiff_ComponentResponsesNil(t *testing.T) {
-// 	s1 := openapi3.T{
-// 		Info: &openapi3.Info{},
-// 		Components: &openapi3.Components{
-// 			Responses: openapi3.Responses{"test": &openapi3.ResponseRef{Value: &openapi3.Response{}}},
-// 		},
-// 	}
-// 	s2 := openapi3.T{
-// 		Info: &openapi3.Info{},
-// 		Components: &openapi3.Components{
-// 			Responses: openapi3.Responses{"test": &openapi3.ResponseRef{}},
-// 		},
-// 	}
-// 	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
-// 	require.EqualError(t, err, "response reference is nil")
+func TestDiff_ComponentResponsesNil(t *testing.T) {
+	s1 := openapi3.T{
+		Info: &openapi3.Info{},
+		Components: &openapi3.Components{
+			Responses: openapi3.ResponseBodies{"test": &openapi3.ResponseRef{Value: &openapi3.Response{}}},
+		},
+	}
+	s2 := openapi3.T{
+		Info: &openapi3.Info{},
+		Components: &openapi3.Components{
+			Responses: openapi3.ResponseBodies{"test": &openapi3.ResponseRef{}},
+		},
+	}
+	_, err := diff.Get(diff.NewConfig(), &s1, &s2)
+	require.EqualError(t, err, "response reference is nil")
 
-// 	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
-// 	require.EqualError(t, err, "response reference is nil")
-// }
+	_, err = diff.Get(diff.NewConfig(), &s2, &s1)
+	require.EqualError(t, err, "response reference is nil")
+}
 
 func TestDiff_ComponentSecuritySchemesNil(t *testing.T) {
 	s1 := openapi3.T{
