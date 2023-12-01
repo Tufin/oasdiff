@@ -607,29 +607,29 @@ func TestBreaking_ModifyRequiredRequiredParamDefaultValue(t *testing.T) {
 }
 
 // BC: removing an schema object from components is breaking (optional)
-// func TestBreaking_SchemaRemoved(t *testing.T) {
-// 	s1 := l(t, 1)
-// 	s2 := l(t, 1)
-// 	s1.Spec.Paths = map[string]*openapi3.PathItem{}
-// 	s2.Spec.Paths = map[string]*openapi3.PathItem{}
+func TestBreaking_SchemaRemoved(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+	s1.Spec.Paths = openapi3.NewPaths()
+	s2.Spec.Paths = openapi3.NewPaths()
 
-// 	for k := range s2.Spec.Components.Schemas {
-// 		delete(s2.Spec.Components.Schemas, k)
-// 	}
+	for k := range s2.Spec.Components.Schemas {
+		delete(s2.Spec.Components.Schemas, k)
+	}
 
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
-// 	require.NoError(t, err)
-// 	checks := checker.GetChecks(utils.StringList{checker.APISchemasRemovedId})
-// 	errs := checker.CheckBackwardCompatibility(checks, d, osm)
-// 	for _, err := range errs {
-// 		require.Equal(t, checker.ERR, err.GetLevel())
-// 	}
-// 	require.NotEmpty(t, errs)
-// 	require.Equal(t, checker.APISchemasRemovedId, errs[0].GetId())
-// 	require.Equal(t, "removed the schema 'network-policies'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-// 	require.Equal(t, checker.APISchemasRemovedId, errs[1].GetId())
-// 	require.Equal(t, "removed the schema 'rules'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
-// }
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	require.NoError(t, err)
+	checks := checker.GetChecks(utils.StringList{checker.APISchemasRemovedId})
+	errs := checker.CheckBackwardCompatibility(checks, d, osm)
+	for _, err := range errs {
+		require.Equal(t, checker.ERR, err.GetLevel())
+	}
+	require.NotEmpty(t, errs)
+	require.Equal(t, checker.APISchemasRemovedId, errs[0].GetId())
+	require.Equal(t, "removed the schema 'network-policies'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, checker.APISchemasRemovedId, errs[1].GetId())
+	require.Equal(t, "removed the schema 'rules'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
 
 // BC: removing a media type from request body is breaking
 func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
