@@ -168,7 +168,7 @@ func filterPathsByExtensionInternal(paths *openapi3.Paths, r *regexp.Regexp) {
 }
 
 // Patch applies the patch to paths
-func (pathsDiff *PathsDiff) Patch(paths openapi3.Paths) error {
+func (pathsDiff *PathsDiff) Patch(paths *openapi3.Paths) error {
 
 	if pathsDiff.Empty() {
 		return nil
