@@ -147,11 +147,11 @@ func TestDiff_AddedTag(t *testing.T) {
 		"security")
 }
 
-// func TestDiff_DeletedEncoding(t *testing.T) {
-// 	require.Contains(t,
-// 		d(t, diff.NewConfig(), 1, 3).PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].EncodingsDiff.Deleted,
-// 		"historyMetadata")
-// }
+func TestDiff_DeletedEncoding(t *testing.T) {
+	require.Contains(t,
+		d(t, diff.NewConfig(), 1, 3).PathsDiff.Modified["/subscribe"].OperationsDiff.Modified["POST"].CallbacksDiff.Modified["myEvent"].Modified["hi"].OperationsDiff.Modified["POST"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].EncodingsDiff.Deleted,
+		"historyMetadata")
+}
 
 func TestDiff_ModifiedEncodingHeaders(t *testing.T) {
 	require.NotNil(t,

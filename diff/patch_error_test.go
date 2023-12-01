@@ -18,7 +18,7 @@ func TestPatch_StringTypeMismatch_Nil(t *testing.T) {
 
 	d1.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["domain"].SchemaDiff.DescriptionDiff.To = nil
 
-	// require.EqualError(t, d1.Patch(s1), "diff value is nil instead of string")
+	require.EqualError(t, d1.Patch(s1), "diff value is nil instead of string")
 }
 
 func TestPatch_StringTypeMismatch_Int(t *testing.T) {
@@ -32,7 +32,7 @@ func TestPatch_StringTypeMismatch_Int(t *testing.T) {
 
 	d1.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["domain"].SchemaDiff.DescriptionDiff.To = 4
 
-	// require.EqualError(t, d1.Patch(s1), "diff value type mismatch: string vs. \"int\"")
+	require.EqualError(t, d1.Patch(s1), "diff value type mismatch: string vs. \"int\"")
 }
 
 func TestPatch_UINT64TypeMismatch(t *testing.T) {
@@ -47,5 +47,5 @@ func TestPatch_UINT64TypeMismatch(t *testing.T) {
 
 	d1.PathsDiff.Modified["/api/{domain}/{project}/install-command"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["domain"].SchemaDiff.MaxLengthDiff.To = 13
 
-	// require.EqualError(t, d1.Patch(s1), "diff value type mismatch: uint64 vs. \"int\"")
+	require.EqualError(t, d1.Patch(s1), "diff value type mismatch: uint64 vs. \"int\"")
 }
