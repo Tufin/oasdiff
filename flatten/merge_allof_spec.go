@@ -45,9 +45,9 @@ func mergeComponents(components *openapi3.Components) error {
 		return err
 	}
 
-	// if components.Responses, err = mergeResponses(utils.ReponseeBodiesToResponses(components.Responses)); err != nil {
-	// 	return err
-	// }
+	if components.Responses, err = mergeResponseBodies(components.Responses); err != nil {
+		return err
+	}
 
 	if components.Callbacks, err = mergeCallbacks(components.Callbacks); err != nil {
 		return err
@@ -127,6 +127,23 @@ func mergeSchemas(schemas openapi3.Schemas) (openapi3.Schemas, error) {
 		s.Value = m
 	}
 	return schemas, nil
+}
+
+func mergeResponseBodies(responseBodies openapi3.ResponseBodies) (openapi3.ResponseBodies, error) {
+	for _, v := range responseBodies {
+		if v == nil || v.Value == nil {
+			continue
+		}
+		content, err := mergeContent(v.Value.Content)
+		if err != nil {
+			return responseBodies, err
+		}
+		v.Value.Content = content
+		if _, err := mergeHeaders(v.Value.Headers); err != nil {
+			return responseBodies, err
+		}
+	}
+	return responseBodies, nil
 }
 
 func mergeResponses(responses *openapi3.Responses) (*openapi3.Responses, error) {

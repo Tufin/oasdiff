@@ -106,3 +106,11 @@ func (responsesDiff *ResponsesDiff) getSummary() *SummaryDetails {
 		Modified: len(responsesDiff.Modified),
 	}
 }
+
+func responseBodiesToResponses(responseBodies openapi3.ResponseBodies) *openapi3.Responses {
+	result := openapi3.NewResponsesWithCapacity(len(responseBodies))
+	for k, v := range responseBodies {
+		result.Set(k, v)
+	}
+	return result
+}
