@@ -61,9 +61,7 @@ func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, o
 			params = append(params, "endLine="+strconv.Itoa(change.GetSourceLineEnd()+1))
 		}
 
-		// all annotated messages must be one-line, due to GitHub Actions limitations
-		message := strings.ReplaceAll(change.GetUncolorizedText(f.Localizer), "\n", "%0A")
-
+		message := fmt.Sprintf("at %s, in API %s %s %s", change.GetSource(), change.GetOperation(), change.GetPath(), change.GetUncolorizedText(f.Localizer))
 		buf.WriteString(fmt.Sprintf("::%s %s::%s\n", githubActionsSeverity[change.GetLevel()], strings.Join(params, ","), message))
 	}
 
