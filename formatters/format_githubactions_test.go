@@ -122,10 +122,6 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	testChanges := checker.Changes{
 		checker.ApiChange{
 			Id:        "change_id",
-<<<<<<< HEAD
-=======
-			Text:      "This is a breaking change.",
->>>>>>> 85fb8912 (fix format)
 			Level:     checker.ERR,
 			Operation: http.MethodGet,
 			Path:      "/api/test",
@@ -133,34 +129,20 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 		},
 		checker.ApiChange{
 			Id:        "change_id",
-<<<<<<< HEAD
-=======
-			Text:      "This is a second breaking change.",
->>>>>>> 85fb8912 (fix format)
 			Level:     checker.ERR,
 			Operation: http.MethodGet,
 			Path:      "/api/test",
 			Source:    "openapi.yaml",
 		},
 		checker.ApiChange{
-<<<<<<< HEAD
 			Id:        "warning_id",
-=======
-			Id:        "change_id",
-			Text:      "This is a warning.",
->>>>>>> 85fb8912 (fix format)
 			Level:     checker.WARN,
 			Operation: http.MethodGet,
 			Path:      "/api/test",
 			Source:    "openapi.yaml",
 		},
 		checker.ApiChange{
-<<<<<<< HEAD
 			Id:        "notice_id",
-=======
-			Id:        "change_id",
-			Text:      "This is a notice.",
->>>>>>> 85fb8912 (fix format)
 			Level:     checker.INFO,
 			Operation: http.MethodGet,
 			Path:      "/api/test",
