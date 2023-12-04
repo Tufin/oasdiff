@@ -11,7 +11,7 @@ func TestPatch_StringTypeMismatch_Nil(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.Description = "reuven"
+	s2.Paths.Value("/api/{domain}/{project}/install-command").Get.Parameters.GetByInAndName("path", "domain").Schema.Value.Description = "reuven"
 
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -25,7 +25,7 @@ func TestPatch_StringTypeMismatch_Int(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.Description = "reuven"
+	s2.Paths.Value("/api/{domain}/{project}/install-command").Get.Parameters.GetByInAndName("path", "domain").Schema.Value.Description = "reuven"
 
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -40,7 +40,7 @@ func TestPatch_UINT64TypeMismatch(t *testing.T) {
 	s2 := l(t, 1)
 
 	maxLength := uint64(13)
-	s2.Paths["/api/{domain}/{project}/install-command"].Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLength
+	s2.Paths.Value("/api/{domain}/{project}/install-command").Get.Parameters.GetByInAndName("path", "domain").Schema.Value.MaxLength = &maxLength
 
 	d1, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)

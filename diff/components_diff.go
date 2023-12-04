@@ -51,7 +51,7 @@ func getComponentsDiffInternal(config *Config, state *state, s1, s2 openapi3.Com
 		return result, err
 	}
 
-	result.ResponsesDiff, err = getResponsesDiff(config, state, s1.Responses, s2.Responses)
+	result.ResponsesDiff, err = getResponsesDiff(config, state, responseBodiesToResponses(s1.Responses), responseBodiesToResponses(s2.Responses))
 	if err != nil {
 		return result, err
 	}

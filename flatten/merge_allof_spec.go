@@ -11,7 +11,7 @@ func MergeSpec(spec *openapi3.T) (*openapi3.T, error) {
 		return spec, err
 	}
 
-	for _, v := range spec.Paths {
+	for _, v := range spec.Paths.Map() {
 		if v == nil {
 			continue
 		}
@@ -45,7 +45,7 @@ func mergeComponents(components *openapi3.Components) error {
 		return err
 	}
 
-	if components.Responses, err = mergeResponses(components.Responses); err != nil {
+	if components.Responses, err = mergeResponseBodies(components.Responses); err != nil {
 		return err
 	}
 
@@ -106,7 +106,7 @@ func mergePathItem(pathItem *openapi3.PathItem) (*openapi3.PathItem, error) {
 
 func mergeCallbacks(callbacks openapi3.Callbacks) (openapi3.Callbacks, error) {
 	for _, v := range callbacks {
-		for _, pathItem := range *v.Value {
+		for _, pathItem := range v.Value.Map() {
 			if _, err := mergePathItem(pathItem); err != nil {
 				return callbacks, err
 			}
@@ -129,8 +129,25 @@ func mergeSchemas(schemas openapi3.Schemas) (openapi3.Schemas, error) {
 	return schemas, nil
 }
 
-func mergeResponses(responses openapi3.Responses) (openapi3.Responses, error) {
-	for _, v := range responses {
+func mergeResponseBodies(responseBodies openapi3.ResponseBodies) (openapi3.ResponseBodies, error) {
+	for _, v := range responseBodies {
+		if v == nil || v.Value == nil {
+			continue
+		}
+		content, err := mergeContent(v.Value.Content)
+		if err != nil {
+			return responseBodies, err
+		}
+		v.Value.Content = content
+		if _, err := mergeHeaders(v.Value.Headers); err != nil {
+			return responseBodies, err
+		}
+	}
+	return responseBodies, nil
+}
+
+func mergeResponses(responses *openapi3.Responses) (*openapi3.Responses, error) {
+	for _, v := range responses.Map() {
 		if v == nil || v.Value == nil {
 			continue
 		}

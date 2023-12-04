@@ -5,13 +5,13 @@ go 1.21.4
 require (
 	cloud.google.com/go v0.111.0
 	github.com/TwiN/go-color v1.4.1
-	github.com/getkin/kin-openapi v0.120.0
+	github.com/getkin/kin-openapi v0.122.0
 	github.com/oasdiff/go-common v0.2.28
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.6.0
-	golang.org/x/exp v0.0.0-20231108232855-2478ac86f678
+	golang.org/x/exp v0.0.0-20231127185646-65229373498e
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -21,7 +21,7 @@ require (
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 )
 
 require (

@@ -15,7 +15,7 @@ func TestRequestParameterPatternChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/test"].Post.Parameters[0].Value.Schema.Value.Pattern = "^[\\w\\s]+$"
+	s2.Spec.Paths.Value("/test").Post.Parameters[0].Value.Schema.Value.Pattern = "^[\\w\\s]+$"
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterPatternAddedOrChangedCheck), d, osm, checker.WARN)

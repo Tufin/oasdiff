@@ -100,7 +100,15 @@ func derefCallback(ref *openapi3.CallbackRef) (*openapi3.Callback, error) {
 }
 
 func getCallbackDiff(config *Config, state *state, callback1, callback2 *openapi3.Callback) (*PathsDiff, error) {
-	return getPathsDiff(config, state, openapi3.Paths(*callback1), openapi3.Paths(*callback2))
+	return getPathsDiff(config, state, callBackToPaths(callback1), callBackToPaths(callback2))
+}
+
+func callBackToPaths(callback *openapi3.Callback) *openapi3.Paths {
+	result := openapi3.NewPathsWithCapacity(callback.Len())
+	for k, v := range callback.Map() {
+		result.Set(k, v)
+	}
+	return result
 }
 
 func (diff *CallbacksDiff) getSummary() *SummaryDetails {

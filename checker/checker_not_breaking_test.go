@@ -40,7 +40,7 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+	s2.Spec.Paths.Value(installCommandPath).Get.RequestBody = &openapi3.RequestBodyRef{
 		Value: openapi3.NewRequestBody().WithRequired(false),
 	}
 
@@ -55,11 +55,11 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+	s1.Spec.Paths.Value(installCommandPath).Get.RequestBody = &openapi3.RequestBodyRef{
 		Value: openapi3.NewRequestBody().WithRequired(true),
 	}
 
-	s2.Spec.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+	s2.Spec.Paths.Value(installCommandPath).Get.RequestBody = &openapi3.RequestBodyRef{
 		Value: openapi3.NewRequestBody().WithRequired(false),
 	}
 
@@ -121,8 +121,8 @@ func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	deleteParam(s1.Spec.Paths[installCommandPath].Get, openapi3.ParameterInHeader, "network-policies")
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = false
+	deleteParam(s1.Spec.Paths.Value(installCommandPath).Get, openapi3.ParameterInHeader, "network-policies")
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = false
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -135,8 +135,8 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = false
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = false
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -155,8 +155,8 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	deleteResponseHeader(s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value, "X-RateLimit-Limit")
-	s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = true
+	deleteResponseHeader(s1.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value, "X-RateLimit-Limit")
+	s2.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers["X-RateLimit-Limit"].Value.Required = true
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -201,8 +201,8 @@ func TestBreaking_DeprecatedOperation(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[installCommandPath].Get.Deprecated = true
-	s2.Spec.Paths[installCommandPath].Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(180).String())
+	s2.Spec.Paths.Value(installCommandPath).Get.Deprecated = true
+	s2.Spec.Paths.Value(installCommandPath).Get.Extensions = map[string]interface{}{diff.SunsetExtension: toJson(t, civil.DateOf(time.Now()).AddDays(180).String())}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -216,7 +216,7 @@ func TestBreaking_DeprecatedParameter(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Deprecated = true
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Deprecated = true
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -229,7 +229,7 @@ func TestBreaking_DeprecatedHeader(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Deprecated = true
+	s2.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers["X-RateLimit-Limit"].Value.Deprecated = true
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -242,7 +242,7 @@ func TestBreaking_DeprecatedSchema(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Deprecated = true
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Deprecated = true
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -269,7 +269,7 @@ func TestBreaking_TagAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[securityScorePath].Get.Tags = append(s2.Spec.Paths[securityScorePath].Get.Tags, "newTag")
+	s2.Spec.Paths.Value(securityScorePath).Get.Tags = append(s2.Spec.Paths.Value(securityScorePath).Get.Tags, "newTag")
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APITagAddedId)
@@ -280,7 +280,7 @@ func TestBreaking_OperationIdAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[securityScorePath].Get.OperationID = ""
+	s1.Spec.Paths.Value(securityScorePath).Get.OperationID = ""
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)

@@ -13,8 +13,8 @@ type PathsDiff struct {
 	Added    utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  utils.StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedPaths    `json:"modified,omitempty" yaml:"modified,omitempty"`
-	Base     openapi3.Paths   `json:"-" yaml:"-"`
-	Revision openapi3.Paths   `json:"-" yaml:"-"`
+	Base     *openapi3.Paths  `json:"-" yaml:"-"`
+	Revision *openapi3.Paths  `json:"-" yaml:"-"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -36,7 +36,7 @@ func newPathsDiff() *PathsDiff {
 	}
 }
 
-func getPathsDiff(config *Config, state *state, paths1, paths2 openapi3.Paths) (*PathsDiff, error) {
+func getPathsDiff(config *Config, state *state, paths1, paths2 *openapi3.Paths) (*PathsDiff, error) {
 
 	if err := filterPaths(config.PathFilter, config.FilterExtension, paths1, paths2); err != nil {
 		return nil, err
@@ -54,20 +54,20 @@ func getPathsDiff(config *Config, state *state, paths1, paths2 openapi3.Paths) (
 	return diff, nil
 }
 
-func getPathsDiffInternal(config *Config, state *state, paths1, paths2 openapi3.Paths) (*PathsDiff, error) {
+func getPathsDiffInternal(config *Config, state *state, paths1, paths2 *openapi3.Paths) (*PathsDiff, error) {
 
 	result := newPathsDiff()
 
-	paths1Mod := rewritePrefix(paths1, config.PathStripPrefixBase, config.PathPrefixBase)
-	paths2Mod := rewritePrefix(paths2, config.PathStripPrefixRevision, config.PathPrefixRevision)
+	paths1Mod := rewritePrefix(paths1.Map(), config.PathStripPrefixBase, config.PathPrefixBase)
+	paths2Mod := rewritePrefix(paths2.Map(), config.PathStripPrefixRevision, config.PathPrefixRevision)
 
 	addedPaths, deletedPaths, otherPaths := getPathItemsDiff(config, paths1Mod, paths2Mod)
 
-	for endpoint := range addedPaths {
+	for endpoint := range addedPaths.Map() {
 		result.addAddedPath(endpoint)
 	}
 
-	for endpoint := range deletedPaths {
+	for endpoint := range deletedPaths.Map() {
 		result.addDeletedPath(endpoint)
 	}
 
@@ -103,7 +103,7 @@ func (pathsDiff *PathsDiff) addModifiedPath(config *Config, state *state, path1 
 	return pathsDiff.Modified.addPathDiff(config, state, path1, pathItemPair)
 }
 
-func filterPaths(filter, filterExtension string, paths1, paths2 openapi3.Paths) error {
+func filterPaths(filter, filterExtension string, paths1, paths2 *openapi3.Paths) error {
 
 	if err := filterPathsByName(filter, paths1, paths2); err != nil {
 		return err
@@ -116,7 +116,7 @@ func filterPaths(filter, filterExtension string, paths1, paths2 openapi3.Paths) 
 	return nil
 }
 
-func filterPathsByName(filter string, paths1, paths2 openapi3.Paths) error {
+func filterPathsByName(filter string, paths1, paths2 *openapi3.Paths) error {
 	if filter == "" {
 		return nil
 	}
@@ -132,15 +132,15 @@ func filterPathsByName(filter string, paths1, paths2 openapi3.Paths) error {
 	return nil
 }
 
-func filterPathsInternal(paths openapi3.Paths, r *regexp.Regexp) {
-	for path := range paths {
+func filterPathsInternal(paths *openapi3.Paths, r *regexp.Regexp) {
+	for path := range paths.Map() {
 		if !r.MatchString(path) {
-			delete(paths, path)
+			delete(paths.Map(), path)
 		}
 	}
 }
 
-func filterPathsByExtensions(filterExtension string, paths1, paths2 openapi3.Paths) error {
+func filterPathsByExtensions(filterExtension string, paths1, paths2 *openapi3.Paths) error {
 	if filterExtension == "" {
 		return nil
 	}
@@ -156,11 +156,11 @@ func filterPathsByExtensions(filterExtension string, paths1, paths2 openapi3.Pat
 	return nil
 }
 
-func filterPathsByExtensionInternal(paths openapi3.Paths, r *regexp.Regexp) {
-	for path, pathItem := range paths {
+func filterPathsByExtensionInternal(paths *openapi3.Paths, r *regexp.Regexp) {
+	for path, pathItem := range paths.Map() {
 		for extension := range pathItem.Extensions {
 			if r.MatchString(extension) {
-				delete(paths, path)
+				delete(paths.Map(), path)
 				break
 			}
 		}
@@ -168,7 +168,7 @@ func filterPathsByExtensionInternal(paths openapi3.Paths, r *regexp.Regexp) {
 }
 
 // Patch applies the patch to paths
-func (pathsDiff *PathsDiff) Patch(paths openapi3.Paths) error {
+func (pathsDiff *PathsDiff) Patch(paths *openapi3.Paths) error {
 
 	if pathsDiff.Empty() {
 		return nil

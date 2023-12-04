@@ -1778,7 +1778,7 @@ func TestMerge_Required(t *testing.T) {
 			require.NoError(t, err, "loading test file")
 			err = doc.Validate(ctx)
 			require.NoError(t, err, "validating spec")
-			merged, err := flatten.Merge(*doc.Paths["/products"].Get.Responses["200"].Value.Content["application/json"].Schema)
+			merged, err := flatten.Merge(*doc.Paths.Value("/products").Get.Responses.Value("200").Value.Content["application/json"].Schema)
 			require.NoError(t, err)
 
 			props := merged.Properties
