@@ -1,5 +1,5 @@
 ### Go get dependecies and build ###
-FROM golang:1.21.4 as builder
+FROM golang:1.21.5 as builder
 ENV PLATFORM docker
 WORKDIR /go/src/app
 COPY go.mod go.sum ./
