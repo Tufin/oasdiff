@@ -4,14 +4,14 @@ added-required-request-body: добавлено обязательное тел�
 request-parameter-removed: удалён %s параметр запроса %s
 total-errors: "%d критические изменения: %d %s, %d %s\\n"
 total-changes: "%d изменений: %d %s, %d %s, %d %s\\n"
-request-parameter-pattern-added: добавлен pattern '%s' у %s параметра запроса %s
-request-parameter-pattern-removed: удалён pattern '%s' у %s параметра запроса %s
-request-parameter-pattern-changed: изменён pattern у %s параметра запроса %s со значения '%s' на значение '%s'
-request-property-pattern-added: добавлен pattern '%s' у поля запроса %s
-request-property-pattern-removed: удалён pattern '%s' у поля запроса %s
-request-property-pattern-changed: изменён pattern у поля запроса %s со значения '%s' на значение '%s'
-api-deprecated-sunset-parse: "API deprecated без валидно парсящейся '%s' даты sunset: %v"
-api-sunset-date-too-small: дата API sunset date '%s' слишком ранняя, должно быть как минимум %d дней от текущего дня
+request-parameter-pattern-added: добавлен pattern %s у %s параметра запроса %s
+request-parameter-pattern-removed: удалён pattern %s у %s параметра запроса %s
+request-parameter-pattern-changed: изменён pattern у %s параметра запроса %s со значения %s на значение %s
+request-property-pattern-added: добавлен pattern %s у поля запроса %s
+request-property-pattern-removed: удалён pattern %s у поля запроса %s
+request-property-pattern-changed: изменён pattern у поля запроса %s со значения %s на значение %s
+api-deprecated-sunset-parse: "API deprecated без валидно парсящейся %s даты sunset: %v"
+api-sunset-date-too-small: дата API sunset date %s слишком ранняя, должно быть как минимум %d дней от текущего дня
 api-path-added: API path добавлено
 api-path-deprecated: API path deprecated
 api-path-reactivated: API path реактивирован
@@ -118,7 +118,7 @@ request-property-min-set-comment: Это предупреждение, пото�
 request-property-removed: удалено поле запроса %s
 request-body-type-changed: изменился type/format тела запроса с %s/%s на %s/%s
 request-property-type-changed: у поля запроса %s изменился type/format с %s/%s на %s/%s
-request-property-x-extensible-enum-value-removed: удалено значение x-extensible-enum '%s' в поле запроса %s
+request-property-x-extensible-enum-value-removed: удалено значение x-extensible-enum %s в поле запроса %s
 response-header-became-optional: заголовок ответа %s стал необязательным для ответа со статусом %s
 required-response-header-removed: удалён ранее обязательный заголовок ответа %s для ответа со статусом %s
 optional-response-header-removed: удалён ранее необязательный заголовок ответа %s для ответа со статусом %s
@@ -130,7 +130,7 @@ response-property-became-nullable: поле ответа %s стало обну�
 response-body-became-nullable: у тела ответа стало обнуляемым
 response-property-enum-value-added: добавлено новое enum значение %s в поле ответа %s для ответа со статусом %s
 response-property-enum-value-added-comment: Добавление новых значений перечисления в ответ может быть неожиданным для клиентов, вместо этого используйте x-extensible-enum.
-response-property-enum-value-removed: удалено значение перечисления '%s' из свойства ответа %s для статуса ответа %s.
+response-property-enum-value-removed: удалено значение перечисления %s из свойства ответа %s для статуса ответа %s.
 response-body-max-length-increased: у тела ответа maxLength увеличен с %s до %s
 response-property-max-length-increased: у поля ответа %s maxLength увеличен с %s до %s для ответа со статусом %s
 response-body-max-length-unset: у тела ответа maxLength был удалён, предыдущее значение - %s

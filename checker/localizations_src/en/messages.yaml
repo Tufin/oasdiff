@@ -4,14 +4,14 @@ added-required-request-body: added required request body
 request-parameter-removed: deleted the %s request parameter %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
-request-parameter-pattern-added: "added the pattern '%s' to the %s request parameter %s"
-request-parameter-pattern-removed: "removed the pattern '%s' from the %s request parameter %s"
-request-parameter-pattern-changed: "changed the pattern of the %s request parameter %s from '%s' to '%s'"
-request-property-pattern-added: "added the pattern '%s' to the request property %s"
-request-property-pattern-removed: "removed the pattern '%s' from the request property %s"
-request-property-pattern-changed: "changed the pattern of the request property %s from '%s' to '%s'"
-api-deprecated-sunset-parse: "api sunset date '%s' can't be parsed for deprecated API: %v"
-api-sunset-date-too-small: "api sunset date '%s' is too small, must be at least %d days from now"
+request-parameter-pattern-added: "added the pattern %s to the %s request parameter %s"
+request-parameter-pattern-removed: "removed the pattern %s from the %s request parameter %s"
+request-parameter-pattern-changed: "changed the pattern of the %s request parameter %s from %s to %s"
+request-property-pattern-added: "added the pattern %s to the request property %s"
+request-property-pattern-removed: "removed the pattern %s from the request property %s"
+request-property-pattern-changed: "changed the pattern of the request property %s from %s to %s"
+api-deprecated-sunset-parse: "api sunset date %s can't be parsed for deprecated API: %v"
+api-sunset-date-too-small: "api sunset date %s is too small, must be at least %d days from now"
 endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated
@@ -118,7 +118,7 @@ request-property-min-set-comment: This is a warning because sometimes it is requ
 request-property-removed: removed the request property %s
 request-body-type-changed: the request's body type/format changed from %s/%s to %s/%s
 request-property-type-changed: the %s request property type/format changed from %s/%s to %s/%s
-request-property-x-extensible-enum-value-removed: removed the x-extensible-enum value '%s' of the request property %s
+request-property-x-extensible-enum-value-removed: removed the x-extensible-enum value %s of the request property %s
 response-header-became-optional: the response header %s became optional for the status %s
 required-response-header-removed: the mandatory response header %s removed for the status %s
 optional-response-header-removed: the optional response header %s removed for the status %s
@@ -128,9 +128,9 @@ response-optional-property-removed: removed the optional property %s from the re
 response-property-became-optional: the response property %s became optional for the status %s
 response-property-became-nullable: the response property %s became nullable for the status %s
 response-body-became-nullable: the response's body became nullable
-response-property-enum-value-added: added the new '%s' enum value to the %s response property for the response status %s
+response-property-enum-value-added: added the new %s enum value to the %s response property for the response status %s
 response-property-enum-value-added-comment: Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.
-response-property-enum-value-removed: removed the '%s' enum value from the %s response property for the response status %s
+response-property-enum-value-removed: removed the %s enum value from the %s response property for the response status %s
 response-body-max-length-increased: the response's body maxLength was increased from %s to %s
 response-property-max-length-increased: the %s response property's maxLength was increased from %s to %s for the response status %s
 response-body-max-length-unset: the response's body maxLength was unset from %s
@@ -183,7 +183,7 @@ response-property-became-required: the response property %s became required for 
 response-write-only-property-became-required: the response write-only property %s became required for the status %s
 request-body-media-type-removed: removed the media type %s from the request body
 request-body-media-type-added: added the media type %s to the request body
-response-write-only-property-enum-value-added: added the new '%s' enum value to the %s response write-only property for the response status %s
+response-write-only-property-enum-value-added: added the new %s enum value to the %s response write-only property for the response status %s
 response-required-property-became-write-only: the response required property %s became write-only for the status %s
 response-required-property-became-read-only: the response required property %s became read-only for the status %s
 response-required-property-became-not-read-only: the response required property %s became not read-only for the status %s
