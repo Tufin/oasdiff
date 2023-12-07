@@ -11,7 +11,7 @@ request-property-pattern-added: "added the pattern %s to the request property %s
 request-property-pattern-removed: "removed the pattern %s from the request property %s"
 request-property-pattern-changed: "changed the pattern of the request property %s from %s to %s"
 api-deprecated-sunset-parse: "api sunset date %s can't be parsed for deprecated API: %v"
-api-sunset-date-too-small: "api sunset date %s is too small, must be at least %d days from now"
+api-sunset-date-too-small: "api sunset date %s is too small, must be at least %s days from now"
 endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated
@@ -25,7 +25,7 @@ api-tag-removed: api tag %s removed
 api-tag-added: api tag %s added
 api-schema-removed: removed the schema %s
 sunset-deleted: api sunset date deleted, but deprecated=true kept
-api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %d days from now
+api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %s days from now
 new-required-request-parameter: added the new required %s request parameter %s
 new-optional-request-parameter: added the new optional %s request parameter %s
 new-required-request-property: added the new required request property %s
