@@ -2,8 +2,8 @@ at: в
 in: в
 added-required-request-body: добавлено обязательное тело запроса
 request-parameter-removed: удалён %s параметр запроса %s
-total-errors: "%d критические изменения: %d %s, %d %s\\n"
-total-changes: "%d изменений: %d %s, %d %s, %d %s\\n"
+total-errors: "%s критические изменения: %s %s, %s %s\\n"
+total-changes: "%s изменений: %s %s, %s %s, %s %s\\n"
 request-parameter-pattern-added: добавлен pattern %s у %s параметра запроса %s
 request-parameter-pattern-removed: удалён pattern %s у %s параметра запроса %s
 request-parameter-pattern-changed: изменён pattern у %s параметра запроса %s со значения %s на значение %s
@@ -11,7 +11,7 @@ request-property-pattern-added: добавлен pattern %s у поля запр
 request-property-pattern-removed: удалён pattern %s у поля запроса %s
 request-property-pattern-changed: изменён pattern у поля запроса %s со значения %s на значение %s
 api-deprecated-sunset-parse: "API deprecated без валидно парсящейся %s даты sunset: %v"
-api-sunset-date-too-small: дата API sunset date %s слишком ранняя, должно быть как минимум %d дней от текущего дня
+api-sunset-date-too-small: дата API sunset date %s слишком ранняя, должно быть как минимум %s дней от текущего дня
 api-path-added: API path добавлено
 api-path-deprecated: API path deprecated
 api-path-reactivated: API path реактивирован
@@ -25,7 +25,7 @@ api-operation-id-added: добавлен идентификатор операц
 api-tag-added: тег API %s добавлен
 api-schema-removed: удалена схема %s
 sunset-deleted: удалена дата sunset date у API, но сохранён deprecated=true
-api-sunset-date-changed-too-small: дата sunset у API изменена на более раннюю с %s на %s, новая дата sunset должна быть либо не раньше %s, либо, как минимум, %d дней от текущего дня
+api-sunset-date-changed-too-small: дата sunset у API изменена на более раннюю с %s на %s, новая дата sunset должна быть либо не раньше %s, либо, как минимум, %s дней от текущего дня
 new-required-request-parameter: добавлен новый обязательный %s параметр зароса %s
 new-optional-request-parameter: добавлен новый необязательный %s параметр зароса %s
 new-required-request-property: добавлено новое обязательное поле запроса %s
