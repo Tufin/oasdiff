@@ -54,7 +54,7 @@ Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
 ## Wrappers
 - [GitHub Action](https://github.com/oasdiff/oasdiff-action)
-- [Cloud Service](#openapi-diff-and-breaking-changes-as-a-service)
+- [Cloud Service](#openapi-diff-breaking-changes-and-changelog-as-a-service)
 - [OpenAPI Sync: Get notified when an API provider breaks the API](https://github.com/oasdiff/sync/)
 
 ## Usage Examples
@@ -163,8 +163,7 @@ Replace `$(pwd)/data` by the path that contains your files.
 Note that the spec paths must begin with `/`.  
 
 ## OpenAPI Diff, Breaking Changes and Changelog as a Service
-Oasdiff is also available a service.
-See: https://github.com/oasdiff/oasdiff-service
+[Oasdiff is also available as a service](OASDIFF-SERVICE.md).
 
 ## Diff Output Formats
 The default diff output format, YAML, provides a full view of all diff details.  
