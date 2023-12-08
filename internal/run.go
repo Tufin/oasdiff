@@ -39,6 +39,7 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 		getChangelogCmd(),
 		getFlattenCmd(),
 		getChecksCmd(),
+		getQRCodeCmd(),
 	)
 
 	return run(rootCmd)
