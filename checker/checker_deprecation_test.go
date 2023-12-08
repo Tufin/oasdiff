@@ -227,7 +227,8 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 
 	s2, err := open(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
-	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(9).String())
+	sunsetDate := civil.DateOf(time.Now()).AddDays(9).String()
+	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, sunsetDate)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -237,7 +238,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APISunsetDateTooSmallId, errs[0].GetId())
-	require.Equal(t, "api sunset date '2023-12-16' is too small, must be at least '10' days from now", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, fmt.Sprintf("api sunset date '%s' is too small, must be at least '10' days from now", sunsetDate), errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deprecating an operation with a deprecation policy and sunset date after required deprecation period is not breaking
