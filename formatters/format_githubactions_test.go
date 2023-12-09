@@ -134,7 +134,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	assert.Contains(t, string(outputFile), "info_count=1\n")
 }
 
-func TestGitHubActionsFormatterr_NotImplemented(t *testing.T) {
+func TestGitHubActionsFormatter_NotImplemented(t *testing.T) {
 	var err error
 	_, err = gitHubFormatter.RenderDiff(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
