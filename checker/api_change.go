@@ -37,10 +37,10 @@ func (c ApiChange) MatchIgnore(ignorePath, ignoreLine string, l Localizer) bool 
 	if ignorePath == "" {
 		return false
 	}
-	x := c.GetUncolorizedText(l)
+
 	return ignorePath == strings.ToLower(c.Path) &&
 		strings.Contains(ignoreLine, strings.ToLower(c.Operation+" "+c.Path)) &&
-		strings.Contains(ignoreLine, strings.ToLower(x))
+		strings.Contains(ignoreLine, strings.ToLower(c.GetUncolorizedText(l)))
 }
 
 func (c ApiChange) GetId() string {

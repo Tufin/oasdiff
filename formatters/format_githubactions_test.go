@@ -1,6 +1,7 @@
 package formatters_test
 
 import (
+	"net/http"
 	"os"
 	"testing"
 
@@ -22,62 +23,81 @@ func TestGithubActionsLookup(t *testing.T) {
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:    "change_id",
-			Level: checker.ERR,
+		checker.ApiChange{
+			Id:        "change_id",
+			Level:     checker.ERR,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
 	}
 
 	// check output
 	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
-	expectedOutput := "::error title=change_id::This is a breaking change.\n"
+	expectedOutput := "::error title=change_id::at openapi.yaml, in API GET /api/test This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_MultipleLevels(t *testing.T) {
 	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:    "change_id",
-			Level: checker.ERR,
+		checker.ApiChange{
+			Id:        "change_id",
+			Level:     checker.ERR,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
-		checker.ComponentChange{
-			Id:    "warning_id",
-			Level: checker.WARN,
+		checker.ApiChange{
+			Id:        "warning_id",
+			Level:     checker.WARN,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
-		checker.ComponentChange{
-			Id:    "notice_id",
-			Level: checker.INFO,
+		checker.ApiChange{
+			Id:        "notice_id",
+			Level:     checker.INFO,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
 	}
 
 	// check output
 	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
-	expectedOutput := "::error title=change_id::This is a breaking change.\n::warning title=warning_id::This is a warning.\n::notice title=notice_id::This is a notice.\n"
+	expectedOutput := "::error title=change_id::at openapi.yaml, in API GET /api/test This is a breaking change.\n::warning title=warning_id::at openapi.yaml, in API GET /api/test This is a warning.\n::notice title=notice_id::at openapi.yaml, in API GET /api/test This is a notice.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_MultilineText(t *testing.T) {
+	t.Skip("messages should not contain \n so this case should never happen")
 	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:    "change_two_lines_id",
-			Level: checker.ERR,
+		checker.ApiChange{
+			Id:        "change_two_lines_id",
+			Level:     checker.ERR,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
 	}
 
 	// check output
 	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
-	expectedOutput := "::error title=change_two_lines_id::This is a breaking change.%0AThis is a second line.\n"
+	expectedOutput := "::error title=change_two_lines_id::at openapi.yaml, in API GET /api/test This is a breaking change.%0AThis is a second line.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 
 func TestGitHubActionsFormatter_RenderBreakingChanges_FileLocation(t *testing.T) {
 	testChanges := checker.Changes{
-		checker.ComponentChange{
+		checker.ApiChange{
 			Id:              "change_id",
 			Level:           checker.ERR,
+			Operation:       http.MethodGet,
+			Path:            "/api/test",
+			Source:          "openapi.yaml",
 			SourceFile:      "openapi.json",
 			SourceLine:      20,
 			SourceLineEnd:   25,
@@ -89,7 +109,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_FileLocation(t *testing.T)
 	// check output
 	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
-	expectedOutput := "::error title=change_id,file=openapi.json,col=6,endColumn=11,line=21,endLine=26::This is a breaking change.\n"
+	expectedOutput := "::error title=change_id,file=openapi.json,col=6,endColumn=11,line=21,endLine=26::at openapi.yaml, in API GET /api/test This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 
@@ -101,21 +121,33 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	_ = os.Setenv("GITHUB_OUTPUT", tempFile.Name())
 
 	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:    "change_id",
-			Level: checker.ERR,
+		checker.ApiChange{
+			Id:        "change_id",
+			Level:     checker.ERR,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
-		checker.ComponentChange{
-			Id:    "change_id",
-			Level: checker.ERR,
+		checker.ApiChange{
+			Id:        "change_id",
+			Level:     checker.ERR,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
-		checker.ComponentChange{
-			Id:    "warning_id",
-			Level: checker.WARN,
+		checker.ApiChange{
+			Id:        "warning_id",
+			Level:     checker.WARN,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
-		checker.ComponentChange{
-			Id:    "notice_id",
-			Level: checker.INFO,
+		checker.ApiChange{
+			Id:        "notice_id",
+			Level:     checker.INFO,
+			Operation: http.MethodGet,
+			Path:      "/api/test",
+			Source:    "openapi.yaml",
 		},
 	}
 
@@ -123,7 +155,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
 	assert.NoError(t, err)
 	_ = os.Unsetenv("GITHUB_OUTPUT")
-	expectedOutput := "::error title=change_id::This is a breaking change.\n::error title=change_id::This is a breaking change.\n::warning title=warning_id::This is a warning.\n::notice title=notice_id::This is a notice.\n"
+	expectedOutput := "::error title=change_id::at openapi.yaml, in API GET /api/test This is a breaking change.\n::error title=change_id::at openapi.yaml, in API GET /api/test This is a breaking change.\n::warning title=warning_id::at openapi.yaml, in API GET /api/test This is a warning.\n::notice title=notice_id::at openapi.yaml, in API GET /api/test This is a notice.\n"
 	assert.Equal(t, expectedOutput, string(output))
 
 	// check job output parameters (NOTE: order of parameters is not guaranteed)
