@@ -45,6 +45,7 @@ func TestBreaking_DeletedPath(t *testing.T) {
 	errs := d(t, getConfig(), 1, 701)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[0].GetId())
+	require.Equal(t, "api path removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deleting an operation is breaking
@@ -52,7 +53,7 @@ func TestBreaking_DeletedOp(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Put = openapi3.NewOperation()
+	s1.Spec.Paths.Value(installCommandPath).Put = openapi3.NewOperation()
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -60,6 +61,7 @@ func TestBreaking_DeletedOp(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIRemovedWithoutDeprecationId, errs[0].GetId())
+	require.Equal(t, "api removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: adding a required request body is breaking
@@ -67,7 +69,7 @@ func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+	s2.Spec.Paths.Value(installCommandPath).Get.RequestBody = &openapi3.RequestBodyRef{
 		Value: openapi3.NewRequestBody().WithRequired(true),
 	}
 
@@ -77,6 +79,7 @@ func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.AddedRequiredRequestBodyId, errs[0].GetId())
+	require.Equal(t, "added required request body", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing request body from optional to required is breaking
@@ -84,11 +87,11 @@ func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+	s1.Spec.Paths.Value(installCommandPath).Get.RequestBody = &openapi3.RequestBodyRef{
 		Value: openapi3.NewRequestBody().WithRequired(false),
 	}
 
-	s2.Spec.Paths[installCommandPath].Get.RequestBody = &openapi3.RequestBodyRef{
+	s2.Spec.Paths.Value(installCommandPath).Get.RequestBody = &openapi3.RequestBodyRef{
 		Value: openapi3.NewRequestBody().WithRequired(true),
 	}
 
@@ -98,6 +101,7 @@ func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyBecameRequiredId, errs[0].GetId())
+	require.Equal(t, "request body became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deleting an enum value is breaking
@@ -106,6 +110,7 @@ func TestBreaking_DeletedEnum(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterEnumValueRemovedId, errs[0].GetId())
+	require.Equal(t, "removed the enum value 'removed-value' from the 'path' request parameter 'domain'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: added an enum value to response breaking
@@ -114,7 +119,9 @@ func TestBreaking_AddedResponseEnum(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.ResponsePropertyEnumValueAddedId, errs[0].GetId())
+	require.Equal(t, "added the new 'QWE' enum value to the 'respenum' response property for the response status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, checker.ResponsePropertyEnumValueAddedId, errs[1].GetId())
+	require.Equal(t, "added the new 'TER2' enum value to the 'respenum2/respenum3' response property for the response status 'default'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 func deleteParam(op *openapi3.Operation, in string, name string) {
@@ -157,7 +164,7 @@ func TestBreaking_NewPathParam(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	deleteParam(s1.Spec.Paths[installCommandPath].Get, openapi3.ParameterInPath, "project")
+	deleteParam(s1.Spec.Paths.Value(installCommandPath).Get, openapi3.ParameterInPath, "project")
 	// note: path params are always required
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
@@ -166,6 +173,7 @@ func TestBreaking_NewPathParam(t *testing.T) {
 
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.NewRequestPathParameterId, errs[0].GetId())
+	require.Equal(t, "added the new path request parameter 'project'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: new required header param is breaking
@@ -173,8 +181,8 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	deleteParam(s1.Spec.Paths[installCommandPath].Get, openapi3.ParameterInHeader, "network-policies")
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
+	deleteParam(s1.Spec.Paths.Value(installCommandPath).Get, openapi3.ParameterInHeader, "network-policies")
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -182,6 +190,7 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.NewRequiredRequestParameterId, errs[0].GetId())
+	require.Equal(t, "added the new required 'header' request parameter 'network-policies'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing header param from optional to required is breaking
@@ -189,8 +198,8 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = false
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = false
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Required = true
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -205,6 +214,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 			Path:      "/api/{domain}/{project}/install-command",
 			Source:    "../data/openapi-test1.yaml",
 		}, errs[0])
+	require.Equal(t, "the 'header' request parameter 'network-policies' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing response header from required to optional is breaking
@@ -212,8 +222,8 @@ func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = true
-	s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = false
+	s1.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers["X-RateLimit-Limit"].Value.Required = true
+	s2.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers["X-RateLimit-Limit"].Value.Required = false
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -221,6 +231,7 @@ func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseHeaderBecameOptionalId, errs[0].GetId())
+	require.Equal(t, "the response header 'X-RateLimit-Limit' became optional for the status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing an existing required response header is breaking as error
@@ -228,8 +239,8 @@ func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = true
-	delete(s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers, "X-RateLimit-Limit")
+	s1.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers["X-RateLimit-Limit"].Value.Required = true
+	delete(s2.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers, "X-RateLimit-Limit")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -240,6 +251,7 @@ func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequiredResponseHeaderRemovedId, errs[0].GetId())
+	require.Equal(t, "the mandatory response header 'X-RateLimit-Limit' removed for the status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing an existing response with successful status is breaking
@@ -247,7 +259,7 @@ func TestBreaking_ResponseSuccessStatusUpdated(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	delete(s2.Spec.Paths[securityScorePath].Get.Responses, "200")
+	delete(s2.Spec.Paths.Value(securityScorePath).Get.Responses.Map(), "200")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -258,6 +270,7 @@ func TestBreaking_ResponseSuccessStatusUpdated(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseSuccessStatusRemovedId, errs[0].GetId())
+	require.Equal(t, "removed the success response with the status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing an existing response with non-successful status is breaking (optional)
@@ -265,7 +278,7 @@ func TestBreaking_ResponseNonSuccessStatusUpdated(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	delete(s2.Spec.Paths[securityScorePath].Get.Responses, "400")
+	delete(s2.Spec.Paths.Value(securityScorePath).Get.Responses.Map(), "400")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -276,6 +289,7 @@ func TestBreaking_ResponseNonSuccessStatusUpdated(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseNonSuccessStatusRemovedId, errs[0].GetId())
+	require.Equal(t, "removed the non-success response with the status '400'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing/updating an operation id is breaking (optional)
@@ -283,7 +297,7 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[securityScorePath].Get.OperationID = "newOperationId"
+	s2.Spec.Paths.Value(securityScorePath).Get.OperationID = "newOperationId"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -295,6 +309,7 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIOperationIdRemovedId, errs[0].GetId())
+	require.Equal(t, "api operation id 'GetSecurityScores' removed and replaced with 'newOperationId'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APIOperationIdRemovedId)
 }
 
@@ -306,18 +321,19 @@ func TestBreaking_RequestBodyEnumRemoved(t *testing.T) {
 	s2, err := open("../data/enums/request-body-enum.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v2/changeOfRequestFieldValueTiedToEnumTest"].Get.RequestBody.Value.Content["application/json"].Schema.Value.Enum = []interface{}{}
+	s2.Spec.Paths.Value("/api/v2/changeOfRequestFieldValueTiedToEnumTest").Get.RequestBody.Value.Content["application/json"].Schema.Value.Enum = []interface{}{}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{"request-body-enum-value-removed"}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.RequestBodyEnumValueRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
 
 	require.Len(t, errs, 3)
-	require.Equal(t, "request-body-enum-value-removed", errs[0].GetId())
+	require.Equal(t, checker.RequestBodyEnumValueRemovedId, errs[0].GetId())
+	require.Equal(t, "request body enum value removed 'VALUE_1'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing/updating a property enum in response is breaking (optional)
@@ -335,6 +351,7 @@ func TestBreaking_ResponsePropertyEnumRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.ResponsePropertyEnumValueRemovedId, errs[0].GetId())
+	require.Equal(t, "removed the 'QWE' enum value from the 'respenum' response property for the response status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing/updating a tag is breaking (optional)
@@ -342,7 +359,7 @@ func TestBreaking_TagRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s2.Spec.Paths[securityScorePath].Get.Tags[0] = "newTag"
+	s2.Spec.Paths.Value(securityScorePath).Get.Tags[0] = "newTag"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -353,6 +370,7 @@ func TestBreaking_TagRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APITagRemovedId, errs[0].GetId())
+	require.Equal(t, "api tag 'security' removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing/updating a media type enum in response (optional)
@@ -372,6 +390,7 @@ func TestBreaking_ResponseMediaTypeEnumRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseMediaTypeEnumValueRemovedId, errs[0].GetId())
+	require.Equal(t, "response schema 'application/json' enum value removed 'VALUE_3'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing an existing response with unparseable status is not breaking
@@ -379,7 +398,7 @@ func TestBreaking_ResponseUnparseableStatusRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	delete(s2.Spec.Paths[installCommandPath].Get.Responses, "default")
+	delete(s2.Spec.Paths.Value(installCommandPath).Get.Responses.Map(), "default")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -395,7 +414,7 @@ func TestBreaking_ResponseErrorStatusRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	delete(s2.Spec.Paths[securityScorePath].Get.Responses, "400")
+	delete(s2.Spec.Paths.Value(securityScorePath).Get.Responses.Map(), "400")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -411,8 +430,8 @@ func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers["X-RateLimit-Limit"].Value.Required = false
-	delete(s2.Spec.Paths[installCommandPath].Get.Responses["default"].Value.Headers, "X-RateLimit-Limit")
+	s1.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers["X-RateLimit-Limit"].Value.Required = false
+	delete(s2.Spec.Paths.Value(installCommandPath).Get.Responses.Value("default").Value.Headers, "X-RateLimit-Limit")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
 	require.NoError(t, err)
@@ -423,6 +442,7 @@ func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.OptionalResponseHeaderRemovedId, errs[0].GetId())
+	require.Equal(t, "the optional response header 'X-RateLimit-Limit' removed for the status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deleting a media-type from response is breaking
@@ -439,6 +459,7 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseMediaTypeRemovedId, errs[0].GetId())
+	require.Equal(t, "removed the media type 'application/json' for the response with the status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deleting a pattern from a schema is not breaking
@@ -469,6 +490,7 @@ func TestBreaking_AddPattern(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-property-pattern-added", errs[0].GetId())
+	require.Equal(t, "added the pattern '^[a-z]+$' to the request property 'created'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: adding a pattern to a schema is breaking for recursive properties
@@ -485,6 +507,7 @@ func TestBreaking_AddPatternRecursive(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-property-pattern-added", errs[0].GetId())
+	require.Equal(t, "added the pattern '^[a-z]+$' to the request property 'data/created'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: modifying a pattern in a schema is breaking
@@ -501,6 +524,7 @@ func TestBreaking_ModifyPattern(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyPatternChangedId, errs[0].GetId())
+	require.Equal(t, "changed the pattern of the request property 'created' from '^[a-z]+$' to '.+'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: modifying a pattern in request parameter is breaking
@@ -517,6 +541,7 @@ func TestBreaking_ModifyParameterPattern(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterPatternChangedId, errs[0].GetId())
+	require.Equal(t, "changed the pattern of the 'path' request parameter 'groupId' from '[0-9a-f]+' to '[0-9]+'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: modifying a pattern to ".*" in a schema is not breaking
@@ -538,8 +563,8 @@ func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "X"
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "X"
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
 
 	// By default, OpenAPI treats all request parameters as optional
 
@@ -556,8 +581,8 @@ func TestBreaking_SettingOptionalParamDefaultValue(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = nil
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = nil
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
 
 	// By default, OpenAPI treats all request parameters as optional
 
@@ -574,8 +599,8 @@ func TestBreaking_RemovingOptionalParamDefaultValue(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
-	s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = nil
+	s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = "Y"
+	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Default = nil
 
 	// By default, OpenAPI treats all request parameters as optional
 
@@ -592,11 +617,11 @@ func TestBreaking_ModifyRequiredRequiredParamDefaultValue(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	paramBase := s1.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies")
+	paramBase := s1.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies")
 	paramBase.Required = true
 	paramBase.Schema.Value.Default = "X"
 
-	paramRevision := s2.Spec.Paths[installCommandPath].Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies")
+	paramRevision := s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies")
 	paramRevision.Required = true
 	paramRevision.Schema.Value.Default = "Y"
 
@@ -610,8 +635,8 @@ func TestBreaking_ModifyRequiredRequiredParamDefaultValue(t *testing.T) {
 func TestBreaking_SchemaRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
-	s1.Spec.Paths = map[string]*openapi3.PathItem{}
-	s2.Spec.Paths = map[string]*openapi3.PathItem{}
+	s1.Spec.Paths = openapi3.NewPaths()
+	s2.Spec.Paths = openapi3.NewPaths()
 
 	for k := range s2.Spec.Components.Schemas {
 		delete(s2.Spec.Components.Schemas, k)

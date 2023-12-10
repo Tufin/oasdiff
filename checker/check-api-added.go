@@ -27,7 +27,7 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 	}
 
 	for _, path := range diffReport.PathsDiff.Added {
-		for opName, op := range diffReport.PathsDiff.Revision[path].Operations() {
+		for opName, op := range diffReport.PathsDiff.Revision.Value(path).Operations() {
 			appendErr(path, opName, op)
 		}
 	}

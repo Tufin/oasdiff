@@ -16,7 +16,7 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 	require.NoError(t, err)
 
 	// Add new success response
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["201"] = s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["200"]
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Set("201", s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("200"))
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -41,7 +41,7 @@ func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	require.NoError(t, err)
 
 	// Add new non-success response
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["400"] = s2.Spec.Paths["/api/v1.0/groups"].Post.Responses["409"]
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Set("400", s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("409"))
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -65,7 +65,7 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	s2, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths["/api/v1.0/groups"].Post.Responses, "409")
+	delete(s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Map(), "409")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -90,7 +90,7 @@ func TestResponseSuccessStatusRemoved(t *testing.T) {
 	s2, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths["/api/v1.0/groups"].Post.Responses, "200")
+	delete(s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Map(), "200")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

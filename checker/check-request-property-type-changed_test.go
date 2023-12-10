@@ -15,7 +15,7 @@ func TestRequestBodyTypeChangedCheck(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "array"
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "array"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -40,7 +40,7 @@ func TestRequestBodyFormatChangedCheck(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Format = "uuid"
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Format = "uuid"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -152,7 +152,7 @@ func TestRequestPropertyFormatChangedCheck(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Format = "uuid"
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Format = "uuid"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -176,8 +176,8 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s1.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = "integer"
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = "number"
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = "integer"
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = "number"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

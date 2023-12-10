@@ -112,11 +112,11 @@ func GetPathsDiff(config *Config, s1, s2 []*load.SpecInfo) (*Diff, *OperationsSo
 		return nil, nil, err
 	}
 
-	if result.PathsDiff, err = getPathsDiff(config, state, *paths1, *paths2); err != nil {
+	if result.PathsDiff, err = getPathsDiff(config, state, paths1, paths2); err != nil {
 		return nil, nil, err
 	}
 
-	if result.EndpointsDiff, err = getEndpointsDiff(config, state, *paths1, *paths2); err != nil {
+	if result.EndpointsDiff, err = getEndpointsDiff(config, state, paths1, paths2); err != nil {
 		return nil, nil, err
 	}
 
@@ -131,23 +131,23 @@ func GetPathsDiff(config *Config, s1, s2 []*load.SpecInfo) (*Diff, *OperationsSo
 	return result, &operationsSources, nil
 }
 
-func getPathItem(paths openapi3.Paths, path string, includePathParams bool) *openapi3.PathItem {
+func getPathItem(paths *openapi3.Paths, path string, includePathParams bool) *openapi3.PathItem {
 	if includePathParams {
-		return paths[path]
+		return paths.Value(path)
 	}
 
 	return paths.Find(path)
 }
 
 func mergedPaths(s1 []*load.SpecInfo, includePathParams bool) (*openapi3.Paths, *OperationsSourcesMap, error) {
-	result := make(openapi3.Paths, 0)
+	result := openapi3.NewPaths()
 	operationsSources := make(OperationsSourcesMap)
 	for _, s := range s1 {
-		for path, pathItem := range s.Spec.Paths {
+		for path, pathItem := range s.Spec.Paths.Map() {
 
 			p := getPathItem(result, path, includePathParams)
 			if p == nil {
-				result[path] = pathItem
+				result.Set(path, pathItem)
 				for _, opItem := range pathItem.Operations() {
 					operationsSources[opItem] = s.Url
 				}
@@ -182,7 +182,7 @@ func mergedPaths(s1 []*load.SpecInfo, includePathParams bool) (*openapi3.Paths, 
 
 		}
 	}
-	return &result, &operationsSources, nil
+	return result, &operationsSources, nil
 }
 
 func sinceDateFrom(pathItem openapi3.PathItem, operation openapi3.Operation) (civil.Date, error) {

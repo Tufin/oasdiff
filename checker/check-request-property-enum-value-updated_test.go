@@ -15,7 +15,7 @@ func TestRequestPropertyEnumValueRemovedCheck(t *testing.T) {
 	s2, err := open("../data/checker/request_property_enum_value_updated_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["category"].Value.Enum = []interface{}{"dog", "cat"}
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["category"].Value.Enum = []interface{}{"dog", "cat"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -42,7 +42,7 @@ func TestRequestPropertyEnumValueAddedCheck(t *testing.T) {
 	s2, err := open("../data/checker/request_property_enum_value_updated_base.yaml")
 	require.NoError(t, err)
 
-	s1.Spec.Paths["/pets"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["category"].Value.Enum = []interface{}{"dog", "cat"}
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["category"].Value.Enum = []interface{}{"dog", "cat"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

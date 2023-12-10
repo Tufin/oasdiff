@@ -33,6 +33,10 @@ func interfaceToString(arg interface{}) string {
 		return argString
 	}
 
+	if argInt, ok := arg.(int); ok {
+		return fmt.Sprintf("%d", argInt)
+	}
+
 	if argUint64, ok := arg.(uint64); ok {
 		return fmt.Sprintf("%d", argUint64)
 	}

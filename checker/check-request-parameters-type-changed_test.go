@@ -15,7 +15,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[0].Value.Schema.Value.Type = "int"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = "int"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -39,7 +39,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[1].Value.Schema.Value.Type = "int"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Type = "int"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -63,7 +63,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[2].Value.Schema.Value.Type = "int"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[2].Value.Schema.Value.Type = "int"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -87,7 +87,7 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[0].Value.Schema.Value.Format = "uuid"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Format = "uuid"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -111,7 +111,7 @@ func TestRequestQueryParamFormatChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[1].Value.Schema.Value.Format = "uri"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Format = "uri"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -135,7 +135,7 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Parameters[2].Value.Schema.Value.Format = "uri"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[2].Value.Schema.Value.Format = "uri"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

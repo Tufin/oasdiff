@@ -15,7 +15,7 @@ func TestTagAdded(t *testing.T) {
 	s2, err := open("../data/checker/tag_added_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Tags = []string{"newTag"}
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Tags = []string{"newTag"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -40,7 +40,7 @@ func TestTagRemoved(t *testing.T) {
 	s2, err := open("../data/checker/tag_removed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Tags = []string{}
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Tags = []string{}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -67,7 +67,7 @@ func TestTagUpdated(t *testing.T) {
 	s2, err := open("../data/checker/tag_removed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.Tags = []string{"newTag"}
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Tags = []string{"newTag"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

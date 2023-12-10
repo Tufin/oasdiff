@@ -14,11 +14,11 @@ func TestBreaking_ReqTypeStringToNumber(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "string"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "string"
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -34,11 +34,11 @@ func TestBreaking_ReqTypeNumberToString(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "string"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "string"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -54,11 +54,11 @@ func TestBreaking_ReqTypeNumberToInteger(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -74,11 +74,11 @@ func TestBreaking_ReqTypeIntegerToNumber(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -92,12 +92,12 @@ func TestBreaking_ReqTypeNumberToInt32(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
-	s2.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Format = "int32"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Format = "int32"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

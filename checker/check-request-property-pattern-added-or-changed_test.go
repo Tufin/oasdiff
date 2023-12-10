@@ -15,7 +15,7 @@ func TestRequestPropertyPatternChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_property_pattern_added_or_changed_revision.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/test"].Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.Pattern = "^[\\w\\s]+$"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.Pattern = "^[\\w\\s]+$"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)

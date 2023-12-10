@@ -57,9 +57,9 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 	for _, path := range diffReport.PathsDiff.Deleted {
 		ignore := true
 		pathDiff := diffReport.PathsDiff
-		for operation, operationItem := range pathDiff.Base[path].Operations() {
-			baseStability, err := getStabilityLevel(pathDiff.Base[path].Operations()[operation].Extensions)
-			source := (*operationsSources)[pathDiff.Base[path].Operations()[operation]]
+		for operation, operationItem := range pathDiff.Base.Value(path).Operations() {
+			baseStability, err := getStabilityLevel(pathDiff.Base.Value(path).Operations()[operation].Extensions)
+			source := (*operationsSources)[pathDiff.Base.Value(path).Operations()[operation]]
 			if err != nil {
 				result = newParsingError(config, result, err, operation, operationItem, path, source)
 				continue

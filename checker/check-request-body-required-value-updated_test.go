@@ -15,7 +15,7 @@ func TestRequestBodyBecameRequired(t *testing.T) {
 	s2, err := open("../data/checker/request_body_became_required_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.RequestBody.Value.Required = true
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.RequestBody.Value.Required = true
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
@@ -38,7 +38,7 @@ func TestRequestBodyBecameOptional(t *testing.T) {
 	s2, err := open("../data/checker/request_body_became_optional_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths["/api/v1.0/groups"].Post.RequestBody.Value.Required = false
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.RequestBody.Value.Required = false
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig().WithCheckBreaking(), s1, s2)
 	require.NoError(t, err)
