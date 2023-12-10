@@ -45,8 +45,8 @@ func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, o
 		var params = []string{
 			"title=" + change.GetId(),
 		}
-		if change.GetSourceFile() != "" {
-			params = append(params, "file="+change.GetSourceFile())
+		if change.GetSource() != "" {
+			params = append(params, "file="+change.GetSource())
 		}
 		if change.GetSourceColumn() != 0 {
 			params = append(params, "col="+strconv.Itoa(change.GetSourceColumn()+1))
@@ -61,11 +61,15 @@ func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, o
 			params = append(params, "endLine="+strconv.Itoa(change.GetSourceLineEnd()+1))
 		}
 
-		message := fmt.Sprintf("at %s, in API %s %s %s", change.GetSource(), change.GetOperation(), change.GetPath(), change.GetUncolorizedText(f.Localizer))
-		buf.WriteString(fmt.Sprintf("::%s %s::%s\n", githubActionsSeverity[change.GetLevel()], strings.Join(params, ","), message))
+		buf.WriteString(fmt.Sprintf("::%s %s::%s\n", githubActionsSeverity[change.GetLevel()], strings.Join(params, ","), getMessage(change, f.Localizer)))
 	}
 
 	return buf.Bytes(), nil
+}
+
+func getMessage(change checker.Change, l checker.Localizer) string {
+	message := strings.ReplaceAll(change.GetUncolorizedText(l), "\n", "%0A")
+	return fmt.Sprintf("in API %s %s %s", change.GetOperation(), change.GetPath(), message)
 }
 
 func (f GitHubActionsFormatter) SupportedOutputs() []Output {
