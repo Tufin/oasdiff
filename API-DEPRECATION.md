@@ -11,7 +11,7 @@ Oasdiff allows you to gracefully remove a resource without getting a breaking ch
    /api/test:
     get:
      deprecated: true
-     x-sunset: "2022-08-10"
+     x-sunset: "2022-12-31"
    ```
 2. At the sunset date or anytime later, the resource can be removed without triggering a breaking change error. An earlier removal will be considered a breaking change.
 
