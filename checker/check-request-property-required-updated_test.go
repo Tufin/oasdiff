@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing request property required value to true
@@ -26,7 +27,7 @@ func TestRequestPropertyMarkedRequired(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_became_required_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_became_required_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }
@@ -49,7 +50,7 @@ func TestRequestPropertyMarkedOptional(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_became_required_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_became_required_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }

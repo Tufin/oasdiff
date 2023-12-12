@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing request body default value
@@ -25,7 +26,7 @@ func TestRequestBodyDefaultValueChanged(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_body_default_value_changed_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_body_default_value_changed_revision.yaml"),
 		OperationId: "createProduct",
 	}, errs[0])
 }
@@ -49,7 +50,7 @@ func TestRequestPropertyDefaultValueChanged(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_default_value_changed_base.yaml"),
 		OperationId: "createProduct",
 	}, errs[0])
 }
@@ -74,7 +75,7 @@ func TestRequestBodyDefaultValueAdded(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_body_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_default_value_changed_base.yaml"),
 		OperationId: "createProduct",
 	}, {
 		Id:          checker.RequestPropertyDefaultValueAddedId,
@@ -82,7 +83,7 @@ func TestRequestBodyDefaultValueAdded(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_body_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_default_value_changed_base.yaml"),
 		OperationId: "createProduct",
 	}}, errs)
 }
@@ -107,7 +108,7 @@ func TestRequestBodyDefaultValueRemoving(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_body_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_default_value_changed_base.yaml"),
 		OperationId: "createProduct",
 	}, {
 		Id:          checker.RequestPropertyDefaultValueRemovedId,
@@ -115,7 +116,7 @@ func TestRequestBodyDefaultValueRemoving(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_body_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_default_value_changed_base.yaml"),
 		OperationId: "createProduct",
 	}}, errs)
 }

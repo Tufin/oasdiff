@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -92,7 +93,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 
@@ -107,7 +108,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 
@@ -124,7 +125,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					}
 					for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
@@ -135,7 +136,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					}
 				}

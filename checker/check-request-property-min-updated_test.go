@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: increasing minimum value of request property
@@ -26,7 +27,7 @@ func TestRequestPropertyMinIncreasedCheck(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_min_increased_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_property_min_increased_revision.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -49,7 +50,7 @@ func TestRequestPropertyMinDecreasedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_min_increased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_min_increased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing optional response property to required
@@ -24,7 +25,7 @@ func TestResponsePropertyBecameRequiredlCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_became_optional_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_became_optional_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -48,7 +49,7 @@ func TestResponseWriteOnlyPropertyBecameRequiredCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_became_optional_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_became_optional_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

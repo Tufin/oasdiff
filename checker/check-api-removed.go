@@ -5,6 +5,7 @@ import (
 
 	"cloud.google.com/go/civil"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -35,7 +36,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -49,7 +50,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -62,7 +63,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 		}
@@ -82,7 +83,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -96,7 +97,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -109,7 +110,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 		}

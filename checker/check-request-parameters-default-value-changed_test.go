@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing request parameter default value
@@ -25,7 +26,7 @@ func TestRequestParameterDefaultValueChanged(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_default_value_changed_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_default_value_changed_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -49,7 +50,7 @@ func TestRequestParameterDefaultValueAdded(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -73,7 +74,7 @@ func TestRequestParameterDefaultValueRemoved(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

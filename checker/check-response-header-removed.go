@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -44,7 +45,7 @@ func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					} else {
 						result = append(result, ApiChange{
@@ -54,7 +55,7 @@ func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					}
 				}

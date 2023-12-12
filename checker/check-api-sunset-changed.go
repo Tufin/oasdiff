@@ -5,6 +5,7 @@ import (
 
 	"cloud.google.com/go/civil"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -37,7 +38,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 
@@ -56,7 +57,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -70,7 +71,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      (*operationsSources)[opBase],
+					Source:      load.NewSource((*operationsSources)[opBase]),
 				})
 				continue
 			}
@@ -86,7 +87,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -101,7 +102,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 		}

@@ -3,6 +3,7 @@ package checker
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -41,7 +42,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
-								Source:      source,
+								Source:      load.NewSource(source),
 							})
 						}
 					})
@@ -63,7 +64,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
-								Source:      source,
+								Source:      load.NewSource(source),
 							})
 						} else {
 							result = append(result, ApiChange{
@@ -73,7 +74,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
-								Source:      source,
+								Source:      load.NewSource(source),
 							})
 						}
 					})

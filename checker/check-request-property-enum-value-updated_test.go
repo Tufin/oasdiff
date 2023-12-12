@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: removing request property enum values
@@ -30,7 +31,7 @@ func TestRequestPropertyEnumValueRemovedCheck(t *testing.T) {
 		Operation:   "POST",
 		OperationId: "updatePet",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_enum_value_updated_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_enum_value_updated_base.yaml"),
 	}, errs[0])
 	require.Equal(t, "removed the enum value 'bird' of the request property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
@@ -57,7 +58,7 @@ func TestRequestPropertyEnumValueAddedCheck(t *testing.T) {
 		Operation:   "POST",
 		OperationId: "updatePet",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_enum_value_updated_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_enum_value_updated_base.yaml"),
 	}, errs[0])
 	require.Equal(t, "added the new 'bird' enum value to the request property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

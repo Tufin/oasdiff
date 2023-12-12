@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -43,7 +44,7 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 				Operation:   operation,
 				OperationId: op.OperationID,
 				Path:        path,
-				Source:      source,
+				Source:      load.NewSource(source),
 			})
 		}
 	}

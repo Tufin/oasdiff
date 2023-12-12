@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: removing an existing operation id
@@ -27,7 +28,7 @@ func TestOperationIdRemoved(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/operation_id_removed_base.yaml",
+		Source:      load.NewSource("../data/checker/operation_id_removed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -51,7 +52,7 @@ func TestOperationIdUpdated(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/operation_id_removed_base.yaml",
+		Source:      load.NewSource("../data/checker/operation_id_removed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 
@@ -77,7 +78,7 @@ func TestOperationIdAdded(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/operation_id_added_base.yaml",
+		Source:      load.NewSource("../data/checker/operation_id_added_base.yaml"),
 		OperationId: "NewOperationId",
 	}, errs[0])
 

@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -57,7 +58,7 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
-								Source:      source,
+								Source:      load.NewSource(source),
 							})
 						}
 					}
@@ -92,14 +93,14 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
-									Source:      source,
+									Source:      load.NewSource(source),
 								})
 							}
 						})
 				}
-
 			}
 		}
 	}
+
 	return result
 }

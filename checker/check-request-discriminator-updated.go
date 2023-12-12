@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -46,7 +47,7 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 

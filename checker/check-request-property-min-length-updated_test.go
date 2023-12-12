@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: decreasing minLength of request property
@@ -27,7 +28,7 @@ func TestRequestPropertyMinLengthDecreased(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_min_length_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_min_length_decreased_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }
@@ -51,7 +52,7 @@ func TestRequestPropertyMinLengthIncreased(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_min_length_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_min_length_decreased_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }
@@ -75,7 +76,7 @@ func TestRequestBodyMinLengthIncreased(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_min_length_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_min_length_decreased_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }
@@ -99,7 +100,7 @@ func TestRequestBodyMinLengthDecreased(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_min_length_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_min_length_decreased_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }

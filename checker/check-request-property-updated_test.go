@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: adding a new required request property
@@ -25,7 +26,7 @@ func TestRequiredRequestPropertyAdded(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_added_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_property_added_revision.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }
@@ -47,7 +48,7 @@ func TestRequiredRequestPropertiesAdded(t *testing.T) {
 			Level:       checker.ERR,
 			Operation:   "POST",
 			Path:        "/products",
-			Source:      "../data/checker/request_property_added_revision2.yaml",
+			Source:      load.NewSource("../data/checker/request_property_added_revision2.yaml"),
 			OperationId: "addProduct",
 		},
 		{
@@ -56,7 +57,7 @@ func TestRequiredRequestPropertiesAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/products",
-			Source:      "../data/checker/request_property_added_revision2.yaml",
+			Source:      load.NewSource("../data/checker/request_property_added_revision2.yaml"),
 			OperationId: "addProduct",
 		}}, errs)
 }
@@ -79,7 +80,7 @@ func TestRequiredOptionalPropertyAdded(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_added_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_property_added_revision.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }
@@ -101,7 +102,7 @@ func TestRequiredRequestPropertyRemoved(t *testing.T) {
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/products",
-		Source:      "../data/checker/request_property_added_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_added_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
 }

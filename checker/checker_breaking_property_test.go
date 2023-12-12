@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 func getReqPropFile(file string) string {
@@ -399,7 +400,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 		Level:     checker.WARN,
 		Operation: "POST",
 		Path:      "/api/roleMappings",
-		Source:    "../data/required-properties/request-property-items-2.yaml",
+		Source:    load.NewSource("../data/required-properties/request-property-items-2.yaml"),
 	})
 }
 

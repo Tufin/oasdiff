@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: increasing max length of request body
@@ -31,7 +32,7 @@ func TestRequestBodyMaxLengthDecreasedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_body_max_length_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -59,7 +60,7 @@ func TestRequestBodyMaxLengthIncreasedCheck(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_body_max_length_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -86,7 +87,7 @@ func TestRequestPropertyMaxLengthDecreasedCheck(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_body_max_length_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -113,7 +114,7 @@ func TestRequestPropertyMaxLengthIncreasedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_body_max_length_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }

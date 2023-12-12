@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: adding 'anyOf' schema to the request body or request body property
@@ -28,7 +29,7 @@ func TestRequestPropertyAnyOfAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/request_property_any_of_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/request_property_any_of_added_revision.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -37,7 +38,7 @@ func TestRequestPropertyAnyOfAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/request_property_any_of_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/request_property_any_of_added_revision.yaml"),
 			OperationId: "updatePets",
 		}}, errs)
 }
@@ -62,7 +63,7 @@ func TestRequestPropertyAnyOfRemoved(t *testing.T) {
 			Level:       checker.ERR,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/request_property_any_of_removed_revision.yaml",
+			Source:      load.NewSource("../data/checker/request_property_any_of_removed_revision.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -71,7 +72,7 @@ func TestRequestPropertyAnyOfRemoved(t *testing.T) {
 			Level:       checker.ERR,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/request_property_any_of_removed_revision.yaml",
+			Source:      load.NewSource("../data/checker/request_property_any_of_removed_revision.yaml"),
 			OperationId: "updatePets",
 		}}, errs)
 }

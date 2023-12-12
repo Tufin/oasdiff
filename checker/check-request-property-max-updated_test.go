@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: decreasing request property maximum value
@@ -29,7 +30,7 @@ func TestRequestPropertyMaxDecreasedCheck(t *testing.T) {
 		Args:        []any{"name", 10.0},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_max_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_max_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -55,7 +56,7 @@ func TestRequestPropertyMaxIncreasingCheck(t *testing.T) {
 		Args:        []any{"name", 15.0, 20.0},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_max_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_max_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -83,7 +84,7 @@ func TestRequestBodyMaxIncreasingCheck(t *testing.T) {
 		Args:        []any{20.0, 25.0},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_max_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_max_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -111,7 +112,7 @@ func TestRequestBodyMaxDecreasedCheck(t *testing.T) {
 		Args:        []any{20.0},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_max_decreased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_max_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }

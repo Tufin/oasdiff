@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: adding 'allOf' subschema to the response body or response body property
@@ -28,7 +29,7 @@ func TestResponsePropertyAllOfAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_all_of_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_all_of_added_revision.yaml"),
 			OperationId: "listPets",
 		},
 		{
@@ -37,7 +38,7 @@ func TestResponsePropertyAllOfAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_all_of_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_all_of_added_revision.yaml"),
 			OperationId: "listPets",
 		}}, errs)
 }
@@ -62,7 +63,7 @@ func TestResponsePropertyAllOfRemoved(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_all_of_removed_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_all_of_removed_revision.yaml"),
 			OperationId: "listPets",
 		},
 		{
@@ -71,7 +72,7 @@ func TestResponsePropertyAllOfRemoved(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_all_of_removed_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_all_of_removed_revision.yaml"),
 			OperationId: "listPets",
 		}}, errs)
 }

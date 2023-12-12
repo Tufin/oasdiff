@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: adding an enum value to a response property
@@ -28,7 +29,7 @@ func TestResponsePropertyEnumValueAdded(t *testing.T) {
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_enum_added_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_enum_added_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 	require.Equal(t, "Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.", errs[0].GetComment(checker.NewDefaultLocalizer()))
@@ -53,7 +54,7 @@ func TestResponseWriteOnlyPropertyEnumValueAdded(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_enum_added_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_enum_added_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

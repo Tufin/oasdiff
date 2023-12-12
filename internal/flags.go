@@ -9,8 +9,8 @@ type Flags interface {
 	toConfig() *diff.Config
 
 	getComposed() bool
-	getBase() load.Source
-	getRevision() load.Source
+	getBase() *load.Source
+	getRevision() *load.Source
 	getFlatten() bool
 	getCircularReferenceCounter() int
 	getIncludeChecks() []string
@@ -24,8 +24,8 @@ type Flags interface {
 	getFailOn() string
 	getFailOnDiff() bool
 
-	setBase(source load.Source)
-	setRevision(source load.Source)
+	setBase(source *load.Source)
+	setRevision(source *load.Source)
 
 	addExcludeElements(string)
 }

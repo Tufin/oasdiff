@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -43,7 +44,7 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					}
 				}
@@ -70,7 +71,7 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
-								Source:      source,
+								Source:      load.NewSource(source),
 							})
 						}
 					})

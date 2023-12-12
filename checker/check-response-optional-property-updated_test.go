@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: removing an optional write-only property from a response
@@ -25,7 +26,7 @@ func TestResponseOptionalPropertyUpdatedCheck(t *testing.T) {
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_optional_property_removed_revision.yaml",
+		Source:      load.NewSource("../data/checker/response_optional_property_removed_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -48,7 +49,7 @@ func TestResponseOptionalPropertyAddedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_optional_property_removed_base.yaml",
+		Source:      load.NewSource("../data/checker/response_optional_property_removed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -71,7 +72,7 @@ func TestResponseOptionalWriteOnlyPropertyRemovedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_optional_property_removed_revision.yaml",
+		Source:      load.NewSource("../data/checker/response_optional_property_removed_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -95,7 +96,7 @@ func TestResponseOptionalWriteOnlyPropertyAddedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_optional_property_removed_base.yaml",
+		Source:      load.NewSource("../data/checker/response_optional_property_removed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

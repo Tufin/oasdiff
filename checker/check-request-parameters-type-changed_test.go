@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing request path parameter type
@@ -27,7 +28,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -51,7 +52,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -75,7 +76,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -99,7 +100,7 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -123,7 +124,7 @@ func TestRequestQueryParamFormatChanged(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -147,7 +148,7 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

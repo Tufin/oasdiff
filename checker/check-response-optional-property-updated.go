@@ -3,6 +3,7 @@ package checker
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -58,7 +59,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
-								Source:      source,
+								Source:      load.NewSource(source),
 							})
 						})
 					CheckAddedPropertiesDiff(
@@ -81,7 +82,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
-								Source:      source,
+								Source:      load.NewSource(source),
 							})
 						})
 				}

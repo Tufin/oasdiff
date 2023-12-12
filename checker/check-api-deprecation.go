@@ -5,6 +5,7 @@ import (
 
 	"cloud.google.com/go/civil"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -41,7 +42,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -55,7 +56,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -71,7 +72,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -86,7 +87,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -98,7 +99,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				Operation:   operation,
 				OperationId: op.OperationID,
 				Path:        path,
-				Source:      source,
+				Source:      load.NewSource(source),
 			})
 		}
 	}

@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing request body type
@@ -28,7 +29,7 @@ func TestRequestBodyTypeChangedCheck(t *testing.T) {
 		Args:        []any{"object", "", "array", ""},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -53,7 +54,7 @@ func TestRequestBodyFormatChangedCheck(t *testing.T) {
 		Args:        []any{"object", "", "object", "uuid"},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -76,7 +77,7 @@ func TestRequestPropertyTypeChangedCheck(t *testing.T) {
 		Args:        []any{"age", "integer", "int32", "string", "string"},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_type_changed_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_revision.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -99,7 +100,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 		Args:        []any{"colors", "array", "", "object", ""},
 		Operation:   "POST",
 		Path:        "/dogs",
-		Source:      "../data/checker/request_property_type_changed_revision_array_to_object.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_revision_array_to_object.yaml"),
 		OperationId: "addDog",
 	}, errs[0])
 	require.Equal(t, checker.ApiChange{
@@ -108,7 +109,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 		Args:        []any{"array", "", "object", ""},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_type_changed_revision_array_to_object.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_revision_array_to_object.yaml"),
 		OperationId: "addPet",
 	}, errs[1])
 }
@@ -131,7 +132,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 		Args:        []any{"colors", "object", "", "array", ""},
 		Operation:   "POST",
 		Path:        "/dogs",
-		Source:      "../data/checker/request_property_type_changed_base_array_to_object.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_base_array_to_object.yaml"),
 		OperationId: "addDog",
 	}, errs[0])
 	require.Equal(t, checker.ApiChange{
@@ -140,7 +141,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 		Args:        []any{"object", "", "array", ""},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_type_changed_base_array_to_object.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_base_array_to_object.yaml"),
 		OperationId: "addPet",
 	}, errs[1])
 }
@@ -165,7 +166,7 @@ func TestRequestPropertyFormatChangedCheck(t *testing.T) {
 		Args:        []any{"age", "integer", "int32", "integer", "uuid"},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }
@@ -190,7 +191,7 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 		Args:        []any{"age", "integer", "int32", "number", "int32"},
 		Operation:   "POST",
 		Path:        "/pets",
-		Source:      "../data/checker/request_property_type_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/request_property_type_changed_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
 }

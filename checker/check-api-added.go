@@ -3,6 +3,7 @@ package checker
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -22,7 +23,7 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 			Operation:   opName,
 			OperationId: opConfig.OperationID,
 			Path:        path,
-			Source:      (*operationsSources)[opConfig],
+			Source:      load.NewSource((*operationsSources)[opConfig]),
 		})
 	}
 

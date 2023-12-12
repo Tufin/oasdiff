@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: adding a required property to response body is detected
@@ -26,7 +27,7 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_required_property_added_revision.yaml",
+		Source:      load.NewSource("../data/checker/response_required_property_added_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -49,7 +50,7 @@ func TestResponseRequiredPropertyRemoved(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_required_property_added_base.yaml",
+		Source:      load.NewSource("../data/checker/response_required_property_added_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -74,7 +75,7 @@ func TestResponseRequiredWriteOnlyPropertyAdded(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_required_property_added_revision.yaml",
+		Source:      load.NewSource("../data/checker/response_required_property_added_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -98,7 +99,7 @@ func TestResponseRequiredWriteOnlyPropertyRemoved(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_required_property_added_base.yaml",
+		Source:      load.NewSource("../data/checker/response_required_property_added_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

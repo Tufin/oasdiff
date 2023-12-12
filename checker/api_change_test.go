@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/load"
 )
 
 var apiChange = checker.ApiChange{
@@ -15,7 +16,7 @@ var apiChange = checker.ApiChange{
 	Operation:       "GET",
 	OperationId:     "123",
 	Path:            "/test",
-	Source:          "source",
+	Source:          load.NewSource("source"),
 	SourceFile:      "sourceFile",
 	SourceLine:      1,
 	SourceLineEnd:   2,

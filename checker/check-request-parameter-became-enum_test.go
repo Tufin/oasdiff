@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing request parameter type to enum
@@ -25,7 +26,7 @@ func TestRequestParameterBecameEnum(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_became_enum_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_became_enum_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 	require.Equal(t, "the 'path' request parameter 'groupId' was restricted to a list of enum values", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))

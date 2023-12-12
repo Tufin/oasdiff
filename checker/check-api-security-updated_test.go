@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: adding a new global security to the API
@@ -103,7 +104,7 @@ func TestAPISecurityAdded(t *testing.T) {
 		Level:     checker.INFO,
 		Operation: "POST",
 		Path:      "/subscribe",
-		Source:    "../data/checker/api_security_added_revision.yaml",
+		Source:    load.NewSource("../data/checker/api_security_added_revision.yaml"),
 	}, errs[0])
 	require.Equal(t, "the endpoint scheme security 'petstore_auth' was added to the API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
@@ -125,7 +126,7 @@ func TestAPISecurityDeleted(t *testing.T) {
 		Level:     checker.INFO,
 		Operation: "POST",
 		Path:      "/subscribe",
-		Source:    "../data/checker/api_security_added_base.yaml",
+		Source:    load.NewSource("../data/checker/api_security_added_base.yaml"),
 	}, errs[0])
 	require.Equal(t, "the endpoint scheme security 'petstore_auth' was removed from the API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
@@ -147,7 +148,7 @@ func TestAPISecurityScopeRemoved(t *testing.T) {
 		Level:     checker.INFO,
 		Operation: "POST",
 		Path:      "/subscribe",
-		Source:    "../data/checker/api_security_updated_revision.yaml",
+		Source:    load.NewSource("../data/checker/api_security_updated_revision.yaml"),
 	}, errs[0])
 	require.Equal(t, "the security scope 'read:pets' was removed from the endpoint's security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
@@ -169,7 +170,7 @@ func TestAPISecurityScopeAdded(t *testing.T) {
 		Level:     checker.INFO,
 		Operation: "POST",
 		Path:      "/subscribe",
-		Source:    "../data/checker/api_security_updated_base.yaml",
+		Source:    load.NewSource("../data/checker/api_security_updated_base.yaml"),
 	}, errs[0])
 	require.Equal(t, "the security scope 'read:pets' was added to the endpoint's security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
