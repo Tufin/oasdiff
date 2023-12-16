@@ -9,17 +9,17 @@ import (
 
 // ComponentChange represnts a change in the Components Section: https://swagger.io/docs/specification/components/
 type ComponentChange struct {
-	Id        string `json:"id,omitempty" yaml:"id,omitempty"`
-	Args      []any  `json:"-" yaml:"-"`
-	Comment   string `json:"comment,omitempty" yaml:"comment,omitempty"`
-	Level     Level  `json:"level" yaml:"level"`
-	Component string `json:"component,omitempty" yaml:"component,omitempty"`
+	Id        string
+	Args      []any
+	Comment   string
+	Level     Level
+	Component string
 
-	SourceFile      string `json:"-" yaml:"-"`
-	SourceLine      int    `json:"-" yaml:"-"`
-	SourceLineEnd   int    `json:"-" yaml:"-"`
-	SourceColumn    int    `json:"-" yaml:"-"`
-	SourceColumnEnd int    `json:"-" yaml:"-"`
+	SourceFile      string
+	SourceLine      int
+	SourceLineEnd   int
+	SourceColumn    int
+	SourceColumnEnd int
 }
 
 func (c ComponentChange) GetSection() string {

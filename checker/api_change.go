@@ -10,20 +10,20 @@ import (
 
 // ApiChange represnts a change in the Paths Section of an OpenAPI spec
 type ApiChange struct {
-	Id          string `json:"id,omitempty" yaml:"id,omitempty"`
+	Id          string
 	Args        []any
-	Comment     string       `json:"comment,omitempty" yaml:"comment,omitempty"`
-	Level       Level        `json:"level" yaml:"level"`
-	Operation   string       `json:"operation,omitempty" yaml:"operation,omitempty"`
-	OperationId string       `json:"operationId,omitempty" yaml:"operationId,omitempty"`
-	Path        string       `json:"path,omitempty" yaml:"path,omitempty"`
-	Source      *load.Source `json:"-" yaml:"-"`
+	Comment     string
+	Level       Level
+	Operation   string
+	OperationId string
+	Path        string
+	Source      *load.Source
 
-	SourceFile      string `json:"-" yaml:"-"`
-	SourceLine      int    `json:"-" yaml:"-"`
-	SourceLineEnd   int    `json:"-" yaml:"-"`
-	SourceColumn    int    `json:"-" yaml:"-"`
-	SourceColumnEnd int    `json:"-" yaml:"-"`
+	SourceFile      string
+	SourceLine      int
+	SourceLineEnd   int
+	SourceColumn    int
+	SourceColumnEnd int
 }
 
 func (c ApiChange) GetSection() string {

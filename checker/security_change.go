@@ -9,16 +9,16 @@ import (
 
 // SecurityChange represents a change in the Security Section (not to be confised with components/securitySchemes)
 type SecurityChange struct {
-	Id      string `json:"id,omitempty" yaml:"id,omitempty"`
-	Args    []any  `json:"-" yaml:"-"`
-	Comment string `json:"comment,omitempty" yaml:"comment,omitempty"`
-	Level   Level  `json:"level" yaml:"level"`
+	Id      string
+	Args    []any
+	Comment string
+	Level   Level
 
-	SourceFile      string `json:"-" yaml:"-"`
-	SourceLine      int    `json:"-" yaml:"-"`
-	SourceLineEnd   int    `json:"-" yaml:"-"`
-	SourceColumn    int    `json:"-" yaml:"-"`
-	SourceColumnEnd int    `json:"-" yaml:"-"`
+	SourceFile      string
+	SourceLine      int
+	SourceLineEnd   int
+	SourceColumn    int
+	SourceColumnEnd int
 }
 
 func (c SecurityChange) GetSection() string {

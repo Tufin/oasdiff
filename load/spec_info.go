@@ -8,6 +8,7 @@ import (
 	"github.com/yargevad/filepathx"
 )
 
+// SpecInfo contains information about an OpenAPI spec and its metadata
 type SpecInfo struct {
 	Url     string
 	Spec    *openapi3.T
