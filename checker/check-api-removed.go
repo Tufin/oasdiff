@@ -29,7 +29,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 		for operation := range diffReport.PathsDiff.Base.Value(path).Operations() {
 			op := diffReport.PathsDiff.Base.Value(path).Operations()[operation]
 			if !op.Deprecated {
-				source := "original_source=" + (*operationsSources)[op]
+				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
 					Id:          APIPathRemovedWithoutDeprecationId,
 					Level:       ERR,
@@ -42,7 +42,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			}
 			rawDate, date, err := getSunsetDate(op.Extensions)
 			if err != nil {
-				source := "original_source=" + (*operationsSources)[op]
+				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
 					Id:          APIPathSunsetParseId,
 					Level:       ERR,
