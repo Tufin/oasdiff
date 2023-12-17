@@ -21,18 +21,10 @@ func From(loader Loader, source *Source) (*openapi3.T, error) {
 	case SourceTypeStdin:
 		return loader.LoadFromStdin()
 	case SourceTypeURL:
-		return loadFromURI(loader, source.Uri)
+		return loader.LoadFromURI(source.Uri)
 	default:
 		return loader.LoadFromFile(source.Path)
 	}
-}
-
-func loadFromURI(loader Loader, uri *url.URL) (*openapi3.T, error) {
-	oas, err := loader.LoadFromURI(uri)
-	if err != nil {
-		return nil, err
-	}
-	return oas, nil
 }
 
 func getURL(rawURL string) (*url.URL, error) {
