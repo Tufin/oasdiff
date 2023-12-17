@@ -67,3 +67,19 @@ func TestApiChange_MultiLineError_NoComment(t *testing.T) {
 
 	require.Equal(t, "error\t[change_id] at source\t\n\tin API GET /test\n\t\tThis is a breaking change.", apiChangeNoComment.MultiLineError(MockLocalizer, checker.ColorNever))
 }
+
+func TestApiChange_SourceFile(t *testing.T) {
+	apiChangeSourceFile := apiChange
+	apiChangeSourceFile.SourceFile = ""
+	apiChangeSourceFile.Source = load.NewSource("spec.yaml")
+
+	require.Equal(t, "spec.yaml", apiChangeSourceFile.GetSourceFile())
+}
+
+func TestApiChange_SourceUrl(t *testing.T) {
+	apiChangeSourceFile := apiChange
+	apiChangeSourceFile.SourceFile = ""
+	apiChangeSourceFile.Source = load.NewSource("http://google.com/spec.yaml")
+
+	require.Equal(t, "", apiChangeSourceFile.GetSourceFile())
+}
