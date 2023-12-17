@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -40,7 +41,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
-								Source:      source,
+								Source:      load.NewSource(source),
 							})
 						}
 					}
@@ -71,7 +72,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					})
 			}

@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/utils"
 )
 
@@ -29,7 +30,7 @@ func TestResponseDiscriminatorUpdatedCheckAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_added_revision.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -38,7 +39,7 @@ func TestResponseDiscriminatorUpdatedCheckAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_added_revision.yaml"),
 			OperationId: "updatePets",
 		}}, errs)
 }
@@ -63,7 +64,7 @@ func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_added_base.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_added_base.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -72,7 +73,7 @@ func TestResponseDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_added_base.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_added_base.yaml"),
 			OperationId: "updatePets",
 		}}, errs)
 }
@@ -97,7 +98,7 @@ func TestResponseDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_added_property_name_changed.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_added_property_name_changed.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -106,7 +107,7 @@ func TestResponseDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_added_property_name_changed.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_added_property_name_changed.yaml"),
 			OperationId: "updatePets",
 		}}, errs)
 }
@@ -131,7 +132,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_mapping_changed.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_mapping_changed.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -140,7 +141,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_mapping_changed.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_mapping_changed.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -149,7 +150,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_mapping_changed.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_mapping_changed.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -158,7 +159,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_mapping_changed.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_mapping_changed.yaml"),
 			OperationId: "updatePets",
 		},
 		{
@@ -167,7 +168,7 @@ func TestResponseDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "POST",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_discriminator_mapping_changed.yaml",
+			Source:      load.NewSource("../data/checker/response_property_discriminator_mapping_changed.yaml"),
 			OperationId: "updatePets",
 		}}, errs)
 }

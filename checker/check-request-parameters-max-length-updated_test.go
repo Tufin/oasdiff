@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: increasing maxLength of request parameters
@@ -25,7 +26,7 @@ func TestRequestParameterMaxLengthIncreasedCheck(t *testing.T) {
 		Level:     checker.INFO,
 		Operation: "POST",
 		Path:      "/test",
-		Source:    "../data/checker/request_parameter_max_length_updated_revision.yaml",
+		Source:    load.NewSource("../data/checker/request_parameter_max_length_updated_revision.yaml"),
 	}, errs[0])
 }
 
@@ -46,6 +47,6 @@ func TestRequestParameterMaxLengthDecreasedCheck(t *testing.T) {
 		Level:     checker.ERR,
 		Operation: "POST",
 		Path:      "/test",
-		Source:    "../data/checker/request_parameter_max_length_updated_base.yaml",
+		Source:    load.NewSource("../data/checker/request_parameter_max_length_updated_base.yaml"),
 	}, errs[0])
 }

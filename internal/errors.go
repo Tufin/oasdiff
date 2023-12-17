@@ -18,14 +18,14 @@ func getErrInvalidFlags(err error) *ReturnError {
 	}
 }
 
-func getErrFailedToLoadSpec(what string, source load.Source, err error) *ReturnError {
+func getErrFailedToLoadSpec(what string, source *load.Source, err error) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("failed to load %s spec from %s with %v", what, source.Out(), err),
 		Code:  102,
 	}
 }
 
-func getErrFailedToFlattenSpec(what string, source load.Source, err error) *ReturnError {
+func getErrFailedToFlattenSpec(what string, source *load.Source, err error) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("failed to flatten %s spec from %s with %v", what, source.Out(), err),
 		Code:  102,

@@ -6,8 +6,8 @@ import (
 )
 
 type ChangelogFlags struct {
-	base                     load.Source
-	revision                 load.Source
+	base                     *load.Source
+	revision                 *load.Source
 	composed                 bool
 	prefixBase               string
 	prefixRevision           string
@@ -47,11 +47,11 @@ func (flags *ChangelogFlags) getComposed() bool {
 	return flags.composed
 }
 
-func (flags *ChangelogFlags) getBase() load.Source {
+func (flags *ChangelogFlags) getBase() *load.Source {
 	return flags.base
 }
 
-func (flags *ChangelogFlags) getRevision() load.Source {
+func (flags *ChangelogFlags) getRevision() *load.Source {
 	return flags.revision
 }
 
@@ -103,11 +103,11 @@ func (flags *ChangelogFlags) getFailOnDiff() bool {
 	return false
 }
 
-func (flags *ChangelogFlags) setBase(source load.Source) {
+func (flags *ChangelogFlags) setBase(source *load.Source) {
 	flags.base = source
 }
 
-func (flags *ChangelogFlags) setRevision(source load.Source) {
+func (flags *ChangelogFlags) setRevision(source *load.Source) {
 	flags.revision = source
 }
 

@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: adding 'oneOf' schema to the response body or response body property
@@ -28,7 +29,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_one_of_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_one_of_added_revision.yaml"),
 			OperationId: "listPets",
 		},
 		{
@@ -37,7 +38,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_one_of_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_one_of_added_revision.yaml"),
 			OperationId: "listPets",
 		},
 		{
@@ -46,7 +47,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_one_of_added_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_one_of_added_revision.yaml"),
 			OperationId: "listPets",
 		}}, errs)
 }
@@ -71,7 +72,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_one_of_removed_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_one_of_removed_revision.yaml"),
 			OperationId: "listPets",
 		},
 		{
@@ -80,7 +81,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_one_of_removed_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_one_of_removed_revision.yaml"),
 			OperationId: "listPets",
 		},
 		{
@@ -89,7 +90,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
-			Source:      "../data/checker/response_property_one_of_removed_revision.yaml",
+			Source:      load.NewSource("../data/checker/response_property_one_of_removed_revision.yaml"),
 			OperationId: "listPets",
 		}}, errs)
 }

@@ -45,8 +45,8 @@ func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, o
 		var params = []string{
 			"title=" + change.GetId(),
 		}
-		if change.GetSource() != "" {
-			params = append(params, "file="+change.GetSource())
+		if change.GetSourceFile() != "" {
+			params = append(params, "file="+change.GetSourceFile())
 		}
 		if change.GetSourceColumn() != 0 {
 			params = append(params, "col="+strconv.Itoa(change.GetSourceColumn()+1))

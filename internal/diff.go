@@ -117,7 +117,7 @@ func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 		return nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
 	}
 
-	if flags.getBase().Stdin && flags.getRevision().Stdin {
+	if flags.getBase().IsStdin() && flags.getRevision().IsStdin() {
 		// io.ReadAll can only read stdin once, so in this edge case, we copy base into revision
 		s2.Spec = s1.Spec
 	}
@@ -169,7 +169,7 @@ func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 	return newDiffResult(diffReport, operationsSources, nil), nil
 }
 
-func mergeAllOf(title string, specInfos []*load.SpecInfo, source load.Source) *ReturnError {
+func mergeAllOf(title string, specInfos []*load.SpecInfo, source *load.Source) *ReturnError {
 
 	var err error
 

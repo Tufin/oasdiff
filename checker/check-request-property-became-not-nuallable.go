@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -41,7 +42,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							Level:     ERR,
 							Operation: operation,
 							Path:      path,
-							Source:    source,
+							Source:    load.NewSource(source),
 
 							OperationId: operationItem.Revision.OperationID,
 						})
@@ -51,7 +52,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							Level:     INFO,
 							Operation: operation,
 							Path:      path,
-							Source:    source,
+							Source:    load.NewSource(source),
 
 							OperationId: operationItem.Revision.OperationID,
 						})
@@ -75,7 +76,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 								Args:      []any{propName},
 								Operation: operation,
 								Path:      path,
-								Source:    source,
+								Source:    load.NewSource(source),
 
 								OperationId: operationItem.Revision.OperationID,
 							})
@@ -86,7 +87,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 								Args:      []any{propName},
 								Operation: operation,
 								Path:      path,
-								Source:    source,
+								Source:    load.NewSource(source),
 
 								OperationId: operationItem.Revision.OperationID,
 							})

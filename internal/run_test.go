@@ -11,6 +11,7 @@ import (
 	"github.com/oasdiff/telemetry/model"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/formatters"
 	"github.com/tufin/oasdiff/internal"
 	"gopkg.in/yaml.v3"
 )
@@ -106,11 +107,11 @@ func Test_DiffInvalidFormat(t *testing.T) {
 func Test_BreakingChangesIncludeChecks(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/run_test/breaking_changes_include_checks_base.yaml ../data/run_test/breaking_changes_include_checks_revision.yaml --include-checks response-non-success-status-removed,api-tag-removed --format json"), &stdout, io.Discard))
-	bc := []checker.ApiChange{}
+	bc := formatters.Changes{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
 	require.Len(t, bc, 2)
 	for _, c := range bc {
-		require.Equal(t, c.GetLevel(), checker.ERR)
+		require.Equal(t, c.Level, checker.ERR)
 	}
 }
 
@@ -167,7 +168,7 @@ func Test_BreakingChangesFailOnWarnsNoDiff(t *testing.T) {
 func Test_BreakingChangesIgnoreErrs(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --err-ignore ../data/ignore-err-example.txt --format json"), &stdout, io.Discard))
-	bc := []checker.ApiChange{}
+	bc := formatters.Changes{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
 	require.Len(t, bc, 5)
 }
@@ -175,7 +176,7 @@ func Test_BreakingChangesIgnoreErrs(t *testing.T) {
 func Test_BreakingChangesIgnoreErrsAndWarns(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --err-ignore ../data/ignore-err-example.txt --warn-ignore ../data/ignore-warn-example.txt --format json"), &stdout, io.Discard))
-	bc := []checker.ApiChange{}
+	bc := formatters.Changes{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
 	require.Len(t, bc, 4)
 }
@@ -183,7 +184,7 @@ func Test_BreakingChangesIgnoreErrsAndWarns(t *testing.T) {
 func Test_BreakingChangesIgnoreErrsApiSchemaOptional(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --err-ignore ../data/ignore-err-example.txt --warn-ignore ../data/ignore-warn-example.txt --include-checks api-schema-removed --format json"), &stdout, io.Discard))
-	bc := []checker.ApiChange{}
+	bc := formatters.Changes{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
 	require.Len(t, bc, 4)
 }
@@ -233,7 +234,7 @@ func Test_DuplicatePathsOK(t *testing.T) {
 func Test_Changelog(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_base.yaml ../data/run_test/changelog_revision.yaml --format json"), &stdout, io.Discard))
-	cl := []checker.ApiChange{}
+	cl := formatters.Changes{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 1)
 }
@@ -241,22 +242,22 @@ func Test_Changelog(t *testing.T) {
 func Test_BreakingChangesChangelogOptionalCheckersAreInfoLevel(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_include_checks_base.yaml ../data/run_test/changelog_include_checks_revision.yaml --format json"), &stdout, io.Discard))
-	cl := []checker.ApiChange{}
+	cl := formatters.Changes{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 2)
 	for _, c := range cl {
-		require.Equal(t, c.GetLevel(), checker.INFO)
+		require.Equal(t, c.Level, checker.INFO)
 	}
 }
 
 func Test_BreakingChangesChangelogOptionalCheckersAreErrorLevelWhenSpecified(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_include_checks_base.yaml ../data/run_test/changelog_include_checks_revision.yaml --format json --include-checks api-tag-removed,response-non-success-status-removed"), &stdout, io.Discard))
-	cl := []checker.ApiChange{}
+	cl := formatters.Changes{}
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
 	require.Len(t, cl, 2)
 	for _, c := range cl {
-		require.Equal(t, c.GetLevel(), checker.ERR)
+		require.Equal(t, c.Level, checker.ERR)
 	}
 }
 

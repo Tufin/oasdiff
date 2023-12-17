@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/load"
 )
 
 var apiChange = checker.ApiChange{
@@ -15,7 +16,7 @@ var apiChange = checker.ApiChange{
 	Operation:       "GET",
 	OperationId:     "123",
 	Path:            "/test",
-	Source:          "source",
+	Source:          load.NewSource("source"),
 	SourceFile:      "sourceFile",
 	SourceLine:      1,
 	SourceLineEnd:   2,
@@ -65,4 +66,20 @@ func TestApiChange_MultiLineError_NoComment(t *testing.T) {
 	apiChangeNoComment.Comment = ""
 
 	require.Equal(t, "error\t[change_id] at source\t\n\tin API GET /test\n\t\tThis is a breaking change.", apiChangeNoComment.MultiLineError(MockLocalizer, checker.ColorNever))
+}
+
+func TestApiChange_SourceFile(t *testing.T) {
+	apiChangeSourceFile := apiChange
+	apiChangeSourceFile.SourceFile = ""
+	apiChangeSourceFile.Source = load.NewSource("spec.yaml")
+
+	require.Equal(t, "spec.yaml", apiChangeSourceFile.GetSourceFile())
+}
+
+func TestApiChange_SourceUrl(t *testing.T) {
+	apiChangeSourceFile := apiChange
+	apiChangeSourceFile.SourceFile = ""
+	apiChangeSourceFile.Source = load.NewSource("http://google.com/spec.yaml")
+
+	require.Equal(t, "", apiChangeSourceFile.GetSourceFile())
 }

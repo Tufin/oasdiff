@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing response body property default value
@@ -24,7 +25,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_default_value_changed_revision.yaml",
+		Source:      load.NewSource("../data/checker/response_property_default_value_changed_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueChangedId,
@@ -32,7 +33,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_default_value_changed_revision.yaml",
+		Source:      load.NewSource("../data/checker/response_property_default_value_changed_revision.yaml"),
 		OperationId: "createOneGroup",
 	}}, errs)
 }
@@ -55,7 +56,7 @@ func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -80,7 +81,7 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueAddedId,
@@ -88,7 +89,7 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}}, errs)
 }
@@ -113,7 +114,7 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, {
 		Id:          checker.ResponsePropertyDefaultValueRemovedId,
@@ -121,7 +122,7 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_property_default_value_changed_base.yaml",
+		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}}, errs)
 }

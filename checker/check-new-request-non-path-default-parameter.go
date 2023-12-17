@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -46,7 +47,7 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 						Operation:   operation,
 						OperationId: operationItem.OperationID,
 						Path:        path,
-						Source:      (*operationsSources)[operationItem],
+						Source:      load.NewSource((*operationsSources)[operationItem]),
 					})
 				}
 			}

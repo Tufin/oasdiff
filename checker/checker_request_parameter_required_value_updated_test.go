@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // BC: changing an existing header param from optional to required is breaking
@@ -27,7 +28,7 @@ func TestBreaking_HeaderParamBecameRequired(t *testing.T) {
 		Level:     checker.ERR,
 		Operation: "GET",
 		Path:      "/api/{domain}/{project}/install-command",
-		Source:    "../data/openapi-test1.yaml",
+		Source:    load.NewSource("../data/openapi-test1.yaml"),
 	}, errs[0])
 }
 
@@ -49,6 +50,6 @@ func TestBreaking_HeaderParamBecameOptional(t *testing.T) {
 		Level:     checker.INFO,
 		Operation: "GET",
 		Path:      "/api/{domain}/{project}/install-command",
-		Source:    "../data/openapi-test1.yaml",
+		Source:    load.NewSource("../data/openapi-test1.yaml"),
 	}, errs[0])
 }

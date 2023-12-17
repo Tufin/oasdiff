@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: increasing minItems value of request parameter
@@ -25,7 +26,7 @@ func TestRequestParameterMinItemsIncreased(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_min_items_increased_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_min_items_increased_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -47,7 +48,7 @@ func TestRequestParameterMinItemsDecreased(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_parameter_min_items_increased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_min_items_increased_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

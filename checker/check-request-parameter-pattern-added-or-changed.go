@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -47,7 +48,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					} else if patternDiff.To == "" {
 						result = append(result, ApiChange{
@@ -57,7 +58,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					} else {
 						level := WARN
@@ -74,7 +75,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
-							Source:      source,
+							Source:      load.NewSource(source),
 						})
 					}
 				}

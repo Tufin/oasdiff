@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing required response property to write-only
@@ -28,7 +29,7 @@ func TestResponseRequiredPropertyBecameWriteOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_required_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/response_required_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -54,7 +55,7 @@ func TestResponseRequiredPropertyBecameNotWriteOnly(t *testing.T) {
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_required_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/response_required_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 	require.Equal(t, "It is valid only if the property was always returned before the specification has been changed", errs[0].GetComment(checker.NewDefaultLocalizer()))
@@ -81,7 +82,7 @@ func TestResponseRequiredPropertyBecameReadOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_required_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/response_required_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -107,7 +108,7 @@ func TestResponseRequiredPropertyBecameNonReadOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_required_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/response_required_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

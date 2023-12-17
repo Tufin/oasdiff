@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing optional response property to write-only
@@ -28,7 +29,7 @@ func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/response_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -53,7 +54,7 @@ func TestResponseOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/response_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -78,7 +79,7 @@ func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/response_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -104,7 +105,7 @@ func TestResponseOptionalPropertyBecameNonReadOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/response_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/response_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

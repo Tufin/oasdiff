@@ -6,8 +6,8 @@ import (
 )
 
 type DiffFlags struct {
-	base                     load.Source
-	revision                 load.Source
+	base                     *load.Source
+	revision                 *load.Source
 	composed                 bool
 	prefixBase               string
 	prefixRevision           string
@@ -40,11 +40,11 @@ func (flags *DiffFlags) getComposed() bool {
 	return flags.composed
 }
 
-func (flags *DiffFlags) getBase() load.Source {
+func (flags *DiffFlags) getBase() *load.Source {
 	return flags.base
 }
 
-func (flags *DiffFlags) getRevision() load.Source {
+func (flags *DiffFlags) getRevision() *load.Source {
 	return flags.revision
 }
 
@@ -96,11 +96,11 @@ func (flags *DiffFlags) getFailOnDiff() bool {
 	return flags.failOnDiff
 }
 
-func (flags *DiffFlags) setBase(source load.Source) {
+func (flags *DiffFlags) setBase(source *load.Source) {
 	flags.base = source
 }
 
-func (flags *DiffFlags) setRevision(source load.Source) {
+func (flags *DiffFlags) setRevision(source *load.Source) {
 	flags.revision = source
 }
 

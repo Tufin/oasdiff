@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing optional request property to write-only
@@ -28,7 +29,7 @@ func TestRequestOptionalPropertyBecameWriteOnly(t *testing.T) {
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Level:       checker.INFO,
-		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/request_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -53,7 +54,7 @@ func TestRequestOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/request_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -78,7 +79,7 @@ func TestRequestOptionalPropertyBecameReadOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/request_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -103,7 +104,7 @@ func TestRequestOptionalPropertyBecameNonReadOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/request_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -128,7 +129,7 @@ func TestRequestRequiredPropertyBecameWriteOnly(t *testing.T) {
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Level:       checker.INFO,
-		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/request_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -153,7 +154,7 @@ func TestRequestRequiredPropertyBecameNotWriteOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/request_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -178,7 +179,7 @@ func TestRequestRequiredPropertyBecameReadOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/request_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -203,7 +204,7 @@ func TestRequestRequiredPropertyBecameNonReadOnly(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_optional_property_write_only_read_only_base.yaml",
+		Source:      load.NewSource("../data/checker/request_optional_property_write_only_read_only_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

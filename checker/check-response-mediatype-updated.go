@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -41,7 +42,7 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
-						Source:      source,
+						Source:      load.NewSource(source),
 					})
 				}
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeAdded {
@@ -52,7 +53,7 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,
-						Source:      source,
+						Source:      load.NewSource(source),
 					})
 				}
 			}

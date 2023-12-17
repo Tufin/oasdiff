@@ -8,6 +8,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -110,7 +111,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -124,7 +125,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -140,7 +141,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -166,7 +167,7 @@ func newParsingError(config *Config,
 		Operation:   operation,
 		OperationId: operationItem.OperationID,
 		Path:        path,
-		Source:      source,
+		Source:      load.NewSource(source),
 	})
 	return result
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing request property pattern
@@ -27,7 +28,7 @@ func TestRequestPropertyPatternChanged(t *testing.T) {
 		Level:     checker.WARN,
 		Operation: "POST",
 		Path:      "/test",
-		Source:    "../data/checker/request_property_pattern_added_or_changed_revision.yaml",
+		Source:    load.NewSource("../data/checker/request_property_pattern_added_or_changed_revision.yaml"),
 		Comment:   checker.PatternChangedCommentId,
 	}, errs[0])
 	require.Equal(t, "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')", errs[0].GetComment(checker.NewDefaultLocalizer()))
@@ -50,7 +51,7 @@ func TestRequestPropertyPatternAdded(t *testing.T) {
 		Level:     checker.WARN,
 		Operation: "POST",
 		Path:      "/test",
-		Source:    "../data/checker/request_property_pattern_added_or_changed_base.yaml",
+		Source:    load.NewSource("../data/checker/request_property_pattern_added_or_changed_base.yaml"),
 		Comment:   checker.PatternChangedCommentId,
 	}, errs[0])
 	require.Equal(t, "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')", errs[0].GetComment(checker.NewDefaultLocalizer()))
@@ -73,6 +74,6 @@ func TestRequestPropertyPatternRemoved(t *testing.T) {
 		Level:     checker.INFO,
 		Operation: "POST",
 		Path:      "/test",
-		Source:    "../data/checker/request_property_pattern_added_or_changed_revision.yaml",
+		Source:    load.NewSource("../data/checker/request_property_pattern_added_or_changed_revision.yaml"),
 	}, errs[0])
 }

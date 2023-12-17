@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: adding a new tag
@@ -27,7 +28,7 @@ func TestTagAdded(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/tag_added_base.yaml",
+		Source:      load.NewSource("../data/checker/tag_added_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 	require.Equal(t, "api tag 'newTag' added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -53,7 +54,7 @@ func TestTagRemoved(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/tag_removed_base.yaml",
+		Source:      load.NewSource("../data/checker/tag_removed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 	require.Equal(t, "api tag 'Test' removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -83,7 +84,7 @@ func TestTagUpdated(t *testing.T) {
 				Level:       checker.INFO,
 				Operation:   "POST",
 				Path:        "/api/v1.0/groups",
-				Source:      "../data/checker/tag_removed_base.yaml",
+				Source:      load.NewSource("../data/checker/tag_removed_base.yaml"),
 				OperationId: "createOneGroup",
 			}, errs[cl])
 		}
@@ -95,7 +96,7 @@ func TestTagUpdated(t *testing.T) {
 				Level:       checker.INFO,
 				Operation:   "POST",
 				Path:        "/api/v1.0/groups",
-				Source:      "../data/checker/tag_removed_base.yaml",
+				Source:      load.NewSource("../data/checker/tag_removed_base.yaml"),
 				OperationId: "createOneGroup",
 			}, errs[cl])
 		}

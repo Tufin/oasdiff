@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: changing request's body to required is breaking
@@ -26,7 +27,7 @@ func TestRequestBodyBecameRequired(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_body_became_required_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_became_required_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
@@ -49,7 +50,7 @@ func TestRequestBodyBecameOptional(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      "../data/checker/request_body_became_optional_base.yaml",
+		Source:      load.NewSource("../data/checker/request_body_became_optional_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }

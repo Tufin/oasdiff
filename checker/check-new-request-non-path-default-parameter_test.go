@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // BC: new header, query and cookie required request default param is breaking
@@ -31,7 +32,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Operation:   "GET",
 			OperationId: "getTest",
 			Path:        "/api/test1",
-			Source:      "../data/request_params/required-request-params.yaml",
+			Source:      load.NewSource("../data/request_params/required-request-params.yaml"),
 		},
 		{
 			Id:        checker.NewRequiredRequestDefaultParameterToExistingPathId,
@@ -39,7 +40,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Level:     3,
 			Operation: "POST",
 			Path:      "/api/test1",
-			Source:    "../data/request_params/required-request-params.yaml",
+			Source:    load.NewSource("../data/request_params/required-request-params.yaml"),
 		},
 		{
 			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
@@ -48,7 +49,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Operation:   "GET",
 			OperationId: "getTest",
 			Path:        "/api/test2",
-			Source:      "../data/request_params/required-request-params.yaml",
+			Source:      load.NewSource("../data/request_params/required-request-params.yaml"),
 		},
 		{
 			Id:          checker.NewRequiredRequestDefaultParameterToExistingPathId,
@@ -57,7 +58,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Operation:   "GET",
 			OperationId: "getTest",
 			Path:        "/api/test3",
-			Source:      "../data/request_params/required-request-params.yaml",
+			Source:      load.NewSource("../data/request_params/required-request-params.yaml"),
 		},
 		{
 			Id:          checker.NewOptionalRequestDefaultParameterToExistingPathId,
@@ -66,7 +67,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Operation:   "GET",
 			OperationId: "getTest",
 			Path:        "/api/test1",
-			Source:      "../data/request_params/required-request-params.yaml",
+			Source:      load.NewSource("../data/request_params/required-request-params.yaml"),
 		},
 		{
 			Id:        checker.NewOptionalRequestDefaultParameterToExistingPathId,
@@ -74,7 +75,7 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Level:     1,
 			Operation: "POST",
 			Path:      "/api/test1",
-			Source:    "../data/request_params/required-request-params.yaml",
+			Source:    load.NewSource("../data/request_params/required-request-params.yaml"),
 		},
 		{
 			Id:          checker.NewOptionalRequestDefaultParameterToExistingPathId,
@@ -83,6 +84,6 @@ func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *t
 			Operation:   "GET",
 			OperationId: "getTest",
 			Path:        "/api/test2",
-			Source:      "../data/request_params/required-request-params.yaml",
+			Source:      load.NewSource("../data/request_params/required-request-params.yaml"),
 		}}, errs)
 }

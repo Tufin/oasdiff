@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: removing an enum value from request parameter
@@ -26,7 +27,7 @@ func TestRequestParameterEnumValueRemovedCheck(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "GET",
 		Path:        "/test",
-		Source:      "../data/checker/request_parameter_enum_value_updated_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_enum_value_updated_revision.yaml"),
 		OperationId: "getTest",
 	}, errs[0])
 }
@@ -49,7 +50,7 @@ func TestRequestParameterEnumValueAddedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "GET",
 		Path:        "/test",
-		Source:      "../data/checker/request_parameter_enum_value_updated_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_enum_value_updated_base.yaml"),
 		OperationId: "getTest",
 	}, errs[0])
 }

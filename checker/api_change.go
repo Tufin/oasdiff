@@ -5,24 +5,25 @@ import (
 	"strings"
 
 	"github.com/TwiN/go-color"
+	"github.com/tufin/oasdiff/load"
 )
 
 // ApiChange represnts a change in the Paths Section of an OpenAPI spec
 type ApiChange struct {
-	Id          string `json:"id,omitempty" yaml:"id,omitempty"`
+	Id          string
 	Args        []any
-	Comment     string `json:"comment,omitempty" yaml:"comment,omitempty"`
-	Level       Level  `json:"level" yaml:"level"`
-	Operation   string `json:"operation,omitempty" yaml:"operation,omitempty"`
-	OperationId string `json:"operationId,omitempty" yaml:"operationId,omitempty"`
-	Path        string `json:"path,omitempty" yaml:"path,omitempty"`
-	Source      string `json:"source,omitempty" yaml:"source,omitempty"`
+	Comment     string
+	Level       Level
+	Operation   string
+	OperationId string
+	Path        string
+	Source      *load.Source
 
-	SourceFile      string `json:"-" yaml:"-"`
-	SourceLine      int    `json:"-" yaml:"-"`
-	SourceLineEnd   int    `json:"-" yaml:"-"`
-	SourceColumn    int    `json:"-" yaml:"-"`
-	SourceColumnEnd int    `json:"-" yaml:"-"`
+	SourceFile      string
+	SourceLine      int
+	SourceLineEnd   int
+	SourceColumn    int
+	SourceColumnEnd int
 }
 
 func (c ApiChange) GetSection() string {
@@ -80,11 +81,19 @@ func (c ApiChange) GetPath() string {
 }
 
 func (c ApiChange) GetSource() string {
-	return c.Source
+	return c.Source.String()
 }
 
 func (c ApiChange) GetSourceFile() string {
-	return c.SourceFile
+	if c.SourceFile != "" {
+		return c.SourceFile
+	}
+
+	if c.Source.IsFile() {
+		return c.Source.String()
+	}
+
+	return ""
 }
 
 func (c ApiChange) GetSourceLine() int {
@@ -107,10 +116,10 @@ func (c ApiChange) SingleLineError(l Localizer, colorMode ColorMode) string {
 	const format = "%s %s %s, %s API %s %s %s [%s]. %s"
 
 	if isColorEnabled(colorMode) {
-		return fmt.Sprintf(format, c.Level.PrettyString(), l("at"), c.Source, l("in"), color.InGreen(c.Operation), color.InGreen(c.Path), c.GetText(l), color.InYellow(c.Id), c.GetComment(l))
+		return fmt.Sprintf(format, c.Level.PrettyString(), l("at"), c.GetSource(), l("in"), color.InGreen(c.Operation), color.InGreen(c.Path), c.GetText(l), color.InYellow(c.Id), c.GetComment(l))
 	}
 
-	return fmt.Sprintf(format, c.Level.String(), l("at"), c.Source, l("in"), c.Operation, c.Path, c.GetUncolorizedText(l), c.Id, c.GetComment(l))
+	return fmt.Sprintf(format, c.Level.String(), l("at"), c.GetSource(), l("in"), c.Operation, c.Path, c.GetUncolorizedText(l), c.Id, c.GetComment(l))
 
 }
 
@@ -118,10 +127,10 @@ func (c ApiChange) MultiLineError(l Localizer, colorMode ColorMode) string {
 	const format = "%s\t[%s] %s %s\t\n\t%s API %s %s\n\t\t%s%s"
 
 	if isColorEnabled(colorMode) {
-		return fmt.Sprintf(format, c.Level.PrettyString(), color.InYellow(c.Id), l("at"), c.Source, l("in"), color.InGreen(c.Operation), color.InGreen(c.Path), c.GetText(l), multiLineComment(c.GetComment(l)))
+		return fmt.Sprintf(format, c.Level.PrettyString(), color.InYellow(c.Id), l("at"), c.GetSource(), l("in"), color.InGreen(c.Operation), color.InGreen(c.Path), c.GetText(l), multiLineComment(c.GetComment(l)))
 	}
 
-	return fmt.Sprintf(format, c.Level.String(), c.Id, l("at"), c.Source, l("in"), c.Operation, c.Path, c.GetUncolorizedText(l), multiLineComment(c.GetComment(l)))
+	return fmt.Sprintf(format, c.Level.String(), c.Id, l("at"), c.GetSource(), l("in"), c.Operation, c.Path, c.GetUncolorizedText(l), multiLineComment(c.GetComment(l)))
 }
 
 func multiLineComment(comment string) string {

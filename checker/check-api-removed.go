@@ -5,6 +5,7 @@ import (
 
 	"cloud.google.com/go/civil"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -28,20 +29,20 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 		for operation := range diffReport.PathsDiff.Base.Value(path).Operations() {
 			op := diffReport.PathsDiff.Base.Value(path).Operations()[operation]
 			if !op.Deprecated {
-				source := "original_source=" + (*operationsSources)[op]
+				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
 					Id:          APIPathRemovedWithoutDeprecationId,
 					Level:       ERR,
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
 			rawDate, date, err := getSunsetDate(op.Extensions)
 			if err != nil {
-				source := "original_source=" + (*operationsSources)[op]
+				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
 					Id:          APIPathSunsetParseId,
 					Level:       ERR,
@@ -49,7 +50,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -62,7 +63,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 		}
@@ -82,7 +83,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -96,7 +97,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 				continue
 			}
@@ -109,7 +110,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 		}

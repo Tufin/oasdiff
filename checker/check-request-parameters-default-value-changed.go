@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -32,7 +33,7 @@ func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 					Operation:   operation,
 					OperationId: operationItem.Revision.OperationID,
 					Path:        path,
-					Source:      source,
+					Source:      load.NewSource(source),
 				})
 			}
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {

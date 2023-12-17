@@ -8,6 +8,7 @@ import (
 	"github.com/yargevad/filepathx"
 )
 
+// SpecInfo contains information about an OpenAPI spec and its metadata
 type SpecInfo struct {
 	Url     string
 	Spec    *openapi3.T
@@ -65,7 +66,7 @@ func getVersion(spec *openapi3.T) string {
 }
 
 // LoadSpecInfo creates a SpecInfo from a local file path, a URL, or stdin
-func LoadSpecInfo(loader Loader, source Source) (*SpecInfo, error) {
+func LoadSpecInfo(loader Loader, source *Source) (*SpecInfo, error) {
 	s, err := From(loader, source)
 	if err != nil {
 		return nil, err

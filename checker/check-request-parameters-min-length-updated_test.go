@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/load"
 )
 
 // CL: increasing minLength value of request parameter
@@ -26,7 +27,7 @@ func TestRequestParameterMinLengthIncreasedCheck(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/test",
-		Source:      "../data/checker/request_parameter_min_length_increased_revision.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_min_length_increased_revision.yaml"),
 		OperationId: "createTest",
 	}, errs[0])
 }
@@ -49,7 +50,7 @@ func TestRequestParameterMinLengthDecreasedCheck(t *testing.T) {
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/test",
-		Source:      "../data/checker/request_parameter_min_length_increased_base.yaml",
+		Source:      load.NewSource("../data/checker/request_parameter_min_length_increased_base.yaml"),
 		OperationId: "createTest",
 	}, errs[0])
 }
