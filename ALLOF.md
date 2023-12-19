@@ -32,7 +32,6 @@ oasdiff flatten data/allof/simple.yaml
 
 The following schema fields are not merged:
 - Extensions
-- Default
 - Example
 - ExternalDocs
 - AllowEmptyValue
