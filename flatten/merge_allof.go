@@ -299,8 +299,8 @@ func flattenSchemas(state *state, result *openapi3.SchemaRef, schemas []*openapi
 	collection := collect(schemas)
 	var err error
 
-	result.Value.Title = collection.Title[0]
-	result.Value.Description = collection.Description[0]
+	result.Value.Title = firstNonEmptyString(collection.Title)
+	result.Value.Description = firstNonEmptyString(collection.Description)
 	result.Value = resolveNumberRange(result.Value, &collection)
 	result.Value.MinLength = findMaxValue(collection.MinLength)
 	result.Value.MaxLength = findMinValue(collection.MaxLength)
@@ -1056,4 +1056,14 @@ func resolveDefault(collection *SchemaCollection) (interface{}, error) {
 		}
 	}
 	return first, nil
+}
+
+func firstNonEmptyString(values []string) string {
+	if len(values) == 1 {
+		return values[0]
+	}
+	if len(values[0]) > 0 {
+		return values[0]
+	}
+	return values[1]
 }
