@@ -299,8 +299,8 @@ func flattenSchemas(state *state, result *openapi3.SchemaRef, schemas []*openapi
 	collection := collect(schemas)
 	var err error
 
-	result.Value.Title = firstNonEmptyString(collection.Title)
-	result.Value.Description = firstNonEmptyString(collection.Description)
+	result.Value.Title = firstOrSecondNonEmpty(collection.Title)
+	result.Value.Description = firstOrSecondNonEmpty(collection.Description)
 	result.Value = resolveNumberRange(result.Value, &collection)
 	result.Value.MinLength = findMaxValue(collection.MinLength)
 	result.Value.MaxLength = findMinValue(collection.MaxLength)
@@ -1058,11 +1058,16 @@ func resolveDefault(collection *SchemaCollection) (interface{}, error) {
 	return first, nil
 }
 
-func firstNonEmptyString(values []string) string {
+// FirstOrSecondNonEmpty returns the first non-empty string from the first two elements of a slice.
+// If both are empty or the slice is empty, it returns an empty string.
+func firstOrSecondNonEmpty(values []string) string {
+	if len(values) == 0 {
+		return ""
+	}
 	if len(values) == 1 {
 		return values[0]
 	}
-	if len(values[0]) > 0 {
+	if values[0] != "" {
 		return values[0]
 	}
 	return values[1]
