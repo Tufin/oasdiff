@@ -1172,6 +1172,27 @@ func TestMerge_Description(t *testing.T) {
 			}})
 	require.NoError(t, err)
 	require.Equal(t, "desc0", merged.Description)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:        "object",
+							Description: "desc1",
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:        "object",
+							Description: "desc2",
+						},
+					},
+				},
+			}})
+	require.NoError(t, err)
+	require.Equal(t, "desc1", merged.Description)
 }
 
 // non-conflicting types are merged successfully
@@ -1253,6 +1274,27 @@ func TestMerge_Title(t *testing.T) {
 			}})
 	require.NoError(t, err)
 	require.Equal(t, "base schema", merged.Title)
+
+	merged, err = flatten.Merge(
+		openapi3.SchemaRef{
+			Value: &openapi3.Schema{
+				AllOf: openapi3.SchemaRefs{
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:  "object",
+							Title: "first",
+						},
+					},
+					&openapi3.SchemaRef{
+						Value: &openapi3.Schema{
+							Type:  "object",
+							Title: "second",
+						},
+					},
+				},
+			}})
+	require.NoError(t, err)
+	require.Equal(t, "first", merged.Title)
 }
 
 // merge conflicting integer formats
