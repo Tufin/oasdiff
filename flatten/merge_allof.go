@@ -90,23 +90,15 @@ func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
 		if err != nil {
 			return nil, err
 		}
-		pruneFields(schema)
 	}
 
 	return result.Value, nil
 }
 
-// remove fields while maintaining an equivalent schema.
-func pruneFields(schema *openapi3.SchemaRef) {
-	if len(schema.Value.OneOf) == 1 && schema.Value.OneOf[0].Value == schema.Value {
-		schema.Value.OneOf = nil
-	}
-	if len(schema.Value.AnyOf) == 1 && schema.Value.AnyOf[0].Value == schema.Value {
-		schema.Value.AnyOf = nil
-	}
-}
-
 func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
+	allOfCopy := make(openapi3.SchemaRefs, len(baseSchemaRef.Value.AllOf))
+	copy(allOfCopy, baseSchemaRef.Value.AllOf)
+
 	schemaRefs := openapi3.SchemaRefs{baseSchemaRef}
 	schemaRefs = append(schemaRefs, baseSchemaRef.Value.AllOf...)
 	err := flattenSchemas(state, baseSchemaRef, schemaRefs)
@@ -114,7 +106,55 @@ func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
 		return err
 	}
 	baseSchemaRef.Value.AllOf = nil
+	pruneOneOf(state, baseSchemaRef, allOfCopy)
+	pruneAnyOf(baseSchemaRef)
 	return nil
+}
+
+func pruneAnyOf(schema *openapi3.SchemaRef) {
+	if len(schema.Value.AnyOf) == 1 && schema.Value.AnyOf[0].Value == schema.Value {
+		schema.Value.AnyOf = nil
+	}
+}
+
+func pruneOneOf(state *state, merged *openapi3.SchemaRef, allOf openapi3.SchemaRefs) {
+	if len(merged.Value.OneOf) == 1 && merged.Value.OneOf[0].Value == merged.Value {
+		merged.Value.OneOf = nil
+		return
+	}
+
+	for _, allOfSchema := range allOf {
+		isCircular := state.refs[allOfSchema.Ref]
+		if !isCircular {
+			continue
+		}
+
+		// check if merged is a child of allOfSchemna
+		isChild := false
+		for _, of := range allOfSchema.Value.OneOf {
+			if of.Value == merged.Value {
+				isChild = true
+			}
+		}
+
+		if !isChild {
+			continue
+		}
+
+		// check if oneOf field of allOfSchema matches the oneOf field of merged
+		mismatchFound := false
+		for i, of := range allOfSchema.Value.OneOf {
+			if of.Value != merged.Value.OneOf[i].Value {
+				mismatchFound = true
+				break
+			}
+		}
+
+		if !mismatchFound {
+			merged.Value.OneOf = nil
+			break
+		}
+	}
 }
 
 // Merge replaces objects under AllOf with a flattened equivalent

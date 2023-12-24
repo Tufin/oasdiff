@@ -1842,6 +1842,26 @@ func TestMerge_AnyOfIsNotPruned(t *testing.T) {
 	require.NotEmpty(t, merged.AnyOf)
 }
 
+func TestMerge_ComplexOneOfIsPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/prune-oneof.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["SchemaWithWithoutOneOf"])
+	require.NoError(t, err)
+	require.Empty(t, merged.OneOf)
+}
+
+func TestMerge_ComplexOneOfIsNotPruned(t *testing.T) {
+	doc := loadSpec(t, "testdata/prune-oneof.yaml")
+	merged, err := flatten.Merge(*doc.Components.Schemas["ThirdSchema"])
+	require.NoError(t, err)
+	require.NotEmpty(t, merged.OneOf)
+	require.Len(t, merged.OneOf, 2)
+
+	merged, err = flatten.Merge(*doc.Components.Schemas["ComplexSchema"])
+	require.NoError(t, err)
+	require.NotEmpty(t, merged.OneOf)
+	require.Len(t, merged.OneOf, 2)
+}
+
 func loadSpec(t *testing.T, path string) *openapi3.T {
 	ctx := context.Background()
 	sl := openapi3.NewLoader()
