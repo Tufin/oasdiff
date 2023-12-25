@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -21,6 +20,7 @@ const (
 )
 
 func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -37,18 +37,18 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			appendResultItem := func(messageId string, a ...any) {
-				result = append(result, ApiChange{
-					Id:          messageId,
-					Level:       INFO,
-					Args:        a,
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, changeGetter(
+					messageId,
+					INFO,
+					a,
+					"",
+					operation,
+					operationItem.Revision,
+					path,
+					operationItem.Revision,
+				))
 			}
 
 			for _, mediaTypeDiff := range operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified {

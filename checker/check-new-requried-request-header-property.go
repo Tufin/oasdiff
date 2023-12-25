@@ -3,7 +3,6 @@ package checker
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -12,6 +11,7 @@ const (
 )
 
 func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -21,7 +21,6 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ParametersDiff == nil {
 				continue
@@ -44,15 +43,16 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 								return
 							}
 
-							result = append(result, ApiChange{
-								Id:          NewRequiredRequestHeaderPropertyId,
-								Level:       ERR,
-								Args:        []any{paramName, propertyFullName(propertyPath, newPropertyName)},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, changeGetter(
+								NewRequiredRequestHeaderPropertyId,
+								ERR,
+								[]any{paramName, propertyFullName(propertyPath, newPropertyName)},
+								"",
+								operation,
+								operationItem.Revision,
+								path,
+								operationItem.Revision,
+							))
 						})
 				}
 			}

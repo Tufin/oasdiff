@@ -42,7 +42,7 @@ type TemplateData struct {
 	RevisionVersion string
 }
 
-func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
+func (f HTMLFormatter) RenderChangelog(changes checker.Changes, tags []string, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	tmpl := template.Must(template.New("changelog").Parse(changelog))
 
 	var out bytes.Buffer

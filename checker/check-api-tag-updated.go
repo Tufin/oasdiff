@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -11,6 +10,7 @@ const (
 )
 
 func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -23,35 +23,35 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
 			op := pathItem.Base.Operations()[operation]
-			source := (*operationsSources)[op]
 
 			if operationItem.TagsDiff == nil {
 				continue
 			}
 
 			for _, tag := range operationItem.TagsDiff.Deleted {
-				result = append(result, ApiChange{
-					Id:          APITagRemovedId,
-					Level:       config.getLogLevel(APITagRemovedId, INFO),
-					Args:        []any{tag},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
-
+				result = append(result, changeGetter(
+					APITagRemovedId,
+					INFO,
+					[]any{tag},
+					"",
+					operation,
+					op,
+					path,
+					op,
+				))
 			}
 
 			for _, tag := range operationItem.TagsDiff.Added {
-				result = append(result, ApiChange{
-					Id:          APITagAddedId,
-					Level:       config.getLogLevel(APITagAddedId, INFO),
-					Args:        []any{tag},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, changeGetter(
+					APITagAddedId,
+					INFO,
+					[]any{tag},
+					"",
+					operation,
+					op,
+					path,
+					op,
+				))
 			}
 		}
 	}

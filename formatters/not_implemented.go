@@ -23,7 +23,7 @@ func (f notImplementedFormatter) RenderBreakingChanges(checker.Changes, RenderOp
 	return notImplemented()
 }
 
-func (f notImplementedFormatter) RenderChangelog(checker.Changes, RenderOpts, *load.SpecInfoPair) ([]byte, error) {
+func (f notImplementedFormatter) RenderChangelog(checker.Changes, []string, RenderOpts, *load.SpecInfoPair) ([]byte, error) {
 	return notImplemented()
 }
 

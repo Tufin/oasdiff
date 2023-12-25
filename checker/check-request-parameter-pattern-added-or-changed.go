@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -13,6 +12,7 @@ const (
 )
 
 func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -37,29 +37,29 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 					if patternDiff == nil {
 						continue
 					}
-					source := (*operationsSources)[operationItem.Revision]
 
 					if patternDiff.From == "" {
-						result = append(result, ApiChange{
-							Id:          RequestParameterPatternAddedId,
-							Level:       WARN,
-							Args:        []any{patternDiff.To, paramLocation, paramName},
-							Comment:     PatternChangedCommentId,
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, changeGetter(
+							RequestParameterPatternAddedId,
+							WARN,
+							[]any{patternDiff.To, paramLocation, paramName},
+							PatternChangedCommentId,
+							operation,
+							operationItem.Revision,
+							path,
+							operationItem.Revision,
+						))
 					} else if patternDiff.To == "" {
-						result = append(result, ApiChange{
-							Id:          RequestParameterPatternRemovedId,
-							Level:       INFO,
-							Args:        []any{patternDiff.From, paramLocation, paramName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, changeGetter(
+							RequestParameterPatternRemovedId,
+							INFO,
+							[]any{patternDiff.From, paramLocation, paramName},
+							"",
+							operation,
+							operationItem.Revision,
+							path,
+							operationItem.Revision,
+						))
 					} else {
 						level := WARN
 						comment := PatternChangedCommentId
@@ -67,16 +67,16 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							level = INFO
 							comment = ""
 						}
-						result = append(result, ApiChange{
-							Id:          RequestParameterPatternChangedId,
-							Level:       level,
-							Args:        []any{paramLocation, paramName, patternDiff.From, patternDiff.To},
-							Comment:     comment,
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, changeGetter(
+							RequestParameterPatternChangedId,
+							level,
+							[]any{paramLocation, paramName, patternDiff.From, patternDiff.To},
+							comment,
+							operation,
+							operationItem.Revision,
+							path,
+							operationItem.Revision,
+						))
 					}
 				}
 			}

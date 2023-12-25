@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -10,6 +9,7 @@ const (
 )
 
 func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -31,7 +31,6 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 
 			mediaTypeChanges := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 
-			source := (*operationsSources)[operationItem.Revision]
 			for _, mediaTypeItem := range mediaTypeChanges {
 				if mediaTypeItem.SchemaDiff == nil {
 					continue
@@ -42,15 +41,16 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 					continue
 				}
 				for _, enumVal := range enumDiff.Deleted {
-					result = append(result, ApiChange{
-						Id:          RequestBodyEnumValueRemovedId,
-						Level:       config.getLogLevel(RequestBodyEnumValueRemovedId, INFO),
-						Args:        []any{enumVal},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, changeGetter(
+						RequestBodyEnumValueRemovedId,
+						INFO,
+						[]any{enumVal},
+						"",
+						operation,
+						operationItem.Revision,
+						path,
+						operationItem.Revision,
+					))
 				}
 			}
 		}

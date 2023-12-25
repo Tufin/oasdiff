@@ -79,12 +79,12 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 
 	if level == checker.WARN {
 		// breaking changes
-		if returnErr := outputBreakingChanges(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs); returnErr != nil {
+		if returnErr := outputBreakingChanges(flags, stdout, errs); returnErr != nil {
 			return false, returnErr
 		}
 	} else {
 		// changelog
-		if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
+		if returnErr := outputChangelog(flags, stdout, errs, diffResult.specInfoPair); returnErr != nil {
 			return false, returnErr
 		}
 	}
@@ -121,24 +121,24 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 	return errs, nil
 }
 
-func outputChangelog(format string, lang string, color string, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
+func outputChangelog(flags Flags, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
 	// formatter lookup
-	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
-		Language: lang,
+	formatter, err := formatters.Lookup(flags.getFormat(), formatters.FormatterOpts{
+		Language: flags.getLang(),
 	})
 	if err != nil {
-		return getErrUnsupportedChangelogFormat(format)
+		return getErrUnsupportedChangelogFormat(flags.getFormat())
 	}
 
 	// render
-	colorMode, err := checker.NewColorMode(color)
+	colorMode, err := checker.NewColorMode(flags.getColor())
 	if err != nil {
 		return getErrInvalidColorMode(err)
 	}
 
-	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{ColorMode: colorMode}, specInfoPair)
+	bytes, err := formatter.RenderChangelog(errs, flags.getTags(), formatters.RenderOpts{ColorMode: colorMode}, specInfoPair)
 	if err != nil {
-		return getErrFailedPrint("changelog "+format, err)
+		return getErrFailedPrint("changelog "+flags.getFormat(), err)
 	}
 
 	// print output

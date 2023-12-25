@@ -76,6 +76,10 @@ func (flags *DiffFlags) getColor() string {
 	return ""
 }
 
+func (flags *DiffFlags) getTags() []string {
+	return []string{""}
+}
+
 func (flags *DiffFlags) getWarnIgnoreFile() string {
 	return ""
 }

@@ -51,24 +51,24 @@ func runBreakingChanges(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 	return getChangelog(flags, stdout, checker.WARN)
 }
 
-func outputBreakingChanges(format string, lang string, color string, stdout io.Writer, errs checker.Changes) *ReturnError {
+func outputBreakingChanges(flags Flags, stdout io.Writer, errs checker.Changes) *ReturnError {
 	// formatter lookup
-	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
-		Language: lang,
+	formatter, err := formatters.Lookup(flags.getFormat(), formatters.FormatterOpts{
+		Language: flags.getLang(),
 	})
 	if err != nil {
-		return getErrUnsupportedBreakingChangesFormat(format)
+		return getErrUnsupportedBreakingChangesFormat(flags.getFormat())
 	}
 
 	// render
-	colorMode, err := checker.NewColorMode(color)
+	colorMode, err := checker.NewColorMode(flags.getColor())
 	if err != nil {
 		return getErrInvalidColorMode(err)
 	}
 
 	bytes, err := formatter.RenderBreakingChanges(errs, formatters.RenderOpts{ColorMode: colorMode})
 	if err != nil {
-		return getErrFailedPrint("breaking "+format, err)
+		return getErrFailedPrint("breaking "+flags.getFormat(), err)
 	}
 
 	// print output

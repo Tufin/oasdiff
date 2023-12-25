@@ -33,7 +33,7 @@ func (f YAMLFormatter) RenderBreakingChanges(changes checker.Changes, opts Rende
 	return printYAML(NewChanges(changes, f.Localizer))
 }
 
-func (f YAMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
+func (f YAMLFormatter) RenderChangelog(changes checker.Changes, tags []string, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	return printYAML(NewChanges(changes, f.Localizer))
 }
 
