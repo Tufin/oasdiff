@@ -90,23 +90,15 @@ func Merge(schema openapi3.SchemaRef) (*openapi3.Schema, error) {
 		if err != nil {
 			return nil, err
 		}
-		pruneFields(schema)
 	}
 
 	return result.Value, nil
 }
 
-// remove fields while maintaining an equivalent schema.
-func pruneFields(schema *openapi3.SchemaRef) {
-	if len(schema.Value.OneOf) == 1 && schema.Value.OneOf[0].Value == schema.Value {
-		schema.Value.OneOf = nil
-	}
-	if len(schema.Value.AnyOf) == 1 && schema.Value.AnyOf[0].Value == schema.Value {
-		schema.Value.AnyOf = nil
-	}
-}
-
 func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
+	allOfCopy := make(openapi3.SchemaRefs, len(baseSchemaRef.Value.AllOf))
+	copy(allOfCopy, baseSchemaRef.Value.AllOf)
+
 	schemaRefs := openapi3.SchemaRefs{baseSchemaRef}
 	schemaRefs = append(schemaRefs, baseSchemaRef.Value.AllOf...)
 	err := flattenSchemas(state, baseSchemaRef, schemaRefs)
@@ -114,7 +106,72 @@ func mergeCircularAllOf(state *state, baseSchemaRef *openapi3.SchemaRef) error {
 		return err
 	}
 	baseSchemaRef.Value.AllOf = nil
+	pruneOneOf(state, baseSchemaRef, allOfCopy)
+	pruneAnyOf(baseSchemaRef)
 	return nil
+}
+
+func pruneAnyOf(schema *openapi3.SchemaRef) {
+	if len(schema.Value.AnyOf) == 1 && schema.Value.AnyOf[0].Value == schema.Value {
+		schema.Value.AnyOf = nil
+	}
+}
+
+// pruneCircularOneOfInHierarchy prunes the 'oneOf' field from a merged schema when specific conditions are met.
+// Pruning criteria:
+// - The unmerged schema is a child of another parent schema, through the oneOf field.
+// - The unmerged schema contains an 'allOf' field with a circular reference to the parent schema.
+// - The merged parent and the merged child schemas contain an identical oneOf field.
+// - The merged parent schema contains a non-empty propertyName discriminator field.
+func pruneCircularOneOfInHierarchy(state *state, merged *openapi3.SchemaRef, allOf openapi3.SchemaRefs) {
+	for _, allOfSchema := range allOf {
+		isCircular := state.refs[allOfSchema.Ref]
+		if !isCircular {
+			continue
+		}
+
+		// check if merged is a child of allOfSchemna
+		isChild := false
+		for _, of := range allOfSchema.Value.OneOf {
+			if of.Value == merged.Value {
+				isChild = true
+			}
+		}
+
+		if !isChild {
+			continue
+		}
+
+		if allOfSchema.Value.Discriminator == nil || allOfSchema.Value.Discriminator.PropertyName == "" {
+			continue
+		}
+
+		if len(allOfSchema.Value.OneOf) != len(merged.Value.OneOf) {
+			continue
+		}
+
+		// check if oneOf field of allOfSchema matches the oneOf field of merged
+		mismatchFound := false
+		for i, of := range allOfSchema.Value.OneOf {
+			if of.Value != merged.Value.OneOf[i].Value {
+				mismatchFound = true
+				break
+			}
+		}
+
+		if !mismatchFound {
+			merged.Value.OneOf = nil
+			break
+		}
+	}
+}
+
+func pruneOneOf(state *state, merged *openapi3.SchemaRef, allOf openapi3.SchemaRefs) {
+	if len(merged.Value.OneOf) == 1 && merged.Value.OneOf[0].Value == merged.Value {
+		merged.Value.OneOf = nil
+		return
+	}
+	pruneCircularOneOfInHierarchy(state, merged, allOf)
 }
 
 // Merge replaces objects under AllOf with a flattened equivalent
@@ -151,6 +208,7 @@ func mergeInternal(state *state, base *openapi3.SchemaRef) (*openapi3.SchemaRef,
 	result.Value.MultipleOf = base.Value.MultipleOf
 	result.Value.MinLength = base.Value.MinLength
 	result.Value.Default = base.Value.Default
+	result.Value.Discriminator = base.Value.Discriminator
 	if base.Value.MaxLength != nil {
 		result.Value.MaxLength = openapi3.Uint64Ptr(*base.Value.MaxLength)
 	}

@@ -1,0 +1,101 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+paths: {}
+
+components:
+  schemas:
+    # BaseSchema is the parent of SchemaWithWithoutOneOf
+    # the flattened version of SchemaWithWithoutOneOf does not contain oneOf field 
+    BaseSchema:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/SchemaWithWithoutOneOf'
+        - type: object
+          properties:
+            inlineProperty:
+              type: string
+      discriminator:
+        propertyName: test
+
+    SchemaWithWithoutOneOf:
+      allOf:
+        - $ref: '#/components/schemas/BaseSchema'
+        - type: object
+          properties:
+            additionalProperty:
+              type: string
+
+    # BaseSchema is the parent of SchemaWithWithOneOf
+    # the flattened version of SchemaWithWithoutOneOf contains oneOf field, because BaseSchema does not have the discriminator field
+    BaseSchemaNoDiscriminator:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/SchemaWithOneOf'
+        - type: object
+          properties:
+            inlineProperty:
+              type: string
+
+    SchemaWithOneOf:
+      allOf:
+        - $ref: '#/components/schemas/BaseSchemaNoDiscriminator'
+        - type: object
+          properties:
+            additionalProperty:
+              type: string
+
+    # FirstSchema is not a parent of ThirdSchema
+    # the flattened version of ThirdSchema contains oneOf
+    FirstSchema:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/SecondSchema'
+        - type: object
+          properties:
+            prop1:
+              type: string
+      discriminator:
+        propertyName: test              
+
+    SecondSchema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ThirdSchema'
+
+    ThirdSchema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/FirstSchema'
+        - type: object
+          properties:
+            thirdProperty:
+              type: string
+
+    # Base is a parent of ComplexSchema
+    # the flattened version of ComplexSchema contains the oneOf of NestedSchema
+    Base:
+      type: object
+      allOf: 
+        - $ref: '#/components/schemas/ComplexSchema'
+      discriminator:
+        propertyName: test        
+      
+    ComplexSchema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Base'
+        - $ref: '#/components/schemas/NestedSchema'
+
+    NestedSchema:
+      type: object
+      oneOf:
+        - type: object
+          properties:
+            nestedProperty:
+              type: string
+        - type: object
+          properties:
+            anotherNestedProperty:
+              type: number
