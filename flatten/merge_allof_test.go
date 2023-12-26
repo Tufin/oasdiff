@@ -1860,6 +1860,11 @@ func TestMerge_ComplexOneOfIsNotPruned(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, merged.OneOf)
 	require.Len(t, merged.OneOf, 2)
+
+	merged, err = flatten.Merge(*doc.Components.Schemas["SchemaWithOneOf"])
+	require.NoError(t, err)
+	require.NotEmpty(t, merged.OneOf)
+	require.Len(t, merged.OneOf, 2)
 }
 
 func loadSpec(t *testing.T, path string) *openapi3.T {

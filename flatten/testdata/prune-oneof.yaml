@@ -15,11 +15,32 @@ components:
         - type: object
           properties:
             inlineProperty:
-              type: string                  
+              type: string
+      discriminator:
+        propertyName: test
 
     SchemaWithWithoutOneOf:
       allOf:
         - $ref: '#/components/schemas/BaseSchema'
+        - type: object
+          properties:
+            additionalProperty:
+              type: string
+
+    # BaseSchema is the parent of SchemaWithWithOneOf
+    # the flattened version of SchemaWithWithoutOneOf contains oneOf field, because BaseSchema does not have the discriminator field
+    BaseSchemaNoDiscriminator:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/SchemaWithOneOf'
+        - type: object
+          properties:
+            inlineProperty:
+              type: string
+
+    SchemaWithOneOf:
+      allOf:
+        - $ref: '#/components/schemas/BaseSchemaNoDiscriminator'
         - type: object
           properties:
             additionalProperty:
@@ -35,6 +56,8 @@ components:
           properties:
             prop1:
               type: string
+      discriminator:
+        propertyName: test              
 
     SecondSchema:
       type: object
@@ -56,6 +79,8 @@ components:
       type: object
       allOf: 
         - $ref: '#/components/schemas/ComplexSchema'
+      discriminator:
+        propertyName: test        
       
     ComplexSchema:
       type: object
