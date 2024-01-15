@@ -19,7 +19,7 @@ func TestCalc_EndpointAdded(t *testing.T) {
 
 	d, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	require.Equal(t, delta.Get(d, s1, s2), 0.25)
+	require.Equal(t, delta.Get(false, d, s1, s2), 0.25)
 }
 
 func TestCalc_EndpointAddedAndDeleted(t *testing.T) {
@@ -32,5 +32,5 @@ func TestCalc_EndpointAddedAndDeleted(t *testing.T) {
 
 	d, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	require.Equal(t, delta.Get(d, s1, s2), 1.0)
+	require.Equal(t, delta.Get(false, d, s1, s2), 1.0)
 }

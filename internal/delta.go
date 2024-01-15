@@ -12,7 +12,7 @@ import (
 
 func getDeltaCmd() *cobra.Command {
 
-	flags := DiffFlags{}
+	flags := DeltaFlags{}
 
 	cmd := cobra.Command{
 		Use:   "delta base revision [flags]",
@@ -33,6 +33,7 @@ func getDeltaCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
 	cmd.PersistentFlags().BoolVarP(&flags.flatten, "flatten", "", false, "merge subschemas under allOf before diff")
+	cmd.PersistentFlags().BoolVarP(&flags.asymmetric, "asymmetric", "", false, "perform asymmetric diff (elements of base that are missing in revision)")
 
 	return &cmd
 }
@@ -46,7 +47,7 @@ func runDelta(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 		return false, err
 	}
 
-	_, _ = fmt.Fprintf(stdout, "%g\n", delta.Get(diffResult.diffReport, diffResult.specInfoPair.Base.Spec, diffResult.specInfoPair.Revision.Spec))
+	_, _ = fmt.Fprintf(stdout, "%g\n", delta.Get(flags.getAsymmetric(), diffResult.diffReport, diffResult.specInfoPair.Base.Spec, diffResult.specInfoPair.Revision.Spec))
 
 	return false, nil
 }

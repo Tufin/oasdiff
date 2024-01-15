@@ -5,17 +5,17 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func Get(diffReport *diff.Diff, base, revision *openapi3.T) float64 {
+func Get(asymmetric bool, diffReport *diff.Diff, base, revision *openapi3.T) float64 {
 	if diffReport.Empty() {
 		return 0
 	}
 
-	d := getEndpointDelta(diffReport.EndpointsDiff, base.Paths, revision.Paths)
+	d := getEndpointDelta(asymmetric, diffReport.EndpointsDiff, base.Paths, revision.Paths)
 
 	return d
 }
 
-func getEndpointDelta(diff *diff.EndpointsDiff, paths1, paths2 *openapi3.Paths) float64 {
+func getEndpointDelta(asymmetric bool, diff *diff.EndpointsDiff, paths1, paths2 *openapi3.Paths) float64 {
 	if diff.Empty() {
 		return 0
 	}
@@ -26,6 +26,9 @@ func getEndpointDelta(diff *diff.EndpointsDiff, paths1, paths2 *openapi3.Paths) 
 	added := len(diff.Added)
 	deleted := len(diff.Deleted)
 
+	if asymmetric {
+		return devide(deleted, endpoints1)
+	}
 	return average(devide(added, endpoints2), devide(deleted, endpoints1))
 
 }

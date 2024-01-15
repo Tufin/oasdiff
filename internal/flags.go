@@ -23,6 +23,7 @@ type Flags interface {
 	getFormat() string
 	getFailOn() string
 	getFailOnDiff() bool
+	getAsymmetric() bool
 
 	setBase(source *load.Source)
 	setRevision(source *load.Source)
