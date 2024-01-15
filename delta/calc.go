@@ -3,6 +3,7 @@ package delta
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/utils"
 )
 
 func Get(asymmetric bool, diffReport *diff.Diff, base, revision *openapi3.T) float64 {
@@ -27,10 +28,9 @@ func getEndpointDelta(asymmetric bool, diff *diff.EndpointsDiff, paths1, paths2 
 	deleted := len(diff.Deleted)
 
 	if asymmetric {
-		return devide(deleted, endpoints1)
+		return utils.Devide(deleted, endpoints1)
 	}
-	return average(devide(added, endpoints2), devide(deleted, endpoints1))
-
+	return utils.Average(utils.Devide(added, endpoints2), utils.Devide(deleted, endpoints1))
 }
 
 func countEndpoints(paths *openapi3.Paths) int {
@@ -39,12 +39,4 @@ func countEndpoints(paths *openapi3.Paths) int {
 		count = count + len(pathItem.Operations())
 	}
 	return count
-}
-
-func devide(a, b int) float64 {
-	return float64(a) / float64(b)
-}
-
-func average(a, b float64) float64 {
-	return (a + b) / 2
 }

@@ -35,6 +35,18 @@ func (stringList *StringList) Minus(other StringList) StringList {
 	return stringList.ToStringSet().Minus(other.ToStringSet()).ToStringList()
 }
 
+func (stringList *StringList) CartesianProduct(other StringList) []StringPair {
+	result := make([]StringPair, stringList.Len()*other.Len())
+	i := 0
+	for _, a := range *stringList {
+		for _, b := range other {
+			result[i] = StringPair{a, b}
+			i++
+		}
+	}
+	return result
+}
+
 func (list StringList) ToStringSet() StringSet {
 	result := make(StringSet, len(list))
 
