@@ -5,6 +5,9 @@ openapi: 3.0.3
 paths:
   /api/test:
     get:
+      parameters:
+        - name: a
+          in: query
       responses:
         200:
           description: OK
