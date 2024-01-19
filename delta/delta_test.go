@@ -10,6 +10,16 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
+func TestEmpty(t *testing.T) {
+	loader := openapi3.NewLoader()
+	s1, err := loader.LoadFromFile("../data/empty.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(diff.NewConfig(), s1, s1)
+	require.NoError(t, err)
+	require.Equal(t, 0.0, delta.Get(false, d))
+}
+
 func TestEndpointAdded(t *testing.T) {
 	loader := openapi3.NewLoader()
 	s1, err := loader.LoadFromFile("../data/simple1.yaml")
