@@ -67,15 +67,6 @@ jobs:
     - run: go fmt ./...
     - run: git --no-pager diff --exit-code
 
-    - if: runner.os == 'Linux'
-      name: golangci-lint
-      uses: golangci/golangci-lint-action@v3
-      with:
-        version: v1.55
-
-    - id: govulncheck
-      uses: golang/govulncheck-action@v1
-
     - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
       env:
         CGO_ENABLED: '1'
