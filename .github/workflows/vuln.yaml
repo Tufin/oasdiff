@@ -9,18 +9,9 @@ permissions:
   # pull-requests: read
 
 jobs:
-  golangci:
-    strategy:
-      matrix:
-        go: ['1.21']
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    name: ${{ matrix.go }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
-        with:
-          go-version: ${{ matrix.go }}
-          cache: false
-      - id: govulncheck
-        uses: golang/govulncheck-action@v1
+    govulncheck_job:
+        runs-on: ubuntu-latest
+        name: Run govulncheck
+        steps:
+          - id: govulncheck
+            uses: golang/govulncheck-action@v1

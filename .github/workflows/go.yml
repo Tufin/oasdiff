@@ -2,6 +2,10 @@ name: go
 on:
   pull_request:
   push:
+
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     env:

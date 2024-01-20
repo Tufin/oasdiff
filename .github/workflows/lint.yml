@@ -5,24 +5,18 @@ on:
 
 permissions:
   contents: read
-  # Optional: allow read access to pull request. Use with `only-new-issues` option.
-  # pull-requests: read
 
 jobs:
   golangci:
-    strategy:
-      matrix:
-        go: ['1.21']
-        os: [ubuntu-latest, macos-latest] # exclude windows because it fails with timeout
-    name: ${{ matrix.go }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: lint
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
         with:
-          go-version: ${{ matrix.go }}
+          go-version: '1.21'
           cache: false
-      - name: golangci-lint
+      - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           # Require: The version of golangci-lint to use.
@@ -34,13 +28,23 @@ jobs:
           # working-directory: somedir
 
           # Optional: golangci-lint command line arguments.
-          # 
-          # Note: by default the `.golangci.yml` file should be at the root of the repository.
+          #
+          # Note: By default, the `.golangci.yml` file should be at the root of the repository.
           # The location of the configuration file can be changed by using `--config=`
-          # args: --timeout=30m --config=/my/path/.golangci.yml --issues-exit-code=0
+          # args: --timeout=30m --config=/my/path/.golangci.yml --issues-exit-code=0 
 
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           # only-new-issues: true
 
-          # Optional:The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
+          # Optional: if set to true, then all caching functionality will be completely disabled,
+          #           takes precedence over all other caching options.
+          # skip-cache: true
+
+          # Optional: if set to true, then the action won't cache or restore ~/go/pkg.
+          # skip-pkg-cache: true
+
+          # Optional: if set to true, then the action won't cache or restore ~/.cache/go-build.
+          # skip-build-cache: true
+
+          # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           # install-mode: "goinstall"
