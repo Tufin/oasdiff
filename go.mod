@@ -2,6 +2,8 @@ module github.com/tufin/oasdiff
 
 go 1.21.4
 
+toolchain go1.21.6
+
 require (
 	cloud.google.com/go v0.112.0
 	github.com/TwiN/go-color v1.4.1
