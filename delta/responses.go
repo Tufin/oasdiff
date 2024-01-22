@@ -4,14 +4,14 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func getParametersDelta(asymmetric bool, d *diff.ParametersDiffByLocation) WeightedDelta {
+func getResponsesDelta(asymmetric bool, d *diff.ResponsesDiff) WeightedDelta {
 	if d.Empty() {
 		return WeightedDelta{}
 	}
 
 	added := d.Added.Len()
 	deleted := d.Deleted.Len()
-	modified := d.Modified.Len()
+	modified := len(d.Modified)
 	unchanged := d.Unchanged.Len()
 	all := added + deleted + modified + unchanged
 

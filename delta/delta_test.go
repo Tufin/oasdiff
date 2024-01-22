@@ -119,3 +119,16 @@ func TestParameters(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, 0.25, delta.Get(true, d))
 }
+
+func TestResponses(t *testing.T) {
+	loader := openapi3.NewLoader()
+	s1, err := loader.LoadFromFile("../data/simple2.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/simple4.yaml")
+	require.NoError(t, err)
+
+	d, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	require.Equal(t, 0.0625, delta.Get(true, d))
+}

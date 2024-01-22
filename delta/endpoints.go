@@ -4,9 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func getEndpointsDelta(asymmetric bool, d *diff.EndpointsDiff) float64 {
+func getEndpointsDelta(asymmetric bool, d *diff.EndpointsDiff) WeightedDelta {
 	if d.Empty() {
-		return 0
+		return WeightedDelta{}
 	}
 
 	added := len(d.Added)
@@ -17,7 +17,10 @@ func getEndpointsDelta(asymmetric bool, d *diff.EndpointsDiff) float64 {
 
 	modifiedDelta := coefficient * getModifiedEndpointsDelta(asymmetric, d.Modified)
 
-	return ratio(asymmetric, added, deleted, modifiedDelta, all)
+	return WeightedDelta{
+		delta:  ratio(asymmetric, added, deleted, modifiedDelta, all),
+		weight: 1,
+	}
 }
 
 func getModifiedEndpointsDelta(asymmetric bool, d diff.ModifiedEndpoints) float64 {
@@ -34,7 +37,8 @@ func getModifiedEndpointDelta(asymmetric bool, d *diff.MethodDiff) float64 {
 	}
 
 	// TODO: consider additional elements of MethodDiff
-	delta := getParametersDelta(asymmetric, d.ParametersDiff)
+	paramsDelta := getParametersDelta(asymmetric, d.ParametersDiff)
+	responsesDelta := getResponsesDelta(asymmetric, d.ResponsesDiff)
 
-	return delta
+	return weightedAverage(paramsDelta, responsesDelta)
 }
