@@ -34,11 +34,7 @@ type ParamNamesByLocation map[string]utils.StringList
 
 // Len returns the number of all params in all locations
 func (params ParamNamesByLocation) Len() int {
-	result := 0
-	for _, l := range params {
-		result += l.Len()
-	}
-	return result
+	return lenNested(params)
 }
 
 // ParamDiffByLocation maps param location (path, query, header or cookie) to param diffs in this location
@@ -46,8 +42,12 @@ type ParamDiffByLocation map[string]ParamDiffs
 
 // Len returns the number of all params in all locations
 func (params ParamDiffByLocation) Len() int {
+	return lenNested(params)
+}
+
+func lenNested[T utils.StringList | ParamDiffs](mapOfList map[string]T) int {
 	result := 0
-	for _, l := range params {
+	for _, l := range mapOfList {
 		result += len(l)
 	}
 	return result
