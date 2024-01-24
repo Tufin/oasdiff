@@ -21,3 +21,18 @@ func ratio(asymmetric bool, added int, deleted int, modifiedDelta float64, all i
 
 	return (float64(added+deleted) + modifiedDelta) / float64(all)
 }
+
+func modifiedLeafDelta(asymmetric bool, modified float64) float64 {
+	if asymmetric {
+		return modified / 2
+	}
+
+	return modified
+}
+
+func boolToFloat64(b bool) float64 {
+	if b {
+		return 1.0
+	}
+	return 0.0
+}

@@ -14,18 +14,3 @@ func getSchemaDelta(asymmetric bool, d *diff.SchemaDiff) float64 {
 
 	return typeDelta
 }
-
-func modifiedLeafDelta(asymmetric bool, modified float64) float64 {
-	if asymmetric {
-		return modified / 2
-	}
-
-	return modified
-}
-
-func boolToFloat64(b bool) float64 {
-	if b {
-		return 1.0
-	}
-	return 0.0
-}

@@ -34,9 +34,10 @@ func TestEndpointAdded(t *testing.T) {
 	}
 
 	require.Equal(t, 0.5, delta.Get(false, d))
+	require.Equal(t, 0.0, delta.Get(true, d))
 }
 
-func TestEndpointDeletedAsym(t *testing.T) {
+func TestEndpointDeleted(t *testing.T) {
 	d := &diff.Diff{
 		EndpointsDiff: &diff.EndpointsDiff{
 			Deleted: diff.Endpoints{
@@ -54,6 +55,7 @@ func TestEndpointDeletedAsym(t *testing.T) {
 		},
 	}
 
+	require.Equal(t, 0.5, delta.Get(false, d))
 	require.Equal(t, 0.5, delta.Get(true, d))
 }
 
@@ -76,6 +78,7 @@ func TestEndpointAddedAndDeleted(t *testing.T) {
 	}
 
 	require.Equal(t, 1.0, delta.Get(false, d))
+	require.Equal(t, 0.5, delta.Get(true, d))
 }
 
 func TestParameters(t *testing.T) {
@@ -96,10 +99,11 @@ func TestParameters(t *testing.T) {
 		},
 	}
 
+	require.Equal(t, 0.5, delta.Get(false, d))
 	require.Equal(t, 0.5, delta.Get(true, d))
 }
 
-func TestResponses(t *testing.T) {
+func TestResponses_AddedAndDeleted(t *testing.T) {
 	d := &diff.Diff{
 		EndpointsDiff: &diff.EndpointsDiff{
 			Modified: diff.ModifiedEndpoints{
@@ -117,6 +121,33 @@ func TestResponses(t *testing.T) {
 	}
 
 	require.Equal(t, 0.5, delta.Get(false, d))
+	require.Equal(t, 0.25, delta.Get(true, d))
+}
+
+func TestResponses_Modified(t *testing.T) {
+	d := &diff.Diff{
+		EndpointsDiff: &diff.EndpointsDiff{
+			Modified: diff.ModifiedEndpoints{
+				diff.Endpoint{
+					Method: "GET",
+					Path:   "/test",
+				}: &diff.MethodDiff{
+					ResponsesDiff: &diff.ResponsesDiff{
+						Modified: diff.ModifiedResponses{
+							"200": &diff.ResponseDiff{
+								ContentDiff: &diff.ContentDiff{
+									MediaTypeAdded: utils.StringList{"json"},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	require.Equal(t, 0.25, delta.Get(false, d))
+	require.Equal(t, 0.125, delta.Get(true, d))
 }
 
 func TestSchema(t *testing.T) {
@@ -147,6 +178,7 @@ func TestSchema(t *testing.T) {
 	}
 
 	require.Equal(t, 0.25, delta.Get(false, d))
+	require.Equal(t, 0.125, delta.Get(true, d))
 }
 
 func TestSymmetric(t *testing.T) {

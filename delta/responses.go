@@ -16,7 +16,7 @@ func getResponsesDelta(asymmetric bool, d *diff.ResponsesDiff) *WeightedDelta {
 	all := added + deleted + modified + unchanged
 
 	// TODO: drill down into modified
-	modifiedDelta := coefficient * float64(modified)
+	modifiedDelta := coefficient * modifiedLeafDelta(asymmetric, float64(modified))
 
 	return NewWeightedDelta(ratio(asymmetric, added, deleted, modifiedDelta, all), all)
 }
