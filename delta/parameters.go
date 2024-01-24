@@ -4,9 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func getParametersDelta(asymmetric bool, d *diff.ParametersDiffByLocation) WeightedDelta {
+func getParametersDelta(asymmetric bool, d *diff.ParametersDiffByLocation) *WeightedDelta {
 	if d.Empty() {
-		return WeightedDelta{}
+		return &WeightedDelta{}
 	}
 
 	added := d.Added.Len()
@@ -15,11 +15,33 @@ func getParametersDelta(asymmetric bool, d *diff.ParametersDiffByLocation) Weigh
 	unchanged := d.Unchanged.Len()
 	all := added + deleted + modified + unchanged
 
-	// TODO: drill down into modified
-	modifiedDelta := coefficient * float64(modified)
+	modifiedDelta := coefficient * getModifiedParametersDelta(asymmetric, d.Modified)
 
-	return WeightedDelta{
-		delta:  ratio(asymmetric, added, deleted, modifiedDelta, all),
-		weight: all,
+	return NewWeightedDelta(
+		ratio(asymmetric, added, deleted, modifiedDelta, all),
+		all,
+	)
+}
+
+func getModifiedParametersDelta(asymmetric bool, d diff.ParamDiffByLocation) float64 {
+	weightedDeltas := make([]*WeightedDelta, len(d))
+	i := 0
+	for _, paramsDiff := range d {
+		for _, parameterDiff := range paramsDiff {
+			weightedDeltas[i] = NewWeightedDelta(getModifiedParameterDelta(asymmetric, parameterDiff), 1)
+			i++
+		}
 	}
+	return weightedAverage(weightedDeltas)
+}
+
+func getModifiedParameterDelta(asymmetric bool, d *diff.ParameterDiff) float64 {
+	if d.Empty() {
+		return 0.0
+	}
+
+	// TODO: consider additional elements of ParameterDiff
+	schemaDelta := getSchemaDelta(asymmetric, d.SchemaDiff)
+
+	return schemaDelta
 }

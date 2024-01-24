@@ -4,9 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func getResponsesDelta(asymmetric bool, d *diff.ResponsesDiff) WeightedDelta {
+func getResponsesDelta(asymmetric bool, d *diff.ResponsesDiff) *WeightedDelta {
 	if d.Empty() {
-		return WeightedDelta{}
+		return &WeightedDelta{}
 	}
 
 	added := d.Added.Len()
@@ -18,8 +18,5 @@ func getResponsesDelta(asymmetric bool, d *diff.ResponsesDiff) WeightedDelta {
 	// TODO: drill down into modified
 	modifiedDelta := coefficient * float64(modified)
 
-	return WeightedDelta{
-		delta:  ratio(asymmetric, added, deleted, modifiedDelta, all),
-		weight: all,
-	}
+	return NewWeightedDelta(ratio(asymmetric, added, deleted, modifiedDelta, all), all)
 }

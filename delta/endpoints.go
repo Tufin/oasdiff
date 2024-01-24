@@ -4,9 +4,9 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func getEndpointsDelta(asymmetric bool, d *diff.EndpointsDiff) WeightedDelta {
+func getEndpointsDelta(asymmetric bool, d *diff.EndpointsDiff) float64 {
 	if d.Empty() {
-		return WeightedDelta{}
+		return 0
 	}
 
 	added := len(d.Added)
@@ -17,18 +17,17 @@ func getEndpointsDelta(asymmetric bool, d *diff.EndpointsDiff) WeightedDelta {
 
 	modifiedDelta := coefficient * getModifiedEndpointsDelta(asymmetric, d.Modified)
 
-	return WeightedDelta{
-		delta:  ratio(asymmetric, added, deleted, modifiedDelta, all),
-		weight: 1,
-	}
+	return ratio(asymmetric, added, deleted, modifiedDelta, all)
 }
 
 func getModifiedEndpointsDelta(asymmetric bool, d diff.ModifiedEndpoints) float64 {
-	result := 0.0
+	weightedDeltas := make([]*WeightedDelta, len(d))
+	i := 0
 	for _, methodDiff := range d {
-		result += getModifiedEndpointDelta(asymmetric, methodDiff)
+		weightedDeltas[i] = NewWeightedDelta(getModifiedEndpointDelta(asymmetric, methodDiff), 1)
+		i++
 	}
-	return result
+	return weightedAverage(weightedDeltas)
 }
 
 func getModifiedEndpointDelta(asymmetric bool, d *diff.MethodDiff) float64 {
@@ -40,5 +39,5 @@ func getModifiedEndpointDelta(asymmetric bool, d *diff.MethodDiff) float64 {
 	paramsDelta := getParametersDelta(asymmetric, d.ParametersDiff)
 	responsesDelta := getResponsesDelta(asymmetric, d.ResponsesDiff)
 
-	return weightedAverage(paramsDelta, responsesDelta)
+	return weightedAverage([]*WeightedDelta{paramsDelta, responsesDelta})
 }
