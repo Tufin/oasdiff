@@ -142,7 +142,7 @@ response-property-min-items-unset: the %s response property's minItems was unset
 response-body-min-length-decreased: the response's body minLength was decreased from %s to %s
 response-property-min-length-decreased: the %s response property's minLength was decreased from %s to %s for the response status %s
 response-body-type-changed: the response's body type/format changed from %s/%s to %s/%s for status %s
-response-property-type-changed: the response's property type/format changed from %s/%s to %s/%s for status %s
+response-property-type-changed: the %s response's property type/format changed from %s/%s to %s/%s for status %s
 response-required-property-became-not-write-only: the response required property %s became not write-only for the status %s
 response-required-property-became-not-write-only-comment: It is valid only if the property was always returned before the specification has been changed
 response-required-property-removed: removed the required property %s from the response with the %s status
