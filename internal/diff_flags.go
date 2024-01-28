@@ -96,6 +96,10 @@ func (flags *DiffFlags) getFailOnDiff() bool {
 	return flags.failOnDiff
 }
 
+func (flags *DiffFlags) getAsymmetric() bool {
+	return false
+}
+
 func (flags *DiffFlags) setBase(source *load.Source) {
 	flags.base = source
 }

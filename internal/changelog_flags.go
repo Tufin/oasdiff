@@ -103,6 +103,10 @@ func (flags *ChangelogFlags) getFailOnDiff() bool {
 	return false
 }
 
+func (flags *ChangelogFlags) getAsymmetric() bool {
+	return false
+}
+
 func (flags *ChangelogFlags) setBase(source *load.Source) {
 	flags.base = source
 }

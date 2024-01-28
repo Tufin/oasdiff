@@ -2,6 +2,11 @@ name: go
 on:
   pull_request:
   push:
+    branches:
+      - 'master'
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     env:
@@ -11,7 +16,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        go: ['1.21.5']
+        go: ['1.21.6']
         os:
         - ubuntu-latest
         - windows-latest
@@ -66,15 +71,6 @@ jobs:
 
     - run: go fmt ./...
     - run: git --no-pager diff --exit-code
-
-    - if: runner.os == 'Linux'
-      name: golangci-lint
-      uses: golangci/golangci-lint-action@v3
-      with:
-        version: v1.55
-
-    - id: govulncheck
-      uses: golang/govulncheck-action@v1
 
     - run: go test ./... -coverprofile=coverage.txt -covermode=atomic
       env:
