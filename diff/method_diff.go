@@ -36,9 +36,10 @@ func (methodDiff *MethodDiff) Empty() bool {
 	return *methodDiff == MethodDiff{Base: methodDiff.Base, Revision: methodDiff.Revision}
 }
 
-func getMethodDiff(config *Config, state *state, operation1, operation2 *openapi3.Operation, pathParamsMap PathParamsMap) (*MethodDiff, error) {
+func getMethodDiff(config *Config, state *state, operation1, operation2 *openapi3.Operation, pathParamsMap PathParamsMap,
+	pathParams1, pathParams2 openapi3.Parameters) (*MethodDiff, error) {
 
-	diff, err := getMethodDiffInternal(config, state, operation1, operation2, pathParamsMap)
+	diff, err := getMethodDiffInternal(config, state, operation1, operation2, pathParamsMap, pathParams1, pathParams2)
 
 	if err != nil {
 		return nil, err
@@ -51,7 +52,8 @@ func getMethodDiff(config *Config, state *state, operation1, operation2 *openapi
 	return diff, nil
 }
 
-func getMethodDiffInternal(config *Config, state *state, operation1, operation2 *openapi3.Operation, pathParamsMap PathParamsMap) (*MethodDiff, error) {
+func getMethodDiffInternal(config *Config, state *state, operation1, operation2 *openapi3.Operation, pathParamsMap PathParamsMap,
+	pathParams1, pathParams2 openapi3.Parameters) (*MethodDiff, error) {
 
 	result := newMethodDiff()
 	var err error
@@ -61,7 +63,7 @@ func getMethodDiffInternal(config *Config, state *state, operation1, operation2 
 	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), operation1.Summary, operation2.Summary)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), operation1.Description, operation2.Description)
 	result.OperationIDDiff = getValueDiff(operation1.OperationID, operation2.OperationID)
-	result.ParametersDiff, err = getParametersDiffByLocation(config, state, operation1.Parameters, operation2.Parameters, pathParamsMap)
+	result.ParametersDiff, err = getParametersDiffByLocation(config, state, paramsInherit(pathParams1, operation1.Parameters), paramsInherit(pathParams2, operation2.Parameters), pathParamsMap)
 	if err != nil {
 		return nil, err
 	}

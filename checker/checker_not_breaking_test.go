@@ -167,19 +167,21 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 // BC: changing operation ID is not breaking
 func TestBreaking_OperationID(t *testing.T) {
 	r := d(t, getConfig(), 3, 1)
-	require.Len(t, r, 3)
+	require.Len(t, r, 4)
 	require.Equal(t, checker.RequestParameterMaxLengthDecreasedId, r[0].GetId())
 	require.Equal(t, checker.RequestParameterEnumValueRemovedId, r[1].GetId())
 	require.Equal(t, checker.RequestParameterPatternAddedId, r[2].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[3].GetId())
 }
 
 // BC: changing a link to operation ID is not breaking
 func TestBreaking_LinkOperationID(t *testing.T) {
 	r := d(t, getConfig(), 3, 1)
-	require.Len(t, r, 3)
+	require.Len(t, r, 4)
 	require.Equal(t, checker.RequestParameterMaxLengthDecreasedId, r[0].GetId())
 	require.Equal(t, checker.RequestParameterEnumValueRemovedId, r[1].GetId())
 	require.Equal(t, checker.RequestParameterPatternAddedId, r[2].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[3].GetId())
 }
 
 // BC: adding a media-type to response is not breaking

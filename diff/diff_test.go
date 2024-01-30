@@ -918,3 +918,23 @@ func TestDiff_DifferentComponentSameHeader(t *testing.T) {
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
+
+func TestDiff_MovedParam(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/param-inheritance/path_base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/param-inheritance/path_revision.yaml")
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s2,
+		})
+	require.NoError(t, err)
+	require.NotEmpty(t, d.EndpointsDiff)
+}
