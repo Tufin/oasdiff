@@ -6,6 +6,7 @@ import (
 
 const coefficient = 0.5
 
+// Get returns a numeric value between 0 and 1 representing the distance between base and revision specs
 func Get(asymmetric bool, diffReport *diff.Diff) float64 {
 	if diffReport.Empty() {
 		return 0

@@ -36,6 +36,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking changes with custom checks](CUSTOMIZING-CHECKS.md)
 - Localization: display breaking changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
+- [Measure a numeric distance between a pair of specifications](DELTA.md)
 
 
 ## Install with Go

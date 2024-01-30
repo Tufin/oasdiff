@@ -10,7 +10,7 @@ Delta considers both elements of base that are deleted in revision and elements 
 For any two specs, a and b: delta(a, b) = delta(b, a)
 
 Asymmetric mode:
-Delta only considers elements of base that are deleted in revision but not elements of base that are added in revision.
+Delta only considers elements of base that are deleted in revision but not elements that are missing in base and were added in revision.
 For any two specs, a and b:  Delta(a, b) + Delta(b, a) = 1
 */
 package delta
