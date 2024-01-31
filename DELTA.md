@@ -1,4 +1,4 @@
-## Delta - a distance function for OpenAPI Spec 3
+## Delta - a distance function for OpenAPI Spec 3 [Beta]
 Delta calculates a numeric value between 0 and 1 representing the distance between base and revision specs:
 ```
 oasdiff delta base.yaml revision.yaml
@@ -36,7 +36,7 @@ oasdiff delta base.yaml revision.yaml --asymmetric
 oasdiff delta revision.yaml base.yaml --asymmetric
 ```
 
-### Feature status: Beta
+### Feature status [Beta]
 Delta currently considers:
 - Endpoints (path+method)
   - Parameters
@@ -45,5 +45,5 @@ Delta currently considers:
   - Responses
 
 Other elementes of OpenAPI spec are ignored.  
-Please submit an issue for issues and feature requests.
+Please submit feature requests.
 
