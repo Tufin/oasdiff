@@ -925,11 +925,11 @@ func TestDiff_PathParamsDeleted(t *testing.T) {
 
 	s1, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
 	require.NoError(t, err)
-	pathparams.Inherit(s1)
+	pathparams.Move(s1)
 
 	s2, err := loader.LoadFromFile("../data/path-params/no_params.yaml")
 	require.NoError(t, err)
-	pathparams.Inherit(s2)
+	pathparams.Move(s2)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
 		&load.SpecInfo{
@@ -947,11 +947,11 @@ func TestDiff_PathParamsMoved(t *testing.T) {
 
 	s1, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
 	require.NoError(t, err)
-	pathparams.Inherit(s1)
+	pathparams.Move(s1)
 
 	s2, err := loader.LoadFromFile("../data/path-params/params_in_op.yaml")
 	require.NoError(t, err)
-	pathparams.Inherit(s2)
+	pathparams.Move(s2)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
 		&load.SpecInfo{
@@ -969,11 +969,11 @@ func TestDiff_PathParamsAdded(t *testing.T) {
 
 	s1, err := loader.LoadFromFile("../data/path-params/no_params.yaml")
 	require.NoError(t, err)
-	pathparams.Inherit(s1)
+	pathparams.Move(s1)
 
 	s2, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
 	require.NoError(t, err)
-	pathparams.Inherit(s2)
+	pathparams.Move(s2)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
 		&load.SpecInfo{
