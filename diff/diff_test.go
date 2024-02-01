@@ -7,7 +7,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/flatten/pathparams"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/utils"
 )
@@ -887,35 +886,19 @@ func TestDiff_DifferentComponentModifiedParam(t *testing.T) {
 }
 
 func TestDiff_DifferentComponentSameSchema(t *testing.T) {
-	loader := openapi3.NewLoader()
-
-	s1, err := loader.LoadFromFile("../data/different_component_same_schema.yaml")
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/different_component_same_schema.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s1,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
 
 func TestDiff_DifferentComponentSameHeader(t *testing.T) {
-	loader := openapi3.NewLoader()
-
-	s1, err := loader.LoadFromFile("../data/different_component_same_header.yaml")
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/different_component_same_header.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s1,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
@@ -923,21 +906,13 @@ func TestDiff_DifferentComponentSameHeader(t *testing.T) {
 func TestDiff_PathParamsDeleted(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/params_in_path.yaml"), load.WithFlattenPathParams())
 	require.NoError(t, err)
-	pathparams.Move(s1)
 
-	s2, err := loader.LoadFromFile("../data/path-params/no_params.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/no_params.yaml"), load.WithFlattenPathParams())
 	require.NoError(t, err)
-	pathparams.Move(s2)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.NotEmpty(t, d.EndpointsDiff.Modified[diff.Endpoint{Method: "GET", Path: "/admin/v0/abc/{id}"}].ParametersDiff.Deleted)
 }
@@ -945,21 +920,13 @@ func TestDiff_PathParamsDeleted(t *testing.T) {
 func TestDiff_PathParamsMoved(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/params_in_path.yaml"), load.WithFlattenPathParams())
 	require.NoError(t, err)
-	pathparams.Move(s1)
 
-	s2, err := loader.LoadFromFile("../data/path-params/params_in_op.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/params_in_op.yaml"), load.WithFlattenPathParams())
 	require.NoError(t, err)
-	pathparams.Move(s2)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
@@ -967,21 +934,13 @@ func TestDiff_PathParamsMoved(t *testing.T) {
 func TestDiff_PathParamsAdded(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/path-params/no_params.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/no_params.yaml"), load.WithFlattenPathParams())
 	require.NoError(t, err)
-	pathparams.Move(s1)
 
-	s2, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/params_in_path.yaml"), load.WithFlattenPathParams())
 	require.NoError(t, err)
-	pathparams.Move(s2)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.NotEmpty(t, d.EndpointsDiff.Modified[diff.Endpoint{Method: "GET", Path: "/admin/v0/abc/{id}"}].ParametersDiff.Added)
 }

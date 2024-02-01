@@ -8,7 +8,7 @@ import (
 )
 
 func TestSpecInfoPair(t *testing.T) {
-	spec, err := load.LoadSpecInfo(MockLoader{}, load.NewSource("../data/openapi-test1.yaml"))
+	spec, err := load.NewSpecInfo(MockLoader{}, load.NewSource("../data/openapi-test1.yaml"))
 	require.NoError(t, err)
 
 	pair := load.NewSpecInfoPair(spec, spec)

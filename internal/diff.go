@@ -7,7 +7,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/flatten/allof"
 	"github.com/tufin/oasdiff/formatters"
 	"github.com/tufin/oasdiff/load"
 )
@@ -107,12 +106,15 @@ func newDiffResult(d *diff.Diff, o *diff.OperationsSourcesMap, s *load.SpecInfoP
 }
 
 func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
-	s1, err := load.LoadSpecInfo(loader, flags.getBase())
+
+	loadOption := getLoadOption(flags.getFlatten())
+
+	s1, err := load.NewSpecInfo(loader, flags.getBase(), loadOption)
 	if err != nil {
 		return nil, getErrFailedToLoadSpec("base", flags.getBase(), err)
 	}
 
-	s2, err := load.LoadSpecInfo(loader, flags.getRevision())
+	s2, err := load.NewSpecInfo(loader, flags.getRevision(), loadOption)
 	if err != nil {
 		return nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
 	}
@@ -120,16 +122,6 @@ func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 	if flags.getBase().IsStdin() && flags.getRevision().IsStdin() {
 		// io.ReadAll can only read stdin once, so in this edge case, we copy base into revision
 		s2.Spec = s1.Spec
-	}
-
-	if flags.getFlatten() {
-		if err := mergeAllOf("base", []*load.SpecInfo{s1}, flags.getBase()); err != nil {
-			return nil, err
-		}
-
-		if err := mergeAllOf("revision", []*load.SpecInfo{s2}, flags.getRevision()); err != nil {
-			return nil, err
-		}
 	}
 
 	diffReport, operationsSources, err := diff.GetWithOperationsSourcesMap(flags.toConfig(), s1, s2)
@@ -141,24 +133,17 @@ func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 }
 
 func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
-	s1, err := load.FromGlob(loader, flags.getBase().Path)
+
+	loadOption := getLoadOption(flags.getFlatten())
+
+	s1, err := load.NewSpecInfoFromGlob(loader, flags.getBase().Path, loadOption)
 	if err != nil {
 		return nil, getErrFailedToLoadSpecs("base", flags.getBase().Path, err)
 	}
 
-	s2, err := load.FromGlob(loader, flags.getRevision().Path)
+	s2, err := load.NewSpecInfoFromGlob(loader, flags.getRevision().Path, loadOption)
 	if err != nil {
 		return nil, getErrFailedToLoadSpecs("revision", flags.getRevision().Path, err)
-	}
-
-	if flags.getFlatten() {
-		if err := mergeAllOf("base", s1, flags.getBase()); err != nil {
-			return nil, err
-		}
-
-		if err := mergeAllOf("revision", s2, flags.getRevision()); err != nil {
-			return nil, err
-		}
 	}
 
 	diffReport, operationsSources, err := diff.GetPathsDiff(flags.toConfig(), s1, s2)
@@ -169,15 +154,9 @@ func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 	return newDiffResult(diffReport, operationsSources, nil), nil
 }
 
-func mergeAllOf(title string, specInfos []*load.SpecInfo, source *load.Source) *ReturnError {
-
-	var err error
-
-	for _, specInfo := range specInfos {
-		if specInfo.Spec, err = allof.MergeSpec(specInfo.Spec); err != nil {
-			return getErrFailedToFlattenSpec(title, source, err)
-		}
+func getLoadOption(flatten bool) load.Option {
+	if flatten {
+		return load.WithFlattenAllOf()
 	}
-
-	return nil
+	return load.WithIdentity()
 }

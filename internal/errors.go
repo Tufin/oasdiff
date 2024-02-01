@@ -25,13 +25,6 @@ func getErrFailedToLoadSpec(what string, source *load.Source, err error) *Return
 	}
 }
 
-func getErrFailedToFlattenSpec(what string, source *load.Source, err error) *ReturnError {
-	return &ReturnError{
-		error: fmt.Errorf("failed to flatten %s spec from %s with %v", what, source.Out(), err),
-		Code:  102,
-	}
-}
-
 func getErrFailedToLoadSpecs(what string, path string, err error) *ReturnError {
 	return &ReturnError{
 		error: fmt.Errorf("failed to load %s specs from glob %q with %v", what, path, err),
