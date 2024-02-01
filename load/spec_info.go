@@ -6,7 +6,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/flatten/allof"
-	"github.com/tufin/oasdiff/flatten/pathparams"
+	"github.com/tufin/oasdiff/flatten/commonparams"
 	"github.com/yargevad/filepathx"
 )
 
@@ -42,12 +42,14 @@ func getVersion(spec *openapi3.T) string {
 
 type Option func(Loader, []*SpecInfo) ([]*SpecInfo, error)
 
+// WithIdentity returns the original SpecInfos
 func WithIdentity() Option {
 	return func(loader Loader, specInfos []*SpecInfo) ([]*SpecInfo, error) {
 		return specInfos, nil
 	}
 }
 
+// WithFlattenAllOf returns SpecInfos with flattened allOf
 func WithFlattenAllOf() Option {
 	return func(loader Loader, specInfos []*SpecInfo) ([]*SpecInfo, error) {
 		var err error
@@ -60,10 +62,12 @@ func WithFlattenAllOf() Option {
 	}
 }
 
+// WithFlattenPathParams returns SpecInfos with Common Parameters combined into operation parameters
+// See here for Common Parameters definition: https://swagger.io/docs/specification/describing-parameters/
 func WithFlattenPathParams() Option {
 	return func(loader Loader, specInfos []*SpecInfo) ([]*SpecInfo, error) {
 		for _, specInfo := range specInfos {
-			pathparams.Move(specInfo.Spec)
+			commonparams.Move(specInfo.Spec)
 		}
 		return specInfos, nil
 	}

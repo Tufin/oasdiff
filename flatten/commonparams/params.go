@@ -1,8 +1,8 @@
-package pathparams
+package commonparams
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-// Move moves path-level params to the operations under the path
+// Move moves common parameters to the operations under the path
 func Move(spec *openapi3.T) {
 	moveParams(spec)
 }
