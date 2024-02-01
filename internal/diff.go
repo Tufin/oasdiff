@@ -7,7 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/flatten"
+	"github.com/tufin/oasdiff/flatten/allof"
 	"github.com/tufin/oasdiff/formatters"
 	"github.com/tufin/oasdiff/load"
 )
@@ -174,7 +174,7 @@ func mergeAllOf(title string, specInfos []*load.SpecInfo, source *load.Source) *
 	var err error
 
 	for _, specInfo := range specInfos {
-		if specInfo.Spec, err = flatten.MergeSpec(specInfo.Spec); err != nil {
+		if specInfo.Spec, err = allof.MergeSpec(specInfo.Spec); err != nil {
 			return getErrFailedToFlattenSpec(title, source, err)
 		}
 	}
