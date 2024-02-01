@@ -40,7 +40,7 @@ func getVersion(spec *openapi3.T) string {
 
 // LoadSpecInfo creates a SpecInfo from a local file path, a URL, or stdin
 func LoadSpecInfo(loader Loader, source *Source) (*SpecInfo, error) {
-	s, err := From(loader, source)
+	s, err := from(loader, source)
 	if err != nil {
 		return nil, err
 	}
