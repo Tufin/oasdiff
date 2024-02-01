@@ -7,6 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/flatten/pathparams"
 	"github.com/tufin/oasdiff/load"
 	"github.com/tufin/oasdiff/utils"
 )
@@ -919,14 +920,16 @@ func TestDiff_DifferentComponentSameHeader(t *testing.T) {
 	require.Empty(t, d)
 }
 
-func TestDiff_MovedParam(t *testing.T) {
+func TestDiff_PathParamsDeleted(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-inheritance/path_base.yaml")
+	s1, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
 	require.NoError(t, err)
+	pathparams.Inherit(s1)
 
-	s2, err := loader.LoadFromFile("../data/param-inheritance/path_revision.yaml")
+	s2, err := loader.LoadFromFile("../data/path-params/no_params.yaml")
 	require.NoError(t, err)
+	pathparams.Inherit(s2)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
 		&load.SpecInfo{
@@ -936,5 +939,49 @@ func TestDiff_MovedParam(t *testing.T) {
 			Spec: s2,
 		})
 	require.NoError(t, err)
-	require.NotEmpty(t, d.EndpointsDiff)
+	require.NotEmpty(t, d.EndpointsDiff.Modified[diff.Endpoint{Method: "GET", Path: "/admin/v0/abc/{id}"}].ParametersDiff.Deleted)
+}
+
+func TestDiff_PathParamsMoved(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
+	require.NoError(t, err)
+	pathparams.Inherit(s1)
+
+	s2, err := loader.LoadFromFile("../data/path-params/params_in_op.yaml")
+	require.NoError(t, err)
+	pathparams.Inherit(s2)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s2,
+		})
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+func TestDiff_PathParamsAdded(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/path-params/no_params.yaml")
+	require.NoError(t, err)
+	pathparams.Inherit(s1)
+
+	s2, err := loader.LoadFromFile("../data/path-params/params_in_path.yaml")
+	require.NoError(t, err)
+	pathparams.Inherit(s2)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s2,
+		})
+	require.NoError(t, err)
+	require.NotEmpty(t, d.EndpointsDiff.Modified[diff.Endpoint{Method: "GET", Path: "/admin/v0/abc/{id}"}].ParametersDiff.Added)
 }

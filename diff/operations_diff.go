@@ -76,8 +76,7 @@ func getOperationsDiffInternal(config *Config, state *state, pathItemPair *pathI
 	var err error
 
 	for _, op := range operations {
-		err = result.diffOperation(config, state, pathItemPair.PathItem1.GetOperation(op), pathItemPair.PathItem2.GetOperation(op), op, pathItemPair.PathParamsMap,
-			pathItemPair.PathItem1.Parameters, pathItemPair.PathItem2.Parameters)
+		err = result.diffOperation(config, state, pathItemPair.PathItem1.GetOperation(op), pathItemPair.PathItem2.GetOperation(op), op, pathItemPair.PathParamsMap)
 		if err != nil {
 			return nil, err
 		}
@@ -86,8 +85,7 @@ func getOperationsDiffInternal(config *Config, state *state, pathItemPair *pathI
 	return result, nil
 }
 
-func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state, operation1, operation2 *openapi3.Operation, method string, pathParamsMap PathParamsMap,
-	pathParams1, pathParams2 openapi3.Parameters) error {
+func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state, operation1, operation2 *openapi3.Operation, method string, pathParamsMap PathParamsMap) error {
 	if operation1 == nil && operation2 == nil {
 		return nil
 	}
@@ -102,7 +100,7 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state
 		return nil
 	}
 
-	diff, err := getMethodDiff(config, state, operation1, operation2, pathParamsMap, pathParams1, pathParams2)
+	diff, err := getMethodDiff(config, state, operation1, operation2, pathParamsMap)
 	if err != nil {
 		return err
 	}

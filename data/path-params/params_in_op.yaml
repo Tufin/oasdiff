@@ -5,7 +5,7 @@ info:
   description: Some desc
   contact:
     name: '#onetwothree'
-    url: 'https://test.com22'
+    url: 'https://test.com'
 servers:
   - description: local
     url: 'http://localhost:8080'
@@ -15,6 +15,9 @@ tags:
 paths:
   '/admin/v0/abc/{id}':
     get:
+      parameters:
+        - $ref: '#/components/parameters/tenant_id'
+        - $ref: '#/components/parameters/id'  
       summary: Get abc
       tags:
         - Two

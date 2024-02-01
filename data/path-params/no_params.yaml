@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info:
+  title: Some API
+  version: 1.0.0
+  description: Some desc
+  contact:
+    name: '#onetwothree'
+    url: 'https://test.com'
+servers:
+  - description: local
+    url: 'http://localhost:8080'
+tags:
+  - name: One
+  - name: Two
+paths:
+  '/admin/v0/abc/{id}':
+    get:
+      summary: Get abc
+      tags:
+        - Two
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/abc'
+components:
+  schemas:
+    abc:
+      title: abc
+      x-stoplight:
+        id: lzwt7se3t6ab2
+      type: object
+      properties:
+        details:
+          type: string
+
+  parameters:
+    tenant_id:
+      schema:
+        type: string
+      in: header
+      required: true
+      name: tenant-id
+      description: 'Tenant IDs'
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 'The ID'

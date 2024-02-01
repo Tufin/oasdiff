@@ -70,7 +70,6 @@ func ExampleGetTextReportAsString() {
 	//   - Deleted response: 400
 	//
 	// GET /api/{domain}/{project}/install-command
-	// - New header param: name
 	// - Deleted header param: network-policies
 	// - Modified path param: project
 	//   - Schema changed
@@ -194,7 +193,6 @@ func ExampleGetHTMLReportAsString() {
 	// </ul>
 	// <p>GET /api/{domain}/{project}/install-command</p>
 	// <ul>
-	// <li>New header param: name</li>
 	// <li>Deleted header param: network-policies</li>
 	// <li>Modified path param: project
 	// <ul>

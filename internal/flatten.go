@@ -6,7 +6,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/flatten"
+	"github.com/tufin/oasdiff/flatten/allof"
 	"github.com/tufin/oasdiff/formatters"
 	"github.com/tufin/oasdiff/load"
 )
@@ -59,7 +59,7 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 	// TODO: get the original format of the spec
 	format := flags.format
 
-	flatSpec, err := flatten.MergeSpec(spec.Spec)
+	flatSpec, err := allof.MergeSpec(spec.Spec)
 	if err != nil {
 		return getErrFailedToFlattenSpec("original", flags.spec, err)
 	}

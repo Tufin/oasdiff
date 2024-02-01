@@ -1,18 +1,18 @@
-package flatten_test
+package allof_test
 
 import (
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/flatten"
+	"github.com/tufin/oasdiff/flatten/allof"
 )
 
 func Test_MergeSpecOK(t *testing.T) {
 	loader := openapi3.NewLoader()
-	s, err := loader.LoadFromFile("../data/allof/simple.yaml")
+	s, err := loader.LoadFromFile("../../data/allof/simple.yaml")
 	require.NoError(t, err)
-	merged, err := flatten.MergeSpec(s)
+	merged, err := allof.MergeSpec(s)
 	require.NoError(t, err)
 	require.Equal(t, "string", merged.Components.Schemas["GroupView"].Value.Properties["created"].Value.Type)
 	require.Equal(t, "string", merged.Components.Parameters["groupId"].Value.Schema.Value.Properties["prop1"].Value.Type)
@@ -25,9 +25,9 @@ func Test_MergeSpecOK(t *testing.T) {
 
 func Test_MergeSpecInvalid(t *testing.T) {
 	loader := openapi3.NewLoader()
-	s, err := loader.LoadFromFile("../data/allof/invalid.yaml")
+	s, err := loader.LoadFromFile("../../data/allof/invalid.yaml")
 	require.NoError(t, err)
 
-	_, err = flatten.MergeSpec(s)
+	_, err = allof.MergeSpec(s)
 	require.EqualError(t, err, "unable to resolve Type conflict: all Type values must be identical")
 }
