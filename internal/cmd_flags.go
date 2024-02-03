@@ -20,7 +20,7 @@ func addCommonDiffFlags(cmd *cobra.Command, flags Flags) {
 	cmd.PersistentFlags().BoolVarP(flags.refIncludePathParams(), "include-path-params", "", false, "include path parameter names in endpoint matching")
 
 	cmd.PersistentFlags().BoolVarP(flags.refFlattenAllOf(), "flatten", "", false, "merge subschemas under allOf before diff")
-	cmd.PersistentFlags().MarkDeprecated("flatten", "use flatten-allof instead")
+	_ = cmd.PersistentFlags().MarkDeprecated("flatten", "use flatten-allof instead")
 	cmd.PersistentFlags().BoolVarP(flags.refFlattenAllOf(), "flatten-allof", "", false, "merge subschemas under allOf before diff")
 	cmd.PersistentFlags().BoolVarP(flags.refFlattenParams(), "flatten-params", "", false, "merge common parameters at path level with operation parameters")
 }
