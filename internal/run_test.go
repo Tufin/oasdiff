@@ -29,6 +29,7 @@ func TestMain(m *testing.M) {
 func setup() {
 	os.Setenv(model.EnvNoTelemetry, "1")
 }
+
 func Test_InvalidCmd(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff invalid"), io.Discard, io.Discard))
 }

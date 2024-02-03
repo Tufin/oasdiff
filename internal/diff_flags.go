@@ -116,3 +116,79 @@ func (flags *DiffFlags) setRevision(source *load.Source) {
 func (flags *DiffFlags) addExcludeElements(element string) {
 	flags.excludeElements = append(flags.excludeElements, element)
 }
+
+func (flags *DiffFlags) refComposed() *bool {
+	return &flags.composed
+}
+
+func (flags *DiffFlags) refExcludeElements() *[]string {
+	return &flags.excludeElements
+}
+
+func (flags *DiffFlags) refMatchPath() *string {
+	return &flags.matchPath
+}
+
+func (flags *DiffFlags) refFilterExtension() *string {
+	return &flags.filterExtension
+}
+
+func (flags *DiffFlags) refCircularReferenceCounter() *int {
+	return &flags.circularReferenceCounter
+}
+
+func (flags *DiffFlags) refPrefixBase() *string {
+	return &flags.prefixBase
+}
+
+func (flags *DiffFlags) refPrefixRevision() *string {
+	return &flags.prefixRevision
+}
+
+func (flags *DiffFlags) refStripPrefixBase() *string {
+	return &flags.stripPrefixBase
+}
+
+func (flags *DiffFlags) refStripPrefixRevision() *string {
+	return &flags.stripPrefixRevision
+}
+
+func (flags *DiffFlags) refIncludePathParams() *bool {
+	return &flags.includePathParams
+}
+
+func (flags *DiffFlags) refFlattenAllOf() *bool {
+	return &flags.flattenAllOf
+}
+
+func (flags *DiffFlags) refFlattenParams() *bool {
+	return &flags.flattenParams
+}
+
+func (flags *DiffFlags) refLang() *string {
+	return nil
+}
+
+func (flags *DiffFlags) refErrIgnoreFile() *string {
+	return nil
+}
+
+func (flags *DiffFlags) refWarnIgnoreFile() *string {
+	return nil
+}
+
+func (flags *DiffFlags) refIncludeChecks() *[]string {
+	return nil
+}
+
+func (flags *DiffFlags) refDeprecationDaysBeta() *int {
+	return nil
+}
+
+func (flags *DiffFlags) refDeprecationDaysStable() *int {
+	return nil
+}
+
+func (flags *DiffFlags) refColor() *string {
+	return nil
+}

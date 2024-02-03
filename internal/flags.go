@@ -30,4 +30,24 @@ type Flags interface {
 	setRevision(source *load.Source)
 
 	addExcludeElements(string)
+
+	refComposed() *bool
+	refExcludeElements() *[]string
+	refMatchPath() *string
+	refFilterExtension() *string
+	refCircularReferenceCounter() *int
+	refPrefixBase() *string
+	refPrefixRevision() *string
+	refStripPrefixBase() *string
+	refStripPrefixRevision() *string
+	refIncludePathParams() *bool
+	refFlattenAllOf() *bool
+	refFlattenParams() *bool
+	refLang() *string
+	refErrIgnoreFile() *string
+	refWarnIgnoreFile() *string
+	refIncludeChecks() *[]string
+	refDeprecationDaysBeta() *int
+	refDeprecationDaysStable() *int
+	refColor() *string
 }
