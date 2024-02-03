@@ -32,7 +32,8 @@ func getDeltaCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixBase, "strip-prefix-base", "", "", "strip this prefix from paths in base-spec before comparison")
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
-	cmd.PersistentFlags().BoolVarP(&flags.flatten, "flatten", "", false, "merge subschemas under allOf before diff")
+	cmd.PersistentFlags().BoolVarP(&flags.flattenAllOf, "flatten", "", false, "merge subschemas under allOf before diff")
+	cmd.PersistentFlags().BoolVarP(&flags.flattenParams, "flatten-params", "", false, "merge path parameters with operation parameters")
 	cmd.PersistentFlags().BoolVarP(&flags.asymmetric, "asymmetric", "", false, "perform asymmetric diff (only elements of base that are missing in revision)")
 
 	return &cmd

@@ -49,6 +49,13 @@ func WithIdentity() Option {
 	}
 }
 
+func GetOption(option Option, enable bool) Option {
+	if !enable {
+		return WithIdentity()
+	}
+	return option
+}
+
 // WithFlattenAllOf returns SpecInfos with flattened allOf
 func WithFlattenAllOf() Option {
 	return func(loader Loader, specInfos []*SpecInfo) ([]*SpecInfo, error) {
@@ -62,9 +69,9 @@ func WithFlattenAllOf() Option {
 	}
 }
 
-// WithFlattenPathParams returns SpecInfos with Common Parameters combined into operation parameters
+// WithFlattenParams returns SpecInfos with Common Parameters combined into operation parameters
 // See here for Common Parameters definition: https://swagger.io/docs/specification/describing-parameters/
-func WithFlattenPathParams() Option {
+func WithFlattenParams() Option {
 	return func(loader Loader, specInfos []*SpecInfo) ([]*SpecInfo, error) {
 		for _, specInfo := range specInfos {
 			commonparams.Move(specInfo.Spec)

@@ -21,7 +21,8 @@ type ChangelogFlags struct {
 	excludeElements          []string
 	includeChecks            []string
 	failOn                   string
-	flatten                  bool
+	flattenAllOf             bool
+	flattenParams            bool
 	lang                     string
 	errIgnoreFile            string
 	warnIgnoreFile           string
@@ -55,8 +56,12 @@ func (flags *ChangelogFlags) getRevision() *load.Source {
 	return flags.revision
 }
 
-func (flags *ChangelogFlags) getFlatten() bool {
-	return flags.flatten
+func (flags *ChangelogFlags) getFlattenAllOf() bool {
+	return flags.flattenAllOf
+}
+
+func (flags *ChangelogFlags) getFlattenParams() bool {
+	return flags.flattenParams
 }
 
 func (flags *ChangelogFlags) getCircularReferenceCounter() int {

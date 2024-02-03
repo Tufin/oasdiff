@@ -139,11 +139,11 @@ func TestSpecInfo_GlobNoFiles(t *testing.T) {
 }
 
 func TestSpecInfo_Options(t *testing.T) {
-	_, err := load.NewSpecInfo(MockLoader{}, load.NewSource("../data/openapi-test1.yaml"), load.WithIdentity(), load.WithFlattenAllOf(), load.WithFlattenPathParams())
+	_, err := load.NewSpecInfo(MockLoader{}, load.NewSource("../data/openapi-test1.yaml"), load.WithIdentity(), load.WithFlattenAllOf(), load.WithFlattenParams())
 	require.NoError(t, err)
 }
 
 func TestSpecInfo_GlobOptions(t *testing.T) {
-	_, err := load.NewSpecInfoFromGlob(MockLoader{}, "../data/*.yaml", load.WithIdentity(), load.WithFlattenAllOf(), load.WithFlattenPathParams())
+	_, err := load.NewSpecInfoFromGlob(MockLoader{}, "../data/*.yaml", load.WithIdentity(), load.WithFlattenAllOf(), load.WithFlattenParams())
 	require.NoError(t, err)
 }

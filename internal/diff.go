@@ -34,7 +34,8 @@ func getDiffCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixBase, "strip-prefix-base", "", "", "strip this prefix from paths in base-spec before comparison")
 	cmd.PersistentFlags().StringVarP(&flags.stripPrefixRevision, "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(&flags.includePathParams, "include-path-params", "", false, "include path parameter names in endpoint matching")
-	cmd.PersistentFlags().BoolVarP(&flags.flatten, "flatten", "", false, "merge subschemas under allOf before diff")
+	cmd.PersistentFlags().BoolVarP(&flags.flattenAllOf, "flatten", "", false, "merge subschemas under allOf before diff")
+	cmd.PersistentFlags().BoolVarP(&flags.flattenParams, "flatten-params", "", false, "merge path parameters with operation parameters")
 	cmd.PersistentFlags().BoolVarP(&flags.failOnDiff, "fail-on-diff", "o", false, "exit with return code 1 when any change is found")
 
 	return &cmd
@@ -107,14 +108,15 @@ func newDiffResult(d *diff.Diff, o *diff.OperationsSourcesMap, s *load.SpecInfoP
 
 func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 
-	loadOption := getLoadOption(flags.getFlatten())
+	flattenAllOf := load.GetOption(load.WithFlattenAllOf(), flags.getFlattenAllOf())
+	flattenParams := load.GetOption(load.WithFlattenParams(), flags.getFlattenParams())
 
-	s1, err := load.NewSpecInfo(loader, flags.getBase(), loadOption)
+	s1, err := load.NewSpecInfo(loader, flags.getBase(), flattenAllOf, flattenParams)
 	if err != nil {
 		return nil, getErrFailedToLoadSpec("base", flags.getBase(), err)
 	}
 
-	s2, err := load.NewSpecInfo(loader, flags.getRevision(), loadOption)
+	s2, err := load.NewSpecInfo(loader, flags.getRevision(), flattenAllOf, flattenParams)
 	if err != nil {
 		return nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
 	}
@@ -134,14 +136,15 @@ func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 
 func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 
-	loadOption := getLoadOption(flags.getFlatten())
+	flattenAllOf := load.GetOption(load.WithFlattenAllOf(), flags.getFlattenAllOf())
+	flattenParams := load.GetOption(load.WithFlattenParams(), flags.getFlattenParams())
 
-	s1, err := load.NewSpecInfoFromGlob(loader, flags.getBase().Path, loadOption)
+	s1, err := load.NewSpecInfoFromGlob(loader, flags.getBase().Path, flattenAllOf, flattenParams)
 	if err != nil {
 		return nil, getErrFailedToLoadSpecs("base", flags.getBase().Path, err)
 	}
 
-	s2, err := load.NewSpecInfoFromGlob(loader, flags.getRevision().Path, loadOption)
+	s2, err := load.NewSpecInfoFromGlob(loader, flags.getRevision().Path, flattenAllOf, flattenParams)
 	if err != nil {
 		return nil, getErrFailedToLoadSpecs("revision", flags.getRevision().Path, err)
 	}
@@ -152,11 +155,4 @@ func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 	}
 
 	return newDiffResult(diffReport, operationsSources, nil), nil
-}
-
-func getLoadOption(flatten bool) load.Option {
-	if flatten {
-		return load.WithFlattenAllOf()
-	}
-	return load.WithIdentity()
 }

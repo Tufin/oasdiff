@@ -11,7 +11,8 @@ type Flags interface {
 	getComposed() bool
 	getBase() *load.Source
 	getRevision() *load.Source
-	getFlatten() bool
+	getFlattenAllOf() bool
+	getFlattenParams() bool
 	getCircularReferenceCounter() int
 	getIncludeChecks() []string
 	getDeprecationDaysBeta() int

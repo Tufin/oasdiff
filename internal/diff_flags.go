@@ -17,7 +17,8 @@ type DiffFlags struct {
 	filterExtension          string
 	format                   string
 	failOnDiff               bool
-	flatten                  bool
+	flattenAllOf             bool
+	flattenParams            bool
 	circularReferenceCounter int
 	includePathParams        bool
 	excludeElements          []string
@@ -48,8 +49,12 @@ func (flags *DiffFlags) getRevision() *load.Source {
 	return flags.revision
 }
 
-func (flags *DiffFlags) getFlatten() bool {
-	return flags.flatten
+func (flags *DiffFlags) getFlattenAllOf() bool {
+	return flags.flattenAllOf
+}
+
+func (flags *DiffFlags) getFlattenParams() bool {
+	return flags.flattenParams
 }
 
 func (flags *DiffFlags) getCircularReferenceCounter() int {
