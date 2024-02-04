@@ -6,7 +6,7 @@ Path-level parameters are inherited by all operations of that path.
 A typical use case are the GET/PUT/PATCH/DELETE operations that manipulate a resource accessed via a path parameter.
 
 ### There are two ways to handle Common Parameters in oasdiff
-1. By default, oasdiff compares path parameters and operation parameters seperately.
+1. By default, oasdiff compares path parameters and operation parameters separately.
 2. The `--flatten-params` merges common parameters from the path level into the operation level before running the diff.
 
 For example, this command outputs two breaking changes:
@@ -30,7 +30,3 @@ Adding the `--flatten-params` eliminates the errors:
 ```
 oasdiff changelog data/common-params/params_in_path.yaml data/common-params/params_in_op.yaml --flatten-params
 ```
-
-
-
-
