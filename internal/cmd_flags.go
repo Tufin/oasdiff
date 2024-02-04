@@ -18,12 +18,12 @@ func addCommonDiffFlags(cmd *cobra.Command, flags Flags) {
 	cmd.PersistentFlags().StringVarP(flags.refStripPrefixBase(), "strip-prefix-base", "", "", "strip this prefix from paths in base-spec before comparison")
 	cmd.PersistentFlags().StringVarP(flags.refStripPrefixRevision(), "strip-prefix-revision", "", "", "strip this prefix from paths in revised-spec before comparison")
 	cmd.PersistentFlags().BoolVarP(flags.refIncludePathParams(), "include-path-params", "", false, "include path parameter names in endpoint matching")
-	addFlattenFlag(cmd, flags)
 	cmd.PersistentFlags().BoolVarP(flags.refFlattenAllOf(), "flatten-allof", "", false, "merge subschemas under allOf before diff")
 	cmd.PersistentFlags().BoolVarP(flags.refFlattenParams(), "flatten-params", "", false, "merge common parameters at path level with operation parameters")
+	addDeprecatedFlattenFlag(cmd, flags)
 }
 
-func addFlattenFlag(cmd *cobra.Command, flags Flags) {
+func addDeprecatedFlattenFlag(cmd *cobra.Command, flags Flags) {
 	const flag = "flatten"
 
 	// add this flag for backward compatibility
@@ -31,7 +31,7 @@ func addFlattenFlag(cmd *cobra.Command, flags Flags) {
 
 	// ideally we'd like to mark '--flatten' as deprecated but this causes cobra to write an error message to stdout when the flag is used
 	// this messes up the json and yaml output
-	// so instead we just hide it
+	// so instead we just hide the flag
 	if err := cmd.PersistentFlags().MarkHidden(flag); err != nil {
 		// we can ignore this error safely
 		_ = err
