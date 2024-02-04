@@ -5,7 +5,7 @@ Parameters shared by all operations of a path can be defined on the path level i
 Path-level parameters are inherited by all operations of that path.  
 A typical use case are the GET/PUT/PATCH/DELETE operations that manipulate a resource accessed via a path parameter.
 
-### There are two ways to handle Common Parameters in oasdiff
+### There are two ways to handle common parameters in oasdiff
 1. By default, oasdiff compares path parameters and operation parameters separately.
 2. The `--flatten-params` merges common parameters from the path level into the operation level before running the diff.
 
