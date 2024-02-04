@@ -9,13 +9,13 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-func TestDiff_PathParamsDeleted(t *testing.T) {
+func TestDiff_CommonParamsDeleted(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/params_in_path.yaml"), load.WithFlattenParams())
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/params_in_path.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
-	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/no_params.yaml"), load.WithFlattenParams())
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/no_params.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -23,13 +23,13 @@ func TestDiff_PathParamsDeleted(t *testing.T) {
 	require.NotEmpty(t, d.EndpointsDiff.Modified[diff.Endpoint{Method: "GET", Path: "/admin/v0/abc/{id}"}].ParametersDiff.Deleted)
 }
 
-func TestDiff_PathParamsMoved(t *testing.T) {
+func TestDiff_CommonParamsMoved(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/params_in_path.yaml"), load.WithFlattenParams())
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/params_in_path.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
-	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/params_in_op.yaml"), load.WithFlattenParams())
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/params_in_op.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -37,13 +37,13 @@ func TestDiff_PathParamsMoved(t *testing.T) {
 	require.Empty(t, d)
 }
 
-func TestDiff_PathParamsAdded(t *testing.T) {
+func TestDiff_CommonParamsAdded(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/no_params.yaml"), load.WithFlattenParams())
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/no_params.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
-	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/path-params/params_in_path.yaml"), load.WithFlattenParams())
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/params_in_path.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
