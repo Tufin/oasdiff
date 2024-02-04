@@ -2,6 +2,7 @@ package formatters
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/checker"
@@ -64,6 +65,7 @@ func SupportedFormatsByContentType(output Output) []string {
 			formats = append(formats, string(k))
 		}
 	}
+	sort.Strings(formats)
 	return formats
 }
 

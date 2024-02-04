@@ -21,7 +21,8 @@ type ChangelogFlags struct {
 	excludeElements          []string
 	includeChecks            []string
 	failOn                   string
-	flatten                  bool
+	flattenAllOf             bool
+	flattenParams            bool
 	lang                     string
 	errIgnoreFile            string
 	warnIgnoreFile           string
@@ -55,8 +56,12 @@ func (flags *ChangelogFlags) getRevision() *load.Source {
 	return flags.revision
 }
 
-func (flags *ChangelogFlags) getFlatten() bool {
-	return flags.flatten
+func (flags *ChangelogFlags) getFlattenAllOf() bool {
+	return flags.flattenAllOf
+}
+
+func (flags *ChangelogFlags) getFlattenParams() bool {
+	return flags.flattenParams
 }
 
 func (flags *ChangelogFlags) getCircularReferenceCounter() int {
@@ -117,4 +122,80 @@ func (flags *ChangelogFlags) setRevision(source *load.Source) {
 
 func (flags *ChangelogFlags) addExcludeElements(element string) {
 	flags.excludeElements = append(flags.excludeElements, element)
+}
+
+func (flags *ChangelogFlags) refComposed() *bool {
+	return &flags.composed
+}
+
+func (flags *ChangelogFlags) refExcludeElements() *[]string {
+	return &flags.excludeElements
+}
+
+func (flags *ChangelogFlags) refMatchPath() *string {
+	return &flags.matchPath
+}
+
+func (flags *ChangelogFlags) refFilterExtension() *string {
+	return &flags.filterExtension
+}
+
+func (flags *ChangelogFlags) refCircularReferenceCounter() *int {
+	return &flags.circularReferenceCounter
+}
+
+func (flags *ChangelogFlags) refPrefixBase() *string {
+	return &flags.prefixBase
+}
+
+func (flags *ChangelogFlags) refPrefixRevision() *string {
+	return &flags.prefixRevision
+}
+
+func (flags *ChangelogFlags) refStripPrefixBase() *string {
+	return &flags.stripPrefixBase
+}
+
+func (flags *ChangelogFlags) refStripPrefixRevision() *string {
+	return &flags.stripPrefixRevision
+}
+
+func (flags *ChangelogFlags) refIncludePathParams() *bool {
+	return &flags.includePathParams
+}
+
+func (flags *ChangelogFlags) refFlattenAllOf() *bool {
+	return &flags.flattenAllOf
+}
+
+func (flags *ChangelogFlags) refFlattenParams() *bool {
+	return &flags.flattenParams
+}
+
+func (flags *ChangelogFlags) refLang() *string {
+	return &flags.lang
+}
+
+func (flags *ChangelogFlags) refErrIgnoreFile() *string {
+	return &flags.errIgnoreFile
+}
+
+func (flags *ChangelogFlags) refWarnIgnoreFile() *string {
+	return &flags.warnIgnoreFile
+}
+
+func (flags *ChangelogFlags) refIncludeChecks() *[]string {
+	return &flags.includeChecks
+}
+
+func (flags *ChangelogFlags) refDeprecationDaysBeta() *int {
+	return &flags.deprecationDaysBeta
+}
+
+func (flags *ChangelogFlags) refDeprecationDaysStable() *int {
+	return &flags.deprecationDaysStable
+}
+
+func (flags *ChangelogFlags) refColor() *string {
+	return &flags.color
 }

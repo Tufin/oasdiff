@@ -1,4 +1,4 @@
-package flatten_test
+package allof_test
 
 import (
 	"bytes"
@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/flatten"
+	"github.com/tufin/oasdiff/flatten/allof"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -1300,7 +1300,7 @@ func runTests(t *testing.T, spec string, tests []Test, shouldMerge bool) []error
 	require.NoError(t, err)
 
 	if shouldMerge {
-		doc, err = flatten.MergeSpec(doc)
+		doc, err = allof.MergeSpec(doc)
 		require.NoError(t, err)
 	}
 

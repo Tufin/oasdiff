@@ -28,7 +28,7 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 	}
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{"courseId"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -48,7 +48,7 @@ func TestBreaking_NewNonRequiredProperty(t *testing.T) {
 		},
 	}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -72,7 +72,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &sr
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{"courseId"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -98,7 +98,7 @@ func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &sr
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), &s1, &s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)

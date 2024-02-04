@@ -29,6 +29,7 @@ func TestMain(m *testing.M) {
 func setup() {
 	os.Setenv(model.EnvNoTelemetry, "1")
 }
+
 func Test_InvalidCmd(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff invalid"), io.Discard, io.Discard))
 }
@@ -261,18 +262,26 @@ func Test_BreakingChangesChangelogOptionalCheckersAreErrorLevelWhenSpecified(t *
 	}
 }
 
-func Test_BreakingChangesFlatten(t *testing.T) {
+func Test_BreakingChangesFlattenDeprecated(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/allof/simple.yaml ../data/allof/revision.yaml --flatten --fail-on ERR"), io.Discard, io.Discard))
 }
 
-func Test_FlattenOK(t *testing.T) {
+func Test_BreakingChangesFlattenAllOf(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/allof/simple.yaml ../data/allof/revision.yaml --flatten-allof --fail-on ERR"), io.Discard, io.Discard))
+}
+
+func Test_BreakingChangesFlattenCommonParams(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/common-params/params_in_path.yaml ../data/common-params/params_in_op.yaml --flatten-params --fail-on ERR"), io.Discard, io.Discard))
+}
+
+func Test_FlattenCmdOK(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff flatten ../data/allof/simple.yaml"), io.Discard, io.Discard))
 }
 
-func Test_FlattenInvalid(t *testing.T) {
+func Test_FlattenCmdInvalid(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff flatten ../data/allof/invalid.yaml"), io.Discard, &stderr))
-	require.Equal(t, `Error: failed to flatten original spec from "../data/allof/invalid.yaml" with unable to resolve Type conflict: all Type values must be identical
+	require.Equal(t, `Error: failed to load original spec from "../data/allof/invalid.yaml" with unable to resolve Type conflict: all Type values must be identical
 `, stderr.String())
 }
 

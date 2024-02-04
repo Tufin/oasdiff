@@ -14,8 +14,8 @@ type Loader interface {
 	LoadFromStdin() (*openapi3.T, error)
 }
 
-// From is a convenience function that opens an OpenAPI spec from a URL or a local path based on the format of the path parameter
-func From(loader Loader, source *Source) (*openapi3.T, error) {
+// from is a convenience function that opens an OpenAPI spec from a URL or a local path based on the format of the path parameter
+func from(loader Loader, source *Source) (*openapi3.T, error) {
 
 	switch source.Type {
 	case SourceTypeStdin:

@@ -30,6 +30,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [API deprecation](API-DEPRECATION.md)
 - [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md)
 - [Merge allOf schemas](ALLOF.md)
+- [Merge common parameters](COMMON-PARAMS.md)
 - [Path prefix modification](#path-prefix-modification)
 - [Path parameter renaming](#path-parameter-renaming)
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)

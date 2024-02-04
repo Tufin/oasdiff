@@ -6,7 +6,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/flatten"
 	"github.com/tufin/oasdiff/formatters"
 	"github.com/tufin/oasdiff/load"
 )
@@ -51,7 +50,7 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
-	spec, err := load.LoadSpecInfo(loader, flags.spec)
+	spec, err := load.NewSpecInfo(loader, flags.spec, load.WithFlattenAllOf())
 	if err != nil {
 		return getErrFailedToLoadSpec("original", flags.spec, err)
 	}
@@ -59,12 +58,7 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 	// TODO: get the original format of the spec
 	format := flags.format
 
-	flatSpec, err := flatten.MergeSpec(spec.Spec)
-	if err != nil {
-		return getErrFailedToFlattenSpec("original", flags.spec, err)
-	}
-
-	if returnErr := outputFlattenedSpec(stdout, flatSpec, format); returnErr != nil {
+	if returnErr := outputFlattenedSpec(stdout, spec.Spec, format); returnErr != nil {
 		return returnErr
 	}
 

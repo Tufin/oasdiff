@@ -1,10 +1,10 @@
-package flatten_test
+package allof_test
 
 import (
 	"context"
 	"testing"
 
-	"github.com/tufin/oasdiff/flatten"
+	"github.com/tufin/oasdiff/flatten/allof"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
@@ -12,7 +12,7 @@ import (
 
 // identical Default fields are merged successfully
 func TestMerge_Default(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				Default: 10,
@@ -22,7 +22,7 @@ func TestMerge_Default(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, 10, merged.Default)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -39,7 +39,7 @@ func TestMerge_Default(t *testing.T) {
 	require.Nil(t, merged.AllOf)
 	require.Equal(t, nil, merged.Default)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -57,7 +57,7 @@ func TestMerge_Default(t *testing.T) {
 	require.Nil(t, merged.AllOf)
 	require.Equal(t, 10, merged.Default)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -81,7 +81,7 @@ func TestMerge_Default(t *testing.T) {
 	require.Nil(t, merged.AllOf)
 	require.Equal(t, 10, merged.Default)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -108,7 +108,7 @@ func TestMerge_Default(t *testing.T) {
 
 // Conflicting Default values cannot be resolved
 func TestMerge_DefaultFailure(t *testing.T) {
-	_, err := flatten.Merge(
+	_, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -128,12 +128,12 @@ func TestMerge_DefaultFailure(t *testing.T) {
 			},
 		})
 
-	require.EqualError(t, err, flatten.DefaultErrorMessage)
+	require.EqualError(t, err, allof.DefaultErrorMessage)
 }
 
 // verify that if all ReadOnly fields are set to false, then the ReadOnly field in the merged schema is false.
 func TestMerge_ReadOnlyIsSetToFalse(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -160,7 +160,7 @@ func TestMerge_ReadOnlyIsSetToFalse(t *testing.T) {
 
 // verify that if there exists a ReadOnly field which is true, then the ReadOnly field in the merged schema is true.
 func TestMerge_ReadOnlyIsSetToTrue(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -185,7 +185,7 @@ func TestMerge_ReadOnlyIsSetToTrue(t *testing.T) {
 
 // verify that if all WriteOnly fields are set to false, then the WriteOnly field in the merged schema is false.
 func TestMerge_WriteOnlyIsSetToFalse(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -210,7 +210,7 @@ func TestMerge_WriteOnlyIsSetToFalse(t *testing.T) {
 
 // verify that if there exists a WriteOnly field which is true, then the WriteOnly field in the merged schema is true.
 func TestMerge_WriteOnlyIsSetToTrue(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -235,7 +235,7 @@ func TestMerge_WriteOnlyIsSetToTrue(t *testing.T) {
 
 // verify that if all nullable fields are set to true, then the nullable field in the merged schema is true.
 func TestMerge_NullableIsSetToTrue(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -261,7 +261,7 @@ func TestMerge_NullableIsSetToTrue(t *testing.T) {
 
 // verify that if there exists a nullable field which is false, then the nullable field in the merged schema is false.
 func TestMerge_NullableIsSetToFalse(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -286,7 +286,7 @@ func TestMerge_NullableIsSetToFalse(t *testing.T) {
 }
 
 func TestMerge_NestedAllOfInProperties(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				Properties: openapi3.Schemas{
@@ -320,7 +320,7 @@ func TestMerge_NestedAllOfInProperties(t *testing.T) {
 }
 
 func TestMerge_NestedAllOfInNot(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				Not: &openapi3.SchemaRef{
@@ -352,7 +352,7 @@ func TestMerge_NestedAllOfInNot(t *testing.T) {
 }
 
 func TestMerge_NestedAllOfInOneOf(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				OneOf: openapi3.SchemaRefs{
@@ -387,7 +387,7 @@ func TestMerge_NestedAllOfInOneOf(t *testing.T) {
 
 // AllOf is empty in base schema, but there is nested non-empty AllOf in base schema.
 func TestMerge_NestedAllOfInAnyOf(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AnyOf: openapi3.SchemaRefs{
@@ -422,7 +422,7 @@ func TestMerge_NestedAllOfInAnyOf(t *testing.T) {
 
 // identical numeric types are merged successfully
 func TestMerge_TypeNumeric(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -455,7 +455,7 @@ func TestMerge_TypeNumeric(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "number", merged.Properties["prop1"].Value.Type)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -491,7 +491,7 @@ func TestMerge_TypeNumeric(t *testing.T) {
 
 // Conflicting numeric types are merged successfully
 func TestMerge_TypeNumericConflictResolved(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -527,7 +527,7 @@ func TestMerge_TypeNumericConflictResolved(t *testing.T) {
 
 // Conflicting types cannot be resolved
 func TestMerge_TypeFailure(t *testing.T) {
-	_, err := flatten.Merge(
+	_, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -558,12 +558,12 @@ func TestMerge_TypeFailure(t *testing.T) {
 				},
 			}})
 
-	require.EqualError(t, err, flatten.TypeErrorMessage)
+	require.EqualError(t, err, allof.TypeErrorMessage)
 }
 
 // if ExclusiveMax is true on the minimum Max value, then ExclusiveMax is true in the merged schema.
 func TestMerge_ExclusiveMaxIsTrue(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -589,7 +589,7 @@ func TestMerge_ExclusiveMaxIsTrue(t *testing.T) {
 
 // if ExclusiveMax is false on the minimum Max value, then ExclusiveMax is false in the merged schema.
 func TestMerge_ExclusiveMaxIsFalse(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -615,7 +615,7 @@ func TestMerge_ExclusiveMaxIsFalse(t *testing.T) {
 
 // if ExclusiveMin is false on the highest Min value, then ExclusiveMin is false in the merged schema.
 func TestMerge_ExclusiveMinIsFalse(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -641,7 +641,7 @@ func TestMerge_ExclusiveMinIsFalse(t *testing.T) {
 
 // if ExclusiveMin is true on the highest Min value, then ExclusiveMin is true in the merged schema.
 func TestMerge_ExclusiveMinIsTrue(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -667,7 +667,7 @@ func TestMerge_ExclusiveMinIsTrue(t *testing.T) {
 
 // merge multiple Not inside AllOf
 func TestMerge_Not(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -701,7 +701,7 @@ func TestMerge_Not(t *testing.T) {
 
 // merge multiple OneOf inside AllOf
 func TestMerge_OneOf(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -746,7 +746,7 @@ func TestMerge_OneOf(t *testing.T) {
 
 // merge multiple AnyOf inside AllOf
 func TestMerge_AnyOf(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -790,7 +790,7 @@ func TestMerge_AnyOf(t *testing.T) {
 
 // conflicting uniqueItems values are merged successfully
 func TestMerge_UniqueItemsTrue(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -814,7 +814,7 @@ func TestMerge_UniqueItemsTrue(t *testing.T) {
 
 // non-conflicting uniqueItems values are merged successfully
 func TestMerge_UniqueItemsFalse(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -838,7 +838,7 @@ func TestMerge_UniqueItemsFalse(t *testing.T) {
 
 // Item merge fails due to conflicting item types.
 func TestMerge_Items_Failure(t *testing.T) {
-	_, err := flatten.Merge(
+	_, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -878,12 +878,12 @@ func TestMerge_Items_Failure(t *testing.T) {
 					},
 				},
 			}})
-	require.EqualError(t, err, flatten.TypeErrorMessage)
+	require.EqualError(t, err, allof.TypeErrorMessage)
 }
 
 // items are merged successfully when there are no conflicts
 func TestMerge_Items(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -932,7 +932,7 @@ func TestMerge_Items(t *testing.T) {
 func TestMerge_MultipleOfContained(t *testing.T) {
 
 	//todo - more tests
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -955,7 +955,7 @@ func TestMerge_MultipleOfContained(t *testing.T) {
 }
 
 func TestMerge_MultipleOfDecimal(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -978,7 +978,7 @@ func TestMerge_MultipleOfDecimal(t *testing.T) {
 }
 
 func TestMerge_EnumContained(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1002,7 +1002,7 @@ func TestMerge_EnumContained(t *testing.T) {
 
 // enum merge fails if the intersection of enum values is empty.
 func TestMerge_EnumNoIntersection(t *testing.T) {
-	_, err := flatten.Merge(
+	_, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1025,7 +1025,7 @@ func TestMerge_EnumNoIntersection(t *testing.T) {
 
 // Properties range is the most restrictive
 func TestMerge_RangeProperties(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1053,7 +1053,7 @@ func TestMerge_RangeProperties(t *testing.T) {
 // Items range is the most restrictive
 func TestMerge_RangeItems(t *testing.T) {
 
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1079,7 +1079,7 @@ func TestMerge_RangeItems(t *testing.T) {
 }
 
 func TestMerge_Range(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1105,7 +1105,7 @@ func TestMerge_Range(t *testing.T) {
 }
 
 func TestMerge_MaxLength(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1128,7 +1128,7 @@ func TestMerge_MaxLength(t *testing.T) {
 }
 
 func TestMerge_MinLength(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1151,7 +1151,7 @@ func TestMerge_MinLength(t *testing.T) {
 }
 
 func TestMerge_Description(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				Description: "desc0",
@@ -1173,7 +1173,7 @@ func TestMerge_Description(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "desc0", merged.Description)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1197,7 +1197,7 @@ func TestMerge_Description(t *testing.T) {
 
 // non-conflicting types are merged successfully
 func TestMerge_NonConflictingType(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1219,7 +1219,7 @@ func TestMerge_NonConflictingType(t *testing.T) {
 
 // schema cannot be merged if types are conflicting
 func TestMerge_FailsOnConflictingTypes(t *testing.T) {
-	_, err := flatten.Merge(
+	_, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1253,7 +1253,7 @@ func TestMerge_FailsOnConflictingTypes(t *testing.T) {
 }
 
 func TestMerge_Title(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				Title: "base schema",
@@ -1275,7 +1275,7 @@ func TestMerge_Title(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "base schema", merged.Title)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1299,7 +1299,7 @@ func TestMerge_Title(t *testing.T) {
 
 // merge conflicting integer formats
 func TestMerge_FormatInteger(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1308,7 +1308,7 @@ func TestMerge_FormatInteger(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Format: flatten.FormatInt32,
+										Format: allof.FormatInt32,
 									},
 								},
 							},
@@ -1320,7 +1320,7 @@ func TestMerge_FormatInteger(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Format: flatten.FormatInt64,
+										Format: allof.FormatInt64,
 									},
 								},
 							},
@@ -1330,12 +1330,12 @@ func TestMerge_FormatInteger(t *testing.T) {
 				},
 			}})
 	require.NoError(t, err)
-	require.Equal(t, flatten.FormatInt32, merged.Properties["prop1"].Value.Format)
+	require.Equal(t, allof.FormatInt32, merged.Properties["prop1"].Value.Format)
 }
 
 // merge conflicting float formats
 func TestMerge_FormatFloat(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1344,7 +1344,7 @@ func TestMerge_FormatFloat(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Format: flatten.FormatFloat,
+										Format: allof.FormatFloat,
 									},
 								},
 							},
@@ -1356,7 +1356,7 @@ func TestMerge_FormatFloat(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Format: flatten.FormatDouble,
+										Format: allof.FormatDouble,
 									},
 								},
 							},
@@ -1366,12 +1366,12 @@ func TestMerge_FormatFloat(t *testing.T) {
 				},
 			}})
 	require.NoError(t, err)
-	require.Equal(t, flatten.FormatFloat, merged.Properties["prop1"].Value.Format)
+	require.Equal(t, allof.FormatFloat, merged.Properties["prop1"].Value.Format)
 }
 
 // merge conflicting integer and float formats
 func TestMerge_NumericFormat(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1380,7 +1380,7 @@ func TestMerge_NumericFormat(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Format: flatten.FormatFloat,
+										Format: allof.FormatFloat,
 									},
 								},
 							},
@@ -1392,7 +1392,7 @@ func TestMerge_NumericFormat(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Format: flatten.FormatDouble,
+										Format: allof.FormatDouble,
 									},
 								},
 							},
@@ -1404,7 +1404,7 @@ func TestMerge_NumericFormat(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Format: flatten.FormatInt32,
+										Format: allof.FormatInt32,
 									},
 								},
 							},
@@ -1414,11 +1414,11 @@ func TestMerge_NumericFormat(t *testing.T) {
 				},
 			}})
 	require.NoError(t, err)
-	require.Equal(t, flatten.FormatInt32, merged.Properties["prop1"].Value.Format)
+	require.Equal(t, allof.FormatInt32, merged.Properties["prop1"].Value.Format)
 }
 
 func TestMerge_Format(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1441,7 +1441,7 @@ func TestMerge_Format(t *testing.T) {
 }
 
 func TestMerge_Format_Failure(t *testing.T) {
-	_, err := flatten.Merge(
+	_, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1459,14 +1459,14 @@ func TestMerge_Format_Failure(t *testing.T) {
 					},
 				},
 			}})
-	require.EqualError(t, err, flatten.FormatErrorMessage)
+	require.EqualError(t, err, allof.FormatErrorMessage)
 }
 
 func TestMerge_EmptySchema(t *testing.T) {
 	schema := openapi3.SchemaRef{
 		Value: &openapi3.Schema{},
 	}
-	merged, err := flatten.Merge(schema)
+	merged, err := allof.Merge(schema)
 	require.NoError(t, err)
 	require.Equal(t, schema.Value, merged)
 }
@@ -1476,7 +1476,7 @@ func TestMerge_NoAllOf(t *testing.T) {
 		Value: &openapi3.Schema{
 			Title: "test",
 		}}
-	merged, err := flatten.Merge(schema)
+	merged, err := allof.Merge(schema)
 	require.NoError(t, err)
 	require.Equal(t, schema.Value, merged)
 }
@@ -1517,7 +1517,7 @@ func TestMerge_TwoObjects(t *testing.T) {
 			},
 		}}
 
-	merged, err := flatten.Merge(schema)
+	merged, err := allof.Merge(schema)
 	require.NoError(t, err)
 	require.Len(t, merged.AllOf, 0)
 	require.Len(t, merged.Properties, 2)
@@ -1547,7 +1547,7 @@ func TestMerge_OneObjectOneProp(t *testing.T) {
 			},
 		}}
 
-	merged, err := flatten.Merge(schema)
+	merged, err := allof.Merge(schema)
 	require.NoError(t, err)
 	require.Len(t, merged.Properties, 1)
 	require.Equal(t, object["description"].Value.Type, merged.Properties["description"].Value.Type)
@@ -1555,7 +1555,7 @@ func TestMerge_OneObjectOneProp(t *testing.T) {
 
 func TestMerge_OneObjectNoProps(t *testing.T) {
 
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1606,7 +1606,7 @@ func TestMerge_OverlappingProps(t *testing.T) {
 				},
 			},
 		}}
-	merged, err := flatten.Merge(schema)
+	merged, err := allof.Merge(schema)
 	require.NoError(t, err)
 	require.Len(t, merged.AllOf, 0)
 	require.Len(t, merged.Properties, 1)
@@ -1626,7 +1626,7 @@ func TestMerge_AdditionalProperties_False(t *testing.T) {
 	secondPropEnum = append(secondPropEnum, "1", "8", "7")
 	thirdPropEnum = append(thirdPropEnum, "3", "8", "5")
 
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1697,7 +1697,7 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 	secondPropEnum = append(secondPropEnum, "1", "8", "7")
 	thirdPropEnum = append(thirdPropEnum, "3", "8", "5")
 
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1757,7 +1757,7 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 }
 
 func TestMergeAllOf_Pattern(t *testing.T) {
-	merged, err := flatten.Merge(
+	merged, err := allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				Pattern: "abc",
@@ -1765,7 +1765,7 @@ func TestMergeAllOf_Pattern(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "abc", merged.Pattern)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1780,7 +1780,7 @@ func TestMergeAllOf_Pattern(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "abc", merged.Pattern)
 
-	merged, err = flatten.Merge(
+	merged, err = allof.Merge(
 		openapi3.SchemaRef{
 			Value: &openapi3.Schema{
 				AllOf: openapi3.SchemaRefs{
@@ -1820,7 +1820,7 @@ func TestMerge_Required(t *testing.T) {
 			require.NoError(t, err, "loading test file")
 			err = doc.Validate(ctx)
 			require.NoError(t, err, "validating spec")
-			merged, err := flatten.Merge(*doc.Paths.Value("/products").Get.Responses.Value("200").Value.Content["application/json"].Schema)
+			merged, err := allof.Merge(*doc.Paths.Value("/products").Get.Responses.Value("200").Value.Content["application/json"].Schema)
 			require.NoError(t, err)
 
 			props := merged.Properties
@@ -1839,7 +1839,7 @@ func TestMerge_Required(t *testing.T) {
 
 func TestMerge_CircularAllOf(t *testing.T) {
 	doc := loadSpec(t, "testdata/circular1.yaml")
-	merged, err := flatten.Merge(*doc.Components.Schemas["AWSEnvironmentSettings"])
+	merged, err := allof.Merge(*doc.Components.Schemas["AWSEnvironmentSettings"])
 	require.NoError(t, err)
 	require.Empty(t, merged.AllOf)
 	require.Empty(t, merged.OneOf)
@@ -1851,7 +1851,7 @@ func TestMerge_CircularAllOf(t *testing.T) {
 // A single OneOf field is pruned if it references it's parent schema
 func TestMerge_OneOfIsPruned(t *testing.T) {
 	doc := loadSpec(t, "testdata/circular2.yaml")
-	merged, err := flatten.Merge(*doc.Components.Schemas["OneOf_Is_Pruned_B"])
+	merged, err := allof.Merge(*doc.Components.Schemas["OneOf_Is_Pruned_B"])
 	require.NoError(t, err)
 	require.Empty(t, merged.AllOf)
 	require.Empty(t, merged.OneOf)
@@ -1860,7 +1860,7 @@ func TestMerge_OneOfIsPruned(t *testing.T) {
 // A single OneOf field is not pruned if it does not reference it's parent schema
 func TestMerge_OneOfIsNotPruned(t *testing.T) {
 	doc := loadSpec(t, "testdata/circular2.yaml")
-	merged, err := flatten.Merge(*doc.Components.Schemas["OneOf_Is_Not_Pruned_B"])
+	merged, err := allof.Merge(*doc.Components.Schemas["OneOf_Is_Not_Pruned_B"])
 	require.NoError(t, err)
 	require.Empty(t, merged.AllOf)
 	require.NotEmpty(t, merged.OneOf)
@@ -1869,7 +1869,7 @@ func TestMerge_OneOfIsNotPruned(t *testing.T) {
 // A single AnyOf field is pruned if it references it's parent schema
 func TestMerge_AnyOfIsPruned(t *testing.T) {
 	doc := loadSpec(t, "testdata/circular2.yaml")
-	merged, err := flatten.Merge(*doc.Components.Schemas["AnyOf_Is_Pruned_B"])
+	merged, err := allof.Merge(*doc.Components.Schemas["AnyOf_Is_Pruned_B"])
 	require.NoError(t, err)
 	require.Empty(t, merged.AllOf)
 	require.Empty(t, merged.AnyOf)
@@ -1878,7 +1878,7 @@ func TestMerge_AnyOfIsPruned(t *testing.T) {
 // A single AnyOf field is not pruned if it does not reference it's parent schema
 func TestMerge_AnyOfIsNotPruned(t *testing.T) {
 	doc := loadSpec(t, "testdata/circular2.yaml")
-	merged, err := flatten.Merge(*doc.Components.Schemas["AnyOf_Is_Not_Pruned_B"])
+	merged, err := allof.Merge(*doc.Components.Schemas["AnyOf_Is_Not_Pruned_B"])
 	require.NoError(t, err)
 	require.Empty(t, merged.AllOf)
 	require.NotEmpty(t, merged.AnyOf)
@@ -1886,24 +1886,24 @@ func TestMerge_AnyOfIsNotPruned(t *testing.T) {
 
 func TestMerge_ComplexOneOfIsPruned(t *testing.T) {
 	doc := loadSpec(t, "testdata/prune-oneof.yaml")
-	merged, err := flatten.Merge(*doc.Components.Schemas["SchemaWithWithoutOneOf"])
+	merged, err := allof.Merge(*doc.Components.Schemas["SchemaWithWithoutOneOf"])
 	require.NoError(t, err)
 	require.Empty(t, merged.OneOf)
 }
 
 func TestMerge_ComplexOneOfIsNotPruned(t *testing.T) {
 	doc := loadSpec(t, "testdata/prune-oneof.yaml")
-	merged, err := flatten.Merge(*doc.Components.Schemas["ThirdSchema"])
+	merged, err := allof.Merge(*doc.Components.Schemas["ThirdSchema"])
 	require.NoError(t, err)
 	require.NotEmpty(t, merged.OneOf)
 	require.Len(t, merged.OneOf, 2)
 
-	merged, err = flatten.Merge(*doc.Components.Schemas["ComplexSchema"])
+	merged, err = allof.Merge(*doc.Components.Schemas["ComplexSchema"])
 	require.NoError(t, err)
 	require.NotEmpty(t, merged.OneOf)
 	require.Len(t, merged.OneOf, 2)
 
-	merged, err = flatten.Merge(*doc.Components.Schemas["SchemaWithOneOf"])
+	merged, err = allof.Merge(*doc.Components.Schemas["SchemaWithOneOf"])
 	require.NoError(t, err)
 	require.NotEmpty(t, merged.OneOf)
 	require.Len(t, merged.OneOf, 2)

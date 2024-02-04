@@ -886,35 +886,19 @@ func TestDiff_DifferentComponentModifiedParam(t *testing.T) {
 }
 
 func TestDiff_DifferentComponentSameSchema(t *testing.T) {
-	loader := openapi3.NewLoader()
-
-	s1, err := loader.LoadFromFile("../data/different_component_same_schema.yaml")
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/different_component_same_schema.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s1,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
 
 func TestDiff_DifferentComponentSameHeader(t *testing.T) {
-	loader := openapi3.NewLoader()
-
-	s1, err := loader.LoadFromFile("../data/different_component_same_header.yaml")
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/different_component_same_header.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s1,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }

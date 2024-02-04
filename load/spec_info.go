@@ -30,33 +30,6 @@ func newSpecInfo(spec *openapi3.T, path string) *SpecInfo {
 	}
 }
 
-type SpecInfoPair struct {
-	Base     *SpecInfo
-	Revision *SpecInfo
-}
-
-func (specInfoPair *SpecInfoPair) GetBaseVersion() string {
-	if specInfoPair == nil {
-		return "n/a"
-	}
-	return specInfoPair.Base.GetVersion()
-}
-
-func (specInfoPair *SpecInfoPair) GetRevisionVersion() string {
-	if specInfoPair == nil {
-		return "n/a"
-	}
-
-	return specInfoPair.Revision.GetVersion()
-}
-
-func NewSpecInfoPair(specInfo1, specInfo2 *SpecInfo) *SpecInfoPair {
-	return &SpecInfoPair{
-		Base:     specInfo1,
-		Revision: specInfo2,
-	}
-}
-
 func getVersion(spec *openapi3.T) string {
 	if spec == nil || spec.Info == nil {
 		return ""
@@ -65,17 +38,46 @@ func getVersion(spec *openapi3.T) string {
 	return spec.Info.Version
 }
 
-// LoadSpecInfo creates a SpecInfo from a local file path, a URL, or stdin
-func LoadSpecInfo(loader Loader, source *Source) (*SpecInfo, error) {
-	s, err := From(loader, source)
+// NewSpecInfo creates a SpecInfo from a local file path, a URL, or stdin
+func NewSpecInfo(loader Loader, source *Source, options ...Option) (*SpecInfo, error) {
+	specInfo, err := loadSpecInfo(loader, source)
+	if err != nil {
+		return nil, err
+	}
+	specInfos := []*SpecInfo{specInfo}
+
+	for _, option := range options {
+		if specInfos, err = option(loader, specInfos); err != nil {
+			return nil, err
+		}
+	}
+	return specInfos[0], nil
+}
+
+// NewSpecInfoFromGlob creates SpecInfos from local files matching the specified glob parameter
+func NewSpecInfoFromGlob(loader Loader, glob string, options ...Option) ([]*SpecInfo, error) {
+	specInfos, err := fromGlob(loader, glob)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, option := range options {
+		if specInfos, err = option(loader, specInfos); err != nil {
+			return nil, err
+		}
+	}
+	return specInfos, nil
+}
+
+func loadSpecInfo(loader Loader, source *Source) (*SpecInfo, error) {
+	s, err := from(loader, source)
 	if err != nil {
 		return nil, err
 	}
 	return newSpecInfo(s, source.Path), nil
 }
 
-// FromGlob creates SpecInfo specs from local files matching the specified glob parameter
-func FromGlob(loader Loader, glob string) ([]*SpecInfo, error) {
+func fromGlob(loader Loader, glob string) ([]*SpecInfo, error) {
 	files, err := filepathx.Glob(glob)
 	if err != nil {
 		return nil, err
