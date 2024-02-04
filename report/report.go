@@ -52,7 +52,7 @@ func (r *report) output(d *diff.Diff) {
 	}
 
 	if d.EndpointsDiff.Empty() {
-		r.print("No endpoint changes")
+		r.print("No endpoint changes, but there are some other changes")
 	} else {
 		r.printEndpoints(d.EndpointsDiff)
 	}
