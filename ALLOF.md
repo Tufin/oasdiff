@@ -20,10 +20,10 @@ diff --side-by-side data/allof/simple.yaml data/allof/revision.yaml
 In order to reduce such false-positives, oasdiff supports the ability to replace allOf by a merged equivalent before comparing the specs, like this:
 
 ```
-oasdiff breaking data/allof/simple.yaml data/allof/revision.yaml --flatten
+oasdiff breaking data/allof/simple.yaml data/allof/revision.yaml --flatten-allof
 ```
 In this case no breaking changes are reported, correctly.  
-The `--flatten` flag is also supported with `diff` and `changelog`.
+The `--flatten-allof` flag is also supported with `diff`, `changelog`, `delta` and `summary`.
 
 In order to see how oasdiff merges allOf, you can use the dedicated `flatten` command:
 ```

@@ -263,7 +263,7 @@ func Test_BreakingChangesChangelogOptionalCheckersAreErrorLevelWhenSpecified(t *
 }
 
 func Test_BreakingChangesFlatten(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/allof/simple.yaml ../data/allof/revision.yaml --flatten --fail-on ERR"), io.Discard, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/allof/simple.yaml ../data/allof/revision.yaml --flatten-allof --fail-on ERR"), io.Discard, io.Discard))
 }
 
 func Test_FlattenOK(t *testing.T) {

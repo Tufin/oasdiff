@@ -1,7 +1,6 @@
 package load_test
 
 import (
-	"log"
 	"os"
 	"testing"
 
@@ -57,19 +56,15 @@ paths:
 `)
 
 	tmpfile, err := os.CreateTemp("", "example")
-	if err != nil {
-		log.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	defer os.Remove(tmpfile.Name()) // clean up
 
-	if _, err := tmpfile.Write(content); err != nil {
-		log.Fatal(err)
-	}
+	_, err = tmpfile.Write(content)
+	require.NoError(t, err)
 
-	if _, err := tmpfile.Seek(0, 0); err != nil {
-		log.Fatal(err)
-	}
+	_, err = tmpfile.Seek(0, 0)
+	require.NoError(t, err)
 
 	oldStdin := os.Stdin
 	defer func() { os.Stdin = oldStdin }() // Restore original Stdin
@@ -90,19 +85,15 @@ paths:
 `)
 
 	tmpfile, err := os.CreateTemp("", "example")
-	if err != nil {
-		log.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	defer os.Remove(tmpfile.Name()) // clean up
 
-	if _, err := tmpfile.Write(content); err != nil {
-		log.Fatal(err)
-	}
+	_, err = tmpfile.Write(content)
+	require.NoError(t, err)
 
-	if _, err := tmpfile.Seek(0, 0); err != nil {
-		log.Fatal(err)
-	}
+	_, err = tmpfile.Seek(0, 0)
+	require.NoError(t, err)
 
 	oldStdin := os.Stdin
 	defer func() { os.Stdin = oldStdin }() // Restore original Stdin
@@ -139,7 +130,7 @@ func TestSpecInfo_GlobNoFiles(t *testing.T) {
 }
 
 func TestSpecInfo_Options(t *testing.T) {
-	_, err := load.NewSpecInfo(MockLoader{}, load.NewSource("../data/openapi-test1.yaml"), load.WithIdentity(), load.WithFlattenAllOf(), load.WithFlattenParams())
+	_, err := load.NewSpecInfo(MockLoader{}, load.NewSource("../data/openapi-test1.yaml"), load.GetOption(load.WithFlattenAllOf(), false), load.GetOption(load.WithFlattenAllOf(), true), load.WithFlattenParams())
 	require.NoError(t, err)
 }
 
