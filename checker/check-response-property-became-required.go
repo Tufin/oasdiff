@@ -40,11 +40,15 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
-							id := ResponsePropertyBecameRequiredId
+							if mediaTypeDiff.SchemaDiff.Base.Properties[changedRequiredPropertyName] == nil {
+								// added properties are processed by ResponseRequiredPropertyUpdatedCheck check
+								continue
+							}
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
 							}
+							id := ResponsePropertyBecameRequiredId
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.WriteOnly {
 								id = ResponseWriteOnlyPropertyBecameRequiredId
 							}
@@ -69,16 +73,17 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 								return
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Added {
-								id := ResponsePropertyBecameRequiredId
 								if propertyDiff.Base.Properties[changedRequiredPropertyName] == nil {
+									// added properties are processed by ResponseRequiredPropertyUpdatedCheck check
 									continue
-								}
-								if propertyDiff.Base.Properties[changedRequiredPropertyName].Value.WriteOnly {
-									id = ResponseWriteOnlyPropertyBecameRequiredId
 								}
 								if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 									continue
+								}
+								id := ResponsePropertyBecameRequiredId
+								if propertyDiff.Base.Properties[changedRequiredPropertyName].Value.WriteOnly {
+									id = ResponseWriteOnlyPropertyBecameRequiredId
 								}
 
 								result = append(result, ApiChange{
