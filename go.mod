@@ -12,7 +12,7 @@ require (
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
-	github.com/yuin/goldmark v1.6.0
+	github.com/yuin/goldmark v1.7.0
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
 	gopkg.in/yaml.v3 v3.0.1
 )
