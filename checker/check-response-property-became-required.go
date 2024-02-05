@@ -41,6 +41,10 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
 							id := ResponsePropertyBecameRequiredId
+							if mediaTypeDiff.SchemaDiff.Base.Properties[changedRequiredPropertyName] == nil {
+								// added properties are processed by ResponseRequiredPropertyUpdatedCheck check
+								continue
+							}
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
