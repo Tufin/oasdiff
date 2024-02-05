@@ -106,7 +106,7 @@ func run(cmd *cobra.Command) int {
 		if ret := getReturnValue(cmd); ret != 0 {
 			return ret
 		}
-		return 100
+		return generalExecutionErr
 	}
 
 	return getReturnValue(cmd)
