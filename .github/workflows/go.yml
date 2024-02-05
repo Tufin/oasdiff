@@ -9,7 +9,7 @@ permissions:
 jobs:
   build-and-test:
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
       GO111MODULE: 'on'
       CGO_ENABLED: '0'
     strategy:
