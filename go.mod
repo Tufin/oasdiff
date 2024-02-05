@@ -1,6 +1,7 @@
 module github.com/tufin/oasdiff
 
-go 1.21.4
+go 1.21.5
+
 toolchain go1.21.6
 
 require (
