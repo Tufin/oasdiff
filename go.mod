@@ -1,14 +1,13 @@
 module github.com/tufin/oasdiff
 
 go 1.21.4
-
 toolchain go1.21.6
 
 require (
 	cloud.google.com/go v0.112.0
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.122.0
-	github.com/oasdiff/go-common v0.2.28
+	github.com/oasdiff/go-common v0.2.29
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.8.4
 	github.com/yargevad/filepathx v1.0.0
