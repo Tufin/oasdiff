@@ -3,6 +3,7 @@ package load
 import (
 	"github.com/tufin/oasdiff/flatten/allof"
 	"github.com/tufin/oasdiff/flatten/commonparams"
+	"github.com/tufin/oasdiff/flatten/headers"
 )
 
 // option functions can be used to preprocess specs after loading them
@@ -42,6 +43,16 @@ func WithFlattenParams() Option {
 	return func(loader Loader, specInfos []*SpecInfo) ([]*SpecInfo, error) {
 		for _, specInfo := range specInfos {
 			commonparams.Move(specInfo.Spec)
+		}
+		return specInfos, nil
+	}
+}
+
+// WithLowercaseHeaders returns SpecInfos with header names converted to lowercase
+func WithLowercaseHeaders() Option {
+	return func(loader Loader, specInfos []*SpecInfo) ([]*SpecInfo, error) {
+		for _, specInfo := range specInfos {
+			headers.Lowercase(specInfo.Spec)
 		}
 		return specInfos, nil
 	}

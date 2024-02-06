@@ -31,6 +31,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md)
 - [Merge allOf schemas](ALLOF.md)
 - [Merge common parameters](COMMON-PARAMS.md)
+- [Case-insensitive header comparison](#case-insensitive-header-comparison)
 - [Path prefix modification](#path-prefix-modification)
 - [Path parameter renaming](#path-parameter-renaming)
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
@@ -240,6 +241,13 @@ Note that stripping precedes prepending.
 Sometimes developers decide to change names of path parameters, for example, in order to follow a certain naming convention.  
 Oasdiff supports path parameter renaming by default.  
 [Learn more](MATCHING-ENDPOINTS.md) about how oasdiff supports path parameter renaming.
+
+## Case-Insensitive Header Comparison
+Header names comparison is normally case-sensitive.  
+To make this comparison case-insensitive, add the `--case-insensitive-headers` flag:
+```
+oasdiff diff data/header-case/base.yaml data/header-case/revision.yaml --case-insensitive-headers
+```
 
 ## Excluding Specific Kinds of Changes 
 You can use the `--exclude-elements` flag to exclude certain kinds of changes:

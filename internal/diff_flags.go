@@ -19,6 +19,7 @@ type DiffFlags struct {
 	failOnDiff               bool
 	flattenAllOf             bool
 	flattenParams            bool
+	insensitiveHeaders       bool
 	circularReferenceCounter int
 	includePathParams        bool
 	excludeElements          []string
@@ -55,6 +56,10 @@ func (flags *DiffFlags) getFlattenAllOf() bool {
 
 func (flags *DiffFlags) getFlattenParams() bool {
 	return flags.flattenParams
+}
+
+func (flags *DiffFlags) getInsensitiveHeaders() bool {
+	return flags.insensitiveHeaders
 }
 
 func (flags *DiffFlags) getCircularReferenceCounter() int {
@@ -163,6 +168,10 @@ func (flags *DiffFlags) refFlattenAllOf() *bool {
 
 func (flags *DiffFlags) refFlattenParams() *bool {
 	return &flags.flattenParams
+}
+
+func (flags *DiffFlags) refInsensitiveHeaders() *bool {
+	return &flags.insensitiveHeaders
 }
 
 func (flags *DiffFlags) refLang() *string {

@@ -99,13 +99,14 @@ func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 
 	flattenAllOf := load.GetOption(load.WithFlattenAllOf(), flags.getFlattenAllOf())
 	flattenParams := load.GetOption(load.WithFlattenParams(), flags.getFlattenParams())
+	lowerHeaderNames := load.GetOption(load.WithLowercaseHeaders(), flags.getInsensitiveHeaders())
 
-	s1, err := load.NewSpecInfo(loader, flags.getBase(), flattenAllOf, flattenParams)
+	s1, err := load.NewSpecInfo(loader, flags.getBase(), flattenAllOf, flattenParams, lowerHeaderNames)
 	if err != nil {
 		return nil, getErrFailedToLoadSpec("base", flags.getBase(), err)
 	}
 
-	s2, err := load.NewSpecInfo(loader, flags.getRevision(), flattenAllOf, flattenParams)
+	s2, err := load.NewSpecInfo(loader, flags.getRevision(), flattenAllOf, flattenParams, lowerHeaderNames)
 	if err != nil {
 		return nil, getErrFailedToLoadSpec("revision", flags.getRevision(), err)
 	}
@@ -127,13 +128,14 @@ func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 
 	flattenAllOf := load.GetOption(load.WithFlattenAllOf(), flags.getFlattenAllOf())
 	flattenParams := load.GetOption(load.WithFlattenParams(), flags.getFlattenParams())
+	lowerHeaderNames := load.GetOption(load.WithLowercaseHeaders(), flags.getInsensitiveHeaders())
 
-	s1, err := load.NewSpecInfoFromGlob(loader, flags.getBase().Path, flattenAllOf, flattenParams)
+	s1, err := load.NewSpecInfoFromGlob(loader, flags.getBase().Path, flattenAllOf, flattenParams, lowerHeaderNames)
 	if err != nil {
 		return nil, getErrFailedToLoadSpecs("base", flags.getBase().Path, err)
 	}
 
-	s2, err := load.NewSpecInfoFromGlob(loader, flags.getRevision().Path, flattenAllOf, flattenParams)
+	s2, err := load.NewSpecInfoFromGlob(loader, flags.getRevision().Path, flattenAllOf, flattenParams, lowerHeaderNames)
 	if err != nil {
 		return nil, getErrFailedToLoadSpecs("revision", flags.getRevision().Path, err)
 	}

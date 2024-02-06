@@ -23,6 +23,7 @@ type ChangelogFlags struct {
 	failOn                   string
 	flattenAllOf             bool
 	flattenParams            bool
+	insensitiveHeaders       bool
 	lang                     string
 	errIgnoreFile            string
 	warnIgnoreFile           string
@@ -62,6 +63,10 @@ func (flags *ChangelogFlags) getFlattenAllOf() bool {
 
 func (flags *ChangelogFlags) getFlattenParams() bool {
 	return flags.flattenParams
+}
+
+func (flags *ChangelogFlags) getInsensitiveHeaders() bool {
+	return flags.insensitiveHeaders
 }
 
 func (flags *ChangelogFlags) getCircularReferenceCounter() int {
@@ -170,6 +175,10 @@ func (flags *ChangelogFlags) refFlattenAllOf() *bool {
 
 func (flags *ChangelogFlags) refFlattenParams() *bool {
 	return &flags.flattenParams
+}
+
+func (flags *ChangelogFlags) refInsensitiveHeaders() *bool {
+	return &flags.insensitiveHeaders
 }
 
 func (flags *ChangelogFlags) refLang() *string {
