@@ -13,6 +13,7 @@ type Flags interface {
 	getRevision() *load.Source
 	getFlattenAllOf() bool
 	getFlattenParams() bool
+	getInsensitiveHeaders() bool
 	getCircularReferenceCounter() int
 	getIncludeChecks() []string
 	getDeprecationDaysBeta() int
@@ -43,6 +44,7 @@ type Flags interface {
 	refIncludePathParams() *bool
 	refFlattenAllOf() *bool
 	refFlattenParams() *bool
+	refInsensitiveHeaders() *bool
 	refLang() *string
 	refErrIgnoreFile() *string
 	refWarnIgnoreFile() *string

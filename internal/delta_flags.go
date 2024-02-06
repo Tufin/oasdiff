@@ -56,3 +56,7 @@ func (flags *DeltaFlags) refFlattenAllOf() *bool {
 func (flags *DeltaFlags) refFlattenParams() *bool {
 	return &flags.flattenParams
 }
+
+func (flags *DeltaFlags) refInsensitiveHeaders() *bool {
+	return &flags.insensitiveHeaders
+}
