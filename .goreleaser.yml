@@ -22,7 +22,7 @@ brews:
  -
    name: oasdiff
    homepage: "https://github.com/tufin/oasdiff"
-   tap:
+   repository:
      owner: tufin
      name: homebrew-tufin
    commit_author:
