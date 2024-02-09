@@ -7,7 +7,7 @@ A typical use case are the GET/PUT/PATCH/DELETE operations that manipulate a res
 
 ### There are two ways to handle common parameters in oasdiff
 1. By default, oasdiff compares path parameters and operation parameters separately.
-2. The `--flatten-params` merges common parameters from the path level into the operation level before running the diff.
+2. The `--flatten-params` flag merges common parameters from the path level into the operation level before running the diff.
 
 For example, this command outputs two breaking changes:
 ```
