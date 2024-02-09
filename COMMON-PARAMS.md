@@ -26,7 +26,7 @@ error	[new-required-request-parameter] at data/common-params/params_in_op.yaml
 ```
 
 
-Adding the `--flatten-params` eliminates the errors:
+Adding the `--flatten-params` flag eliminates the errors:
 ```
 oasdiff changelog data/common-params/params_in_path.yaml data/common-params/params_in_op.yaml --flatten-params
 ```
