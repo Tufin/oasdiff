@@ -56,7 +56,7 @@ func TestYamlFormatter_RenderChecks(t *testing.T) {
 
 	out, err := yamlFormatter.RenderChecks(checks, formatters.NewRenderOpts())
 	require.NoError(t, err)
-	require.Equal(t, "- id: change_id\n  level: info\n  description: This is a breaking change.\n  reuired: true\n", string(out))
+	require.Equal(t, "- id: change_id\n  level: info\n  description: This is a breaking change.\n  required: true\n", string(out))
 }
 
 func TestYamlFormatter_RenderDiff(t *testing.T) {
