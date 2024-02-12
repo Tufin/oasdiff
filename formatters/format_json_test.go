@@ -56,7 +56,7 @@ func TestJsonFormatter_RenderChecks(t *testing.T) {
 
 	out, err := jsonFormatter.RenderChecks(checks, formatters.NewRenderOpts())
 	require.NoError(t, err)
-	require.Equal(t, "[{\"id\":\"change_id\",\"level\":\"info\",\"description\":\"This is a breaking change.\",\"reuired\":true}]", string(out))
+	require.Equal(t, "[{\"id\":\"change_id\",\"level\":\"info\",\"description\":\"This is a breaking change.\",\"required\":true}]", string(out))
 }
 
 func TestJsonFormatter_RenderDiff(t *testing.T) {
