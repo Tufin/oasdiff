@@ -22,7 +22,7 @@ oasdiff checks
 
 ### Output Formats
 By default, changes are displayed as human-readable text with [color](#color).  
-You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, `html`, `githubactions` or `junit`.  
+You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, [`html`](https://html-preview.github.io/?url=https://github.com/tufin/oasdiff/blob/main/changelog.html), `githubactions` or `junit`.  
 An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](BREAKING-CHANGES.md#ignoring-specific-breaking-changes)
 
 ### Color
