@@ -8,14 +8,14 @@ oasdiff delta base.yaml revision.yaml
 
 ### The distance between identical specs is 0
 The minimum distance, 0, respresnts the distance between specifications with identical endpoints.  
-For example, the distance between any spec to itself is 0:
+The distance between any spec to itself is 0:
 ```
 oasdiff delta spec.yaml spec.yaml
 ```
 
 ### The distance between disjoint specs is 1
 The maximum distance, 1, respresnts the distance between specifications with no common endpoints.  
-For example, the distance between a spec with no endpoints and another spec with one or more endpoints is 1:
+The distance between a spec with no endpoints and another spec with one or more endpoints is 1:
 ```
 oasdiff delta empty-spec.yaml non-empty-spec.yaml
 ```
@@ -23,7 +23,7 @@ oasdiff delta empty-spec.yaml non-empty-spec.yaml
 
 ### Symmetric mode
 By default, delta is symmetric and takes into account both elements of base that are deleted in revision and elements of base that are added in revision.  
-For example, the symmetric distance between any two specs is the same regardless of the order of the given specs:
+The symmetric distance between any two specs is the same regardless of the order of the given specs:
 ```
 oasdiff delta base.yaml revision.yaml
 oasdiff delta revision.yaml base.yaml
@@ -31,7 +31,7 @@ oasdiff delta revision.yaml base.yaml
 
 ### Asymmetric mode
 It is also possible to calculate an asymmetric distance which takes into account elements of base that were deleted in revision but ignores elements that are missing in base and were added in revision.  
-For examples, for any two specs the sum of the asymmetric distances is their symmetric distance:
+For any two specs the sum of the asymmetric distances is their symmetric distance:
 ```
 oasdiff delta base.yaml revision.yaml --asymmetric
 oasdiff delta revision.yaml base.yaml --asymmetric
