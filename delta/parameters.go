@@ -24,7 +24,7 @@ func getParametersDelta(asymmetric bool, d *diff.ParametersDiffByLocation) *Weig
 }
 
 func getModifiedParametersDelta(asymmetric bool, d diff.ParamDiffByLocation) float64 {
-	weightedDeltas := make([]*WeightedDelta, len(d))
+	weightedDeltas := make([]*WeightedDelta, d.Len())
 	i := 0
 	for _, paramsDiff := range d {
 		for _, parameterDiff := range paramsDiff {
