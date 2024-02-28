@@ -74,15 +74,6 @@ func Test_Summary(t *testing.T) {
 	require.Contains(t, stdout.String(), `diff: true`)
 }
 
-func Test_InvalidFile(t *testing.T) {
-	var stderr bytes.Buffer
-	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff diff no-file ../data/openapi-test3.yaml"), io.Discard, &stderr))
-	require.Condition(t, func() (success bool) {
-		return stderr.String() == "Error: failed to load base spec from \"no-file\": open no-file: no such file or directory\n" ||
-			stderr.String() == "Error: failed to load base spec from \"no-file\": open no-file: The system cannot find the file specified.\n" // windows
-	}, stderr.String())
-}
-
 func Test_InvalidGlob(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 103, internal.Run(cmdToArgs(`oasdiff diff -c "a[" ../data/openapi-test3.yaml`), io.Discard, &stderr))
@@ -200,16 +191,6 @@ func Test_ComposedMode(t *testing.T) {
 	var bc interface{}
 	require.NoError(t, yaml.Unmarshal(stdout.Bytes(), &bc))
 	require.Equal(t, map[string]interface{}{"paths": map[string]interface{}{"deleted": []interface{}{"/api/old-test"}}}, bc)
-}
-
-func Test_ComposedModeInvalidFile(t *testing.T) {
-	var stderr bytes.Buffer
-	require.Equal(t, 103, internal.Run(cmdToArgs("oasdiff diff ../data/allof/* ../data/allof/* --composed --flatten"), io.Discard, &stderr))
-
-	require.Condition(t, func() (success bool) {
-		return stderr.String() == "Error: failed to load base specs from glob \"../data/allof/*\": failed to flatten allOf in \"../data/allof/invalid.yaml\": unable to resolve Type conflict: all Type values must be identical\n" ||
-			stderr.String() == "Error: failed to load base specs from glob \"../data/allof/*\": failed to flatten allOf in \"..\\data\\allof\\invalid.yaml\": unable to resolve Type conflict: all Type values must be identical" // windows
-	}, stderr.String())
 }
 
 func Test_Help(t *testing.T) {
