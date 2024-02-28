@@ -1,6 +1,8 @@
 package load
 
 import (
+	"fmt"
+
 	"github.com/tufin/oasdiff/flatten/allof"
 	"github.com/tufin/oasdiff/flatten/commonparams"
 	"github.com/tufin/oasdiff/flatten/headers"
@@ -30,7 +32,7 @@ func WithFlattenAllOf() Option {
 		var err error
 		for _, specInfo := range specInfos {
 			if specInfo.Spec, err = allof.MergeSpec(specInfo.Spec); err != nil {
-				return nil, err
+				return nil, fmt.Errorf("failed to flatten allOf in %q: %w", specInfo.Url, err)
 			}
 		}
 		return specInfos, nil

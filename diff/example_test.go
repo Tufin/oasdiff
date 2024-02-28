@@ -18,13 +18,13 @@ func ExampleGet() {
 
 	s1, err := loader.LoadFromFile("../data/simple1.yaml")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load spec with %v", err)
+		fmt.Fprintf(os.Stderr, "failed to load spec: %v", err)
 		return
 	}
 
 	s2, err := loader.LoadFromFile("../data/simple2.yaml")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load spec with %v", err)
+		fmt.Fprintf(os.Stderr, "failed to load spec: %v", err)
 		return
 	}
 
@@ -66,13 +66,13 @@ func ExampleGetPathsDiff() {
 
 	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/openapi-test1.yaml"))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load spec with %v", err)
+		fmt.Fprintf(os.Stderr, "failed to load spec: %v", err)
 		return
 	}
 
 	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/openapi-test3.yaml"))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load spec with %v", err)
+		fmt.Fprintf(os.Stderr, "failed to load spec: %v", err)
 		return
 	}
 
