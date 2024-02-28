@@ -205,8 +205,11 @@ func Test_ComposedMode(t *testing.T) {
 func Test_ComposedModeInvalidFile(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 103, internal.Run(cmdToArgs("oasdiff diff ../data/allof/* ../data/allof/* --composed --flatten"), io.Discard, &stderr))
-	require.Equal(t, `Error: failed to load base specs from glob "../data/allof/*": failed to flatten allOf in "../data/allof/invalid.yaml": unable to resolve Type conflict: all Type values must be identical
-`, stderr.String())
+
+	require.Condition(t, func() (success bool) {
+		return stderr.String() == "Error: failed to load base specs from glob \"../data/allof/*\": failed to flatten allOf in \"../data/allof/invalid.yaml\": unable to resolve Type conflict: all Type values must be identical\n" ||
+			stderr.String() == "Error: failed to load base specs from glob \"../data/allof/*\": failed to flatten allOf in \"..\\data\\allof\\invalid.yaml\": unable to resolve Type conflict: all Type values must be identical\n" // windows
+	}, stderr.String())
 }
 
 func Test_Help(t *testing.T) {
