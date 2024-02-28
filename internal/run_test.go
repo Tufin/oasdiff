@@ -208,7 +208,7 @@ func Test_ComposedModeInvalidFile(t *testing.T) {
 
 	require.Condition(t, func() (success bool) {
 		return stderr.String() == "Error: failed to load base specs from glob \"../data/allof/*\": failed to flatten allOf in \"../data/allof/invalid.yaml\": unable to resolve Type conflict: all Type values must be identical\n" ||
-			stderr.String() == "Error: failed to load base specs from glob \"../data/allof/*\": failed to flatten allOf in \"..\\data\\allof\\invalid.yaml\": unable to resolve Type conflict: all Type values must be identical\n" // windows
+			stderr.String() == "Error: failed to load base specs from glob \"../data/allof/*\": failed to flatten allOf in \"..\\data\\allof\\invalid.yaml\": unable to resolve Type conflict: all Type values must be identical" // windows
 	}, stderr.String())
 }
 
