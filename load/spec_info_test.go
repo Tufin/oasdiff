@@ -111,7 +111,7 @@ func TestSpecInfo_GlobOK(t *testing.T) {
 
 func TestSpecInfo_InvalidSpec(t *testing.T) {
 	_, err := load.NewSpecInfoFromGlob(MockLoader{}, "../data/ignore-err-example.txt")
-	require.EqualError(t, err, "error unmarshaling JSON: while decoding JSON: json: cannot unmarshal string into Go value of type openapi3.TBis")
+	require.EqualError(t, err, "failed to load \"../data/ignore-err-example.txt\": error unmarshaling JSON: while decoding JSON: json: cannot unmarshal string into Go value of type openapi3.TBis")
 }
 
 func TestSpecInfo_InvalidGlob(t *testing.T) {

@@ -123,7 +123,7 @@ func filterPathsByName(filter string, paths1, paths2 *openapi3.Paths) error {
 
 	r, err := regexp.Compile(filter)
 	if err != nil {
-		return fmt.Errorf("failed to compile filter regex %q with %w", filter, err)
+		return fmt.Errorf("failed to compile filter regex %q: %w", filter, err)
 	}
 
 	filterPathsInternal(paths1, r)
@@ -147,7 +147,7 @@ func filterPathsByExtensions(filterExtension string, paths1, paths2 *openapi3.Pa
 
 	r, err := regexp.Compile(filterExtension)
 	if err != nil {
-		return fmt.Errorf("failed to compile extension filter regex %q with %w", filterExtension, err)
+		return fmt.Errorf("failed to compile extension filter regex %q: %w", filterExtension, err)
 	}
 
 	filterPathsByExtensionInternal(paths1, r)

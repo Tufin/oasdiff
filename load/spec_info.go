@@ -2,6 +2,7 @@ package load
 
 import (
 	"errors"
+	"fmt"
 	"net/url"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -86,7 +87,7 @@ func fromGlob(loader Loader, glob string) ([]*SpecInfo, error) {
 	for _, file := range files {
 		spec, err := loader.LoadFromFile(file)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to load %q: %w", file, err)
 		}
 		result = append(result, &SpecInfo{Url: file, Spec: spec})
 	}

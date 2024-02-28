@@ -78,27 +78,27 @@ func Test_InvalidFile(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff diff no-file ../data/openapi-test3.yaml"), io.Discard, &stderr))
 	require.Condition(t, func() (success bool) {
-		return stderr.String() == "Error: failed to load base spec from \"no-file\" with open no-file: no such file or directory\n" ||
-			stderr.String() == "Error: failed to load base spec from \"no-file\" with open no-file: The system cannot find the file specified.\n" // windows
-	})
+		return stderr.String() == "Error: failed to load base spec from \"no-file\": open no-file: no such file or directory\n" ||
+			stderr.String() == "Error: failed to load base spec from \"no-file\": open no-file: The system cannot find the file specified.\n" // windows
+	}, stderr.String())
 }
 
 func Test_InvalidGlob(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 103, internal.Run(cmdToArgs(`oasdiff diff -c "a[" ../data/openapi-test3.yaml`), io.Discard, &stderr))
-	require.Equal(t, "Error: failed to load base specs from glob \"\\\"a[\\\"\" with syntax error in pattern\n", stderr.String())
+	require.Equal(t, "Error: failed to load base specs from glob \"\\\"a[\\\"\": syntax error in pattern\n", stderr.String())
 }
 
 func Test_GlobNoFiles(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 103, internal.Run(cmdToArgs("oasdiff diff -c no-file ../data/openapi-test3.yaml"), io.Discard, &stderr))
-	require.Equal(t, "Error: failed to load base specs from glob \"no-file\" with no matching files\n", stderr.String())
+	require.Equal(t, "Error: failed to load base specs from glob \"no-file\": no matching files\n", stderr.String())
 }
 
 func Test_GlobWithUrl(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 103, internal.Run(cmdToArgs("oasdiff diff -c ../data/openapi-test1.yaml https://"), io.Discard, &stderr))
-	require.Equal(t, "Error: failed to load revision specs from glob \"https://\" with no matching files (should be a glob, not a URL)\n", stderr.String())
+	require.Equal(t, "Error: failed to load revision specs from glob \"https://\": no matching files (should be a glob, not a URL)\n", stderr.String())
 }
 
 func Test_DiffInvalidFormat(t *testing.T) {
@@ -202,6 +202,13 @@ func Test_ComposedMode(t *testing.T) {
 	require.Equal(t, map[string]interface{}{"paths": map[string]interface{}{"deleted": []interface{}{"/api/old-test"}}}, bc)
 }
 
+func Test_ComposedModeInvalidFile(t *testing.T) {
+	var stderr bytes.Buffer
+	require.Equal(t, 103, internal.Run(cmdToArgs("oasdiff diff ../data/allof/* ../data/allof/* --composed --flatten"), io.Discard, &stderr))
+	require.Equal(t, `Error: failed to load base specs from glob "../data/allof/*": failed to flatten allOf in "../data/allof/invalid.yaml": unable to resolve Type conflict: all Type values must be identical
+`, stderr.String())
+}
+
 func Test_Help(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff --help"), &stdout, io.Discard))
@@ -285,7 +292,7 @@ func Test_FlattenCmdOK(t *testing.T) {
 func Test_FlattenCmdInvalid(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff flatten ../data/allof/invalid.yaml"), io.Discard, &stderr))
-	require.Equal(t, `Error: failed to load original spec from "../data/allof/invalid.yaml" with unable to resolve Type conflict: all Type values must be identical
+	require.Equal(t, `Error: failed to load original spec from "../data/allof/invalid.yaml": failed to flatten allOf in "../data/allof/invalid.yaml": unable to resolve Type conflict: all Type values must be identical
 `, stderr.String())
 }
 

@@ -130,7 +130,7 @@ func filterOperationsByExtensions(filterExtension string, pathItemPair *pathItem
 
 	r, err := regexp.Compile(filterExtension)
 	if err != nil {
-		return fmt.Errorf("failed to compile extension filter regex %q with %w", filterExtension, err)
+		return fmt.Errorf("failed to compile extension filter regex %q: %w", filterExtension, err)
 	}
 
 	filterOperationsByExtensionInternal(pathItemPair.PathItem1, r)

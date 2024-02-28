@@ -24,5 +24,5 @@ func Test_MergeSpecOK(t *testing.T) {
 
 func Test_MergeSpecInvalid(t *testing.T) {
 	_, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../../data/allof/invalid.yaml"), load.WithFlattenAllOf())
-	require.EqualError(t, err, "unable to resolve Type conflict: all Type values must be identical")
+	require.EqualError(t, err, "failed to flatten allOf in \"../../data/allof/invalid.yaml\": unable to resolve Type conflict: all Type values must be identical")
 }
