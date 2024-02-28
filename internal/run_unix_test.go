@@ -1,3 +1,5 @@
+//go:build unix
+
 package internal_test
 
 import (
