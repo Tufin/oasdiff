@@ -10,7 +10,7 @@ require (
 	github.com/getkin/kin-openapi v0.122.0
 	github.com/oasdiff/go-common v0.2.29
 	github.com/oasdiff/telemetry v0.1.2
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.7.0
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
