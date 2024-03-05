@@ -1,0 +1,11 @@
+openapi: 3.0.3
+info:
+  title: Spec #2
+  version: "0.1"
+paths:
+  '/test':
+    post:
+      summary: POST endpoint
+      responses:
+        '200':
+          description: Success
