@@ -48,6 +48,17 @@ func TestComposed_Duplicate(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestComposed_Issue500(t *testing.T) {
+	s1 := []*load.SpecInfo{
+		loadFrom(t, "../data/composed/issue500/", 1),
+		loadFrom(t, "../data/composed/issue500/", 2),
+	}
+
+	config := diff.NewConfig()
+	_, _, err := diff.GetPathsDiff(config, s1, s1)
+	require.NoError(t, err)
+}
+
 func TestComposed_CompareMostRecent(t *testing.T) {
 	s1 := []*load.SpecInfo{
 		loadFrom(t, "../data/composed/base/", 1),

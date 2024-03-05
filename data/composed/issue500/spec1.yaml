@@ -1,0 +1,11 @@
+openapi: 3.0.3
+info:
+  title: Spec #1
+  version: "0.1"
+paths:
+  '/test':
+    get:
+      summary: GET endpoint
+      responses:
+        '200':
+          description: Success

@@ -147,7 +147,7 @@ func mergedPaths(s1 []*load.SpecInfo, includePathParams bool) (*openapi3.Paths, 
 
 			p := getPathItem(result, path, includePathParams)
 			if p == nil {
-				result.Set(path, pathItem)
+				result.Set(path, copyPathItem(pathItem))
 				for _, opItem := range pathItem.Operations() {
 					operationsSources[opItem] = s.Url
 				}
@@ -179,10 +179,29 @@ func mergedPaths(s1 []*load.SpecInfo, includePathParams bool) (*openapi3.Paths, 
 					return nil, nil, fmt.Errorf("duplicate endpoint (%s %s) found in %s and %s. You may add the %s extension to specify order", op, path, operationsSources[oldOperation], s.Url, SinceDateExtension)
 				}
 			}
-
 		}
 	}
 	return result, &operationsSources, nil
+}
+
+// copyPathItem returns a shallow copy of the path item
+func copyPathItem(pathItem *openapi3.PathItem) *openapi3.PathItem {
+	return &openapi3.PathItem{
+		Extensions:  pathItem.Extensions,
+		Ref:         pathItem.Ref,
+		Summary:     pathItem.Summary,
+		Description: pathItem.Description,
+		Get:         pathItem.Get,
+		Put:         pathItem.Put,
+		Post:        pathItem.Post,
+		Delete:      pathItem.Delete,
+		Options:     pathItem.Options,
+		Head:        pathItem.Head,
+		Patch:       pathItem.Patch,
+		Trace:       pathItem.Trace,
+		Servers:     pathItem.Servers,
+		Parameters:  pathItem.Parameters,
+	}
 }
 
 func sinceDateFrom(pathItem openapi3.PathItem, operation openapi3.Operation) (civil.Date, error) {
