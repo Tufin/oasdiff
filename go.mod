@@ -2,7 +2,7 @@ module github.com/tufin/oasdiff
 
 go 1.21.5
 
-toolchain go1.21.6
+toolchain go1.22.1
 
 require (
 	cloud.google.com/go v0.112.1
