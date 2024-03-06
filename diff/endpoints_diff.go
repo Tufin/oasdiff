@@ -33,7 +33,8 @@ func (diff *EndpointsDiff) Empty() bool {
 
 	return len(diff.Added) == 0 &&
 		len(diff.Deleted) == 0 &&
-		len(diff.Modified) == 0
+		len(diff.Modified) == 0 &&
+		len(diff.Unchanged) == 0
 }
 
 func newEndpointsDiff() *EndpointsDiff {
@@ -60,6 +61,10 @@ func getEndpointsDiff(config *Config, state *state, paths1, paths2 *openapi3.Pat
 		return nil, err
 	}
 
+	if !config.Unchanged {
+		diff.Unchanged = nil
+	}
+
 	if diff.Empty() {
 		return nil, nil
 	}
@@ -78,18 +83,18 @@ func getEndpointsDiffInternal(config *Config, state *state, paths1, paths2 *open
 
 	for path, pathItem := range addedPaths.Map() {
 		for method := range pathItem.Operations() {
-			result.addAddedPath(path, method)
+			result.addAddedEndpoint(path, method)
 		}
 	}
 
 	for path, pathItem := range deletedPaths.Map() {
 		for method := range pathItem.Operations() {
-			result.addDeletedPath(path, method)
+			result.addDeletedEndpoint(path, method)
 		}
 	}
 
 	for path, pathItemPair := range otherPaths {
-		if err := result.addModifiedPaths(config, state, path, pathItemPair); err != nil {
+		if err := result.addModifiedEndpoints(config, state, path, pathItemPair); err != nil {
 			return nil, err
 		}
 	}
@@ -97,55 +102,55 @@ func getEndpointsDiffInternal(config *Config, state *state, paths1, paths2 *open
 	return result, nil
 }
 
-func (diff *EndpointsDiff) addAddedPath(path string, method string) {
+func (diff *EndpointsDiff) addAddedEndpoint(path string, method string) {
 	diff.Added = append(diff.Added, Endpoint{
 		Method: method,
 		Path:   path,
 	})
 }
 
-func (diff *EndpointsDiff) addDeletedPath(path string, method string) {
+func (diff *EndpointsDiff) addDeletedEndpoint(path string, method string) {
 	diff.Deleted = append(diff.Deleted, Endpoint{
 		Method: method,
 		Path:   path,
 	})
 }
 
-func (diff *EndpointsDiff) addUnchangedPath(path string, method string) {
+func (diff *EndpointsDiff) addUnchangedEndpoint(path string, method string) {
 	diff.Unchanged = append(diff.Unchanged, Endpoint{
 		Method: method,
 		Path:   path,
 	})
 }
 
-func (diff *EndpointsDiff) addModifiedPaths(config *Config, state *state, path string, pathItemPair *pathItemPair) error {
+func (diff *EndpointsDiff) addModifiedEndpoints(config *Config, state *state, path string, pathItemPair *pathItemPair) error {
 
-	pathDiff, err := getPathDiff(config, state, pathItemPair)
+	operationsDiff, err := getOperationsDiff(config, state, pathItemPair)
 	if err != nil {
 		return err
 	}
 
-	if pathDiff.Empty() || pathDiff.OperationsDiff.Empty() {
+	if operationsDiff.Empty() {
 		return nil
 	}
 
-	for _, method := range pathDiff.OperationsDiff.Added {
-		diff.addAddedPath(path, method)
+	for _, method := range operationsDiff.Added {
+		diff.addAddedEndpoint(path, method)
 	}
 
-	for _, method := range pathDiff.OperationsDiff.Deleted {
-		diff.addDeletedPath(path, method)
+	for _, method := range operationsDiff.Deleted {
+		diff.addDeletedEndpoint(path, method)
 	}
 
-	for method, methodDiff := range pathDiff.OperationsDiff.Modified {
+	for method, methodDiff := range operationsDiff.Modified {
 		diff.Modified[Endpoint{
 			Method: method,
 			Path:   path,
 		}] = methodDiff
 	}
 
-	for _, method := range pathDiff.OperationsDiff.Unchanged {
-		diff.addUnchangedPath(path, method)
+	for _, method := range operationsDiff.Unchanged {
+		diff.addUnchangedEndpoint(path, method)
 	}
 
 	return nil

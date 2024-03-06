@@ -29,6 +29,7 @@ type Flags interface {
 
 	setBase(source *load.Source)
 	setRevision(source *load.Source)
+	setUnchanged(bool)
 
 	addExcludeElements(string)
 

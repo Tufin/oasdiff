@@ -30,6 +30,7 @@ func getDeltaCmd() *cobra.Command {
 func runDelta(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 
 	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
+	flags.setUnchanged(true)
 
 	diffResult, err := calcDiff(flags)
 	if err != nil {

@@ -23,7 +23,8 @@ func (diff *ParametersDiffByLocation) Empty() bool {
 
 	return len(diff.Added) == 0 &&
 		len(diff.Deleted) == 0 &&
-		len(diff.Modified) == 0
+		len(diff.Modified) == 0 &&
+		len(diff.Unchanged) == 0
 }
 
 // ParamLocations are the four possible locations of parameters: path, query, header or cookie
@@ -105,6 +106,10 @@ func getParametersDiffByLocation(config *Config, state *state, params1, params2 
 	diff, err := getParametersDiffByLocationInternal(config, state, params1, params2, pathParamsMap)
 	if err != nil {
 		return nil, err
+	}
+
+	if !config.Unchanged {
+		diff.Unchanged = nil
 	}
 
 	if diff.Empty() {

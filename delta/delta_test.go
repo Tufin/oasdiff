@@ -193,10 +193,12 @@ func TestSymmetric(t *testing.T) {
 		s2, err := loader.LoadFromFile(pair.Y)
 		require.NoError(t, err)
 
-		d1, err := diff.Get(diff.NewConfig(), s1, s2)
+		config := diff.NewConfig().WithUnchanged()
+
+		d1, err := diff.Get(config, s1, s2)
 		require.NoError(t, err)
 
-		d2, err := diff.Get(diff.NewConfig(), s2, s1)
+		d2, err := diff.Get(config, s2, s1)
 		require.NoError(t, err)
 
 		require.Equal(t, delta.Get(false, d1), delta.Get(false, d2), pair)
@@ -215,11 +217,13 @@ func TestAsymmetric(t *testing.T) {
 		s2, err := loader.LoadFromFile(pair.Y)
 		require.NoError(t, err)
 
-		d1, err := diff.Get(diff.NewConfig(), s1, s2)
+		config := diff.NewConfig().WithUnchanged()
+
+		d1, err := diff.Get(config, s1, s2)
 		require.NoError(t, err)
 		asymmetric1 := delta.Get(true, d1)
 
-		d2, err := diff.Get(diff.NewConfig(), s2, s1)
+		d2, err := diff.Get(config, s2, s1)
 		require.NoError(t, err)
 		asymmetric2 := delta.Get(true, d2)
 
@@ -227,4 +231,21 @@ func TestAsymmetric(t *testing.T) {
 
 		require.Equal(t, asymmetric1+asymmetric2, symmetric, pair)
 	}
+}
+
+func TestUnchanged(t *testing.T) {
+
+	loader := openapi3.NewLoader()
+	s1, err := loader.LoadFromFile("../data/delta/base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/delta/revision.yaml")
+	require.NoError(t, err)
+
+	config := diff.NewConfig().WithUnchanged()
+
+	d, err := diff.Get(config, s1, s2)
+	require.NoError(t, err)
+
+	require.Equal(t, 0.75, delta.Get(false, d))
 }

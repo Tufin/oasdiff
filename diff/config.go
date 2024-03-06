@@ -15,6 +15,7 @@ type Config struct {
 	PathStripPrefixRevision string
 	ExcludeElements         utils.StringSet
 	IncludePathParams       bool
+	Unchanged               bool
 }
 
 const (
@@ -77,5 +78,10 @@ func (config *Config) WithCheckBreaking() *Config {
 	config.IncludeExtensions.Add(SunsetExtension)
 	config.IncludeExtensions.Add(XExtensibleEnumExtension)
 
+	return config
+}
+
+func (config *Config) WithUnchanged() *Config {
+	config.Unchanged = true
 	return config
 }

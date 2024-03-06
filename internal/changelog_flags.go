@@ -30,6 +30,7 @@ type ChangelogFlags struct {
 	deprecationDaysBeta      int
 	deprecationDaysStable    int
 	color                    string
+	unchanged                bool
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
@@ -41,6 +42,7 @@ func (flags *ChangelogFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
+	config.Unchanged = flags.unchanged
 
 	return config
 }
@@ -123,6 +125,10 @@ func (flags *ChangelogFlags) setBase(source *load.Source) {
 
 func (flags *ChangelogFlags) setRevision(source *load.Source) {
 	flags.revision = source
+}
+
+func (flags *ChangelogFlags) setUnchanged(unchanged bool) {
+	flags.unchanged = unchanged
 }
 
 func (flags *ChangelogFlags) addExcludeElements(element string) {

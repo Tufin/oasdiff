@@ -25,7 +25,8 @@ func (operationsDiff *OperationsDiff) Empty() bool {
 
 	return len(operationsDiff.Added) == 0 &&
 		len(operationsDiff.Deleted) == 0 &&
-		len(operationsDiff.Modified) == 0
+		len(operationsDiff.Modified) == 0 &&
+		len(operationsDiff.Unchanged) == 0
 }
 
 func newOperationsDiff() *OperationsDiff {
@@ -49,6 +50,10 @@ func getOperationsDiff(config *Config, state *state, pathItemPair *pathItemPair)
 	diff, err := getOperationsDiffInternal(config, state, pathItemPair)
 	if err != nil {
 		return nil, err
+	}
+
+	if !config.Unchanged {
+		diff.Unchanged = nil
 	}
 
 	if diff.Empty() {
