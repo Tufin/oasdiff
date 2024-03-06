@@ -85,10 +85,9 @@ func TestDiff_ModifiedOperation(t *testing.T) {
 	require.NoError(t, err)
 
 	require.Equal(t, &diff.OperationsDiff{
-		Added:     utils.StringList{"GET"},
-		Deleted:   utils.StringList{"POST"},
-		Modified:  diff.ModifiedOperations{},
-		Unchanged: utils.StringList{},
+		Added:    utils.StringList{"GET"},
+		Deleted:  utils.StringList{"POST"},
+		Modified: diff.ModifiedOperations{},
 	},
 		d.PathsDiff.Modified["/api/test"].OperationsDiff)
 }

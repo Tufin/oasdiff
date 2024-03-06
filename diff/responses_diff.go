@@ -23,7 +23,8 @@ func (responsesDiff *ResponsesDiff) Empty() bool {
 
 	return len(responsesDiff.Added) == 0 &&
 		len(responsesDiff.Deleted) == 0 &&
-		len(responsesDiff.Modified) == 0
+		len(responsesDiff.Modified) == 0 &&
+		len(responsesDiff.Unchanged) == 0
 }
 
 // ModifiedResponses is map of response values to their respective diffs
@@ -46,6 +47,10 @@ func getResponsesDiff(config *Config, state *state, responses1, responses2 *open
 	diff, err := getResponsesDiffInternal(config, state, responses1, responses2)
 	if err != nil {
 		return nil, err
+	}
+
+	if !config.Unchanged {
+		diff.Unchanged = nil
 	}
 
 	if diff.Empty() {
@@ -75,6 +80,7 @@ func getResponsesDiffInternal(config *Config, state *state, responses1, response
 			if err != nil {
 				return nil, err
 			}
+
 			if diff.Empty() {
 				result.Unchanged = append(result.Unchanged, responseValue1)
 			} else {

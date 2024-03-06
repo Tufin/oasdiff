@@ -23,6 +23,7 @@ type DiffFlags struct {
 	circularReferenceCounter int
 	includePathParams        bool
 	excludeElements          []string
+	unchanged                bool
 }
 
 func (flags *DiffFlags) toConfig() *diff.Config {
@@ -34,6 +35,7 @@ func (flags *DiffFlags) toConfig() *diff.Config {
 	config.PathStripPrefixBase = flags.stripPrefixBase
 	config.PathStripPrefixRevision = flags.stripPrefixRevision
 	config.IncludePathParams = flags.includePathParams
+	config.Unchanged = flags.unchanged
 
 	return config
 }
@@ -116,6 +118,10 @@ func (flags *DiffFlags) setBase(source *load.Source) {
 
 func (flags *DiffFlags) setRevision(source *load.Source) {
 	flags.revision = source
+}
+
+func (flags *DiffFlags) setUnchanged(unchanged bool) {
+	flags.unchanged = unchanged
 }
 
 func (flags *DiffFlags) addExcludeElements(element string) {
