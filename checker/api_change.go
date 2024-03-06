@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"github.com/TwiN/go-color"
+	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
 
@@ -18,12 +20,44 @@ type ApiChange struct {
 	OperationId string
 	Path        string
 	Source      *load.Source
+	Tags        map[string]any
 
 	SourceFile      string
 	SourceLine      int
 	SourceLineEnd   int
 	SourceColumn    int
 	SourceColumnEnd int
+}
+
+func newApiChangeGetter(config *Config, operationsSources *diff.OperationsSourcesMap) ChangeGetter {
+	return func(id string, defaultLevel Level, args []any, comment string, method string, op *openapi3.Operation, path string, sourceOp *openapi3.Operation) Change {
+		return ApiChange{
+			Id:          id,
+			Comment:     comment,
+			Level:       config.getLogLevel(id, defaultLevel),
+			Operation:   method,
+			Path:        path,
+			OperationId: op.OperationID,
+			Source:      load.NewSource((*operationsSources)[sourceOp]),
+			Args:        args,
+			Tags:        getTags(config, op),
+		}
+	}
+}
+
+func getTags(config *Config, op *openapi3.Operation) map[string]any {
+	if config.Tags == nil {
+		return nil
+	}
+
+	result := map[string]any{}
+	for _, tag := range config.Tags {
+		if val, ok := op.Extensions[tag]; ok {
+			result[tag] = val
+		}
+	}
+
+	return result
 }
 
 func (c ApiChange) GetSection() string {
@@ -82,6 +116,10 @@ func (c ApiChange) GetPath() string {
 
 func (c ApiChange) GetSource() string {
 	return c.Source.String()
+}
+
+func (c ApiChange) GetTags() map[string]any {
+	return c.Tags
 }
 
 func (c ApiChange) GetSourceFile() string {

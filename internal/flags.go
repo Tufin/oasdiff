@@ -20,6 +20,7 @@ type Flags interface {
 	getDeprecationDaysStable() int
 	getLang() string
 	getColor() string
+	getTags() []string
 	getWarnIgnoreFile() string
 	getErrIgnoreFile() string
 	getFormat() string

@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -11,6 +10,7 @@ const (
 )
 
 func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil || len(diffReport.PathsDiff.Modified) == 0 {
 		return result
@@ -40,15 +40,16 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 
 					// TODO: if base operation had this param individually (not through the path) - continue
 
-					result = append(result, ApiChange{
-						Id:          id,
-						Level:       level,
-						Args:        []any{paramLoc, param.Value.Name},
-						Operation:   operation,
-						OperationId: operationItem.OperationID,
-						Path:        path,
-						Source:      load.NewSource((*operationsSources)[operationItem]),
-					})
+					result = append(result, changeGetter(
+						id,
+						level,
+						[]any{paramLoc, param.Value.Name},
+						"",
+						operation,
+						operationItem,
+						path,
+						operationItem,
+					))
 				}
 			}
 		}

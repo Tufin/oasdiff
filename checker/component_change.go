@@ -75,6 +75,10 @@ func (c ComponentChange) GetSource() string {
 	return ""
 }
 
+func (c ComponentChange) GetTags() map[string]any {
+	return nil
+}
+
 func (c ComponentChange) GetSourceFile() string {
 	return c.SourceFile
 }

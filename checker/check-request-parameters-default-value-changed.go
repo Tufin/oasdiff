@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -12,6 +11,7 @@ const (
 )
 
 func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -24,17 +24,17 @@ func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 			if operationItem.ParametersDiff == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			appendResultItem := func(messageId string, a ...any) {
-				result = append(result, ApiChange{
-					Id:          messageId,
-					Level:       ERR,
-					Args:        a,
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, changeGetter(
+					messageId,
+					ERR,
+					a,
+					"",
+					operation,
+					operationItem.Revision,
+					path,
+					operationItem.Revision,
+				))
 			}
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {

@@ -192,7 +192,7 @@ func TestGitHubActionsFormatter_NotImplemented(t *testing.T) {
 	_, err = gitHubFormatter.RenderSummary(nil, formatters.NewRenderOpts())
 	assert.Error(t, err)
 
-	_, err = gitHubFormatter.RenderChangelog(nil, formatters.NewRenderOpts(), nil)
+	_, err = gitHubFormatter.RenderChangelog(nil, nil, formatters.NewRenderOpts(), nil)
 	assert.Error(t, err)
 
 	_, err = gitHubFormatter.RenderChecks(nil, formatters.NewRenderOpts())

@@ -33,7 +33,7 @@ func (f JSONFormatter) RenderBreakingChanges(changes checker.Changes, opts Rende
 	return printJSON(NewChanges(changes, f.Localizer))
 }
 
-func (f JSONFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
+func (f JSONFormatter) RenderChangelog(changes checker.Changes, tags []string, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	return printJSON(NewChanges(changes, f.Localizer))
 }
 

@@ -5,6 +5,7 @@ type Config struct {
 	MinSunsetBetaDays   int
 	MinSunsetStableDays int
 	LogLevelOverrides   map[string]Level
+	Tags                []string
 }
 
 func (c *Config) getLogLevel(checkerId string, defaultLevel Level) Level {

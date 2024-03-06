@@ -33,7 +33,7 @@ func (f SingleLineFormatter) RenderBreakingChanges(changes checker.Changes, opts
 	return result.Bytes(), nil
 }
 
-func (f SingleLineFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
+func (f SingleLineFormatter) RenderChangelog(changes checker.Changes, tags []string, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	result := bytes.NewBuffer(nil)
 
 	if len(changes) > 0 {

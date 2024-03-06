@@ -40,7 +40,7 @@ func (f TEXTFormatter) RenderBreakingChanges(changes checker.Changes, opts Rende
 	return result.Bytes(), nil
 }
 
-func (f TEXTFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
+func (f TEXTFormatter) RenderChangelog(changes checker.Changes, tags []string, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	result := bytes.NewBuffer(nil)
 
 	if len(changes) > 0 {

@@ -93,6 +93,10 @@ func (flags *ChangelogFlags) getColor() string {
 	return flags.color
 }
 
+func (flags *ChangelogFlags) getTags() []string {
+	return []string{""}
+}
+
 func (flags *ChangelogFlags) getWarnIgnoreFile() string {
 	return flags.warnIgnoreFile
 }

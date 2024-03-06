@@ -5,7 +5,6 @@ import (
 
 	"cloud.google.com/go/civil"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -14,6 +13,7 @@ const (
 )
 
 func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -25,54 +25,56 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 		}
 		for operation, operationDiff := range pathItem.OperationsDiff.Modified {
 			op := pathItem.Revision.Operations()[operation]
-			source := (*operationsSources)[op]
 
 			if !op.Deprecated {
 				continue
 			}
 
 			if operationDiff.ExtensionsDiff != nil && !operationDiff.ExtensionsDiff.Deleted.Empty() {
-				result = append(result, ApiChange{
-					Id:          APISunsetDeletedId,
-					Level:       ERR,
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, changeGetter(
+					APISunsetDeletedId,
+					ERR,
+					nil,
+					"",
+					operation,
+					op,
+					path,
+					op,
+				))
 			}
 
 			if operationDiff.ExtensionsDiff == nil || operationDiff.ExtensionsDiff.Modified.Empty() {
 				continue
 			}
 
-			opBase := pathItem.Base.Operations()[operation]
-
 			rawDate, date, err := getSunsetDate(op.Extensions)
 			if err != nil {
-				result = append(result, ApiChange{
-					Id:          APIDeprecatedSunsetParseId,
-					Level:       ERR,
-					Args:        []any{rawDate, err},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, changeGetter(
+					APIDeprecatedSunsetParseId,
+					ERR,
+					[]any{rawDate, err},
+					"",
+					operation,
+					op,
+					path,
+					op,
+				))
 				continue
 			}
 
+			opBase := pathItem.Base.Operations()[operation]
 			rawDate, baseDate, err := getSunsetDate(opBase.Extensions)
 			if err != nil {
-				result = append(result, ApiChange{
-					Id:          APIDeprecatedSunsetParseId,
-					Level:       ERR,
-					Args:        []any{rawDate, err},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource((*operationsSources)[opBase]),
-				})
+				result = append(result, changeGetter(
+					APIDeprecatedSunsetParseId,
+					ERR,
+					[]any{rawDate, err},
+					"",
+					operation,
+					op,
+					path,
+					opBase,
+				))
 				continue
 			}
 
@@ -80,30 +82,32 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
-				result = append(result, ApiChange{
-					Id:          ParseErrorId,
-					Level:       ERR,
-					Args:        []any{err.Error()},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, changeGetter(
+					ParseErrorId,
+					ERR,
+					[]any{err.Error()},
+					"",
+					operation,
+					op,
+					path,
+					op,
+				))
 				continue
 			}
 
 			deprecationDays := getDeprecationDays(config, stability)
 
 			if baseDate.After(date) && days < deprecationDays {
-				result = append(result, ApiChange{
-					Id:          APISunsetDateChangedTooSmallId,
-					Level:       ERR,
-					Args:        []any{baseDate, date, baseDate, deprecationDays},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, changeGetter(
+					APISunsetDateChangedTooSmallId,
+					ERR,
+					[]any{baseDate, date, baseDate, deprecationDays},
+					"",
+					operation,
+					op,
+					path,
+					op,
+				))
 			}
 		}
 	}

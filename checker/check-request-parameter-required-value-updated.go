@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -11,6 +10,7 @@ const (
 )
 
 func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	changeGetter := newApiChangeGetter(config, operationsSources)
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -41,16 +41,16 @@ func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operations
 						level = INFO
 					}
 
-					source := (*operationsSources)[operationItem.Revision]
-					result = append(result, ApiChange{
-						Id:          id,
-						Level:       level,
-						Args:        []any{paramLocation, paramName},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, changeGetter(
+						id,
+						level,
+						[]any{paramLocation, paramName},
+						"",
+						operation,
+						operationItem.Revision,
+						path,
+						operationItem.Revision,
+					))
 				}
 			}
 		}
