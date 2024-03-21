@@ -8,7 +8,7 @@ require (
 	cloud.google.com/go v0.112.1
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.122.0
-	github.com/oasdiff/go-common v0.2.29
+	github.com/oasdiff/go-common v0.2.30
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.9.0
 	github.com/yargevad/filepathx v1.0.0
