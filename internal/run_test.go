@@ -149,12 +149,20 @@ func Test_BreakingChangesFailOnWarnsErrsOnly(t *testing.T) {
 	require.Equal(t, 1, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test2.yaml ../data/openapi-test4.yaml --fail-on WARN"), io.Discard, io.Discard))
 }
 
-func Test_BreakingChangesFailOnDiffNoDiff(t *testing.T) {
+func Test_BreakingChangesFailOnErrNoDiff(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test1.yaml --fail-on ERR"), io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesFailOnWarnsNoDiff(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test1.yaml --fail-on WARN"), io.Discard, io.Discard))
+}
+
+func Test_ChangelogFailOnInfo(t *testing.T) {
+	require.Equal(t, 1, internal.Run(cmdToArgs("oasdiff changelog ../data/simple3.yaml ../data/simple4.yaml --fail-on INFO"), io.Discard, io.Discard))
+}
+
+func Test_ChangelogFailOnWarnInfosOnly(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/simple3.yaml ../data/simple4.yaml --fail-on WARN"), io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesIgnoreErrs(t *testing.T) {
