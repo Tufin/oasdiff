@@ -5,7 +5,7 @@ go 1.21.5
 toolchain go1.22.1
 
 require (
-	cloud.google.com/go v0.112.1
+	cloud.google.com/go v0.112.2
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.122.0
 	github.com/oasdiff/go-common v0.2.29
