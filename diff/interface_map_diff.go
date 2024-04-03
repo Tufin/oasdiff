@@ -1,6 +1,9 @@
 package diff
 
-import "github.com/tufin/oasdiff/utils"
+import (
+	"github.com/tufin/oasdiff/utils"
+	"github.com/wI2L/jsondiff"
+)
 
 // InterfaceMap is a map of string to interface
 type InterfaceMap map[string]interface{}
@@ -10,14 +13,6 @@ type InterfaceMapDiff struct {
 	Added    utils.StringList   `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  utils.StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedInterfaces `json:"modified,omitempty" yaml:"modified,omitempty"`
-}
-
-// ModifiedInterfaces is map of interface names to their respective diffs
-type ModifiedInterfaces map[string]*ValueDiff
-
-// Empty indicates whether a change was found in this element
-func (modifiedInterfaces ModifiedInterfaces) Empty() bool {
-	return len(modifiedInterfaces) == 0
 }
 
 // Empty indicates whether a change was found in this element
@@ -56,9 +51,11 @@ func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter utils.StringSet
 	for name1, interface1 := range map1 {
 		if _, ok := filter[name1]; ok {
 			if interface2, ok := map2[name1]; ok {
-				if diff := getValueDiff(interface1, interface2); !diff.Empty() {
-					result.Modified[name1] = diff
+				patch, err := jsondiff.Compare(interface1, interface2)
+				if err != nil {
+					// TODO: handle error
 				}
+				result.Modified[name1] = patch
 			} else {
 				result.Deleted = append(result.Deleted, name1)
 			}

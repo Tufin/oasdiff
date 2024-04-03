@@ -79,3 +79,11 @@ func (config *Config) WithCheckBreaking() *Config {
 
 	return config
 }
+
+func (config *Config) WithExtensions(extensions ...string) *Config {
+	for _, extension := range extensions {
+		config.IncludeExtensions.Add(extension)
+	}
+
+	return config
+}

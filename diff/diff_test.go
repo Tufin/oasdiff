@@ -902,3 +902,27 @@ func TestDiff_DifferentComponentSameHeader(t *testing.T) {
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
+
+func TestDiff_Extensions(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/extensions/base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/extensions/revision.yaml")
+	require.NoError(t, err)
+
+	extension := "x-amazon-apigateway-integration"
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExtensions(extension),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s2,
+		})
+	require.NoError(t, err)
+	dd := d.PathsDiff.Modified["/example/callback"].OperationsDiff.Modified["POST"].ExtensionsDiff.Modified[extension]
+	require.Len(t, dd, 2)
+	require.Equal(t, "{\"value\":\"200\",\"op\":\"replace\",\"path\":\"/responses/default/statusCode\"}", dd[0].String())
+	require.Equal(t, "{\"value\":\"http://api.example.com/v1/example/calllllllllback\",\"op\":\"replace\",\"path\":\"/uri\"}", dd[1].String())
+}
