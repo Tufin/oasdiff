@@ -17,23 +17,31 @@ func (diff *VariableDiff) Empty() bool {
 	return diff == nil || *diff == VariableDiff{}
 }
 
-func getVariableDiff(config *Config, state *state, var1, var2 *openapi3.ServerVariable) *VariableDiff {
-	diff := getVariableDiffInternal(config, state, var1, var2)
-
-	if diff.Empty() {
-		return nil
+func getVariableDiff(config *Config, state *state, var1, var2 *openapi3.ServerVariable) (*VariableDiff, error) {
+	diff, err := getVariableDiffInternal(config, state, var1, var2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getVariableDiffInternal(config *Config, state *state, var1, var2 *openapi3.ServerVariable) *VariableDiff {
+func getVariableDiffInternal(config *Config, state *state, var1, var2 *openapi3.ServerVariable) (*VariableDiff, error) {
 	result := VariableDiff{}
+	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, var1.Extensions, var2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, var1.Extensions, var2.Extensions)
+	if err != nil {
+		return nil, err
+	}
+
 	result.EnumDiff = getStringsDiff(var1.Enum, var2.Enum)
 	result.DefaultDiff = getValueDiff(var1.Default, var2.Default)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), var1.Description, var2.Description)
 
-	return &result
+	return &result, nil
 }

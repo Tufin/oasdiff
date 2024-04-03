@@ -926,3 +926,29 @@ func TestDiff_Extensions(t *testing.T) {
 	require.Equal(t, "{\"value\":\"200\",\"op\":\"replace\",\"path\":\"/responses/default/statusCode\"}", dd[0].String())
 	require.Equal(t, "{\"value\":\"http://api.example.com/v1/example/calllllllllback\",\"op\":\"replace\",\"path\":\"/uri\"}", dd[1].String())
 }
+
+func TestDiff_ExtensionsInvalid(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/extensions/base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/extensions/revision.yaml")
+	require.NoError(t, err)
+
+	extension := "x-amazon-apigateway-integration"
+
+	// Add invalid extension
+	newPathItem := s2.Paths.Find("/example/callback")
+	newPathItem.Post.Extensions[extension] = interface{}(make(chan int))
+	s2.Paths.Set("/example/callback", newPathItem)
+
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExtensions(extension),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s2,
+		})
+	require.EqualError(t, err, "json: unsupported type: chan int")
+}

@@ -63,7 +63,11 @@ func getSecuritySchemesDiffInternal(config *Config, state *state, securityScheme
 			if err != nil {
 				return nil, err
 			}
-			if diff := getSecuritySchemeDiff(config, state, value1, value2); !diff.Empty() {
+			diff, err := getSecuritySchemeDiff(config, state, value1, value2)
+			if err != nil {
+				return nil, err
+			}
+			if !diff.Empty() {
 				result.Modified[name1] = diff
 			}
 		} else {

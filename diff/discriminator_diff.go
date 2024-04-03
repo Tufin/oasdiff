@@ -23,37 +23,44 @@ func newDiscriminatorDiff() *DiscriminatorDiff {
 
 }
 
-func getDiscriminatorDiff(config *Config, state *state, discriminator1, discriminator2 *openapi3.Discriminator) *DiscriminatorDiff {
-	diff := getDiscriminatorDiffInternal(config, state, discriminator1, discriminator2)
-
-	if diff.Empty() {
-		return nil
+func getDiscriminatorDiff(config *Config, state *state, discriminator1, discriminator2 *openapi3.Discriminator) (*DiscriminatorDiff, error) {
+	diff, err := getDiscriminatorDiffInternal(config, state, discriminator1, discriminator2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getDiscriminatorDiffInternal(config *Config, state *state, discriminator1, discriminator2 *openapi3.Discriminator) *DiscriminatorDiff {
+func getDiscriminatorDiffInternal(config *Config, state *state, discriminator1, discriminator2 *openapi3.Discriminator) (*DiscriminatorDiff, error) {
 
 	result := newDiscriminatorDiff()
+	var err error
 
 	if discriminator1 == nil && discriminator2 == nil {
-		return result
+		return result, nil
 	}
 
 	if discriminator1 == nil && discriminator2 != nil {
 		result.Added = true
-		return result
+		return result, nil
 	}
 
 	if discriminator1 != nil && discriminator2 == nil {
 		result.Deleted = true
-		return result
+		return result, nil
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, discriminator1.Extensions, discriminator2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, discriminator1.Extensions, discriminator2.Extensions)
+	if err != nil {
+		return nil, err
+	}
 	result.PropertyNameDiff = getValueDiff(discriminator1.PropertyName, discriminator2.PropertyName)
 	result.MappingDiff = getStringMapDiff(discriminator1.Mapping, discriminator2.Mapping)
 
-	return result
+	return result, nil
 }

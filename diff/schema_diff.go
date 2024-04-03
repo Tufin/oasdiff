@@ -125,7 +125,10 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
+	if err != nil {
+		return nil, err
+	}
 	result.OneOfDiff, err = getSchemaListsDiff(config, state, value1.OneOf, value2.OneOf)
 	if err != nil {
 		return nil, err
@@ -149,7 +152,10 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	result.EnumDiff = getEnumDiff(config, state, value1.Enum, value2.Enum)
 	result.DefaultDiff = getValueDiff(value1.Default, value2.Default)
 	result.ExampleDiff = getValueDiffConditional(config.IsExcludeExamples(), value1.Example, value2.Example)
-	result.ExternalDocsDiff = getExternalDocsDiff(config, state, value1.ExternalDocs, value2.ExternalDocs)
+	result.ExternalDocsDiff, err = getExternalDocsDiff(config, state, value1.ExternalDocs, value2.ExternalDocs)
+	if err != nil {
+		return nil, err
+	}
 	result.AdditionalPropertiesAllowedDiff = getBoolRefDiff(value1.AdditionalProperties.Has, value2.AdditionalProperties.Has)
 	result.UniqueItemsDiff = getValueDiff(value1.UniqueItems, value2.UniqueItems)
 	result.ExclusiveMinDiff = getValueDiff(value1.ExclusiveMin, value2.ExclusiveMin)
@@ -188,7 +194,10 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		return nil, err
 	}
 
-	result.DiscriminatorDiff = getDiscriminatorDiff(config, state, value1.Discriminator, value2.Discriminator)
+	result.DiscriminatorDiff, err = getDiscriminatorDiff(config, state, value1.Discriminator, value2.Discriminator)
+	if err != nil {
+		return nil, err
+	}
 
 	return &result, nil
 }

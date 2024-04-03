@@ -34,17 +34,20 @@ func newInterfaceMapDiff() *InterfaceMapDiff {
 	}
 }
 
-func getInterfaceMapDiff(map1, map2 InterfaceMap, filter utils.StringSet) *InterfaceMapDiff {
-	diff := getInterfaceMapDiffInternal(map1, map2, filter)
-
-	if diff.Empty() {
-		return nil
+func getInterfaceMapDiff(map1, map2 InterfaceMap, filter utils.StringSet) (*InterfaceMapDiff, error) {
+	diff, err := getInterfaceMapDiffInternal(map1, map2, filter)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter utils.StringSet) *InterfaceMapDiff {
+func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter utils.StringSet) (*InterfaceMapDiff, error) {
 
 	result := newInterfaceMapDiff()
 
@@ -53,7 +56,7 @@ func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter utils.StringSet
 			if interface2, ok := map2[name1]; ok {
 				patch, err := jsondiff.Compare(interface1, interface2)
 				if err != nil {
-					// TODO: handle error
+					return nil, err
 				}
 				result.Modified[name1] = patch
 			} else {
@@ -70,5 +73,5 @@ func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter utils.StringSet
 		}
 	}
 
-	return result
+	return result, nil
 }

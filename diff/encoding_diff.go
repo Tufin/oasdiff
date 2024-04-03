@@ -42,7 +42,10 @@ func getEncodingDiffInternal(config *Config, state *state, value1, value2 *opena
 		return nil, fmt.Errorf("encoding is nil")
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
+	if err != nil {
+		return nil, err
+	}
 	result.ContentTypeDiff = getValueDiff(value1.ContentType, value2.ContentType)
 	result.HeadersDiff, err = getHeadersDiff(config, state, value1.Headers, value2.Headers)
 	if err != nil {

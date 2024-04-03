@@ -53,7 +53,11 @@ func getServersDiffInternal(config *Config, state *state, pServers1, pServers2 *
 
 	for _, server1 := range servers1 {
 		if server2 := findServer(server1, servers2); server2 != nil {
-			if diff := getServerDiff(config, state, server1, server2); !diff.Empty() {
+			diff, err := getServerDiff(config, state, server1, server2)
+			if err != nil {
+				return nil
+			}
+			if !diff.Empty() {
 				result.Modified[server1.URL] = diff
 			}
 		} else {

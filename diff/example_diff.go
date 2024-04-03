@@ -18,24 +18,32 @@ func (diff *ExampleDiff) Empty() bool {
 	return diff == nil || *diff == ExampleDiff{}
 }
 
-func getExampleDiff(config *Config, state *state, value1, value2 *openapi3.Example) *ExampleDiff {
-	diff := getExampleDiffInternal(config, state, value1, value2)
-
-	if diff.Empty() {
-		return nil
+func getExampleDiff(config *Config, state *state, value1, value2 *openapi3.Example) (*ExampleDiff, error) {
+	diff, err := getExampleDiffInternal(config, state, value1, value2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil,	nil
+	}
+
+	return diff,nil
 }
 
-func getExampleDiffInternal(config *Config, state *state, value1, value2 *openapi3.Example) *ExampleDiff {
+func getExampleDiffInternal(config *Config, state *state, value1, value2 *openapi3.Example) (*ExampleDiff, error) {
 	result := ExampleDiff{}
+	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
+	if err != nil {
+		return nil, err
+	}
+
 	result.SummaryDiff = getValueDiffConditional(config.IsExcludeSummary(), value1.Summary, value2.Summary)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), value1.Description, value2.Description)
 	result.ValueDiff = getValueDiff(value1.Value, value2.Value)
 	result.ExternalValueDiff = getValueDiff(value1.ExternalValue, value2.ExternalValue)
 
-	return &result
+	return &result, nil
 }

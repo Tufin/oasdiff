@@ -71,7 +71,10 @@ func getExamplesDiffInternal(config *Config, state *state, examples1, examples2 
 				return nil, err
 			}
 
-			diff := getExampleDiff(config, state, value1, value2)
+			diff, err := getExampleDiff(config, state, value1, value2)
+			if err != nil {
+				return nil, err
+			}
 
 			if !diff.Empty() {
 				result.Modified[name1] = diff
