@@ -25,10 +25,10 @@ func getExampleDiff(config *Config, state *state, value1, value2 *openapi3.Examp
 	}
 
 	if diff.Empty() {
-		return nil,	nil
+		return nil, nil
 	}
 
-	return diff,nil
+	return diff, nil
 }
 
 func getExampleDiffInternal(config *Config, state *state, value1, value2 *openapi3.Example) (*ExampleDiff, error) {
