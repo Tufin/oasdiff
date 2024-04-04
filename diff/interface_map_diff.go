@@ -2,7 +2,6 @@ package diff
 
 import (
 	"github.com/tufin/oasdiff/utils"
-	"github.com/wI2L/jsondiff"
 )
 
 // InterfaceMap is a map of string to interface
@@ -54,7 +53,7 @@ func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter utils.StringSet
 	for name1, interface1 := range map1 {
 		if _, ok := filter[name1]; ok {
 			if interface2, ok := map2[name1]; ok {
-				patch, err := jsondiff.Compare(interface1, interface2)
+				patch, err := compareJson(interface1, interface2)
 				if err != nil {
 					return nil, err
 				}

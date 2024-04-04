@@ -923,8 +923,10 @@ func TestDiff_Extensions(t *testing.T) {
 	require.NoError(t, err)
 	dd := d.PathsDiff.Modified["/example/callback"].OperationsDiff.Modified["POST"].ExtensionsDiff.Modified[extension]
 	require.Len(t, dd, 2)
-	require.Equal(t, "{\"value\":\"200\",\"op\":\"replace\",\"path\":\"/responses/default/statusCode\"}", dd[0].String())
-	require.Equal(t, "{\"value\":\"http://api.example.com/v1/example/calllllllllback\",\"op\":\"replace\",\"path\":\"/uri\"}", dd[1].String())
+	require.Equal(t, "200", dd[0].Value)
+	require.Equal(t, "201", dd[0].OldValue)
+	require.Equal(t, "http://api.example.com/v1/example/calllllllllback", dd[1].Value)
+	require.Equal(t, "http://api.example.com/v1/example/callback", dd[1].OldValue)
 }
 
 func TestDiff_ExtensionsInvalid(t *testing.T) {
