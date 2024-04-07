@@ -254,13 +254,13 @@ oasdiff diff data/header-case/base.yaml data/header-case/revision.yaml --case-in
 ## Excluding Specific Kinds of Changes 
 You can use the `--exclude-elements` flag to exclude certain kinds of changes:
 - Use `--exclude-elements examples` to exclude [Examples](https://swagger.io/specification/#example-object)
+- Use `--exclude-elements extensions` to exclude [Extensions](https://swagger.io/specification/#specification-extensions)
 - Use `--exclude-elements description` to exclude description fields
 - Use `--exclude-elements title` to exclude title fields
 - Use `--exclude-elements summary` to exclude summary fields
 - Use `--exclude-elements endpoints` to exclude the [endpoints diff](#paths-vs-endpoints)
 
 You can ignore multiple elements with a comma-separated list of excluded elements as in [this example](#ignore-changes-to-description-and-examples).  
-Note that [Extensions](https://swagger.io/specification/#specification-extensions) are always excluded from the diff.
 
 ## Excluding Specific Endpoints
 You can filter endpoints in two ways:
