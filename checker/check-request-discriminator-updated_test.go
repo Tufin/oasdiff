@@ -17,7 +17,7 @@ func TestRequestDiscriminatorUpdatedCheckAdded(t *testing.T) {
 	s2, err := open("../data/checker/request_property_discriminator_added_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestDiscriminatorUpdatedCheck), d, osm, checker.INFO)
 
@@ -50,7 +50,7 @@ func TestRequestDiscriminatorUpdatedCheckRemoved(t *testing.T) {
 	s2, err := open("../data/checker/request_property_discriminator_added_base.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestDiscriminatorUpdatedCheck), d, osm, checker.INFO)
 
@@ -83,7 +83,7 @@ func TestRequestDiscriminatorUpdatedCheckPropertyNameChanging(t *testing.T) {
 	s2, err := open("../data/checker/request_property_discriminator_added_property_name_changed.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestDiscriminatorUpdatedCheck), d, osm, checker.INFO)
 
@@ -117,7 +117,7 @@ func TestRequestDiscriminatorUpdatedCheckMappingChanging(t *testing.T) {
 	s2, err := open("../data/checker/request_property_discriminator_mapping_changed.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestDiscriminatorUpdatedCheck), d, osm, checker.INFO)
 

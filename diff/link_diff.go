@@ -2,7 +2,6 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
 )
 
 // LinkDiff describes the changes between a pair of link objects: https://swagger.io/specification/#link-object
@@ -46,7 +45,7 @@ func getLinkDiffInternal(config *Config, state *state, link1, link2 *openapi3.Li
 	result.OperationIDDiff = getValueDiff(link1.OperationID, link2.OperationID)
 	result.OperationRefDiff = getValueDiff(link1.OperationRef, link2.OperationRef)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), link1.Description, link2.Description)
-	result.ParametersDiff, err = getInterfaceMapDiff(link1.Parameters, link2.Parameters, utils.StringSet{})
+	result.ParametersDiff, err = getInterfaceMapDiff(link1.Parameters, link2.Parameters)
 	if err != nil {
 		return nil, err
 	}

@@ -195,7 +195,7 @@ func Test_BreakingChangesInvalidIgnoreFile(t *testing.T) {
 
 func Test_ComposedMode(t *testing.T) {
 	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff ../data/composed/base/*.yaml ../data/composed/revision/*.yaml --composed --exclude-elements endpoints"), &stdout, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff ../data/composed/base/*.yaml ../data/composed/revision/*.yaml --composed --exclude-elements endpoints,extensions"), &stdout, io.Discard))
 	var bc interface{}
 	require.NoError(t, yaml.Unmarshal(stdout.Bytes(), &bc))
 	require.Equal(t, map[string]interface{}{"paths": map[string]interface{}{"deleted": []interface{}{"/api/old-test"}}}, bc)

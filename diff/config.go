@@ -6,7 +6,6 @@ import (
 
 // Config includes various settings to control the diff
 type Config struct {
-	IncludeExtensions       utils.StringSet
 	PathFilter              string
 	FilterExtension         string
 	PathPrefixBase          string
@@ -23,6 +22,7 @@ const (
 	ExcludeEndpointsOption   = "endpoints"
 	ExcludeTitleOption       = "title"
 	ExcludeSummaryOption     = "summary"
+	ExcludeExtensionsOption  = "extensions"
 )
 
 var ExcludeDiffOptions = []string{
@@ -31,18 +31,23 @@ var ExcludeDiffOptions = []string{
 	ExcludeEndpointsOption,
 	ExcludeTitleOption,
 	ExcludeSummaryOption,
+	ExcludeExtensionsOption,
 }
 
 // NewConfig returns a default configuration
 func NewConfig() *Config {
 	return &Config{
-		IncludeExtensions: utils.StringSet{},
-		ExcludeElements:   utils.StringSet{},
+		ExcludeElements: utils.StringSet{},
 	}
 }
 
 func (config *Config) WithExcludeElements(excludeElements []string) *Config {
 	config.ExcludeElements = utils.StringList(excludeElements).ToStringSet()
+	return config
+}
+
+func (config *Config) WithExcludeExtensions() *Config {
+	config.ExcludeElements.Add(ExcludeExtensionsOption)
 	return config
 }
 
@@ -66,24 +71,12 @@ func (config *Config) IsExcludeSummary() bool {
 	return config.ExcludeElements.Contains(ExcludeSummaryOption)
 }
 
+func (config *Config) IsExcludeExtensions() bool {
+	return config.ExcludeElements.Contains(ExcludeExtensionsOption)
+}
+
 const (
 	SunsetExtension          = "x-sunset"
 	XStabilityLevelExtension = "x-stability-level"
 	XExtensibleEnumExtension = "x-extensible-enum"
 )
-
-func (config *Config) WithCheckBreaking() *Config {
-	config.IncludeExtensions.Add(XStabilityLevelExtension)
-	config.IncludeExtensions.Add(SunsetExtension)
-	config.IncludeExtensions.Add(XExtensibleEnumExtension)
-
-	return config
-}
-
-func (config *Config) WithExtensions(extensions ...string) *Config {
-	for _, extension := range extensions {
-		config.IncludeExtensions.Add(extension)
-	}
-
-	return config
-}

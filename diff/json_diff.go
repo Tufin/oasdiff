@@ -11,7 +11,7 @@ type jsonPatch []*jsonOperation
 
 // jsonOperation is a wrapper to jsondiff.jsonOperation with proper serialization for json and yaml
 type jsonOperation struct {
-	OldValue interface{} `json:"old_value" yaml:"old_value"`
+	OldValue interface{} `json:"oldValue" yaml:"oldValue"`
 	Value    interface{} `json:"value" yaml:"value"`
 	Type     string      `json:"op" yaml:"op"`
 	From     string      `json:"from" yaml:"from"`

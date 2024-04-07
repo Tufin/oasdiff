@@ -33,8 +33,8 @@ func newInterfaceMapDiff() *InterfaceMapDiff {
 	}
 }
 
-func getInterfaceMapDiff(map1, map2 InterfaceMap, filter utils.StringSet) (*InterfaceMapDiff, error) {
-	diff, err := getInterfaceMapDiffInternal(map1, map2, filter)
+func getInterfaceMapDiff(map1, map2 InterfaceMap) (*InterfaceMapDiff, error) {
+	diff, err := getInterfaceMapDiffInternal(map1, map2)
 	if err != nil {
 		return nil, err
 	}
@@ -46,29 +46,25 @@ func getInterfaceMapDiff(map1, map2 InterfaceMap, filter utils.StringSet) (*Inte
 	return diff, nil
 }
 
-func getInterfaceMapDiffInternal(map1, map2 InterfaceMap, filter utils.StringSet) (*InterfaceMapDiff, error) {
+func getInterfaceMapDiffInternal(map1, map2 InterfaceMap) (*InterfaceMapDiff, error) {
 
 	result := newInterfaceMapDiff()
 
 	for name1, interface1 := range map1 {
-		if _, ok := filter[name1]; ok {
-			if interface2, ok := map2[name1]; ok {
-				patch, err := compareJson(interface1, interface2)
-				if err != nil {
-					return nil, err
-				}
-				result.Modified[name1] = patch
-			} else {
-				result.Deleted = append(result.Deleted, name1)
+		if interface2, ok := map2[name1]; ok {
+			patch, err := compareJson(interface1, interface2)
+			if err != nil {
+				return nil, err
 			}
+			result.Modified[name1] = patch
+		} else {
+			result.Deleted = append(result.Deleted, name1)
 		}
 	}
 
 	for name2 := range map2 {
-		if _, ok := filter[name2]; ok {
-			if _, ok := map1[name2]; !ok {
-				result.Added = append(result.Added, name2)
-			}
+		if _, ok := map1[name2]; !ok {
+			result.Added = append(result.Added, name2)
 		}
 	}
 

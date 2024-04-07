@@ -13,7 +13,7 @@ func TestIgnore(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 3)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Equal(t, 6, len(errs))
@@ -27,7 +27,7 @@ func TestIgnoreSubpath(t *testing.T) {
 	s1 := l(t, 6)
 	s2 := l(t, 7)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Equal(t, 3, len(errs))
@@ -41,7 +41,7 @@ func TestIgnoreOnlyIncludedSubpaths(t *testing.T) {
 	s1 := l(t, 8)
 	s2 := l(t, 7)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Equal(t, 2, len(errs)) // detect new and newest were deleted
@@ -58,7 +58,7 @@ func TestIgnoreComponent(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 3)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.APISchemasRemovedId}), d, osm)
 	require.Equal(t, 8, len(errs))

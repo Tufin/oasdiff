@@ -16,7 +16,7 @@ func TestResponseRequiredPropertyAdded(t *testing.T) {
 	s2, err := open("../data/checker/response_required_property_added_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -40,7 +40,7 @@ func TestResponseRequiredPropertyRemoved(t *testing.T) {
 	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Required = []string{"name", "id"}
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -64,7 +64,7 @@ func TestResponseRequiredWriteOnlyPropertyAdded(t *testing.T) {
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["new"].Value.WriteOnly = true
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -89,7 +89,7 @@ func TestResponseRequiredWriteOnlyPropertyRemoved(t *testing.T) {
 
 	s1.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["new"].Value.WriteOnly = true
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Required = []string{"name", "id"}
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseRequiredPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)

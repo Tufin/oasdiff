@@ -16,7 +16,7 @@ func TestRequestPropertyOneOfAdded(t *testing.T) {
 	s2, err := open("../data/checker/request_property_one_of_added_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyOneOfUpdatedCheck), d, osm, checker.INFO)
 
@@ -50,7 +50,7 @@ func TestRequestPropertyOneOfRemoved(t *testing.T) {
 	s2, err := open("../data/checker/request_property_one_of_removed_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyOneOfUpdatedCheck), d, osm, checker.INFO)
 

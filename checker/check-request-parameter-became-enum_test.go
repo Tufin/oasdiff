@@ -16,7 +16,7 @@ func TestRequestParameterBecameEnum(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_became_enum_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterBecameEnumCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)

@@ -32,7 +32,7 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) *diff.Diff {
 }
 
 func TestDiff_Same(t *testing.T) {
-	require.Nil(t, d(t, diff.NewConfig(), 1, 1))
+	require.Nil(t, d(t, diff.NewConfig().WithExcludeExtensions(), 1, 1))
 }
 
 func TestDiff_Empty(t *testing.T) {
@@ -94,37 +94,19 @@ func TestDiff_ModifiedOperation(t *testing.T) {
 }
 
 func TestAddedExtension(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
-	}
-
-	require.Contains(t,
-		d(t, &config, 3, 1).ExtensionsDiff.Added,
-		"x-extension-test")
+	require.Contains(t, d(t, diff.NewConfig(), 3, 1).ExtensionsDiff.Added, "x-extension-test")
 }
 
 func TestDeletedExtension(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
-	}
-
-	require.Contains(t,
-		d(t, &config, 1, 3).ExtensionsDiff.Deleted,
-		"x-extension-test")
+	require.Contains(t, d(t, diff.NewConfig(), 1, 3).ExtensionsDiff.Deleted, "x-extension-test")
 }
 
 func TestModifiedExtension(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test2": struct{}{}},
-	}
-
-	require.NotNil(t,
-		d(t, &config, 1, 3).ExtensionsDiff.Modified["x-extension-test2"])
+	require.NotNil(t, d(t, diff.NewConfig(), 1, 3).ExtensionsDiff.Modified["x-extension-test2"])
 }
 
 func TestExcludedExtension(t *testing.T) {
-	require.Nil(t,
-		d(t, diff.NewConfig(), 1, 3).ExtensionsDiff)
+	require.Nil(t, d(t, diff.NewConfig().WithExcludeExtensions(), 1, 3).ExtensionsDiff)
 }
 
 func TestDiff_AddedGlobalTag(t *testing.T) {
@@ -311,16 +293,13 @@ func TestResponseDeleted(t *testing.T) {
 }
 
 func TestResponseDescriptionModified(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
-	}
 
 	require.Equal(t,
 		&diff.ValueDiff{
 			From: "Tufin",
 			To:   "Tufin1",
 		},
-		d(t, &config, 3, 1).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
+		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestResponseHeadersModified(t *testing.T) {
@@ -345,12 +324,9 @@ func TestServerDeleted(t *testing.T) {
 }
 
 func TestServerModified(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
-	}
 
 	require.Contains(t,
-		d(t, &config, 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified,
+		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified,
 		"https://www.oasdiff.com")
 }
 
@@ -889,7 +865,7 @@ func TestDiff_DifferentComponentSameSchema(t *testing.T) {
 	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/different_component_same_schema.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
@@ -912,8 +888,7 @@ func TestDiff_Extensions(t *testing.T) {
 	s2, err := loader.LoadFromFile("../data/extensions/revision.yaml")
 	require.NoError(t, err)
 
-	extension := "x-amazon-apigateway-integration"
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExtensions(extension),
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
 		&load.SpecInfo{
 			Spec: s1,
 		},
@@ -921,7 +896,7 @@ func TestDiff_Extensions(t *testing.T) {
 			Spec: s2,
 		})
 	require.NoError(t, err)
-	dd := d.PathsDiff.Modified["/example/callback"].OperationsDiff.Modified["POST"].ExtensionsDiff.Modified[extension]
+	dd := d.PathsDiff.Modified["/example/callback"].OperationsDiff.Modified["POST"].ExtensionsDiff.Modified["x-amazon-apigateway-integration"]
 	require.Len(t, dd, 2)
 	require.Equal(t, "200", dd[0].Value)
 	require.Equal(t, "201", dd[0].OldValue)
@@ -945,7 +920,7 @@ func TestDiff_ExtensionsInvalid(t *testing.T) {
 	newPathItem.Post.Extensions[extension] = interface{}(make(chan int))
 	s2.Paths.Set("/example/callback", newPathItem)
 
-	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExtensions(extension),
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(),
 		&load.SpecInfo{
 			Spec: s1,
 		},

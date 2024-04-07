@@ -16,7 +16,7 @@ func TestRequestParameterMaxItemsIncreased(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_max_items_updated_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterMaxItemsUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -38,7 +38,7 @@ func TestRequestParameterMaxItemsDecreased(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_max_items_updated_base.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterMaxItemsUpdatedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)

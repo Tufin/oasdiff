@@ -20,7 +20,7 @@ func TestBreaking_RespTypeStringToNumber(t *testing.T) {
 	require.NoError(t, err)
 	s2.Spec.Paths.Value("/test").Get.Responses.Value("200").Value.Content["application/json"].Schema.Value.Type = "number"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
@@ -40,7 +40,7 @@ func TestBreaking_RespTypeNumberToString(t *testing.T) {
 	require.NoError(t, err)
 	s2.Spec.Paths.Value("/test").Get.Responses.Value("200").Value.Content["application/json"].Schema.Value.Type = "string"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
@@ -60,7 +60,7 @@ func TestBreaking_RespTypeNumberToInteger(t *testing.T) {
 	require.NoError(t, err)
 	s2.Spec.Paths.Value("/test").Get.Responses.Value("200").Value.Content["application/json"].Schema.Value.Type = "integer"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -78,7 +78,7 @@ func TestBreaking_RespTypeIntegerToNumber(t *testing.T) {
 	require.NoError(t, err)
 	s2.Spec.Paths.Value("/test").Get.Responses.Value("200").Value.Content["application/json"].Schema.Value.Type = "number"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
@@ -99,7 +99,7 @@ func TestBreaking_RespTypeNumberToInt32(t *testing.T) {
 	s2.Spec.Paths.Value("/test").Get.Responses.Value("200").Value.Content["application/json"].Schema.Value.Type = "integer"
 	s2.Spec.Paths.Value("/test").Get.Responses.Value("200").Value.Content["application/json"].Schema.Value.Format = "int32"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -113,7 +113,7 @@ func TestBreaking_RespTypeChanged(t *testing.T) {
 	s2, err := open("../data/type-change/revision-response.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 1)
