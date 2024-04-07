@@ -45,11 +45,11 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						if propertyDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension] == nil {
 							return
 						}
-						from, ok := diff.GetJsonOrigValue(propertyDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension])
+						from, ok := propertyDiff.Base.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
 						if !ok {
 							return
 						}
-						to, ok := diff.GetJsonOrigValue(propertyDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension])
+						to, ok := propertyDiff.Base.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
 						if !ok {
 							return
 						}

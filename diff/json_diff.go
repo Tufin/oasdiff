@@ -1,8 +1,6 @@
 package diff
 
 import (
-	"encoding/json"
-
 	"github.com/wI2L/jsondiff"
 )
 
@@ -42,28 +40,4 @@ func compareJson(source, target interface{}, opts ...jsondiff.Option) (jsonPatch
 		return nil, err
 	}
 	return toJsonPatch(patch), nil
-}
-
-// GetJsonOrigValue returns the original value of the diff, only if there is exactly one diff
-func GetJsonOrigValue(patch jsonPatch) (json.RawMessage, bool) {
-	if len(patch) != 1 {
-		return nil, false
-	}
-	result, ok := patch[0].OldValue.(json.RawMessage)
-	if !ok {
-		return nil, false
-	}
-	return result, true
-}
-
-// GetJsonOrigValue returns the new value of the diff, only if there is exactly one diff
-func GetJsonNewValue(patch jsonPatch) (json.RawMessage, bool) {
-	if len(patch) != 1 {
-		return nil, false
-	}
-	result, ok := patch[0].Value.(json.RawMessage)
-	if !ok {
-		return nil, false
-	}
-	return result, true
 }

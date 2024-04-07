@@ -45,11 +45,11 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 					if paramItem.SchemaDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension] == nil {
 						continue
 					}
-					from, ok := diff.GetJsonOrigValue(paramItem.SchemaDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension])
+					from, ok := paramItem.SchemaDiff.Base.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
 					if !ok {
 						continue
 					}
-					to, ok := diff.GetJsonNewValue(paramItem.SchemaDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension])
+					to, ok := paramItem.SchemaDiff.Revision.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
 					if !ok {
 						continue
 					}
