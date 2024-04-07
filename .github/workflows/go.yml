@@ -88,10 +88,11 @@ jobs:
       run: |
         ! git grep -InE 'json:"' | grep -v _test.go | grep -v yaml:
 
-    - uses: codecov/codecov-action@v3
+    - uses: codecov/codecov-action@v4
       with:
         files: ./coverage.txt
         flags: unittests # optional
         name: codecov-umbrella # optional
         fail_ci_if_error: true # optional (default = false)
         verbose: true # optional (default = false)
+        token: ${{ secrets.CODECOV_TOKEN }} # required
