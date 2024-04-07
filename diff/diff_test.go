@@ -904,6 +904,26 @@ func TestDiff_Extensions(t *testing.T) {
 	require.Equal(t, "http://api.example.com/v1/example/callback", dd[1].OldValue)
 }
 
+func TestDiff_ExtensionsExcluded(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/extensions/base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/extensions/revision.yaml")
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(),
+		&load.SpecInfo{
+			Spec: s1,
+		},
+		&load.SpecInfo{
+			Spec: s2,
+		})
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
 func TestDiff_ExtensionsInvalid(t *testing.T) {
 	loader := openapi3.NewLoader()
 
