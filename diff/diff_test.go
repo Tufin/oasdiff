@@ -706,19 +706,13 @@ func TestDiff_InfoDeleted(t *testing.T) {
 func TestDiff_PathParamInMethodRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/method-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/method-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/method-revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/method-revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}"].ParametersDiff.Modified["path"]["bookId"].NameDiff
@@ -729,19 +723,13 @@ func TestDiff_PathParamInMethodRenamed(t *testing.T) {
 func TestDiff_PathParamInOperationRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/op-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/op-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/op-revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/op-revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
@@ -752,19 +740,13 @@ func TestDiff_PathParamInOperationRenamed(t *testing.T) {
 func TestDiff_PathParamRefInOperationRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/op-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/op-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/op-revision-ref.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/op-revision-ref.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
@@ -775,19 +757,13 @@ func TestDiff_PathParamRefInOperationRenamed(t *testing.T) {
 func TestDiff_TwoPathParamsRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/two-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/two-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/two-revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/two-revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}/{libraryId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
@@ -802,19 +778,13 @@ func TestDiff_TwoPathParamsRenamed(t *testing.T) {
 func TestDiff_TwoPathParamsOneRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/one-of-two-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/one-of-two-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/one-of-two-revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/one-of-two-revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}/{libraryId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["libraryId"].NameDiff
@@ -825,16 +795,10 @@ func TestDiff_TwoPathParamsOneRenamed(t *testing.T) {
 func TestDiff_DifferentComponentSameParam(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/different_component_same_parameter.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/different_component_same_parameter.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s1,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
@@ -842,19 +806,13 @@ func TestDiff_DifferentComponentSameParam(t *testing.T) {
 func TestDiff_DifferentComponentModifiedParam(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/different_component_same_parameter.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/different_component_same_parameter.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/different_component_modified_parameter.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/different_component_modified_parameter.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	dd := d.ComponentsDiff.ParametersDiff.Modified["differentComponentName_A"].InDiff
 	require.Equal(t, "header", dd.From)
@@ -882,19 +840,13 @@ func TestDiff_DifferentComponentSameHeader(t *testing.T) {
 func TestDiff_Extensions(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/extensions/base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/extensions/revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	dd := d.PathsDiff.Modified["/example/callback"].OperationsDiff.Modified["POST"].ExtensionsDiff.Modified["x-amazon-apigateway-integration"]
 	require.Len(t, dd, 2)
@@ -907,19 +859,13 @@ func TestDiff_Extensions(t *testing.T) {
 func TestDiff_ExtensionsExcluded(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/extensions/base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/extensions/revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(), s1, s2)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
@@ -927,25 +873,19 @@ func TestDiff_ExtensionsExcluded(t *testing.T) {
 func TestDiff_ExtensionsInvalid(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/extensions/base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/extensions/revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/revision.yaml"))
 	require.NoError(t, err)
 
 	extension := "x-amazon-apigateway-integration"
 
 	// Add invalid extension
-	newPathItem := s2.Paths.Find("/example/callback")
+	newPathItem := s2.Spec.Paths.Find("/example/callback")
 	newPathItem.Post.Extensions[extension] = interface{}(make(chan int))
-	s2.Paths.Set("/example/callback", newPathItem)
+	s2.Spec.Paths.Set("/example/callback", newPathItem)
 
-	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.EqualError(t, err, "json: unsupported type: chan int")
 }
