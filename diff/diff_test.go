@@ -871,21 +871,47 @@ func TestDiff_ExtensionsExcluded(t *testing.T) {
 }
 
 func TestDiff_ExtensionsInvalid(t *testing.T) {
-	loader := openapi3.NewLoader()
-
-	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/base.yaml"))
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/extensions/base.yaml"))
 	require.NoError(t, err)
-
-	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/revision.yaml"))
-	require.NoError(t, err)
-
-	extension := "x-amazon-apigateway-integration"
 
 	// Add invalid extension
-	newPathItem := s2.Spec.Paths.Find("/example/callback")
-	newPathItem.Post.Extensions[extension] = interface{}(make(chan int))
-	s2.Spec.Paths.Set("/example/callback", newPathItem)
+	newPathItem := s1.Spec.Paths.Find("/example/callback")
+	newPathItem.Post.Extensions["x-amazon-apigateway-integration"] = interface{}(make(chan int))
+	s1.Spec.Paths.Set("/example/callback", newPathItem)
 
-	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	require.EqualError(t, err, "json: unsupported type: chan int")
+}
+
+func TestDiff_ExtensionsInvalidSecuritySchemes(t *testing.T) {
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/security-requirements/spec_1.yaml"))
+	require.NoError(t, err)
+
+	// Add invalid extension
+	s1.Spec.Components.SecuritySchemes["petstore_auth"].Value.Extensions = map[string]interface{}{"invalid": interface{}(make(chan int))}
+
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	require.EqualError(t, err, "json: unsupported type: chan int")
+}
+
+func TestDiff_ExtensionsInvalidFlows(t *testing.T) {
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/security-requirements/spec_1.yaml"))
+	require.NoError(t, err)
+
+	// Add invalid extension
+	s1.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Extensions = map[string]interface{}{"invalid": interface{}(make(chan int))}
+
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	require.EqualError(t, err, "json: unsupported type: chan int")
+}
+
+func TestDiff_ExtensionsInvalidImplicit(t *testing.T) {
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/security-requirements/spec_1.yaml"))
+	require.NoError(t, err)
+
+	// Add invalid extension
+	s1.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Implicit.Extensions = map[string]interface{}{"invalid": interface{}(make(chan int))}
+
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.EqualError(t, err, "json: unsupported type: chan int")
 }
