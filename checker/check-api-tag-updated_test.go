@@ -18,7 +18,7 @@ func TestTagAdded(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Tags = []string{"newTag"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APITagUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -43,7 +43,7 @@ func TestTagRemoved(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Tags = []string{}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APITagUpdatedCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
@@ -70,7 +70,7 @@ func TestTagUpdated(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Tags = []string{"newTag"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APITagUpdatedCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)

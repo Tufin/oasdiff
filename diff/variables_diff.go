@@ -34,17 +34,20 @@ func newVariablesDiff() *VariablesDiff {
 	}
 }
 
-func getVariablesDiff(config *Config, state *state, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
-	diff := getVariablesDiffInternal(config, state, variables1, variables2)
-
-	if diff.Empty() {
-		return nil
+func getVariablesDiff(config *Config, state *state, variables1, variables2 map[string]*openapi3.ServerVariable) (*VariablesDiff, error) {
+	diff, err := getVariablesDiffInternal(config, state, variables1, variables2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getVariablesDiffInternal(config *Config, state *state, variables1, variables2 map[string]*openapi3.ServerVariable) *VariablesDiff {
+func getVariablesDiffInternal(config *Config, state *state, variables1, variables2 map[string]*openapi3.ServerVariable) (*VariablesDiff, error) {
 	result := newVariablesDiff()
 
 	for name1, var1 := range variables1 {
@@ -54,7 +57,11 @@ func getVariablesDiffInternal(config *Config, state *state, variables1, variable
 			continue
 		}
 
-		if diff := getVariableDiff(config, state, var1, var2); !diff.Empty() {
+		diff, err := getVariableDiff(config, state, var1, var2)
+		if err != nil {
+			return nil, err
+		}
+		if !diff.Empty() {
 			result.Modified[name1] = diff
 		}
 	}
@@ -66,5 +73,5 @@ func getVariablesDiffInternal(config *Config, state *state, variables1, variable
 		}
 	}
 
-	return result
+	return result, nil
 }

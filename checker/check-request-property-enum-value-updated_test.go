@@ -18,7 +18,7 @@ func TestRequestPropertyEnumValueRemovedCheck(t *testing.T) {
 
 	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["category"].Value.Enum = []interface{}{"dog", "cat"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyEnumValueUpdatedCheck), d, osm, checker.ERR)
@@ -45,7 +45,7 @@ func TestRequestPropertyEnumValueAddedCheck(t *testing.T) {
 
 	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["category"].Value.Enum = []interface{}{"dog", "cat"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyEnumValueUpdatedCheck), d, osm, checker.INFO)

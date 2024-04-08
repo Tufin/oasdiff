@@ -16,7 +16,7 @@ func TestRequiredRequestPropertyAdded(t *testing.T) {
 	s2, err := open("../data/checker/request_property_added_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -38,7 +38,7 @@ func TestRequiredRequestPropertiesAdded(t *testing.T) {
 	s2, err := open("../data/checker/request_property_added_revision2.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.ElementsMatch(t, []checker.ApiChange{
@@ -70,7 +70,7 @@ func TestRequiredOptionalPropertyAdded(t *testing.T) {
 	require.NoError(t, err)
 
 	s2.Spec.Paths.Value("/products").Post.RequestBody.Value.Content["application/json"].Schema.Value.Required = []string{"name"}
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -92,7 +92,7 @@ func TestRequiredRequestPropertyRemoved(t *testing.T) {
 	s2, err := open("../data/checker/request_property_added_base.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)

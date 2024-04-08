@@ -32,7 +32,7 @@ func TestDiff_CommonParamsMoved(t *testing.T) {
 	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/params_in_op.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(), s1, s2)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }

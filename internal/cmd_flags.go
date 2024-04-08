@@ -4,12 +4,10 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/checker/localizations"
-	"github.com/tufin/oasdiff/diff"
 )
 
 func addCommonDiffFlags(cmd *cobra.Command, flags Flags) {
 	cmd.PersistentFlags().BoolVarP(flags.refComposed(), "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	enumWithOptions(cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil, flags.refExcludeElements()), "exclude-elements", "e", "comma-separated list of elements to exclude")
 	cmd.PersistentFlags().StringVarP(flags.refMatchPath(), "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(flags.refFilterExtension(), "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().IntVarP(flags.refCircularReferenceCounter(), "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")

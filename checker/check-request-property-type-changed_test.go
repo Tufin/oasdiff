@@ -18,7 +18,7 @@ func TestRequestBodyTypeChangedCheck(t *testing.T) {
 
 	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "array"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
@@ -43,7 +43,7 @@ func TestRequestBodyFormatChangedCheck(t *testing.T) {
 
 	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Format = "uuid"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
@@ -66,7 +66,7 @@ func TestRequestPropertyTypeChangedCheck(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
@@ -89,7 +89,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_revision_array_to_object.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
@@ -121,7 +121,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_base_array_to_object.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
@@ -155,7 +155,7 @@ func TestRequestPropertyFormatChangedCheck(t *testing.T) {
 
 	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Format = "uuid"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
@@ -180,7 +180,7 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = "integer"
 	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = "number"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.INFO)

@@ -18,7 +18,7 @@ func TestRequestBodyBecameRequired(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.RequestBody.Value.Required = true
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.RequestBodyRequiredUpdatedCheck), d, osm)
 	require.Len(t, errs, 1)
@@ -41,7 +41,7 @@ func TestRequestBodyBecameOptional(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.RequestBody.Value.Required = false
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig().WithCheckBreaking(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestBodyRequiredUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)

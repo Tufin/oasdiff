@@ -22,28 +22,39 @@ func (diff *SecuritySchemeDiff) Empty() bool {
 	return diff == nil || *diff == SecuritySchemeDiff{}
 }
 
-func getSecuritySchemeDiff(config *Config, state *state, scheme1, scheme2 *openapi3.SecurityScheme) *SecuritySchemeDiff {
-	diff := getSecuritySchemeDiffInternal(config, state, scheme1, scheme2)
-
-	if diff.Empty() {
-		return nil
+func getSecuritySchemeDiff(config *Config, state *state, scheme1, scheme2 *openapi3.SecurityScheme) (*SecuritySchemeDiff, error) {
+	diff, err := getSecuritySchemeDiffInternal(config, state, scheme1, scheme2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getSecuritySchemeDiffInternal(config *Config, state *state, scheme1, scheme2 *openapi3.SecurityScheme) *SecuritySchemeDiff {
+func getSecuritySchemeDiffInternal(config *Config, state *state, scheme1, scheme2 *openapi3.SecurityScheme) (*SecuritySchemeDiff, error) {
 	result := SecuritySchemeDiff{}
+	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, scheme1.Extensions, scheme2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, scheme1.Extensions, scheme2.Extensions)
+	if err != nil {
+		return nil, err
+	}
+
 	result.TypeDiff = getValueDiff(scheme1.Type, scheme2.Type)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), scheme1.Description, scheme2.Description)
 	result.NameDiff = getValueDiff(scheme1.Name, scheme2.Name)
 	result.InDiff = getValueDiff(scheme1.In, scheme2.In)
 	result.SchemeDiff = getValueDiff(scheme1.Scheme, scheme2.Scheme)
 	result.BearerFormatDiff = getValueDiff(scheme1.BearerFormat, scheme2.BearerFormat)
-	result.OAuthFlowsDiff = getOAuthFlowsDiff(config, state, scheme1.Flows, scheme2.Flows)
+	result.OAuthFlowsDiff, err = getOAuthFlowsDiff(config, state, scheme1.Flows, scheme2.Flows)
+	if err != nil {
+		return nil, err
+	}
 	result.OpenIDConnectURLDiff = getValueDiff(scheme1.OpenIdConnectUrl, scheme2.OpenIdConnectUrl)
 
-	return &result
+	return &result, nil
 }

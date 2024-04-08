@@ -28,7 +28,7 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) *diff.Diff {
 }
 
 func Test_NoChanges(t *testing.T) {
-	require.Equal(t, report.GetTextReportAsString(d(t, &diff.Config{}, 3, 3)), "No changes\n")
+	require.Equal(t, report.GetTextReportAsString(d(t, diff.NewConfig().WithExcludeExtensions(), 3, 3)), "No changes\n")
 }
 
 func Test_NoEndpointChanges(t *testing.T) {

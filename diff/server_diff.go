@@ -19,38 +19,49 @@ func (diff *ServerDiff) Empty() bool {
 	return diff == nil || *diff == ServerDiff{}
 }
 
-func getServerDiff(config *Config, state *state, value1, value2 *openapi3.Server) *ServerDiff {
-	diff := getServerDiffInternal(config, state, value1, value2)
-
-	if diff.Empty() {
-		return nil
+func getServerDiff(config *Config, state *state, value1, value2 *openapi3.Server) (*ServerDiff, error) {
+	diff, err := getServerDiffInternal(config, state, value1, value2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getServerDiffInternal(config *Config, state *state, value1, value2 *openapi3.Server) *ServerDiff {
+func getServerDiffInternal(config *Config, state *state, value1, value2 *openapi3.Server) (*ServerDiff, error) {
 
 	if value1 == nil && value2 == nil {
-		return nil
+		return nil, nil
 	}
 
 	result := ServerDiff{}
+	var err error
 
 	if value1 == nil && value2 != nil {
 		result.Added = true
-		return &result
+		return &result, nil
 	}
 
 	if value1 != nil && value2 == nil {
 		result.Deleted = true
-		return &result
+		return &result, nil
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, value1.Extensions, value2.Extensions)
+	if err != nil {
+		return nil, err
+	}
+
 	result.URLDiff = getValueDiff(value1.URL, value2.URL)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), value1.Description, value2.Description)
-	result.VariablesDiff = getVariablesDiff(config, state, value1.Variables, value2.Variables)
+	result.VariablesDiff, err = getVariablesDiff(config, state, value1.Variables, value2.Variables)
+	if err != nil {
+		return nil, err
+	}
 
-	return &result
+	return &result, nil
 }

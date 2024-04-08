@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/tufin/oasdiff/utils"
@@ -18,6 +19,7 @@ type enumSliceValue struct {
 
 func newEnumSliceValue(allowedValues []string, val []string, p *[]string) *enumSliceValue {
 	result := new(enumSliceValue)
+	slices.Sort(allowedValues)
 	result.allowedValues = allowedValues
 	result.value = p
 	*result.value = val

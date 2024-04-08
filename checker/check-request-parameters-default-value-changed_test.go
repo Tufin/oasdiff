@@ -16,7 +16,7 @@ func TestRequestParameterDefaultValueChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_default_value_changed_revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterDefaultValueChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
@@ -40,7 +40,7 @@ func TestRequestParameterDefaultValueAdded(t *testing.T) {
 
 	s1.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Default = nil
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterDefaultValueChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)
@@ -64,7 +64,7 @@ func TestRequestParameterDefaultValueRemoved(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Default = nil
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterDefaultValueChangedCheck), d, osm, checker.ERR)
 	require.Len(t, errs, 1)

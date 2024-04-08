@@ -19,7 +19,7 @@ func TestResponseSuccessStatusAdded(t *testing.T) {
 	// Add new success response
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Set("201", s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("200"))
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseSuccessStatusUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -44,7 +44,7 @@ func TestResponseNonSuccessStatusAdded(t *testing.T) {
 	// Add new non-success response
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Set("400", s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("409"))
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseNonSuccessStatusUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -68,7 +68,7 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 
 	delete(s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Map(), "409")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseNonSuccessStatusUpdatedCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
@@ -93,7 +93,7 @@ func TestResponseSuccessStatusRemoved(t *testing.T) {
 
 	delete(s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Map(), "200")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseSuccessStatusUpdatedCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)

@@ -22,36 +22,43 @@ func (diff *ExternalDocsDiff) Empty() bool {
 	return diff == nil || *diff == ExternalDocsDiff{}
 }
 
-func getExternalDocsDiff(config *Config, state *state, docs1, docs2 *openapi3.ExternalDocs) *ExternalDocsDiff {
-	diff := getExternalDocsDiffInternal(config, state, docs1, docs2)
-
-	if diff.Empty() {
-		return nil
+func getExternalDocsDiff(config *Config, state *state, docs1, docs2 *openapi3.ExternalDocs) (*ExternalDocsDiff, error) {
+	diff, err := getExternalDocsDiffInternal(config, state, docs1, docs2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getExternalDocsDiffInternal(config *Config, state *state, docs1, docs2 *openapi3.ExternalDocs) *ExternalDocsDiff {
+func getExternalDocsDiffInternal(config *Config, state *state, docs1, docs2 *openapi3.ExternalDocs) (*ExternalDocsDiff, error) {
 	result := newExternalDocsDiff()
+	var err error
 
 	if docs1 == nil && docs2 == nil {
-		return result
+		return result, nil
 	}
 
 	if docs1 == nil && docs2 != nil {
 		result.Added = true
-		return result
+		return result, nil
 	}
 
 	if docs1 != nil && docs2 == nil {
 		result.Deleted = true
-		return result
+		return result, nil
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, docs1.Extensions, docs2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, docs1.Extensions, docs2.Extensions)
+	if err != nil {
+		return nil, err
+	}
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), docs1.Description, docs2.Description)
 	result.URLDiff = getValueDiff(docs1.URL, docs2.URL)
 
-	return result
+	return result, nil
 }

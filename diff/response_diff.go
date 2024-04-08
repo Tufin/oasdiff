@@ -37,7 +37,11 @@ func diffResponseValuesInternal(config *Config, state *state, response1, respons
 	result := ResponseDiff{}
 	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, response1.Extensions, response2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, response1.Extensions, response2.Extensions)
+	if err != nil {
+		return nil, err
+	}
+
 	result.DescriptionDiff = getStringRefDiffConditional(config.IsExcludeDescription(), response1.Description, response2.Description)
 	result.HeadersDiff, err = getHeadersDiff(config, state, response1.Headers, response2.Headers)
 	if err != nil {

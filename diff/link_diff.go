@@ -2,7 +2,6 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
 )
 
 // LinkDiff describes the changes between a pair of link objects: https://swagger.io/specification/#link-object
@@ -36,13 +35,24 @@ func getLinkDiff(config *Config, state *state, link1, link2 *openapi3.Link) (*Li
 
 func getLinkDiffInternal(config *Config, state *state, link1, link2 *openapi3.Link) (*LinkDiff, error) {
 	result := LinkDiff{}
+	var err error
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, link1.Extensions, link2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, link1.Extensions, link2.Extensions)
+	if err != nil {
+		return nil, err
+	}
+
 	result.OperationIDDiff = getValueDiff(link1.OperationID, link2.OperationID)
 	result.OperationRefDiff = getValueDiff(link1.OperationRef, link2.OperationRef)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), link1.Description, link2.Description)
-	result.ParametersDiff = getInterfaceMapDiff(link1.Parameters, link2.Parameters, utils.StringSet{})
-	result.ServerDiff = getServerDiff(config, state, link1.Server, link2.Server)
+	result.ParametersDiff, err = getInterfaceMapDiff(link1.Parameters, link2.Parameters)
+	if err != nil {
+		return nil, err
+	}
+	result.ServerDiff, err = getServerDiff(config, state, link1.Server, link2.Server)
+	if err != nil {
+		return nil, err
+	}
 	result.RequestBodyDiff = getValueDiff(link1.RequestBody, link2.RequestBody)
 
 	return &result, nil

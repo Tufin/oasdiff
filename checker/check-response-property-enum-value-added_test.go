@@ -18,7 +18,7 @@ func TestResponsePropertyEnumValueAdded(t *testing.T) {
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["typeEnum"].Value.Enum = []interface{}{"Test"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyEnumValueAddedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -44,7 +44,7 @@ func TestResponseWriteOnlyPropertyEnumValueAdded(t *testing.T) {
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["writeOnlyEnum"].Value.Enum = []interface{}{"Test"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyEnumValueAddedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)

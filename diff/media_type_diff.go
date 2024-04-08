@@ -41,7 +41,10 @@ func getMediaTypeDiffInternal(config *Config, state *state, mediaType1 *openapi3
 		return nil, fmt.Errorf("media type is nil")
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, mediaType1.Extensions, mediaType2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, mediaType1.Extensions, mediaType2.Extensions)
+	if err != nil {
+		return nil, err
+	}
 	result.SchemaDiff, err = getSchemaDiff(config, state, mediaType1.Schema, mediaType2.Schema)
 	if err != nil {
 		return nil, err

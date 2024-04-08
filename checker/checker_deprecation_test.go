@@ -39,7 +39,7 @@ func TestBreaking_RemoveBeforeSunset(t *testing.T) {
 	s2, err := open(getDeprecationFile("sunset.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
@@ -57,7 +57,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	s2, err := open(getDeprecationFile("sunset.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NoError(t, err)
 	require.NotEmpty(t, errs)
@@ -75,7 +75,7 @@ func TestBreaking_DeprecationPast(t *testing.T) {
 	s2, err := open(getDeprecationFile("sunset.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
@@ -90,7 +90,7 @@ func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	c := singleCheckConfig(checker.APIDeprecationCheck)
 	c.MinSunsetStableDays = 10
@@ -110,7 +110,7 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 	s2, err := open(getDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
@@ -129,7 +129,7 @@ func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 
 	delete(s2.Spec.Paths.Map(), "/api/test")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
@@ -145,7 +145,7 @@ func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 
 	delete(s2.Spec.Paths.Map(), "/api/test")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.Len(t, errs, 2)
@@ -166,7 +166,7 @@ func TestBreaking_DeprecationForDraft(t *testing.T) {
 	require.NoError(t, err)
 	s2.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
@@ -185,7 +185,7 @@ func TestBreaking_RemovedPathForDraft(t *testing.T) {
 
 	delete(s2.Spec.Paths.Map(), "/api/test")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
@@ -203,7 +203,7 @@ func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 
 	delete(s2.Spec.Paths.Map(), "/api/test")
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.Len(t, errs, 2)
@@ -230,7 +230,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 	sunsetDate := civil.DateOf(time.Now()).AddDays(9).String()
 	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, sunsetDate)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	c := singleCheckConfig(checker.APIDeprecationCheck)
 	c.MinSunsetStableDays = 10
@@ -252,7 +252,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	c := singleCheckConfig(checker.APIDeprecationCheck)
 	c.MinSunsetStableDays = 10
@@ -272,7 +272,7 @@ func TestBreaking_DeprecationPathPast(t *testing.T) {
 	s2, err := open(getDeprecationFile("sunset-path.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
@@ -287,7 +287,7 @@ func TestBreaking_DeprecationPathMixed(t *testing.T) {
 	s2, err := open(getDeprecationFile("sunset-path.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
@@ -305,7 +305,7 @@ func TestBreaking_SunsetDeletedForDeprecatedEndpoint(t *testing.T) {
 	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
 	require.NotEmpty(t, errs)
@@ -323,7 +323,7 @@ func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
 	s2, err := open(getDeprecationFile("sunset-path.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NotEmpty(t, errs)
@@ -340,7 +340,7 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 	s2, err := open("../data/deprecation/deprecated-future.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIDeprecationCheck), d, osm, checker.INFO)
@@ -363,7 +363,7 @@ func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	s2, err := open("../data/deprecation/base.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIDeprecationCheck), d, osm, checker.INFO)
@@ -386,7 +386,7 @@ func TestBreaking_InvaidStability(t *testing.T) {
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Len(t, errs, 1)

@@ -18,7 +18,7 @@ func TestResponseOptionalPropertyBecameWriteOnly(t *testing.T) {
 	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["name"].Value.WriteOnly = true
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -43,7 +43,7 @@ func TestResponseOptionalPropertyBecameNotWriteOnly(t *testing.T) {
 	require.NoError(t, err)
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["writeOnlyName"].Value.WriteOnly = false
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -68,7 +68,7 @@ func TestResponseOptionalPropertyBecameReadOnly(t *testing.T) {
 	require.NoError(t, err)
 
 	s1.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["id"].Value.ReadOnly = false
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -94,7 +94,7 @@ func TestResponseOptionalPropertyBecameNonReadOnly(t *testing.T) {
 
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["id"].Value.ReadOnly = false
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponseOptionalPropertyWriteOnlyReadOnlyCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)

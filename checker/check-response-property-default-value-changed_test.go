@@ -15,7 +15,7 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	require.NoError(t, err)
 	s2, err := open("../data/checker/response_property_default_value_changed_revision.yaml")
 	require.NoError(t, err)
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
@@ -46,7 +46,7 @@ func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 	require.NoError(t, err)
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("404").Value.Content["text/plain"].Schema.Value.Default = "new default value"
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -71,7 +71,7 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 	s1.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("404").Value.Content["text/plain"].Schema.Value.Default = nil
 	s1.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["created"].Value.Default = nil
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
@@ -104,7 +104,7 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("404").Value.Content["text/plain"].Schema.Value.Default = nil
 	s2.Spec.Components.Schemas["GroupView"].Value.Properties["data"].Value.Properties["created"].Value.Default = nil
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)

@@ -28,7 +28,7 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 	}
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{"courseId"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -48,7 +48,7 @@ func TestBreaking_NewNonRequiredProperty(t *testing.T) {
 		},
 	}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -72,7 +72,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &sr
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{"courseId"}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -98,7 +98,7 @@ func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &sr
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Required = []string{}
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -112,7 +112,7 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	s2, err := open(getReqPropFile("response-revision.json"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -128,7 +128,7 @@ func TestBreaking_ReqBodyBecameEnum(t *testing.T) {
 	s2, err := open("../data/enums/request-body-enum.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -144,7 +144,7 @@ func TestBreaking_ReqBodyEnumValueAdded(t *testing.T) {
 	s2, err := open("../data/enums/request-body-enum-revision.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -158,7 +158,7 @@ func TestBreaking_ReqBodyBecameEnumAndTypeChanged(t *testing.T) {
 	s2, err := open("../data/enums/request-body-enum-int.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 2)
@@ -174,7 +174,7 @@ func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
 	s2, err := open("../data/enums/request-property-enum.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -190,7 +190,7 @@ func TestBreaking_ReqParameterBecameEnum(t *testing.T) {
 	s2, err := open("../data/enums/request-parameter-op-enum.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -206,7 +206,7 @@ func TestBreaking_ReqParameterHeaderPropertyBecameEnum(t *testing.T) {
 	s2, err := open("../data/enums/request-parameter-property-enum.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -222,7 +222,7 @@ func TestBreaking_RespBodyNullable(t *testing.T) {
 	s2, err := open("../data/nullable/revision-body.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -238,7 +238,7 @@ func TestBreaking_ReqBodyPropertyNotNullable(t *testing.T) {
 	s2, err := open("../data/nullable/revision-req.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -254,7 +254,7 @@ func TestBreaking_RespBodyPropertyNullable(t *testing.T) {
 	s2, err := open("../data/nullable/revision-property.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -270,7 +270,7 @@ func TestBreaking_RespBodyEmbeddedPropertyNullable(t *testing.T) {
 	s2, err := open("../data/nullable/revision-embedded-property.yaml")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -286,7 +286,7 @@ func TestBreaking_RespBodyDeleteAndDisableRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("response-del-required-prop-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -300,7 +300,7 @@ func TestBreaking_ReqBodyNewRequiredPropertyNew(t *testing.T) {
 	s2, err := open(getReqPropFile("request-new-required-prop-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -314,7 +314,7 @@ func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 	s2, err := open(getReqPropFile("response-base.json"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -328,7 +328,7 @@ func TestBreaking_ReqBodyRequiredPropertyDisabled(t *testing.T) {
 	s2, err := open(getReqPropFile("request-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -342,7 +342,7 @@ func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 	s2, err := open(getReqPropFile("request-base.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -358,7 +358,7 @@ func TestBreaking_ReqBodyNewRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("request-new-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -374,7 +374,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("request-new-base.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -391,7 +391,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 	s2, err := open(getReqPropFile("request-property-items-2.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Contains(t, errs, checker.ApiChange{
@@ -412,7 +412,7 @@ func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("response-new-revision.json"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -426,7 +426,7 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("response-new-base.json"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -442,7 +442,7 @@ func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("response-allof-revision.json"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -456,7 +456,7 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("response-allof-base.json"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -472,7 +472,7 @@ func TestBreaking_ReadOnlyNewRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("read-only-new-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -486,7 +486,7 @@ func TestBreaking_ReadOnlyPropertyRequiredEnabled(t *testing.T) {
 	s2, err := open(getReqPropFile("read-only-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -500,7 +500,7 @@ func TestBreaking_WriteOnlyDeleteRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("write-only-delete-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -517,7 +517,7 @@ func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
 	s2, err := open(getReqPropFile("write-only-delete-partial-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -538,7 +538,7 @@ func TestBreaking_WriteOnlyPropertyRequiredDisabled(t *testing.T) {
 	s2, err := open(getReqPropFile("write-only-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -552,7 +552,7 @@ func TestBreaking_RequiredPropertyWriteOnlyEnabled(t *testing.T) {
 	s2, err := open(getReqPropFile("write-only-changed-revision.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Empty(t, errs)
@@ -566,7 +566,7 @@ func TestBreaking_RequiredPropertyWriteOnlyDisabled(t *testing.T) {
 	s2, err := open(getReqPropFile("write-only-changed-base.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -585,7 +585,7 @@ func TestBreaking_Body(t *testing.T) {
 	s2, err := open(getReqPropFile("body2.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -601,7 +601,7 @@ func TestBreaking_Items(t *testing.T) {
 	s2, err := open(getReqPropFile("items2.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -617,7 +617,7 @@ func TestBreaking_AnyOf(t *testing.T) {
 	s2, err := open(getReqPropFile("anyOf2.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -633,7 +633,7 @@ func TestBreaking_NestedProp(t *testing.T) {
 	s2, err := open(getReqPropFile("nested-property2.yaml"))
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.NotEmpty(t, errs)
@@ -649,7 +649,7 @@ func TestBreaking_OneOf(t *testing.T) {
 	s2, err := open("../data/x-of/revision.json")
 	require.NoError(t, err)
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
 	require.Len(t, errs, 3)

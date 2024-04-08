@@ -32,7 +32,7 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) *diff.Diff {
 }
 
 func TestDiff_Same(t *testing.T) {
-	require.Nil(t, d(t, diff.NewConfig(), 1, 1))
+	require.Nil(t, d(t, diff.NewConfig().WithExcludeExtensions(), 1, 1))
 }
 
 func TestDiff_Empty(t *testing.T) {
@@ -94,37 +94,19 @@ func TestDiff_ModifiedOperation(t *testing.T) {
 }
 
 func TestAddedExtension(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
-	}
-
-	require.Contains(t,
-		d(t, &config, 3, 1).ExtensionsDiff.Added,
-		"x-extension-test")
+	require.Contains(t, d(t, diff.NewConfig(), 3, 1).ExtensionsDiff.Added, "x-extension-test")
 }
 
 func TestDeletedExtension(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
-	}
-
-	require.Contains(t,
-		d(t, &config, 1, 3).ExtensionsDiff.Deleted,
-		"x-extension-test")
+	require.Contains(t, d(t, diff.NewConfig(), 1, 3).ExtensionsDiff.Deleted, "x-extension-test")
 }
 
 func TestModifiedExtension(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test2": struct{}{}},
-	}
-
-	require.NotNil(t,
-		d(t, &config, 1, 3).ExtensionsDiff.Modified["x-extension-test2"])
+	require.NotNil(t, d(t, diff.NewConfig(), 1, 3).ExtensionsDiff.Modified["x-extension-test2"])
 }
 
 func TestExcludedExtension(t *testing.T) {
-	require.Nil(t,
-		d(t, diff.NewConfig(), 1, 3).ExtensionsDiff)
+	require.Nil(t, d(t, diff.NewConfig().WithExcludeExtensions(), 1, 3).ExtensionsDiff)
 }
 
 func TestDiff_AddedGlobalTag(t *testing.T) {
@@ -311,16 +293,13 @@ func TestResponseDeleted(t *testing.T) {
 }
 
 func TestResponseDescriptionModified(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
-	}
 
 	require.Equal(t,
 		&diff.ValueDiff{
 			From: "Tufin",
 			To:   "Tufin1",
 		},
-		d(t, &config, 3, 1).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
+		d(t, diff.NewConfig(), 3, 1).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["default"].DescriptionDiff)
 }
 
 func TestResponseHeadersModified(t *testing.T) {
@@ -345,12 +324,9 @@ func TestServerDeleted(t *testing.T) {
 }
 
 func TestServerModified(t *testing.T) {
-	config := diff.Config{
-		IncludeExtensions: utils.StringSet{"x-extension-test": struct{}{}},
-	}
 
 	require.Contains(t,
-		d(t, &config, 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified,
+		d(t, diff.NewConfig(), 5, 3).PathsDiff.Modified[installCommandPath].OperationsDiff.Modified["GET"].ServersDiff.Modified,
 		"https://www.oasdiff.com")
 }
 
@@ -730,19 +706,13 @@ func TestDiff_InfoDeleted(t *testing.T) {
 func TestDiff_PathParamInMethodRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/method-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/method-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/method-revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/method-revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}"].ParametersDiff.Modified["path"]["bookId"].NameDiff
@@ -753,19 +723,13 @@ func TestDiff_PathParamInMethodRenamed(t *testing.T) {
 func TestDiff_PathParamInOperationRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/op-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/op-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/op-revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/op-revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
@@ -776,19 +740,13 @@ func TestDiff_PathParamInOperationRenamed(t *testing.T) {
 func TestDiff_PathParamRefInOperationRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/op-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/op-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/op-revision-ref.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/op-revision-ref.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
@@ -799,19 +757,13 @@ func TestDiff_PathParamRefInOperationRenamed(t *testing.T) {
 func TestDiff_TwoPathParamsRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/two-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/two-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/two-revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/two-revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}/{libraryId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["bookId"].NameDiff
@@ -826,19 +778,13 @@ func TestDiff_TwoPathParamsRenamed(t *testing.T) {
 func TestDiff_TwoPathParamsOneRenamed(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/param-rename/one-of-two-base.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/one-of-two-base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/param-rename/one-of-two-revision.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/param-rename/one-of-two-revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
 	dd := d.PathsDiff.Modified["/books/{bookId}/{libraryId}"].OperationsDiff.Modified["GET"].ParametersDiff.Modified["path"]["libraryId"].NameDiff
@@ -849,16 +795,10 @@ func TestDiff_TwoPathParamsOneRenamed(t *testing.T) {
 func TestDiff_DifferentComponentSameParam(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/different_component_same_parameter.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/different_component_same_parameter.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s1,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
@@ -866,19 +806,13 @@ func TestDiff_DifferentComponentSameParam(t *testing.T) {
 func TestDiff_DifferentComponentModifiedParam(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := loader.LoadFromFile("../data/different_component_same_parameter.yaml")
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/different_component_same_parameter.yaml"))
 	require.NoError(t, err)
 
-	s2, err := loader.LoadFromFile("../data/different_component_modified_parameter.yaml")
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/different_component_modified_parameter.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(),
-		&load.SpecInfo{
-			Spec: s1,
-		},
-		&load.SpecInfo{
-			Spec: s2,
-		})
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	dd := d.ComponentsDiff.ParametersDiff.Modified["differentComponentName_A"].InDiff
 	require.Equal(t, "header", dd.From)
@@ -889,7 +823,7 @@ func TestDiff_DifferentComponentSameSchema(t *testing.T) {
 	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/different_component_same_schema.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
@@ -901,4 +835,83 @@ func TestDiff_DifferentComponentSameHeader(t *testing.T) {
 	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
+}
+
+func TestDiff_Extensions(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/revision.yaml"))
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	dd := d.PathsDiff.Modified["/example/callback"].OperationsDiff.Modified["POST"].ExtensionsDiff.Modified["x-amazon-apigateway-integration"]
+	require.Len(t, dd, 2)
+	require.Equal(t, "200", dd[0].Value)
+	require.Equal(t, "201", dd[0].OldValue)
+	require.Equal(t, "http://api.example.com/v1/example/calllllllllback", dd[1].Value)
+	require.Equal(t, "http://api.example.com/v1/example/callback", dd[1].OldValue)
+}
+
+func TestDiff_ExtensionsExcluded(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/revision.yaml"))
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}
+
+func TestDiff_ExtensionsInvalid(t *testing.T) {
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/extensions/base.yaml"))
+	require.NoError(t, err)
+
+	// Add invalid extension
+	newPathItem := s1.Spec.Paths.Find("/example/callback")
+	newPathItem.Post.Extensions["x-amazon-apigateway-integration"] = interface{}(make(chan int))
+	s1.Spec.Paths.Set("/example/callback", newPathItem)
+
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	require.EqualError(t, err, "json: unsupported type: chan int")
+}
+
+func TestDiff_ExtensionsInvalidSecuritySchemes(t *testing.T) {
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/security-requirements/spec_1.yaml"))
+	require.NoError(t, err)
+
+	// Add invalid extension
+	s1.Spec.Components.SecuritySchemes["petstore_auth"].Value.Extensions = map[string]interface{}{"invalid": interface{}(make(chan int))}
+
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	require.EqualError(t, err, "json: unsupported type: chan int")
+}
+
+func TestDiff_ExtensionsInvalidFlows(t *testing.T) {
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/security-requirements/spec_1.yaml"))
+	require.NoError(t, err)
+
+	// Add invalid extension
+	s1.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Extensions = map[string]interface{}{"invalid": interface{}(make(chan int))}
+
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	require.EqualError(t, err, "json: unsupported type: chan int")
+}
+
+func TestDiff_ExtensionsInvalidImplicit(t *testing.T) {
+	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/security-requirements/spec_1.yaml"))
+	require.NoError(t, err)
+
+	// Add invalid extension
+	s1.Spec.Components.SecuritySchemes["petstore_auth"].Value.Flows.Implicit.Extensions = map[string]interface{}{"invalid": interface{}(make(chan int))}
+
+	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	require.EqualError(t, err, "json: unsupported type: chan int")
 }

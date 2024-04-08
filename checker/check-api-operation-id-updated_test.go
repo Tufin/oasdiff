@@ -18,7 +18,7 @@ func TestOperationIdRemoved(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.OperationID = ""
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -42,7 +42,7 @@ func TestOperationIdUpdated(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.OperationID = "newOperationId"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
@@ -68,7 +68,7 @@ func TestOperationIdAdded(t *testing.T) {
 
 	s2.Spec.Paths.Value("/api/v1.0/groups").Post.OperationID = "NewOperationId"
 
-	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig().WithCheckBreaking(), s1, s2)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIOperationIdUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)

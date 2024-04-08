@@ -19,38 +19,45 @@ func (diff *ContactDiff) Empty() bool {
 	return diff == nil || *diff == ContactDiff{}
 }
 
-func getContactDiff(config *Config, state *state, contact1, contact2 *openapi3.Contact) *ContactDiff {
-	diff := getContactDiffInternal(config, state, contact1, contact2)
-
-	if diff.Empty() {
-		return nil
+func getContactDiff(config *Config, state *state, contact1, contact2 *openapi3.Contact) (*ContactDiff, error) {
+	diff, err := getContactDiffInternal(config, state, contact1, contact2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getContactDiffInternal(config *Config, state *state, contact1, contact2 *openapi3.Contact) *ContactDiff {
+func getContactDiffInternal(config *Config, state *state, contact1, contact2 *openapi3.Contact) (*ContactDiff, error) {
 
 	result := ContactDiff{}
+	var err error
 
 	if contact1 == nil && contact2 == nil {
-		return &result
+		return &result, nil
 	}
 
 	if contact1 == nil && contact2 != nil {
 		result.Added = true
-		return &result
+		return &result, nil
 	}
 
 	if contact1 != nil && contact2 == nil {
 		result.Deleted = true
-		return &result
+		return &result, nil
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, contact1.Extensions, contact2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, contact1.Extensions, contact2.Extensions)
+	if err != nil {
+		return nil, err
+	}
 	result.NameDiff = getValueDiff(contact1.Name, contact2.Name)
 	result.URLDiff = getValueDiff(contact1.URL, contact2.URL)
 	result.EmailDiff = getValueDiff(contact1.Email, contact2.Email)
 
-	return &result
+	return &result, nil
 }

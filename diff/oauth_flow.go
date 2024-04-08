@@ -20,39 +20,47 @@ func (diff *OAuthFlowDiff) Empty() bool {
 	return diff == nil || *diff == OAuthFlowDiff{}
 }
 
-func getOAuthFlowDiff(config *Config, state *state, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
-	diff := getOAuthFlowDiffInternal(config, state, flow1, flow2)
-
-	if diff.Empty() {
-		return nil
+func getOAuthFlowDiff(config *Config, state *state, flow1, flow2 *openapi3.OAuthFlow) (*OAuthFlowDiff, error) {
+	diff, err := getOAuthFlowDiffInternal(config, state, flow1, flow2)
+	if err != nil {
+		return nil, err
 	}
 
-	return diff
+	if diff.Empty() {
+		return nil, nil
+	}
+
+	return diff, nil
 }
 
-func getOAuthFlowDiffInternal(config *Config, state *state, flow1, flow2 *openapi3.OAuthFlow) *OAuthFlowDiff {
+func getOAuthFlowDiffInternal(config *Config, state *state, flow1, flow2 *openapi3.OAuthFlow) (*OAuthFlowDiff, error) {
 
 	if flow1 == nil && flow2 == nil {
-		return nil
+		return nil, nil
 	}
 
 	result := OAuthFlowDiff{}
+	var err error
 
 	if flow1 == nil && flow2 != nil {
 		result.Added = true
-		return &result
+		return &result, nil
 	}
 
 	if flow1 != nil && flow2 == nil {
 		result.Deleted = true
-		return &result
+		return &result, nil
 	}
 
-	result.ExtensionsDiff = getExtensionsDiff(config, state, flow1.Extensions, flow2.Extensions)
+	result.ExtensionsDiff, err = getExtensionsDiff(config, state, flow1.Extensions, flow2.Extensions)
+	if err != nil {
+		return nil, err
+	}
+
 	result.AuthorizationURLDiff = getValueDiff(flow1.AuthorizationURL, flow2.AuthorizationURL)
 	result.TokenURLDiff = getValueDiff(flow1.TokenURL, flow2.TokenURL)
 	result.RefreshURLDiff = getValueDiff(flow1.RefreshURL, flow2.RefreshURL)
 	result.ScopesDiff = getStringMapDiff(flow1.Scopes, flow2.Scopes)
 
-	return &result
+	return &result, nil
 }
