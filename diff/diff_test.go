@@ -915,3 +915,14 @@ func TestDiff_ExtensionsInvalidImplicit(t *testing.T) {
 	_, _, err = diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.EqualError(t, err, "json: unsupported type: chan int")
 }
+
+func TestDiff_ExtensionsIssue519(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/openapi-2.json"))
+	require.NoError(t, err)
+
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
+	require.NoError(t, err)
+	require.Empty(t, d)
+}

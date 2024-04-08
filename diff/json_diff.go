@@ -7,6 +7,11 @@ import (
 // jsonPatch is a wrapper to jsondiff.jsonPatch with proper serialization for json and yaml
 type jsonPatch []*jsonOperation
 
+// Empty indicates whether a change was found in this element
+func (p jsonPatch) Empty() bool {
+	return len(p) == 0
+}
+
 // jsonOperation is a wrapper to jsondiff.jsonOperation with proper serialization for json and yaml
 type jsonOperation struct {
 	OldValue interface{} `json:"oldValue" yaml:"oldValue"`
