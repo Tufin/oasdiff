@@ -56,7 +56,9 @@ func getInterfaceMapDiffInternal(map1, map2 InterfaceMap) (*InterfaceMapDiff, er
 			if err != nil {
 				return nil, err
 			}
-			result.Modified[name1] = patch
+			if !patch.Empty() {
+				result.Modified[name1] = patch
+			}
 		} else {
 			result.Deleted = append(result.Deleted, name1)
 		}
