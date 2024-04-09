@@ -11,10 +11,9 @@ import (
 
 // OperationsDiff describes the changes between a pair of operation objects (https://swagger.io/specification/#operation-object) of two path item objects
 type OperationsDiff struct {
-	Added     utils.StringList   `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted   utils.StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified  ModifiedOperations `json:"modified,omitempty" yaml:"modified,omitempty"`
-	Unchanged utils.StringList   `json:"unchanged,omitempty" yaml:"unchanged,omitempty"`
+	Added    utils.StringList   `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedOperations `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -30,10 +29,9 @@ func (operationsDiff *OperationsDiff) Empty() bool {
 
 func newOperationsDiff() *OperationsDiff {
 	return &OperationsDiff{
-		Added:     utils.StringList{},
-		Deleted:   utils.StringList{},
-		Modified:  ModifiedOperations{},
-		Unchanged: utils.StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
+		Modified: ModifiedOperations{},
 	}
 }
 
@@ -107,8 +105,6 @@ func (operationsDiff *OperationsDiff) diffOperation(config *Config, state *state
 
 	if !diff.Empty() {
 		operationsDiff.Modified[method] = diff
-	} else {
-		operationsDiff.Unchanged = append(operationsDiff.Unchanged, method)
 	}
 
 	return nil

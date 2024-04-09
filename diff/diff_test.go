@@ -88,7 +88,6 @@ func TestDiff_ModifiedOperation(t *testing.T) {
 		Added:     utils.StringList{"GET"},
 		Deleted:   utils.StringList{"POST"},
 		Modified:  diff.ModifiedOperations{},
-		Unchanged: utils.StringList{},
 	},
 		d.PathsDiff.Modified["/api/test"].OperationsDiff)
 }

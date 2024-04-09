@@ -40,7 +40,6 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 		getFlattenCmd(),
 		getChecksCmd(),
 		getQRCodeCmd(),
-		getDeltaCmd(),
 	)
 
 	return run(rootCmd)

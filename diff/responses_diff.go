@@ -9,10 +9,9 @@ import (
 
 // ResponsesDiff describes the changes between a pair of sets of response objects: https://swagger.io/specification/#responses-object
 type ResponsesDiff struct {
-	Added     utils.StringList  `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted   utils.StringList  `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified  ModifiedResponses `json:"modified,omitempty" yaml:"modified,omitempty"`
-	Unchanged utils.StringList  `json:"unchanged,omitempty" yaml:"unchanged,omitempty"`
+	Added    utils.StringList  `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList  `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedResponses `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -31,10 +30,9 @@ type ModifiedResponses map[string]*ResponseDiff
 
 func newResponsesDiff() *ResponsesDiff {
 	return &ResponsesDiff{
-		Added:     utils.StringList{},
-		Deleted:   utils.StringList{},
-		Modified:  ModifiedResponses{},
-		Unchanged: utils.StringList{},
+		Added:    utils.StringList{},
+		Deleted:  utils.StringList{},
+		Modified: ModifiedResponses{},
 	}
 }
 
@@ -75,9 +73,7 @@ func getResponsesDiffInternal(config *Config, state *state, responses1, response
 			if err != nil {
 				return nil, err
 			}
-			if diff.Empty() {
-				result.Unchanged = append(result.Unchanged, responseValue1)
-			} else {
+			if !diff.Empty() {
 				result.Modified[responseValue1] = diff
 			}
 		} else {

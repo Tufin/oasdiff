@@ -13,10 +13,9 @@ For example, if there's a new path "/test" with method POST then EndpointsDiff w
 Or, if path "/test" was modified to include a new methdod, PUT, then EndpointsDiff will describe this as a new endpoint: PUT /test.
 */
 type EndpointsDiff struct {
-	Added     Endpoints         `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted   Endpoints         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified  ModifiedEndpoints `json:"modified,omitempty" yaml:"modified,omitempty"`
-	Unchanged Endpoints         `json:"unchanged,omitempty" yaml:"unchanged,omitempty"`
+	Added    Endpoints         `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  Endpoints         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedEndpoints `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Endpoint is a combination of an HTTP method and a Path
@@ -38,10 +37,9 @@ func (diff *EndpointsDiff) Empty() bool {
 
 func newEndpointsDiff() *EndpointsDiff {
 	return &EndpointsDiff{
-		Added:     Endpoints{},
-		Deleted:   Endpoints{},
-		Modified:  ModifiedEndpoints{},
-		Unchanged: Endpoints{},
+		Added:    Endpoints{},
+		Deleted:  Endpoints{},
+		Modified: ModifiedEndpoints{},
 	}
 }
 
@@ -111,13 +109,6 @@ func (diff *EndpointsDiff) addDeletedPath(path string, method string) {
 	})
 }
 
-func (diff *EndpointsDiff) addUnchangedPath(path string, method string) {
-	diff.Unchanged = append(diff.Unchanged, Endpoint{
-		Method: method,
-		Path:   path,
-	})
-}
-
 func (diff *EndpointsDiff) addModifiedPaths(config *Config, state *state, path string, pathItemPair *pathItemPair) error {
 
 	pathDiff, err := getPathDiff(config, state, pathItemPair)
@@ -142,10 +133,6 @@ func (diff *EndpointsDiff) addModifiedPaths(config *Config, state *state, path s
 			Method: method,
 			Path:   path,
 		}] = methodDiff
-	}
-
-	for _, method := range pathDiff.OperationsDiff.Unchanged {
-		diff.addUnchangedPath(path, method)
 	}
 
 	return nil

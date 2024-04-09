@@ -23,7 +23,7 @@ In order to reduce such false-positives, oasdiff supports the ability to replace
 oasdiff breaking data/allof/simple.yaml data/allof/revision.yaml --flatten-allof
 ```
 In this case no breaking changes are reported, correctly.  
-The `--flatten-allof` flag is also supported with `diff`, `changelog`, `delta` and `summary`.
+The `--flatten-allof` flag is also supported with `diff`, `changelog` and `summary`.
 
 In order to see how oasdiff merges allOf, you can use the dedicated `flatten` command:
 ```
