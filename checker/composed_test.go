@@ -29,7 +29,7 @@ func TestComposed_Empty(t *testing.T) {
 		loadFrom(t, "../data/composed/base/", 1),
 	}
 
-	diffReport, _, err := diff.GetPathsDiff(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	diffReport, _, err := diff.GetPathsDiff(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.Nil(t, diffReport)
 }
@@ -69,7 +69,7 @@ func TestComposed_CompareMostRecent(t *testing.T) {
 		loadFrom(t, "../data/composed/revision/", 2),
 	}
 
-	diffReport, _, err := diff.GetPathsDiff(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	diffReport, _, err := diff.GetPathsDiff(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.Nil(t, diffReport)
 }

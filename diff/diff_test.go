@@ -32,7 +32,7 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) *diff.Diff {
 }
 
 func TestDiff_Same(t *testing.T) {
-	require.Nil(t, d(t, diff.NewConfig().WithExcludeExtensions(), 1, 1))
+	require.Nil(t, d(t, diff.NewConfig(), 1, 1))
 }
 
 func TestDiff_Empty(t *testing.T) {
@@ -823,7 +823,7 @@ func TestDiff_DifferentComponentSameSchema(t *testing.T) {
 	s1, err := load.NewSpecInfo(openapi3.NewLoader(), load.NewSource("../data/different_component_same_schema.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(), s1, s1)
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s1)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }
