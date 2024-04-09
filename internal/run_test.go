@@ -301,7 +301,3 @@ func Test_ColorWithNonTextFormat(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff changelog ../data/allof/simple.yaml ../data/allof/revision.yaml -f yaml --color always"), io.Discard, &stderr))
 	require.Equal(t, "Error: --color flag is only relevant with 'text' or 'singleline' formats\n", stderr.String())
 }
-
-func Test_Delta(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff delta ../data/simple1.yaml ../data/simple2.yaml"), io.Discard, io.Discard))
-}

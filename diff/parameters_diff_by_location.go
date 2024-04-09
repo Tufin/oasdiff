@@ -9,10 +9,9 @@ import (
 
 // ParametersDiffByLocation describes the changes, grouped by param location, between a pair of lists of parameter objects: https://swagger.io/specification/#parameter-object
 type ParametersDiffByLocation struct {
-	Added     ParamNamesByLocation `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted   ParamNamesByLocation `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified  ParamDiffByLocation  `json:"modified,omitempty" yaml:"modified,omitempty"`
-	Unchanged ParamNamesByLocation `json:"unchanged,omitempty" yaml:"unchanged,omitempty"`
+	Added    ParamNamesByLocation `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  ParamNamesByLocation `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ParamDiffByLocation  `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -55,10 +54,9 @@ func lenNested[T utils.StringList | ParamDiffs](mapOfList map[string]T) int {
 
 func newParametersDiffByLocation() *ParametersDiffByLocation {
 	return &ParametersDiffByLocation{
-		Added:     ParamNamesByLocation{},
-		Deleted:   ParamNamesByLocation{},
-		Modified:  ParamDiffByLocation{},
-		Unchanged: ParamNamesByLocation{},
+		Added:    ParamNamesByLocation{},
+		Deleted:  ParamNamesByLocation{},
+		Modified: ParamDiffByLocation{},
 	}
 }
 
@@ -89,15 +87,6 @@ func (diff *ParametersDiffByLocation) addModifiedParam(param *openapi3.Parameter
 		paramDiffs[param.Name] = paramDiff
 	} else {
 		diff.Modified[param.In] = ParamDiffs{param.Name: paramDiff}
-	}
-}
-
-func (diff *ParametersDiffByLocation) addUnchangedParam(param *openapi3.Parameter) {
-
-	if paramNames, ok := diff.Unchanged[param.In]; ok {
-		diff.Unchanged[param.In] = append(paramNames, param.Name)
-	} else {
-		diff.Unchanged[param.In] = utils.StringList{param.Name}
 	}
 }
 
@@ -135,9 +124,7 @@ func getParametersDiffByLocationInternal(config *Config, state *state, params1, 
 				return nil, err
 			}
 
-			if diff.Empty() {
-				result.addUnchangedParam(param1)
-			} else {
+			if !diff.Empty() {
 				result.addModifiedParam(param1, diff)
 			}
 		} else {
