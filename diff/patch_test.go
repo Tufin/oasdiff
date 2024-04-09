@@ -18,7 +18,7 @@ func TestPatch_MethodDescription(t *testing.T) {
 
 	require.NoError(t, d1.Patch(s1))
 
-	d2, err := diff.Get(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.False(t, d2.GetSummary().Diff)
 }
@@ -34,7 +34,7 @@ func TestPatch_ParameterDescription(t *testing.T) {
 
 	require.NoError(t, d1.Patch(s1))
 
-	d2, err := diff.Get(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.False(t, d2.GetSummary().Diff)
 }
@@ -51,7 +51,7 @@ func TestPatch_ParameterSchemaFormat(t *testing.T) {
 
 	require.NoError(t, d1.Patch(s1))
 
-	d2, err := diff.Get(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.False(t, d2.GetSummary().Diff)
 }
@@ -67,7 +67,7 @@ func TestPatch_ParameterSchemaEnum(t *testing.T) {
 
 	require.NoError(t, d1.Patch(s1))
 
-	d2, err := diff.Get(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.False(t, d2.GetSummary().Diff)
 }
@@ -85,7 +85,7 @@ func TestPatch_ParameterSchemaMaxLengthNil(t *testing.T) {
 
 	require.NoError(t, d1.Patch(s1))
 
-	d2, err := diff.Get(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.False(t, d2.GetSummary().Diff)
 }
@@ -102,7 +102,7 @@ func TestPatch_ParameterSchemaMaxLength(t *testing.T) {
 
 	require.NoError(t, d1.Patch(s1))
 
-	d2, err := diff.Get(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	d2, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	require.False(t, d2.GetSummary().Diff)
 }
