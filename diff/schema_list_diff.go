@@ -137,7 +137,7 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 		}
 
 		if d.Empty() {
-			return SchemaListDiff{}, err
+			return SchemaListDiff{}, nil
 		}
 
 		return SchemaListDiff{
@@ -166,11 +166,7 @@ func getGroupDiffForInlineSchemas(config *Config, state *state, schemaRefs1, sch
 			return nil, nil, err
 		} else if !found {
 			notContainedIdx = append(notContainedIdx, index1)
-			schemaName := fmt.Sprintf("%s[%d]", inlineSchemaPrefix, index1)
-			if schemaRef1 != nil && schemaRef1.Value != nil && schemaRef1.Value.Title != "" {
-				schemaName = fmt.Sprintf("%s:%s", schemaName, schemaRef1.Value.Title)
-			}
-			notContainedSchemas = append(notContainedSchemas, schemaName)
+			notContainedSchemas = append(notContainedSchemas, getSchemaName(inlineSchemaPrefix, schemaRef1, index1))
 		} else {
 			matched[index2] = struct{}{}
 		}
@@ -214,4 +210,12 @@ func isSchemaRef(schemaRef *openapi3.SchemaRef) bool {
 		return false
 	}
 	return schemaRef.Ref != ""
+}
+
+func getSchemaName(inlineSchemaPrefix string, schemaRef *openapi3.SchemaRef, index int) string {
+	schemaName := fmt.Sprintf("%s[%d]", inlineSchemaPrefix, index)
+	if schemaRef != nil && schemaRef.Value != nil && schemaRef.Value.Title != "" {
+		return fmt.Sprintf("%s:%s", schemaName, schemaRef.Value.Title)
+	}
+	return schemaName
 }
