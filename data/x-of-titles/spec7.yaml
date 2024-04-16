@@ -1,0 +1,22 @@
+openapi: 3.0.3
+info:
+  title: Test
+  version: "0.1"
+paths:
+  '/test':
+    get:
+      responses:
+        '200':
+          description: Success
+          content:
+            'application/json':
+              schema:
+                anyOf:
+                  - title: Title 2
+                    type: string
+                  - title: Title 2
+                    type: number
+                  - title: Title 3
+                    type: boolean
+                  - title:
+                    type: number

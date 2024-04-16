@@ -1,0 +1,76 @@
+openapi: 3.0.1
+info:
+  title: Test API
+  version: "2.0"
+tags:
+- name: Tests
+  description: Test tag.
+paths:
+  /api/v2/changeOfResponseFieldValueTiedToEnumTest:
+    get:
+      tags:
+      - Tests
+      summary: This is a test
+      description: Test description.
+      operationId: getTest
+      requestBody:
+        description: Test.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupOfRequestObjects'
+        required: true
+      responses:
+        "200":
+          description: OK
+      security:
+      - DigestAuth: []
+components:
+  schemas:
+    GroupOfRequestObjects:
+      type: object
+      description: Enum values
+      oneOf:
+      - $ref: "#/components/schemas/ResponseEnumInline"
+      - $ref: "#/components/schemas/ResponseEnumInline2"
+    ResponseEnumInline:
+      type: object
+      description: Enum values
+      properties:
+        eventTypeName:
+          description: Incident that triggered this alert.
+          type: object
+          oneOf:
+          - enum:
+            - CREDIT_CARD_ABOUT_TO_EXPIRE
+            title: Billing Event Types
+            type: string
+          - enum:
+            - CPS_SNAPSHOT_STARTED
+            - CPS_SNAPSHOT_SUCCESSFUL
+            - CPS_SNAPSHOT_FAILED
+            - CPS_SNAPSHOT_FALLBACK_SUCCESSFUL
+            - CPS_SNAPSHOT_FALLBACK_FAILED
+            - CPS_RESTORE_SUCCESSFUL
+            - CPS_EXPORT_SUCCESSFUL
+            - CPS_RESTORE_FAILED
+            - CPS_EXPORT_FAILED
+            - CPS_SNAPSHOT_DOWNLOAD_REQUEST_FAILED
+            - CPS_OPLOG_CAUGHT_UP
+            title: Cps Backup Event Types
+            type: string
+    ResponseEnumInline2:
+      type: object
+      description: Enum values
+      properties:
+        eventTypeName2:
+          description: Incident that triggered this alert.
+          type: object
+          oneOf:
+          - enum:
+            - CREDIT_CARD_ABOUT_TO_EXPIRE
+            title: Billing Event Types
+            type: string
+    DigestAuth:
+      type: http
+      scheme: digest

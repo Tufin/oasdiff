@@ -9,15 +9,73 @@ import (
 )
 
 /*
-SchemaListDiff describes the changes between a pair of lists of schema objects: https://swagger.io/specification/#schema-object
-The result is a combination of two diffs:
-1. Diff of schemas with a $ref: added/deleted schema names; modified=diff of schemas with the same $ref
-2. Diff of schemas without a $ref (inline schemas): added/deleted schemas (base/revision + index in the list of schemas); modified=diff of schemas with the same title or a single modified inline schema with no title
+SchemaListDiff describes the changes between a pair of subschemas under AllOf, AnyOf or OneOf
+[oneOf, anyOf, allOf]: https://swagger.io/docs/specification/data-models/oneof-anyof-allof-not/
+[Schema Objects]: https://swagger.io/specification/#schema-object
+The SchemaListDiff is a combination of two diffs:
+
+ 1. Diff of schemas with a $ref:
+    - schemas with the same $ref across base and revision are compared to each other and based on the result are considered as modified or unmodified
+    - other schemas are considered added/deleted
+
+ 2. Diff of schemas without a $ref ("inline schemas"):
+    Unlike schemas with $ref, inline schemas are not identified by a unique name and are therefor compared by their content.
+    - syntactically identical schemas across base and revision are considered unmodified
+    - schemas with the same title across base and revision are compared to each other and based on the result are considered as modified or unmodified
+    - other schemas are considered added/deleted
+    - special case: if there remains exactly one added schema and one deleted schema without titles, they will be be compared to eachother and considered as modified or unmodified
+
+The SchemaListDiff format:
+- Under Deleted: 1-based index in the deletred schema + schema title (if exists)
+- Under Added: 1-based index in the added schema + schema title (if exists)
+- Under Modified: schema title + diff of the schema objects
 */
 type SchemaListDiff struct {
-	Added    utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  utils.StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedSchemas  `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Added    Schemas         `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  Schemas         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedSchemas `json:"modified,omitempty" yaml:"modified,omitempty"`
+}
+
+func NewSchemaListDiff() *SchemaListDiff {
+	return &SchemaListDiff{
+		Added:    Schemas{},
+		Deleted:  Schemas{},
+		Modified: ModifiedSchemas{},
+	}
+}
+
+func (diff *SchemaListDiff) appendAddedSchema(schemaName string) {
+	diff.Added = append(diff.Added, Schema{Title: schemaName})
+}
+
+func (diff *SchemaListDiff) appendDeletedSchema(schemaName string) {
+	diff.Deleted = append(diff.Deleted, Schema{Title: schemaName})
+}
+
+type Schema struct {
+	Index int    `json:"index" yaml:"index"`
+	Title string `json:"title,omitempty" yaml:"title,omitempty"`
+}
+
+type Schemas []Schema
+
+func getSchemas(indexes []int, schemaRefs openapi3.SchemaRefs) Schemas {
+	result := Schemas{}
+	for _, index := range indexes {
+		result = append(result, Schema{
+			Index: index,
+			Title: schemaRefs[index].Value.Title,
+		})
+	}
+	return result
+}
+
+func (schemas Schemas) String() string {
+	result := ""
+	for _, schema := range schemas {
+		result += fmt.Sprintf("%d: %s\n", schema.Index, schema.Title)
+	}
+	return result
 }
 
 // Empty indicates whether a change was found in this element
@@ -75,10 +133,8 @@ func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schem
 type schemaRefsFilter func(schemaRef *openapi3.SchemaRef) bool
 
 // getSchemaListsRefsDiff compares schemas by $ref name
-func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SchemaListDiff, error) {
-	added := utils.StringList{}
-	deleted := utils.StringList{}
-	modified := ModifiedSchemas{}
+func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (*SchemaListDiff, error) {
+	result := NewSchemaListDiff()
 
 	schemaMap2 := toSchemaRefMap(schemaRefs2, filter)
 	for _, schema1 := range schemaRefs1 {
@@ -88,12 +144,13 @@ func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRef
 		ref := schema1.Ref
 		if schema2, found := schemaMap2[ref]; found {
 			schemaMap2.delete(ref)
-			if err := modified.addSchemaDiff(config, state, ref, schema1, schema2.schemaRef); err != nil {
-				return SchemaListDiff{}, err
+			var err error
+			result.Modified, err = result.Modified.addSchemaDiff(config, state, ref, schema1, schema2.schemaRef)
+			if err != nil {
+				return result, err
 			}
 		} else {
-			schemaName := ref[strings.LastIndex(ref, "/")+1:]
-			deleted = append(deleted, schemaName)
+			result.appendDeletedSchema(ref[strings.LastIndex(ref, "/")+1:])
 		}
 	}
 
@@ -106,27 +163,22 @@ func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRef
 		if _, found := schemaMap1[ref]; found {
 			schemaMap1.delete(ref)
 		} else {
-			schemaName := ref[strings.LastIndex(ref, "/")+1:]
-			added = append(added, schemaName)
+			result.appendAddedSchema(ref[strings.LastIndex(ref, "/")+1:])
 		}
 	}
-	return SchemaListDiff{
-		Added:    added,
-		Deleted:  deleted,
-		Modified: modified,
-	}, nil
+	return result, nil
 }
 
 func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SchemaListDiff, error) {
 
 	// find schemas in revision that have no matching schema in the base
-	addedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs2, schemaRefs1, filter, "RevisionSchema")
+	addedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs2, schemaRefs1, filter)
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
 
 	// find schemas in base that have no matching schema in the revision
-	deletedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs1, schemaRefs2, filter, "BaseSchema")
+	deletedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs1, schemaRefs2, filter)
 	if err != nil {
 		return SchemaListDiff{}, err
 	}
@@ -139,19 +191,18 @@ func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaR
 
 	// special case: single modified schema with no title
 	if isSingleModifiedCase(schemaRefs1, schemaRefs2, addedIdx, deletedIdx) {
-		d, err := getSchemaDiff(config, state, schemaRefs1[deletedIdx[0]], schemaRefs2[addedIdx[0]])
+		var err error
+		modifiedSchemas, err = modifiedSchemas.addSchemaDiff(config, state, fmt.Sprintf("#%d", 1+deletedIdx[0]), schemaRefs1[deletedIdx[0]], schemaRefs2[addedIdx[0]])
 		if err != nil {
 			return SchemaListDiff{}, err
 		}
-
-		modifiedSchemas[fmt.Sprintf("#%d", 1+deletedIdx[0])] = d
 		addedIdx = []int{}
 		deletedIdx = []int{}
 	}
 
 	return SchemaListDiff{
-		Added:    getSchemaNames("RevisionSchema", addedIdx, schemaRefs2),
-		Deleted:  getSchemaNames("BaseSchema", deletedIdx, schemaRefs1),
+		Added:    getSchemas(addedIdx, schemaRefs2),
+		Deleted:  getSchemas(deletedIdx, schemaRefs1),
 		Modified: modifiedSchemas,
 	}, nil
 }
@@ -174,11 +225,11 @@ func compareByTitle(config *Config, state *state, addedIdx, deletedIdx []int, sc
 			continue
 		}
 
-		d, err := getSchemaDiff(config, state, schemaRefs1[deletedId], schemaRefs2[addedId])
+		var err error
+		modifiedSchemas, err = modifiedSchemas.addSchemaDiff(config, state, schemaRefs1[deletedId].Value.Title, schemaRefs1[deletedId], schemaRefs2[addedId])
 		if err != nil {
 			return nil, nil, nil, err
 		}
-		modifiedSchemas[schemaRefs1[deletedId].Value.Title] = d
 	}
 
 	return deleteMatched(addedIdx, addedMatched), deleteMatched(deletedIdx, deletedMatched), modifiedSchemas, nil
@@ -221,7 +272,7 @@ func matchByTitle(config *Config, state *state, addedIdx, deletedIdx []int, sche
 	return addedMatched, deletedMatched
 }
 
-func getNonContainedInlineSchemas(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter, inlineSchemaPrefix string) ([]int, error) {
+func getNonContainedInlineSchemas(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) ([]int, error) {
 
 	notContainedIdx := []int{}
 	matched := map[int]struct{}{}
@@ -278,20 +329,4 @@ func isSchemaRef(schemaRef *openapi3.SchemaRef) bool {
 		return false
 	}
 	return schemaRef.Ref != ""
-}
-
-func getSchemaNames(inlineSchemaPrefix string, indexes []int, schemaRefs openapi3.SchemaRefs) utils.StringList {
-	result := utils.StringList{}
-	for _, index := range indexes {
-		result = append(result, getSchemaName(inlineSchemaPrefix, schemaRefs[index], index))
-	}
-	return result
-}
-
-func getSchemaName(inlineSchemaPrefix string, schemaRef *openapi3.SchemaRef, index int) string {
-	schemaName := fmt.Sprintf("%s[%d]", inlineSchemaPrefix, index)
-	if schemaRef != nil && schemaRef.Value != nil && schemaRef.Value.Title != "" {
-		return fmt.Sprintf("%s:%s", schemaName, schemaRef.Value.Title)
-	}
-	return schemaName
 }

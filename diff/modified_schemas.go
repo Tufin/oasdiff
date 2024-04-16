@@ -4,30 +4,40 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-// ModifiedSchemas is map of schema names to their respective diffs
-type ModifiedSchemas map[string]*SchemaDiff
+type ModifiedSchema struct {
+	Base     Schema      `json:"base,omitempty" yaml:"base,omitempty"`
+	Revision Schema      `json:"revision,omitempty" yaml:"revision,omitempty"`
+	Diff     *SchemaDiff `json:"diff,omitempty" yaml:"diff,omitempty"`
+}
 
-func (modifiedSchemas ModifiedSchemas) addSchemaDiff(config *Config, state *state, schemaName string, schemaRef1, schemaRef2 *openapi3.SchemaRef) error {
+type ModifiedSchemas []*ModifiedSchema
+
+// ModifiedSchemasOld is map of schema names to their respective diffs
+type ModifiedSchemasOld map[string]*SchemaDiff
+
+func (modifiedSchemas ModifiedSchemas) addSchemaDiff(config *Config, state *state, schemaName string, schemaRef1, schemaRef2 *openapi3.SchemaRef) (ModifiedSchemas, error) {
 
 	diff, err := getSchemaDiff(config, state, schemaRef1, schemaRef2)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if !diff.Empty() {
-		modifiedSchemas[schemaName] = diff
+		modifiedSchemas = append(modifiedSchemas, &ModifiedSchema{
+			Base: Schema{
+				// Index: schemaRef1.Index,
+				Title: schemaRef1.Value.Title,
+			},
+			Revision: Schema{
+				// Index: schemaRef2.Index,
+				Title: schemaRef2.Value.Title,
+			},
+			Diff: diff,
+		})
 	}
 
-	return nil
+	return modifiedSchemas, nil
 }
 
 func (modifiedSchemas ModifiedSchemas) combine(other ModifiedSchemas) ModifiedSchemas {
-	result := ModifiedSchemas{}
-
-	for ref, d := range modifiedSchemas {
-		result[ref] = d
-	}
-	for ref, d := range other {
-		result[ref] = d
-	}
-	return result
+	return append(modifiedSchemas, other...)
 }

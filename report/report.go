@@ -398,7 +398,7 @@ func (r *report) printSchemaListDiff(d *diff.SchemaListDiff) {
 	if len(d.Modified) > 0 {
 		for schemaRef, schemaDiff := range d.Modified {
 			r.print("Schema", schemaRef, "modified")
-			r.indent().printSchema(schemaDiff)
+			r.indent().printSchema(schemaDiff.Diff)
 		}
 	}
 }

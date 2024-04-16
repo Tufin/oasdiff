@@ -7,11 +7,11 @@ import (
 
 // SchemasDiff describes the changes between a pair of sets of schema objects: https://swagger.io/specification/#schema-object
 type SchemasDiff struct {
-	Added    utils.StringList `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  utils.StringList `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedSchemas  `json:"modified,omitempty" yaml:"modified,omitempty"`
-	Base     openapi3.Schemas `json:"-" yaml:"-"`
-	Revision openapi3.Schemas `json:"-" yaml:"-"`
+	Added    utils.StringList   `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  utils.StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedSchemasOld `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Base     openapi3.Schemas   `json:"-" yaml:"-"`
+	Revision openapi3.Schemas   `json:"-" yaml:"-"`
 }
 
 // Empty indicates whether a change was found in this element
@@ -29,7 +29,7 @@ func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
 		Added:    utils.StringList{},
 		Deleted:  utils.StringList{},
-		Modified: ModifiedSchemas{},
+		Modified: ModifiedSchemasOld{},
 	}
 }
 
@@ -118,7 +118,8 @@ func (schemasDiff *SchemasDiff) addDeletedSchema(schema string) {
 }
 
 func (schemasDiff *SchemasDiff) addModifiedSchema(config *Config, state *state, schemaName string, schemaRef1, schemaRef2 *openapi3.SchemaRef) error {
-	return schemasDiff.Modified.addSchemaDiff(config, state, schemaName, schemaRef1, schemaRef2)
+	return nil
+	// return schemasDiff.Modified.addSchemaDiff(config, state, schemaName, schemaRef1, schemaRef2)
 }
 
 func (schemasDiff *SchemasDiff) getSummary() *SummaryDetails {
