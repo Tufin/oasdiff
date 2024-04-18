@@ -301,3 +301,11 @@ func Test_ColorWithNonTextFormat(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff changelog ../data/allof/simple.yaml ../data/allof/revision.yaml -f yaml --color always"), io.Discard, &stderr))
 	require.Equal(t, "Error: --color flag is only relevant with 'text' or 'singleline' formats\n", stderr.String())
 }
+
+func Test_QR(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff qr"), io.Discard, io.Discard))
+}
+
+func Test_InvalidEnumValue(t *testing.T) {
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff ../data/openapi-test1.yaml ../data/openapi-test3.yaml --exclude-elements xxx"), io.Discard, io.Discard))
+}
