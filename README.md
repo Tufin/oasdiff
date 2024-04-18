@@ -35,7 +35,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Path prefix modification](#path-prefix-modification)
 - [Path parameter renaming](#path-parameter-renaming)
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
-- [Tracking changes to OpenAPI Extensions](#openapi-extensions-diff)
+- [Tracking changes to OpenAPI Extensions](#openapi-extensions)
 - [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking changes with custom checks](CUSTOMIZING-CHECKS.md)
 - Localization: display breaking changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
