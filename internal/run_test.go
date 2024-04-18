@@ -38,6 +38,12 @@ func Test_NoRevision(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff base.yaml"), io.Discard, io.Discard))
 }
 
+func Test_ExtraRevision(t *testing.T) {
+	var stderr bytes.Buffer
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff 1 2 3"), io.Discard, &stderr))
+	require.Equal(t, "Error: invalid arguments after base and revision\n", stderr.String())
+}
+
 func Test_InvalidFlag(t *testing.T) {
 	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff data/openapi-test1.yaml data/openapi-test1.yaml --invalid"), io.Discard, io.Discard))
 }
@@ -201,6 +207,12 @@ func Test_ComposedMode(t *testing.T) {
 	require.Equal(t, map[string]interface{}{"paths": map[string]interface{}{"deleted": []interface{}{"/api/old-test"}}}, bc)
 }
 
+func Test_ComposedModeStdin(t *testing.T) {
+	var stderr bytes.Buffer
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff - - --composed"), io.Discard, &stderr))
+	require.Equal(t, "Error: can't read from stdin in composed mode\n", stderr.String())
+}
+
 func Test_Help(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff --help"), &stdout, io.Discard))
@@ -307,5 +319,8 @@ func Test_QR(t *testing.T) {
 }
 
 func Test_InvalidEnumValue(t *testing.T) {
-	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff ../data/openapi-test1.yaml ../data/openapi-test3.yaml --exclude-elements xxx"), io.Discard, io.Discard))
+	var stderr bytes.Buffer
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff diff ../data/openapi-test1.yaml ../data/openapi-test3.yaml --exclude-elements xxx"), io.Discard, &stderr))
+	require.Equal(t, `Error: invalid argument "xxx" for "-e, --exclude-elements" flag: xxx is not one of the allowed values: description, endpoints, examples, extensions, summary, or title
+`, stderr.String())
 }
