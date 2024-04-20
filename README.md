@@ -35,6 +35,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Path prefix modification](#path-prefix-modification)
 - [Path parameter renaming](#path-parameter-renaming)
 - [Excluding certain kinds of changes](#excluding-specific-kinds-of-changes)
+- [Tracking changes to OpenAPI Extensions](#openapi-extensions)
 - [Excluding endpoints](#excluding-specific-endpoints)
 - [Extending breaking changes with custom checks](CUSTOMIZING-CHECKS.md)
 - Localization: display breaking changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
@@ -265,6 +266,29 @@ You can ignore multiple elements with a comma-separated list of excluded element
 You can filter endpoints in two ways:
 1. By path name: use the `--match-path` option to exclude paths that don't match the given regular expression, see [example](#openapi-diff-for-endpoints-containing-api-in-the-path)
 2. By extension: use the `--filter-extension` option to exclude paths and operations with an OpenAPI Extension matching the given regular expression, see [example](#exclude-paths-and-operations-with-extension-x-beta)
+
+## OpenAPI Extensions
+Oasdiff tracks changes to [OpenAPI extensions](https://swagger.io/docs/specification/openapi-extensions/) by default. To disable this, see [Excluding Specific Kinds of Changes](#excluding-specific-kinds-of-changes).  
+The diff format for OpenAPI extensions conforms with [JavaScript Object Notation (JSON) Patch](https://datatracker.ietf.org/doc/html/rfc6902#section-4.4f), for example:
+```
+endpoints:
+    modified:
+        ?   method: POST
+            path: /example/callback
+        :   extensions:
+                modified:
+                    x-amazon-apigateway-integration:
+                        - oldValue: "201"
+                          value: "200"
+                          op: replace
+                          from: ""
+                          path: /responses/default/statusCode
+                        - oldValue: http://api.example.com/v1/example/callback
+                          value: http://api.example.com/v1/example/calllllllllback
+                          op: replace
+                          from: ""
+                          path: /uri
+```
 
 ## Notes for Go Developers
 ### Embedding oasdiff into your program
