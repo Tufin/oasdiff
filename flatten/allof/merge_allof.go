@@ -580,7 +580,9 @@ func resolveNonFalseAdditionalProps(state *state, schema *openapi3.Schema, colle
 	}
 
 	var schemaRef *openapi3.SchemaRef
-	if len(additionalSchemas) > 0 {
+	if len(additionalSchemas) == 1 {
+		schemaRef = additionalSchemas[0]
+	} else if len(additionalSchemas) > 1 {
 		result := openapi3.NewSchemaRef("", openapi3.NewSchema())
 		err := flattenSchemas(state, result, additionalSchemas)
 		if err != nil {

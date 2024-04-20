@@ -1,0 +1,17 @@
+openapi: 3.0.0
+info:
+  title: Self-Referential allOf Schema API
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    BaseSchema:
+      allOf:
+        - $ref: '#/components/schemas/NestedSelfReferentialSchema'
+    NestedSelfReferentialSchema:
+      type: object
+      properties:
+        prop1:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NestedSelfReferentialSchema'
