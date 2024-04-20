@@ -35,7 +35,7 @@ func TestMergeSpec_CircularAdditionalPropsWithoutAllOf(t *testing.T) {
 	require.Equal(t, "object", merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.Type)
 	require.NotNil(t, merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema)
 	require.NotNil(t, merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema.Value)
-	
+
 	baseSchema := merged.Components.Schemas["BaseSchema"].Value
 	referencedAdditionalPropSchema := merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema.Value
 	require.Equal(t, baseSchema, referencedAdditionalPropSchema)
@@ -51,7 +51,7 @@ func TestMergeSpec_MergeCircularAdditionalPropsWithAllOf(t *testing.T) {
 	require.Equal(t, "object", merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.Type)
 	require.NotNil(t, merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema)
 	require.NotNil(t, merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema.Value)
-	
+
 	baseSchema := merged.Components.Schemas["BaseSchema"].Value
 	referencedAdditionalPropSchema := merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema.Value
 	require.Equal(t, baseSchema, referencedAdditionalPropSchema)
@@ -66,7 +66,7 @@ func TestMergeSpec_MergeCircularAdditionalPropsNestedWithinAllOf(t *testing.T) {
 	require.Equal(t, "object", merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.Type)
 	require.NotNil(t, merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema)
 	require.NotNil(t, merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema.Value)
-	
+
 	baseSchemaReferencedAdditionalPropSchema := merged.Components.Schemas["BaseSchema"].Value.Properties["prop1"].Value.AdditionalProperties.Schema.Value
 	NestedSelfReferentialSchema := merged.Components.Schemas["NestedSelfReferentialSchema"].Value
 	require.Equal(t, baseSchemaReferencedAdditionalPropSchema, NestedSelfReferentialSchema)
