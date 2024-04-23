@@ -1,7 +1,6 @@
 package diff
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -9,77 +8,76 @@ import (
 )
 
 /*
-SchemaListDiff describes the changes between a pair of subschemas under AllOf, AnyOf or OneOf
+SubschemasDiff describes the changes between a pair of subschemas under AllOf, AnyOf or OneOf
 [oneOf, anyOf, allOf]: https://swagger.io/docs/specification/data-models/oneof-anyof-allof-not/
 [Schema Objects]: https://swagger.io/specification/#schema-object
-The SchemaListDiff is a combination of two diffs:
+The SubschemasDiff is a combination of two diffs:
 
- 1. Diff of schemas with a $ref:
+ 1. Diff of referenced schemas (subschemas under AllOf, AnyOf or OneOf defined as references to schemas under components):
     - schemas with the same $ref across base and revision are compared to each other and based on the result are considered as modified or unmodified
     - other schemas are considered added/deleted
 
- 2. Diff of schemas without a $ref ("inline schemas"):
-    Unlike schemas with $ref, inline schemas are not identified by a unique name and are therefor compared by their content.
+ 2. Diff of inline schemas (subschemas defined under AllOf, AnyOf or OneOf without a reference):
+    Unlike referenced schemas, inline schemas are not identified by a unique name and are therefor compared by their content.
     - syntactically identical schemas across base and revision are considered unmodified
     - schemas with the same title across base and revision are compared to each other and based on the result are considered as modified or unmodified
     - other schemas are considered added/deleted
     - special case: if there remains exactly one added schema and one deleted schema without titles, they will be be compared to eachother and considered as modified or unmodified
 
-The SchemaListDiff format:
-- Under Deleted: 1-based index in the deletred schema + schema title (if exists)
-- Under Added: 1-based index in the added schema + schema title (if exists)
-- Under Modified: schema title + diff of the schema objects
+SubschemasDiff format:
+- Deleted: zero-based index in the deleted schema + schema title (if exists) + component name for referenced schemas
+- Added: zero-based index in the added schema + schema title (if exists) + component name for referenced schemas
+- Modified: zero-based indecis in base and revision + schema title (if exists) + component name for referenced schemas + diff
 */
-type SchemaListDiff struct {
-	Added    Schemas         `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  Schemas         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedSchemas `json:"modified,omitempty" yaml:"modified,omitempty"`
+type SubschemasDiff struct {
+	Added    Subschemas         `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  Subschemas         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Modified ModifiedSubschemas `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
-func NewSchemaListDiff() *SchemaListDiff {
-	return &SchemaListDiff{
-		Added:    Schemas{},
-		Deleted:  Schemas{},
-		Modified: ModifiedSchemas{},
+func NewSubschemasDiff() *SubschemasDiff {
+	return &SubschemasDiff{
+		Added:    Subschemas{},
+		Deleted:  Subschemas{},
+		Modified: ModifiedSubschemas{},
 	}
 }
 
-func (diff *SchemaListDiff) appendAddedSchema(schemaName string) {
-	diff.Added = append(diff.Added, Schema{Title: schemaName})
+func (diff *SubschemasDiff) appendAdded(index int, schemaRef *openapi3.SchemaRef, title string) {
+	diff.Added = append(diff.Added,
+		Subschema{
+			Index:     index,
+			Component: getComponentName(schemaRef),
+			Title:     title,
+		},
+	)
 }
 
-func (diff *SchemaListDiff) appendDeletedSchema(schemaName string) {
-	diff.Deleted = append(diff.Deleted, Schema{Title: schemaName})
+func (diff *SubschemasDiff) appendDeleted(index int, schemaRef *openapi3.SchemaRef, title string) {
+	diff.Deleted = append(diff.Deleted,
+		Subschema{
+			Index:     index,
+			Component: getComponentName(schemaRef),
+			Title:     title,
+		},
+	)
 }
 
-type Schema struct {
-	Index int    `json:"index" yaml:"index"`
-	Title string `json:"title,omitempty" yaml:"title,omitempty"`
-}
-
-type Schemas []Schema
-
-func getSchemas(indexes []int, schemaRefs openapi3.SchemaRefs) Schemas {
-	result := Schemas{}
-	for _, index := range indexes {
-		result = append(result, Schema{
-			Index: index,
-			Title: schemaRefs[index].Value.Title,
-		})
+func (diff *SubschemasDiff) appendModified(config *Config, state *state, schemaRef1, schemaRef2 *openapi3.SchemaRef, index1, index2 int) error {
+	var err error
+	diff.Modified, err = diff.Modified.addSchemaDiff(config, state, schemaRef1, schemaRef2, index1, index2)
+	if err != nil {
+		return err
 	}
-	return result
+	return nil
 }
 
-func (schemas Schemas) String() string {
-	result := ""
-	for _, schema := range schemas {
-		result += fmt.Sprintf("%d: %s\n", schema.Index, schema.Title)
-	}
-	return result
+func getComponentName(schemaRef *openapi3.SchemaRef) string {
+	return schemaRef.Ref[strings.LastIndex(schemaRef.Ref, "/")+1:]
 }
 
 // Empty indicates whether a change was found in this element
-func (diff *SchemaListDiff) Empty() bool {
+func (diff *SubschemasDiff) Empty() bool {
 	if diff == nil {
 		return true
 	}
@@ -89,8 +87,8 @@ func (diff *SchemaListDiff) Empty() bool {
 		len(diff.Modified) == 0
 }
 
-func getSchemaListsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
-	diff, err := getSchemaListsDiffInternal(config, state, schemaRefs1, schemaRefs2)
+func getSubschemasDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SubschemasDiff, error) {
+	diff, err := getSubschemasDiffInternal(config, state, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
 	}
@@ -102,27 +100,27 @@ func getSchemaListsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 o
 	return diff, nil
 }
 
-func (diff SchemaListDiff) combine(other SchemaListDiff) (*SchemaListDiff, error) {
+func (diff SubschemasDiff) combine(other SubschemasDiff) (*SubschemasDiff, error) {
 
-	return &SchemaListDiff{
+	return &SubschemasDiff{
 		Added:    append(diff.Added, other.Added...),
 		Deleted:  append(diff.Deleted, other.Deleted...),
 		Modified: diff.Modified.combine(other.Modified),
 	}, nil
 }
 
-func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SchemaListDiff, error) {
+func getSubschemasDiffInternal(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SubschemasDiff, error) {
 
 	if len(schemaRefs1) == 0 && len(schemaRefs2) == 0 {
 		return nil, nil
 	}
 
-	diffRefs, err := getSchemaListsRefsDiff(config, state, schemaRefs1, schemaRefs2, isSchemaRef)
+	diffRefs, err := getSubschemasRefDiff(config, state, schemaRefs1, schemaRefs2, isSchemaRef)
 	if err != nil {
 		return nil, err
 	}
 
-	diffInline, err := getSchemaListsInlineDiff(config, state, schemaRefs1, schemaRefs2, isSchemaInline)
+	diffInline, err := getSubschemasInlineDiff(config, state, schemaRefs1, schemaRefs2, isSchemaInline)
 	if err != nil {
 		return nil, err
 	}
@@ -132,77 +130,70 @@ func getSchemaListsDiffInternal(config *Config, state *state, schemaRefs1, schem
 
 type schemaRefsFilter func(schemaRef *openapi3.SchemaRef) bool
 
-// getSchemaListsRefsDiff compares schemas by $ref name
-func getSchemaListsRefsDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (*SchemaListDiff, error) {
-	result := NewSchemaListDiff()
+// getSubschemasRefDiff compares schemas by $ref name
+func getSubschemasRefDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (*SubschemasDiff, error) {
+	result := NewSubschemasDiff()
 
-	schemaMap2 := toSchemaRefMap(schemaRefs2, filter)
-	for _, schema1 := range schemaRefs1 {
-		if !filter(schema1) {
+	refMap2 := toRefMap(schemaRefs2, filter)
+	for index1, schemaRef1 := range schemaRefs1 {
+		if !filter(schemaRef1) {
 			continue
 		}
-		ref := schema1.Ref
-		if schema2, found := schemaMap2[ref]; found {
-			schemaMap2.delete(ref)
-			var err error
-			result.Modified, err = result.Modified.addSchemaDiff(config, state, ref, schema1, schema2.schemaRef)
-			if err != nil {
+		if schemaRef2, index2, found := refMap2.pop(schemaRef1.Ref); found {
+			if err := result.appendModified(config, state, schemaRef1, schemaRef2, index1, index2); err != nil {
 				return result, err
 			}
-		} else {
-			result.appendDeletedSchema(ref[strings.LastIndex(ref, "/")+1:])
-		}
-	}
-
-	schemaMap1 := toSchemaRefMap(schemaRefs1, filter)
-	for _, schema2 := range schemaRefs2 {
-		if !filter(schema2) {
 			continue
 		}
-		ref := schema2.Ref
-		if _, found := schemaMap1[ref]; found {
-			schemaMap1.delete(ref)
-		} else {
-			result.appendAddedSchema(ref[strings.LastIndex(ref, "/")+1:])
+		result.appendDeleted(index1, schemaRef1, "")
+	}
+
+	refMap1 := toRefMap(schemaRefs1, filter)
+	for index2, schemaRef2 := range schemaRefs2 {
+		if !filter(schemaRef2) {
+			continue
+		}
+		if _, _, found := refMap1.pop(schemaRef2.Ref); !found {
+			result.appendAdded(index2, schemaRef2, "")
 		}
 	}
 	return result, nil
 }
 
-func getSchemaListsInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SchemaListDiff, error) {
+func getSubschemasInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SubschemasDiff, error) {
 
 	// find schemas in revision that have no matching schema in the base
 	addedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs2, schemaRefs1, filter)
 	if err != nil {
-		return SchemaListDiff{}, err
+		return SubschemasDiff{}, err
 	}
 
 	// find schemas in base that have no matching schema in the revision
 	deletedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs1, schemaRefs2, filter)
 	if err != nil {
-		return SchemaListDiff{}, err
+		return SubschemasDiff{}, err
 	}
 
 	// match schemas by title
 	addedIdx, deletedIdx, modifiedSchemas, err := compareByTitle(config, state, addedIdx, deletedIdx, schemaRefs1, schemaRefs2)
 	if err != nil {
-		return SchemaListDiff{}, err
+		return SubschemasDiff{}, err
 	}
 
 	// special case: single modified schema with no title
 	if isSingleModifiedCase(schemaRefs1, schemaRefs2, addedIdx, deletedIdx) {
 		var err error
-		modifiedSchemas, err = modifiedSchemas.addSchemaDiff(config, state, fmt.Sprintf("#%d", 1+deletedIdx[0]), schemaRefs1[deletedIdx[0]], schemaRefs2[addedIdx[0]])
+		modifiedSchemas, err = modifiedSchemas.addSchemaDiff(config, state, schemaRefs1[deletedIdx[0]], schemaRefs2[addedIdx[0]], deletedIdx[0], addedIdx[0])
 		if err != nil {
-			return SchemaListDiff{}, err
+			return SubschemasDiff{}, err
 		}
 		addedIdx = []int{}
 		deletedIdx = []int{}
 	}
 
-	return SchemaListDiff{
-		Added:    getSchemas(addedIdx, schemaRefs2),
-		Deleted:  getSchemas(deletedIdx, schemaRefs1),
+	return SubschemasDiff{
+		Added:    getSubschemas(addedIdx, schemaRefs2),
+		Deleted:  getSubschemas(deletedIdx, schemaRefs1),
 		Modified: modifiedSchemas,
 	}, nil
 }
@@ -214,11 +205,11 @@ func isSingleModifiedCase(schemaRefs1, schemaRefs2 openapi3.SchemaRefs, addedIdx
 		schemaRefs2[addedIdx[0]].Value.Title == ""
 }
 
-func compareByTitle(config *Config, state *state, addedIdx, deletedIdx []int, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, []int, ModifiedSchemas, error) {
+func compareByTitle(config *Config, state *state, addedIdx, deletedIdx []int, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, []int, ModifiedSubschemas, error) {
 
 	addedMatched, deletedMatched := matchByTitle(config, state, addedIdx, deletedIdx, schemaRefs1, schemaRefs2)
 
-	modifiedSchemas := ModifiedSchemas{}
+	modifiedSchemas := ModifiedSubschemas{}
 	for _, addedId := range addedIdx {
 		deletedId, found := addedMatched[addedId]
 		if !found {
@@ -226,7 +217,7 @@ func compareByTitle(config *Config, state *state, addedIdx, deletedIdx []int, sc
 		}
 
 		var err error
-		modifiedSchemas, err = modifiedSchemas.addSchemaDiff(config, state, schemaRefs1[deletedId].Value.Title, schemaRefs1[deletedId], schemaRefs2[addedId])
+		modifiedSchemas, err = modifiedSchemas.addSchemaDiff(config, state, schemaRefs1[deletedId], schemaRefs2[addedId], deletedId, addedId)
 		if err != nil {
 			return nil, nil, nil, err
 		}

@@ -387,7 +387,7 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 	r.printMessage(d.DiscriminatorDiff, "Discriminator changed")
 }
 
-func (r *report) printSchemaListDiff(d *diff.SchemaListDiff) {
+func (r *report) printSchemaListDiff(d *diff.SubschemasDiff) {
 	if d.Empty() {
 		return
 	}

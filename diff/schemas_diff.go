@@ -5,11 +5,11 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
-// SchemasDiff describes the changes between a pair of sets of schema objects: https://swagger.io/specification/#schema-object
+// SchemasDiff describes the changes between a pair of maps of schema objects like the components.schemas object
 type SchemasDiff struct {
 	Added    utils.StringList   `json:"added,omitempty" yaml:"added,omitempty"`
 	Deleted  utils.StringList   `json:"deleted,omitempty" yaml:"deleted,omitempty"`
-	Modified ModifiedSchemasOld `json:"modified,omitempty" yaml:"modified,omitempty"`
+	Modified ModifiedSchemasMap `json:"modified,omitempty" yaml:"modified,omitempty"`
 	Base     openapi3.Schemas   `json:"-" yaml:"-"`
 	Revision openapi3.Schemas   `json:"-" yaml:"-"`
 }
@@ -29,7 +29,7 @@ func newSchemasDiff() *SchemasDiff {
 	return &SchemasDiff{
 		Added:    utils.StringList{},
 		Deleted:  utils.StringList{},
-		Modified: ModifiedSchemasOld{},
+		Modified: ModifiedSchemasMap{},
 	}
 }
 
@@ -118,8 +118,7 @@ func (schemasDiff *SchemasDiff) addDeletedSchema(schema string) {
 }
 
 func (schemasDiff *SchemasDiff) addModifiedSchema(config *Config, state *state, schemaName string, schemaRef1, schemaRef2 *openapi3.SchemaRef) error {
-	return nil
-	// return schemasDiff.Modified.addSchemaDiff(config, state, schemaName, schemaRef1, schemaRef2)
+	return schemasDiff.Modified.addSchemaDiff(config, state, schemaName, schemaRef1, schemaRef2)
 }
 
 func (schemasDiff *SchemasDiff) getSummary() *SummaryDetails {
@@ -128,4 +127,20 @@ func (schemasDiff *SchemasDiff) getSummary() *SummaryDetails {
 		Deleted:  len(schemasDiff.Deleted),
 		Modified: len(schemasDiff.Modified),
 	}
+}
+
+// ModifiedSchemasMap is map of schema names to their respective diffs
+type ModifiedSchemasMap map[string]*SchemaDiff
+
+func (modifiedSchemas ModifiedSchemasMap) addSchemaDiff(config *Config, state *state, schemaName string, schemaRef1, schemaRef2 *openapi3.SchemaRef) error {
+
+	diff, err := getSchemaDiff(config, state, schemaRef1, schemaRef2)
+	if err != nil {
+		return err
+	}
+	if !diff.Empty() {
+		modifiedSchemas[schemaName] = diff
+	}
+
+	return nil
 }

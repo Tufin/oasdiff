@@ -7,7 +7,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/utils"
 )
 
 func getXOfTitlesFile(file string) string {
@@ -41,8 +40,22 @@ func TestXOfTitles_TitleNameChanged(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, dd)
 	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
-	require.ElementsMatch(t, utils.StringList{"RevisionSchema[1]:Title 3"}, anyOfDiff.Added)
-	require.ElementsMatch(t, utils.StringList{"BaseSchema[1]:Title 2"}, anyOfDiff.Deleted)
+	require.ElementsMatch(t,
+		diff.Subschemas{
+			{
+				Index: 1,
+				Title: "Title 3",
+			},
+		},
+		anyOfDiff.Added)
+	require.ElementsMatch(t,
+		diff.Subschemas{
+			{
+				Index: 1,
+				Title: "Title 2",
+			},
+		},
+		anyOfDiff.Deleted)
 	require.Empty(t, anyOfDiff.Modified)
 }
 
@@ -61,9 +74,40 @@ func TestXOfTitles_TitlesModified(t *testing.T) {
 	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
 	require.Empty(t, anyOfDiff.Added)
 	require.Empty(t, anyOfDiff.Deleted)
+
 	require.Len(t, anyOfDiff.Modified, 2)
-	require.Equal(t, diff.ValueDiff{From: "string", To: "boolean"}, *anyOfDiff.Modified["Title 1"].TypeDiff)
-	require.Equal(t, diff.ValueDiff{From: "string", To: "number"}, *anyOfDiff.Modified["Title 2"].TypeDiff)
+
+	require.Equal(t,
+		diff.Subschema{
+			Index: 0,
+			Title: "Title 1",
+		},
+		anyOfDiff.Modified[0].Base,
+	)
+	require.Equal(t,
+		diff.Subschema{
+			Index: 0,
+			Title: "Title 1",
+		},
+		anyOfDiff.Modified[0].Revision,
+	)
+	require.Equal(t, diff.ValueDiff{From: "string", To: "boolean"}, *anyOfDiff.Modified[0].Diff.TypeDiff)
+
+	require.Equal(t,
+		diff.Subschema{
+			Index: 1,
+			Title: "Title 2",
+		},
+		anyOfDiff.Modified[1].Base,
+	)
+	require.Equal(t,
+		diff.Subschema{
+			Index: 1,
+			Title: "Title 2",
+		},
+		anyOfDiff.Modified[1].Revision,
+	)
+	require.Equal(t, diff.ValueDiff{From: "string", To: "number"}, *anyOfDiff.Modified[1].Diff.TypeDiff)
 }
 
 func TestXOfTitles_TitlesModifiedAndAdded(t *testing.T) {
@@ -79,10 +123,33 @@ func TestXOfTitles_TitlesModifiedAndAdded(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, dd)
 	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
-	require.ElementsMatch(t, utils.StringList{"RevisionSchema[2]:Title 3"}, anyOfDiff.Added)
+	require.Len(t, anyOfDiff.Added, 1)
+	require.ElementsMatch(t, diff.Subschemas{
+		{
+			Index: 2,
+			Title: "Title 3",
+		},
+	}, anyOfDiff.Added)
 	require.Empty(t, anyOfDiff.Deleted)
 	require.Len(t, anyOfDiff.Modified, 1)
-	require.Equal(t, diff.ValueDiff{From: "boolean", To: "string"}, *anyOfDiff.Modified["Title 1"].TypeDiff)
+	require.Equal(t,
+		diff.Subschema{
+			Index: 0,
+			Title: "Title 1",
+		},
+		anyOfDiff.Modified[0].Base,
+	)
+	require.Equal(t,
+		diff.Subschema{
+			Index: 0,
+			Title: "Title 1",
+		},
+		anyOfDiff.Modified[0].Revision,
+	)
+	require.Equal(t,
+		diff.ValueDiff{From: "boolean", To: "string"},
+		*anyOfDiff.Modified[0].Diff.TypeDiff,
+	)
 }
 
 func TestXOfTitles_DuplicateTitles(t *testing.T) {
@@ -98,7 +165,25 @@ func TestXOfTitles_DuplicateTitles(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, dd)
 	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
-	require.ElementsMatch(t, utils.StringList{"RevisionSchema[0]:Title 2", "RevisionSchema[2]:Title 3"}, anyOfDiff.Added)
-	require.ElementsMatch(t, utils.StringList{"BaseSchema[0]:Title 1"}, anyOfDiff.Deleted)
+	require.Len(t, anyOfDiff.Added, 2)
+	require.ElementsMatch(t, diff.Subschemas{
+		{
+			Index: 0,
+			Title: "Title 2",
+		},
+		{
+			Index: 2,
+			Title: "Title 3",
+		},
+	}, anyOfDiff.Added)
+
+	require.Len(t, anyOfDiff.Deleted, 1)
+	require.ElementsMatch(t, diff.Subschemas{
+		{
+			Index: 0,
+			Title: "Title 1",
+		},
+	}, anyOfDiff.Deleted)
+
 	require.Empty(t, anyOfDiff.Modified, 0)
 }
