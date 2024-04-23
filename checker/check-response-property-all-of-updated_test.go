@@ -25,7 +25,7 @@ func TestResponsePropertyAllOfAdded(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          checker.ResponseBodyAllOfAddedId,
-			Args:        []any{"Rabbit", "200"},
+			Args:        []any{"#/components/schemas/Rabbit", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -34,7 +34,7 @@ func TestResponsePropertyAllOfAdded(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyAllOfAddedId,
-			Args:        []any{"Breed3", "/allOf[#/components/schemas/Dog]/breed", "200"},
+			Args:        []any{"#/components/schemas/Breed3", "/allOf[#/components/schemas/Dog]/breed", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -59,7 +59,7 @@ func TestResponsePropertyAllOfRemoved(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          checker.ResponseBodyAllOfRemovedId,
-			Args:        []any{"Rabbit", "200"},
+			Args:        []any{"#/components/schemas/Rabbit", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -68,7 +68,7 @@ func TestResponsePropertyAllOfRemoved(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyAllOfRemovedId,
-			Args:        []any{"Breed3", "/allOf[#/components/schemas/Dog]/breed", "200"},
+			Args:        []any{"#/components/schemas/Breed3", "/allOf[#/components/schemas/Dog]/breed", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",

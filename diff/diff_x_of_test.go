@@ -27,13 +27,17 @@ func TestAllOf_SingleRef(t *testing.T) {
 	require.NoError(t, err)
 	allOfDiff := dd.PathsDiff.Modified["/api"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AllOfDiff
 	require.Len(t, allOfDiff.Modified, 1)
-	require.Equal(t, diff.Subschema{
-		Index:     0,
-		Component: "ProductDto",
+	require.Equal(t, diff.BaseSubschema{
+		Subschema: diff.Subschema{
+			Index:     0,
+			Component: "ProductDto",
+		},
 	}, allOfDiff.Modified[0].Base)
-	require.Equal(t, diff.Subschema{
-		Index:     0,
-		Component: "ProductDto",
+	require.Equal(t, diff.RevisionSubschema{
+		Subschema: diff.Subschema{
+			Index:     0,
+			Component: "ProductDto",
+		},
 	}, allOfDiff.Modified[0].Revision)
 	require.Equal(t, utils.StringList{"sku"}, allOfDiff.Modified[0].Diff.PropertiesDiff.Added)
 }
@@ -51,13 +55,18 @@ func TestOneOf_TwoRefs(t *testing.T) {
 	require.NoError(t, err)
 	oneOfDiff := dd.PathsDiff.Modified["/pets"].OperationsDiff.Modified["PATCH"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff
 	require.Len(t, oneOfDiff.Modified, 1)
-	require.Equal(t, diff.Subschema{
-		Index:     1,
-		Component: "Dog",
+	require.Equal(t, diff.BaseSubschema{
+		Subschema: diff.Subschema{
+			Index:     1,
+			Component: "Dog",
+		},
 	}, oneOfDiff.Modified[0].Base)
-	require.Equal(t, diff.Subschema{
-		Index:     1,
-		Component: "Dog",
+	require.Equal(t, diff.RevisionSubschema{
+		Subschema: diff.Subschema{
+
+			Index:     1,
+			Component: "Dog",
+		},
 	}, oneOfDiff.Modified[0].Revision)
 	require.Equal(t, 1, oneOfDiff.Modified[0].Diff.AllOfDiff.Modified[0].Base.Index)
 	require.Equal(t, utils.StringList{"guard"}, oneOfDiff.Modified[0].Diff.AllOfDiff.Modified[0].Diff.PropertiesDiff.Added)
@@ -77,24 +86,32 @@ func TestOneOf_ChangeBoth(t *testing.T) {
 	oneOfDiff := dd.PathsDiff.Modified["/pets"].OperationsDiff.Modified["PATCH"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff
 	require.Len(t, oneOfDiff.Modified, 2)
 
-	require.Equal(t, diff.Subschema{
-		Index:     0,
-		Component: "Cat",
+	require.Equal(t, diff.BaseSubschema{
+		Subschema: diff.Subschema{
+			Index:     0,
+			Component: "Cat",
+		},
 	}, oneOfDiff.Modified[0].Base)
-	require.Equal(t, diff.Subschema{
-		Index:     0,
-		Component: "Cat",
+	require.Equal(t, diff.RevisionSubschema{
+		Subschema: diff.Subschema{
+			Index:     0,
+			Component: "Cat",
+		},
 	}, oneOfDiff.Modified[0].Revision)
 	require.Equal(t, 1, oneOfDiff.Modified[0].Diff.AllOfDiff.Modified[0].Base.Index)
 	require.Equal(t, utils.StringList{"miao"}, oneOfDiff.Modified[0].Diff.AllOfDiff.Modified[0].Diff.PropertiesDiff.Added)
 
-	require.Equal(t, diff.Subschema{
-		Index:     1,
-		Component: "Dog",
+	require.Equal(t, diff.BaseSubschema{
+		Subschema: diff.Subschema{
+			Index:     1,
+			Component: "Dog",
+		},
 	}, oneOfDiff.Modified[1].Base)
-	require.Equal(t, diff.Subschema{
-		Index:     1,
-		Component: "Dog",
+	require.Equal(t, diff.RevisionSubschema{
+		Subschema: diff.Subschema{
+			Index:     1,
+			Component: "Dog",
+		},
 	}, oneOfDiff.Modified[1].Revision)
 	require.Equal(t, 1, oneOfDiff.Modified[1].Diff.AllOfDiff.Modified[0].Base.Index)
 	require.Equal(t, utils.StringList{"guard"}, oneOfDiff.Modified[1].Diff.AllOfDiff.Modified[0].Diff.PropertiesDiff.Added)
@@ -151,13 +168,17 @@ func TestOneOf_MultiRefs(t *testing.T) {
 	require.NoError(t, err)
 	oneOfDiff := dd.PathsDiff.Modified["/pets"].OperationsDiff.Modified["GET"].RequestBodyDiff.ContentDiff.MediaTypeModified["application/json"].SchemaDiff.OneOfDiff
 	require.Len(t, oneOfDiff.Modified, 1)
-	require.Equal(t, diff.Subschema{
-		Index:     2,
-		Component: "Dog",
+	require.Equal(t, diff.BaseSubschema{
+		Subschema: diff.Subschema{
+			Index:     2,
+			Component: "Dog",
+		},
 	}, oneOfDiff.Modified[0].Base)
-	require.Equal(t, diff.Subschema{
-		Index:     1,
-		Component: "Dog",
+	require.Equal(t, diff.RevisionSubschema{
+		Subschema: diff.Subschema{
+			Index:     1,
+			Component: "Dog",
+		},
 	}, oneOfDiff.Modified[0].Revision)
 	require.Equal(t, "bark", oneOfDiff.Modified[0].Diff.PropertiesDiff.Added[0])
 	require.Equal(t, "name", oneOfDiff.Modified[0].Diff.PropertiesDiff.Deleted[0])
@@ -175,17 +196,23 @@ func TestAnyOf_IncludeDescriptions(t *testing.T) {
 	dd, err := diff.Get(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
-	require.ElementsMatch(t, diff.Subschemas{
+	require.ElementsMatch(t, diff.RevisionSubschemas{
 		{
-			Index: 0,
+			Subschema: diff.Subschema{
+				Index: 0,
+			},
 		},
 		{
-			Index: 2,
+			Subschema: diff.Subschema{
+				Index: 2,
+			},
 		},
 	}, anyOfDiff.Added)
-	require.ElementsMatch(t, diff.Subschemas{
-		{
-			Index: 0,
+	require.ElementsMatch(t, diff.BaseSubschemas{
+		diff.BaseSubschema{
+			Subschema: diff.Subschema{
+				Index: 0,
+			},
 		},
 	}, anyOfDiff.Deleted)
 	require.Empty(t, anyOfDiff.Modified)
@@ -203,9 +230,11 @@ func TestAnyOf_ExcludeDescriptions(t *testing.T) {
 	dd, err := diff.Get(diff.NewConfig().WithExcludeElements([]string{diff.ExcludeDescriptionOption}), s1, s2)
 	require.NoError(t, err)
 	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
-	require.ElementsMatch(t, diff.Subschemas{
-		{
-			Index: 2,
+	require.ElementsMatch(t, diff.RevisionSubschemas{
+		diff.RevisionSubschema{
+			Subschema: diff.Subschema{
+				Index: 2,
+			},
 		},
 	}, anyOfDiff.Added)
 	require.Empty(t, anyOfDiff.Deleted)

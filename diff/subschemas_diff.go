@@ -30,35 +30,39 @@ SubschemasDiff format:
 - Modified: zero-based indecis in base and revision + schema title (if exists) + component name for referenced schemas + diff
 */
 type SubschemasDiff struct {
-	Added    Subschemas         `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  Subschemas         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    RevisionSubschemas `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  BaseSubschemas     `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedSubschemas `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
 func NewSubschemasDiff() *SubschemasDiff {
 	return &SubschemasDiff{
-		Added:    Subschemas{},
-		Deleted:  Subschemas{},
+		Added:    RevisionSubschemas{},
+		Deleted:  BaseSubschemas{},
 		Modified: ModifiedSubschemas{},
 	}
 }
 
 func (diff *SubschemasDiff) appendAdded(index int, schemaRef *openapi3.SchemaRef, title string) {
 	diff.Added = append(diff.Added,
-		Subschema{
-			Index:     index,
-			Component: getComponentName(schemaRef),
-			Title:     title,
+		RevisionSubschema{
+			Subschema: Subschema{
+				Index:     index,
+				Component: getComponentName(schemaRef),
+				Title:     title,
+			},
 		},
 	)
 }
 
 func (diff *SubschemasDiff) appendDeleted(index int, schemaRef *openapi3.SchemaRef, title string) {
 	diff.Deleted = append(diff.Deleted,
-		Subschema{
-			Index:     index,
-			Component: getComponentName(schemaRef),
-			Title:     title,
+		BaseSubschema{
+			Subschema: Subschema{
+				Index:     index,
+				Component: getComponentName(schemaRef),
+				Title:     title,
+			},
 		},
 	)
 }
@@ -192,8 +196,8 @@ func getSubschemasInlineDiff(config *Config, state *state, schemaRefs1, schemaRe
 	}
 
 	return SubschemasDiff{
-		Added:    getSubschemas(addedIdx, schemaRefs2),
-		Deleted:  getSubschemas(deletedIdx, schemaRefs1),
+		Added:    getRevisionSubschemas(addedIdx, schemaRefs2),
+		Deleted:  getBaseSubschemas(deletedIdx, schemaRefs1),
 		Modified: modifiedSchemas,
 	}, nil
 }
