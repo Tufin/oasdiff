@@ -16,11 +16,34 @@ type ModifiedSubschema struct {
 	Diff     *SchemaDiff `json:"diff" yaml:"diff"`
 }
 
+func (modifiedSchema *ModifiedSubschema) GetName() string {
+	baseName := modifiedSchema.Base.GetName()
+	revisonName := modifiedSchema.Revision.GetName()
+
+	if baseName == revisonName {
+		return baseName
+	}
+
+	return fmt.Sprintf("%s -> %s", baseName, revisonName)
+}
+
 // Subschema identifies a subschema by its index and title
 type Subschema struct {
 	Index     int    `json:"index" yaml:"index"`
 	Component string `json:"component,omitempty" yaml:"component,omitempty"`
 	Title     string `json:"title,omitempty" yaml:"title,omitempty"`
+}
+
+func (subschema Subschema) GetName() string {
+	if subschema.Title != "" {
+		return subschema.Title
+	}
+
+	if subschema.Component != "" {
+		return subschema.Component
+	}
+
+	return fmt.Sprintf("schema #%d", subschema.Index)
 }
 
 // Subschemas is a list of subschemas
