@@ -187,3 +187,37 @@ func TestXOfTitles_DuplicateTitles(t *testing.T) {
 
 	require.Empty(t, anyOfDiff.Modified, 0)
 }
+
+func TestXOfTitles_EmptyTitle(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile(getXOfTitlesFile("spec6.yaml"))
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile(getXOfTitlesFile("spec7.yaml"))
+	require.NoError(t, err)
+
+	dd, err := diff.Get(&diff.Config{}, s1, s2)
+	require.NoError(t, err)
+	require.NotEmpty(t, dd)
+	anyOfDiff := dd.PathsDiff.Modified["/test"].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["200"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.AnyOfDiff
+	require.Empty(t, anyOfDiff.Added)
+	require.Empty(t, anyOfDiff.Deleted)
+	require.Len(t, anyOfDiff.Modified, 1)
+	require.Equal(t,
+		diff.Subschema{
+			Index: 3,
+		},
+		anyOfDiff.Modified[0].Base,
+	)
+	require.Equal(t,
+		diff.Subschema{
+			Index: 3,
+		},
+		anyOfDiff.Modified[0].Revision,
+	)
+	require.Equal(t,
+		diff.ValueDiff{From: "string", To: "number"},
+		*anyOfDiff.Modified[0].Diff.TypeDiff,
+	)
+}

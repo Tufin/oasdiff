@@ -163,13 +163,13 @@ func getSubschemasRefDiff(config *Config, state *state, schemaRefs1, schemaRefs2
 func getSubschemasInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (SubschemasDiff, error) {
 
 	// find schemas in revision that have no matching schema in the base
-	addedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs2, schemaRefs1, isSchemaInline)
+	addedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs2, schemaRefs1)
 	if err != nil {
 		return SubschemasDiff{}, err
 	}
 
 	// find schemas in base that have no matching schema in the revision
-	deletedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs1, schemaRefs2, isSchemaInline)
+	deletedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return SubschemasDiff{}, err
 	}
@@ -263,17 +263,17 @@ func matchByTitle(config *Config, state *state, addedIdx, deletedIdx []int, sche
 	return addedMatched, deletedMatched
 }
 
-func getNonContainedInlineSchemas(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) ([]int, error) {
+func getNonContainedInlineSchemas(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) ([]int, error) {
 
 	notContainedIdx := []int{}
 	matched := map[int]struct{}{}
 
 	for index1, schemaRef1 := range schemaRefs1 {
-		if !filter(schemaRef1) {
+		if !isSchemaInline(schemaRef1) {
 			continue
 		}
 
-		if found, index2, err := findIndenticalSchema(config, state, schemaRef1, schemaRefs2, matched, filter); err != nil {
+		if found, index2, err := findIndenticalSchema(config, state, schemaRef1, schemaRefs2, matched, isSchemaInline); err != nil {
 			return nil, err
 		} else if !found {
 			notContainedIdx = append(notContainedIdx, index1)

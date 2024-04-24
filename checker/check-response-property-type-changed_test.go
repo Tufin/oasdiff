@@ -78,3 +78,45 @@ func TestResponsePropertyFormatChangedCheck(t *testing.T) {
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
+
+// CL: changing properties of subschemas under allOf
+func TestResponsePropertyAnyOfModified(t *testing.T) {
+	s1, err := open("../data/checker/response_property_any_of_complex_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/response_property_any_of_complex_revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyTypeChangedCheck), d, osm, checker.INFO)
+
+	require.Len(t, errs, 3)
+	require.ElementsMatch(t, []checker.ApiChange{
+		{
+			Id:          checker.ResponsePropertyTypeChangedId,
+			Args:        []any{"/anyOf[#/components/schemas/Dog]/breed/anyOf[#/components/schemas/Breed2]/name", "string", "", "number", "", "200"},
+			Level:       checker.ERR,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      load.NewSource("../data/checker/response_property_any_of_complex_revision.yaml"),
+			OperationId: "listPets",
+		},
+		{
+			Id:          checker.ResponsePropertyTypeChangedId,
+			Args:        []any{"/anyOf[subschema #3: Rabbit]/", "string", "", "number", "", "200"},
+			Level:       checker.ERR,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      load.NewSource("../data/checker/response_property_any_of_complex_revision.yaml"),
+			OperationId: "listPets",
+		},
+		{
+			Id:          checker.ResponsePropertyTypeChangedId,
+			Args:        []any{"/anyOf[subschema #4 -> subschema #5]/", "string", "", "number", "", "200"},
+			Level:       checker.ERR,
+			Operation:   "GET",
+			Path:        "/pets",
+			Source:      load.NewSource("../data/checker/response_property_any_of_complex_revision.yaml"),
+			OperationId: "listPets",
+		}}, errs)
+}

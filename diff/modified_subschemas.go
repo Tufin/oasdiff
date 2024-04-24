@@ -8,9 +8,10 @@ import (
 )
 
 // ModifiedSubschemas is list of modified subschemas with their diffs
+// Unlike other Modiefied types which are modeled as maps, this one is modeled as a slice to avoid complex mapping keys
 type ModifiedSubschemas []*ModifiedSubschema
 
-// ModifiedSubschema is a single modified subschema with its diff
+// ModifiedSubschema represents a modified subschema with its indentifiers in base and revision, and the schema diff
 type ModifiedSubschema struct {
 	Base     Subschema   `json:"base" yaml:"base"`
 	Revision Subschema   `json:"revision" yaml:"revision"`
@@ -32,14 +33,15 @@ func (modifiedSchema *ModifiedSubschema) String() string {
 // Subschemas is a list of subschemas
 type Subschemas []Subschema
 
-// Subschema identifies a subschema by its index, component and title
+// Subschema uniquely identifies a subschema by its index, component and title
 type Subschema struct {
 	Index     int    `json:"index" yaml:"index"`                             // zero-based index in the schema's subschemas
-	Component string `json:"component,omitempty" yaml:"component,omitempty"` // component name if the subschema is a component
+	Component string `json:"component,omitempty" yaml:"component,omitempty"` // component name if the subschema is a reference to components/schemas
 	Title     string `json:"title,omitempty" yaml:"title,omitempty"`         // title of the subschema
 }
 
 // String returns a string representation of the subschema
+// Note that we convert the index to 1-based index
 func (subschema Subschema) String() string {
 	const prefix = "subschema"
 
@@ -47,6 +49,7 @@ func (subschema Subschema) String() string {
 		return fmt.Sprintf("%s #%d: %s", prefix, subschema.Index+1, subschema.Title)
 	}
 
+	// note: we may want to ad the index to the component name in the future
 	if subschema.Component != "" {
 		return fmt.Sprintf("#/components/schemas/%s", subschema.Component)
 	}
