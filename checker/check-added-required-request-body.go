@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	AddedRequiredRequestBodyId = "added-required-request-body"
-	AddedOptionalRequestBodyId = "added-optional-request-body"
+	AddedRequiredRequestBodyId = "request-body-added-required"
+	AddedOptionalRequestBodyId = "request-body-added-optional"
 )
 
 func AddedRequestBodyCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {

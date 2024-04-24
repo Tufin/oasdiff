@@ -1,7 +1,7 @@
 at: в
 in: в
-added-required-request-body: добавлено обязательное тело запроса
-added-optional-request-body: добавлено необязательное тело запроса
+request-body-added-required: добавлено обязательное тело запроса
+request-body-added-optional: добавлено необязательное тело запроса
 request-parameter-removed: удалён %s параметр запроса %s
 total-errors: "%s критические изменения: %s %s, %s %s\\n"
 total-changes: "%s изменений: %s %s, %s %s, %s %s\\n"
