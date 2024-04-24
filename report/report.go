@@ -397,7 +397,7 @@ func (r *report) printSchemaListDiff(d *diff.SubschemasDiff) {
 
 	if len(d.Modified) > 0 {
 		for _, schemaDiff := range d.Modified {
-			r.print("Schema modified:", schemaDiff.String())
+			r.print("Modified schema:", schemaDiff.String())
 			r.indent().printSchema(schemaDiff.Diff)
 		}
 	}
