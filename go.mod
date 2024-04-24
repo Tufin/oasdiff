@@ -1,14 +1,12 @@
 module github.com/tufin/oasdiff
 
-go 1.21.5
-
-toolchain go1.22.2
+go 1.22.2
 
 require (
 	cloud.google.com/go v0.112.2
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.122.0
-	github.com/oasdiff/go-common v0.2.29
+	github.com/oasdiff/go-common v0.2.30
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.9.0
 	github.com/yargevad/filepathx v1.0.0
@@ -27,7 +25,7 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
-	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/sys v0.19.0 // indirect
 )
 
 require (
