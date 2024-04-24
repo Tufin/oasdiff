@@ -11,58 +11,52 @@ import (
 SubschemasDiff describes the changes between a pair of subschemas under AllOf, AnyOf or OneOf
 [oneOf, anyOf, allOf]: https://swagger.io/docs/specification/data-models/oneof-anyof-allof-not/
 [Schema Objects]: https://swagger.io/specification/#schema-object
-The SubschemasDiff is a combination of two diffs:
+SubschemasDiff is a combination of two diffs:
 
- 1. Diff of referenced schemas (subschemas under AllOf, AnyOf or OneOf defined as references to schemas under components):
+ 1. Diff of referenced schemas: subschemas under AllOf, AnyOf or OneOf defined as references to schemas under components/schemas
     - schemas with the same $ref across base and revision are compared to each other and based on the result are considered as modified or unmodified
     - other schemas are considered added/deleted
 
- 2. Diff of inline schemas (subschemas defined under AllOf, AnyOf or OneOf without a reference):
-    Unlike referenced schemas, inline schemas are not identified by a unique name and are therefor compared by their content.
+ 2. Diff of inline schemas: subschemas defined directly under AllOf, AnyOf or OneOf, without a reference to components/schemas
+    Unlike referenced schemas, inline schemas cannot be matched by a unique name and are therefor compared by their content.
     - syntactically identical schemas across base and revision are considered unmodified
     - schemas with the same title across base and revision are compared to each other and based on the result are considered as modified or unmodified
     - other schemas are considered added/deleted
-    - special case: if there remains exactly one added schema and one deleted schema without titles, they will be be compared to eachother and considered as modified or unmodified
 
-SubschemasDiff format:
-- Deleted: zero-based index in the deleted schema + schema title (if exists) + component name for referenced schemas
-- Added: zero-based index in the added schema + schema title (if exists) + component name for referenced schemas
-- Modified: zero-based indecis in base and revision + schema title (if exists) + component name for referenced schemas + diff
+Special case:
+If there remains exactly one added schema and one deleted schema without a reference and without a title, they will be be compared to eachother and considered as modified or unmodified
 */
 type SubschemasDiff struct {
-	Added    RevisionSubschemas `json:"added,omitempty" yaml:"added,omitempty"`
-	Deleted  BaseSubschemas     `json:"deleted,omitempty" yaml:"deleted,omitempty"`
+	Added    Subschemas         `json:"added,omitempty" yaml:"added,omitempty"`
+	Deleted  Subschemas         `json:"deleted,omitempty" yaml:"deleted,omitempty"`
 	Modified ModifiedSubschemas `json:"modified,omitempty" yaml:"modified,omitempty"`
 }
 
+// NewSubschemasDiff creates a new SubschemasDiff
 func NewSubschemasDiff() *SubschemasDiff {
 	return &SubschemasDiff{
-		Added:    RevisionSubschemas{},
-		Deleted:  BaseSubschemas{},
+		Added:    Subschemas{},
+		Deleted:  Subschemas{},
 		Modified: ModifiedSubschemas{},
 	}
 }
 
 func (diff *SubschemasDiff) appendAdded(index int, schemaRef *openapi3.SchemaRef, title string) {
 	diff.Added = append(diff.Added,
-		RevisionSubschema{
-			Subschema: Subschema{
-				Index:     index,
-				Component: getComponentName(schemaRef),
-				Title:     title,
-			},
+		Subschema{
+			Index:     index,
+			Component: getComponentName(schemaRef),
+			Title:     title,
 		},
 	)
 }
 
 func (diff *SubschemasDiff) appendDeleted(index int, schemaRef *openapi3.SchemaRef, title string) {
 	diff.Deleted = append(diff.Deleted,
-		BaseSubschema{
-			Subschema: Subschema{
-				Index:     index,
-				Component: getComponentName(schemaRef),
-				Title:     title,
-			},
+		Subschema{
+			Index:     index,
+			Component: getComponentName(schemaRef),
+			Title:     title,
 		},
 	)
 }
@@ -134,7 +128,7 @@ func getSubschemasDiffInternal(config *Config, state *state, schemaRefs1, schema
 
 type schemaRefsFilter func(schemaRef *openapi3.SchemaRef) bool
 
-// getSubschemasRefDiff compares schemas by $ref name
+// getSubschemasRefDiff compares subschemas by $ref name
 func getSubschemasRefDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (*SubschemasDiff, error) {
 	result := NewSubschemasDiff()
 
@@ -164,6 +158,7 @@ func getSubschemasRefDiff(config *Config, state *state, schemaRefs1, schemaRefs2
 	return result, nil
 }
 
+// getSubschemasInlineDiff compares inline subschemas
 func getSubschemasInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SubschemasDiff, error) {
 
 	// find schemas in revision that have no matching schema in the base
@@ -196,8 +191,8 @@ func getSubschemasInlineDiff(config *Config, state *state, schemaRefs1, schemaRe
 	}
 
 	return SubschemasDiff{
-		Added:    getRevisionSubschemas(addedIdx, schemaRefs2),
-		Deleted:  getBaseSubschemas(deletedIdx, schemaRefs1),
+		Added:    getSubschemas(addedIdx, schemaRefs2),
+		Deleted:  getSubschemas(deletedIdx, schemaRefs1),
 		Modified: modifiedSchemas,
 	}, nil
 }

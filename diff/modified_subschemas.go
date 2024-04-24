@@ -12,11 +12,12 @@ type ModifiedSubschemas []*ModifiedSubschema
 
 // ModifiedSubschema is a single modified subschema with its diff
 type ModifiedSubschema struct {
-	Base     BaseSubschema     `json:"base" yaml:"base"`
-	Revision RevisionSubschema `json:"revision" yaml:"revision"`
-	Diff     *SchemaDiff       `json:"diff" yaml:"diff"`
+	Base     Subschema   `json:"base" yaml:"base"`
+	Revision Subschema   `json:"revision" yaml:"revision"`
+	Diff     *SchemaDiff `json:"diff" yaml:"diff"`
 }
 
+// String returns a string representation of the modified subschema
 func (modifiedSchema *ModifiedSubschema) String() string {
 	baseName := modifiedSchema.Base.String()
 	revisonName := modifiedSchema.Revision.String()
@@ -28,83 +29,44 @@ func (modifiedSchema *ModifiedSubschema) String() string {
 	return fmt.Sprintf("%s -> %s", baseName, revisonName)
 }
 
-// Subschema identifies a subschema by its index and title
+// Subschemas is a list of subschemas
+type Subschemas []Subschema
+
+// Subschema identifies a subschema by its index, component and title
 type Subschema struct {
-	Index     int    `json:"index" yaml:"index"`
-	Component string `json:"component,omitempty" yaml:"component,omitempty"`
-	Title     string `json:"title,omitempty" yaml:"title,omitempty"`
+	Index     int    `json:"index" yaml:"index"`                             // zero-based index in the schema's subschemas
+	Component string `json:"component,omitempty" yaml:"component,omitempty"` // component name if the subschema is a component
+	Title     string `json:"title,omitempty" yaml:"title,omitempty"`         // title of the subschema
 }
 
-type BaseSubschema struct {
-	Subschema
-}
+// String returns a string representation of the subschema
+func (subschema Subschema) String() string {
+	const prefix = "subschema"
 
-func (subschema BaseSubschema) String() string {
-	return subschema.Subschema.String("BaseSchema")
-}
-
-type RevisionSubschema struct {
-	Subschema
-}
-
-func (subschema RevisionSubschema) String() string {
-	return subschema.Subschema.String("RevisionSchema")
-}
-
-func (subschema Subschema) String(prefix string) string {
 	if subschema.Title != "" {
-		return fmt.Sprintf("%s[%d]:%s", prefix, subschema.Index, subschema.Title)
+		return fmt.Sprintf("%s #%d: %s", prefix, subschema.Index+1, subschema.Title)
 	}
 
 	if subschema.Component != "" {
 		return fmt.Sprintf("#/components/schemas/%s", subschema.Component)
 	}
 
-	return fmt.Sprintf("schema #%d", subschema.Index)
+	return fmt.Sprintf("%s #%d", prefix, subschema.Index+1)
 }
 
-// BaseSubschemas is a list of Base Subschemas
-type BaseSubschemas []BaseSubschema
-
-// RevisionSubschemas is a list of Revision Subschemas
-type RevisionSubschemas []RevisionSubschema
-
-func getBaseSubschemas(indexes []int, schemaRefs openapi3.SchemaRefs) BaseSubschemas {
-	result := BaseSubschemas{}
+func getSubschemas(indexes []int, schemaRefs openapi3.SchemaRefs) Subschemas {
+	result := Subschemas{}
 	for _, index := range indexes {
-		result = append(result, BaseSubschema{
-			Subschema: Subschema{
-				Index: index,
-				Title: schemaRefs[index].Value.Title,
-			},
+		result = append(result, Subschema{
+			Index: index,
+			Title: schemaRefs[index].Value.Title,
 		})
 	}
 	return result
 }
 
-func getRevisionSubschemas(indexes []int, schemaRefs openapi3.SchemaRefs) RevisionSubschemas {
-	result := RevisionSubschemas{}
-	for _, index := range indexes {
-		result = append(result, RevisionSubschema{
-			Subschema: Subschema{
-				Index: index,
-				Title: schemaRefs[index].Value.Title,
-			},
-		})
-	}
-	return result
-}
-
-func (schemas BaseSubschemas) String() string {
-	names := make([]string, len(schemas))
-	for i, schema := range schemas {
-		names[i] = schema.String()
-	}
-	list := utils.StringList(names)
-	return list.String()
-}
-
-func (schemas RevisionSubschemas) String() string {
+// String returns a string representation of the subschemas
+func (schemas Subschemas) String() string {
 	names := make([]string, len(schemas))
 	for i, schema := range schemas {
 		names[i] = schema.String()
@@ -121,19 +83,15 @@ func (modifiedSchemas ModifiedSubschemas) addSchemaDiff(config *Config, state *s
 	}
 	if !diff.Empty() {
 		modifiedSchemas = append(modifiedSchemas, &ModifiedSubschema{
-			Base: BaseSubschema{
-				Subschema: Subschema{
-					Index:     index1,
-					Component: getComponentName(schemaRef1),
-					Title:     schemaRef1.Value.Title,
-				},
+			Base: Subschema{
+				Index:     index1,
+				Component: getComponentName(schemaRef1),
+				Title:     schemaRef1.Value.Title,
 			},
-			Revision: RevisionSubschema{
-				Subschema: Subschema{
-					Index:     index2,
-					Component: getComponentName(schemaRef2),
-					Title:     schemaRef2.Value.Title,
-				},
+			Revision: Subschema{
+				Index:     index2,
+				Component: getComponentName(schemaRef2),
+				Title:     schemaRef2.Value.Title,
 			},
 			Diff: diff,
 		})

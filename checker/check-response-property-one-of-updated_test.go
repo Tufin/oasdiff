@@ -43,7 +43,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyOneOfAddedId,
-			Args:        []any{"RevisionSchema[1]:Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
+			Args:        []any{"subschema #2: Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -86,7 +86,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyOneOfRemovedId,
-			Args:        []any{"BaseSchema[1]:Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
+			Args:        []any{"subschema #2: Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
