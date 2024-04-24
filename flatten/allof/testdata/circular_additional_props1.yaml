@@ -1,0 +1,14 @@
+openapi: 3.0.0
+info:
+  title: Circular AdditionalProperties
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    BaseSchema:
+      type: object
+      properties:
+        prop1:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BaseSchema'
