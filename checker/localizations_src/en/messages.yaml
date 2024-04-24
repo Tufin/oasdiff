@@ -1,7 +1,7 @@
 at: at
 in: in
-added-required-request-body: added required request body
-added-optional-request-body: added optional request body
+request-body-added-required: added required request body
+request-body-added-optional: added optional request body
 request-parameter-removed: deleted the %s request parameter %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
@@ -266,7 +266,8 @@ request-required-property-became-not-write-only: the request required property %
 new-required-request-default-parameter-to-existing-path: added the new required %s request parameter %s to all path's operations
 new-optional-request-default-parameter-to-existing-path: added the new optional %s request parameter %s to all path's operations
 # descriptions
-added-required-request-body-description: required request body added
+request-body-added-required-description: required request body added
+request-body-added-optional-description: optional request body added
 api-deprecated-sunset-parse-description: endpoint deprecated with invalid or missing sunset date
 endpoint-added-description: endpoint added
 api-global-security-added-description: security scheme added in security
