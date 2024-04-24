@@ -25,7 +25,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          checker.ResponseBodyOneOfAddedId,
-			Args:        []any{"Rabbit", "200"},
+			Args:        []any{"#/components/schemas/Rabbit", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -34,7 +34,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyOneOfAddedId,
-			Args:        []any{"Breed3", "/oneOf[#/components/schemas/Dog]/breed", "200"},
+			Args:        []any{"#/components/schemas/Breed3", "/oneOf[#/components/schemas/Dog]/breed", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -43,7 +43,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyOneOfAddedId,
-			Args:        []any{"RevisionSchema[1]:Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
+			Args:        []any{"subschema #2: Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -68,7 +68,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          checker.ResponseBodyOneOfRemovedId,
-			Args:        []any{"Rabbit", "200"},
+			Args:        []any{"#/components/schemas/Rabbit", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -77,7 +77,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyOneOfRemovedId,
-			Args:        []any{"Breed3", "/oneOf[#/components/schemas/Dog]/breed", "200"},
+			Args:        []any{"#/components/schemas/Breed3", "/oneOf[#/components/schemas/Dog]/breed", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -86,7 +86,7 @@ func TestResponsePropertyOneOfRemoved(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyOneOfRemovedId,
-			Args:        []any{"BaseSchema[1]:Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
+			Args:        []any{"subschema #2: Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
 			Level:       checker.INFO,
 			Operation:   "GET",
 			Path:        "/pets",

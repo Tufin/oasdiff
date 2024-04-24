@@ -12,9 +12,9 @@ type SchemaDiff struct {
 	SchemaDeleted                   bool                    `json:"schemaDeleted,omitempty" yaml:"schemaDeleted,omitempty"`
 	CircularRefDiff                 bool                    `json:"circularRef,omitempty" yaml:"circularRef,omitempty"`
 	ExtensionsDiff                  *ExtensionsDiff         `json:"extensions,omitempty" yaml:"extensions,omitempty"`
-	OneOfDiff                       *SchemaListDiff         `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
-	AnyOfDiff                       *SchemaListDiff         `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
-	AllOfDiff                       *SchemaListDiff         `json:"allOf,omitempty" yaml:"allOf,omitempty"`
+	OneOfDiff                       *SubschemasDiff         `json:"oneOf,omitempty" yaml:"oneOf,omitempty"`
+	AnyOfDiff                       *SubschemasDiff         `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
+	AllOfDiff                       *SubschemasDiff         `json:"allOf,omitempty" yaml:"allOf,omitempty"`
 	NotDiff                         *SchemaDiff             `json:"not,omitempty" yaml:"not,omitempty"`
 	TypeDiff                        *ValueDiff              `json:"type,omitempty" yaml:"type,omitempty"`
 	TitleDiff                       *ValueDiff              `json:"title,omitempty" yaml:"title,omitempty"`
@@ -129,15 +129,15 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	if err != nil {
 		return nil, err
 	}
-	result.OneOfDiff, err = getSchemaListsDiff(config, state, value1.OneOf, value2.OneOf)
+	result.OneOfDiff, err = getSubschemasDiff(config, state, value1.OneOf, value2.OneOf)
 	if err != nil {
 		return nil, err
 	}
-	result.AnyOfDiff, err = getSchemaListsDiff(config, state, value1.AnyOf, value2.AnyOf)
+	result.AnyOfDiff, err = getSubschemasDiff(config, state, value1.AnyOf, value2.AnyOf)
 	if err != nil {
 		return nil, err
 	}
-	result.AllOfDiff, err = getSchemaListsDiff(config, state, value1.AllOf, value2.AllOf)
+	result.AllOfDiff, err = getSubschemasDiff(config, state, value1.AllOf, value2.AllOf)
 	if err != nil {
 		return nil, err
 	}

@@ -201,6 +201,7 @@ These examples are automatically generated from unit tests.
 [changing optional response property to write-only](checker/check-response-optional-property-write-only-read-only_test.go?plain=1#L12)  
 [changing optional response write-only property to required](checker/check-response-property-became-required_test.go?plain=1#L33)  
 [changing pattern of request parameters](checker/check-request-parameter-pattern-added-or-changed_test.go?plain=1#L12)  
+[changing properties of subschemas under allOf](checker/check-response-property-type-changed_test.go?plain=1#L82)  
 [changing request body and property types from array to object](checker/check-request-property-type-changed_test.go?plain=1#L85)  
 [changing request body and property types from object to array](checker/check-request-property-type-changed_test.go?plain=1#L117)  
 [changing request body default value](checker/check-request-property-default-value-changed_test.go?plain=1#L12)  

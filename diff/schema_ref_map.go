@@ -4,38 +4,44 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-type refWithCount struct {
+type ref struct {
 	schemaRef *openapi3.SchemaRef
-	count     int
+	indices   []int
 }
 
-type schemaRefMap map[string]*refWithCount
+// refMap is used to match referenced subschemas across base and revision
+type refMap map[string]*ref
 
-func (schemaRefMap schemaRefMap) add(schemaRef *openapi3.SchemaRef) {
-	if val, found := schemaRefMap[schemaRef.Ref]; found {
-		val.count++
+// push adds a schema reference to the map or, if exists, adds an index to the existing reference
+func (m refMap) push(schemaRef *openapi3.SchemaRef, index int) {
+	if val, found := m[schemaRef.Ref]; found {
+		val.indices = append(val.indices, index)
 	} else {
-		schemaRefMap[schemaRef.Ref] = &refWithCount{
+		m[schemaRef.Ref] = &ref{
 			schemaRef: schemaRef,
-			count:     1,
+			indices:   []int{index},
 		}
 	}
 }
 
-func (schemaRefMap schemaRefMap) delete(ref string) {
-	if val, found := schemaRefMap[ref]; found {
-		val.count--
-		if val.count == 0 {
-			delete(schemaRefMap, ref)
+// pop checks if the reference exists in the map, returns the schema reference and an index if exists, and removes the index from the map
+func (m refMap) pop(ref string) (*openapi3.SchemaRef, int, bool) {
+	if val, found := m[ref]; found {
+		if len(val.indices) > 0 {
+			index := val.indices[0]
+			val.indices = val.indices[1:]
+			return val.schemaRef, index, true
 		}
+		delete(m, ref)
 	}
+	return nil, 0, false
 }
 
-func toSchemaRefMap(schemaRefs openapi3.SchemaRefs, filter schemaRefsFilter) schemaRefMap {
-	result := schemaRefMap{}
-	for _, schemaRef := range schemaRefs {
+func toRefMap(schemaRefs openapi3.SchemaRefs, filter schemaRefsFilter) refMap {
+	result := refMap{}
+	for index, schemaRef := range schemaRefs {
 		if filter(schemaRef) {
-			result.add(schemaRef)
+			result.push(schemaRef, index)
 		}
 	}
 	return result
