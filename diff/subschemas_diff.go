@@ -103,7 +103,7 @@ func (diff SubschemasDiff) combine(other SubschemasDiff) (*SubschemasDiff, error
 	return &SubschemasDiff{
 		Added:    append(diff.Added, other.Added...),
 		Deleted:  append(diff.Deleted, other.Deleted...),
-		Modified: diff.Modified.combine(other.Modified),
+		Modified: append(diff.Modified, other.Modified...),
 	}, nil
 }
 
@@ -113,12 +113,12 @@ func getSubschemasDiffInternal(config *Config, state *state, schemaRefs1, schema
 		return nil, nil
 	}
 
-	diffRefs, err := getSubschemasRefDiff(config, state, schemaRefs1, schemaRefs2, isSchemaRef)
+	diffRefs, err := getSubschemasRefDiff(config, state, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
 	}
 
-	diffInline, err := getSubschemasInlineDiff(config, state, schemaRefs1, schemaRefs2, isSchemaInline)
+	diffInline, err := getSubschemasInlineDiff(config, state, schemaRefs1, schemaRefs2)
 	if err != nil {
 		return nil, err
 	}
@@ -129,12 +129,13 @@ func getSubschemasDiffInternal(config *Config, state *state, schemaRefs1, schema
 type schemaRefsFilter func(schemaRef *openapi3.SchemaRef) bool
 
 // getSubschemasRefDiff compares subschemas by $ref name
-func getSubschemasRefDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (*SubschemasDiff, error) {
+func getSubschemasRefDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (*SubschemasDiff, error) {
+
 	result := NewSubschemasDiff()
 
-	refMap2 := toRefMap(schemaRefs2, filter)
+	refMap2 := toRefMap(schemaRefs2, isSchemaRef)
 	for index1, schemaRef1 := range schemaRefs1 {
-		if !filter(schemaRef1) {
+		if !isSchemaRef(schemaRef1) {
 			continue
 		}
 		if schemaRef2, index2, found := refMap2.pop(schemaRef1.Ref); found {
@@ -146,9 +147,9 @@ func getSubschemasRefDiff(config *Config, state *state, schemaRefs1, schemaRefs2
 		result.appendDeleted(index1, schemaRef1, "")
 	}
 
-	refMap1 := toRefMap(schemaRefs1, filter)
+	refMap1 := toRefMap(schemaRefs1, isSchemaRef)
 	for index2, schemaRef2 := range schemaRefs2 {
-		if !filter(schemaRef2) {
+		if !isSchemaRef(schemaRef2) {
 			continue
 		}
 		if _, _, found := refMap1.pop(schemaRef2.Ref); !found {
@@ -159,16 +160,16 @@ func getSubschemasRefDiff(config *Config, state *state, schemaRefs1, schemaRefs2
 }
 
 // getSubschemasInlineDiff compares inline subschemas
-func getSubschemasInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs, filter schemaRefsFilter) (SubschemasDiff, error) {
+func getSubschemasInlineDiff(config *Config, state *state, schemaRefs1, schemaRefs2 openapi3.SchemaRefs) (SubschemasDiff, error) {
 
 	// find schemas in revision that have no matching schema in the base
-	addedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs2, schemaRefs1, filter)
+	addedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs2, schemaRefs1, isSchemaInline)
 	if err != nil {
 		return SubschemasDiff{}, err
 	}
 
 	// find schemas in base that have no matching schema in the revision
-	deletedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs1, schemaRefs2, filter)
+	deletedIdx, err := getNonContainedInlineSchemas(config, state, schemaRefs1, schemaRefs2, isSchemaInline)
 	if err != nil {
 		return SubschemasDiff{}, err
 	}

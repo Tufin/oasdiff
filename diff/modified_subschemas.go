@@ -99,7 +99,3 @@ func (modifiedSchemas ModifiedSubschemas) addSchemaDiff(config *Config, state *s
 
 	return modifiedSchemas, nil
 }
-
-func (modifiedSchemas ModifiedSubschemas) combine(other ModifiedSubschemas) ModifiedSubschemas {
-	return append(modifiedSchemas, other...)
-}
