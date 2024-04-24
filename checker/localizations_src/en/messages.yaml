@@ -1,6 +1,7 @@
 at: at
 in: in
 added-required-request-body: added required request body
+added-optional-request-body: added optional request body
 request-parameter-removed: deleted the %s request parameter %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
