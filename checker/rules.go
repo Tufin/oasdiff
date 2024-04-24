@@ -58,7 +58,8 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(APISunsetDeletedId, ERR, true, APISunsetChangedCheck),
 		newBackwardCompatibilityRule(APISunsetDateChangedTooSmallId, ERR, true, APISunsetChangedCheck),
 		// AddedRequiredRequestBodyCheck
-		newBackwardCompatibilityRule(AddedRequiredRequestBodyId, ERR, true, AddedRequiredRequestBodyCheck),
+		newBackwardCompatibilityRule(AddedRequiredRequestBodyId, ERR, true, AddedRequestBodyCheck),
+		newBackwardCompatibilityRule(AddedOptionalRequestBodyId, INFO, true, AddedRequestBodyCheck),
 		// NewRequestNonPathDefaultParameterCheck
 		newBackwardCompatibilityRule(NewRequiredRequestDefaultParameterToExistingPathId, ERR, true, NewRequestNonPathDefaultParameterCheck),
 		newBackwardCompatibilityRule(NewOptionalRequestDefaultParameterToExistingPathId, INFO, true, NewRequestNonPathDefaultParameterCheck),
