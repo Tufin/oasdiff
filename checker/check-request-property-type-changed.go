@@ -40,7 +40,7 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						result = append(result, ApiChange{
 							Id:          RequestBodyTypeChangedId,
 							Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-							Args:        []any{typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
+							Args:        []any{typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -67,7 +67,7 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 							result = append(result, ApiChange{
 								Id:          RequestPropertyTypeChangedId,
 								Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-								Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
+								Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -81,9 +81,12 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 	return result
 }
 
-func fillEmptyTypeAndFormatDiffs(typeDiff *diff.ValueDiff, schemaDiff *diff.SchemaDiff, formatDiff *diff.ValueDiff) (*diff.ValueDiff, *diff.ValueDiff) {
+func fillEmptyTypeAndFormatDiffs(typeDiff *diff.StringsDiff, schemaDiff *diff.SchemaDiff, formatDiff *diff.ValueDiff) (*diff.StringsDiff, *diff.ValueDiff) {
 	if typeDiff == nil {
-		typeDiff = &diff.ValueDiff{From: schemaDiff.Revision.Type, To: schemaDiff.Revision.Type}
+		typeDiff = &diff.StringsDiff{
+			Deleted: schemaDiff.Base.Type.Slice(), // TODO: check bug fix
+			Added:   schemaDiff.Revision.Type.Slice(),
+		}
 	}
 	if formatDiff == nil {
 		formatDiff = &diff.ValueDiff{From: schemaDiff.Revision.Format, To: schemaDiff.Revision.Format}
@@ -91,10 +94,10 @@ func fillEmptyTypeAndFormatDiffs(typeDiff *diff.ValueDiff, schemaDiff *diff.Sche
 	return typeDiff, formatDiff
 }
 
-func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
+func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
 
 	if typeDiff != nil {
-		return !isTypeContained(typeDiff.To, typeDiff.From, mediaType)
+		return !isTypeContained(typeDiff.Added, typeDiff.Deleted, mediaType)
 	}
 
 	if formatDiff != nil {

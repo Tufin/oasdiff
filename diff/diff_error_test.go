@@ -48,7 +48,7 @@ func TestDiff_PathItemNil(t *testing.T) {
 	s1, err := loader.LoadFromFile("../data/home-iot-api-1.yaml")
 	require.NoError(t, err)
 
-	s1.Paths.Map()["/devices"] = nil
+	s1.Paths.Set("/devices", nil)
 	_, err = diff.Get(diff.NewConfig(), s1, s1)
 	require.EqualError(t, err, "path item is nil")
 }

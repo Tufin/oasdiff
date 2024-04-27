@@ -3,6 +3,7 @@ package checker_test
 import (
 	"testing"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
@@ -14,11 +15,11 @@ func TestBreaking_ReqTypeStringToNumber(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "string"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"string"}
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"number"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -34,11 +35,11 @@ func TestBreaking_ReqTypeNumberToString(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"number"}
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "string"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"string"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -54,11 +55,11 @@ func TestBreaking_ReqTypeNumberToInteger(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"number"}
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"integer"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -74,11 +75,11 @@ func TestBreaking_ReqTypeIntegerToNumber(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"integer"}
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"number"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -92,11 +93,11 @@ func TestBreaking_ReqTypeNumberToInt32(t *testing.T) {
 
 	s1, err := open(file)
 	require.NoError(t, err)
-	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "number"
+	s1.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"number"}
 
 	s2, err := open(file)
 	require.NoError(t, err)
-	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "integer"
+	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"integer"}
 	s2.Spec.Paths.Value("/test").Post.RequestBody.Value.Content["application/json"].Schema.Value.Format = "int32"
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)

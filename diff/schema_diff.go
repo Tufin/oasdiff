@@ -16,7 +16,7 @@ type SchemaDiff struct {
 	AnyOfDiff                       *SubschemasDiff         `json:"anyOf,omitempty" yaml:"anyOf,omitempty"`
 	AllOfDiff                       *SubschemasDiff         `json:"allOf,omitempty" yaml:"allOf,omitempty"`
 	NotDiff                         *SchemaDiff             `json:"not,omitempty" yaml:"not,omitempty"`
-	TypeDiff                        *ValueDiff              `json:"type,omitempty" yaml:"type,omitempty"`
+	TypeDiff                        *StringsDiff            `json:"type,omitempty" yaml:"type,omitempty"`
 	TitleDiff                       *ValueDiff              `json:"title,omitempty" yaml:"title,omitempty"`
 	FormatDiff                      *ValueDiff              `json:"format,omitempty" yaml:"format,omitempty"`
 	DescriptionDiff                 *ValueDiff              `json:"description,omitempty" yaml:"description,omitempty"`
@@ -145,7 +145,7 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	if err != nil {
 		return nil, err
 	}
-	result.TypeDiff = getValueDiff(value1.Type, value2.Type)
+	result.TypeDiff = getStringsDiff(value1.Type.Slice(), value2.Type.Slice())
 	result.TitleDiff = getValueDiffConditional(config.IsExcludeTitle(), value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), value1.Description, value2.Description)
@@ -216,9 +216,9 @@ func (diff *SchemaDiff) Patch(schema *openapi3.Schema) error {
 		return nil
 	}
 
-	if err := diff.TypeDiff.patchString(&schema.Type); err != nil {
-		return err
-	}
+	// if err := diff.TypeDiff.patchString(&schema.Type); err != nil {
+	// 	return err
+	// }
 
 	if err := diff.TitleDiff.patchString(&schema.Title); err != nil {
 		return err

@@ -165,13 +165,10 @@ func TestDiff_ModifiedParam(t *testing.T) {
 func TestSchemaDiff_TypeDiff(t *testing.T) {
 	dd := d(t, diff.NewConfig(), 1, 2)
 
-	require.Equal(t,
-		"string",
-		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff.From)
-
-	require.Equal(t,
-		"integer",
-		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff.To)
+	require.True(t,
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff.Deleted.Is("string"))
+	require.True(t,
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInPath]["domain"].SchemaDiff.TypeDiff.Added.Is("integer"))
 }
 
 func TestSchemaDiff_EnumDiff(t *testing.T) {
@@ -204,13 +201,11 @@ func TestSchemaDiff_NotDiff(t *testing.T) {
 func TestSchemaDiff_ContentDiff(t *testing.T) {
 	dd := d(t, diff.NewConfig(), 2, 1)
 
-	require.Equal(t,
-		"number",
-		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.From)
+	require.True(t,
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.Deleted.Is("number"))
 
-	require.Equal(t,
-		"string",
-		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.To)
+	require.True(t,
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInQuery]["filter"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["color"].TypeDiff.Added.Is("string"))
 }
 
 func TestSchemaDiff_MediaTypeAdded(t *testing.T) {
@@ -228,13 +223,11 @@ func TestSchemaDiff_MediaTypeDeleted(t *testing.T) {
 func TestSchemaDiff_MediaTypeModified(t *testing.T) {
 	dd := d(t, diff.NewConfig(), 1, 5)
 
-	require.Equal(t,
-		"object",
-		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.From)
+	require.True(t,
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.Deleted.Is("object"))
 
-	require.Equal(t,
-		"string",
-		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.To)
+	require.True(t,
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ParametersDiff.Modified[openapi3.ParameterInCookie]["test"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.Added.Is("string"))
 }
 
 func TestSchemaDiff_MediaType_MultiEntries(t *testing.T) {
@@ -381,14 +374,12 @@ func TestHeaderDeleted(t *testing.T) {
 func TestRequestBodyModified(t *testing.T) {
 	dd := d(t, diff.NewConfig(), 1, 3)
 
-	require.Equal(t,
-		"number",
-		dd.RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.From,
+	require.True(t,
+		dd.RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.Deleted.Is("number"),
 	)
 
-	require.Equal(t,
-		"integer",
-		dd.RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.To,
+	require.True(t,
+		dd.RequestBodiesDiff.Modified["reuven"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.PropertiesDiff.Modified["meter_value"].TypeDiff.Added.Is("integer"),
 	)
 }
 
@@ -407,25 +398,21 @@ func TestHeaderModifiedSchema(t *testing.T) {
 func TestHeaderModifiedContent(t *testing.T) {
 	dd := d(t, diff.NewConfig(), 5, 1)
 
-	require.Equal(t,
-		"string",
-		dd.HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.From)
+	require.True(t,
+		dd.HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.Deleted.Is("string"))
 
-	require.Equal(t,
-		"object",
-		dd.HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.To)
+	require.True(t,
+		dd.HeadersDiff.Modified["testc"].ContentDiff.MediaTypeModified["application/json"].SchemaDiff.TypeDiff.Added.Is("object"))
 }
 
 func TestResponseContentModified(t *testing.T) {
 	dd := d(t, diff.NewConfig(), 5, 1)
 
-	require.Equal(t,
-		"object",
-		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff.From)
+	require.True(t,
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff.Deleted.Is("object"))
 
-	require.Equal(t,
-		"string",
-		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff.To)
+	require.True(t,
+		dd.PathsDiff.Modified[securityScorePath].OperationsDiff.Modified["GET"].ResponsesDiff.Modified["201"].ContentDiff.MediaTypeModified["application/xml"].SchemaDiff.TypeDiff.Added.Is("string"))
 }
 
 func TestResponseDespcriptionNil(t *testing.T) {

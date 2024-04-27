@@ -3,10 +3,12 @@ package checker_test
 import (
 	"testing"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // CL: changing request path parameter type
@@ -16,7 +18,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = "int"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = &openapi3.Types{"int"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -24,7 +26,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"path", "groupId", "string", "", "int", ""},
+		Args:        []any{"path", "groupId", utils.StringList{"string"}, "", utils.StringList{"int"}, ""},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -40,7 +42,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Type = "int"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Type = &openapi3.Types{"int"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -48,7 +50,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"query", "token", "string", "uuid", "int", "uuid"},
+		Args:        []any{"query", "token", utils.StringList{"string"}, "uuid", utils.StringList{"int"}, "uuid"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -64,7 +66,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[2].Value.Schema.Value.Type = "int"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[2].Value.Schema.Value.Type = &openapi3.Types{"int"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -72,7 +74,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"header", "X-Request-ID", "string", "uuid", "int", "uuid"},
+		Args:        []any{"header", "X-Request-ID", utils.StringList{"string"}, "uuid", utils.StringList{"int"}, "uuid"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -96,7 +98,7 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"path", "groupId", "string", "", "string", "uuid"},
+		Args:        []any{"path", "groupId", utils.StringList{"string"}, "", utils.StringList{"string"}, "uuid"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -120,7 +122,7 @@ func TestRequestQueryParamFormatChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"query", "token", "string", "uuid", "string", "uri"},
+		Args:        []any{"query", "token", utils.StringList{"string"}, "uuid", utils.StringList{"string"}, "uri"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -144,7 +146,7 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"header", "X-Request-ID", "string", "uuid", "string", "uri"},
+		Args:        []any{"header", "X-Request-ID", utils.StringList{"string"}, "uuid", utils.StringList{"string"}, "uri"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",

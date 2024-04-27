@@ -22,7 +22,7 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &openapi3.SchemaRef{
 		Value: &openapi3.Schema{
-			Type:        "string",
+			Type:        &openapi3.Types{"string"},
 			Description: "Unique ID of the course",
 		},
 	}
@@ -43,7 +43,7 @@ func TestBreaking_NewNonRequiredProperty(t *testing.T) {
 
 	s2.Spec.Paths.Value(installCommandPath).Get.Parameters.GetByInAndName(openapi3.ParameterInHeader, "network-policies").Schema.Value.Properties["courseId"] = &openapi3.SchemaRef{
 		Value: &openapi3.Schema{
-			Type:        "string",
+			Type:        &openapi3.Types{"string"},
 			Description: "Unique ID of the course",
 		},
 	}
@@ -61,7 +61,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 
 	sr := openapi3.SchemaRef{
 		Value: &openapi3.Schema{
-			Type:        "string",
+			Type:        &openapi3.Types{"string"},
 			Description: "Unique ID of the course",
 		},
 	}
@@ -87,7 +87,7 @@ func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 
 	sr := openapi3.SchemaRef{
 		Value: &openapi3.Schema{
-			Type:        "string",
+			Type:        &openapi3.Types{"string"},
 			Description: "Unique ID of the course",
 		},
 	}

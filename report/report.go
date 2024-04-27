@@ -330,7 +330,7 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 		r.indent().printSchema(d.NotDiff)
 	}
 
-	r.printValue(d.TypeDiff, "Type")
+	r.printStrings(d.TypeDiff, "Type")
 	r.printValue(d.TitleDiff, "Title")
 	r.printValue(d.FormatDiff, "Format")
 	r.printValue(d.DescriptionDiff, "Description")
@@ -533,6 +533,14 @@ func (r *report) printValue(d *diff.ValueDiff, title string) {
 	}
 
 	r.print(title, "changed from", quote(d.From), "to", quote(d.To))
+}
+
+func (r *report) printStrings(d *diff.StringsDiff, title string) {
+	if d.Empty() {
+		return
+	}
+
+	r.print(title, "changed from", quote(d.Deleted.String()), "to", quote(d.Added.String()))
 }
 
 func (r *report) printHeaders(d *diff.HeadersDiff) {

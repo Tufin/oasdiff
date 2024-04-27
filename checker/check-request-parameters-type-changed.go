@@ -33,11 +33,11 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 						continue
 					}
 
-					if typeDiff != nil && typeDiff.From == "integer" && typeDiff.To == "number" {
+					if typeDiff != nil && typeDiff.Deleted.Is("integer") && typeDiff.Added.Is("number") {
 						continue
 					}
 
-					if typeDiff != nil && typeDiff.To == "string" {
+					if typeDiff != nil && typeDiff.Added.Is("string") {
 						// parameters can be changed to string anytime
 						continue
 					}
@@ -46,18 +46,18 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 						continue
 					}
 
-					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type == "string" &&
+					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type.Is("string") &&
 						(formatDiff.From == "date" && formatDiff.To == "date-time" ||
 							formatDiff.From == "time" && formatDiff.To == "date-time") {
 						continue
 					}
 
-					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type == "number" &&
+					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type.Is("number") &&
 						(formatDiff.From == "float" && formatDiff.To == "double") {
 						continue
 					}
 
-					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type == "integer" &&
+					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type.Is("integer") &&
 						(formatDiff.From == "int32" && formatDiff.To == "int64" ||
 							formatDiff.From == "int32" && formatDiff.To == "bigint" ||
 							formatDiff.From == "int64" && formatDiff.To == "bigint") {
@@ -66,7 +66,10 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					source := (*operationsSources)[operationItem.Revision]
 
 					if typeDiff == nil {
-						typeDiff = &diff.ValueDiff{From: paramDiff.Revision.Schema.Value.Type, To: paramDiff.Revision.Schema.Value.Type}
+						typeDiff = &diff.StringsDiff{
+							Deleted: paramDiff.Base.Schema.Value.Type.Slice(), // TODO: check bug fix
+							Added:   paramDiff.Revision.Schema.Value.Type.Slice(),
+						}
 					}
 					if formatDiff == nil {
 						formatDiff = &diff.ValueDiff{From: paramDiff.Revision.Schema.Value.Format, To: paramDiff.Revision.Schema.Value.Format}
@@ -75,7 +78,7 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, ApiChange{
 						Id:          RequestParameterTypeChangedId,
 						Level:       ERR,
-						Args:        []any{paramLocation, paramName, typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
+						Args:        []any{paramLocation, paramName, typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
 						Operation:   operation,
 						OperationId: operationItem.Revision.OperationID,
 						Path:        path,

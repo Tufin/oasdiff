@@ -254,7 +254,7 @@ func TestBreaking_ResponseSuccessStatusUpdated(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	delete(s2.Spec.Paths.Value(securityScorePath).Get.Responses.Map(), "200")
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Delete("200")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -273,7 +273,7 @@ func TestBreaking_ResponseNonSuccessStatusUpdated(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	delete(s2.Spec.Paths.Value(securityScorePath).Get.Responses.Map(), "400")
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Delete("400")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)

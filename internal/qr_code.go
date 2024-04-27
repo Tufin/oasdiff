@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +16,7 @@ func getQRCodeCmd() *cobra.Command {
 		ValidArgsFunction: cobra.NoFileCompletions, // see https://github.com/spf13/cobra/issues/1969
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			println(`                                  
+			fmt.Fprintf(cmd.OutOrStdout(), "%s\n", `
 			▄▄▄▄▄▄▄  ▄  ▄▄  ▄▄▄▄  ▄▄▄▄▄▄▄  
 			█ ▄▄▄ █ ▄▄█▀█▄█▀█▀ █  █ ▄▄▄ █  
 			█ ███ █  ▀█▀ ▀█▀ ▄██  █ ███ █  

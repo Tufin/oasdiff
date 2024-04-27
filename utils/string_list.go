@@ -76,3 +76,10 @@ func (list StringList) Less(i, j int) bool {
 func (list StringList) Swap(i, j int) {
 	list[i], list[j] = list[j], list[i]
 }
+
+func (stringList *StringList) Is(s string) bool {
+	if stringList == nil {
+		return false
+	}
+	return len(*stringList) == 1 && (*stringList)[0] == s
+}
