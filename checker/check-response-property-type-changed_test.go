@@ -33,7 +33,7 @@ func TestResponseSchemaTypeChangedCheck(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: changing a response property schema type
+// CL: changing a response property schema type from string to integer
 func TestResponsePropertyTypeChangedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_schema_type_changed_revision.yaml")
 	require.NoError(t, err)

@@ -181,7 +181,7 @@ These examples are automatically generated from unit tests.
 [adding response property pattern](checker/check-response-pattern-added-or-changed_test.go?plain=1#L37)  
 [adding two new request properties, one required, one optional](checker/check-request-property-updated_test.go?plain=1#L34)  
 [changing a response property schema format](checker/check-response-property-type-changed_test.go?plain=1#L60)  
-[changing a response property schema type](checker/check-response-property-type-changed_test.go?plain=1#L36)  
+[changing a response property schema type from string to integer](checker/check-response-property-type-changed_test.go?plain=1#L36)  
 [changing a response schema type](checker/check-response-property-type-changed_test.go?plain=1#L14)  
 [changing an existing header param from required to optional](checker/checker_request_parameter_required_value_updated_test.go?plain=1#L35)  
 [changing an existing header param to optional](checker/checker_not_breaking_test.go?plain=1#L133)  
