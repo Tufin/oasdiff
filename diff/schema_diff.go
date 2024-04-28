@@ -145,7 +145,7 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 	if err != nil {
 		return nil, err
 	}
-	result.TypeDiff = getStringsDiff(value1.Type.Slice(), value2.Type.Slice())
+	result.TypeDiff = getTypeDiff(value1.Type, value2.Type)
 	result.TitleDiff = getValueDiffConditional(config.IsExcludeTitle(), value1.Title, value2.Title)
 	result.FormatDiff = getValueDiff(value1.Format, value2.Format)
 	result.DescriptionDiff = getValueDiffConditional(config.IsExcludeDescription(), value1.Description, value2.Description)
@@ -215,10 +215,6 @@ func (diff *SchemaDiff) Patch(schema *openapi3.Schema) error {
 	if diff.Empty() {
 		return nil
 	}
-
-	// if err := diff.TypeDiff.patchString(&schema.Type); err != nil {
-	// 	return err
-	// }
 
 	if err := diff.TitleDiff.patchString(&schema.Title); err != nil {
 		return err
