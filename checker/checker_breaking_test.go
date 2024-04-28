@@ -393,7 +393,7 @@ func TestBreaking_ResponseUnparseableStatusRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	delete(s2.Spec.Paths.Value(installCommandPath).Get.Responses.Map(), "default")
+	s2.Spec.Paths.Value(installCommandPath).Get.Responses.Delete("default")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -409,7 +409,7 @@ func TestBreaking_ResponseErrorStatusRemoved(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
 
-	delete(s2.Spec.Paths.Value(securityScorePath).Get.Responses.Map(), "400")
+	s2.Spec.Paths.Value(securityScorePath).Get.Responses.Delete("400")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)

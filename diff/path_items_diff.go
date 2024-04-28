@@ -51,7 +51,7 @@ func rewritePrefix(paths map[string]*openapi3.PathItem, strip, prepend string) *
 }
 
 func findEndpoint(config *Config, endpoint string, paths *openapi3.Paths) (*openapi3.PathItem, PathParamsMap, bool) {
-	if pathItem, ok := paths.Map()[endpoint]; ok {
+	if pathItem := paths.Value(endpoint); pathItem != nil {
 		return pathItem, PathParamsMap{}, true
 	}
 
