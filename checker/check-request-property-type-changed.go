@@ -35,7 +35,9 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 					formatDiff := schemaDiff.FormatDiff
 
 					if !typeDiff.Empty() || !formatDiff.Empty() {
-						typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
+						typeDiff = getDetailedTypeDiff(schemaDiff)
+						formatDiff = getDetailedFormatDiff(schemaDiff)
 
 						result = append(result, ApiChange{
 							Id:          RequestBodyTypeChangedId,
@@ -63,7 +65,10 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						formatDiff := schemaDiff.FormatDiff
 
 						if !typeDiff.Empty() || !formatDiff.Empty() {
-							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
+							typeDiff = getDetailedTypeDiff(schemaDiff)
+							formatDiff = getDetailedFormatDiff(schemaDiff)
+
 							result = append(result, ApiChange{
 								Id:          RequestPropertyTypeChangedId,
 								Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
@@ -81,17 +86,28 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 	return result
 }
 
-func fillEmptyTypeAndFormatDiffs(typeDiff *diff.StringsDiff, schemaDiff *diff.SchemaDiff, formatDiff *diff.ValueDiff) (*diff.StringsDiff, *diff.ValueDiff) {
-	if typeDiff == nil {
-		typeDiff = &diff.StringsDiff{
-			Deleted: schemaDiff.Base.Type.Slice(), // TODO: check bug fix
-			Added:   schemaDiff.Revision.Type.Slice(),
-		}
+/*
+getDetailedTypeDiff ensures that we have:
+1. a non-empty diff, even if type wasn't changed
+2. the full list of values in base and revision, rather than the added/deleted values only
+*/
+func getDetailedTypeDiff(schemaDiff *diff.SchemaDiff) *diff.StringsDiff {
+	return &diff.StringsDiff{
+		Deleted: schemaDiff.Base.Type.Slice(),
+		Added:   schemaDiff.Revision.Type.Slice(),
 	}
-	if formatDiff == nil {
-		formatDiff = &diff.ValueDiff{From: schemaDiff.Revision.Format, To: schemaDiff.Revision.Format}
+}
+
+/*
+getDetailedFormatDiff ensures that we have:
+1. a non-empty diff, even if format wasn't changed
+2. the original and revised format values which is implicit because format can only have a single value
+*/
+func getDetailedFormatDiff(schemaDiff *diff.SchemaDiff) *diff.ValueDiff {
+	return &diff.ValueDiff{
+		From: schemaDiff.Base.Format,
+		To:   schemaDiff.Revision.Format,
 	}
-	return typeDiff, formatDiff
 }
 
 func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {

@@ -122,3 +122,27 @@ func TestResponsePropertyAnyOfModified(t *testing.T) {
 			OperationId: "listPets",
 		}}, errs)
 }
+
+// CL: changing a response property schema type from a single value to to multiple types
+func TestResponseSchemaTypeMultiCheck(t *testing.T) {
+	s1, err := open("../data/checker/response_schema_type_changed_revision.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/response_schema_type_changed_revision.yaml")
+	require.NoError(t, err)
+
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("200").Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Type = &openapi3.Types{"integer", "string"}
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyTypeChangedCheck), d, osm, checker.ERR)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.ResponsePropertyTypeChangedId,
+		Args:        []any{"data/name", utils.StringList{"string"}, "", utils.StringList{"integer", "string"}, "", "200"},
+		Level:       checker.ERR,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      load.NewSource("../data/checker/response_schema_type_changed_revision.yaml"),
+		OperationId: "createOneGroup",
+	}, errs[0])
+}

@@ -42,7 +42,10 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 						typeDiff := schemaDiff.TypeDiff
 						formatDiff := schemaDiff.FormatDiff
 						if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
-							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
+							typeDiff = getDetailedTypeDiff(schemaDiff)
+							formatDiff = getDetailedFormatDiff(schemaDiff)
+
 							result = append(result, ApiChange{
 								Id:          ResponseBodyTypeChangedId,
 								Level:       ERR,
@@ -67,7 +70,10 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 							formatDiff := schemaDiff.FormatDiff
 
 							if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
-								typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
+								typeDiff = getDetailedTypeDiff(schemaDiff)
+								formatDiff = getDetailedFormatDiff(schemaDiff)
+
 								result = append(result, ApiChange{
 									Id:          ResponsePropertyTypeChangedId,
 									Level:       ERR,

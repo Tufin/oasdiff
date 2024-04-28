@@ -27,8 +27,11 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					if paramDiff.SchemaDiff == nil {
 						continue
 					}
-					typeDiff := paramDiff.SchemaDiff.TypeDiff
-					formatDiff := paramDiff.SchemaDiff.FormatDiff
+
+					schemaDiff := paramDiff.SchemaDiff
+					typeDiff := schemaDiff.TypeDiff
+					formatDiff := schemaDiff.FormatDiff
+
 					if typeDiff == nil && formatDiff == nil {
 						continue
 					}
@@ -65,15 +68,8 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					}
 					source := (*operationsSources)[operationItem.Revision]
 
-					if typeDiff == nil {
-						typeDiff = &diff.StringsDiff{
-							Deleted: paramDiff.Base.Schema.Value.Type.Slice(), // TODO: check bug fix
-							Added:   paramDiff.Revision.Schema.Value.Type.Slice(),
-						}
-					}
-					if formatDiff == nil {
-						formatDiff = &diff.ValueDiff{From: paramDiff.Revision.Schema.Value.Format, To: paramDiff.Revision.Schema.Value.Format}
-					}
+					typeDiff = getDetailedTypeDiff(schemaDiff)
+					formatDiff = getDetailedFormatDiff(schemaDiff)
 
 					result = append(result, ApiChange{
 						Id:          RequestParameterTypeChangedId,
