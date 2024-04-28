@@ -16,8 +16,8 @@ func getQRCodeCmd() *cobra.Command {
 		ValidArgsFunction: cobra.NoFileCompletions, // see https://github.com/spf13/cobra/issues/1969
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			fmt.Fprintf(cmd.OutOrStdout(), "%s\n", `
-			▄▄▄▄▄▄▄  ▄  ▄▄  ▄▄▄▄  ▄▄▄▄▄▄▄  
+			fmt.Fprintf(cmd.OutOrStdout(), "%s\n",
+				`			▄▄▄▄▄▄▄  ▄  ▄▄  ▄▄▄▄  ▄▄▄▄▄▄▄  
 			█ ▄▄▄ █ ▄▄█▀█▄█▀█▀ █  █ ▄▄▄ █  
 			█ ███ █  ▀█▀ ▀█▀ ▄██  █ ███ █  
 			█▄▄▄▄▄█ ▄▀▄ ▄▀▄ ▄ █▀█ █▄▄▄▄▄█  
@@ -31,8 +31,7 @@ func getQRCodeCmd() *cobra.Command {
 			▄▄▄▄▄▄▄ █▄ ██▀▄ █████ ▄ █▄▀██  
 			█ ▄▄▄ █ █▄▄▄▀▀█ ██▀ █▄▄▄█▀ ▀▄  
 			█ ███ █ ▄█ ▀ ▄▀ ▀▀ ▄▀  ██▄▀▀█  
-			█▄▄▄▄▄█ █▀▄▀▄  █▄█ ███ ▄█  █▄  
-										   `)
+			█▄▄▄▄▄█ █▀▄▀▄  █▄█ ███ ▄█  █▄`)
 			return nil
 		},
 	}
