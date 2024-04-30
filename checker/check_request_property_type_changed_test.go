@@ -3,10 +3,12 @@ package checker_test
 import (
 	"testing"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // CL: changing request body type
@@ -16,7 +18,7 @@ func TestRequestBodyTypeChangedCheck(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = "array"
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Type = &openapi3.Types{"array"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -26,7 +28,7 @@ func TestRequestBodyTypeChangedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
-		Args:        []any{"object", "", "array", ""},
+		Args:        []any{utils.StringList{"object"}, "", utils.StringList{"array"}, ""},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_base.yaml"),
@@ -51,7 +53,7 @@ func TestRequestBodyFormatChangedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
-		Args:        []any{"object", "", "object", "uuid"},
+		Args:        []any{utils.StringList{"object"}, "", utils.StringList{"object"}, "uuid"},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_base.yaml"),
@@ -74,7 +76,7 @@ func TestRequestPropertyTypeChangedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
-		Args:        []any{"age", "integer", "int32", "string", "string"},
+		Args:        []any{"age", utils.StringList{"integer"}, "int32", utils.StringList{"string"}, "string"},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_revision.yaml"),
@@ -97,7 +99,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
-		Args:        []any{"colors", "array", "", "object", ""},
+		Args:        []any{"colors", utils.StringList{"array"}, "", utils.StringList{"object"}, ""},
 		Operation:   "POST",
 		Path:        "/dogs",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_revision_array_to_object.yaml"),
@@ -106,7 +108,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckArrayToObject(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
-		Args:        []any{"array", "", "object", ""},
+		Args:        []any{utils.StringList{"array"}, "", utils.StringList{"object"}, ""},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_revision_array_to_object.yaml"),
@@ -129,7 +131,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
-		Args:        []any{"colors", "object", "", "array", ""},
+		Args:        []any{"colors", utils.StringList{"object"}, "", utils.StringList{"array"}, ""},
 		Operation:   "POST",
 		Path:        "/dogs",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_base_array_to_object.yaml"),
@@ -138,7 +140,7 @@ func TestRequestBodyAndPropertyTypesChangedCheckObjectToArray(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyTypeChangedId,
 		Level:       checker.ERR,
-		Args:        []any{"object", "", "array", ""},
+		Args:        []any{utils.StringList{"object"}, "", utils.StringList{"array"}, ""},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_base_array_to_object.yaml"),
@@ -163,7 +165,7 @@ func TestRequestPropertyFormatChangedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.ERR,
-		Args:        []any{"age", "integer", "int32", "integer", "uuid"},
+		Args:        []any{"age", utils.StringList{"integer"}, "int32", utils.StringList{"integer"}, "uuid"},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_base.yaml"),
@@ -177,8 +179,8 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 	s2, err := open("../data/checker/request_property_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = "integer"
-	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = "number"
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = &openapi3.Types{"integer"}
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["age"].Value.Type = &openapi3.Types{"number"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -188,7 +190,7 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyTypeChangedId,
 		Level:       checker.INFO,
-		Args:        []any{"age", "integer", "int32", "number", "int32"},
+		Args:        []any{"age", utils.StringList{"integer"}, "int32", utils.StringList{"number"}, "int32"},
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_type_changed_base.yaml"),

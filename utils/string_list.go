@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"slices"
 	"sort"
 	"strings"
 )
@@ -23,12 +24,10 @@ func (stringList *StringList) Set(s string) error {
 }
 
 func (stringList *StringList) Contains(s string) bool {
-	for _, item := range *stringList {
-		if s == item {
-			return true
-		}
+	if stringList == nil {
+		return false
 	}
-	return false
+	return slices.Contains(*stringList, s)
 }
 
 func (stringList *StringList) Minus(other StringList) StringList {
@@ -75,4 +74,11 @@ func (list StringList) Less(i, j int) bool {
 // Swap implements the sort.Interface interface
 func (list StringList) Swap(i, j int) {
 	list[i], list[j] = list[j], list[i]
+}
+
+func (stringList *StringList) Is(s string) bool {
+	if stringList == nil {
+		return false
+	}
+	return len(*stringList) == 1 && (*stringList)[0] == s
 }

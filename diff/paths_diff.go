@@ -135,7 +135,7 @@ func filterPathsByName(filter string, paths1, paths2 *openapi3.Paths) error {
 func filterPathsInternal(paths *openapi3.Paths, r *regexp.Regexp) {
 	for path := range paths.Map() {
 		if !r.MatchString(path) {
-			delete(paths.Map(), path)
+			paths.Delete(path)
 		}
 	}
 }
@@ -160,7 +160,7 @@ func filterPathsByExtensionInternal(paths *openapi3.Paths, r *regexp.Regexp) {
 	for path, pathItem := range paths.Map() {
 		for extension := range pathItem.Extensions {
 			if r.MatchString(extension) {
-				delete(paths.Map(), path)
+				paths.Delete(path)
 				break
 			}
 		}

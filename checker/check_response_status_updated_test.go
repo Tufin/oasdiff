@@ -66,7 +66,7 @@ func TestResponseNonSuccessStatusRemoved(t *testing.T) {
 	s2, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Map(), "409")
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Delete("409")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -91,7 +91,7 @@ func TestResponseSuccessStatusRemoved(t *testing.T) {
 	s2, err := open("../data/checker/response_status_base.yaml")
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Map(), "200")
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Delete("200")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)

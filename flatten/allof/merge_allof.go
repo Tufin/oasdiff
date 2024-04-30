@@ -763,21 +763,21 @@ func findMinValue(values []*uint64) *uint64 {
 func resolveType(schema *openapi3.Schema, collection *SchemaCollection) (*openapi3.Schema, error) {
 	types := filterEmptyStrings(collection.Type)
 	if len(types) == 0 {
-		schema.Type = ""
+		schema.Type = nil
 		return schema, nil
 	}
 	if areTypesNumeric(types) {
 		for _, t := range types {
 			if t == "integer" {
-				schema.Type = "integer"
+				schema.Type = &openapi3.Types{"integer"}
 				return schema, nil
 			}
 		}
-		schema.Type = "number"
+		schema.Type = &openapi3.Types{"number"}
 		return schema, nil
 	}
 	if allStringsEqual(types) {
-		schema.Type = types[0]
+		schema.Type = &openapi3.Types{types[0]}
 		return schema, nil
 	}
 	return schema, errors.New(TypeErrorMessage)
@@ -938,7 +938,9 @@ func collect(schemas []*openapi3.SchemaRef) SchemaCollection {
 		collection.AnyOf = append(collection.AnyOf, s.Value.AnyOf)
 		collection.OneOf = append(collection.OneOf, s.Value.OneOf)
 		collection.Title = append(collection.Title, s.Value.Title)
-		collection.Type = append(collection.Type, s.Value.Type)
+		if s.Value.Type != nil {
+			collection.Type = append(collection.Type, *s.Value.Type...)
+		}
 		collection.Format = append(collection.Format, s.Value.Format)
 		collection.Description = append(collection.Description, s.Value.Description)
 		collection.Enum = append(collection.Enum, s.Value.Enum)

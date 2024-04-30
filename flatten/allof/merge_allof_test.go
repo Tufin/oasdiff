@@ -28,7 +28,7 @@ func TestMerge_Default(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
@@ -45,7 +45,7 @@ func TestMerge_Default(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Default: 10,
 						},
 					},
@@ -63,13 +63,13 @@ func TestMerge_Default(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Default: 10,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Default: 10,
 						},
 					},
@@ -87,13 +87,13 @@ func TestMerge_Default(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Default: "abc",
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Default: "abc",
 						},
 					},
@@ -114,13 +114,13 @@ func TestMerge_DefaultFailure(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Default: 10,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Default: "abc",
 						},
 					},
@@ -139,13 +139,13 @@ func TestMerge_ReadOnlyIsSetToFalse(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							ReadOnly: false,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							ReadOnly: false,
 						},
 					},
@@ -166,13 +166,13 @@ func TestMerge_ReadOnlyIsSetToTrue(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							ReadOnly: true,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							ReadOnly: false,
 						},
 					},
@@ -191,13 +191,13 @@ func TestMerge_WriteOnlyIsSetToFalse(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:      "object",
+							Type:      &openapi3.Types{"object"},
 							WriteOnly: false,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:      "object",
+							Type:      &openapi3.Types{"object"},
 							WriteOnly: false,
 						},
 					},
@@ -216,13 +216,13 @@ func TestMerge_WriteOnlyIsSetToTrue(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:      "object",
+							Type:      &openapi3.Types{"object"},
 							WriteOnly: true,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:      "object",
+							Type:      &openapi3.Types{"object"},
 							WriteOnly: false,
 						},
 					},
@@ -241,13 +241,13 @@ func TestMerge_NullableIsSetToTrue(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							Nullable: true,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							Nullable: true,
 						},
 					},
@@ -267,13 +267,13 @@ func TestMerge_NullableIsSetToFalse(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							Nullable: false,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							Nullable: true,
 						},
 					},
@@ -292,18 +292,18 @@ func TestMerge_NestedAllOfInProperties(t *testing.T) {
 				Properties: openapi3.Schemas{
 					"prop1": &openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							AllOf: openapi3.SchemaRefs{
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										MinProps: 10,
 										MaxProps: openapi3.Uint64Ptr(40),
 									},
 								},
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										MinProps: 5,
 										MaxProps: openapi3.Uint64Ptr(25),
 									},
@@ -325,18 +325,18 @@ func TestMerge_NestedAllOfInNot(t *testing.T) {
 			Value: &openapi3.Schema{
 				Not: &openapi3.SchemaRef{
 					Value: &openapi3.Schema{
-						Type: "object",
+						Type: &openapi3.Types{"object"},
 						AllOf: openapi3.SchemaRefs{
 							&openapi3.SchemaRef{
 								Value: &openapi3.Schema{
-									Type:     "object",
+									Type:     &openapi3.Types{"object"},
 									MinProps: 10,
 									MaxProps: openapi3.Uint64Ptr(40),
 								},
 							},
 							&openapi3.SchemaRef{
 								Value: &openapi3.Schema{
-									Type:     "object",
+									Type:     &openapi3.Types{"object"},
 									MinProps: 5,
 									MaxProps: openapi3.Uint64Ptr(25),
 								},
@@ -358,18 +358,18 @@ func TestMerge_NestedAllOfInOneOf(t *testing.T) {
 				OneOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							AllOf: openapi3.SchemaRefs{
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										MinProps: 10,
 										MaxProps: openapi3.Uint64Ptr(40),
 									},
 								},
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										MinProps: 5,
 										MaxProps: openapi3.Uint64Ptr(25),
 									},
@@ -393,18 +393,18 @@ func TestMerge_NestedAllOfInAnyOf(t *testing.T) {
 				AnyOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							AllOf: openapi3.SchemaRefs{
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										MinProps: 10,
 										MaxProps: openapi3.Uint64Ptr(40),
 									},
 								},
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										MinProps: 5,
 										MaxProps: openapi3.Uint64Ptr(25),
 									},
@@ -431,11 +431,11 @@ func TestMerge_TypeNumeric(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "number",
+										Type: &openapi3.Types{"number"},
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
@@ -443,17 +443,17 @@ func TestMerge_TypeNumeric(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "number",
+										Type: &openapi3.Types{"number"},
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
 			}})
 	require.NoError(t, err)
-	require.Equal(t, "number", merged.Properties["prop1"].Value.Type)
+	require.True(t, merged.Properties["prop1"].Value.Type.Is("number"))
 
 	merged, err = allof.Merge(
 		openapi3.SchemaRef{
@@ -464,11 +464,11 @@ func TestMerge_TypeNumeric(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "integer",
+										Type: &openapi3.Types{"integer"},
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
@@ -476,17 +476,17 @@ func TestMerge_TypeNumeric(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "integer",
+										Type: &openapi3.Types{"integer"},
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
 			}})
 	require.NoError(t, err)
-	require.Equal(t, "integer", merged.Properties["prop1"].Value.Type)
+	require.Equal(t, &openapi3.Types{"integer"}, merged.Properties["prop1"].Value.Type)
 }
 
 // Conflicting numeric types are merged successfully
@@ -500,11 +500,11 @@ func TestMerge_TypeNumericConflictResolved(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "integer",
+										Type: &openapi3.Types{"integer"},
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
@@ -512,17 +512,17 @@ func TestMerge_TypeNumericConflictResolved(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "number",
+										Type: &openapi3.Types{"number"},
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
 			}})
 	require.NoError(t, err)
-	require.Equal(t, "integer", merged.Properties["prop1"].Value.Type)
+	require.True(t, merged.Properties["prop1"].Value.Type.Is("integer"))
 }
 
 // Conflicting types cannot be resolved
@@ -536,11 +536,11 @@ func TestMerge_TypeFailure(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "integer",
+										Type: &openapi3.Types{"integer"},
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
@@ -548,11 +548,11 @@ func TestMerge_TypeFailure(t *testing.T) {
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "string",
+										Type: &openapi3.Types{"string"},
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
@@ -569,14 +569,14 @@ func TestMerge_ExclusiveMaxIsTrue(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:         "object",
+							Type:         &openapi3.Types{"object"},
 							ExclusiveMax: true,
 							Max:          openapi3.Float64Ptr(1),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:         "object",
+							Type:         &openapi3.Types{"object"},
 							ExclusiveMax: false,
 							Max:          openapi3.Float64Ptr(2),
 						},
@@ -595,14 +595,14 @@ func TestMerge_ExclusiveMaxIsFalse(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:         "object",
+							Type:         &openapi3.Types{"object"},
 							ExclusiveMax: false,
 							Max:          openapi3.Float64Ptr(1),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:         "object",
+							Type:         &openapi3.Types{"object"},
 							ExclusiveMax: true,
 							Max:          openapi3.Float64Ptr(2),
 						},
@@ -621,14 +621,14 @@ func TestMerge_ExclusiveMinIsFalse(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:         "object",
+							Type:         &openapi3.Types{"object"},
 							ExclusiveMin: false,
 							Min:          openapi3.Float64Ptr(40),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:         "object",
+							Type:         &openapi3.Types{"object"},
 							ExclusiveMin: true,
 							Min:          openapi3.Float64Ptr(5),
 						},
@@ -647,14 +647,14 @@ func TestMerge_ExclusiveMinIsTrue(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:         "object",
+							Type:         &openapi3.Types{"object"},
 							ExclusiveMin: true,
 							Min:          openapi3.Float64Ptr(40),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:         "object",
+							Type:         &openapi3.Types{"object"},
 							ExclusiveMin: false,
 							Min:          openapi3.Float64Ptr(5),
 						},
@@ -673,20 +673,20 @@ func TestMerge_Not(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Not: &openapi3.SchemaRef{
 								Value: &openapi3.Schema{
-									Type: "string",
+									Type: &openapi3.Types{"string"},
 								},
 							},
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Not: &openapi3.SchemaRef{
 								Value: &openapi3.Schema{
-									Type: "integer",
+									Type: &openapi3.Types{"integer"},
 								},
 							},
 						},
@@ -695,8 +695,8 @@ func TestMerge_Not(t *testing.T) {
 			}})
 
 	require.NoError(t, err)
-	require.Equal(t, "string", merged.Not.Value.AnyOf[0].Value.Type)
-	require.Equal(t, "integer", merged.Not.Value.AnyOf[1].Value.Type)
+	require.Equal(t, &openapi3.Types{"string"}, merged.Not.Value.AnyOf[0].Value.Type)
+	require.True(t, merged.Not.Value.AnyOf[1].Value.Type.Is("integer"))
 }
 
 // merge multiple OneOf inside AllOf
@@ -707,17 +707,17 @@ func TestMerge_OneOf(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							OneOf: openapi3.SchemaRefs{
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										Required: []string{"prop1"},
 									},
 								},
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										Required: []string{"prop2"},
 									},
 								},
@@ -726,11 +726,11 @@ func TestMerge_OneOf(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							OneOf: openapi3.SchemaRefs{
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										Required: []string{"prop2"},
 									},
 								},
@@ -752,17 +752,17 @@ func TestMerge_AnyOf(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							AnyOf: openapi3.SchemaRefs{
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										Required: []string{"string"},
 									},
 								},
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										Required: []string{"boolean"},
 									},
 								},
@@ -771,11 +771,11 @@ func TestMerge_AnyOf(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							AnyOf: openapi3.SchemaRefs{
 								&openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type:     "object",
+										Type:     &openapi3.Types{"object"},
 										Required: []string{"boolean"},
 									},
 								},
@@ -796,13 +796,13 @@ func TestMerge_UniqueItemsTrue(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:        "object",
+							Type:        &openapi3.Types{"object"},
 							UniqueItems: true,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:        "object",
+							Type:        &openapi3.Types{"object"},
 							UniqueItems: false,
 						},
 					},
@@ -820,13 +820,13 @@ func TestMerge_UniqueItemsFalse(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:        "object",
+							Type:        &openapi3.Types{"object"},
 							UniqueItems: false,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:        "object",
+							Type:        &openapi3.Types{"object"},
 							UniqueItems: false,
 						},
 					},
@@ -844,14 +844,14 @@ func TestMerge_Items_Failure(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"test": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "array",
+										Type: &openapi3.Types{"array"},
 										Items: &openapi3.SchemaRef{
 											Value: &openapi3.Schema{
-												Type: "integer",
+												Type: &openapi3.Types{"integer"},
 											},
 										},
 									},
@@ -861,14 +861,14 @@ func TestMerge_Items_Failure(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"test": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "array",
+										Type: &openapi3.Types{"array"},
 										Items: &openapi3.SchemaRef{
 											Value: &openapi3.Schema{
-												Type: "string",
+												Type: &openapi3.Types{"string"},
 											},
 										},
 									},
@@ -889,14 +889,14 @@ func TestMerge_Items(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"test": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "array",
+										Type: &openapi3.Types{"array"},
 										Items: &openapi3.SchemaRef{
 											Value: &openapi3.Schema{
-												Type: "integer",
+												Type: &openapi3.Types{"integer"},
 											},
 										},
 									},
@@ -906,14 +906,14 @@ func TestMerge_Items(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"test": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "array",
+										Type: &openapi3.Types{"array"},
 										Items: &openapi3.SchemaRef{
 											Value: &openapi3.Schema{
-												Type: "integer",
+												Type: &openapi3.Types{"integer"},
 											},
 										},
 									},
@@ -925,8 +925,8 @@ func TestMerge_Items(t *testing.T) {
 			}})
 	require.NoError(t, err)
 	require.Nil(t, merged.AllOf)
-	require.Equal(t, "array", merged.Properties["test"].Value.Type)
-	require.Equal(t, "integer", merged.Properties["test"].Value.Items.Value.Type)
+	require.True(t, merged.Properties["test"].Value.Type.Is("array"))
+	require.True(t, merged.Properties["test"].Value.Items.Value.Type.Is("integer"))
 }
 
 func TestMerge_MultipleOfContained(t *testing.T) {
@@ -938,13 +938,13 @@ func TestMerge_MultipleOfContained(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:       "object",
+							Type:       &openapi3.Types{"object"},
 							MultipleOf: openapi3.Float64Ptr(10.0),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:       "object",
+							Type:       &openapi3.Types{"object"},
 							MultipleOf: openapi3.Float64Ptr(2.0),
 						},
 					},
@@ -961,13 +961,13 @@ func TestMerge_MultipleOfDecimal(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:       "object",
+							Type:       &openapi3.Types{"object"},
 							MultipleOf: openapi3.Float64Ptr(11.0),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:       "object",
+							Type:       &openapi3.Types{"object"},
 							MultipleOf: openapi3.Float64Ptr(0.7),
 						},
 					},
@@ -984,13 +984,13 @@ func TestMerge_EnumContained(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Enum: []interface{}{"1", nil, 1},
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Enum: []interface{}{"1"},
 						},
 					},
@@ -1008,13 +1008,13 @@ func TestMerge_EnumNoIntersection(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Enum: []interface{}{"1", nil},
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Enum: []interface{}{"2"},
 						},
 					},
@@ -1031,14 +1031,14 @@ func TestMerge_RangeProperties(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							MinProps: 10,
 							MaxProps: openapi3.Uint64Ptr(40),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							MinProps: 5,
 							MaxProps: openapi3.Uint64Ptr(25),
 						},
@@ -1059,14 +1059,14 @@ func TestMerge_RangeItems(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							MinItems: 10,
 							MaxItems: openapi3.Uint64Ptr(40),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:     "object",
+							Type:     &openapi3.Types{"object"},
 							MinItems: 5,
 							MaxItems: openapi3.Uint64Ptr(25),
 						},
@@ -1085,14 +1085,14 @@ func TestMerge_Range(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Min:  openapi3.Float64Ptr(10),
 							Max:  openapi3.Float64Ptr(40),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Min:  openapi3.Float64Ptr(5),
 							Max:  openapi3.Float64Ptr(25),
 						},
@@ -1111,13 +1111,13 @@ func TestMerge_MaxLength(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:      "object",
+							Type:      &openapi3.Types{"object"},
 							MaxLength: openapi3.Uint64Ptr(10),
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:      "object",
+							Type:      &openapi3.Types{"object"},
 							MaxLength: openapi3.Uint64Ptr(20),
 						},
 					},
@@ -1134,13 +1134,13 @@ func TestMerge_MinLength(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:      "object",
+							Type:      &openapi3.Types{"object"},
 							MinLength: 10,
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:      "object",
+							Type:      &openapi3.Types{"object"},
 							MinLength: 20,
 						},
 					},
@@ -1158,13 +1158,13 @@ func TestMerge_Description(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:        "object",
+							Type:        &openapi3.Types{"object"},
 							Description: "desc1",
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:        "object",
+							Type:        &openapi3.Types{"object"},
 							Description: "desc2",
 						},
 					},
@@ -1179,13 +1179,13 @@ func TestMerge_Description(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:        "object",
+							Type:        &openapi3.Types{"object"},
 							Description: "desc1",
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:        "object",
+							Type:        &openapi3.Types{"object"},
 							Description: "desc2",
 						},
 					},
@@ -1203,18 +1203,18 @@ func TestMerge_NonConflictingType(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
 			}})
 	require.NoError(t, err)
-	require.Equal(t, "object", merged.Type)
+	require.True(t, merged.Type.Is("object"))
 }
 
 // schema cannot be merged if types are conflicting
@@ -1225,11 +1225,11 @@ func TestMerge_FailsOnConflictingTypes(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"name": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "string",
+										Type: &openapi3.Types{"string"},
 									},
 								},
 							},
@@ -1237,11 +1237,11 @@ func TestMerge_FailsOnConflictingTypes(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"name": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "object",
+										Type: &openapi3.Types{"object"},
 									},
 								},
 							},
@@ -1260,13 +1260,13 @@ func TestMerge_Title(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:  "object",
+							Type:  &openapi3.Types{"object"},
 							Title: "first",
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:  "object",
+							Type:  &openapi3.Types{"object"},
 							Title: "second",
 						},
 					},
@@ -1281,13 +1281,13 @@ func TestMerge_Title(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:  "object",
+							Type:  &openapi3.Types{"object"},
 							Title: "first",
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:  "object",
+							Type:  &openapi3.Types{"object"},
 							Title: "second",
 						},
 					},
@@ -1312,7 +1312,7 @@ func TestMerge_FormatInteger(t *testing.T) {
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
@@ -1324,7 +1324,7 @@ func TestMerge_FormatInteger(t *testing.T) {
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
@@ -1348,7 +1348,7 @@ func TestMerge_FormatFloat(t *testing.T) {
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
@@ -1360,7 +1360,7 @@ func TestMerge_FormatFloat(t *testing.T) {
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
@@ -1384,7 +1384,7 @@ func TestMerge_NumericFormat(t *testing.T) {
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
@@ -1396,7 +1396,7 @@ func TestMerge_NumericFormat(t *testing.T) {
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 					&openapi3.SchemaRef{
@@ -1408,7 +1408,7 @@ func TestMerge_NumericFormat(t *testing.T) {
 									},
 								},
 							},
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 						},
 					},
 				},
@@ -1424,13 +1424,13 @@ func TestMerge_Format(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:   "object",
+							Type:   &openapi3.Types{"object"},
 							Format: "date",
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:   "object",
+							Type:   &openapi3.Types{"object"},
 							Format: "date",
 						},
 					},
@@ -1447,13 +1447,13 @@ func TestMerge_Format_Failure(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:   "object",
+							Type:   &openapi3.Types{"object"},
 							Format: "date",
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:   "object",
+							Type:   &openapi3.Types{"object"},
 							Format: "byte",
 						},
 					},
@@ -1486,7 +1486,7 @@ func TestMerge_TwoObjects(t *testing.T) {
 	obj1 := openapi3.Schemas{
 		"description": &openapi3.SchemaRef{
 			Value: &openapi3.Schema{
-				Type: "string",
+				Type: &openapi3.Types{"string"},
 			},
 		},
 	}
@@ -1494,7 +1494,7 @@ func TestMerge_TwoObjects(t *testing.T) {
 	obj2 := openapi3.Schemas{
 		"name": &openapi3.SchemaRef{
 			Value: &openapi3.Schema{
-				Type: "string",
+				Type: &openapi3.Types{"string"},
 			},
 		},
 	}
@@ -1504,13 +1504,13 @@ func TestMerge_TwoObjects(t *testing.T) {
 			AllOf: openapi3.SchemaRefs{
 				&openapi3.SchemaRef{
 					Value: &openapi3.Schema{
-						Type:       "object",
+						Type:       &openapi3.Types{"object"},
 						Properties: obj1,
 					},
 				},
 				&openapi3.SchemaRef{
 					Value: &openapi3.Schema{
-						Type:       "object",
+						Type:       &openapi3.Types{"object"},
 						Properties: obj2,
 					},
 				},
@@ -1530,7 +1530,7 @@ func TestMerge_OneObjectOneProp(t *testing.T) {
 	object := openapi3.Schemas{
 		"description": &openapi3.SchemaRef{
 			Value: &openapi3.Schema{
-				Type: "string",
+				Type: &openapi3.Types{"string"},
 			},
 		},
 	}
@@ -1540,7 +1540,7 @@ func TestMerge_OneObjectOneProp(t *testing.T) {
 			AllOf: openapi3.SchemaRefs{
 				&openapi3.SchemaRef{
 					Value: &openapi3.Schema{
-						Type:       "object",
+						Type:       &openapi3.Types{"object"},
 						Properties: object,
 					},
 				},
@@ -1561,7 +1561,7 @@ func TestMerge_OneObjectNoProps(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:       "object",
+							Type:       &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{},
 						},
 					},
@@ -1594,13 +1594,13 @@ func TestMerge_OverlappingProps(t *testing.T) {
 			AllOf: openapi3.SchemaRefs{
 				&openapi3.SchemaRef{
 					Value: &openapi3.Schema{
-						Type:       "object",
+						Type:       &openapi3.Types{"object"},
 						Properties: obj1,
 					},
 				},
 				&openapi3.SchemaRef{
 					Value: &openapi3.Schema{
-						Type:       "object",
+						Type:       &openapi3.Types{"object"},
 						Properties: obj2,
 					},
 				},
@@ -1632,7 +1632,7 @@ func TestMerge_AdditionalProperties_False(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
@@ -1641,7 +1641,7 @@ func TestMerge_AdditionalProperties_False(t *testing.T) {
 								},
 								"name": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "string",
+										Type: &openapi3.Types{"string"},
 									},
 								},
 							},
@@ -1652,7 +1652,7 @@ func TestMerge_AdditionalProperties_False(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"prop2": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
@@ -1667,7 +1667,7 @@ func TestMerge_AdditionalProperties_False(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"prop2": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
@@ -1703,7 +1703,7 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"prop1": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
@@ -1712,7 +1712,7 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 								},
 								"name": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
-										Type: "string",
+										Type: &openapi3.Types{"string"},
 									},
 								},
 							},
@@ -1723,7 +1723,7 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"prop2": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
@@ -1738,7 +1738,7 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type: "object",
+							Type: &openapi3.Types{"object"},
 							Properties: openapi3.Schemas{
 								"prop2": &openapi3.SchemaRef{
 									Value: &openapi3.Schema{
@@ -1753,7 +1753,7 @@ func TestMerge_AdditionalProperties_True(t *testing.T) {
 					},
 				}}})
 	require.NoError(t, err)
-	require.Equal(t, "string", merged.Properties["name"].Value.Type)
+	require.True(t, merged.Properties["name"].Value.Type.Is("string"))
 }
 
 func TestMergeAllOf_Pattern(t *testing.T) {
@@ -1771,7 +1771,7 @@ func TestMergeAllOf_Pattern(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Pattern: "abc",
 						},
 					},
@@ -1786,13 +1786,13 @@ func TestMergeAllOf_Pattern(t *testing.T) {
 				AllOf: openapi3.SchemaRefs{
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Pattern: "foo",
 						},
 					},
 					&openapi3.SchemaRef{
 						Value: &openapi3.Schema{
-							Type:    "object",
+							Type:    &openapi3.Types{"object"},
 							Pattern: "bar",
 						},
 					},
@@ -1844,8 +1844,8 @@ func TestMerge_CircularAllOf(t *testing.T) {
 	require.Empty(t, merged.AllOf)
 	require.Empty(t, merged.OneOf)
 
-	require.Equal(t, "string", merged.Properties["serviceEndpoints"].Value.Type)
-	require.Equal(t, "string", merged.Properties["region"].Value.Type)
+	require.True(t, merged.Properties["serviceEndpoints"].Value.Type.Is("string"))
+	require.True(t, merged.Properties["region"].Value.Type.Is("string"))
 }
 
 // A single OneOf field is pruned if it references it's parent schema

@@ -35,12 +35,14 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 					formatDiff := schemaDiff.FormatDiff
 
 					if !typeDiff.Empty() || !formatDiff.Empty() {
-						typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
+						typeDiff = getDetailedTypeDiff(schemaDiff)
+						formatDiff = getDetailedFormatDiff(schemaDiff)
 
 						result = append(result, ApiChange{
 							Id:          RequestBodyTypeChangedId,
 							Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-							Args:        []any{typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
+							Args:        []any{typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -63,11 +65,14 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						formatDiff := schemaDiff.FormatDiff
 
 						if !typeDiff.Empty() || !formatDiff.Empty() {
-							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
+							typeDiff = getDetailedTypeDiff(schemaDiff)
+							formatDiff = getDetailedFormatDiff(schemaDiff)
+
 							result = append(result, ApiChange{
 								Id:          RequestPropertyTypeChangedId,
 								Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-								Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To},
+								Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -81,20 +86,34 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 	return result
 }
 
-func fillEmptyTypeAndFormatDiffs(typeDiff *diff.ValueDiff, schemaDiff *diff.SchemaDiff, formatDiff *diff.ValueDiff) (*diff.ValueDiff, *diff.ValueDiff) {
-	if typeDiff == nil {
-		typeDiff = &diff.ValueDiff{From: schemaDiff.Revision.Type, To: schemaDiff.Revision.Type}
+/*
+getDetailedTypeDiff ensures that we have:
+1. a non-empty diff, even if type wasn't changed
+2. the full list of values in base and revision, rather than the added/deleted values only
+*/
+func getDetailedTypeDiff(schemaDiff *diff.SchemaDiff) *diff.StringsDiff {
+	return &diff.StringsDiff{
+		Deleted: schemaDiff.Base.Type.Slice(),
+		Added:   schemaDiff.Revision.Type.Slice(),
 	}
-	if formatDiff == nil {
-		formatDiff = &diff.ValueDiff{From: schemaDiff.Revision.Format, To: schemaDiff.Revision.Format}
-	}
-	return typeDiff, formatDiff
 }
 
-func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
+/*
+getDetailedFormatDiff ensures that we have:
+1. a non-empty diff, even if format wasn't changed
+2. the original and revised format values which is implicit because format can only have a single value
+*/
+func getDetailedFormatDiff(schemaDiff *diff.SchemaDiff) *diff.ValueDiff {
+	return &diff.ValueDiff{
+		From: schemaDiff.Base.Format,
+		To:   schemaDiff.Revision.Format,
+	}
+}
+
+func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
 
 	if typeDiff != nil {
-		return !isTypeContained(typeDiff.To, typeDiff.From, mediaType)
+		return !isTypeContained(typeDiff.Added, typeDiff.Deleted, mediaType)
 	}
 
 	if formatDiff != nil {

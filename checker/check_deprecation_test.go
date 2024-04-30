@@ -127,7 +127,7 @@ func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths.Map(), "/api/test")
+	s2.Spec.Paths.Delete("/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -143,7 +143,7 @@ func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths.Map(), "/api/test")
+	s2.Spec.Paths.Delete("/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -183,7 +183,7 @@ func TestBreaking_RemovedPathForDraft(t *testing.T) {
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths.Map(), "/api/test")
+	s2.Spec.Paths.Delete("/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -201,7 +201,7 @@ func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	delete(s2.Spec.Paths.Map(), "/api/test")
+	s2.Spec.Paths.Delete("/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)

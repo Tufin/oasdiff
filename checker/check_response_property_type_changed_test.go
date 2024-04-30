@@ -3,10 +3,12 @@ package checker_test
 import (
 	"testing"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // CL: changing a response schema type
@@ -22,7 +24,7 @@ func TestResponseSchemaTypeChangedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseBodyTypeChangedId,
-		Args:        []any{"string", "", "object", "", "200"},
+		Args:        []any{utils.StringList{"string"}, "", utils.StringList{"object"}, "", "200"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -31,14 +33,14 @@ func TestResponseSchemaTypeChangedCheck(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: changing a response property schema type
+// CL: changing a response property schema type from string to integer
 func TestResponsePropertyTypeChangedCheck(t *testing.T) {
 	s1, err := open("../data/checker/response_schema_type_changed_revision.yaml")
 	require.NoError(t, err)
 	s2, err := open("../data/checker/response_schema_type_changed_revision.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("200").Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Type = "integer"
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("200").Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Type = &openapi3.Types{"integer"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -46,7 +48,7 @@ func TestResponsePropertyTypeChangedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyTypeChangedId,
-		Args:        []any{"data/name", "string", "", "integer", "", "200"},
+		Args:        []any{"data/name", utils.StringList{"string"}, "", utils.StringList{"integer"}, "", "200"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -70,7 +72,7 @@ func TestResponsePropertyFormatChangedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyTypeChangedId,
-		Args:        []any{"data/name", "string", "hostname", "string", "uuid", "200"},
+		Args:        []any{"data/name", utils.StringList{"string"}, "hostname", utils.StringList{"string"}, "uuid", "200"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -94,7 +96,7 @@ func TestResponsePropertyAnyOfModified(t *testing.T) {
 	require.ElementsMatch(t, []checker.ApiChange{
 		{
 			Id:          checker.ResponsePropertyTypeChangedId,
-			Args:        []any{"/anyOf[#/components/schemas/Dog]/breed/anyOf[#/components/schemas/Breed2]/name", "string", "", "number", "", "200"},
+			Args:        []any{"/anyOf[#/components/schemas/Dog]/breed/anyOf[#/components/schemas/Breed2]/name", utils.StringList{"string"}, "", utils.StringList{"number"}, "", "200"},
 			Level:       checker.ERR,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -103,7 +105,7 @@ func TestResponsePropertyAnyOfModified(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyTypeChangedId,
-			Args:        []any{"/anyOf[subschema #3: Rabbit]/", "string", "", "number", "", "200"},
+			Args:        []any{"/anyOf[subschema #3: Rabbit]/", utils.StringList{"string"}, "", utils.StringList{"number"}, "", "200"},
 			Level:       checker.ERR,
 			Operation:   "GET",
 			Path:        "/pets",
@@ -112,11 +114,35 @@ func TestResponsePropertyAnyOfModified(t *testing.T) {
 		},
 		{
 			Id:          checker.ResponsePropertyTypeChangedId,
-			Args:        []any{"/anyOf[subschema #4 -> subschema #5]/", "string", "", "number", "", "200"},
+			Args:        []any{"/anyOf[subschema #4 -> subschema #5]/", utils.StringList{"string"}, "", utils.StringList{"number"}, "", "200"},
 			Level:       checker.ERR,
 			Operation:   "GET",
 			Path:        "/pets",
 			Source:      load.NewSource("../data/checker/response_property_any_of_complex_revision.yaml"),
 			OperationId: "listPets",
 		}}, errs)
+}
+
+// CL: changing a response property schema type from a single value to to multiple types
+func TestResponseSchemaTypeMultiCheck(t *testing.T) {
+	s1, err := open("../data/checker/response_schema_type_changed_revision.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/response_schema_type_changed_revision.yaml")
+	require.NoError(t, err)
+
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Responses.Value("200").Value.Content["application/json"].Schema.Value.Properties["data"].Value.Properties["name"].Value.Type = &openapi3.Types{"integer", "string"}
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyTypeChangedCheck), d, osm, checker.ERR)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.ResponsePropertyTypeChangedId,
+		Args:        []any{"data/name", utils.StringList{"string"}, "", utils.StringList{"integer", "string"}, "", "200"},
+		Level:       checker.ERR,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      load.NewSource("../data/checker/response_schema_type_changed_revision.yaml"),
+		OperationId: "createOneGroup",
+	}, errs[0])
 }

@@ -58,7 +58,7 @@ func getResponsesDiffInternal(config *Config, state *state, responses1, response
 	result := newResponsesDiff()
 
 	for responseValue1, responseRef1 := range responses1.Map() {
-		if responseRef2, ok := responses2.Map()[responseValue1]; ok {
+		if responseRef2 := responses2.Value(responseValue1); responseRef2 != nil {
 			value1, err := derefResponse(responseRef1)
 			if err != nil {
 				return nil, err
@@ -82,7 +82,7 @@ func getResponsesDiffInternal(config *Config, state *state, responses1, response
 	}
 
 	for responseValue2 := range responses2.Map() {
-		if _, ok := responses1.Map()[responseValue2]; !ok {
+		if responseRef1 := responses1.Value(responseValue2); responseRef1 == nil {
 			result.Added = append(result.Added, responseValue2)
 		}
 	}

@@ -6,6 +6,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
+	"github.com/tufin/oasdiff/utils"
 )
 
 func commentId(id string) string {
@@ -31,6 +32,10 @@ func interfaceToString(arg interface{}) string {
 
 	if argString, ok := arg.(string); ok {
 		return argString
+	}
+
+	if argStringList, ok := arg.(utils.StringList); ok {
+		return argStringList.String()
 	}
 
 	if argInt, ok := arg.(int); ok {

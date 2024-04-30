@@ -3,8 +3,10 @@ package checker
 import (
 	"strings"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
+	"github.com/tufin/oasdiff/utils"
 )
 
 const (
@@ -40,11 +42,14 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 						typeDiff := schemaDiff.TypeDiff
 						formatDiff := schemaDiff.FormatDiff
 						if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
-							typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
+							typeDiff = getDetailedTypeDiff(schemaDiff)
+							formatDiff = getDetailedFormatDiff(schemaDiff)
+
 							result = append(result, ApiChange{
 								Id:          ResponseBodyTypeChangedId,
 								Level:       ERR,
-								Args:        []any{typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To, responseStatus},
+								Args:        []any{typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To, responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -65,11 +70,14 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 							formatDiff := schemaDiff.FormatDiff
 
 							if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
-								typeDiff, formatDiff = fillEmptyTypeAndFormatDiffs(typeDiff, schemaDiff, formatDiff)
+
+								typeDiff = getDetailedTypeDiff(schemaDiff)
+								formatDiff = getDetailedFormatDiff(schemaDiff)
+
 								result = append(result, ApiChange{
 									Id:          ResponsePropertyTypeChangedId,
 									Level:       ERR,
-									Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.From, formatDiff.From, typeDiff.To, formatDiff.To, responseStatus},
+									Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To, responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
@@ -84,10 +92,10 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 	return result
 }
 
-func breakingTypeFormatChangedInResponseProperty(typeDiff *diff.ValueDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
+func breakingTypeFormatChangedInResponseProperty(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
 
 	if typeDiff != nil {
-		return !isTypeContained(typeDiff.From, typeDiff.To, mediaType)
+		return !isTypeContained(typeDiff.Deleted, typeDiff.Added, mediaType)
 	}
 
 	if formatDiff != nil {
@@ -98,15 +106,19 @@ func breakingTypeFormatChangedInResponseProperty(typeDiff *diff.ValueDiff, forma
 }
 
 // isTypeContained checks if type2 is contained in type1
-func isTypeContained(type1, type2 interface{}, mediaType string) bool {
-	return (type1 == "number" && type2 == "integer") ||
-		(type1 == "string" && !isJsonMediaType(mediaType) && mediaType != "application/xml") // string can change to anything, unless it's json or xml
+func isTypeContained(type1, type2 utils.StringList, mediaType string) bool {
+	return (type1.Is("number") && type2.Is("integer")) ||
+		(type1.Is("string") && !isJsonMediaType(mediaType) && mediaType != "application/xml") // string can change to anything, unless it's json or xml
 }
 
 // isFormatContained checks if format2 is contained in format1
-func isFormatContained(schemaType string, format1, format2 interface{}) bool {
+func isFormatContained(schemaType *openapi3.Types, format1, format2 interface{}) bool {
 
-	switch schemaType {
+	if schemaType == nil || len(*schemaType) > 1 {
+		return false
+	}
+
+	switch schemaType.Slice()[0] {
 	case "number":
 		return format1 == "double" && format2 == "float"
 	case "integer":
