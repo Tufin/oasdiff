@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
@@ -36,36 +37,10 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 						continue
 					}
 
-					if typeDiff != nil && typeDiff.Deleted.Is("integer") && typeDiff.Added.Is("number") {
+					if typeAndFormatContained(typeDiff, formatDiff, paramDiff.Revision.Schema.Value.Type) {
 						continue
 					}
 
-					if typeDiff != nil && typeDiff.Added.Is("string") {
-						// parameters can be changed to string anytime
-						continue
-					}
-
-					if formatDiff != nil && (formatDiff.To == nil || formatDiff.To == "") {
-						continue
-					}
-
-					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type.Is("string") &&
-						(formatDiff.From == "date" && formatDiff.To == "date-time" ||
-							formatDiff.From == "time" && formatDiff.To == "date-time") {
-						continue
-					}
-
-					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type.Is("number") &&
-						(formatDiff.From == "float" && formatDiff.To == "double") {
-						continue
-					}
-
-					if formatDiff != nil && paramDiff.Revision.Schema.Value.Type.Is("integer") &&
-						(formatDiff.From == "int32" && formatDiff.To == "int64" ||
-							formatDiff.From == "int32" && formatDiff.To == "bigint" ||
-							formatDiff.From == "int64" && formatDiff.To == "bigint") {
-						continue
-					}
 					source := (*operationsSources)[operationItem.Revision]
 
 					typeDiff = getDetailedTypeDiff(schemaDiff)
@@ -85,4 +60,40 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 		}
 	}
 	return result
+}
+
+func typeAndFormatContained(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, revisionType *openapi3.Types) bool {
+
+	if typeDiff != nil && typeDiff.Deleted.Is("integer") && typeDiff.Added.Is("number") {
+		return true
+	}
+
+	if typeDiff != nil && typeDiff.Added.Is("string") {
+		return true
+	}
+
+	if formatDiff != nil && (formatDiff.To == nil || formatDiff.To == "") {
+		// TODO: is this correct?
+		return true
+	}
+
+	if formatDiff != nil && revisionType.Is("string") &&
+		(formatDiff.From == "date" && formatDiff.To == "date-time" ||
+			formatDiff.From == "time" && formatDiff.To == "date-time") {
+		return true
+	}
+
+	if formatDiff != nil && revisionType.Is("number") &&
+		(formatDiff.From == "float" && formatDiff.To == "double") {
+		return true
+	}
+
+	if formatDiff != nil && revisionType.Is("integer") &&
+		(formatDiff.From == "int32" && formatDiff.To == "int64" ||
+			formatDiff.From == "int32" && formatDiff.To == "bigint" ||
+			formatDiff.From == "int64" && formatDiff.To == "bigint") {
+		return true
+	}
+
+	return false
 }
