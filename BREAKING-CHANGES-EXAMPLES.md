@@ -214,6 +214,8 @@ These examples are automatically generated from unit tests.
 [changing request parameter default value](checker/check_request_parameters_default_value_changed_test.go?plain=1#L12)  
 [changing request parameter type to enum](checker/check_request_parameter_became_enum_test.go?plain=1#L12)  
 [changing request path parameter format](checker/check_request_parameters_type_changed_test.go?plain=1#L86)  
+[changing request path parameter type by adding "string" is allowed](checker/check_request_parameters_type_changed_test.go?plain=1#L158)  
+[changing request path parameter type by replacing "integer" with "number" is allowed](checker/check_request_parameters_type_changed_test.go?plain=1#L174)  
 [changing request path parameter type](checker/check_request_parameters_type_changed_test.go?plain=1#L14)  
 [changing request property default value](checker/check_request_property_default_value_changed_test.go?plain=1#L34)  
 [changing request property format](checker/check_request_property_type_changed_test.go?plain=1#L151)  
