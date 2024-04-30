@@ -18,7 +18,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = &openapi3.Types{"int"}
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = &openapi3.Types{"integer"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -26,7 +26,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"path", "groupId", utils.StringList{"string"}, "", utils.StringList{"int"}, ""},
+		Args:        []any{"path", "groupId", utils.StringList{"string"}, "", utils.StringList{"integer"}, ""},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -42,7 +42,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Type = &openapi3.Types{"int"}
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[1].Value.Schema.Value.Type = &openapi3.Types{"integer"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -50,7 +50,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"query", "token", utils.StringList{"string"}, "uuid", utils.StringList{"int"}, "uuid"},
+		Args:        []any{"query", "token", utils.StringList{"string"}, "uuid", utils.StringList{"integer"}, "uuid"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -66,7 +66,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[2].Value.Schema.Value.Type = &openapi3.Types{"int"}
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[2].Value.Schema.Value.Type = &openapi3.Types{"integer"}
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -74,7 +74,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestParameterTypeChangedId,
-		Args:        []any{"header", "X-Request-ID", utils.StringList{"string"}, "uuid", utils.StringList{"int"}, "uuid"},
+		Args:        []any{"header", "X-Request-ID", utils.StringList{"string"}, "uuid", utils.StringList{"integer"}, "uuid"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
@@ -153,4 +153,36 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+}
+
+// CL: changing request path parameter type by adding "string" is allowed
+func TestRequestPathParamTypeAddString(t *testing.T) {
+	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
+	require.NoError(t, err)
+
+	s1.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = &openapi3.Types{"integer"}
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = &openapi3.Types{"integer", "string"}
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
+	require.Empty(t, errs)
+}
+
+// CL: changing request path parameter type by replacing "integer" with "number" is allowed
+func TestRequestPathParamTypeIntegerToNumber(t *testing.T) {
+	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_parameter_type_changed_base.yaml")
+	require.NoError(t, err)
+
+	s1.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = &openapi3.Types{"integer", "string"}
+	s2.Spec.Paths.Value("/api/v1.0/groups").Post.Parameters[0].Value.Schema.Value.Type = &openapi3.Types{"number", "string"}
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
+	require.Empty(t, errs)
 }
