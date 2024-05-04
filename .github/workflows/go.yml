@@ -27,7 +27,7 @@ jobs:
     name: ${{ matrix.go }} on ${{ matrix.os }}
     steps:
 
-    - uses: actions/setup-go@v4
+    - uses: actions/setup-go@v5
       with:
         go-version: ${{ matrix.go }}
 
