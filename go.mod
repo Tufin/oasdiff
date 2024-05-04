@@ -6,7 +6,6 @@ require (
 	cloud.google.com/go v0.112.2
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.124.0
-	github.com/oasdiff/go-common v0.3.4
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.9.0
 	github.com/yargevad/filepathx v1.0.0
@@ -18,7 +17,6 @@ require (
 require (
 	github.com/denisbrodbeck/machineid v1.0.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/tidwall/gjson v1.17.1 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
