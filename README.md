@@ -22,8 +22,12 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - Display a user-friendly [changelog](CHANGELOG.md) of all important API changes
 - OpenAPI diff in YAML, JSON, Text/Markdown or HTML
 - [Run from Docker](#openapi-diff-with-docker)
+(https://github.com/oasdiff/sync/)
+- [GitHub Action](https://github.com/oasdiff/oasdiff-action)
+- [Cloud Service](OASDIFF-SERVICE.md)
+- [OpenAPI Sync: Get notified when an API provider breaks the API](https://github.com/oasdiff/sync/)
 - [Embed in your go program](#embedding-oasdiff-into-your-program)
-- OpenAPI diff of local files or remote files over http/s
+- Compare local files or remote files over http/s
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](#composed-mode)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
@@ -55,128 +59,24 @@ brew install oasdiff
 ## Install on macOS, Windows and Linux
 Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
-## Wrappers
-- [GitHub Action](https://github.com/oasdiff/oasdiff-action)
-- [Cloud Service](#openapi-diff-breaking-changes-and-changelog-as-a-service)
-- [OpenAPI Sync: Get notified when an API provider breaks the API](https://github.com/oasdiff/sync/)
+## The main oasdiff commands
 
-## Usage Examples
+### [diff](DIFF.md)
+Displays the raw changes between a pair of OpenAPI specs.  
+Output is fully detailed, typically in yaml or json but also available in text/markdown or html formats.  
+Typically used as input for other tools but may also be viewed ny humans.
 
-<img src="./demo.svg">
+### [breaking](BREAKING-CHANGES.md)
+Displays breaking changes between a pair of OpenAPI specs.  
+Categorized into ERR-level and WARN-level messages.  
+Human readable with colorized output.  
+Typically used in the CI to prevent breaking changes.
 
-### OpenAPI diff of local files in YAML
-```bash
-oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml
-```
-The default diff output format is YAML.  
-No output means that the diff is empty, or, in other words, there are no changes.
+### [changelog](CHANGELOG.md)
+Displays a summary of important changes between a pair of OpenAPI specs, including all breaking changes as well as additional INFO-level changes.   
+Human readable and colorized output.
 
-### OpenAPI diff of local files in Text/Markdown 
-```bash
-oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml -f text
-```
-The Text/Markdown diff report provides a simplified and partial view of the changes.  
-To view all details, use the default format: YAML.  
-If you'd like to see additional details in the text/markdown report, please submit a [feature request](https://github.com/Tufin/oasdiff/issues/new?assignees=&labels=&template=feature_request.md&title=).
-
-### OpenAPI diff of local files in HTML
-```bash
-oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml -f html 
-```
-The HTML diff report provides a simplified and partial view of the changes.  
-To view all details, use the default format: YAML.  
-If you'd like to see additional details in the HTML report, please submit a [feature request](https://github.com/Tufin/oasdiff/issues/new?assignees=&labels=&template=feature_request.md&title=).
-
-
-### OpenAPI diff for remote files over http/s
-```bash
-oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
-```
-
-### Breaking changes
-```bash
-oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-### Breaking changes as YAML
-```bash
-oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f yaml
-```
-
-### Breaking changes across multiple specs with globs
-```bash
-oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c
-```
-
-### Fail with exit code 1 if any ERR-level breaking changes are found
-```bash
-oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c -o ERR
-```
-
-### Fail with exit code 1 if any change is found
-```bash
-oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text -o
-```
-
-### OpenAPI changelog
-```bash
-oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-### OpenAPI diff for endpoints containing "/api" in the path
-```bash
-oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text -p "/api"
-```
-Filters are applied recursively at all levels. For example, if a path contains a [callback](https://swagger.io/docs/specification/callbacks/), the filter will be applied both to the path itself and to the callback path. To include such a nested change, use a regular expression that contains both paths, for example ```-filter "path|callback-path"```
-
-### Exclude paths and operations with extension "x-beta"
-```bash
-oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text --filter-extension "x-beta"
-``` 
-Notes:
-1. [OpenAPI Extensions](https://swagger.io/docs/specification/openapi-extensions/) can be defined both at the [path](https://swagger.io/docs/specification/paths-and-operations/) level and at the [operation](https://swagger.io/docs/specification/paths-and-operations/) level. Both are matched and excluded with this flag.
-2. If a path or operation has a matching extension only in one of the specs, but not in the other, it will appear as Added or Deleted.
-
-### Ignore changes to description and examples
-```bash
-oasdiff diff data/openapi-test1.yaml data/openapi-test3.yaml --exclude-elements description,examples -f text
-``` 
-
-### Display change summary
-```bash
-oasdiff summary https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-### OpenAPI Diff with Docker
-To run with docker just replace the `oasdiff` command by `docker run --rm -t tufin/oasdiff`, for example:
-
-```bash
-docker run --rm -t tufin/oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
-```
-
-### Breaking changes with Docker
-```bash
-docker run --rm -t tufin/oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-### Comparing local files with Docker
-```bash
-docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff diff /data/openapi-test1.yaml /data/openapi-test3.yaml
-```
-
-Replace `$(pwd)/data` by the path that contains your files.  
-Note that the spec paths must begin with `/`.  
-
-## OpenAPI Diff, Breaking Changes and Changelog as a Service
-[Oasdiff is also available as a service](OASDIFF-SERVICE.md).
-
-## Diff Output Formats
-The default diff output format, YAML, provides a full view of all diff details.  
-Note that no output in the YAML format signifies that the diff is empty, or, in other words, there are no changes.  
-Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
-The JSON format works only with `-exclude-elements endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
-If you wish to include additional details in non-YAML formats, please open an issue.
-
+    
 ## Paths vs. Endpoints
 OpenAPI Specification has a hierarchical model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
 Oasdiff respects this hierarchy and displays a hierarchical diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
@@ -251,44 +151,12 @@ To make this comparison case-insensitive, add the `--case-insensitive-headers` f
 oasdiff diff data/header-case/base.yaml data/header-case/revision.yaml --case-insensitive-headers
 ```
 
-## Excluding Specific Kinds of Changes 
-You can use the `--exclude-elements` flag to exclude certain kinds of changes:
-- Use `--exclude-elements examples` to exclude [Examples](https://swagger.io/specification/#example-object)
-- Use `--exclude-elements extensions` to exclude [Extensions](https://swagger.io/specification/#specification-extensions)
-- Use `--exclude-elements description` to exclude description fields
-- Use `--exclude-elements title` to exclude title fields
-- Use `--exclude-elements summary` to exclude summary fields
-- Use `--exclude-elements endpoints` to exclude the [endpoints diff](#paths-vs-endpoints)
-
 You can ignore multiple elements with a comma-separated list of excluded elements as in [this example](#ignore-changes-to-description-and-examples).  
 
 ## Excluding Specific Endpoints
 You can filter endpoints in two ways:
 1. By path name: use the `--match-path` option to exclude paths that don't match the given regular expression, see [example](#openapi-diff-for-endpoints-containing-api-in-the-path)
 2. By extension: use the `--filter-extension` option to exclude paths and operations with an OpenAPI Extension matching the given regular expression, see [example](#exclude-paths-and-operations-with-extension-x-beta)
-
-## OpenAPI Extensions
-Oasdiff tracks changes to [OpenAPI extensions](https://swagger.io/docs/specification/openapi-extensions/) by default. To disable this, see [Excluding Specific Kinds of Changes](#excluding-specific-kinds-of-changes).  
-The diff format for OpenAPI extensions conforms with [JavaScript Object Notation (JSON) Patch](https://datatracker.ietf.org/doc/html/rfc6902#section-4.4f), for example:
-```
-endpoints:
-    modified:
-        ?   method: POST
-            path: /example/callback
-        :   extensions:
-                modified:
-                    x-amazon-apigateway-integration:
-                        - oldValue: "201"
-                          value: "200"
-                          op: replace
-                          from: ""
-                          path: /responses/default/statusCode
-                        - oldValue: http://api.example.com/v1/example/callback
-                          value: http://api.example.com/v1/example/calllllllllback
-                          op: replace
-                          from: ""
-                          path: /uri
-```
 
 ## Notes for Go Developers
 ### Embedding oasdiff into your program

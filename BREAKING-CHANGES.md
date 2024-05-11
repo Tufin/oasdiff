@@ -1,8 +1,10 @@
 ## Breaking Changes
-A breaking change is a change to a component, such as a server, that could break a dependent component, such as a client, for example deleting an endpoint. 
-When working with OpenAPI, breaking changes can be caught by monitoring changes to the specification.
+Displays breaking changes between a pair of OpenAPI specs.  
+Categorized into ERR-level and WARN-level messages.  
+Human readable with colorized output.  
+Typically used in the CI to prevent breaking changes.
 
-To detect breaking changes between two specs run oasdiff with the `breaking` command:
+### Example
 ```
 oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
@@ -86,8 +88,8 @@ This method allows adding new entries to enums used in responses which is very u
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
-### Optional Breaking Changes Checks
-Oasdiff supports a few optional breaking changes checks which can be added with the `--include-checks` flag. For example:
+### Optional Checks
+Oasdiff supports a few optional checks which can be added with the `--include-checks` flag. For example:
 ```
 oasdiff breaking data/openapi-test1.yaml data/openapi-test3.yaml --include-checks response-non-success-status-removed
 ```
@@ -95,6 +97,10 @@ To see a list of optional checks, run:
 ```
 oasdiff checks --required false
 ```
+
+[Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  
+This document is automatically generated from oasdiff unit tests.
+
 
 ### Localization
 To display changes in other languages, use the `--lang` flag.  
@@ -105,10 +111,6 @@ Currently English and Russian are supported.
 If you encounter a change that isn't considered breaking by oasdiff you may:
 1. Check if the change is already available as an [optional breaking changes check](#optional-breaking-changes-checks).  
 2. Add a [custom check](CUSTOMIZING-CHECKS.md)
-
-### Examples
-[Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  
-This document is automatically generated from oasdiff unit tests.
 
 ### Known Limitations
 - no checks for `context` instead of `schema` for request parameters
