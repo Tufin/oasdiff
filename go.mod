@@ -1,6 +1,6 @@
 module github.com/tufin/oasdiff
 
-go 1.22.2
+go 1.22.3
 
 require (
 	cloud.google.com/go v0.113.0
@@ -10,7 +10,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.7.1
-	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
+	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
 	gopkg.in/yaml.v3 v3.0.1
 )
 
