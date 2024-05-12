@@ -182,7 +182,7 @@ func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
 	require.Equal(t, checker.RequestPropertyBecameEnumId, errs[0].GetId())
 }
 
-// BC: changing an existing header param to enum is breaking
+// BC: changing an existing path param to enum is breaking
 func TestBreaking_ReqParameterBecameEnum(t *testing.T) {
 	s1, err := open("../data/enums/request-parameter-op-no-enum.yaml")
 	require.NoError(t, err)
