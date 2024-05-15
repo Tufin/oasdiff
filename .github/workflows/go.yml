@@ -62,7 +62,7 @@ jobs:
     - if: runner.os == 'Linux'
       name: Generate breaking-changes examples
       run: |
-        sh scripts/doc_breaking_changes.sh > BREAKING-CHANGES-EXAMPLES.md
+        sh scripts/doc_breaking_changes.sh > doc/BREAKING-CHANGES-EXAMPLES.md
 
     - run: go fmt ./...
     - run: git --no-pager diff --exit-code
