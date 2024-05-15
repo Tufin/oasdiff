@@ -1,8 +1,7 @@
 ## Breaking Changes
-Displays breaking changes between a pair of OpenAPI specs.  
-Categorized into ERR-level and WARN-level messages.  
-Human readable with colorized output.  
-Typically used in the CI to prevent breaking changes.
+The `breking` command displays the breaking changes between OpenAPI specs.  
+Default output is human readable with colorized output, optionally, there are structured formats and formats conpatible with CI systems.  
+This command is typically used in the CI to report or prevent breaking changes.
 
 ### Example
 ```
@@ -115,3 +114,10 @@ If you encounter a change that isn't considered breaking by oasdiff you may:
 ### Known Limitations
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
+
+### Additional Options
+- [Merging AllOf Schemas](ALLOF.md)
+- [Merging common parameters from the path level into the operation level](COMMON-PARAMS.md)
+- [Comparing multiple specs](COMPOSED.md)
+- [Running from docker](DOCKER.md)
+- [Embedding in your go program](GO.md)

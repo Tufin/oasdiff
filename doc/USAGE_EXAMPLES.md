@@ -1,7 +1,5 @@
 ## Usage Examples
 
-<img src="./demo.svg">
-
 ### OpenAPI diff of local files in YAML
 ```bash
 oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml

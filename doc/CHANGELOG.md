@@ -1,6 +1,6 @@
 ## Changelog
 As your API evolves, it will undergo changes. Some of these changes may be "breaking" while others are not.  
-The changelog provides a list of all significant changes between two versions of the OpenAPI specification, including non-breaking changes.
+The changelog provides a list of all significant changes between two versions of the OpenAPI specification, including non-breaking changes.  
 
 To generate the changelog between two specs run oasdiff with the `changelog` command:
 ```
@@ -32,3 +32,10 @@ To control color manually, use the `--color` flag with `always` or `never`.
 
 ### Customizing the Changelog
 If you encounter a change that isn't logged by oasdiff you may add a [custom check](CUSTOMIZING-CHECKS.md).
+
+### Additional Options
+- [Merging AllOf Schemas](ALLOF.md)
+- [Merging common parameters from the path level into the operation level](COMMON-PARAMS.md)
+- [Comparing multiple specs](COMPOSED.md)
+- [Running from docker](DOCKER.md)
+- [Embedding in your go program](GO.md)
