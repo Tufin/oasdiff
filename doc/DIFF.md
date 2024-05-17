@@ -1,5 +1,5 @@
 ## Diff
-The `diff` command displays the raw changes between OpenAPI specs.  
+The `oasdiff diff` command displays the raw changes between OpenAPI specs.  
 Output is fully detailed, typically in yaml or json but also available in text, markdown and html formats.  
 This commmand is typically used to generate a structured diff report which can be consumed by other tools but it can also be viewed ny humans.
 
@@ -9,6 +9,11 @@ Note that no output in the YAML format signifies that the diff is empty, or, in 
 Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
 The JSON format works only with `-exclude-elements endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
 If you wish to include additional details in non-YAML formats, please open an issue.
+
+### Preventing Changes
+A common way to use `oasdiff diff` is by running it as a step the CI/CD pipeline to detect changes.  
+In order to prevent changes, `oasdiff diff` can be configured to return an error if changes are found.  
+To exit with return code 1 if any changes are found, add the `--fail-on-diff` flag.  
 
 ### Paths vs. Endpoints
 OpenAPI Specification has a hierarchical model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
@@ -81,6 +86,9 @@ You can use the `--exclude-elements` flag to exclude certain kinds of changes:
 ### Additional Options
 - [Merging AllOf Schemas](ALLOF.md)
 - [Merging common parameters from the path level into the operation level](COMMON-PARAMS.md)
+- [Excluding some endpoints](EXCLUDING-ENDPOINTS.md)
+- [Path parameter renaming](PATH-PARAM-RENAME.md)
+- [Case-insensitive header comparison](HEADER-DIFF.md)
 - [Comparing multiple specs](COMPOSED.md)
 - [Running from docker](DOCKER.md)
 - [Embedding in your go program](GO.md)

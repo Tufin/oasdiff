@@ -1,36 +1,48 @@
-## Breaking Changes
-The `breking` command displays the breaking changes between OpenAPI specs.  
-Default output is human readable with colorized output, optionally, there are structured formats and formats conpatible with CI systems.  
-This command is typically used in the CI to report or prevent breaking changes.
+## Breaking Changes and Changelog
+As your API evolves, it undergoes changes. Some of these changes may be "breaking" while others are not.  
+The `oasdiff breking` command displays the breaking changes between OpenAPI specifications.  
+The `oasdiff changelog` command displays all significant changes between OpenAPI specifications, including breaking and non-breaking changes.  
+These commands are typically used in the CI to report or prevent breaking changes.
 
-### Example
+### Example: display breaking changes
 ```
 oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
-### Breaking Changes Checks
-Oasdiff detects over 100 kinds of breaking changes categorized into two levels:
+### Example: display a changelog
+```
+oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+
+### Checks
+Oasdiff detects over 100 kinds of changes categorized into three levels:
 - `ERR` - Errors are definite breaking changes which should be avoided
-- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically
+- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically as breaking
+- `INFO` - Non-breaking changes
 
-To see the full list of breaking changes that are supported by oasdiff, run:
-```
-oasdiff checks --severity warn,error
-```
+The `breaking` command displays changes with level `ERR` and `WARN` only.  
+The `changelog` command displays all three levels. 
 
-### Preventing Breaking Changes
-A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect breaking changes.  
-In order to prevent breaking changes, oasdiff can be configured to return an error if any breaking change is found:
-- To exit with return code 1 when any ERR-level breaking changes are found, add the `--fail-on ERR` flag.  
-- To exit with return code 1 when any breaking changes are found, WARN-level or ERR-level, add the `--fail-on WARN` flag.
+To see the full list of checks that are supported by oasdiff, run:
+```
+oasdiff checks
+```
 
 ### Output Formats
-By default, breaking changes are displayed as human-readable text with [color](#color).  
-You can specify the `--format` flag to output breaking changes in other formats: `json`, `yaml`, `githubactions` or `junit`.  
-An additional format `singleline` displays each breaking change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
+By default, changes are displayed as human-readable text with [color](#color).  
+You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, `githubactions` or `junit`.  
+An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
+
+### Preventing Breaking Changes
+A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
+In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
+- To exit with return code 1 if ERR breaking changes are found, add the `--fail-on ERR` flag.  
+- To exit with return code 1 if ERR or WARN breaking changes are found, WARN or ERR, add the `--fail-on WARN` flag.
+- To exit with return code 1 if any changes are found, add the `--fail-on INFO` flag.
 
 ### Color
-When outputting breaking changes to a Unix terminal, oasdiff automatically adds colors with ANSI color escape sequences.  
+When outputting changes to a Unix terminal, oasdiff automatically adds colors with ANSI color escape sequences.  
 If output is piped into another process or redirected to a file, oasdiff disables color.  
 To control color manually, use the `--color` flag with `always` or `never`.
 
@@ -75,7 +87,6 @@ The required parts may appear in any order, in lower or upper case, and the conf
 ```
  - 12.01.2023 In GET /api/{domain}/{project}/badges/security-score we removed the success response with the status '200'
  - 31.10.2023 Removed the schema 'network-policies' from components
-
 ```
 
 The configuration files can be of any text type, e.g., Markdown, so you can use them to document breaking changes and other important changes.
@@ -111,13 +122,16 @@ If you encounter a change that isn't considered breaking by oasdiff you may:
 1. Check if the change is already available as an [optional breaking changes check](#optional-breaking-changes-checks).  
 2. Add a [custom check](CUSTOMIZING-CHECKS.md)
 
-### Known Limitations
-- no checks for `context` instead of `schema` for request parameters
-- no checks for `callback`s
-
 ### Additional Options
 - [Merging AllOf Schemas](ALLOF.md)
 - [Merging common parameters from the path level into the operation level](COMMON-PARAMS.md)
+- [Excluding some endpoints](EXCLUDING-ENDPOINTS.md)
+- [Path parameter renaming](PATH-PARAM-RENAME.md)
+- [Case-insensitive header comparison](HEADER-DIFF.md)
 - [Comparing multiple specs](COMPOSED.md)
 - [Running from docker](DOCKER.md)
 - [Embedding in your go program](GO.md)
+
+### Known Limitations
+- no checks for `context` instead of `schema` for request parameters
+- no checks for `callback`s

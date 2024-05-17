@@ -19,10 +19,9 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 
 ## Features 
 - Detect [breaking changes](BREAKING-CHANGES.md)
-- Display a user-friendly [changelog](CHANGELOG.md) of all important API changes
-- [OpenAPI diff in YAML, JSON, Text/Markdown or HTML](DIFF.md)
+- Display a user-friendly [changelog](BREAKING-CHANGES.md) of all important API changes
+- OpenAPI [diff](DIFF.md) in YAML, JSON, Text, Markdown or HTML
 - [Run from Docker](DOCKER.md)
-(https://github.com/oasdiff/sync/)
 - [GitHub Action](https://github.com/oasdiff/oasdiff-action)
 - [Cloud Service](OASDIFF-SERVICE.md)
 - [OpenAPI Sync: Get notified when an API provider breaks the API](https://github.com/oasdiff/sync/)
@@ -45,6 +44,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - Localization: display breaking changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
 
 
+## Demo
 <img src="./demo.svg">
 
 ## Installation
