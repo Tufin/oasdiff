@@ -1,4 +1,6 @@
 # oasdiff-service
+While oasdiff can run directly on your environment, it can also be used through a service so you don't need to install anything.        
+To use it you must first [create a tenant](#creating-a-tenant), and then call the [diff](#run-diff), [breaking-changes](#run-breaking-changes) or [changelog](#run-changelog) commands.
 
 ### Creating a tenant
 Create a tenant and get a tenant ID:
@@ -33,4 +35,7 @@ curl -X POST \
     https://api.oasdiff.com/tenants/{tenant-id}/changelog
 ```
 ### Errors
-oasdiff-service uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the 2xx range indicate success. Codes in the 4xx range indicate a failure with additional information provided (e.g., invalid OpenAPI spec format, a required parameter was missing, etc.). Codes in the 5xx range indicate an error with oasdiff-service servers (these are rare)
+The service uses conventional HTTP response codes to indicate success or failure of an API request:
+- Codes in the 2xx range indicate success
+- Codes in the 4xx range indicate a failure with additional information provided (e.g., invalid OpenAPI spec format, a required parameter was missing, etc.)
+- Codes in the 5xx range indicate a server error (these are rare)
