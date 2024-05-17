@@ -6,16 +6,17 @@ You can filter endpoints in two ways:
 Use the `--match-path` option to exclude paths that don't match the given regular expression.  
 For example, this diff includes only endpoints containing "/api" in the path:
 ```
-oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text --match-path "/api"
+oasdiff diff --match-path "/api" https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
 ```
-Note, that the filter is applied recursively at all levels. For example, if a path contains a callback, the filter will be applied both to the path itself and to the callback path.  
-To include such a nested change, use a regular expression that contains both paths, for example -filter "path|callback-path"
+Note:  
+If a path contains a callback, the filter will be applied both to the path itself and to the callback path.  
+To include both the path and the callback, use a regular expression with a filter for each level, for example: "path|callback-path"
    
 ### By extension
 Use the `--filter-extension` option to exclude paths and operations with an OpenAPI Extension matching the given regular expression.  
-For example, this diff excludes paths and operations with extension "x-beta"
+For example, this diff excludes paths and operations with extension "x-beta":
 ```
-oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text --filter-extension "x-beta"
+oasdiff diff --filter-extension "x-beta" https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
 ```
 Notes:
 1. OpenAPI Extensions can be defined both at the path level and at the operation level. Both are matched and excluded with this flag.
