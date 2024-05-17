@@ -4,11 +4,12 @@ Output is fully detailed, typically in yaml or json but also available in text, 
 This commmand is typically used to generate a structured diff report which can be consumed by other tools but it can also be viewed ny humans.
 
 ### Output Formats
-The default diff output format, YAML, provides a full view of all diff details.  
-Note that no output in the YAML format signifies that the diff is empty, or, in other words, there are no changes.  
-Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
-If you wish to include additional details in non-YAML formats, please open an issue.  
-The JSON format works only with `-exclude-elements endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
+The default diff output format is `yaml`.  
+The `yaml` and the `json` formats include all diff details.  
+Note that an empty `yaml` or `json` result signifies that the diff is empty, or, in other words, there are no changes.  
+The `text` and `html` formats are designed to be more user-friendly and provide only the most important parts of the diff.  
+The `text` format is also compatible with markdown.  
+Note that the `json` format excludes the `endpoints` section to avoid the [complex mapping keys problem](#complex-mapping-keys).
 
 ### Preventing Changes
 A common way to use `oasdiff diff` is by running it as a step the CI/CD pipeline to detect changes.  
@@ -44,12 +45,15 @@ endpoints:
                 deleted:
                     - security
 ```
+
+### Complex Mapping Keys
 The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.  
-Some YAML libraries don't support complex mapping keys:
+Some YAML libraries don't support complex mapping keys, for exampple:
 - python PyYAML: see https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450
 - golang gopkg.in/yaml.v3 fails to unmarshal the oasdiff output. This package offers a solution: https://github.com/tliron/yamlkeys
 
-When using output format `json`, oasdiff excludes `endpoints` automatically.
+You can exclude the endpoint section by adding the following flag: `--exclude-elements=endpoints`.  
+When using `json` output format, oasdiff excludes `endpoints` automatically.
 
 ### OpenAPI Extensions
 Oasdiff tracks changes to [OpenAPI extensions](https://swagger.io/docs/specification/openapi-extensions/) by default. To disable this, see [Excluding Specific Kinds of Changes](#excluding-specific-kinds-of-changes).  
