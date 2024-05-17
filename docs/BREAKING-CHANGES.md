@@ -135,3 +135,30 @@ If you encounter a change that isn't considered breaking by oasdiff you may:
 ### Known Limitations
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
+
+### Usage Examples
+
+#### Breaking changes
+```
+oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
+#### Breaking changes as YAML
+```
+oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f yaml
+```
+
+#### Breaking changes across multiple specs with globs
+```
+oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c
+```
+
+#### Breaking changes with exit code 1 if any ERR-level breaking changes are found
+```
+oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c -o ERR
+```
+
+#### Changelog
+```
+oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```

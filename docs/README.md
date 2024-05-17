@@ -64,10 +64,11 @@ brew install oasdiff
 Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
 ## The main commands
-- [diff](DIFF.md): the raw changes between OpenAPI specs, fully detailed
+- [diff](DIFF.md): the diff between OpenAPI specs, fully detailed
 - [breaking](BREAKING-CHANGES.md): breaking changes between OpenAPI specs  
-- [changelog](BREAKING-CHANGES.md): important changes between OpenAPI specs including all breaking changes as well as non-breaking changes
+- [changelog](BREAKING-CHANGES.md): important changes between OpenAPI specs including breaking and non-breaking changes
 - [flatten](ALLOF.md): replace all instances of allOf by a merged equivalent
+- checks: displays the different checks that oasdiff runs to detect changes
 
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi).

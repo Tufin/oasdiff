@@ -1,5 +1,5 @@
 ## Diff
-The `oasdiff diff` command displays the raw changes between OpenAPI specs.  
+The `oasdiff diff` command displays the diff between OpenAPI specs.  
 Output is fully detailed, typically in yaml or json but also available in text, markdown and html formats.  
 This commmand is typically used to generate a structured diff report which can be consumed by other tools but it can also be viewed ny humans.
 
@@ -87,6 +87,11 @@ You can use the `--exclude-elements` flag to exclude certain kinds of changes:
 - Use `--exclude-elements summary` to exclude summary fields
 - Use `--exclude-elements endpoints` to exclude the [endpoints diff](#paths-vs-endpoints)
 
+For example, this diff excludes descriptions and examples:
+```
+oasdiff diff data/openapi-test1.yaml data/openapi-test3.yaml --exclude-elements description,examples -f text
+```
+
 ### Additional Options
 - [Merging AllOf Schemas](ALLOF.md)
 - [Merging common parameters from the path level into the operation level](COMMON-PARAMS.md)
@@ -96,3 +101,37 @@ You can use the `--exclude-elements` flag to exclude certain kinds of changes:
 - [Comparing multiple specs](COMPOSED.md)
 - [Running from docker](DOCKER.md)
 - [Embedding in your go program](GO.md)
+
+### Usage Examples
+
+#### Diff as YAML
+```
+oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml
+```
+The default diff output format is `yaml`.  
+No output means that the diff is empty, or, in other words, there are no changes.
+
+#### Text/Markdown Diff Report
+```
+oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml -f text
+```
+The text diff report provides a simplified and partial view of the changes. It is also compatible with markdown.  
+To view all diff details, use `yaml` or `json` formats.
+
+#### HTML Diff Report
+```
+oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml -f html 
+```
+The html diff report provides a simplified and partial view of the changes.  
+To view all diff details, use `yaml` or `json` formats.
+
+
+#### Comparing remote files over http/s
+```
+oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
+```
+
+#### Diff across multiple specs with globs
+```
+oasdiff diff "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c
+```

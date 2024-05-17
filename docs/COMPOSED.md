@@ -7,3 +7,8 @@ Notes:
 1. Composed mode compares only [paths and endpoints](DIFF.md#paths-vs-endpoints), other resources are compared only if referenced from the paths or endpoints.
 2. Composed mode doesn't support [Path Prefix Modification](PATH-PREFIX.md) 
 3. Learn more about how oasdiff [matches endpoints to each other](MATCHING-ENDPOINTS.md)
+
+Example:
+```
+oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c
+```
