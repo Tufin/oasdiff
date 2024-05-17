@@ -86,7 +86,7 @@ You can use the `--exclude-elements` flag to exclude certain kinds of changes:
 ### Additional Options
 - [Merging AllOf Schemas](ALLOF.md)
 - [Merging common parameters from the path level into the operation level](COMMON-PARAMS.md)
-- [Excluding some endpoints](EXCLUDING-ENDPOINTS.md)
+- [Filtering endpoints](FILTERING-ENDPOINTS.md)
 - [Path parameter renaming](PATH-PARAM-RENAME.md)
 - [Case-insensitive header comparison](HEADER-DIFF.md)
 - [Comparing multiple specs](COMPOSED.md)
