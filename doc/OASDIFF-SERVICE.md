@@ -1,6 +1,5 @@
 # oasdiff-service
-While oasdiff can run directly on your environment, it can also be used through a service so you don't need to install anything.  
-Here's the source code for the service: https://github.com/oasdiff/oasdiff-service.  
+While oasdiff can run directly on your environment, it can also be used through a service so you don't need to install anything.        
 To use it you must first [create a tenant](#creating-a-tenant), and then call the [diff](#run-diff), [breaking-changes](#run-breaking-changes) or [changelog](#run-changelog) commands.
 
 ### Creating a tenant

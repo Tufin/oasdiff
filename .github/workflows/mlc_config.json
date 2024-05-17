@@ -3,13 +3,5 @@
       {
         "pattern": "^https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml"
       }
-    ],
-    "httpHeaders": [
-      {
-        "urls": ["https://github.com/oasdiff/oasdiff-service"],
-        "headers": {
-          "Accept": "*/*"
-        }
-      }
     ]
 }
