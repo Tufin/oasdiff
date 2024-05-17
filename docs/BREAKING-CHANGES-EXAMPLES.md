@@ -15,7 +15,7 @@ These examples are automatically generated from unit tests.
 [changing a response property to optional under AllOf, AnyOf or OneOf is breaking](../checker/check_breaking_property_test.go?plain=1#L644)  
 [changing an embedded response property to nullable is breaking](../checker/check_breaking_property_test.go?plain=1#L265)  
 [changing an existing header param from optional to required is breaking](../checker/check_breaking_test.go?plain=1#L191)  
-[changing an existing header param to enum is breaking](../checker/check_breaking_property_test.go?plain=1#L185)  
+[changing an existing path param to enum is breaking](../checker/check_breaking_property_test.go?plain=1#L185)  
 [changing an existing property in request body anyOf to required is breaking](../checker/check_breaking_property_test.go?plain=1#L612)  
 [changing an existing property in request body items to required is breaking](../checker/check_breaking_property_test.go?plain=1#L596)  
 [changing an existing property in request body to enum is breaking](../checker/check_breaking_property_test.go?plain=1#L169)  
