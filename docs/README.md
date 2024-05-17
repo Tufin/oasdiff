@@ -37,7 +37,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Case-insensitive header comparison](HEADER-DIFF.md)
 - [Path prefix modification](PATH-PREFIX.md)
 - [Path parameter renaming](PATH-PARAM-RENAME.md)
-- [Excluding certain kinds of changes](DIFF.md##excluding-specific-kinds-of-changes)
+- [Excluding certain kinds of changes](DIFF.md#excluding-specific-kinds-of-changes)
 - [Tracking changes to OpenAPI Extensions](DIFF.md#openapi-extensions)
 - [Filtering endpoints](FILTERING-ENDPOINTS.md)
 - [Extending breaking changes with custom checks](CUSTOMIZING-CHECKS.md)
