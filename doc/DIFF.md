@@ -7,12 +7,12 @@ This commmand is typically used to generate a structured diff report which can b
 The default diff output format, YAML, provides a full view of all diff details.  
 Note that no output in the YAML format signifies that the diff is empty, or, in other words, there are no changes.  
 Other formats: text, markdown, and HTML, are designed to be more user-friendly by providing only the most important parts of the diff, in a simplified format.  
+If you wish to include additional details in non-YAML formats, please open an issue.  
 The JSON format works only with `-exclude-elements endpoints` and is intended as a workaround for YAML complex mapping keys which aren't supported by some libraries (see comment at end of next section for more details).
-If you wish to include additional details in non-YAML formats, please open an issue.
 
 ### Paths vs. Endpoints
 OpenAPI Specification has a hierarchical model of [Paths](https://swagger.io/specification/#paths-object) and [Operations](https://swagger.io/specification/#operation-object) (HTTP methods).  
-Oasdiff respects this hierarchy and displays a hierarchical diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
+Oasdiff follows this hierarchy and displays a hierarchical diff with path changes: added, deleted and modified, and within the latter, "modified" section, another set of operation changes: added, deleted and modified. For example:
 ```yaml
 paths:
     deleted:
