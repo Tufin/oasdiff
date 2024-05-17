@@ -1,6 +1,6 @@
 ## Breaking Changes and Changelog
 As your API evolves, it undergoes changes. Some of these changes may be "breaking" while others are not.  
-The `oasdiff breking` command displays the breaking changes between OpenAPI specifications.  
+The `oasdiff breaking` command displays the breaking changes between OpenAPI specifications.  
 The `oasdiff changelog` command displays all significant changes between OpenAPI specifications, including breaking and non-breaking changes.  
 These commands are typically used in the CI to report or prevent breaking changes.
 
@@ -38,7 +38,7 @@ An additional format `singleline` displays each change on a single line, this ca
 A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
 In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
 - To exit with return code 1 if ERR breaking changes are found, add the `--fail-on ERR` flag.  
-- To exit with return code 1 if ERR or WARN breaking changes are found, WARN or ERR, add the `--fail-on WARN` flag.
+- To exit with return code 1 if ERR or WARN breaking changes are found, add the `--fail-on WARN` flag.
 - To exit with return code 1 if any changes are found, add the `--fail-on INFO` flag.
 
 ### Color
