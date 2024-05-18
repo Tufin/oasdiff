@@ -119,7 +119,7 @@ Currently English and Russian are supported.
 
 ### Customizing Breaking Changes Checks
 If you encounter a change that isn't considered breaking by oasdiff you may:
-1. Check if the change is already available as an [optional breaking changes check](#optional-breaking-changes-checks).  
+1. Check if the change is already available as an [optional breaking changes check](#optional-checks).  
 2. Add a [custom check](CUSTOMIZING-CHECKS.md)
 
 ### Additional Options
