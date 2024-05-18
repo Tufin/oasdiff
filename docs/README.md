@@ -31,7 +31,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Compare two collections of specs](COMPOSED.md)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - [API deprecation](API-DEPRECATION.md)
-- [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md)
+- [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md#duplicate-endpoints)
 - [Merge allOf schemas](ALLOF.md)
 - [Merge common parameters](COMMON-PARAMS.md)
 - [Case-insensitive header comparison](HEADER-DIFF.md)

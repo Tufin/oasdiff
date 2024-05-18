@@ -8,7 +8,7 @@ For example, the following endpoints will be compared to each other because they
 This capability allows oasdiff to compare matching endpoints even if their path parameters were renamed.
 
 ## Duplicate Endpoints
-Because oasdiff compares matching endpoints to each other, it expects a single instance of each endpoint to appear in each of the compared specs (or collections in [Composed Mode](README.md#composed-mode)).
+Because oasdiff compares matching endpoints to each other, it expects a single instance of each endpoint to appear in each of the compared specs (or collections in [Composed Mode](COMPOSED.md))
 
 In some cases, your specs may contain duplicate matching endpoints which will cause oasdiff to return an error, for example:
 ```
@@ -17,11 +17,11 @@ Error: diff failed with duplicate endpoint (GET /pet/{petId3}) found in data/dup
 ```
 
 There are two ways to overcome this:
-1. **Include** path parameter names in the endpoint matching algorithm with the `--include-path-params` flag
+1. If the duplication is a result of renaming path pararms, you can instruct oasdiff to include path parameter names in the endpoint matching algorithm with the `--include-path-params` flag
 2. Use [`x-since-date`](#duplicate-endpoints-and-x-since-date)
 
 ## Duplicate Endpoints and `x-since-date`
-If duplicate matching endpoints are found in either of the compared specs (or collections in [Composed Mode](README.md#composed-mode)), then oasdiff uses the endpoint with the most recent `x-since-date` value.
+If duplicate matching endpoints are found in either of the compared specs (or collections in [Composed Mode](COMPOSED.md)), then oasdiff uses the endpoint with the most recent `x-since-date` value.
 
 - The `x-since-date` extension can be set at the Path or Operation level.
 - `x-since-date` extensions set on the Operation level override the value set on Path level.
