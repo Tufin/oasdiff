@@ -79,13 +79,13 @@ endpoints:
 ```
 
 ### Excluding Specific Kinds of Changes 
-You can use the `--exclude-elements` flag to exclude certain kinds of changes:
+You can use the `--exclude-elements` flag with to exclude one or more of the following:
 - Use `--exclude-elements examples` to exclude [Examples](https://swagger.io/specification/#example-object)
 - Use `--exclude-elements extensions` to exclude [Extensions](https://swagger.io/specification/#specification-extensions)
 - Use `--exclude-elements description` to exclude description fields
 - Use `--exclude-elements title` to exclude title fields
 - Use `--exclude-elements summary` to exclude summary fields
-- Use `--exclude-elements endpoints` to exclude the [endpoints diff](#paths-vs-endpoints)
+- Use `--exclude-elements endpoints` to exclude the [endpoints section of the diff](#paths-vs-endpoints)
 
 For example, this diff excludes descriptions and examples:
 ```
