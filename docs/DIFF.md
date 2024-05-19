@@ -52,7 +52,7 @@ Some YAML libraries don't support complex mapping keys, for exampple:
 - python PyYAML: see https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450
 - golang gopkg.in/yaml.v3 fails to unmarshal the oasdiff output. This package offers a solution: https://github.com/tliron/yamlkeys
 
-You can exclude the endpoint section by adding the following flag: `--exclude-elements=endpoints`.  
+To overcome this limitation, oasdiff allows you to exclude the endpoints section by adding the following flag: `--exclude-elements=endpoints`.  
 When using `json` output format, oasdiff excludes `endpoints` automatically.
 
 ### OpenAPI Extensions
