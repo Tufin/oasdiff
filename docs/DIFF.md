@@ -1,7 +1,7 @@
 ## Diff
 The `oasdiff diff` command displays the diff between OpenAPI specs.  
 Output is fully detailed, typically in yaml or json but also available in text, markdown and html formats.  
-This commmand is typically used to generate a structured diff report which can be consumed by other tools but it can also be viewed ny humans.
+This commmand is typically used to generate a structured diff report which can be consumed by other tools but it can also be viewed by humans.
 
 ### Output Formats
 The default diff output format is `yaml`.  
