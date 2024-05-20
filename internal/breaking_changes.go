@@ -13,11 +13,12 @@ func getBreakingChangesCmd() *cobra.Command {
 	flags := ChangelogFlags{}
 
 	cmd := cobra.Command{
-		Use:   "breaking base revision [flags]",
-		Short: "Display breaking changes",
-		Long:  "Display breaking changes between base and revision specs." + specHelp,
-		Args:  getParseArgs(&flags),
-		RunE:  getRun(&flags, runBreakingChanges),
+		Use:    "breaking base revision [flags]",
+		Short:  "Display breaking changes",
+		Long:   "Display breaking changes between base and revision specs." + specHelp,
+		Args:   getParseArgs(&flags),
+		RunE:   getRun(&flags, runBreakingChanges),
+		Hidden: true,
 	}
 
 	addCommonDiffFlags(&cmd, &flags)
