@@ -34,17 +34,17 @@ By default, changes are displayed as human-readable text with [color](#color).
 You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, `githubactions` or `junit`.  
 An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
 
+### Preventing Breaking Changes
+A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
+In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
+- To exit with return code 1 if ERR breaking changes are found, add the `--fail-on ERR` flag.  
+- To exit with return code 1 if ERR or WARN breaking changes are found, add the `--fail-on WARN` flag.
+- To exit with return code 1 if any changes are found, add the `--fail-on INFO` flag.
+
 ### Color
 When outputting changes to a Unix terminal, oasdiff automatically adds colors with ANSI color escape sequences.  
 If output is piped into another process or redirected to a file, oasdiff disables color.  
 To control color manually, use the `--color` flag with `always` or `never`.
-
-### Preventing Breaking Changes
-A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
-In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
-- To exit with return code 1 if ERR-level changes are found, add the `--fail-on ERR` flag.  
-- To exit with return code 1 if ERR-level or WARN-level changes are found, add the `--fail-on WARN` flag.
-- To exit with return code 1 if any changes are found, add the `--fail-on INFO` flag.
 
 ### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking change error.  
@@ -119,7 +119,7 @@ Currently English and Russian are supported.
 
 ### Customizing Breaking Changes Checks
 If you encounter a change that isn't considered breaking by oasdiff you may:
-1. Check if the change is already available as an [optional check](#optional-checks).  
+1. Check if the change is already available as an [optional breaking changes check](#optional-checks).  
 2. Add a [custom check](CUSTOMIZING-CHECKS.md)
 
 ### Additional Options
@@ -145,17 +145,17 @@ oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/opena
 
 #### Breaking changes as YAML
 ```
-oasdiff breaking -f yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f yaml
 ```
 
 #### Breaking changes across multiple specs with globs
 ```
-oasdiff breaking -c "data/composed/base/*.yaml" "data/composed/revision/*.yaml"
+oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c
 ```
 
 #### Breaking changes with exit code 1 if any ERR-level breaking changes are found
 ```
-oasdiff breaking -c -o ERR "data/composed/base/*.yaml" "data/composed/revision/*.yaml"
+oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c -o ERR
 ```
 
 #### Changelog
