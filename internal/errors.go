@@ -48,39 +48,27 @@ func getErrFailedPrint(what string, err error) *ReturnError {
 	)
 }
 
-func getErrUnsupportedDiffFormat(format string) *ReturnError {
+func getErrUnsupportedFormat(format, cmd string, code int) *ReturnError {
 	return getError(
-		fmt.Errorf("format %q is not supported by \"diff\"", format),
-		109,
+		fmt.Errorf("format %q is not supported by %q", format, cmd),
+		code,
 	)
+}
+
+func getErrUnsupportedDiffFormat(format string) *ReturnError {
+	return getErrUnsupportedFormat(format, "diff", 109)
 }
 
 func getErrUnsupportedSummaryFormat(format string) *ReturnError {
-	return getError(
-		fmt.Errorf("format %q is not supported by \"summary\"", format),
-		110,
-	)
+	return getErrUnsupportedFormat(format, "summary", 110)
 }
 
 func getErrUnsupportedChangelogFormat(format string) *ReturnError {
-	return getError(
-		fmt.Errorf("format %q is not supported by \"changelog\"", format),
-		111,
-	)
-}
-
-func getErrUnsupportedBreakingChangesFormat(format string) *ReturnError {
-	return getError(
-		fmt.Errorf("format %q is not supported by \"breaking\"", format),
-		112,
-	)
+	return getErrUnsupportedFormat(format, "changelog", 111)
 }
 
 func getErrUnsupportedChecksFormat(format string) *ReturnError {
-	return getError(
-		fmt.Errorf("format %q is not supported with \"checks\"", format),
-		113,
-	)
+	return getErrUnsupportedFormat(format, "checks", 113)
 }
 
 func getErrInvalidColorMode(err error) *ReturnError {

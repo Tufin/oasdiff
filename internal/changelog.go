@@ -66,16 +66,8 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 		return false, returnErr
 	}
 
-	if level == checker.WARN {
-		// breaking changes
-		if returnErr := outputBreakingChanges(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs); returnErr != nil {
-			return false, returnErr
-		}
-	} else {
-		// changelog
-		if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
-			return false, returnErr
-		}
+	if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
+		return false, returnErr
 	}
 
 	if flags.getFailOn() != "" {

@@ -22,7 +22,7 @@ func TestGithubActionsLookup(t *testing.T) {
 	require.IsType(t, formatters.GitHubActionsFormatter{}, f)
 }
 
-func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
+func TestGitHubActionsFormatter_RenderChangelog_OneFailure(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ApiChange{
 			Id:        "change_id",
@@ -34,13 +34,13 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
+	output, err := gitHubFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id,file=openapi.yaml::in API GET /api/test This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 
-func TestGitHubActionsFormatter_RenderBreakingChanges_MultipleLevels(t *testing.T) {
+func TestGitHubActionsFormatter_RenderChangelog_MultipleLevels(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ApiChange{
 			Id:        "change_id",
@@ -66,7 +66,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_MultipleLevels(t *testing.
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
+	output, err := gitHubFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id,file=openapi.yaml::in API GET /api/test This is a breaking change.\n::warning title=warning_id,file=openapi.yaml::in API GET /api/test This is a warning.\n::notice title=notice_id,file=openapi.yaml::in API GET /api/test This is a notice.\n"
 	assert.Equal(t, expectedOutput, string(output))
@@ -84,13 +84,13 @@ func TestGitHubActionsFormatter_DontRenderHttpSource(t *testing.T) {
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
+	output, err := gitHubFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id::in API GET /api/test This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 
-func TestGitHubActionsFormatter_RenderBreakingChanges_MultilineText(t *testing.T) {
+func TestGitHubActionsFormatter_RenderChangelog_MultilineText(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ApiChange{
 			Id:        "change_two_lines_id",
@@ -102,13 +102,13 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_MultilineText(t *testing.T
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
+	output, err := gitHubFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_two_lines_id,file=openapi.yaml::in API GET /api/test This is a breaking change.%0AThis is a second line.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 
-func TestGitHubActionsFormatter_RenderBreakingChanges_FileLocation(t *testing.T) {
+func TestGitHubActionsFormatter_RenderChangelog_FileLocation(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ApiChange{
 			Id:              "change_id",
@@ -125,13 +125,13 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_FileLocation(t *testing.T)
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
+	output, err := gitHubFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	assert.NoError(t, err)
 	expectedOutput := "::error title=change_id,file=openapi.json,col=6,endColumn=11,line=21,endLine=26::in API GET /api/test This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 
-func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *testing.T) {
+func TestGitHubActionsFormatter_RenderChangelog_JobOutputParameters(t *testing.T) {
 	// temp file to mock GITHUB_OUTPUT
 	tempFile, err := os.CreateTemp("", "github-output")
 	assert.NoError(t, err)
@@ -170,7 +170,7 @@ func TestGitHubActionsFormatter_RenderBreakingChanges_JobOutputParameters(t *tes
 	}
 
 	// check output
-	output, err := gitHubFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
+	output, err := gitHubFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	assert.NoError(t, err)
 	_ = os.Unsetenv("GITHUB_OUTPUT")
 	expectedOutput := "::error title=change_id,file=openapi.yaml::in API GET /api/test This is a breaking change.\n::error title=change_id,file=openapi.yaml::in API GET /api/test This is a breaking change.\n::warning title=warning_id,file=openapi.yaml::in API GET /api/test This is a warning.\n::notice title=notice_id,file=openapi.yaml::in API GET /api/test This is a notice.\n"

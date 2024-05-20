@@ -47,10 +47,6 @@ func newJUnitFormatter(l checker.Localizer) JUnitFormatter {
 	}
 }
 
-func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	return f.RenderChangelog(changes, opts, nil)
-}
-
 func (f JUnitFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	var testSuite = JUnitTestSuite{
 		Package:   "com.oasdiff",
@@ -96,5 +92,5 @@ func (f JUnitFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts
 }
 
 func (f JUnitFormatter) SupportedOutputs() []Output {
-	return []Output{OutputBreaking, OutputChangelog}
+	return []Output{OutputChangelog}
 }

@@ -28,10 +28,6 @@ func newGitHubActionsFormatter(l checker.Localizer) GitHubActionsFormatter {
 	}
 }
 
-func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	return f.RenderChangelog(changes, opts, nil)
-}
-
 func (f GitHubActionsFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	var buf bytes.Buffer
 
@@ -78,7 +74,7 @@ func getMessage(change checker.Change, l checker.Localizer) string {
 }
 
 func (f GitHubActionsFormatter) SupportedOutputs() []Output {
-	return []Output{OutputBreaking, OutputChangelog}
+	return []Output{OutputChangelog}
 }
 
 func writeGitHubActionsJobOutputParameters(params map[string]string) error {

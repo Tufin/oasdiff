@@ -18,19 +18,6 @@ func TestYamlLookup(t *testing.T) {
 	require.IsType(t, formatters.YAMLFormatter{}, f)
 }
 
-func TestYamlFormatter_RenderBreakingChanges(t *testing.T) {
-	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:    "change_id",
-			Level: checker.ERR,
-		},
-	}
-
-	out, err := yamlFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
-	require.NoError(t, err)
-	require.Equal(t, "- id: change_id\n  text: This is a breaking change.\n  level: 3\n  section: components\n", string(out))
-}
-
 func TestYamlFormatter_RenderChangelog(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{
