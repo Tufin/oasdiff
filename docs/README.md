@@ -11,8 +11,31 @@
 
 Command-line and Go package to compare and detect breaking changes in OpenAPI specs.
 
+## Installation
+
+### Install with Go
+```bash
+go install github.com/tufin/oasdiff@latest
+```
+
+### Install on macOS with Brew
+```bash
+brew tap tufin/homebrew-tufin
+brew install oasdiff
+```
+
+### Install on macOS, Windows and Linux
+Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
+
 
 ## Try it
+
+### Locally
+```
+oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test5.yaml
+```
+
+### With Docker
 ```
 docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test5.yaml
 ```
@@ -46,22 +69,6 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 
 ## Demo
 <img src="./demo.svg">
-
-## Installation
-
-### Install with Go
-```bash
-go install github.com/tufin/oasdiff@latest
-```
-
-### Install on macOS with Brew
-```bash
-brew tap tufin/homebrew-tufin
-brew install oasdiff
-```
-
-### Install on macOS, Windows and Linux
-Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
 ## The main commands
 - [diff](DIFF.md): the diff between OpenAPI specs, fully detailed
