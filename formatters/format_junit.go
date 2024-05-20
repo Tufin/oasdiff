@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/load"
 )
 
 type JUnitTestSuites struct {
@@ -47,6 +48,10 @@ func newJUnitFormatter(l checker.Localizer) JUnitFormatter {
 }
 
 func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+	return f.RenderChangelog(changes, opts, nil)
+}
+
+func (f JUnitFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	var testSuite = JUnitTestSuite{
 		Package:   "com.oasdiff",
 		Time:      "0",
@@ -91,5 +96,5 @@ func (f JUnitFormatter) RenderBreakingChanges(changes checker.Changes, opts Rend
 }
 
 func (f JUnitFormatter) SupportedOutputs() []Output {
-	return []Output{OutputBreaking}
+	return []Output{OutputBreaking, OutputChangelog}
 }
