@@ -27,6 +27,7 @@ func getChangelogCmd() *cobra.Command {
 	addCommonBreakingFlags(&cmd, &flags)
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChangelog), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, "", &flags.failOn), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
+	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, LevelInfo, &flags.level), "level", "", "output errors with this level or higher")
 
 	return &cmd
 }
@@ -36,7 +37,12 @@ func enumWithOptions(cmd *cobra.Command, value enumVal, name, shorthand, usage s
 }
 
 func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
-	return getChangelog(flags, stdout, checker.INFO)
+	level, err := checker.NewLevel(flags.getLevel())
+	if err != nil {
+		return false, getErrInvalidFlags(fmt.Errorf("invalid level value %s", flags.getLevel()))
+	}
+
+	return getChangelog(flags, stdout, level)
 }
 
 func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
