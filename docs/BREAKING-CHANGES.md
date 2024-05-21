@@ -14,6 +14,17 @@ oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/opena
 oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
+### Preventing Breaking Changes
+A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
+In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
+- To exit with return code 1 if ERR-level changes are found, add the `--fail-on ERR` flag.  
+- To exit with return code 1 if ERR-level or WARN-level changes are found, add the `--fail-on WARN` flag.
+- To exit with return code 1 if any changes are found, add the `--fail-on INFO` flag.
+
+For example:
+```
+oasdiff breaking --fail-on ERR data/openapi-test1.yaml data/openapi-test3.yaml
+```
 
 ### Checks
 Oasdiff detects over 100 kinds of changes categorized into three levels:
@@ -34,17 +45,15 @@ By default, changes are displayed as human-readable text with [color](#color).
 You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, `githubactions` or `junit`.  
 An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
 
+For example:
+```
+oasdiff breaking -f yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+```
+
 ### Color
 When outputting changes to a Unix terminal, oasdiff automatically adds colors with ANSI color escape sequences.  
 If output is piped into another process or redirected to a file, oasdiff disables color.  
 To control color manually, use the `--color` flag with `always` or `never`.
-
-### Preventing Breaking Changes
-A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
-In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
-- To exit with return code 1 if ERR-level changes are found, add the `--fail-on ERR` flag.  
-- To exit with return code 1 if ERR-level or WARN-level changes are found, add the `--fail-on WARN` flag.
-- To exit with return code 1 if any changes are found, add the `--fail-on INFO` flag.
 
 ### API Stability Levels
 When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking change error.  
@@ -111,7 +120,6 @@ oasdiff checks --required false
 [Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  
 This document is automatically generated from oasdiff unit tests.
 
-
 ### Localization
 To display changes in other languages, use the `--lang` flag.  
 Currently English and Russian are supported.  
@@ -135,30 +143,3 @@ If you encounter a change that isn't considered breaking by oasdiff you may:
 ### Known Limitations
 - no checks for `context` instead of `schema` for request parameters
 - no checks for `callback`s
-
-### Usage Examples
-
-#### Breaking changes
-```
-oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-#### Breaking changes as YAML
-```
-oasdiff breaking -f yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
-
-#### Breaking changes across multiple specs with globs
-```
-oasdiff breaking -c "data/composed/base/*.yaml" "data/composed/revision/*.yaml"
-```
-
-#### Breaking changes with exit code 1 if any ERR-level breaking changes are found
-```
-oasdiff breaking -c -o ERR "data/composed/base/*.yaml" "data/composed/revision/*.yaml"
-```
-
-#### Changelog
-```
-oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
-```
