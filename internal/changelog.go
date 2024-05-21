@@ -18,7 +18,7 @@ func getChangelogCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "changelog base revision [flags]",
 		Short: "Display changelog",
-		Long:  "Display a changelog between base and revision specs." + specHelp,
+		Long:  "Display changes between base and revision specs." + specHelp,
 		Args:  getParseArgs(&flags),
 		RunE:  getRun(&flags, runChangelog),
 	}
