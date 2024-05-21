@@ -14,6 +14,13 @@ oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/opena
 oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
+### Preventing Breaking Changes
+A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
+In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
+- To exit with return code 1 if ERR breaking changes are found, add the `--fail-on ERR` flag.  
+- To exit with return code 1 if ERR or WARN breaking changes are found, add the `--fail-on WARN` flag.
+- To exit with return code 1 if any changes are found, add the `--fail-on INFO` flag.
+
 
 ### Checks
 Oasdiff detects over 100 kinds of changes categorized into three levels:
@@ -33,13 +40,6 @@ oasdiff checks
 By default, changes are displayed as human-readable text with [color](#color).  
 You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, `githubactions` or `junit`.  
 An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
-
-### Preventing Breaking Changes
-A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
-In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
-- To exit with return code 1 if ERR breaking changes are found, add the `--fail-on ERR` flag.  
-- To exit with return code 1 if ERR or WARN breaking changes are found, add the `--fail-on WARN` flag.
-- To exit with return code 1 if any changes are found, add the `--fail-on INFO` flag.
 
 ### Color
 When outputting changes to a Unix terminal, oasdiff automatically adds colors with ANSI color escape sequences.  
@@ -145,17 +145,17 @@ oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/opena
 
 #### Breaking changes as YAML
 ```
-oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f yaml
+oasdiff breaking -f yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
 #### Breaking changes across multiple specs with globs
 ```
-oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c
+oasdiff breaking -c "data/composed/base/*.yaml" "data/composed/revision/*.yaml"
 ```
 
 #### Breaking changes with exit code 1 if any ERR-level breaking changes are found
 ```
-oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c -o ERR
+oasdiff breaking -c -o ERR "data/composed/base/*.yaml" "data/composed/revision/*.yaml"
 ```
 
 #### Changelog
