@@ -3,7 +3,7 @@ module github.com/tufin/oasdiff
 go 1.22.3
 
 require (
-	cloud.google.com/go v0.113.0
+	cloud.google.com/go v0.114.0
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.124.0
 	github.com/oasdiff/telemetry v0.1.2
@@ -22,7 +22,7 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
-	golang.org/x/sys v0.19.0 // indirect
+	golang.org/x/sys v0.20.0 // indirect
 )
 
 require (
