@@ -48,27 +48,11 @@ func getErrFailedPrint(what string, err error) *ReturnError {
 	)
 }
 
-func getErrUnsupportedFormat(format, cmd string, code int) *ReturnError {
+func getErrUnsupportedFormat(format, cmd string) *ReturnError {
 	return getError(
 		fmt.Errorf("format %q is not supported by %q", format, cmd),
-		code,
+		110,
 	)
-}
-
-func getErrUnsupportedDiffFormat(format string) *ReturnError {
-	return getErrUnsupportedFormat(format, "diff", 109)
-}
-
-func getErrUnsupportedSummaryFormat(format string) *ReturnError {
-	return getErrUnsupportedFormat(format, "summary", 110)
-}
-
-func getErrUnsupportedChangelogFormat(format string) *ReturnError {
-	return getErrUnsupportedFormat(format, "changelog", 111)
-}
-
-func getErrUnsupportedChecksFormat(format string) *ReturnError {
-	return getErrUnsupportedFormat(format, "checks", 113)
 }
 
 func getErrInvalidColorMode(err error) *ReturnError {

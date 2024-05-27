@@ -11,6 +11,8 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
+const changelogCmd = "changelog"
+
 func getChangelogCmd() *cobra.Command {
 
 	flags := ChangelogFlags{}
@@ -108,7 +110,7 @@ func outputChangelog(format string, lang string, color string, stdout io.Writer,
 		Language: lang,
 	})
 	if err != nil {
-		return getErrUnsupportedChangelogFormat(format)
+		return getErrUnsupportedFormat(format, changelogCmd)
 	}
 
 	// render
@@ -119,7 +121,7 @@ func outputChangelog(format string, lang string, color string, stdout io.Writer,
 
 	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{ColorMode: colorMode}, specInfoPair)
 	if err != nil {
-		return getErrFailedPrint("changelog "+format, err)
+		return getErrFailedPrint(changelogCmd+" "+format, err)
 	}
 
 	// print output
