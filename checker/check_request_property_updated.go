@@ -53,6 +53,9 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 						if propertyItem.ReadOnly {
 							return
 						}
+						if propertyItem.Default != nil {
+							return
+						}
 
 						propName := propertyFullName(propertyPath, propertyName)
 

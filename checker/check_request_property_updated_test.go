@@ -106,3 +106,16 @@ func TestRequiredRequestPropertyRemoved(t *testing.T) {
 		OperationId: "addProduct",
 	}, errs[0])
 }
+
+// CL: adding a new required request property with a default value
+func TestRequiredRequestPropertyAddedWithDefault(t *testing.T) {
+	s1, err := open("../data/checker/request_property_added_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_added_with_default.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
+	require.Empty(t, errs)
+}

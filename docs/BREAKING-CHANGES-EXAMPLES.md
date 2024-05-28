@@ -156,6 +156,7 @@ These examples are automatically generated from unit tests.
 [adding a new oauth security scope](../checker/check_components_security_updated_test.go?plain=1#L117)  
 [adding a new operation id](../checker/check_api_operation_id_updated_test.go?plain=1#L62)  
 [adding a new optional request property](../checker/check_request_property_updated_test.go?plain=1#L65)  
+[adding a new required request property with a default value](../checker/check_request_property_updated_test.go?plain=1#L110)  
 [adding a new required request property](../checker/check_request_property_updated_test.go?plain=1#L12)  
 [adding a new security component](../checker/check_components_security_updated_test.go?plain=1#L77)  
 [adding a new security to the API endpoint](../checker/check_api_security_updated_test.go?plain=1#L90)  
