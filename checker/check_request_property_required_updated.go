@@ -46,6 +46,9 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 							continue
 						}
+						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.Default != nil {
+							continue
+						}
 						result = append(result, ApiChange{
 							Id:          RequestPropertyBecameRequiredId,
 							Level:       ERR,

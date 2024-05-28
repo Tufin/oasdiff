@@ -273,6 +273,7 @@ These examples are automatically generated from unit tests.
 [increasing minimum value of request property](../checker/check_request_property_min_updated_test.go?plain=1#L12)  
 [increasing request body maximum value](../checker/check_request_property_max_updated_test.go?plain=1#L64)  
 [increasing request property maximum value](../checker/check_request_property_max_updated_test.go?plain=1#L38)  
+[making request property required, while also giving it a default value](../checker/check_request_property_required_updated_test.go?plain=1#L58)  
 [new header, query and cookie request params](../checker/check_new_request_non_path_parameter_test.go?plain=1#L11)  
 [new paths or path operations](../checker/check_api_added_test.go?plain=1#L11)  
 [path operations that became deprecated](../checker/check_deprecation_test.go?plain=1#L335)  

@@ -54,3 +54,18 @@ func TestRequestPropertyMarkedOptional(t *testing.T) {
 		OperationId: "addProduct",
 	}, errs[0])
 }
+
+// CL: making request property required, while also giving it a default value
+func TestRequestPropertyWithDefaultMarkedRequired(t *testing.T) {
+	s1, err := open("../data/checker/request_property_became_required_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_became_required_base.yaml")
+	require.NoError(t, err)
+
+	s1.Spec.Paths.Value("/products").Post.RequestBody.Value.Content["application/json"].Schema.Value.Required = []string{""}
+	s2.Spec.Paths.Value("/products").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["name"].Value.Default = "default"
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyRequiredUpdatedCheck), d, osm, checker.INFO)
+	require.Empty(t, errs)
+}
