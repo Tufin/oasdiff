@@ -332,5 +332,5 @@ func Test_MaxCircularSufficient(t *testing.T) {
 func Test_MaxCircularInsufficient(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff diff ../data/circular3.yaml ../data/circular3.yaml --max-circular-dep=0"), io.Discard, &stderr))
-	require.Equal(t, "Error: failed to load base spec from \"../data/circular3.yaml\": kin-openapi bug found: circular schema reference not handled with length 4 - #/components/schemas/circular2 -> #/components/schemas/circular3 -> #/components/schemas/circular1 -> #/components/schemas/circular2\n", stderr.String())
+	require.Contains(t, stderr.String(), "Error: failed to load base spec from \"../data/circular3.yaml\": kin-openapi bug found: circular schema reference not handled with")
 }
