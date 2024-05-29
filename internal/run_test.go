@@ -325,12 +325,16 @@ func Test_InvalidEnumValue(t *testing.T) {
 `, stderr.String())
 }
 
-func Test_MaxCircularSufficient(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff ../data/circular3.yaml ../data/circular3.yaml"), io.Discard, io.Discard))
-}
-
+// The behavior of max-circular-dep (which is mapped to CircularReferenceCounter in kin-openapi) is unclear
+// All we know is that if a user gets this error, they should increase the value of max-circular-dep
+// See https://github.com/getkin/kin-openapi/issues/916
 func Test_MaxCircularInsufficient(t *testing.T) {
 	var stderr bytes.Buffer
 	require.Equal(t, 102, internal.Run(cmdToArgs("oasdiff diff ../data/circular3.yaml ../data/circular3.yaml --max-circular-dep=0"), io.Discard, &stderr))
 	require.Contains(t, stderr.String(), "Error: failed to load base spec from \"../data/circular3.yaml\": kin-openapi bug found: circular schema reference not handled with")
+}
+
+// Increasing max-circular-dep to 2 is enough to handle the circular reference
+func Test_MaxCircularSufficient(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff ../data/circular3.yaml ../data/circular3.yaml --max-circular-dep=2"), io.Discard, io.Discard))
 }
