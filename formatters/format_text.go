@@ -26,20 +26,6 @@ func (f TEXTFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 	return []byte(report.GetTextReportAsString(diff)), nil
 }
 
-func (f TEXTFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	result := bytes.NewBuffer(nil)
-
-	if len(changes) > 0 {
-		_, _ = fmt.Fprint(result, getBreakingTitle(changes, f.Localizer, opts.ColorMode))
-	}
-
-	for _, c := range changes {
-		_, _ = fmt.Fprintf(result, "%s\n\n", c.MultiLineError(f.Localizer, opts.ColorMode))
-	}
-
-	return result.Bytes(), nil
-}
-
 func (f TEXTFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	result := bytes.NewBuffer(nil)
 
@@ -68,5 +54,5 @@ func (f TEXTFormatter) RenderChecks(checks Checks, opts RenderOpts) ([]byte, err
 }
 
 func (f TEXTFormatter) SupportedOutputs() []Output {
-	return []Output{OutputDiff, OutputBreaking, OutputChangelog, OutputChecks}
+	return []Output{OutputDiff, OutputChangelog, OutputChecks}
 }

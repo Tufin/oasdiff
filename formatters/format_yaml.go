@@ -29,10 +29,6 @@ func (f YAMLFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, 
 	return printYAML(diff.GetSummary())
 }
 
-func (f YAMLFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	return printYAML(NewChanges(changes, f.Localizer))
-}
-
 func (f YAMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	return printYAML(NewChanges(changes, f.Localizer))
 }
@@ -46,7 +42,7 @@ func (f YAMLFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte,
 }
 
 func (f YAMLFormatter) SupportedOutputs() []Output {
-	return []Output{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks, OutputFlatten}
+	return []Output{OutputDiff, OutputSummary, OutputChangelog, OutputChecks, OutputFlatten}
 }
 
 func printYAML(output interface{}) ([]byte, error) {

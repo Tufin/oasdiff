@@ -11,6 +11,8 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
+const diffCmd = "diff"
+
 func getDiffCmd() *cobra.Command {
 
 	flags := DiffFlags{}
@@ -55,7 +57,7 @@ func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnE
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
 	if err != nil {
-		return getErrUnsupportedDiffFormat(format)
+		return getErrUnsupportedFormat(format, diffCmd)
 	}
 
 	// render

@@ -62,8 +62,6 @@ func TestHtmlFormatter_RenderChangelog(t *testing.T) {
 
 func TestHtmlFormatter_NotImplemented(t *testing.T) {
 	var err error
-	_, err = htmlFormatter.RenderBreakingChanges(checker.Changes{}, formatters.NewRenderOpts())
-	assert.Error(t, err)
 
 	_, err = htmlFormatter.RenderChecks(formatters.Checks{}, formatters.NewRenderOpts())
 	assert.Error(t, err)

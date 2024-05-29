@@ -117,10 +117,6 @@ func Test_BasicBreakingChanges(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml"), io.Discard, io.Discard))
 }
 
-func Test_BreakingChangesInvalidFormat(t *testing.T) {
-	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --format html"), io.Discard, io.Discard))
-}
-
 func Test_BreakingChangesYaml(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/openapi-test1.yaml ../data/openapi-test3.yaml --format yaml"), &stdout, io.Discard))

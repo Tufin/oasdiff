@@ -33,7 +33,7 @@ Oasdiff detects over 100 kinds of changes categorized into three levels:
 - `INFO` - Non-breaking changes
 
 The `breaking` command displays changes with level `ERR` and `WARN` only.  
-The `changelog` command displays all three levels. 
+The `changelog` command displays changes with levels that are greater or equal to the `--level` argument (default `INFO`).
 
 To see the full list of checks that are supported by oasdiff, run:
 ```
@@ -41,9 +41,15 @@ oasdiff checks
 ```
 
 ### Output Formats
-By default, changes are displayed as human-readable text with [color](#color).  
-You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, `githubactions` or `junit`.  
-An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
+By default, oasdiff displays changes in a human-readable [colorized](#color) text format.  
+Additional formats can be generated using the `--format` flag:
+- json
+- yaml
+- githubactions: suitable for integration with github
+- junit: suitable for integration with gitlab
+- html: [see example](changelog.html)
+- text: the default, human-readable, format
+- singleline: displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
 
 For example:
 ```

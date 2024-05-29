@@ -21,6 +21,7 @@ type ChangelogFlags struct {
 	excludeElements          []string
 	includeChecks            []string
 	failOn                   string
+	level                    string
 	flattenAllOf             bool
 	flattenParams            bool
 	insensitiveHeaders       bool
@@ -107,6 +108,10 @@ func (flags *ChangelogFlags) getFormat() string {
 
 func (flags *ChangelogFlags) getFailOn() string {
 	return flags.failOn
+}
+
+func (flags *ChangelogFlags) getLevel() string {
+	return flags.level
 }
 
 func (flags *ChangelogFlags) getFailOnDiff() bool {

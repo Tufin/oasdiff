@@ -24,6 +24,7 @@ type Flags interface {
 	getErrIgnoreFile() string
 	getFormat() string
 	getFailOn() string
+	getLevel() string
 	getFailOnDiff() bool
 	getAsymmetric() bool
 

@@ -102,6 +102,10 @@ func (flags *DiffFlags) getFailOn() string {
 	return ""
 }
 
+func (flags *DiffFlags) getLevel() string {
+	return ""
+}
+
 func (flags *DiffFlags) getFailOnDiff() bool {
 	return flags.failOnDiff
 }

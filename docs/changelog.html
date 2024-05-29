@@ -1,0 +1,244 @@
+<html>
+
+<head>
+    <style>
+
+        @import url(//fonts.googleapis.com/css?family=Nunito);
+
+        * {
+            font-family: 'Nunito','Helvetica Neue',Helvetica,Arial,sans-serif;
+        }
+        
+        .title {
+            margin: 1em 0 0.5em 0;
+            font-size: 36px;
+        }
+
+        .path {
+            color: #016BF8;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .endpoint {
+            color: #21313c;
+            line-height: 24px;
+            margin: 22px 0;
+        }        
+
+        .endpoint-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .change-type {
+            box-sizing: border-box;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 16px;
+            border-radius: 5px;
+            height: 18px;
+            padding-left: 6px;
+            padding-right: 6px;
+            text-transform: uppercase;
+            border: 1px solid;
+            letter-spacing: 1px;
+            background-color: #E3FCF7;
+            border-color: #C0FAE6;
+            color: #00684A;
+            margin-top: 2px;
+        }
+
+        .change {
+        }
+
+        .breaking {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 5px;
+        }
+
+        .breaking-icon {
+            color: #DB3030;
+        }
+
+        .endpoint-changes {
+        }
+
+        .tooltip {
+            position:relative;  
+        }
+
+        .tooltip:before {
+            content: attr(data-text);  
+            position:absolute;
+
+             
+            top:50%;
+            transform:translateY(-50%);
+
+             
+            left:100%;
+            margin-left:15px;  
+
+             
+            width:200px;
+            padding:10px;
+            border-radius:10px;
+            background:#000;
+            color: #fff;
+            text-align:center;
+
+            display:none;  
+        }        
+
+        .tooltip:hover:before {
+            display:block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title">API Changelog 1.0.0 vs. 1.0.1 </div>
+    
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <span class="path">
+                <div class="">GET /api/{domain}/{project}/badges/security-score</div>
+            </span>
+            <div class="change-type">Updated</div>
+        </div>
+        <ul class="endpoint-changes">
+            
+            <li class="change">
+            
+            <div class="breaking tooltip" data-text="Breaking Change">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
+            </div>
+            
+            removed the success response with the status &#39;200&#39;
+            </li>
+            
+            <li class="change">
+            
+            <div class="breaking tooltip" data-text="Breaking Change">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
+            </div>
+            
+            removed the success response with the status &#39;201&#39;
+            </li>
+            
+            <li class="change">
+            
+            <div class="breaking tooltip" data-text="Breaking Change">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
+            </div>
+            
+            deleted the &#39;cookie&#39; request parameter &#39;test&#39;
+            </li>
+            
+            <li class="change">
+            
+            <div class="breaking tooltip" data-text="Breaking Change">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
+            </div>
+            
+            deleted the &#39;header&#39; request parameter &#39;user&#39;
+            </li>
+            
+            <li class="change">
+            
+            <div class="breaking tooltip" data-text="Breaking Change">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
+            </div>
+            
+            deleted the &#39;query&#39; request parameter &#39;filter&#39;
+            </li>
+            
+            <li class="change">
+            
+            api operation id &#39;GetSecurityScores&#39; removed and replaced with &#39;GetSecurityScore&#39;
+            </li>
+            
+            <li class="change">
+            
+            api tag &#39;security&#39; removed
+            </li>
+            
+            <li class="change">
+            
+            for the &#39;query&#39; request parameter &#39;token&#39;, the maxLength was increased from &#39;29&#39; to &#39;30&#39;
+            </li>
+            
+            <li class="change">
+            
+            removed the pattern &#39;^(?:[\w-./:]&#43;)$&#39; from the &#39;query&#39; request parameter &#39;image&#39;
+            </li>
+            
+            <li class="change">
+            
+            removed the non-success response with the status &#39;400&#39;
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <span class="path">
+                <div class="">GET /api/{domain}/{project}/install-command</div>
+            </span>
+            <div class="change-type">Updated</div>
+        </div>
+        <ul class="endpoint-changes">
+            
+            <li class="change">
+            
+            <div class="breaking tooltip" data-text="Breaking Change">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="breaking-icon" role="img" aria-label="Important With Circle Icon"><path fill="currentColor" fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM7 4.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm2 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd"></path></svg>
+            </div>
+            
+            deleted the &#39;header&#39; request parameter &#39;network-policies&#39;
+            </li>
+            
+            <li class="change">
+            
+            added the new optional &#39;header&#39; request parameter &#39;name&#39; to all path&#39;s operations
+            </li>
+            
+            <li class="change">
+            
+            added the new enum value &#39;test1&#39; to the &#39;path&#39; request parameter &#39;project&#39;
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="endpoint">
+        <div class="endpoint-header">
+            <span class="path">
+                <div class="">POST /register</div>
+            </span>
+            <div class="change-type">Updated</div>
+        </div>
+        <ul class="endpoint-changes">
+            
+            <li class="change">
+            
+            the endpoint scheme security &#39;bearerAuth&#39; was removed from the API
+            </li>
+            
+            <li class="change">
+            
+            the security scope &#39;write:pets&#39; was added to the endpoint&#39;s security scheme &#39;OAuth&#39;
+            </li>
+            
+        </ul>
+    </div>
+    
+</body>
+
+</html>
+
