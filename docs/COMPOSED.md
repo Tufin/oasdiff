@@ -10,5 +10,5 @@ Notes:
 
 Example:
 ```
-oasdiff breaking "data/composed/base/*.yaml" "data/composed/revision/*.yaml" -c
+oasdiff breaking --composed "data/composed/base/*.yaml" "data/composed/revision/*.yaml"
 ```
