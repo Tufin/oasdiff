@@ -43,7 +43,7 @@ func optionalChecks() map[string]BackwardCompatibilityCheck {
 	return result
 }
 
-func levelOverrides(includeChecks utils.StringList) map[string]Level {
+func levelOverrides(includeChecks []string) map[string]Level {
 	result := map[string]Level{}
 	for _, s := range includeChecks {
 		// if the checker was explicitly included with the `--include-checks`,

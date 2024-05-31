@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/utils"
 )
 
 func TestIgnore(t *testing.T) {
@@ -60,7 +59,7 @@ func TestIgnoreComponent(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.APISchemasRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalCheck(checker.APISchemasRemovedId), d, osm)
 	require.Equal(t, 8, len(errs))
 
 	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt", checker.NewDefaultLocalizer())

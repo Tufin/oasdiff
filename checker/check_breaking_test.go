@@ -9,7 +9,6 @@ import (
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
-	"github.com/tufin/oasdiff/utils"
 )
 
 const (
@@ -277,7 +276,7 @@ func TestBreaking_ResponseNonSuccessStatusUpdated(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.ResponseNonSuccessStatusRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalCheck(checker.ResponseNonSuccessStatusRemovedId), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -297,7 +296,7 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.APIOperationIdRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalCheck(checker.APIOperationIdRemovedId), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -321,7 +320,7 @@ func TestBreaking_RequestBodyEnumRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.RequestBodyEnumValueRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalCheck(checker.RequestBodyEnumValueRemovedId), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -339,7 +338,7 @@ func TestBreaking_ResponsePropertyEnumRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.ResponsePropertyEnumValueRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalCheck(checker.ResponsePropertyEnumValueRemovedId), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -358,7 +357,7 @@ func TestBreaking_TagRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.APITagRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalCheck(checker.APITagRemovedId), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -378,7 +377,7 @@ func TestBreaking_ResponseMediaTypeEnumRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.ResponseMediaTypeEnumValueRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalCheck(checker.ResponseMediaTypeEnumValueRemovedId), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -639,7 +638,7 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	checks := checker.NewConfig().WithOptionalChecks(utils.StringList{checker.APISchemasRemovedId})
+	checks := checker.NewConfig().WithOptionalCheck(checker.APISchemasRemovedId)
 	errs := checker.CheckBackwardCompatibility(checks, d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())

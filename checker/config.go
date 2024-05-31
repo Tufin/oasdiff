@@ -1,7 +1,5 @@
 package checker
 
-import "github.com/tufin/oasdiff/utils"
-
 type Config struct {
 	Checks              []BackwardCompatibilityCheck
 	MinSunsetBetaDays   int
@@ -23,8 +21,13 @@ func NewConfig() *Config {
 	}
 }
 
-func (config *Config) WithOptionalChecks(includeChecks utils.StringList) *Config {
-	config.LogLevelOverrides = levelOverrides(includeChecks)
+func (config *Config) WithOptionalCheck(id string) *Config {
+	config.LogLevelOverrides = levelOverrides([]string{id})
+	return config
+}
+
+func (config *Config) WithOptionalChecks(ids []string) *Config {
+	config.LogLevelOverrides = levelOverrides(ids)
 	return config
 }
 
