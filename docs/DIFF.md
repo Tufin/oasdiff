@@ -129,7 +129,6 @@ oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml -f html
 The html diff report provides a simplified and partial view of the changes.  
 To view all diff details, use `yaml` or `json` formats.
 
-
 #### Comparing remote files over http/s
 ```
 oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
