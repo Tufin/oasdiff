@@ -41,7 +41,7 @@ func addCommonBreakingFlags(cmd *cobra.Command, flags Flags) {
 	enumWithOptions(cmd, newEnumValue(localizations.GetSupportedLanguages(), localizations.LangDefault, flags.refLang()), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().StringVarP(flags.refErrIgnoreFile(), "err-ignore", "", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().StringVarP(flags.refWarnIgnoreFile(), "warn-ignore", "", "", "configuration file for ignoring warnings")
-	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalChecks(), nil, flags.refIncludeChecks()), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks --required false' to see options)")
+	cmd.PersistentFlags().VarP(newEnumSliceValue(checker.GetOptionalRuleIds(), nil, flags.refIncludeChecks()), "include-checks", "i", "comma-separated list of optional checks (run 'oasdiff checks --required false' to see options)")
 	cmd.PersistentFlags().IntVarP(flags.refDeprecationDaysBeta(), "deprecation-days-beta", "", checker.BetaDeprecationDays, "min days required between deprecating a beta resource and removing it")
 	cmd.PersistentFlags().IntVarP(flags.refDeprecationDaysStable(), "deprecation-days-stable", "", checker.StableDeprecationDays, "min days required between deprecating a stable resource and removing it")
 	enumWithOptions(cmd, newEnumValue([]string{"auto", "always", "never"}, "auto", flags.refColor()), "color", "", "when to colorize textual output")

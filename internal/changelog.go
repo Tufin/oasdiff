@@ -56,7 +56,7 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 		return false, err
 	}
 
-	bcConfig := checker.GetAllChecks(flags.getIncludeChecks(), flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
+	bcConfig := checker.NewConfig().WithOptionalChecks(flags.getIncludeChecks()).WithDeprecation(flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffResult.diffReport, diffResult.operationsSources, level),
@@ -68,7 +68,7 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 		return false, returnErr
 	}
 
-	if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
+	if returnErr := outputChangelog(flags, stdout, errs, diffResult.specInfoPair); returnErr != nil {
 		return false, returnErr
 	}
 
@@ -104,24 +104,25 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 	return errs, nil
 }
 
-func outputChangelog(format string, lang string, color string, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
+func outputChangelog(flags Flags, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
+
 	// formatter lookup
-	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
-		Language: lang,
+	formatter, err := formatters.Lookup(flags.getFormat(), formatters.FormatterOpts{
+		Language: flags.getLang(),
 	})
 	if err != nil {
-		return getErrUnsupportedFormat(format, changelogCmd)
+		return getErrUnsupportedFormat(flags.getFormat(), changelogCmd)
 	}
 
 	// render
-	colorMode, err := checker.NewColorMode(color)
+	colorMode, err := checker.NewColorMode(flags.getColor())
 	if err != nil {
 		return getErrInvalidColorMode(err)
 	}
 
 	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{ColorMode: colorMode}, specInfoPair)
 	if err != nil {
-		return getErrFailedPrint(changelogCmd+" "+format, err)
+		return getErrFailedPrint(changelogCmd+" "+flags.getFormat(), err)
 	}
 
 	// print output

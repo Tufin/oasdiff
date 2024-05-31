@@ -86,7 +86,7 @@ func ExampleGetPathsDiff() {
 		return
 	}
 
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), diffRes, operationsSources)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), diffRes, operationsSources)
 
 	// process configuration file for ignoring errors
 	errs, err = checker.ProcessIgnoredBackwardCompatibilityErrors(checker.ERR, errs, "../data/ignore-err-example.txt", checker.NewDefaultLocalizer())
