@@ -7,6 +7,7 @@ import (
 	"github.com/tufin/oasdiff/utils"
 )
 
+// BackwardCompatibilityCheck, or a check, is a function that receives a diff report and returns a list of changes
 type BackwardCompatibilityCheck func(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes
 
 func defaultChecks() []BackwardCompatibilityCheck {
@@ -14,6 +15,7 @@ func defaultChecks() []BackwardCompatibilityCheck {
 	result := []BackwardCompatibilityCheck{}
 	m := utils.StringSet{}
 	for _, rule := range GetRequiredRules() {
+		// functions are not comparable, so we convert them to strings
 		pStr := fmt.Sprintf("%v", rule.Handler)
 		if !m.Contains(pStr) {
 			m.Add(pStr)
@@ -24,23 +26,13 @@ func defaultChecks() []BackwardCompatibilityCheck {
 }
 
 func allChecks() []BackwardCompatibilityCheck {
-	defaultChecks := defaultChecks()
-	optionalChecks := optionalChecks()
-
-	for _, v := range optionalChecks {
-		defaultChecks = append(defaultChecks, v)
-	}
-	return defaultChecks
-}
-
-func optionalChecks() map[string]BackwardCompatibilityCheck {
 	optionalRules := GetOptionalRules()
-
-	result := make(map[string]BackwardCompatibilityCheck, len(optionalRules))
-	for _, rule := range optionalRules {
-		result[rule.Id] = rule.Handler
+	optionalChecks := make([]BackwardCompatibilityCheck, len(optionalRules))
+	for i, rule := range optionalRules {
+		optionalChecks[i] = rule.Handler
 	}
-	return result
+
+	return append(defaultChecks(), optionalChecks...)
 }
 
 func levelOverrides(includeChecks []string) map[string]Level {
@@ -51,18 +43,5 @@ func levelOverrides(includeChecks []string) map[string]Level {
 		// so the returned level should be overwritten to ERR.
 		result[s] = ERR
 	}
-	return result
-}
-
-func GetOptionalChecks() []string {
-	optionalChecks := optionalChecks()
-
-	result := make([]string, len(optionalChecks))
-	i := 0
-	for key := range optionalChecks {
-		result[i] = key
-		i++
-	}
-
 	return result
 }
