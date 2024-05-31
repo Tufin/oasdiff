@@ -22,8 +22,7 @@ func NewConfig() *Config {
 }
 
 func (config *Config) WithOptionalCheck(id string) *Config {
-	config.LogLevelOverrides = levelOverrides([]string{id})
-	return config
+	return config.WithOptionalChecks([]string{id})
 }
 
 func (config *Config) WithOptionalChecks(ids []string) *Config {
