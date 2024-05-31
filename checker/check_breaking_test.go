@@ -31,7 +31,7 @@ func d(t *testing.T, config *diff.Config, v1, v2 int) checker.Changes {
 	l2 := l(t, v2)
 	d, osm, err := diff.GetWithOperationsSourcesMap(config, l1, l2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	return errs
 }
 
@@ -52,7 +52,7 @@ func TestBreaking_DeletedOp(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIRemovedWithoutDeprecationId, errs[0].GetId())
@@ -70,7 +70,7 @@ func TestBreaking_AddingRequiredRequestBody(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.AddedRequiredRequestBodyId, errs[0].GetId())
@@ -92,7 +92,7 @@ func TestBreaking_RequestBodyRequiredEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyBecameRequiredId, errs[0].GetId())
@@ -149,7 +149,7 @@ func TestBreaking_PathParamRename(t *testing.T) {
 		&load.SpecInfo{Spec: s2},
 	)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 
 	require.Empty(t, errs)
 }
@@ -164,7 +164,7 @@ func TestBreaking_NewPathParam(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.NewRequestPathParameterId, errs[0].GetId())
@@ -181,7 +181,7 @@ func TestBreaking_NewRequiredHeaderParam(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.NewRequiredRequestParameterId, errs[0].GetId())
@@ -198,7 +198,7 @@ func TestBreaking_HeaderParamRequiredEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t,
 		checker.ApiChange{
@@ -222,7 +222,7 @@ func TestBreaking_ResponseHeaderParamRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseHeaderBecameOptionalId, errs[0].GetId())
@@ -239,7 +239,7 @@ func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -258,7 +258,7 @@ func TestBreaking_ResponseSuccessStatusUpdated(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -277,7 +277,7 @@ func TestBreaking_ResponseNonSuccessStatusUpdated(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.ResponseNonSuccessStatusRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.ResponseNonSuccessStatusRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -297,7 +297,7 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.APIOperationIdRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.APIOperationIdRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -321,7 +321,7 @@ func TestBreaking_RequestBodyEnumRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.RequestBodyEnumValueRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.RequestBodyEnumValueRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -339,7 +339,7 @@ func TestBreaking_ResponsePropertyEnumRemoved(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.ResponsePropertyEnumValueRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.ResponsePropertyEnumValueRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -358,7 +358,7 @@ func TestBreaking_TagRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.APITagRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.APITagRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -378,7 +378,7 @@ func TestBreaking_ResponseMediaTypeEnumRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetChecks(utils.StringList{checker.ResponseMediaTypeEnumValueRemovedId}), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig().WithOptionalChecks(utils.StringList{checker.ResponseMediaTypeEnumValueRemovedId}), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -397,7 +397,7 @@ func TestBreaking_ResponseUnparseableStatusRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -413,7 +413,7 @@ func TestBreaking_ResponseErrorStatusRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
 	}
@@ -430,7 +430,7 @@ func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.WARN, err.GetLevel())
 	}
@@ -450,7 +450,7 @@ func TestBreaking_ResponseDeleteMediaType(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseMediaTypeRemovedId, errs[0].GetId())
@@ -467,7 +467,7 @@ func TestBreaking_DeletePatten(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -481,7 +481,7 @@ func TestBreaking_AddPattern(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-property-pattern-added", errs[0].GetId())
@@ -498,7 +498,7 @@ func TestBreaking_AddPatternRecursive(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-property-pattern-added", errs[0].GetId())
@@ -515,7 +515,7 @@ func TestBreaking_ModifyPattern(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyPatternChangedId, errs[0].GetId())
@@ -532,7 +532,7 @@ func TestBreaking_ModifyParameterPattern(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterPatternChangedId, errs[0].GetId())
@@ -549,7 +549,7 @@ func TestBreaking_ModifyPatternToAnyString(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -565,7 +565,7 @@ func TestBreaking_ModifyRequiredOptionalParamDefaultValue(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterDefaultValueChangedId, errs[0].GetId())
 	require.Equal(t, "for the 'header' request parameter 'network-policies', default value was changed from 'X' to 'Y'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -583,7 +583,7 @@ func TestBreaking_SettingOptionalParamDefaultValue(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterDefaultValueAddedId, errs[0].GetId())
 	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -601,7 +601,7 @@ func TestBreaking_RemovingOptionalParamDefaultValue(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, "request-parameter-default-value-removed", errs[0].GetId())
 	require.Equal(t, "for the 'header' request parameter 'network-policies', default value 'Y' was removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -622,7 +622,7 @@ func TestBreaking_ModifyRequiredRequiredParamDefaultValue(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -639,7 +639,7 @@ func TestBreaking_SchemaRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	checks := checker.GetChecks(utils.StringList{checker.APISchemasRemovedId})
+	checks := checker.NewConfig().WithOptionalChecks(utils.StringList{checker.APISchemasRemovedId})
 	errs := checker.CheckBackwardCompatibility(checks, d, osm)
 	for _, err := range errs {
 		require.Equal(t, checker.ERR, err.GetLevel())
@@ -661,7 +661,7 @@ func TestBreaking_RequestBodyMediaTypeRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Equal(t, "request-body-media-type-removed", errs[0].GetId())
 	require.Equal(t, "removed the media type 'application/json' from the request body", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -676,7 +676,7 @@ func TestBreaking_RequestPropertyAnyOfRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 
 	require.Len(t, errs, 2)
 
@@ -698,7 +698,7 @@ func TestBreaking_RequestPropertyOneOfRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.RequestBodyOneOfRemovedId, errs[0].GetId())
@@ -719,7 +719,7 @@ func TestBreaking_RequestPropertyAllOfAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 
 	require.Len(t, errs, 2)
 
@@ -741,7 +741,7 @@ func TestBreaking_RequestPropertyAllOfRemoved(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 
 	require.Len(t, errs, 2)
 
