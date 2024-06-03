@@ -13,6 +13,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+const checksCmd = "checks"
+
 type ChecksFlags struct {
 	lang     string
 	format   string
@@ -75,7 +77,7 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 		Language: flags.lang,
 	})
 	if err != nil {
-		return getErrUnsupportedChecksFormat(flags.format)
+		return getErrUnsupportedFormat(flags.format, checksCmd)
 	}
 
 	// filter rules

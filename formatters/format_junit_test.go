@@ -19,33 +19,11 @@ func TestJUnitLineLookup(t *testing.T) {
 	require.IsType(t, formatters.JUnitFormatter{}, f)
 }
 
-func TestJUnitFormatter_RenderBreakingChanges_OneFailure(t *testing.T) {
-	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:    "change_id",
-			Level: checker.ERR,
-		},
-	}
-
-	// check output
-	output, err := jUnitFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
-	assert.NoError(t, err)
-	expectedOutput := `<?xml version="1.0" encoding="UTF-8"?>
-<testsuites>
-  <testsuite package="com.oasdiff" time="0" tests="1" errors="0" failures="1" name="OASDiff">
-    <testcase name="change_id" classname="OASDiff" time="0">
-      <failure message="Breaking change detected">This is a breaking change.</failure>
-    </testcase>
-  </testsuite>
-</testsuites>`
-	assert.Equal(t, expectedOutput, string(output))
-}
-
-func TestJUnitFormatter_RenderBreakingChanges_Success(t *testing.T) {
+func TestJUnitFormatter_RenderChangelog_Success(t *testing.T) {
 	testChanges := checker.Changes{}
 
 	// check output
-	output, err := jUnitFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
+	output, err := jUnitFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	assert.NoError(t, err)
 	expectedOutput := `<?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
@@ -63,9 +41,6 @@ func TestJUnitFormatter_NotImplemented(t *testing.T) {
 	assert.Error(t, err)
 
 	_, err = jUnitFormatter.RenderSummary(nil, formatters.NewRenderOpts())
-	assert.Error(t, err)
-
-	_, err = jUnitFormatter.RenderChangelog(nil, formatters.NewRenderOpts(), nil)
 	assert.Error(t, err)
 
 	_, err = jUnitFormatter.RenderChecks(nil, formatters.NewRenderOpts())

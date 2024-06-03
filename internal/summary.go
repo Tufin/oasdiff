@@ -10,6 +10,8 @@ import (
 	"github.com/tufin/oasdiff/formatters"
 )
 
+const summaryCmd = "summary"
+
 func getSummaryCmd() *cobra.Command {
 	flags := DiffFlags{}
 
@@ -49,13 +51,13 @@ func outputSummary(stdout io.Writer, diffReport *diff.Diff, format string) *Retu
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
 	if err != nil {
-		return getErrUnsupportedSummaryFormat(format)
+		return getErrUnsupportedFormat(format, summaryCmd)
 	}
 
 	// render
 	bytes, err := formatter.RenderSummary(diffReport, formatters.NewRenderOpts())
 	if err != nil {
-		return getErrFailedPrint("summary "+format, err)
+		return getErrFailedPrint(summaryCmd+" "+format, err)
 	}
 
 	// print output

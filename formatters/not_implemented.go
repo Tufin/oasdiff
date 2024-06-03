@@ -19,10 +19,6 @@ func (f notImplementedFormatter) RenderSummary(*diff.Diff, RenderOpts) ([]byte, 
 	return notImplemented()
 }
 
-func (f notImplementedFormatter) RenderBreakingChanges(checker.Changes, RenderOpts) ([]byte, error) {
-	return notImplemented()
-}
-
 func (f notImplementedFormatter) RenderChangelog(checker.Changes, RenderOpts, *load.SpecInfoPair) ([]byte, error) {
 	return notImplemented()
 }

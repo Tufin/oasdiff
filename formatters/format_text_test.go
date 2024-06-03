@@ -19,20 +19,6 @@ func TestTextLookup(t *testing.T) {
 	require.IsType(t, formatters.TEXTFormatter{}, f)
 }
 
-func TestTextFormatter_RenderBreakingChanges(t *testing.T) {
-	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:        "change_id",
-			Level:     checker.ERR,
-			Component: "test",
-		},
-	}
-
-	out, err := textFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
-	require.NoError(t, err)
-	require.Equal(t, "1 breaking changes: 1 error, 0 warning\nerror\t[change_id] \t\n\tin components/test\n\t\tThis is a breaking change.\n\n", string(out))
-}
-
 func TestTextFormatter_RenderChangelog(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{

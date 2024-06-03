@@ -5,11 +5,15 @@ This commmand is typically used to generate a structured diff report which can b
 
 ### Output Formats
 The default diff output format is `yaml`.  
-The `yaml` and the `json` formats include all diff details.  
-Note that an empty `yaml` or `json` result signifies that the diff is empty, or, in other words, there are no changes.  
-The `text` and `html` formats are designed to be more user-friendly and provide only the most important parts of the diff.  
-The `text` format is also compatible with markdown.  
-Note that the `json` format excludes the `endpoints` section to avoid the [complex mapping keys problem](#complex-mapping-keys).
+Additional formats can be generated using the `--format` flag:
+- yaml: includes all diff details
+- json: includes all diff details
+- text: designed to be more user-friendly and provide only the most important parts of the diff (also compatible with markdown)
+- html: designed to be more user-friendly and provide only the most important parts of the diff (see also [changelog with html](BREAKING-CHANGES.md#output-formats))
+
+Notes: 
+- an empty `yaml` or `json` result signifies that the diff is empty, or, in other words, there are no changes.  
+- the `json` format excludes the `endpoints` section to avoid the [complex mapping keys problem](#complex-mapping-keys).
 
 ### Preventing Changes
 A common way to use `oasdiff diff` is by running it as a step the CI/CD pipeline to detect changes.  
@@ -124,7 +128,6 @@ oasdiff diff data/openapi-test1.yaml data/openapi-test2.yaml -f html
 ```
 The html diff report provides a simplified and partial view of the changes.  
 To view all diff details, use `yaml` or `json` formats.
-
 
 #### Comparing remote files over http/s
 ```

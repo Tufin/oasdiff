@@ -22,7 +22,7 @@ func TestBreaking_RequestMaxLengthSmaller(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterMaxLengthDecreasedId, errs[0].GetId())
@@ -41,7 +41,7 @@ func TestBreaking_ResponseMaxLengthSmaller(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -55,7 +55,7 @@ func TestBreaking_RequestMinLengthSmaller(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -69,7 +69,7 @@ func TestBreaking_MinLengthSmaller(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Equal(t, checker.ResponseBodyMinLengthDecreasedId, errs[0].GetId())
 }
 
@@ -86,7 +86,7 @@ func TestBreaking_RequestMaxLengthGreater(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -103,7 +103,7 @@ func TestBreaking_ResponseMaxLengthGreater(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 }
 
@@ -119,7 +119,7 @@ func TestBreaking_MaxLengthFromNil(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterMaxLengthSetId, errs[0].GetId())
@@ -137,7 +137,7 @@ func TestBreaking_ResponseMaxLengthFromNil(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -153,7 +153,7 @@ func TestBreaking_RequestMaxLengthToNil(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -169,7 +169,7 @@ func TestBreaking_ResponseMaxLengthToNil(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyMaxLengthUnsetId, errs[0].GetId())
@@ -185,7 +185,7 @@ func TestBreaking_MaxLengthBothNil(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -199,7 +199,7 @@ func TestBreaking_ResponseMaxLengthBothNil(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -213,7 +213,7 @@ func TestBreaking_RequestMinItemsSmaller(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -227,7 +227,7 @@ func TestBreaking_ResponseMinItemsSmaller(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyMinItemsDecreasedId, errs[0].GetId())
@@ -243,7 +243,7 @@ func TestBreaking_RequeatMinItemsGreater(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 }
 
@@ -257,7 +257,7 @@ func TestBreaking_ResponseMinItemsGreater(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -274,7 +274,7 @@ func TestBreaking_MaxSmaller(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.NotEmpty(t, errs)
 }
 
@@ -291,6 +291,6 @@ func TestBreaking_MaxSmallerInResponse(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }

@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/tufin/oasdiff/checker"
+	"github.com/tufin/oasdiff/load"
 )
 
 var githubActionsSeverity = map[checker.Level]string{
@@ -27,7 +28,7 @@ func newGitHubActionsFormatter(l checker.Localizer) GitHubActionsFormatter {
 	}
 }
 
-func (f GitHubActionsFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
+func (f GitHubActionsFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	var buf bytes.Buffer
 
 	// add error, warning and notice count to job output parameters
@@ -73,7 +74,7 @@ func getMessage(change checker.Change, l checker.Localizer) string {
 }
 
 func (f GitHubActionsFormatter) SupportedOutputs() []Output {
-	return []Output{OutputBreaking}
+	return []Output{OutputChangelog}
 }
 
 func writeGitHubActionsJobOutputParameters(params map[string]string) error {

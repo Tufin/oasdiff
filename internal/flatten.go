@@ -10,6 +10,8 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
+const flattenCmd = "flatten"
+
 func getFlattenCmd() *cobra.Command {
 
 	flags := FlattenFlags{}
@@ -69,7 +71,7 @@ func outputFlattenedSpec(stdout io.Writer, spec *openapi3.T, format string) *Ret
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.DefaultFormatterOpts())
 	if err != nil {
-		return getErrUnsupportedSummaryFormat(format)
+		return getErrUnsupportedFormat(format, flattenCmd)
 	}
 
 	// render

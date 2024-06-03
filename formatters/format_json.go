@@ -29,10 +29,6 @@ func (f JSONFormatter) RenderSummary(diff *diff.Diff, opts RenderOpts) ([]byte, 
 	return printJSON(diff.GetSummary())
 }
 
-func (f JSONFormatter) RenderBreakingChanges(changes checker.Changes, opts RenderOpts) ([]byte, error) {
-	return printJSON(NewChanges(changes, f.Localizer))
-}
-
 func (f JSONFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	return printJSON(NewChanges(changes, f.Localizer))
 }
@@ -46,7 +42,7 @@ func (f JSONFormatter) RenderFlatten(spec *openapi3.T, opts RenderOpts) ([]byte,
 }
 
 func (f JSONFormatter) SupportedOutputs() []Output {
-	return []Output{OutputDiff, OutputSummary, OutputBreaking, OutputChangelog, OutputChecks, OutputFlatten}
+	return []Output{OutputDiff, OutputSummary, OutputChangelog, OutputChecks, OutputFlatten}
 }
 
 func printJSON(output interface{}) ([]byte, error) {

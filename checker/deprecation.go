@@ -9,11 +9,6 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-const (
-	BetaDeprecationDays   = 31
-	StableDeprecationDays = 180
-)
-
 func getSunsetDate(Extensions map[string]interface{}) (string, civil.Date, error) {
 	sunset, ok := Extensions[diff.SunsetExtension].(string)
 	if !ok {

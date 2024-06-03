@@ -383,6 +383,15 @@ func GetOptionalRules() []BackwardCompatibilityRule {
 	return result
 }
 
+func GetOptionalRuleIds() []string {
+
+	result := []string{}
+	for _, rule := range GetOptionalRules() {
+		result = append(result, rule.Id)
+	}
+	return result
+}
+
 func GetRequiredRules() []BackwardCompatibilityRule {
 
 	result := []BackwardCompatibilityRule{}

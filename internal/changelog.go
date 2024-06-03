@@ -11,6 +11,8 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
+const changelogCmd = "changelog"
+
 func getChangelogCmd() *cobra.Command {
 
 	flags := ChangelogFlags{}
@@ -18,7 +20,7 @@ func getChangelogCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "changelog base revision [flags]",
 		Short: "Display changelog",
-		Long:  "Display a changelog between base and revision specs." + specHelp,
+		Long:  "Display changes between base and revision specs." + specHelp,
 		Args:  getParseArgs(&flags),
 		RunE:  getRun(&flags, runChangelog),
 	}
@@ -27,6 +29,7 @@ func getChangelogCmd() *cobra.Command {
 	addCommonBreakingFlags(&cmd, &flags)
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChangelog), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, "", &flags.failOn), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
+	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, LevelInfo, &flags.level), "level", "", "output errors with this level or higher")
 
 	return &cmd
 }
@@ -36,7 +39,12 @@ func enumWithOptions(cmd *cobra.Command, value enumVal, name, shorthand, usage s
 }
 
 func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
-	return getChangelog(flags, stdout, checker.INFO)
+	level, err := checker.NewLevel(flags.getLevel())
+	if err != nil {
+		return false, getErrInvalidFlags(fmt.Errorf("invalid level value %s", flags.getLevel()))
+	}
+
+	return getChangelog(flags, stdout, level)
 }
 
 func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
@@ -48,7 +56,7 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 		return false, err
 	}
 
-	bcConfig := checker.GetAllChecks(flags.getIncludeChecks(), flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
+	bcConfig := checker.NewConfig().WithOptionalChecks(flags.getIncludeChecks()).WithDeprecation(flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffResult.diffReport, diffResult.operationsSources, level),
@@ -60,16 +68,8 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 		return false, returnErr
 	}
 
-	if level == checker.WARN {
-		// breaking changes
-		if returnErr := outputBreakingChanges(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs); returnErr != nil {
-			return false, returnErr
-		}
-	} else {
-		// changelog
-		if returnErr := outputChangelog(flags.getFormat(), flags.getLang(), flags.getColor(), stdout, errs, diffResult.specInfoPair); returnErr != nil {
-			return false, returnErr
-		}
+	if returnErr := outputChangelog(flags, stdout, errs, diffResult.specInfoPair); returnErr != nil {
+		return false, returnErr
 	}
 
 	if flags.getFailOn() != "" {
@@ -104,24 +104,25 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 	return errs, nil
 }
 
-func outputChangelog(format string, lang string, color string, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
+func outputChangelog(flags Flags, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
+
 	// formatter lookup
-	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
-		Language: lang,
+	formatter, err := formatters.Lookup(flags.getFormat(), formatters.FormatterOpts{
+		Language: flags.getLang(),
 	})
 	if err != nil {
-		return getErrUnsupportedChangelogFormat(format)
+		return getErrUnsupportedFormat(flags.getFormat(), changelogCmd)
 	}
 
 	// render
-	colorMode, err := checker.NewColorMode(color)
+	colorMode, err := checker.NewColorMode(flags.getColor())
 	if err != nil {
 		return getErrInvalidColorMode(err)
 	}
 
 	bytes, err := formatter.RenderChangelog(errs, formatters.RenderOpts{ColorMode: colorMode}, specInfoPair)
 	if err != nil {
-		return getErrFailedPrint("changelog "+format, err)
+		return getErrFailedPrint(changelogCmd+" "+flags.getFormat(), err)
 	}
 
 	// print output

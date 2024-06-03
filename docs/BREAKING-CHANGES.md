@@ -14,6 +14,20 @@ oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/opena
 oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
 ```
 
+### Checks
+Oasdiff supports over 250 checks, categorized into three levels:  
+- `ERR` - Errors are definite breaking changes which should be avoided
+- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically as breaking
+- `INFO` - Non-breaking changes
+
+`oasdiff breaking` detects changes with level `ERR` and `WARN` only.  
+`oasdiff changelog` detects changes with levels that are greater or equal to the `--level` argument. The default level, `INFO`, includes all checks.
+
+To see the full list of checks that are supported by oasdiff, run:
+```
+oasdiff checks
+```
+
 ### Preventing Breaking Changes
 A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
 In order to prevent changes, oasdiff can be configured to return an error if changes above a certain level are found.
@@ -26,24 +40,16 @@ For example:
 oasdiff breaking --fail-on ERR data/openapi-test1.yaml data/openapi-test3.yaml
 ```
 
-### Checks
-Oasdiff detects over 100 kinds of changes categorized into three levels:
-- `ERR` - Errors are definite breaking changes which should be avoided
-- `WARN` - Warnings are potential breaking changes which developers should be aware of, but cannot be confirmed programmatically as breaking
-- `INFO` - Non-breaking changes
-
-The `breaking` command displays changes with level `ERR` and `WARN` only.  
-The `changelog` command displays all three levels. 
-
-To see the full list of checks that are supported by oasdiff, run:
-```
-oasdiff checks
-```
-
 ### Output Formats
-By default, changes are displayed as human-readable text with [color](#color).  
-You can specify the `--format` flag to output changes in other formats: `json`, `yaml`, `githubactions` or `junit`.  
-An additional format `singleline` displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
+By default, oasdiff displays changes in a human-readable [colorized](#color) text format.  
+Additional formats can be generated using the `--format` flag:
+- json
+- yaml
+- githubactions: suitable for integration with github
+- junit: suitable for integration with gitlab
+- html: [see example](https://html-preview.github.io/?url=https://github.com/Tufin/oasdiff/blob/main/docs/changelog.html)
+- text: the default, human-readable, format
+- singleline: displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
 
 For example:
 ```

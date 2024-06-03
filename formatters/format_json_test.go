@@ -18,19 +18,6 @@ func TestJsonLookup(t *testing.T) {
 	require.IsType(t, formatters.JSONFormatter{}, f)
 }
 
-func TestJsonFormatter_RenderBreakingChanges(t *testing.T) {
-	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:    "change_id",
-			Level: checker.ERR,
-		},
-	}
-
-	out, err := jsonFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
-	require.NoError(t, err)
-	require.Equal(t, "[{\"id\":\"change_id\",\"text\":\"This is a breaking change.\",\"level\":3,\"section\":\"components\"}]", string(out))
-}
-
 func TestJsonFormatter_RenderChangelog(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{

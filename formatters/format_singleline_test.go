@@ -19,20 +19,6 @@ func TestSingleLineLookup(t *testing.T) {
 	require.IsType(t, formatters.SingleLineFormatter{}, f)
 }
 
-func TestSingleLineFormatter_RenderBreakingChanges(t *testing.T) {
-	testChanges := checker.Changes{
-		checker.ComponentChange{
-			Id:        "change_id",
-			Level:     checker.ERR,
-			Component: "test",
-		},
-	}
-
-	out, err := singleLineFormatter.RenderBreakingChanges(testChanges, formatters.NewRenderOpts())
-	require.NoError(t, err)
-	require.Equal(t, "1 breaking changes: 1 error, 0 warning\nerror, in components/test This is a breaking change. [change_id]. \n\n", string(out))
-}
-
 func TestSingleLineFormatter_RenderChangelog(t *testing.T) {
 	testChanges := checker.Changes{
 		checker.ComponentChange{
