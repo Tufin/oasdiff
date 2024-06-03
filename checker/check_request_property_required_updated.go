@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	RequestPropertyBecameRequiredId = "request-property-became-required"
-	RequestPropertyBecameOptionalId = "request-property-became-optional"
+	RequestPropertyBecameRequiredId            = "request-property-became-required"
+	RequestPropertyBecameRequiredWithDefaultId = "request-property-became-required-with-default"
+	RequestPropertyBecameOptionalId            = "request-property-became-optional"
 )
 
 func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -40,15 +41,28 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 
-							result = append(result, ApiChange{
-								Id:          RequestPropertyBecameRequiredId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							if schemaDiff.Revision.Properties[changedRequiredPropertyName].Value.Default == nil {
+								result = append(result, ApiChange{
+									Id:          RequestPropertyBecameRequiredId,
+									Level:       ERR,
+									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      load.NewSource(source),
+								})
+							} else {
+								// property has a default value, so making it required is not a breaking change
+								result = append(result, ApiChange{
+									Id:          RequestPropertyBecameRequiredWithDefaultId,
+									Level:       INFO,
+									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      load.NewSource(source),
+								})
+							}
 						}
 						for _, changedRequiredPropertyName := range schemaDiff.RequiredDiff.Deleted {
 							if !changedRequiredPropertyRelevant(schemaDiff, changedRequiredPropertyName) {
@@ -92,10 +106,6 @@ func changedRequiredPropertyRelevant(schemaDiff *diff.SchemaDiff, changedRequire
 	}
 	if schemaDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 		// property is read-only, not relevant in requests
-		return false
-	}
-	if schemaDiff.Revision.Properties[changedRequiredPropertyName].Value.Default != nil {
-		// property has a default value, so making it required is not a breaking change
 		return false
 	}
 

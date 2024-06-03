@@ -67,5 +67,14 @@ func TestRequestPropertyWithDefaultMarkedRequired(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyRequiredUpdatedCheck), d, osm, checker.INFO)
-	require.Empty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestPropertyBecameRequiredWithDefaultId,
+		Args:        []any{"name"},
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/products",
+		Source:      load.NewSource("../data/checker/request_property_became_required_base.yaml"),
+		OperationId: "addProduct",
+	}, errs[0])
 }
