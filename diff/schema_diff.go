@@ -83,16 +83,16 @@ func getSchemaDiffInternal(config *Config, state *state, schema1, schema2 *opena
 		case schemaStatusNoSchemas:
 			return nil, nil
 		case schemaStatusSchemaAdded:
-			return &SchemaDiff{SchemaAdded: true}, nil
+			return &SchemaDiff{SchemaAdded: true, Revision: schema2}, nil
 		case schemaStatusSchemaDeleted:
-			return &SchemaDiff{SchemaDeleted: true}, nil
+			return &SchemaDiff{SchemaDeleted: true, Base: schema1}, nil
 		}
 	}
 
 	if status := getCircularRefsDiff(state.visitedSchemasBase, state.visitedSchemasRevision, schema1, schema2); status != circularRefStatusNone {
 		switch status {
 		case circularRefStatusDiff:
-			return &SchemaDiff{CircularRefDiff: true}, nil
+			return &SchemaDiff{CircularRefDiff: true, Base: schema1, Revision: schema2}, nil
 		case circularRefStatusNoDiff:
 			return nil, nil
 		}

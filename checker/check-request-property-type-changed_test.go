@@ -130,3 +130,26 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 		OperationId: "addPet",
 	}, errs[0])
 }
+
+// CL: changing request property type from object to array
+func TestRequestPropertyTypeChangedCheckFromObjectToArray(t *testing.T) {
+	s1, err := open("../data/checker/request_property_type_changed_base_object_to_array.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_type_changed_revision_object_to_array.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(getConfig(), s1, s2)
+	require.NoError(t, err)
+
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.ERR)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          "request-property-type-changed",
+		Level:       checker.ERR,
+		Text:        "the 'data' request property type/format changed from 'object'/'none' to 'array'/'none'",
+		Operation:   "POST",
+		Path:        "/pets",
+		Source:      "../data/checker/request_property_type_changed_revision_object_to_array.yaml",
+		OperationId: "addPet",
+	}, errs[0])
+}
