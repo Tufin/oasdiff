@@ -24,7 +24,7 @@ These examples are automatically generated from unit tests.
 [changing an existing property in request header to required is breaking](../checker/check_breaking_property_test.go?plain=1#L57)  
 [changing an existing property in response body to optional is breaking](../checker/check_breaking_property_test.go?plain=1#L107)  
 [changing an existing property under another property in request body to required is breaking](../checker/check_breaking_property_test.go?plain=1#L644)  
-[changing an existing request body from optional to required is breaking](../checker/check_breaking_test.go?plain=1#L80)  
+[changing an existing request body from optional to required is breaking](../checker/check_breaking_test.go?plain=1#L79)  
 [changing an existing required property in response body to not-write-only is breaking](../checker/check_breaking_property_test.go?plain=1#L561)  
 [changing an existing response header from required to optional is breaking](../checker/check_breaking_test.go?plain=1#L214)  
 [changing max length in request from nil to any value is breaking](../checker/check_breaking_min_max_test.go?plain=1#L110)  
