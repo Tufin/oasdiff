@@ -30,6 +30,7 @@ api-sunset-date-changed-too-small: api sunset date changed to earlier date from 
 new-required-request-parameter: added the new required %s request parameter %s
 new-optional-request-parameter: added the new optional %s request parameter %s
 new-required-request-property: added the new required request property %s
+new-required-request-property-with-default: added the new required request property %s with a default value
 new-optional-request-property: added the new optional request property %s
 new-required-request-header-property: added the new required %s request header's property %s
 request-body-became-required: request body became required
