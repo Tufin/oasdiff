@@ -591,6 +591,7 @@ func TestBreaking_Body(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
+	require.Equal(t, []interface{}{"id"}, errs[0].GetArgs())
 }
 
 // BC: changing an existing property in request body items to required is breaking
@@ -607,6 +608,21 @@ func TestBreaking_Items(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
+	require.Equal(t, []interface{}{"/items/id"}, errs[0].GetArgs())
+}
+
+// BC: changing an existing property in request body items to required with a default value is not breaking
+func TestBreaking_ItemsWithDefault(t *testing.T) {
+	s1, err := open(getReqPropFile("items1.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getReqPropFile("items3.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	require.Empty(t, errs)
 }
 
 // BC: changing an existing property in request body anyOf to required is breaking
