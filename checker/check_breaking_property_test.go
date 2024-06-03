@@ -621,7 +621,7 @@ func TestBreaking_ItemsWithDefault(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.GetDefaultChecks(), d, osm)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
