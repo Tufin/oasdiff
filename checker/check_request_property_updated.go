@@ -8,9 +8,10 @@ import (
 )
 
 const (
-	RequestPropertyRemovedId     = "request-property-removed"
-	NewRequiredRequestPropertyId = "new-required-request-property"
-	NewOptionalRequestPropertyId = "new-optional-request-property"
+	RequestPropertyRemovedId                = "request-property-removed"
+	NewRequiredRequestPropertyId            = "new-required-request-property"
+	NewRequiredRequestPropertyWithDefaultId = "new-required-request-property-with-default"
+	NewOptionalRequestPropertyId            = "new-optional-request-property"
 )
 
 func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -57,15 +58,27 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if slices.Contains(parent.Revision.Required, propertyName) {
-							result = append(result, ApiChange{
-								Id:          NewRequiredRequestPropertyId,
-								Level:       ERR,
-								Args:        []any{propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							if propertyItem.Default == nil {
+								result = append(result, ApiChange{
+									Id:          NewRequiredRequestPropertyId,
+									Level:       ERR,
+									Args:        []any{propName},
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      load.NewSource(source),
+								})
+							} else {
+								result = append(result, ApiChange{
+									Id:          NewRequiredRequestPropertyWithDefaultId,
+									Level:       INFO,
+									Args:        []any{propName},
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      load.NewSource(source),
+								})
+							}
 						} else {
 							result = append(result, ApiChange{
 								Id:          NewOptionalRequestPropertyId,

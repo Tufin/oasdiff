@@ -30,6 +30,7 @@ api-sunset-date-changed-too-small: api sunset date changed to earlier date from 
 new-required-request-parameter: added the new required %s request parameter %s
 new-optional-request-parameter: added the new optional %s request parameter %s
 new-required-request-property: added the new required request property %s
+new-required-request-property-with-default: added the new required request property %s with a default value
 new-optional-request-property: added the new optional request property %s
 new-required-request-header-property: added the new required %s request header's property %s
 request-body-became-required: request body became required
@@ -72,6 +73,7 @@ request-parameter-min-set-comment: This is a warning because sometimes it is req
 request-parameter-type-changed: for the %s request parameter %s, the type/format was changed from %s/%s to %s/%s
 new-request-path-parameter: added the new path request parameter %s
 request-property-became-required: the request property %s became required
+request-property-became-required-with-default: the request property %s with a default value became required
 request-property-became-optional: the request property %s became optional
 request-property-became-not-nullable: the request property %s became not nullable
 request-body-became-not-nullable: the request's body became not nullable
@@ -308,6 +310,7 @@ new-required-request-default-parameter-to-existing-path-description: required re
 new-required-request-header-property-description: new required request header
 new-required-request-parameter-description: required request parameter added to endpoint
 new-required-request-property-description: required property added to request
+new-required-request-property-with-default-description: required property with default value added to request
 optional-response-header-removed-description: optional response header deleted
 parsing-error-description: invalid stability level
 request-body-all-of-added-description: sub-schema added to allOf in request body
@@ -392,9 +395,10 @@ request-property-became-not-nullable-description: request property became not nu
 request-property-became-nullable-description: request property became nullable
 request-property-became-optional-description: request property became optional
 request-property-became-required-description: request property became required
+request-property-became-required-with-default-description: request property with a default value became required
 request-property-default-value-added-description: request property default value set
-request-property-default-value-changed-description: request property default-value changed
-request-property-default-value-removed-description: request property default-value unset
+request-property-default-value-changed-description: request property default value changed
+request-property-default-value-removed-description: request property default value unset
 request-property-discriminator-added-description: request property discriminator added
 request-property-discriminator-mapping-added-description: request property discriminator mapping added
 request-property-discriminator-mapping-changed-description: request property discriminator mapping changed

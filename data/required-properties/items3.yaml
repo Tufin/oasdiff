@@ -1,0 +1,23 @@
+openapi: 3.0.1
+info:
+  title: Swagger API
+  version: v1
+paths:
+  /test:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                    default: '1'
+      responses:
+      '200':
+        description: Success

@@ -218,6 +218,7 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(RequestPropertyPatternChangedId, WARN, true, RequestPropertyPatternUpdatedCheck),
 		// RequestPropertyRequiredUpdatedCheck
 		newBackwardCompatibilityRule(RequestPropertyBecameRequiredId, ERR, true, RequestPropertyRequiredUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyBecameRequiredWithDefaultId, INFO, true, RequestPropertyRequiredUpdatedCheck),
 		newBackwardCompatibilityRule(RequestPropertyBecameOptionalId, INFO, true, RequestPropertyRequiredUpdatedCheck),
 		// RequestPropertyTypeChangedCheck
 		newBackwardCompatibilityRule(RequestBodyTypeChangedId, ERR, true, RequestPropertyTypeChangedCheck),
@@ -225,6 +226,7 @@ func GetAllRules() []BackwardCompatibilityRule {
 		// RequestPropertyUpdatedCheck
 		newBackwardCompatibilityRule(RequestPropertyRemovedId, WARN, true, RequestPropertyUpdatedCheck),
 		newBackwardCompatibilityRule(NewRequiredRequestPropertyId, ERR, true, RequestPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(NewRequiredRequestPropertyWithDefaultId, INFO, true, RequestPropertyUpdatedCheck),
 		newBackwardCompatibilityRule(NewOptionalRequestPropertyId, INFO, true, RequestPropertyUpdatedCheck),
 		// RequestPropertyWriteOnlyReadOnlyCheck
 		newBackwardCompatibilityRule(RequestOptionalPropertyBecameNonWriteOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),

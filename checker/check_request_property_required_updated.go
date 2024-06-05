@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	RequestPropertyBecameRequiredId = "request-property-became-required"
-	RequestPropertyBecameOptionalId = "request-property-became-optional"
+	RequestPropertyBecameRequiredId            = "request-property-became-required"
+	RequestPropertyBecameRequiredWithDefaultId = "request-property-became-required-with-default"
+	RequestPropertyBecameOptionalId            = "request-property-became-optional"
 )
 
 func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -33,92 +34,38 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 					continue
 				}
 
-				if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
-					for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Added {
-						if mediaTypeDiff.SchemaDiff.Base.Properties[changedRequiredPropertyName] == nil {
-							// it is a new property, checked by the new-required-request-property check
-							continue
-						}
-						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
-							// property was removed, checked by request-property-removed
-							continue
-						}
-						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
-							continue
-						}
-						result = append(result, ApiChange{
-							Id:          RequestPropertyBecameRequiredId,
-							Level:       ERR,
-							Args:        []any{changedRequiredPropertyName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
-					}
-					for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
-						if mediaTypeDiff.SchemaDiff.Base.Properties[changedRequiredPropertyName] == nil {
-							// it is a new property, checked by the new-required-request-property check
-							continue
-						}
-						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
-							// property was removed, checked by request-property-removed
-							continue
-						}
-						if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
-							continue
-						}
-						result = append(result, ApiChange{
-							Id:          RequestPropertyBecameOptionalId,
-							Level:       INFO,
-							Args:        []any{changedRequiredPropertyName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
-					}
-				}
-
-				CheckModifiedPropertiesDiff(
-					mediaTypeDiff.SchemaDiff,
-					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
-						requiredDiff := propertyDiff.RequiredDiff
-						if requiredDiff == nil {
-							return
-						}
-						for _, changedRequiredPropertyName := range requiredDiff.Added {
-							if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
-								continue
-							}
-							if propertyDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
-								continue
-							}
-							if propertyDiff.Base.Properties[changedRequiredPropertyName] == nil {
-								// it is a new property, checked by the new-required-request-property check
+				processRequestPropertyRequiredDiff := func(schemaDiff *diff.SchemaDiff, propertyPath string, propertyName string) {
+					if schemaDiff.RequiredDiff != nil {
+						for _, changedRequiredPropertyName := range schemaDiff.RequiredDiff.Added {
+							if !changedRequiredPropertyRelevant(schemaDiff, changedRequiredPropertyName) {
 								continue
 							}
 
-							result = append(result, ApiChange{
-								Id:          RequestPropertyBecameRequiredId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							if schemaDiff.Revision.Properties[changedRequiredPropertyName].Value.Default == nil {
+								result = append(result, ApiChange{
+									Id:          RequestPropertyBecameRequiredId,
+									Level:       ERR,
+									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      load.NewSource(source),
+								})
+							} else {
+								// property has a default value, so making it required is not a breaking change
+								result = append(result, ApiChange{
+									Id:          RequestPropertyBecameRequiredWithDefaultId,
+									Level:       INFO,
+									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      load.NewSource(source),
+								})
+							}
 						}
-
-						for _, changedRequiredPropertyName := range requiredDiff.Deleted {
-							if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
-								continue
-							}
-							if propertyDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
-								continue
-							}
-							if propertyDiff.Base.Properties[changedRequiredPropertyName] == nil {
-								// it is a new property, checked by the new-required-request-property check
+						for _, changedRequiredPropertyName := range schemaDiff.RequiredDiff.Deleted {
+							if !changedRequiredPropertyRelevant(schemaDiff, changedRequiredPropertyName) {
 								continue
 							}
 
@@ -132,9 +79,35 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								Source:      load.NewSource(source),
 							})
 						}
+					}
+				}
+
+				processRequestPropertyRequiredDiff(mediaTypeDiff.SchemaDiff, "", "")
+
+				CheckModifiedPropertiesDiff(
+					mediaTypeDiff.SchemaDiff,
+					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, _ *diff.SchemaDiff) {
+						processRequestPropertyRequiredDiff(propertyDiff, propertyPath, propertyName)
 					})
 			}
 		}
 	}
 	return result
+}
+
+func changedRequiredPropertyRelevant(schemaDiff *diff.SchemaDiff, changedRequiredPropertyName string) bool {
+	if schemaDiff.Base.Properties[changedRequiredPropertyName] == nil {
+		// it is a new property, checked by the new-required-request-property check
+		return false
+	}
+	if schemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
+		// property was removed, checked by request-property-removed
+		return false
+	}
+	if schemaDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
+		// property is read-only, not relevant in requests
+		return false
+	}
+
+	return true
 }
