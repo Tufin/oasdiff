@@ -44,11 +44,6 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - Detect [breaking changes](BREAKING-CHANGES.md)
 - Display a user-friendly [changelog](BREAKING-CHANGES.md) of all important API changes
 - OpenAPI [diff](DIFF.md) in YAML, JSON, Text, Markdown or HTML
-- [Run from Docker](DOCKER.md)
-- [GitHub Action](https://github.com/oasdiff/oasdiff-action)
-- [Cloud Service](OASDIFF-SERVICE.md)
-- [OpenAPI Sync: Get notified when an API provider breaks the API](https://github.com/oasdiff/sync/)
-- [Embed in your go program](GO.md)
 - Compare local files or remote files over http/s
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](COMPOSED.md)
@@ -65,7 +60,11 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Filtering endpoints](FILTERING-ENDPOINTS.md)
 - [Extending breaking changes with custom checks](CUSTOMIZING-CHECKS.md)
 - Localization: display breaking changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
-
+- [Run from Docker](DOCKER.md)
+- [GitHub Action](https://github.com/oasdiff/oasdiff-action)
+- [Cloud Service](OASDIFF-SERVICE.md)
+- [OpenAPI Sync: Get notified when an API provider breaks the API](https://github.com/oasdiff/sync/)
+- [Embed in your go program](GO.md)
 
 ## Demo
 <img src="./demo.svg">
