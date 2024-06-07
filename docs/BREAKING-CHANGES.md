@@ -23,7 +23,7 @@ Oasdiff supports over 250 checks, categorized into three levels:
 `oasdiff breaking` detects changes with level `ERR` and `WARN` only.  
 `oasdiff changelog` detects changes with levels that are greater or equal to the `--level` argument. The default level, `INFO`, includes all checks.
 
-To see the full list of checks that are supported by oasdiff, run:
+To see the full list of checks and their descriptions, run:
 ```
 oasdiff checks
 ```
