@@ -5,20 +5,37 @@ As API owners, we want a process that will allow us to phase out the old API ver
 OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and other object types as deprecated.  
 Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource **is** considered a breaking change.
 
+### Deprecation without Sunset
 Oasdiff allows you to gracefully remove a resource without getting a breaking change error, as follows:
-1. First, the resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed
+1. The resource is marked as ```deprecated```:
+   ```
+   /api/test:
+    get:
+     deprecated: true
+   ```
+2. Subsequently, the resource can be removed without triggering a breaking change error.
+
+To enable deprecation without sunset, set `--deprecation-days-beta` and `--deprecation-days-stable` to 0.
+
+### Deprecation with Sunset
+A more mature deprecation process includes a sunset date which tells the clients how long they can still use the deprecated API:
+1. The resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed:
    ```
    /api/test:
     get:
      deprecated: true
      x-sunset: "2022-12-31"
    ```
+   Note sunset date should conform with [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339).    
 2. At the sunset date or anytime later, the resource can be removed without triggering a breaking change error. An earlier removal will be considered a breaking change.
 
-In addition, oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it with the `--deprecation-days-beta` and `--deprecation-days-stable` flags, specifying the deprecation days for each [API stability level](STABILITY.md).  
-For example, the following command requires any deprecation to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
+### Enforcing a minimal grace priod before sunset
+Oasdiff also allows you to control the minimal number of days required between deprecating a resource and removing it.  
+You can configure a minimal grace period per [API stability level](STABILITY.md) with the following flags:
+- `--deprecation-days-stable`: default 180 days
+- `--deprecation-days-beta`: default 31 days
+
+For example, the following command requires deprecation of stable APIs to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
 ```
 oasdiff breaking data/deprecation/base.yaml data/deprecation/deprecated-past.yaml --deprecation-days-stable=30
 ```
-
-By default, `--deprecation-days-beta` and `--deprecation-days-stable` are set to 31 and 180, respectively. Setting deprecation-days to 0 allows for non-breaking deprecation, regardless of the sunset date.  

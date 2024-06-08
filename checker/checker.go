@@ -103,7 +103,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 				result = append(result, ApiChange{
-					Id:          ParseErrorId,
+					Id:          APIInvalidStabilityLevelId,
 					Args:        []any{err.Error()},
 					Level:       ERR,
 					Operation:   operation,
@@ -117,7 +117,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
 				result = append(result, ApiChange{
-					Id:          ParseErrorId,
+					Id:          APIInvalidStabilityLevelId,
 					Args:        []any{err.Error()},
 					Level:       ERR,
 					Operation:   operation,
@@ -159,7 +159,7 @@ func newParsingError(config *Config,
 	path string,
 	source string) Changes {
 	result = append(result, ApiChange{
-		Id:          ParseErrorId,
+		Id:          APIInvalidStabilityLevelId,
 		Args:        []any{err.Error()},
 		Level:       ERR,
 		Operation:   operation,
@@ -180,11 +180,11 @@ func getStabilityLevel(i map[string]interface{}) (string, error) {
 	if !ok {
 		jsonStability, ok := i[diff.XStabilityLevelExtension].(json.RawMessage)
 		if !ok {
-			return "", fmt.Errorf("unparseable x-stability-level")
+			return "", fmt.Errorf("x-stability-level isn't a string nor valid json")
 		}
 		err := json.Unmarshal(jsonStability, &stabilityLevel)
 		if err != nil {
-			return "", fmt.Errorf("unparseable x-stability-level")
+			return "", fmt.Errorf("failed to unmarshal x-stability-level json")
 		}
 	}
 
@@ -192,7 +192,7 @@ func getStabilityLevel(i map[string]interface{}) (string, error) {
 		stabilityLevel != STABILITY_ALPHA &&
 		stabilityLevel != STABILITY_BETA &&
 		stabilityLevel != STABILITY_STABLE {
-		return "", fmt.Errorf("invalid x-stability-level: %q", stabilityLevel)
+		return "", fmt.Errorf("value is not one of %s, %s, %s or %s: %q", STABILITY_DRAFT, STABILITY_ALPHA, STABILITY_BETA, STABILITY_STABLE, stabilityLevel)
 	}
 
 	return stabilityLevel, nil

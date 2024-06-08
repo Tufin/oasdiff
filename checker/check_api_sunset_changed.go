@@ -24,10 +24,10 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			continue
 		}
 		for operation, operationDiff := range pathItem.OperationsDiff.Modified {
-			op := pathItem.Revision.Operations()[operation]
-			source := (*operationsSources)[op]
+			opRevision := pathItem.Revision.Operations()[operation]
+			source := (*operationsSources)[opRevision]
 
-			if !op.Deprecated {
+			if !opRevision.Deprecated {
 				continue
 			}
 
@@ -36,7 +36,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Id:          APISunsetDeletedId,
 					Level:       ERR,
 					Operation:   operation,
-					OperationId: op.OperationID,
+					OperationId: opRevision.OperationID,
 					Path:        path,
 					Source:      load.NewSource(source),
 				})
@@ -48,28 +48,56 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			opBase := pathItem.Base.Operations()[operation]
 
-			rawDate, date, err := getSunsetDate(op.Extensions)
-			if err != nil {
+			sunsetRevision, ok := getSunset(opRevision.Extensions)
+			if !ok {
 				result = append(result, ApiChange{
-					Id:          APIDeprecatedSunsetParseId,
+					Id:          APIDeprecatedSunsetMissingId,
 					Level:       ERR,
-					Args:        []any{rawDate, err},
+					Args:        []any{},
 					Operation:   operation,
-					OperationId: op.OperationID,
+					OperationId: opRevision.OperationID,
 					Path:        path,
 					Source:      load.NewSource(source),
 				})
 				continue
 			}
 
-			rawDate, baseDate, err := getSunsetDate(opBase.Extensions)
+			date, err := getSunsetDate(sunsetRevision)
 			if err != nil {
 				result = append(result, ApiChange{
 					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Args:        []any{rawDate, err},
+					Args:        []any{err},
 					Operation:   operation,
-					OperationId: op.OperationID,
+					OperationId: opRevision.OperationID,
+					Path:        path,
+					Source:      load.NewSource(source),
+				})
+				continue
+			}
+
+			sunsetBase, ok := getSunset(opBase.Extensions)
+			if !ok {
+				result = append(result, ApiChange{
+					Id:          APIDeprecatedSunsetMissingId,
+					Level:       ERR,
+					Args:        []any{},
+					Operation:   operation,
+					OperationId: opRevision.OperationID,
+					Path:        path,
+					Source:      load.NewSource((*operationsSources)[opBase]),
+				})
+				continue
+			}
+
+			baseDate, err := getSunsetDate(sunsetBase)
+			if err != nil {
+				result = append(result, ApiChange{
+					Id:          APIDeprecatedSunsetParseId,
+					Level:       ERR,
+					Args:        []any{err},
+					Operation:   operation,
+					OperationId: opRevision.OperationID,
 					Path:        path,
 					Source:      load.NewSource((*operationsSources)[opBase]),
 				})
@@ -78,14 +106,14 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			days := date.DaysSince(civil.DateOf(time.Now()))
 
-			stability, err := getStabilityLevel(op.Extensions)
+			stability, err := getStabilityLevel(opRevision.Extensions)
 			if err != nil {
 				result = append(result, ApiChange{
-					Id:          ParseErrorId,
+					Id:          APIInvalidStabilityLevelId,
 					Level:       ERR,
 					Args:        []any{err.Error()},
 					Operation:   operation,
-					OperationId: op.OperationID,
+					OperationId: opRevision.OperationID,
 					Path:        path,
 					Source:      load.NewSource(source),
 				})
@@ -100,7 +128,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Level:       ERR,
 					Args:        []any{baseDate, date, baseDate, deprecationDays},
 					Operation:   operation,
-					OperationId: op.OperationID,
+					OperationId: opRevision.OperationID,
 					Path:        path,
 					Source:      load.NewSource(source),
 				})

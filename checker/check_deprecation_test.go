@@ -48,7 +48,7 @@ func TestBreaking_RemoveBeforeSunset(t *testing.T) {
 	require.Equal(t, "api removed before the sunset date '9999-08-10'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: deleting an operation without sunset date is breaking
+// BC: deleting an operation without sunset date is not breaking
 func TestBreaking_DeprecationNoSunset(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
@@ -60,10 +60,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
 	require.NoError(t, err)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIPathSunsetParseId, errs[0].GetId())
-	require.Equal(t, "api-path-sunset-parse", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Empty(t, errs)
 }
 
 // BC: deleting an operation after sunset date is not breaking
@@ -97,8 +94,45 @@ func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
+	require.Equal(t, checker.APIDeprecatedSunsetMissingId, errs[0].GetId())
+	require.Equal(t, "api sunset date is missing for deprecated API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
+
+// BC: deprecating an operation with a deprecation policy and an invalid sunset date is breaking
+func TestBreaking_DeprecationWithInvalidSunset(t *testing.T) {
+
+	s1, err := open(getDeprecationFile("base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getDeprecationFile("deprecated-with-invalid-sunset.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	c := singleCheckConfig(checker.APIDeprecationCheck)
+	c.MinSunsetStableDays = 10
+	errs := checker.CheckBackwardCompatibility(c, d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIDeprecatedSunsetParseId, errs[0].GetId())
-	require.Equal(t, "api sunset date '' can't be parsed for deprecated API: 'sunset extension not found'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "failed to parse sunset date: 'sunset date doesn't conform with RFC3339: invalid'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
+
+// BC: deprecating an operation without a deprecation policy but without specifying sunset date is not breaking
+func TestBreaking_DeprecationWithoutSunsetNoPolicy(t *testing.T) {
+
+	s1, err := open(getDeprecationFile("base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	c := singleCheckConfig(checker.APIDeprecationCheck)
+	c.MinSunsetStableDays = 0
+	errs := checker.CheckBackwardCompatibility(c, d, osm)
+	require.Empty(t, errs)
 }
 
 // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking
@@ -114,6 +148,21 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
+}
+
+// BC: specifying an invalid stability level is breaking
+func TestBreaking_InvalidStabilityLevel(t *testing.T) {
+	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getDeprecationFile("base-invalid-stability.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.APIInvalidStabilityLevelId, errs[0].GetId())
 }
 
 // BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for alpha level
@@ -393,8 +442,8 @@ func TestBreaking_InvaidStability(t *testing.T) {
 
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
-	require.Equal(t, checker.ParseErrorId, e0.Id)
+	require.Equal(t, checker.APIInvalidStabilityLevelId, e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
-	require.Equal(t, "parsing-error", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "failed to parse stability level: 'value is not one of draft, alpha, beta or stable: \"ga\"'", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

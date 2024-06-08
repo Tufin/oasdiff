@@ -40,13 +40,20 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				})
 				continue
 			}
-			rawDate, date, err := getSunsetDate(op.Extensions)
+
+			sunset, ok := getSunset(op.Extensions)
+			if !ok {
+				// No sunset date, allow removal
+				continue
+			}
+
+			date, err := getSunsetDate(sunset)
 			if err != nil {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
 					Id:          APIPathSunsetParseId,
 					Level:       ERR,
-					Args:        []any{rawDate, err},
+					Args:        []any{err},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -54,6 +61,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				})
 				continue
 			}
+
 			if !civil.DateOf(time.Now()).After(date) {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
@@ -87,13 +95,19 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 				})
 				continue
 			}
-			rawDate, date, err := getSunsetDate(op.Extensions)
+			sunset, ok := getSunset(op.Extensions)
+			if !ok {
+				// No sunset date, allow removal
+				continue
+			}
+
+			date, err := getSunsetDate(sunset)
 			if err != nil {
 				source := (*operationsSources)[op]
 				result = append(result, ApiChange{
 					Id:          APIPathSunsetParseId,
 					Level:       ERR,
-					Args:        []any{rawDate, err},
+					Args:        []any{err},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
