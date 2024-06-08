@@ -62,24 +62,11 @@ If output is piped into another process or redirected to a file, oasdiff disable
 To control color manually, use the `--color` flag with `always` or `never`.
 
 ### API Stability Levels
-When a new API is introduced, you may want to allow developers to change its behavior without triggering a breaking change error.  
-You can define an endpoint's stability level with the `x-stability-level` extension.  
-There are four stability levels: `draft`->`alpha`->`beta`->`stable`.  
-APIs with the levels `draft` or `alpha` can be changed freely without triggering a breaking change error.  
-Stability level may be increased, but not decreased, like this: `draft`->`alpha`->`beta`->`stable`.  
-APIs with no stability level will trigger breaking changes errors upon relevant change.  
-APIs with no stability level can be changed to any stability level.  
-
-Example:
-   ```
-   /api/test:
-    post:
-     x-stability-level: "alpha"
-   ```
+Assigning [stability levels](STABILITY.md) to APIs allows fine-grained control over how APIs are allowed to change based on their maturity.  
 
 ### Deprecating APIs
 Before deleting an endpoint, it is recommended to give consumers a heads-up in the form of "deprecation". 
-Oasdiff allows you to [deprecate APIs gracefully](API-DEPRECATION.md) without triggering a breaking-change error.
+Oasdiff allows you to [deprecate APIs gracefully](DEPRECATION.md) without triggering a breaking-change error.
 
 ### Ignoring Specific Breaking Changes
 Sometimes, you want to allow certain breaking changes, for example, when your spec and service are out-of-sync and you need to correct the spec.  
