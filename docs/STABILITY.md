@@ -14,4 +14,4 @@ Example:
      x-stability-level: "alpha"
    ```
 
-Stability levels can also be used to control the [API deprecation and sunset policies](DEPRECATION.md).
+Stability levels can also be used to control [grace periods for API deprecation](DEPRECATION.md#grace-period).
