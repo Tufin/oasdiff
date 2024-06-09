@@ -50,15 +50,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			stability, err := getStabilityLevel(op.Extensions)
 			if err != nil {
-				result = append(result, ApiChange{
-					Id:          APIInvalidStabilityLevelId,
-					Level:       ERR,
-					Args:        []any{err.Error()},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				// handled in CheckBackwardCompatibility
 				continue
 			}
 

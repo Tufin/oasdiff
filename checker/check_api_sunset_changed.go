@@ -108,15 +108,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			stability, err := getStabilityLevel(opRevision.Extensions)
 			if err != nil {
-				result = append(result, ApiChange{
-					Id:          APIInvalidStabilityLevelId,
-					Level:       ERR,
-					Args:        []any{err.Error()},
-					Operation:   operation,
-					OperationId: opRevision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				// handled in CheckBackwardCompatibility
 				continue
 			}
 

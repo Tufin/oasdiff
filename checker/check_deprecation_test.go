@@ -118,6 +118,26 @@ func TestBreaking_DeprecationWithInvalidSunset(t *testing.T) {
 	require.Equal(t, "failed to parse sunset date: 'sunset date doesn't conform with RFC3339: invalid'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
+// BC: deprecating an operation with a deprecation policy and an invalid stability level is breaking
+func TestBreaking_DeprecationWithInvalidStabilityLevel(t *testing.T) {
+
+	s1, err := open(getDeprecationFile("base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getDeprecationFile("deprecated-with-invalid-stability.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	c := singleCheckConfig(checker.APIDeprecationCheck)
+	c.MinSunsetStableDays = 10
+	errs := checker.CheckBackwardCompatibility(c, d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.APIInvalidStabilityLevelId, errs[0].GetId())
+	require.Equal(t, "failed to parse stability level: 'value is not one of draft, alpha, beta or stable: \"invalid\"'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
+
 // BC: deprecating an operation without a deprecation policy but without specifying sunset date is not breaking
 func TestBreaking_DeprecationWithoutSunsetNoPolicy(t *testing.T) {
 
