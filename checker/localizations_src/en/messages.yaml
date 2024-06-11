@@ -13,8 +13,8 @@ request-property-pattern-removed: "removed the pattern %s from the request prope
 request-property-pattern-changed: "changed the pattern of the request property %s from %s to %s"
 api-deprecated-sunset-parse: "failed to parse sunset date: %v"
 api-invalid-stability-level: "failed to parse stability level: %v"
-api-deprecated-sunset-missing: "api sunset date is missing for deprecated API"
-api-sunset-date-too-small: "api sunset date %s is too small, must be at least %s days from now"
+api-deprecated-sunset-missing: "sunset date is missing for deprecated API"
+api-sunset-date-too-small: "sunset date %s is too small, must be at least %s days from now"
 endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated

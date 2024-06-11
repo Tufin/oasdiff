@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
@@ -49,16 +50,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 
 			date, err := getSunsetDate(sunset)
 			if err != nil {
-				source := (*operationsSources)[op]
-				result = append(result, ApiChange{
-					Id:          APIPathSunsetParseId,
-					Level:       ERR,
-					Args:        []any{err},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, getAPIPathSunsetParseId(op, operationsSources, operation, path, err))
 				continue
 			}
 
@@ -103,16 +95,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 
 			date, err := getSunsetDate(sunset)
 			if err != nil {
-				source := (*operationsSources)[op]
-				result = append(result, ApiChange{
-					Id:          APIPathSunsetParseId,
-					Level:       ERR,
-					Args:        []any{err},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, getAPIPathSunsetParseId(op, operationsSources, operation, path, err))
 				continue
 			}
 			if !civil.DateOf(time.Now()).After(date) {
@@ -131,4 +114,16 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 	}
 
 	return result
+}
+
+func getAPIPathSunsetParseId(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string, err error) Change {
+	return ApiChange{
+		Id:          APIDeprecatedSunsetParseId,
+		Level:       ERR,
+		Args:        []any{err},
+		Operation:   method,
+		OperationId: operation.OperationID,
+		Path:        path,
+		Source:      load.NewSource((*operationsSources)[operation]),
+	}
 }
