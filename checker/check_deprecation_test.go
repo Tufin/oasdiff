@@ -23,11 +23,7 @@ func getDeprecationFile(file string) string {
 }
 
 func singleCheckConfig(c checker.BackwardCompatibilityCheck) *checker.Config {
-	return &checker.Config{
-		Checks:              []checker.BackwardCompatibilityCheck{c},
-		MinSunsetBetaDays:   31,
-		MinSunsetStableDays: 180,
-	}
+	return checker.NewConfig().WithSingleCheck(c)
 }
 
 // BC: deleting an operation before sunset date is breaking
