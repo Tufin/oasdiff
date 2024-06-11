@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
@@ -25,82 +26,41 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 		}
 		for operation, operationDiff := range pathItem.OperationsDiff.Modified {
 			opRevision := pathItem.Revision.Operations()[operation]
-			source := (*operationsSources)[opRevision]
+			opBase := pathItem.Base.Operations()[operation]
 
 			if !opRevision.Deprecated {
 				continue
 			}
 
-			if operationDiff.ExtensionsDiff != nil && !operationDiff.ExtensionsDiff.Deleted.Empty() {
+			if operationDiff.ExtensionsDiff == nil {
+				continue
+			}
+
+			if operationDiff.ExtensionsDiff.Deleted.Contains(diff.SunsetExtension) {
 				result = append(result, ApiChange{
 					Id:          APISunsetDeletedId,
 					Level:       ERR,
 					Operation:   operation,
 					OperationId: opRevision.OperationID,
 					Path:        path,
-					Source:      load.NewSource(source),
-				})
-			}
-
-			if operationDiff.ExtensionsDiff == nil || operationDiff.ExtensionsDiff.Modified.Empty() {
-				continue
-			}
-
-			opBase := pathItem.Base.Operations()[operation]
-
-			sunsetRevision, ok := getSunset(opRevision.Extensions)
-			if !ok {
-				result = append(result, ApiChange{
-					Id:          APIDeprecatedSunsetMissingId,
-					Level:       ERR,
-					Args:        []any{},
-					Operation:   operation,
-					OperationId: opRevision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
+					Source:      load.NewSource((*operationsSources)[opRevision]),
 				})
 				continue
 			}
 
-			date, err := getSunsetDate(sunsetRevision)
+			if _, ok := operationDiff.ExtensionsDiff.Modified[diff.SunsetExtension]; !ok {
+				continue
+			}
+
+			date, err := getSunsetDate(opRevision.Extensions[diff.SunsetExtension])
 			if err != nil {
-				result = append(result, ApiChange{
-					Id:          APIDeprecatedSunsetParseId,
-					Level:       ERR,
-					Args:        []any{err},
-					Operation:   operation,
-					OperationId: opRevision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, getAPIDeprecatedSunsetParseId(opRevision, operationsSources, path, operation, err))
 				continue
 			}
 
-			sunsetBase, ok := getSunset(opBase.Extensions)
-			if !ok {
-				result = append(result, ApiChange{
-					Id:          APIDeprecatedSunsetMissingId,
-					Level:       ERR,
-					Args:        []any{},
-					Operation:   operation,
-					OperationId: opRevision.OperationID,
-					Path:        path,
-					Source:      load.NewSource((*operationsSources)[opBase]),
-				})
-				continue
-			}
-
-			baseDate, err := getSunsetDate(sunsetBase)
+			baseDate, err := getSunsetDate(opBase.Extensions[diff.SunsetExtension])
 			if err != nil {
-				result = append(result, ApiChange{
-					Id:          APIDeprecatedSunsetParseId,
-					Level:       ERR,
-					Args:        []any{err},
-					Operation:   operation,
-					OperationId: opRevision.OperationID,
-					Path:        path,
-					Source:      load.NewSource((*operationsSources)[opBase]),
-				})
+				result = append(result, getAPIDeprecatedSunsetParseId(opBase, operationsSources, path, operation, err))
 				continue
 			}
 
@@ -122,7 +82,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					Operation:   operation,
 					OperationId: opRevision.OperationID,
 					Path:        path,
-					Source:      load.NewSource(source),
+					Source:      load.NewSource((*operationsSources)[opRevision]),
 				})
 			}
 		}
@@ -150,5 +110,29 @@ func getDeprecationDays(config *Config, stability string) int {
 		return config.MinSunsetStableDays
 	default:
 		return config.MinSunsetStableDays
+	}
+}
+
+func getAPIDeprecatedSunsetMissing(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string) Change {
+	return ApiChange{
+		Id:          APIDeprecatedSunsetMissingId,
+		Level:       ERR,
+		Args:        []any{},
+		Operation:   method,
+		OperationId: operation.OperationID,
+		Path:        path,
+		Source:      load.NewSource((*operationsSources)[operation]),
+	}
+}
+
+func getAPIDeprecatedSunsetParseId(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string, err error) Change {
+	return ApiChange{
+		Id:          APIDeprecatedSunsetParseId,
+		Level:       ERR,
+		Args:        []any{err},
+		Operation:   method,
+		OperationId: operation.OperationID,
+		Path:        path,
+		Source:      load.NewSource((*operationsSources)[operation]),
 	}
 }
