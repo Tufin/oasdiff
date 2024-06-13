@@ -3,7 +3,7 @@ module github.com/tufin/oasdiff
 go 1.22.4
 
 require (
-	cloud.google.com/go v0.114.0
+	cloud.google.com/go v0.115.0
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.124.0
 	github.com/oasdiff/telemetry v0.1.2
