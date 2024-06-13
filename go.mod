@@ -5,7 +5,7 @@ go 1.22.4
 require (
 	cloud.google.com/go v0.115.0
 	github.com/TwiN/go-color v1.4.1
-	github.com/getkin/kin-openapi v0.124.0
+	github.com/getkin/kin-openapi v0.125.0
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.9.0
 	github.com/yargevad/filepathx v1.0.0
