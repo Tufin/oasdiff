@@ -25,6 +25,7 @@ func getDeprecationFile(file string) string {
 func singleCheckConfig(c checker.BackwardCompatibilityCheck) *checker.Config {
 	return checker.NewConfig().WithSingleCheck(c)
 }
+
 // BC: deleting an operation after sunset date is not breaking
 func TestBreaking_DeprecationPast(t *testing.T) {
 
