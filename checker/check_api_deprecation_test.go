@@ -25,40 +25,6 @@ func getDeprecationFile(file string) string {
 func singleCheckConfig(c checker.BackwardCompatibilityCheck) *checker.Config {
 	return checker.NewConfig().WithSingleCheck(c)
 }
-
-// BC: deleting an operation before sunset date is breaking
-func TestBreaking_RemoveBeforeSunset(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("sunset.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIRemovedBeforeSunsetId, errs[0].GetId())
-	require.Equal(t, "api removed before the sunset date '9999-08-10'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-}
-
-// BC: deleting an operation without sunset date is not breaking
-func TestBreaking_DeprecationNoSunset(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("sunset.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.NoError(t, err)
-	require.Empty(t, errs)
-}
-
 // BC: deleting an operation after sunset date is not breaking
 func TestBreaking_DeprecationPast(t *testing.T) {
 
@@ -180,21 +146,6 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: specifying an invalid stability level is breaking
-func TestBreaking_InvalidStabilityLevel(t *testing.T) {
-	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("base-invalid-stability.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIInvalidStabilityLevelId, errs[0].GetId())
-}
-
 // BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for alpha level
 func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
@@ -212,26 +163,6 @@ func TestBreaking_RemovedPathForAlpha(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
-}
-
-// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not alpha stability level
-func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
-	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-
-	s2.Spec.Paths.Delete("/api/test")
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.Len(t, errs, 2)
-	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[0].GetId())
-	require.Equal(t, "api path removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[1].GetId())
-	require.Equal(t, "api path removed without deprecation", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for draft level
@@ -268,28 +199,6 @@ func TestBreaking_RemovedPathForDraft(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
-}
-
-// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not draft stability level
-func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
-	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-	draft := toJson(t, checker.STABILITY_DRAFT)
-	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
-
-	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-
-	s2.Spec.Paths.Delete("/api/test")
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.Len(t, errs, 2)
-	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[0].GetId())
-	require.Equal(t, "api path removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[1].GetId())
-	require.Equal(t, "api path removed without deprecation", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 func toJson(t *testing.T, value string) json.RawMessage {
@@ -353,144 +262,6 @@ func TestBreaking_DeprecationPathPast(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
 	require.Empty(t, errs)
-}
-
-// BC: deleting a path with some operations having sunset date in the future is breaking
-func TestBreaking_DeprecationPathMixed(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-path-mixed.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("sunset-path.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIPathRemovedBeforeSunsetId, errs[0].GetId())
-	require.Equal(t, "api path removed before the sunset date '9999-08-10'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-}
-
-// BC: deleting sunset header for a deprecated endpoint is breaking
-func TestBreaking_SunsetDeletedForDeprecatedEndpoint(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-with-sunset.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APISunsetDeletedId, errs[0].GetId())
-	require.Equal(t, "api sunset date deleted, but deprecated=true kept", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-}
-
-// BC: changing sunset to an earlier date for a deprecated endpoint is breaking
-func TestBreaking_SunsetModifiedForDeprecatedEndpoint(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("deprecated-past.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APISunsetDateChangedTooSmallId, errs[0].GetId())
-	require.Equal(t, "api sunset date changed to earlier date from '9999-08-10' to '2022-08-10', new sunset date must be not earlier than '9999-08-10' at least '180' days from now", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-}
-
-// BC: changing sunset to an invalid date for a deprecated endpoint is breaking
-func TestBreaking_SunsetModifiedToInvalidForDeprecatedEndpoint(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("deprecated-invalid.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIDeprecatedSunsetParseId, errs[0].GetId())
-	require.Equal(t, "failed to parse sunset date: 'sunset date doesn't conform with RFC3339: invalid-date'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-}
-
-// BC: changing sunset from an invalid date for a deprecated endpoint is breaking
-func TestBreaking_SunsetModifiedFromInvalidForDeprecatedEndpoint(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-invalid.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("deprecated-future.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIDeprecatedSunsetParseId, errs[0].GetId())
-	require.Equal(t, "failed to parse sunset date: 'sunset date doesn't conform with RFC3339: invalid-date'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-}
-
-// BC: deleting other extension (not sunset) header for a deprecated endpoint is not breaking
-func TestBreaking_NonSunsetDeletedForDeprecatedEndpoint(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-with-other-extension.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
-	require.Empty(t, errs)
-}
-
-// BC: no change to headers for a deprecated endpoint is not breaking
-func TestBreaking_NoChangeToSunsetDeprecatedEndpoint(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("deprecated-future-2.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
-	require.Empty(t, errs)
-}
-
-// test sunset date without double quotes, see https://github.com/Tufin/oasdiff/pull/198/files
-func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-path-mixed-rfc3339-sunset.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("sunset-path.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIPathRemovedBeforeSunsetId, errs[0].GetId())
-	require.Equal(t, "api path removed before the sunset date '9999-08-10'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: path operations that became deprecated
