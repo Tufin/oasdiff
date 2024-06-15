@@ -79,6 +79,7 @@ func TestBreaking_InvalidStabilityLevelInBase(t *testing.T) {
 	require.Equal(t, "../data/deprecation/base-invalid-stability.yaml", errs[0].GetSource())
 }
 
+// BC: specifying a non-text, not-json stability level in base is breaking
 func TestBreaking_InvalidNonJsonStabilityLevel(t *testing.T) {
 	s1, err := open(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
