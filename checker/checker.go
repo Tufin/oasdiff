@@ -160,11 +160,11 @@ func getStabilityLevel(i map[string]interface{}) (string, error) {
 
 	stabilityLevel, ok := i[diff.XStabilityLevelExtension].(string)
 	if !ok {
-		jsonStability, ok := i[diff.XStabilityLevelExtension].(json.RawMessage)
+		jsonStabilityRaw, ok := i[diff.XStabilityLevelExtension].(json.RawMessage)
 		if !ok {
 			return "", fmt.Errorf("x-stability-level isn't a string nor valid json")
 		}
-		err := json.Unmarshal(jsonStability, &stabilityLevel)
+		err := json.Unmarshal(jsonStabilityRaw, &stabilityLevel)
 		if err != nil {
 			return "", fmt.Errorf("failed to unmarshal x-stability-level json")
 		}
