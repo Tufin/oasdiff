@@ -89,6 +89,7 @@ These examples are automatically generated from unit tests.
 [removing/updating an enum in request body is breaking (optional)](../checker/check_breaking_test.go?plain=1#L310)  
 [removing/updating an operation id is breaking (optional)](../checker/check_breaking_test.go?plain=1#L289)  
 [setting the default value of an optional request parameter is breaking](../checker/check_breaking_test.go?plain=1#L573)  
+[specifying a non-text, not-json stability level in base is breaking](../checker/checker_test.go?plain=1#L82)  
 [specifying an invalid stability level in base is breaking](../checker/checker_test.go?plain=1#L65)  
 [specifying an invalid stability level in revision is breaking](../checker/checker_test.go?plain=1#L48)  
 
