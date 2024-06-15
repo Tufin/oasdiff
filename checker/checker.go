@@ -60,7 +60,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 			baseStability, err := getStabilityLevel(pathDiff.Base.Value(path).Operations()[operation].Extensions)
 			source := (*operationsSources)[pathDiff.Base.Value(path).Operations()[operation]]
 			if err != nil {
-				result = newParsingError(config, result, err, operation, operationItem, path, source)
+				result = append(result, newParsingError(err, operation, operationItem, path, source))
 				continue
 			}
 			if !(baseStability == STABILITY_DRAFT || baseStability == STABILITY_ALPHA) {
@@ -87,7 +87,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 			baseStability, err := getStabilityLevel(operationItem.Extensions)
 			source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 			if err != nil {
-				result = newParsingError(config, result, err, operation, operationItem, path, source)
+				result = append(result, newParsingError(err, operation, operationItem, path, source))
 				continue
 			}
 			if !(baseStability == STABILITY_DRAFT || baseStability == STABILITY_ALPHA) {
@@ -102,29 +102,13 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].Extensions)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
-				result = append(result, ApiChange{
-					Id:          APIInvalidStabilityLevelId,
-					Args:        []any{err.Error()},
-					Level:       ERR,
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, newParsingError(err, operation, operationItem.Revision, path, source))
 				continue
 			}
 			revisionStability, err := getStabilityLevel(pathDiff.Revision.Operations()[operation].Extensions)
 			if err != nil {
 				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
-				result = append(result, ApiChange{
-					Id:          APIInvalidStabilityLevelId,
-					Args:        []any{err.Error()},
-					Level:       ERR,
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, newParsingError(err, operation, operationItem.Revision, path, source))
 				continue
 			}
 			source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
@@ -151,14 +135,13 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 	return result
 }
 
-func newParsingError(config *Config,
-	result Changes,
+func newParsingError(
 	err error,
 	operation string,
 	operationItem *openapi3.Operation,
 	path string,
-	source string) Changes {
-	result = append(result, ApiChange{
+	source string) Change {
+	return ApiChange{
 		Id:          APIInvalidStabilityLevelId,
 		Args:        []any{err.Error()},
 		Level:       ERR,
@@ -166,8 +149,7 @@ func newParsingError(config *Config,
 		OperationId: operationItem.OperationID,
 		Path:        path,
 		Source:      load.NewSource(source),
-	})
-	return result
+	}
 }
 
 func getStabilityLevel(i map[string]interface{}) (string, error) {
