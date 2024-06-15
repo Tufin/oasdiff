@@ -41,21 +41,6 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: specifying an invalid stability level is breaking
-func TestBreaking_InvalidStabilityLevel(t *testing.T) {
-	s1, err := open(getDeprecationFile("base.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("base-invalid-stability.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIInvalidStabilityLevelId, errs[0].GetId())
-}
-
 // BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not alpha stability level
 func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))

@@ -12,6 +12,7 @@ request-property-pattern-added: добавлен pattern %s у поля запр
 request-property-pattern-removed: удалён pattern %s у поля запроса %s
 request-property-pattern-changed: изменён pattern у поля запроса %s со значения %s на значение %s
 api-deprecated-sunset-parse: "не удалось проанализировать дату заката: %v"
+api-stability-decreased: "уровень стабильности конечной точки уменьшен с %s до %s"
 api-invalid-stability-level: "не удалось разобрать уровень стабильности: %v"
 api-deprecated-sunset-missing: "API устарел без даты прекращения действия"
 api-sunset-date-too-small: дата API sunset date %s слишком ранняя, должно быть как минимум %s дней от текущего дня

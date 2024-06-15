@@ -58,8 +58,8 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 		pathDiff := diffReport.PathsDiff
 		for operation, operationItem := range pathDiff.Base.Value(path).Operations() {
 			baseStability, err := getStabilityLevel(pathDiff.Base.Value(path).Operations()[operation].Extensions)
-			source := (*operationsSources)[pathDiff.Base.Value(path).Operations()[operation]]
 			if err != nil {
+				source := (*operationsSources)[pathDiff.Base.Value(path).Operations()[operation]]
 				result = append(result, newParsingError(err, operation, operationItem, path, source))
 				continue
 			}
@@ -85,8 +85,8 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 		for _, operation := range pathDiff.OperationsDiff.Deleted {
 			operationItem := pathDiff.Base.Operations()[operation]
 			baseStability, err := getStabilityLevel(operationItem.Extensions)
-			source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 			if err != nil {
+				source := (*operationsSources)[pathDiff.Base.Operations()[operation]]
 				result = append(result, newParsingError(err, operation, operationItem, path, source))
 				continue
 			}
@@ -111,11 +111,11 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 				result = append(result, newParsingError(err, operation, operationItem.Revision, path, source))
 				continue
 			}
-			source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
 			if baseStability == STABILITY_STABLE && revisionStability != STABILITY_STABLE ||
 				baseStability == STABILITY_BETA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
 				baseStability == STABILITY_ALPHA && revisionStability != STABILITY_ALPHA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
 				revisionStability == "" && baseStability != "" {
+				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
 				result = append(result, ApiChange{
 					Id:          APIStabilityDecreasedId,
 					Args:        []any{baseStability, revisionStability},
