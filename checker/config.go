@@ -2,14 +2,14 @@ package checker
 
 type Config struct {
 	Checks              []BackwardCompatibilityCheck
-	MinSunsetBetaDays   int
-	MinSunsetStableDays int
+	MinSunsetBetaDays   uint
+	MinSunsetStableDays uint
 	LogLevelOverrides   map[string]Level
 }
 
 const (
-	BetaDeprecationDays   = 31
-	StableDeprecationDays = 180
+	DefaultBetaDeprecationDays   = uint(0)
+	DefaultStableDeprecationDays = uint(0)
 )
 
 // NewConfig creates a new configuration with default values.
@@ -17,8 +17,8 @@ func NewConfig() *Config {
 	return &Config{
 		Checks:              allChecks(),
 		LogLevelOverrides:   map[string]Level{},
-		MinSunsetBetaDays:   BetaDeprecationDays,
-		MinSunsetStableDays: StableDeprecationDays,
+		MinSunsetBetaDays:   DefaultBetaDeprecationDays,
+		MinSunsetStableDays: DefaultStableDeprecationDays,
 	}
 }
 
@@ -34,7 +34,7 @@ func (config *Config) WithOptionalChecks(ids []string) *Config {
 }
 
 // WithDeprecation sets the number of days before sunset for deprecation warnings.
-func (config *Config) WithDeprecation(deprecationDaysBeta int, deprecationDaysStable int) *Config {
+func (config *Config) WithDeprecation(deprecationDaysBeta uint, deprecationDaysStable uint) *Config {
 	config.MinSunsetBetaDays = deprecationDaysBeta
 	config.MinSunsetStableDays = deprecationDaysStable
 	return config

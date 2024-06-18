@@ -74,7 +74,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			deprecationDays := getDeprecationDays(config, stability)
 
-			if baseDate.After(date) && days < deprecationDays {
+			if baseDate.After(date) && days < int(deprecationDays) {
 				result = append(result, ApiChange{
 					Id:          APISunsetDateChangedTooSmallId,
 					Level:       ERR,
@@ -98,7 +98,7 @@ const (
 	STABILITY_STABLE = "stable"
 )
 
-func getDeprecationDays(config *Config, stability string) int {
+func getDeprecationDays(config *Config, stability string) uint {
 	switch stability {
 	case STABILITY_DRAFT:
 		return 0

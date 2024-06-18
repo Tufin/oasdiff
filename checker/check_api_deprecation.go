@@ -58,6 +58,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			sunset, ok := getSunset(op.Extensions)
 			if !ok {
+				// if deprecation policy is defined and sunset is missing, it's a breaking change
 				if deprecationDays > 0 {
 					result = append(result, getAPIDeprecatedSunsetMissing(op, operationsSources, path, operation))
 				}
@@ -80,7 +81,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			days := date.DaysSince(civil.DateOf(time.Now()))
 
-			if days < deprecationDays {
+			if days < int(deprecationDays) {
 				result = append(result, ApiChange{
 					Id:          APISunsetDateTooSmallId,
 					Level:       ERR,

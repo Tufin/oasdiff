@@ -72,7 +72,7 @@ func checkAPIRemoval(deprecationId, sunsetId string, op *openapi3.Operation, ope
 		return getAPIPathSunsetParse(op, operationsSources, method, path, err)
 	}
 
-	if !civil.DateOf(time.Now()).After(date) {
+	if civil.DateOf(time.Now()).Before(date) {
 		return ApiChange{
 			Id:          sunsetId,
 			Level:       ERR,

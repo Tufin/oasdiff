@@ -41,25 +41,6 @@ func TestBreaking_DeprecationPast(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: deprecating an operation with a deprecation policy but without specifying sunset date is breaking
-func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("base.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	c := singleCheckConfig(checker.APIDeprecationCheck).WithDeprecation(0, 10)
-	errs := checker.CheckBackwardCompatibility(c, d, osm)
-	require.NotEmpty(t, errs)
-	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIDeprecatedSunsetMissingId, errs[0].GetId())
-	require.Equal(t, "sunset date is missing for deprecated API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-}
-
 // BC: deprecating an operation with a deprecation policy and an invalid sunset date is breaking
 func TestBreaking_DeprecationWithInvalidSunset(t *testing.T) {
 
@@ -131,6 +112,22 @@ func TestBreaking_DeprecationWithoutSunsetWithPolicy(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIDeprecatedSunsetMissingId, errs[0].GetId())
 	require.Equal(t, "sunset date is missing for deprecated API", errs[0].GetText(checker.NewDefaultLocalizer()))
+}
+
+// BC: deprecating an operation with a default deprecation policy but without specifying sunset date is not breaking
+func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
+
+	s1, err := open(getDeprecationFile("base.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	c := singleCheckConfig(checker.APIDeprecationCheck)
+	errs := checker.CheckBackwardCompatibility(c, d, osm)
+	require.Empty(t, errs)
 }
 
 // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for alpha level
