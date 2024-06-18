@@ -36,5 +36,5 @@ require (
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/cobra v1.8.1
-	github.com/wI2L/jsondiff v0.5.2
+	github.com/wI2L/jsondiff v0.6.0
 )
