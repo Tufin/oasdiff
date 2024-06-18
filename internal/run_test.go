@@ -277,6 +277,12 @@ func Test_BreakingChangesFlattenAllOf(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/allof/simple.yaml ../data/allof/revision.yaml --flatten-allof --fail-on ERR"), io.Discard, io.Discard))
 }
 
+func Test_BreakingChangesInvalidDeprecationDays(t *testing.T) {
+	var stderr bytes.Buffer
+	require.Equal(t, 100, internal.Run(cmdToArgs("oasdiff breaking ../data/deprecation/base.yaml ../data/deprecation/deprecated-with-sunset.yaml --deprecation-days-stable=-1"), io.Discard, &stderr))
+	require.Equal(t, "Error: invalid argument \"-1\" for \"--deprecation-days-stable\" flag: strconv.ParseUint: parsing \"-1\": invalid syntax\n", stderr.String())
+}
+
 func Test_BreakingChangesFlattenCommonParams(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/common-params/params_in_path.yaml ../data/common-params/params_in_op.yaml --flatten-params --fail-on ERR"), io.Discard, io.Discard))
 }

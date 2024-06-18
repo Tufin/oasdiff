@@ -70,11 +70,11 @@ func (flags *DiffFlags) getIncludeChecks() []string {
 	return nil
 }
 
-func (flags *DiffFlags) getDeprecationDaysBeta() int {
+func (flags *DiffFlags) getDeprecationDaysBeta() uint {
 	return 0
 }
 
-func (flags *DiffFlags) getDeprecationDaysStable() int {
+func (flags *DiffFlags) getDeprecationDaysStable() uint {
 	return 0
 }
 
@@ -182,6 +182,10 @@ func (flags *DiffFlags) refLang() *string {
 	return nil
 }
 
+func (flags *DiffFlags) refFormat() *string {
+	return nil
+}
+
 func (flags *DiffFlags) refErrIgnoreFile() *string {
 	return nil
 }
@@ -194,11 +198,11 @@ func (flags *DiffFlags) refIncludeChecks() *[]string {
 	return nil
 }
 
-func (flags *DiffFlags) refDeprecationDaysBeta() *int {
+func (flags *DiffFlags) refDeprecationDaysBeta() *uint {
 	return nil
 }
 
-func (flags *DiffFlags) refDeprecationDaysStable() *int {
+func (flags *DiffFlags) refDeprecationDaysStable() *uint {
 	return nil
 }
 

@@ -5,7 +5,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/formatters"
 )
 
 func getBreakingChangesCmd() *cobra.Command {
@@ -22,7 +21,6 @@ func getBreakingChangesCmd() *cobra.Command {
 
 	addCommonDiffFlags(&cmd, &flags)
 	addCommonBreakingFlags(&cmd, &flags)
-	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChangelog), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn}, "", &flags.failOn), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
 
 	return &cmd
