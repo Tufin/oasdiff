@@ -96,6 +96,7 @@ func TestBreaking_DeprecationWithInvalidStabilityLevel(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIInvalidStabilityLevelId, errs[0].GetId())
 	require.Equal(t, "failed to parse stability level: 'value is not one of draft, alpha, beta or stable: \"invalid\"'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "../data/deprecation/deprecated-with-invalid-stability.yaml", errs[0].GetSource())
 }
 
 // BC: deprecating an operation without a deprecation policy but without specifying sunset date is not breaking
@@ -330,4 +331,5 @@ func TestBreaking_InvaidStability(t *testing.T) {
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
 	require.Equal(t, "failed to parse stability level: 'value is not one of draft, alpha, beta or stable: \"ga\"'", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "../data/deprecation/invalid-stability.yaml", errs[0].GetSource())
 }
