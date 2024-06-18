@@ -16,8 +16,8 @@ type Flags interface {
 	getInsensitiveHeaders() bool
 	getCircularReferenceCounter() int
 	getIncludeChecks() []string
-	getDeprecationDaysBeta() int
-	getDeprecationDaysStable() int
+	getDeprecationDaysBeta() uint
+	getDeprecationDaysStable() uint
 	getLang() string
 	getColor() string
 	getWarnIgnoreFile() string
@@ -47,10 +47,11 @@ type Flags interface {
 	refFlattenParams() *bool
 	refInsensitiveHeaders() *bool
 	refLang() *string
+	refFormat() *string
 	refErrIgnoreFile() *string
 	refWarnIgnoreFile() *string
 	refIncludeChecks() *[]string
-	refDeprecationDaysBeta() *int
-	refDeprecationDaysStable() *int
+	refDeprecationDaysBeta() *uint
+	refDeprecationDaysStable() *uint
 	refColor() *string
 }

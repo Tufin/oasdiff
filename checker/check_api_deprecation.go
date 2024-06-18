@@ -9,11 +9,12 @@ import (
 )
 
 const (
-	EndpointReactivatedId      = "endpoint-reactivated"
-	APIDeprecatedSunsetParseId = "api-deprecated-sunset-parse"
-	ParseErrorId               = "parsing-error"
-	APISunsetDateTooSmallId    = "api-sunset-date-too-small"
-	EndpointDeprecatedId       = "endpoint-deprecated"
+	EndpointReactivatedId        = "endpoint-reactivated"
+	APIDeprecatedSunsetParseId   = "api-deprecated-sunset-parse"
+	APIDeprecatedSunsetMissingId = "api-deprecated-sunset-missing"
+	APIInvalidStabilityLevelId   = "api-invalid-stability-level"
+	APISunsetDateTooSmallId      = "api-sunset-date-too-small"
+	EndpointDeprecatedId         = "endpoint-deprecated"
 )
 
 func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -47,12 +48,29 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 				continue
 			}
 
-			rawDate, date, err := getSunsetDate(op.Extensions)
+			stability, err := getStabilityLevel(op.Extensions)
+			if err != nil {
+				// handled in CheckBackwardCompatibility
+				continue
+			}
+
+			deprecationDays := getDeprecationDays(config, stability)
+
+			sunset, ok := getSunset(op.Extensions)
+			if !ok {
+				// if deprecation policy is defined and sunset is missing, it's a breaking change
+				if deprecationDays > 0 {
+					result = append(result, getAPIDeprecatedSunsetMissing(op, operationsSources, path, operation))
+				}
+				continue
+			}
+
+			date, err := getSunsetDate(sunset)
 			if err != nil {
 				result = append(result, ApiChange{
 					Id:          APIDeprecatedSunsetParseId,
 					Level:       ERR,
-					Args:        []any{rawDate, err},
+					Args:        []any{err},
 					Operation:   operation,
 					OperationId: op.OperationID,
 					Path:        path,
@@ -63,23 +81,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			days := date.DaysSince(civil.DateOf(time.Now()))
 
-			stability, err := getStabilityLevel(op.Extensions)
-			if err != nil {
-				result = append(result, ApiChange{
-					Id:          ParseErrorId,
-					Level:       ERR,
-					Args:        []any{err.Error()},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
-				continue
-			}
-
-			deprecationDays := getDeprecationDays(config, stability)
-
-			if days < deprecationDays {
+			if days < int(deprecationDays) {
 				result = append(result, ApiChange{
 					Id:          APISunsetDateTooSmallId,
 					Level:       ERR,
