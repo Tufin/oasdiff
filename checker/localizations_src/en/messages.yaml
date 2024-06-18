@@ -12,6 +12,7 @@ request-property-pattern-added: "added the pattern %s to the request property %s
 request-property-pattern-removed: "removed the pattern %s from the request property %s"
 request-property-pattern-changed: "changed the pattern of the request property %s from %s to %s"
 api-deprecated-sunset-parse: "failed to parse sunset date: %v"
+api-path-sunset-parse: "failed to parse sunset date: %v"
 api-stability-decreased: "endpoint stability level decreased from %s to %s"
 api-invalid-stability-level: "failed to parse stability level: %v"
 api-deprecated-sunset-missing: "sunset date is missing for deprecated API"

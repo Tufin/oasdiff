@@ -58,7 +58,7 @@ func TestBreaking_SunsetModifiedToInvalidForDeprecatedEndpoint(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIDeprecatedSunsetParseId, errs[0].GetId())
+	require.Equal(t, checker.APIPathSunsetParseId, errs[0].GetId())
 	require.Equal(t, "failed to parse sunset date: 'sunset date doesn't conform with RFC3339: invalid-date'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
@@ -76,7 +76,7 @@ func TestBreaking_SunsetModifiedFromInvalidForDeprecatedEndpoint(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APISunsetChangedCheck), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.APIDeprecatedSunsetParseId, errs[0].GetId())
+	require.Equal(t, checker.APIPathSunsetParseId, errs[0].GetId())
 	require.Equal(t, "failed to parse sunset date: 'sunset date doesn't conform with RFC3339: invalid-date'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, "../data/deprecation/deprecated-invalid.yaml", errs[0].GetSource())
 }

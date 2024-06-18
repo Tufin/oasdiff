@@ -66,7 +66,15 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			date, err := getSunsetDate(sunset)
 			if err != nil {
-				result = append(result, getAPIDeprecatedSunsetParseId(op, operationsSources, path, operation, err))
+				result = append(result, ApiChange{
+					Id:          APIDeprecatedSunsetParseId,
+					Level:       ERR,
+					Args:        []any{err},
+					Operation:   operation,
+					OperationId: op.OperationID,
+					Path:        path,
+					Source:      load.NewSource(source),
+				})
 				continue
 			}
 

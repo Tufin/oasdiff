@@ -54,13 +54,13 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			date, err := getSunsetDate(opRevision.Extensions[diff.SunsetExtension])
 			if err != nil {
-				result = append(result, getAPIDeprecatedSunsetParseId(opRevision, operationsSources, path, operation, err))
+				result = append(result, getAPIPathSunsetParse(opRevision, operationsSources, path, operation, err))
 				continue
 			}
 
 			baseDate, err := getSunsetDate(opBase.Extensions[diff.SunsetExtension])
 			if err != nil {
-				result = append(result, getAPIDeprecatedSunsetParseId(opBase, operationsSources, path, operation, err))
+				result = append(result, getAPIPathSunsetParse(opBase, operationsSources, path, operation, err))
 				continue
 			}
 
@@ -118,18 +118,6 @@ func getAPIDeprecatedSunsetMissing(operation *openapi3.Operation, operationsSour
 		Id:          APIDeprecatedSunsetMissingId,
 		Level:       ERR,
 		Args:        []any{},
-		Operation:   method,
-		OperationId: operation.OperationID,
-		Path:        path,
-		Source:      load.NewSource((*operationsSources)[operation]),
-	}
-}
-
-func getAPIDeprecatedSunsetParseId(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string, err error) Change {
-	return ApiChange{
-		Id:          APIDeprecatedSunsetParseId,
-		Level:       ERR,
-		Args:        []any{err},
 		Operation:   method,
 		OperationId: operation.OperationID,
 		Path:        path,
