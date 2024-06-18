@@ -5,7 +5,7 @@ As API owners, we want a process that will allow us to phase out the old API ver
 OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and other object types as deprecated.  
 Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource **is** considered a breaking change.
 
-### Deprecation without sunset
+### Deprecation without a sunset date
 Oasdiff allows you to gracefully remove a resource without getting a breaking change error, as follows:
 1. The resource is marked as ```deprecated```:
    ```
@@ -15,8 +15,8 @@ Oasdiff allows you to gracefully remove a resource without getting a breaking ch
    ```
 2. Subsequently, the resource can be removed without triggering a breaking change error.
 
-### Deprecation with sunset
-A more mature deprecation process includes a sunset date which tells the clients how long they can still use the deprecated API:
+### Deprecation with a sunset date
+A more mature deprecation process includes a sunset date which tells the API clients how long they can still use the deprecated API before sunset:
 1. The resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed:
    ```
    /api/test:
@@ -27,13 +27,24 @@ A more mature deprecation process includes a sunset date which tells the clients
    Note sunset date should conform with [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339).    
 2. At the sunset date or anytime later, the resource can be removed without triggering a breaking change error. An earlier removal will be considered a breaking change.
 
-### Grace period
-Oasdiff allows you to specify a required grace period: the minimal number of days required between deprecating a resource and removing it.  
-You can configure a grace period by setting `--deprecation-days-stable` to any positive number.  
+Notes:
+1. In this mode, oasdiff considers the `x-sunset` extension as **optional** allowing developers to deprecate APIs with or without the `x-sunset` extension.  
+2. After an `x-sunset` extension is specified, changing it to an earlier date will trigger a breaking change.  
 
-For example, the following command requires deprecation of APIs to be accompanied by an ```x-sunset``` extension with a date which is at least 30 days away, otherwise the deprecation itself will be considered a breaking change:
+### Enforcing Sunset Grace Period
+Oasdiff allows you to enforce a sunset grace period: the minimal number of days required between deprecating a resource and removing it.  
+In this mode oasdiff considers the `x-sunset` extension **mandatory**, so that deprecating an API must be acompanied with an `x-sunset` extension, otherwise it is considered breaking.  
+
+For example, the following command requires deprecation of APIs to be accompanied by an ```x-sunset``` extension with a date which is at least 180 days away, otherwise the deprecation itself will be considered a breaking change:
 ```
-oasdiff breaking data/deprecation/base.yaml data/deprecation/deprecated-past.yaml --deprecation-days-stable=30
+oasdiff breaking data/deprecation/base.yaml data/deprecation/deprecated-past.yaml --deprecation-days-stable=180
 ```
 
-You can also define a different grace period for [Beta resources](STABILITY.md) with the `--deprecation-days-beta` flag.
+If you are using [API stability levels](STABILITY.md) you can define different sunset grace periods for:
+- Stable APIs: with the `--deprecation-days-stable`
+- Beta APIs: with the `--deprecation-days-beta`
+
+Notes:
+1. Deprecation days can be set to non-negative integers
+2. Setting deprecation days to a zero value disables enforcement and reverts to the [Deprecation with a sunset date](#deprecation-with-a-sunset-date) behavior
+2. After an `x-sunset` extension is specified, it can only be changed to a future date which respects the sunset grace period relative to date of the change.
