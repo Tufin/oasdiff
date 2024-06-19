@@ -24,7 +24,13 @@ brew tap tufin/homebrew-tufin
 brew install oasdiff
 ```
 
-### Install on macOS, Windows and Linux
+### Install on macOS and Linux using curl
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/tufin/oasdiff/main/install.sh | sh
+```
+
+### Manually install on macOS, Windows and Linux
 Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
 
@@ -48,7 +54,8 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](COMPOSED.md)
 - Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
-- [API deprecation](API-DEPRECATION.md)
+- [API deprecation](DEPRECATION.md)
+- [API stability levels](STABILITY.md)
 - [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md#duplicate-endpoints)
 - [Merge allOf schemas](ALLOF.md)
 - [Merge common parameters](COMMON-PARAMS.md)

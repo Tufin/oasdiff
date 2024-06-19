@@ -3,29 +3,35 @@ package checker
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"cloud.google.com/go/civil"
 	"github.com/tufin/oasdiff/diff"
 )
 
-func getSunsetDate(Extensions map[string]interface{}) (string, civil.Date, error) {
-	sunset, ok := Extensions[diff.SunsetExtension].(string)
+func getSunset(Extensions map[string]interface{}) (interface{}, bool) {
+	value, ok := Extensions[diff.SunsetExtension]
+	return value, ok
+}
+
+func getSunsetDate(sunset interface{}) (civil.Date, error) {
+	sunsetStr, ok := sunset.(string)
 	if !ok {
-		sunsetJson, ok := Extensions[diff.SunsetExtension].(json.RawMessage)
+		sunsetJson, ok := sunset.(json.RawMessage)
 		if !ok {
-			return "", civil.Date{}, errors.New("sunset extension not found")
+			return civil.Date{}, errors.New("sunset value isn't a string nor valid json")
 		}
-		if err := json.Unmarshal(sunsetJson, &sunset); err != nil {
-			return "", civil.Date{}, errors.New("unmarshal failed")
+		if err := json.Unmarshal(sunsetJson, &sunsetStr); err != nil {
+			return civil.Date{}, fmt.Errorf("failed to unmarshal sunset json: %v", sunset)
 		}
 	}
 
-	if date, err := civil.ParseDate(sunset); err == nil {
-		return sunset, date, nil
-	} else if date, err := time.Parse(time.RFC3339, sunset); err == nil {
-		return sunset, civil.DateOf(date), nil
+	if date, err := civil.ParseDate(sunsetStr); err == nil {
+		return date, nil
+	} else if date, err := time.Parse(time.RFC3339, sunsetStr); err == nil {
+		return civil.DateOf(date), nil
 	}
 
-	return sunset, civil.Date{}, errors.New("failed to parse sunset date")
+	return civil.Date{}, fmt.Errorf("sunset date doesn't conform with RFC3339: %s", sunsetStr)
 }

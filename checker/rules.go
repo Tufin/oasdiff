@@ -45,7 +45,7 @@ func GetAllRules() []BackwardCompatibilityRule {
 		// APIDeprecationCheck
 		newBackwardCompatibilityRule(EndpointReactivatedId, INFO, true, APIDeprecationCheck),
 		newBackwardCompatibilityRule(APIDeprecatedSunsetParseId, ERR, true, APIDeprecationCheck),
-		newBackwardCompatibilityRule(ParseErrorId, ERR, true, APIDeprecationCheck),
+		newBackwardCompatibilityRule(APIInvalidStabilityLevelId, ERR, true, APIDeprecationCheck),
 		newBackwardCompatibilityRule(APISunsetDateTooSmallId, ERR, true, APIDeprecationCheck),
 		newBackwardCompatibilityRule(EndpointDeprecatedId, INFO, true, APIDeprecationCheck),
 		// APIRemovedCheck

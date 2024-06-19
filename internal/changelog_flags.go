@@ -28,8 +28,8 @@ type ChangelogFlags struct {
 	lang                     string
 	errIgnoreFile            string
 	warnIgnoreFile           string
-	deprecationDaysBeta      int
-	deprecationDaysStable    int
+	deprecationDaysBeta      uint
+	deprecationDaysStable    uint
 	color                    string
 }
 
@@ -78,11 +78,11 @@ func (flags *ChangelogFlags) getIncludeChecks() []string {
 	return flags.includeChecks
 }
 
-func (flags *ChangelogFlags) getDeprecationDaysBeta() int {
+func (flags *ChangelogFlags) getDeprecationDaysBeta() uint {
 	return flags.deprecationDaysBeta
 }
 
-func (flags *ChangelogFlags) getDeprecationDaysStable() int {
+func (flags *ChangelogFlags) getDeprecationDaysStable() uint {
 	return flags.deprecationDaysStable
 }
 
@@ -190,6 +190,10 @@ func (flags *ChangelogFlags) refLang() *string {
 	return &flags.lang
 }
 
+func (flags *ChangelogFlags) refFormat() *string {
+	return &flags.format
+}
+
 func (flags *ChangelogFlags) refErrIgnoreFile() *string {
 	return &flags.errIgnoreFile
 }
@@ -202,11 +206,11 @@ func (flags *ChangelogFlags) refIncludeChecks() *[]string {
 	return &flags.includeChecks
 }
 
-func (flags *ChangelogFlags) refDeprecationDaysBeta() *int {
+func (flags *ChangelogFlags) refDeprecationDaysBeta() *uint {
 	return &flags.deprecationDaysBeta
 }
 
-func (flags *ChangelogFlags) refDeprecationDaysStable() *int {
+func (flags *ChangelogFlags) refDeprecationDaysStable() *uint {
 	return &flags.deprecationDaysStable
 }
 

@@ -11,8 +11,12 @@ request-parameter-pattern-changed: "changed the pattern of the %s request parame
 request-property-pattern-added: "added the pattern %s to the request property %s"
 request-property-pattern-removed: "removed the pattern %s from the request property %s"
 request-property-pattern-changed: "changed the pattern of the request property %s from %s to %s"
-api-deprecated-sunset-parse: "api sunset date %s can't be parsed for deprecated API: %v"
-api-sunset-date-too-small: "api sunset date %s is too small, must be at least %s days from now"
+api-deprecated-sunset-parse: "failed to parse sunset date: %v"
+api-path-sunset-parse: "failed to parse sunset date: %v"
+api-stability-decreased: "endpoint stability level decreased from %s to %s"
+api-invalid-stability-level: "failed to parse stability level: %v"
+api-deprecated-sunset-missing: "sunset date is missing for deprecated API"
+api-sunset-date-too-small: "sunset date %s is too small, must be at least %s days from now"
 endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated
@@ -270,7 +274,8 @@ new-optional-request-default-parameter-to-existing-path: added the new optional 
 # descriptions
 request-body-added-required-description: required request body added
 request-body-added-optional-description: optional request body added
-api-deprecated-sunset-parse-description: endpoint deprecated with invalid or missing sunset date
+api-deprecated-sunset-parse-description: endpoint deprecated with invalid sunset date
+api-deprecated-sunset-missing-description: endpoint deprecated without sunset date
 endpoint-added-description: endpoint added
 api-global-security-added-description: security scheme added in security
 api-global-security-removed-description: security scheme deleted in security
@@ -312,7 +317,7 @@ new-required-request-parameter-description: required request parameter added to 
 new-required-request-property-description: required property added to request
 new-required-request-property-with-default-description: required property with default value added to request
 optional-response-header-removed-description: optional response header deleted
-parsing-error-description: invalid stability level
+api-invalid-stability-level-description: invalid stability level
 request-body-all-of-added-description: sub-schema added to allOf in request body
 request-body-all-of-removed-description: sub-schema deleted from allOf in request body
 request-body-any-of-added-description: sub-schema added to anyOf in request body
