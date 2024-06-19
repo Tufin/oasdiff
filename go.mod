@@ -5,12 +5,12 @@ go 1.22.4
 require (
 	cloud.google.com/go v0.115.0
 	github.com/TwiN/go-color v1.4.1
-	github.com/getkin/kin-openapi v0.124.0
+	github.com/getkin/kin-openapi v0.125.0
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.9.0
 	github.com/yargevad/filepathx v1.0.0
 	github.com/yuin/goldmark v1.7.2
-	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
+	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8
 	gopkg.in/yaml.v3 v3.0.1
 )
 
