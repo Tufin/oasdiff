@@ -9,7 +9,7 @@ require (
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/stretchr/testify v1.9.0
 	github.com/yargevad/filepathx v1.0.0
-	github.com/yuin/goldmark v1.7.2
+	github.com/yuin/goldmark v1.7.3
 	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8
 	gopkg.in/yaml.v3 v3.0.1
 )
