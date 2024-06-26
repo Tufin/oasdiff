@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"github.com/TwiN/go-color"
+	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
 
@@ -24,6 +26,19 @@ type ApiChange struct {
 	SourceLineEnd   int
 	SourceColumn    int
 	SourceColumnEnd int
+}
+
+func NewApiChange(id string, level Level, args []any, comment string, operationsSources *diff.OperationsSourcesMap, operation *openapi3.Operation, method, path string) ApiChange {
+	return ApiChange{
+		Id:          id,
+		Level:       level,
+		Args:        args,
+		Comment:     comment,
+		OperationId: operation.OperationID,
+		Operation:   method,
+		Path:        path,
+		Source:      load.NewSource((*operationsSources)[operation]),
+	}
 }
 
 func (c ApiChange) GetSection() string {
