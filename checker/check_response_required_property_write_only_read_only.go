@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -23,7 +22,6 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ResponsesDiff == nil {
 				continue
@@ -67,16 +65,16 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								comment = ""
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       level,
-								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
-								Comment:     comment,
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								level,
+								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
+								comment,
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 
 					CheckModifiedPropertiesDiff(
@@ -103,15 +101,16 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								level = INFO
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       level,
-								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								level,
+								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 				}
 			}

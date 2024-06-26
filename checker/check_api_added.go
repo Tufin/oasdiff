@@ -3,7 +3,6 @@ package checker
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -16,15 +15,17 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 		return result
 	}
 
-	appendErr := func(path, opName string, opConfig *openapi3.Operation) {
-		result = append(result, ApiChange{
-			Id:          EndpointAddedId,
-			Level:       INFO,
-			Operation:   opName,
-			OperationId: opConfig.OperationID,
-			Path:        path,
-			Source:      load.NewSource((*operationsSources)[opConfig]),
-		})
+	appendErr := func(path, method string, operation *openapi3.Operation) {
+		result = append(result, NewApiChange(
+			EndpointAddedId,
+			INFO,
+			nil,
+			"",
+			operationsSources,
+			operation,
+			method,
+			path,
+		))
 	}
 
 	for _, path := range diffReport.PathsDiff.Added {
@@ -35,7 +36,7 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 
 	for path, pathDiff := range diffReport.PathsDiff.Modified {
 		for opName, op := range pathDiff.Revision.Operations() {
-			if _, foundInBase := pathDiff.Base.Operations()[opName]; foundInBase {
+			if baseOp := pathDiff.Base.GetOperation(opName); baseOp != nil {
 				continue
 			}
 			appendErr(path, opName, op)

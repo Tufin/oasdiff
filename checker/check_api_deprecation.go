@@ -5,7 +5,6 @@ import (
 
 	"cloud.google.com/go/civil"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -28,8 +27,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			continue
 		}
 		for operation, operationDiff := range pathItem.OperationsDiff.Modified {
-			op := pathItem.Revision.Operations()[operation]
-			source := (*operationsSources)[op]
+			op := pathItem.Revision.GetOperation(operation)
 
 			if operationDiff.DeprecatedDiff == nil {
 				continue
@@ -37,14 +35,16 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			if operationDiff.DeprecatedDiff.To == nil || operationDiff.DeprecatedDiff.To == false {
 				// not breaking changes
-				result = append(result, ApiChange{
-					Id:          EndpointReactivatedId,
-					Level:       INFO,
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, NewApiChange(
+					EndpointReactivatedId,
+					INFO,
+					nil,
+					"",
+					operationsSources,
+					op,
+					operation,
+					path,
+				))
 				continue
 			}
 
@@ -67,42 +67,46 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 
 			date, err := getSunsetDate(sunset)
 			if err != nil {
-				result = append(result, ApiChange{
-					Id:          APIDeprecatedSunsetParseId,
-					Level:       ERR,
-					Args:        []any{err},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, NewApiChange(
+					APIDeprecatedSunsetParseId,
+					ERR,
+					[]any{err},
+					"",
+					operationsSources,
+					op,
+					operation,
+					path,
+				))
 				continue
 			}
 
 			days := date.DaysSince(civil.DateOf(time.Now()))
 
 			if days < int(deprecationDays) {
-				result = append(result, ApiChange{
-					Id:          APISunsetDateTooSmallId,
-					Level:       ERR,
-					Args:        []any{date, deprecationDays},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, NewApiChange(
+					APISunsetDateTooSmallId,
+					ERR,
+					[]any{date, deprecationDays},
+					"",
+					operationsSources,
+					op,
+					operation,
+					path,
+				))
 				continue
 			}
 
 			// not breaking changes
-			result = append(result, ApiChange{
-				Id:          EndpointDeprecatedId,
-				Level:       INFO,
-				Operation:   operation,
-				OperationId: op.OperationID,
-				Path:        path,
-				Source:      load.NewSource(source),
-			})
+			result = append(result, NewApiChange(
+				EndpointDeprecatedId,
+				INFO,
+				nil,
+				"",
+				operationsSources,
+				op,
+				operation,
+				path,
+			))
 		}
 	}
 
