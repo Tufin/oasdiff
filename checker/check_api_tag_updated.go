@@ -22,7 +22,7 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 		}
 
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			op := pathItem.Base.Operations()[operation]
+			op := pathItem.Base.GetOperation(operation)
 			source := (*operationsSources)[op]
 
 			if operationItem.TagsDiff == nil {

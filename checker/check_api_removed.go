@@ -28,7 +28,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			continue
 		}
 		for operation := range diffReport.PathsDiff.Base.Value(path).Operations() {
-			op := diffReport.PathsDiff.Base.Value(path).Operations()[operation]
+			op := diffReport.PathsDiff.Base.Value(path).GetOperation(operation)
 			if change := checkAPIRemoval(APIPathRemovedWithoutDeprecationId, APIPathRemovedBeforeSunsetId, op, operationsSources, operation, path); change != nil {
 				result = append(result, change)
 			}
@@ -40,7 +40,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 			continue
 		}
 		for _, operation := range pathItem.OperationsDiff.Deleted {
-			op := pathItem.Base.Operations()[operation]
+			op := pathItem.Base.GetOperation(operation)
 			if change := checkAPIRemoval(APIRemovedWithoutDeprecationId, APIRemovedBeforeSunsetId, op, operationsSources, operation, path); change != nil {
 				result = append(result, change)
 			}
