@@ -25,8 +25,8 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			continue
 		}
 		for operation, operationDiff := range pathItem.OperationsDiff.Modified {
-			opRevision := pathItem.Revision.Operations()[operation]
-			opBase := pathItem.Base.Operations()[operation]
+			opRevision := pathItem.Revision.GetOperation(operation)
+			opBase := pathItem.Base.GetOperation(operation)
 
 			if !opRevision.Deprecated {
 				continue

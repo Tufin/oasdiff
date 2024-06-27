@@ -28,7 +28,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			continue
 		}
 		for operation, operationDiff := range pathItem.OperationsDiff.Modified {
-			op := pathItem.Revision.Operations()[operation]
+			op := pathItem.Revision.GetOperation(operation)
 			source := (*operationsSources)[op]
 
 			if operationDiff.DeprecatedDiff == nil {

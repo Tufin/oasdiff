@@ -35,7 +35,7 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 
 	for path, pathDiff := range diffReport.PathsDiff.Modified {
 		for opName, op := range pathDiff.Revision.Operations() {
-			if _, foundInBase := pathDiff.Base.Operations()[opName]; foundInBase {
+			if baseOp := pathDiff.Base.GetOperation(opName); baseOp != nil {
 				continue
 			}
 			appendErr(path, opName, op)

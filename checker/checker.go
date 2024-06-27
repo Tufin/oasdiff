@@ -57,7 +57,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 		ignore := true
 		pathDiff := diffReport.PathsDiff
 		for operation, operationItem := range pathDiff.Base.Value(path).Operations() {
-			baseStability, err := getStabilityLevel(pathDiff.Base.Value(path).Operations()[operation].Extensions)
+			baseStability, err := getStabilityLevel(pathDiff.Base.Value(path).GetOperation(operation).Extensions)
 			if err != nil {
 				result = append(result, getAPIInvalidStabilityLevel(operationItem, operationsSources, operation, path, err))
 				continue
@@ -82,7 +82,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 		// remove draft and alpha operations diffs deleted
 		iOperation := 0
 		for _, operation := range pathDiff.OperationsDiff.Deleted {
-			operationItem := pathDiff.Base.Operations()[operation]
+			operationItem := pathDiff.Base.GetOperation(operation)
 			baseStability, err := getStabilityLevel(operationItem.Extensions)
 			if err != nil {
 				result = append(result, getAPIInvalidStabilityLevel(operationItem, operationsSources, operation, path, err))
@@ -97,12 +97,12 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 
 		// remove draft and alpha operations diffs modified
 		for operation, operationItem := range pathDiff.OperationsDiff.Modified {
-			baseStability, err := getStabilityLevel(pathDiff.Base.Operations()[operation].Extensions)
+			baseStability, err := getStabilityLevel(pathDiff.Base.GetOperation(operation).Extensions)
 			if err != nil {
 				result = append(result, getAPIInvalidStabilityLevel(operationItem.Base, operationsSources, operation, path, err))
 				continue
 			}
-			revisionStability, err := getStabilityLevel(pathDiff.Revision.Operations()[operation].Extensions)
+			revisionStability, err := getStabilityLevel(pathDiff.Revision.GetOperation(operation).Extensions)
 			if err != nil {
 				result = append(result, getAPIInvalidStabilityLevel(operationItem.Revision, operationsSources, operation, path, err))
 				continue
@@ -111,7 +111,7 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 				baseStability == STABILITY_BETA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
 				baseStability == STABILITY_ALPHA && revisionStability != STABILITY_ALPHA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
 				revisionStability == "" && baseStability != "" {
-				source := (*operationsSources)[pathDiff.Revision.Operations()[operation]]
+				source := (*operationsSources)[pathDiff.Revision.GetOperation(operation)]
 				result = append(result, ApiChange{
 					Id:          APIStabilityDecreasedId,
 					Args:        []any{baseStability, revisionStability},

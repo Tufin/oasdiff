@@ -26,14 +26,14 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 				continue
 			}
 
-			op := pathItem.Base.Operations()[operation]
+			op := pathItem.Base.GetOperation(operation)
 			source := (*operationsSources)[op]
 
 			id := APIOperationIdRemovedId
 			args := []any{operationItem.Base.OperationID, operationItem.Revision.OperationID}
 			if operationItem.OperationIDDiff.From == nil || operationItem.OperationIDDiff.From == "" {
 				id = APIOperationIdAddId
-				op = pathItem.Revision.Operations()[operation]
+				op = pathItem.Revision.GetOperation(operation)
 				args = []any{operationItem.Revision.OperationID}
 			}
 
