@@ -29,30 +29,32 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
-				if mediaTypeDiff.SchemaDiff != nil {
-					schemaDiff := mediaTypeDiff.SchemaDiff
-					typeDiff := schemaDiff.TypeDiff
-					formatDiff := schemaDiff.FormatDiff
+				if mediaTypeDiff.SchemaDiff == nil {
+					continue
+				}
 
-					if !typeDiff.Empty() || !formatDiff.Empty() {
+				schemaDiff := mediaTypeDiff.SchemaDiff
+				typeDiff := schemaDiff.TypeDiff
+				formatDiff := schemaDiff.FormatDiff
 
-						typeDiff = getDetailedTypeDiff(schemaDiff)
-						formatDiff = getDetailedFormatDiff(schemaDiff)
+				if !typeDiff.Empty() || !formatDiff.Empty() {
 
-						result = append(result, ApiChange{
-							Id:          RequestBodyTypeChangedId,
-							Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-							Args:        []any{typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
-					}
+					typeDiffArgs := getDetailedTypeDiff(schemaDiff)
+					formatDiffArgs := getDetailedFormatDiff(schemaDiff)
+
+					result = append(result, ApiChange{
+						Id:          RequestBodyTypeChangedId,
+						Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
+						Args:        []any{typeDiffArgs.Deleted, formatDiffArgs.From, typeDiffArgs.Added, formatDiffArgs.To},
+						Operation:   operation,
+						OperationId: operationItem.Revision.OperationID,
+						Path:        path,
+						Source:      load.NewSource(source),
+					})
 				}
 
 				CheckModifiedPropertiesDiff(
-					mediaTypeDiff.SchemaDiff,
+					schemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 						if propertyDiff.Revision == nil {
 							return
@@ -66,13 +68,13 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 
 						if !typeDiff.Empty() || !formatDiff.Empty() {
 
-							typeDiff = getDetailedTypeDiff(schemaDiff)
-							formatDiff = getDetailedFormatDiff(schemaDiff)
+							typeDiffArgs := getDetailedTypeDiff(schemaDiff)
+							formatDiffArgs := getDetailedFormatDiff(schemaDiff)
 
 							result = append(result, ApiChange{
 								Id:          RequestPropertyTypeChangedId,
 								Level:       conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
-								Args:        []any{propertyFullName(propertyPath, propertyName), typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
+								Args:        []any{propertyFullName(propertyPath, propertyName), typeDiffArgs.Deleted, formatDiffArgs.From, typeDiffArgs.Added, formatDiffArgs.To},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -108,17 +110,4 @@ func getDetailedFormatDiff(schemaDiff *diff.SchemaDiff) *diff.ValueDiff {
 		From: schemaDiff.Base.Format,
 		To:   schemaDiff.Revision.Format,
 	}
-}
-
-func breakingTypeFormatChangedInRequestProperty(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, mediaType string, schemaDiff *diff.SchemaDiff) bool {
-
-	if typeDiff != nil {
-		return !isTypeContained(typeDiff.Added, typeDiff.Deleted, mediaType)
-	}
-
-	if formatDiff != nil {
-		return !isFormatContained(schemaDiff.Revision.Type, formatDiff.To, formatDiff.From)
-	}
-
-	return false
 }
