@@ -55,7 +55,7 @@ func isTypeContained(to, from utils.StringList, stronglyTyped bool) bool {
 		return true
 	}
 
-	// anything can be changed to string, unless it's json or xml
+	// anything can be changed to string, unless it's "strongly typed"
 	if !stronglyTyped {
 		return to.Empty() || to.Is("string")
 	}
@@ -64,10 +64,15 @@ func isTypeContained(to, from utils.StringList, stronglyTyped bool) bool {
 }
 
 // isStronglyTyped checks if the media type is strongly typed, for example:
-// in text format, all numbers can also be interpreted as strings
-// but in json and xml formats, a number (1) is not the same as a string ("1")
+// in text format, all numbers can also be interpreted as strings (1 can be a number or a string)
+// but in json, a number (1) is not the same as a string ("1")
 func isStronglyTyped(mediaType string) bool {
-	return isJsonMediaType(mediaType) || mediaType == "application/xml"
+	return isJsonMediaType(mediaType)
+}
+
+func isJsonMediaType(mediaType string) bool {
+	return mediaType == "application/json" ||
+		(strings.HasPrefix(mediaType, "application/vnd.") && strings.HasSuffix(mediaType, "+json"))
 }
 
 // isFormatContained checks if from is contained in to
@@ -99,11 +104,6 @@ func getSingleType(types *openapi3.Types) string {
 	}
 
 	return (*types)[0]
-}
-
-func isJsonMediaType(mediaType string) bool {
-	return mediaType == "application/json" ||
-		(strings.HasPrefix(mediaType, "application/vnd.") && strings.HasSuffix(mediaType, "+json"))
 }
 
 func getBaseType(schemaDiff *diff.SchemaDiff) utils.StringList {
