@@ -1,13 +1,14 @@
 package checker
 
 import (
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
 
 const (
-	RequestParameterTypeChangedId = "request-parameter-type-changed"
+	RequestParameterTypeChangedId                = "request-parameter-type-changed"
+	RequestParameterPropertyTypeChangedId        = "request-parameter-property-type-changed"
+	RequestParameterPropertyTypeChangedCommentId = "request-parameter-property-type-changed-warn-comment"
 )
 
 func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -23,6 +24,8 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 			if operationItem.ParametersDiff == nil {
 				continue
 			}
+			source := (*operationsSources)[operationItem.Revision]
+
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {
 					if paramDiff.SchemaDiff == nil {
@@ -33,28 +36,43 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					typeDiff := schemaDiff.TypeDiff
 					formatDiff := schemaDiff.FormatDiff
 
-					if typeDiff == nil && formatDiff == nil {
-						continue
+					if !typeDiff.Empty() || !formatDiff.Empty() {
+
+						result = append(result, ApiChange{
+							Id:          RequestParameterTypeChangedId,
+							Level:       conditionalError(breakingTypeFormatChangedInRequestParam(typeDiff, formatDiff, schemaDiff), INFO),
+							Args:        []any{paramLocation, paramName, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      load.NewSource(source),
+						})
 					}
 
-					if typeAndFormatContained(typeDiff, formatDiff, paramDiff.Revision.Schema.Value.Type) {
-						continue
-					}
+					CheckModifiedPropertiesDiff(
+						schemaDiff,
+						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 
-					source := (*operationsSources)[operationItem.Revision]
+							schemaDiff := propertyDiff
+							typeDiff := schemaDiff.TypeDiff
+							formatDiff := schemaDiff.FormatDiff
 
-					typeDiff = getDetailedTypeDiff(schemaDiff)
-					formatDiff = getDetailedFormatDiff(schemaDiff)
+							if !typeDiff.Empty() || !formatDiff.Empty() {
 
-					result = append(result, ApiChange{
-						Id:          RequestParameterTypeChangedId,
-						Level:       ERR,
-						Args:        []any{paramLocation, paramName, typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+								level, comment := checkRequestParameterPropertyTypeChanged(typeDiff, formatDiff, schemaDiff)
+
+								result = append(result, ApiChange{
+									Id:          RequestParameterPropertyTypeChangedId,
+									Level:       level,
+									Args:        []any{paramLocation, paramName, propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+									Comment:     comment,
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      load.NewSource(source),
+								})
+							}
+						})
 				}
 			}
 		}
@@ -62,38 +80,36 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 	return result
 }
 
-func typeAndFormatContained(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, revisionType *openapi3.Types) bool {
+/*
+checkRequestParameterPropertyTypeChanged checks the level of the change in the request parameter property type
+Explanation:
+Objects can be passed in the request parameters, for example, the following calls are equivalent:
+PHP style: GET http://localhost:8080/api/tickets?params[id]=123&params[color]=green
+JSON: GET http://localhost:8080/api/tickets?params={"id":"123","color":"green"}
 
-	if typeDiff != nil && typeDiff.Deleted.Is("integer") && typeDiff.Added.Is("number") {
-		return true
+The "params" object has two properties: "id" and "color", both with type "string", but note that the "id" values are actually numbers.
+Imagine that the OpenAPI type of property "id" was changed from "number" to "string".
+In the first example, the change is non-breaking, because the PHP format for numbers and strings is the same.
+But in the second example, the change is breaking, because the JSON format requires quotes for strings.
+*/
+func checkRequestParameterPropertyTypeChanged(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, schemaDiff *diff.SchemaDiff) (Level, string) {
+
+	// try with JSON format
+	isBreakingAsJson := breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, "application/json", schemaDiff)
+
+	// try with non-JSON format
+	isBreakingAsNonJson := breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, "", schemaDiff)
+
+	// if the JSON and not breaking as non-JSON formats don't agree, it's a warning
+	if isBreakingAsJson != isBreakingAsNonJson {
+		return WARN, RequestParameterPropertyTypeChangedCommentId
 	}
 
-	if typeDiff != nil && typeDiff.Added.Is("string") {
-		return true
+	// if both are breaking it's an error
+	if isBreakingAsJson {
+		return ERR, ""
 	}
 
-	if formatDiff != nil && (formatDiff.To == nil || formatDiff.To == "") {
-		// TODO: is this correct?
-		return true
-	}
-
-	if formatDiff != nil && revisionType.Is("string") &&
-		(formatDiff.From == "date" && formatDiff.To == "date-time" ||
-			formatDiff.From == "time" && formatDiff.To == "date-time") {
-		return true
-	}
-
-	if formatDiff != nil && revisionType.Is("number") &&
-		(formatDiff.From == "float" && formatDiff.To == "double") {
-		return true
-	}
-
-	if formatDiff != nil && revisionType.Is("integer") &&
-		(formatDiff.From == "int32" && formatDiff.To == "int64" ||
-			formatDiff.From == "int32" && formatDiff.To == "bigint" ||
-			formatDiff.From == "int64" && formatDiff.To == "bigint") {
-		return true
-	}
-
-	return false
+	// if niether are breaking it's an informational change
+	return INFO, ""
 }
