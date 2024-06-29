@@ -392,6 +392,7 @@ request-parameter-pattern-changed-description: request parameter pattern changed
 request-parameter-pattern-removed-description: request parameter pattern unset
 request-parameter-removed-description: request parameter deleted
 request-parameter-type-changed-description: request parameter type changed
+request-parameter-property-type-changed-description: request parameter property type changed
 request-parameter-x-extensible-enum-value-removed-description: request parameter-x-extensible-enum value deleted
 request-property-all-of-added-description: sub-schema added to allOf in request property 
 request-property-all-of-removed-description: sub-schema deleted from allOf in request property 
