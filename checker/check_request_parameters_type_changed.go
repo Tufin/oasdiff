@@ -6,7 +6,9 @@ import (
 )
 
 const (
-	RequestParameterTypeChangedId = "request-parameter-type-changed"
+	RequestParameterTypeChangedId                = "request-parameter-type-changed"
+	RequestParameterPropertyTypeChangedId        = "request-parameter-property-type-changed"
+	RequestParameterPropertyTypeChangedCommentId = "request-parameter-property-type-changed-warn-comment"
 )
 
 func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -36,13 +38,10 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 					if !typeDiff.Empty() || !formatDiff.Empty() {
 
-						typeDiffArgs := getDetailedTypeDiff(schemaDiff)
-						formatDiffArgs := getDetailedFormatDiff(schemaDiff)
-
 						result = append(result, ApiChange{
 							Id:          RequestParameterTypeChangedId,
 							Level:       conditionalError(breakingTypeFormatChangedInRequestParam(typeDiff, formatDiff, schemaDiff), INFO),
-							Args:        []any{paramLocation, paramName, typeDiffArgs.Deleted, formatDiffArgs.From, typeDiffArgs.Added, formatDiffArgs.To},
+							Args:        []any{paramLocation, paramName, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 							Operation:   operation,
 							OperationId: operationItem.Revision.OperationID,
 							Path:        path,
@@ -60,13 +59,18 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 							if !typeDiff.Empty() || !formatDiff.Empty() {
 
-								typeDiffArgs := getDetailedTypeDiff(schemaDiff)
-								formatDiffArgs := getDetailedFormatDiff(schemaDiff)
+								level := WARN
+								comment := RequestParameterPropertyTypeChangedCommentId
+								if isWarn := breakingTypeFormatChangedInRequestParam(typeDiff, formatDiff, schemaDiff); isWarn {
+									level = ERR
+									comment = ""
+								}
 
 								result = append(result, ApiChange{
-									Id:          RequestParameterTypeChangedId,
-									Level:       conditionalError(breakingTypeFormatChangedInRequestParam(typeDiff, formatDiff, schemaDiff), INFO),
-									Args:        []any{paramLocation, propertyFullName(propertyPath, propertyName), typeDiffArgs.Deleted, formatDiffArgs.From, typeDiffArgs.Added, formatDiffArgs.To},
+									Id:          RequestParameterPropertyTypeChangedId,
+									Level:       level,
+									Args:        []any{paramLocation, paramName, propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+									Comment:     comment,
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,

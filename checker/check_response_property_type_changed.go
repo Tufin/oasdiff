@@ -39,13 +39,10 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 						formatDiff := schemaDiff.FormatDiff
 						if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
 
-							typeDiffArgs := getDetailedTypeDiff(schemaDiff)
-							formatDiffArgs := getDetailedFormatDiff(schemaDiff)
-
 							result = append(result, ApiChange{
 								Id:          ResponseBodyTypeChangedId,
 								Level:       ERR,
-								Args:        []any{typeDiffArgs.Deleted, formatDiffArgs.From, typeDiffArgs.Added, formatDiffArgs.To, responseStatus},
+								Args:        []any{getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff), responseStatus},
 								Operation:   operation,
 								OperationId: operationItem.Revision.OperationID,
 								Path:        path,
@@ -67,13 +64,10 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 							if breakingTypeFormatChangedInResponseProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
 
-								typeDiffArgs := getDetailedTypeDiff(schemaDiff)
-								formatDiffArgs := getDetailedFormatDiff(schemaDiff)
-
 								result = append(result, ApiChange{
 									Id:          ResponsePropertyTypeChangedId,
 									Level:       ERR,
-									Args:        []any{propertyFullName(propertyPath, propertyName), typeDiffArgs.Deleted, formatDiffArgs.From, typeDiffArgs.Added, formatDiffArgs.To, responseStatus},
+									Args:        []any{propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff), responseStatus},
 									Operation:   operation,
 									OperationId: operationItem.Revision.OperationID,
 									Path:        path,
