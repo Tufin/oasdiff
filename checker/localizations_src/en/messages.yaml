@@ -524,7 +524,3 @@ response-write-only-property-became-optional-description: response write-only pr
 response-write-only-property-became-required-description: response write-only property became required
 response-write-only-property-enum-value-added-description: response write-only property enum value added
 sunset-deleted-description: sunset deleted
-unparseable-parameter-from-x-extensible-enum-description: unparseable x-extensible-enum in original request parameter
-unparseable-parameter-to-x-extensible-enum-description: unparseable x-extensible-enum in revised request parameter
-unparseable-property-from-x-extensible-enum-description: unparseable x-extensible-enum in original request property
-unparseable-property-to-x-extensible-enum-description: unparseable x-extensible-enum in revised request property

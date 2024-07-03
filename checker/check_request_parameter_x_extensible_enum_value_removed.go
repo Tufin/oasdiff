@@ -1,15 +1,11 @@
 package checker
 
 import (
-	"encoding/json"
-
 	"github.com/tufin/oasdiff/diff"
 	"golang.org/x/exp/slices"
 )
 
 const (
-	UnparsableParameterFromXExtensibleEnumId      = "unparseable-parameter-from-x-extensible-enum"
-	UnparsableParameterToXExtensibleEnumId        = "unparseable-parameter-to-x-extensible-enum"
 	RequestParameterXExtensibleEnumValueRemovedId = "request-parameter-x-extensible-enum-value-removed"
 )
 
@@ -43,41 +39,23 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 					if paramItem.SchemaDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension] == nil {
 						continue
 					}
-					from, ok := paramItem.SchemaDiff.Base.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
+					from, ok := paramItem.SchemaDiff.Base.Extensions[diff.XExtensibleEnumExtension].([]interface{})
 					if !ok {
 						continue
 					}
-					to, ok := paramItem.SchemaDiff.Revision.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
+					to, ok := paramItem.SchemaDiff.Revision.Extensions[diff.XExtensibleEnumExtension].([]interface{})
 					if !ok {
 						continue
 					}
-					var fromSlice []string
-					if err := json.Unmarshal(from, &fromSlice); err != nil {
-						result = append(result, NewApiChange(
-							UnparsableParameterFromXExtensibleEnumId,
-							ERR,
-							[]any{paramLocation, paramName},
-							"",
-							operationsSources,
-							operationItem.Revision,
-							operation,
-							path,
-						))
-						continue
+
+					fromSlice := make([]string, len(from))
+					for i, item := range from {
+						fromSlice[i] = item.(string)
 					}
-					var toSlice []string
-					if err := json.Unmarshal(to, &toSlice); err != nil {
-						result = append(result, NewApiChange(
-							UnparsableParameterToXExtensibleEnumId,
-							ERR,
-							[]any{paramLocation, paramName},
-							"",
-							operationsSources,
-							operationItem.Revision,
-							operation,
-							path,
-						))
-						continue
+
+					toSlice := make([]string, len(to))
+					for i, item := range to {
+						toSlice[i] = item.(string)
 					}
 
 					deletedVals := make([]string, 0)
