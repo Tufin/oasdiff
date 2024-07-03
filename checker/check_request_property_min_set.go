@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -25,7 +24,6 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -61,16 +59,16 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 							return
 						}
 
-						result = append(result, ApiChange{
-							Id:          RequestPropertyMinSetId,
-							Level:       WARN,
-							Args:        []any{propertyFullName(propertyPath, propertyName), minDiff.To},
-							Comment:     commentId(RequestPropertyMinSetId),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestPropertyMinSetId,
+							WARN,
+							[]any{propertyFullName(propertyPath, propertyName), minDiff.To},
+							commentId(RequestPropertyMinSetId),
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					})
 			}
 		}

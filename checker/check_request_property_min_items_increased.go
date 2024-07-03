@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -25,7 +24,6 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -34,15 +32,16 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 					if minItemsDiff.From != nil &&
 						minItemsDiff.To != nil {
 						if IsIncreasedValue(minItemsDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMinItemsIncreasedId,
-								Level:       ERR,
-								Args:        []any{minItemsDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMinItemsIncreasedId,
+								ERR,
+								[]any{minItemsDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					}
 				}
@@ -65,15 +64,16 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 							return
 						}
 
-						result = append(result, ApiChange{
-							Id:          RequestPropertyMinItemsIncreasedId,
-							Level:       ERR,
-							Args:        []any{propertyFullName(propertyPath, propertyName), minItemsDiff.To},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestPropertyMinItemsIncreasedId,
+							ERR,
+							[]any{propertyFullName(propertyPath, propertyName), minItemsDiff.To},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					})
 			}
 		}

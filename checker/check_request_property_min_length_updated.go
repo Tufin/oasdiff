@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -27,7 +26,6 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -36,25 +34,27 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 					if minLengthDiff.From != nil &&
 						minLengthDiff.To != nil {
 						if IsIncreasedValue(minLengthDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMinLengthIncreasedId,
-								Level:       ERR,
-								Args:        []any{minLengthDiff.From, minLengthDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMinLengthIncreasedId,
+								ERR,
+								[]any{minLengthDiff.From, minLengthDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMinLengthDecreasedId,
-								Level:       INFO,
-								Args:        []any{minLengthDiff.From, minLengthDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMinLengthDecreasedId,
+								INFO,
+								[]any{minLengthDiff.From, minLengthDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					}
 				}
@@ -74,25 +74,27 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsDecreasedValue(minLengthDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyMinLengthDecreasedId,
-								Level:       INFO,
-								Args:        []any{propName, minLengthDiff.From, minLengthDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyMinLengthDecreasedId,
+								INFO,
+								[]any{propName, minLengthDiff.From, minLengthDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyMinLengthIncreasedId,
-								Level:       ERR,
-								Args:        []any{propName, minLengthDiff.From, minLengthDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyMinLengthIncreasedId,
+								ERR,
+								[]any{propName, minLengthDiff.From, minLengthDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 			}
