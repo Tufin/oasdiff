@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -27,25 +26,25 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 			}
 
 			op := pathItem.Base.GetOperation(operation)
-			source := (*operationsSources)[op]
-
 			id := APIOperationIdRemovedId
 			args := []any{operationItem.Base.OperationID, operationItem.Revision.OperationID}
+
 			if operationItem.OperationIDDiff.From == nil || operationItem.OperationIDDiff.From == "" {
 				id = APIOperationIdAddId
 				op = pathItem.Revision.GetOperation(operation)
 				args = []any{operationItem.Revision.OperationID}
 			}
 
-			result = append(result, ApiChange{
-				Id:          id,
-				Level:       config.getLogLevel(id, INFO),
-				Args:        args,
-				Operation:   operation,
-				OperationId: op.OperationID,
-				Path:        path,
-				Source:      load.NewSource(source),
-			})
+			result = append(result, NewApiChange(
+				id,
+				config.getLogLevel(id, INFO),
+				args,
+				"",
+				operationsSources,
+				op,
+				operation,
+				path,
+			))
 		}
 	}
 	return result
