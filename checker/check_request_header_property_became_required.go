@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -19,7 +18,6 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ParametersDiff == nil {
 				continue
@@ -77,15 +75,16 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 								if propertyDiff.Revision.Properties[changedRequiredPropertyName].Value.ReadOnly {
 									continue
 								}
-								result = append(result, ApiChange{
-									Id:          RequestHeaderPropertyBecameRequiredId,
-									Level:       ERR,
-									Args:        []any{paramName, propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									RequestHeaderPropertyBecameRequiredId,
+									ERR,
+									[]any{paramName, propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						})
 				}

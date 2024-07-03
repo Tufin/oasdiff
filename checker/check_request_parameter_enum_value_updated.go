@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -26,7 +25,6 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 			if operationItem.ParametersDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for paramLocation, paramItems := range operationItem.ParametersDiff.Modified {
 				for paramName, paramItem := range paramItems {
 					if paramItem.SchemaDiff == nil {
@@ -37,26 +35,28 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 						continue
 					}
 					for _, enumVal := range enumDiff.Deleted {
-						result = append(result, ApiChange{
-							Id:          RequestParameterEnumValueRemovedId,
-							Level:       ERR,
-							Args:        []any{enumVal, paramLocation, paramName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestParameterEnumValueRemovedId,
+							ERR,
+							[]any{enumVal, paramLocation, paramName},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 					for _, enumVal := range enumDiff.Added {
-						result = append(result, ApiChange{
-							Id:          RequestParameterEnumValueAddedId,
-							Level:       INFO,
-							Args:        []any{enumVal, paramLocation, paramName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestParameterEnumValueAddedId,
+							INFO,
+							[]any{enumVal, paramLocation, paramName},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 				}
 			}

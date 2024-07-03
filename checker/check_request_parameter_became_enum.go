@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -25,7 +24,6 @@ func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *d
 			if operationItem.ParametersDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for paramLocation, paramItems := range operationItem.ParametersDiff.Modified {
 				for paramName, paramItem := range paramItems {
 					if paramItem.SchemaDiff == nil {
@@ -36,15 +34,16 @@ func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *d
 						continue
 					}
 
-					result = append(result, ApiChange{
-						Id:          RequestParameterBecameEnumId,
-						Level:       ERR,
-						Args:        []any{paramLocation, paramName},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						RequestParameterBecameEnumId,
+						ERR,
+						[]any{paramLocation, paramName},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}

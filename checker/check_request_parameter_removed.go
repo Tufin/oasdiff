@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -24,16 +23,16 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 			}
 			for paramLocation, paramItems := range operationItem.ParametersDiff.Deleted {
 				for _, paramName := range paramItems {
-					source := (*operationsSources)[operationItem.Revision]
-					result = append(result, ApiChange{
-						Id:          RequestParameterRemovedId,
-						Level:       WARN,
-						Args:        []any{paramLocation, paramName},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						RequestParameterRemovedId,
+						WARN,
+						[]any{paramLocation, paramName},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}
