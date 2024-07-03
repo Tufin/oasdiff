@@ -37,14 +37,16 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			}
 
 			if operationDiff.ExtensionsDiff.Deleted.Contains(diff.SunsetExtension) {
-				result = append(result, ApiChange{
-					Id:          APISunsetDeletedId,
-					Level:       ERR,
-					Operation:   operation,
-					OperationId: opRevision.OperationID,
-					Path:        path,
-					Source:      load.NewSource((*operationsSources)[opRevision]),
-				})
+				result = append(result, NewApiChange(
+					APISunsetDeletedId,
+					ERR,
+					nil,
+					"",
+					operationsSources,
+					opRevision,
+					operation,
+					path,
+				))
 				continue
 			}
 
@@ -75,15 +77,16 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			deprecationDays := getDeprecationDays(config, stability)
 
 			if baseDate.After(date) && days < int(deprecationDays) {
-				result = append(result, ApiChange{
-					Id:          APISunsetDateChangedTooSmallId,
-					Level:       ERR,
-					Args:        []any{baseDate, date, baseDate, deprecationDays},
-					Operation:   operation,
-					OperationId: opRevision.OperationID,
-					Path:        path,
-					Source:      load.NewSource((*operationsSources)[opRevision]),
-				})
+				result = append(result, NewApiChange(
+					APISunsetDateChangedTooSmallId,
+					ERR,
+					[]any{baseDate, date, baseDate, deprecationDays},
+					"",
+					operationsSources,
+					opRevision,
+					operation,
+					path,
+				))
 			}
 		}
 	}

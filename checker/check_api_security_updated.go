@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -76,8 +75,6 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
 
-			source := (*operationsSources)[operationItem.Revision]
-
 			if operationItem.SecurityDiff == nil {
 				continue
 			}
@@ -86,30 +83,34 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				if addedSecurity == "" {
 					continue
 				}
-				result = append(result, ApiChange{
-					Id:          APISecurityAddedCheckId,
-					Level:       INFO,
-					Args:        []any{addedSecurity},
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+
+				result = append(result, NewApiChange(
+					APISecurityAddedCheckId,
+					INFO,
+					[]any{addedSecurity},
+					"",
+					operationsSources,
+					operationItem.Revision,
+					operation,
+					path,
+				))
 			}
 
 			for _, deletedSecurity := range operationItem.SecurityDiff.Deleted {
 				if deletedSecurity == "" {
 					continue
 				}
-				result = append(result, ApiChange{
-					Id:          APISecurityRemovedCheckId,
-					Level:       INFO,
-					Args:        []any{deletedSecurity},
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+
+				result = append(result, NewApiChange(
+					APISecurityRemovedCheckId,
+					INFO,
+					[]any{deletedSecurity},
+					"",
+					operationsSources,
+					operationItem.Revision,
+					operation,
+					path,
+				))
 			}
 
 			for _, updatedSecurity := range operationItem.SecurityDiff.Modified {
@@ -118,26 +119,28 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 				}
 				for securitySchemeName, updatedSecuritySchemeScopes := range updatedSecurity {
 					for _, addedScope := range updatedSecuritySchemeScopes.Added {
-						result = append(result, ApiChange{
-							Id:          APISecurityScopeAddedId,
-							Level:       INFO,
-							Args:        []any{addedScope, securitySchemeName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							APISecurityScopeAddedId,
+							INFO,
+							[]any{addedScope, securitySchemeName},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 					for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
-						result = append(result, ApiChange{
-							Id:          APISecurityScopeRemovedId,
-							Level:       INFO,
-							Args:        []any{deletedScope, securitySchemeName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							APISecurityScopeRemovedId,
+							INFO,
+							[]any{deletedScope, securitySchemeName},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 				}
 			}
