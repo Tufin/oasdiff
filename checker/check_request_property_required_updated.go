@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -21,7 +20,6 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.RequestBodyDiff == nil ||
 				operationItem.RequestBodyDiff.ContentDiff == nil ||
@@ -42,26 +40,28 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							if schemaDiff.Revision.Properties[changedRequiredPropertyName].Value.Default == nil {
-								result = append(result, ApiChange{
-									Id:          RequestPropertyBecameRequiredId,
-									Level:       ERR,
-									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									RequestPropertyBecameRequiredId,
+									ERR,
+									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							} else {
 								// property has a default value, so making it required is not a breaking change
-								result = append(result, ApiChange{
-									Id:          RequestPropertyBecameRequiredWithDefaultId,
-									Level:       INFO,
-									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									RequestPropertyBecameRequiredWithDefaultId,
+									INFO,
+									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						}
 						for _, changedRequiredPropertyName := range schemaDiff.RequiredDiff.Deleted {
@@ -69,15 +69,16 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								continue
 							}
 
-							result = append(result, ApiChange{
-								Id:          RequestPropertyBecameOptionalId,
-								Level:       INFO,
-								Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyBecameOptionalId,
+								INFO,
+								[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					}
 				}

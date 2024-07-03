@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -27,7 +26,6 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.RequestBodyDiff == nil ||
 				operationItem.RequestBodyDiff.ContentDiff == nil ||
@@ -60,15 +58,16 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 								id = RequestRequiredPropertyBecameWriteOnlyCheckId
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       INFO,
-								Args:        []any{propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								INFO,
+								[]any{propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 							return
 						}
 
@@ -76,15 +75,16 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						if writeOnlyDiff.To == true {
 							id = RequestOptionalPropertyBecameWriteOnlyCheckId
 						}
-						result = append(result, ApiChange{
-							Id:          id,
-							Level:       INFO,
-							Args:        []any{propName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							id,
+							INFO,
+							[]any{propName},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					})
 
 				CheckModifiedPropertiesDiff(
@@ -106,15 +106,16 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							if readOnlyDiff.To == true {
 								id = RequestRequiredPropertyBecameReadOnlyCheckId
 							}
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       INFO,
-								Args:        []any{propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								INFO,
+								[]any{propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 							return
 						}
 
@@ -122,15 +123,16 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						if readOnlyDiff.To == true {
 							id = RequestOptionalPropertyBecameReadOnlyCheckId
 						}
-						result = append(result, ApiChange{
-							Id:          id,
-							Level:       INFO,
-							Args:        []any{propName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							id,
+							INFO,
+							[]any{propName},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					})
 			}
 		}

@@ -3,7 +3,6 @@ package checker
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -35,22 +34,22 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
 						if !propertyItem.ReadOnly {
-							source := (*operationsSources)[operationItem.Revision]
-							result = append(result, ApiChange{
-								Id:          RequestPropertyRemovedId,
-								Level:       WARN,
-								Args:        []any{propertyFullName(propertyPath, propertyName)},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+
+							result = append(result, NewApiChange(
+								RequestPropertyRemovedId,
+								WARN,
+								[]any{propertyFullName(propertyPath, propertyName)},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 				CheckAddedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
-						source := (*operationsSources)[operationItem.Revision]
 						if propertyItem.ReadOnly {
 							return
 						}
@@ -59,36 +58,39 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 
 						if slices.Contains(parent.Revision.Required, propertyName) {
 							if propertyItem.Default == nil {
-								result = append(result, ApiChange{
-									Id:          NewRequiredRequestPropertyId,
-									Level:       ERR,
-									Args:        []any{propName},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									NewRequiredRequestPropertyId,
+									ERR,
+									[]any{propName},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							} else {
-								result = append(result, ApiChange{
-									Id:          NewRequiredRequestPropertyWithDefaultId,
-									Level:       INFO,
-									Args:        []any{propName},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									NewRequiredRequestPropertyWithDefaultId,
+									INFO,
+									[]any{propName},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						} else {
-							result = append(result, ApiChange{
-								Id:          NewOptionalRequestPropertyId,
-								Level:       INFO,
-								Args:        []any{propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								NewOptionalRequestPropertyId,
+								INFO,
+								[]any{propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 			}
