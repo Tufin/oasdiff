@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -29,7 +28,6 @@ func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -38,27 +36,29 @@ func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 				}
 
 				if mediaTypeDiff.SchemaDiff.AnyOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AnyOfDiff.Added) > 0 {
-					result = append(result, ApiChange{
-						Id:          RequestBodyAnyOfAddedId,
-						Level:       INFO,
-						Args:        []any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String()},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						RequestBodyAnyOfAddedId,
+						INFO,
+						[]any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String()},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 
 				if mediaTypeDiff.SchemaDiff.AnyOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted) > 0 {
-					result = append(result, ApiChange{
-						Id:          RequestBodyAnyOfRemovedId,
-						Level:       ERR,
-						Args:        []any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String()},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						RequestBodyAnyOfRemovedId,
+						ERR,
+						[]any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String()},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 
 				CheckModifiedPropertiesDiff(
@@ -71,27 +71,29 @@ func RequestPropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if len(propertyDiff.AnyOfDiff.Added) > 0 {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyAnyOfAddedId,
-								Level:       INFO,
-								Args:        []any{propertyDiff.AnyOfDiff.Added.String(), propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyAnyOfAddedId,
+								INFO,
+								[]any{propertyDiff.AnyOfDiff.Added.String(), propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 
 						if len(propertyDiff.AnyOfDiff.Deleted) > 0 {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyAnyOfRemovedId,
-								Level:       ERR,
-								Args:        []any{propertyDiff.AnyOfDiff.Deleted.String(), propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyAnyOfRemovedId,
+								ERR,
+								[]any{propertyDiff.AnyOfDiff.Deleted.String(), propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 			}

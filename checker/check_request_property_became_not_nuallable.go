@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -22,7 +21,6 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.RequestBodyDiff == nil ||
 				operationItem.RequestBodyDiff.ContentDiff == nil ||
@@ -37,25 +35,27 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 
 				if mediaTypeDiff.SchemaDiff.NullableDiff != nil {
 					if mediaTypeDiff.SchemaDiff.NullableDiff.From == true {
-						result = append(result, ApiChange{
-							Id:        RequestBodyBecomeNotNullableId,
-							Level:     ERR,
-							Operation: operation,
-							Path:      path,
-							Source:    load.NewSource(source),
-
-							OperationId: operationItem.Revision.OperationID,
-						})
+						result = append(result, NewApiChange(
+							RequestBodyBecomeNotNullableId,
+							ERR,
+							nil,
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					} else if mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
-						result = append(result, ApiChange{
-							Id:        RequestBodyBecomeNullableId,
-							Level:     INFO,
-							Operation: operation,
-							Path:      path,
-							Source:    load.NewSource(source),
-
-							OperationId: operationItem.Revision.OperationID,
-						})
+						result = append(result, NewApiChange(
+							RequestBodyBecomeNullableId,
+							INFO,
+							nil,
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 				}
 
@@ -70,27 +70,27 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if nullableDiff.From == true {
-							result = append(result, ApiChange{
-								Id:        RequestPropertyBecomeNotNullableId,
-								Level:     ERR,
-								Args:      []any{propName},
-								Operation: operation,
-								Path:      path,
-								Source:    load.NewSource(source),
-
-								OperationId: operationItem.Revision.OperationID,
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyBecomeNotNullableId,
+								ERR,
+								[]any{propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else if nullableDiff.To == true {
-							result = append(result, ApiChange{
-								Id:        RequestPropertyBecomeNullableId,
-								Level:     INFO,
-								Args:      []any{propName},
-								Operation: operation,
-								Path:      path,
-								Source:    load.NewSource(source),
-
-								OperationId: operationItem.Revision.OperationID,
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyBecomeNullableId,
+								INFO,
+								[]any{propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 
 					})

@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -28,16 +27,16 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 				}
 
 				for _, paramName := range paramItems {
-					source := (*operationsSources)[operationItem.Revision]
-					result = append(result, ApiChange{
-						Id:          NewRequestPathParameterId,
-						Level:       ERR,
-						Args:        []any{paramName},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						NewRequestPathParameterId,
+						ERR,
+						[]any{paramName},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}
