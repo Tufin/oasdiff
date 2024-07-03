@@ -86,15 +86,16 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 									continue
 								}
 
-								result = append(result, ApiChange{
-									Id:          id,
-									Level:       level,
-									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), responseStatus},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									id,
+									level,
+									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), responseStatus},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						})
 				}

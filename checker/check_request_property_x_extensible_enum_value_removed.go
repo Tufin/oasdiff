@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -29,7 +28,6 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -55,28 +53,30 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						}
 						var fromSlice []string
 						if err := json.Unmarshal(from, &fromSlice); err != nil {
-							result = append(result, ApiChange{
-								Id:          UnparseablePropertyFromXExtensibleEnumId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyName)},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								UnparseablePropertyFromXExtensibleEnumId,
+								ERR,
+								[]any{propertyFullName(propertyPath, propertyName)},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 							return
 						}
 						var toSlice []string
 						if err := json.Unmarshal(to, &toSlice); err != nil {
-							result = append(result, ApiChange{
-								Id:          UnparseablePropertyToXExtensibleEnumId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyName)},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								UnparseablePropertyToXExtensibleEnumId,
+								ERR,
+								[]any{propertyFullName(propertyPath, propertyName)},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 							return
 						}
 
@@ -91,15 +91,16 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							return
 						}
 						for _, enumVal := range deletedVals {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyXExtensibleEnumValueRemovedId,
-								Level:       ERR,
-								Args:        []any{enumVal, propertyFullName(propertyPath, propertyName)},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyXExtensibleEnumValueRemovedId,
+								ERR,
+								[]any{enumVal, propertyFullName(propertyPath, propertyName)},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 			}

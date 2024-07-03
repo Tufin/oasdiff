@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -35,18 +34,18 @@ func ResponseDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources 
 			if operationItem.ResponsesDiff == nil || operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			appendResultItem := func(messageId string, a ...any) {
-				result = append(result, ApiChange{
-					Id:          messageId,
-					Level:       INFO,
-					Args:        a,
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, NewApiChange(
+					messageId,
+					INFO,
+					a,
+					"",
+					operationsSources,
+					operationItem.Revision,
+					operation,
+					path,
+				))
 			}
 
 			for responseStatus, responsesDiff := range operationItem.ResponsesDiff.Modified {
