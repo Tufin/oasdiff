@@ -63,7 +63,7 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 							RequestPropertyMaxSetId,
 							WARN,
 							[]any{propertyFullName(propertyPath, propertyName), maxDiff.To},
-							"",
+							commentId(RequestPropertyMaxSetId),
 							operationsSources,
 							operationItem.Revision,
 							operation,

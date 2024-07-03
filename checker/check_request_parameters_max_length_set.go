@@ -39,7 +39,7 @@ func RequestParameterMaxLengthSetCheck(diffReport *diff.Diff, operationsSources 
 						RequestParameterMaxLengthSetId,
 						WARN,
 						[]any{paramLocation, paramName, maxLengthDiff.To},
-						"",
+						commentId(RequestParameterMaxLengthSetId),
 						operationsSources,
 						operationItem.Revision,
 						operation,
