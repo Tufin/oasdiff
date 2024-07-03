@@ -111,16 +111,17 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 				baseStability == STABILITY_BETA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
 				baseStability == STABILITY_ALPHA && revisionStability != STABILITY_ALPHA && revisionStability != STABILITY_BETA && revisionStability != STABILITY_STABLE ||
 				revisionStability == "" && baseStability != "" {
-				source := (*operationsSources)[pathDiff.Revision.GetOperation(operation)]
-				result = append(result, ApiChange{
-					Id:          APIStabilityDecreasedId,
-					Args:        []any{baseStability, revisionStability},
-					Level:       ERR,
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, NewApiChange(
+					APIStabilityDecreasedId,
+					ERR,
+					[]any{baseStability, revisionStability},
+					"",
+					operationsSources,
+					operationItem.Revision,
+					operation,
+					path,
+				))
+
 				continue
 			}
 			if revisionStability == STABILITY_DRAFT || revisionStability == STABILITY_ALPHA {

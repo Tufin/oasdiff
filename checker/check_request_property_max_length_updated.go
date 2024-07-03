@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -27,7 +26,6 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -36,25 +34,27 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 					if maxLengthDiff.From != nil &&
 						maxLengthDiff.To != nil {
 						if IsDecreasedValue(maxLengthDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMaxLengthDecreasedId,
-								Level:       ERR,
-								Args:        []any{maxLengthDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMaxLengthDecreasedId,
+								ERR,
+								[]any{maxLengthDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMaxLengthIncreasedId,
-								Level:       INFO,
-								Args:        []any{maxLengthDiff.From, maxLengthDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMaxLengthIncreasedId,
+								INFO,
+								[]any{maxLengthDiff.From, maxLengthDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					}
 				}
@@ -74,25 +74,27 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsDecreasedValue(maxLengthDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyMaxLengthDecreasedId,
-								Level:       conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Args:        []any{propName, maxLengthDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyMaxLengthDecreasedId,
+								conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								[]any{propName, maxLengthDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyMaxLengthIncreasedId,
-								Level:       INFO,
-								Args:        []any{propName, maxLengthDiff.From, maxLengthDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyMaxLengthIncreasedId,
+								INFO,
+								[]any{propName, maxLengthDiff.From, maxLengthDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 
 					})

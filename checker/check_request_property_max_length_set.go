@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -25,7 +24,6 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -33,16 +31,16 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 					maxLengthDiff := mediaTypeDiff.SchemaDiff.MaxLengthDiff
 					if maxLengthDiff.From == nil &&
 						maxLengthDiff.To != nil {
-						result = append(result, ApiChange{
-							Id:          RequestBodyMaxLengthSetId,
-							Level:       WARN,
-							Args:        []any{maxLengthDiff.To},
-							Comment:     commentId(RequestBodyMaxLengthSetId),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestBodyMaxLengthSetId,
+							WARN,
+							[]any{maxLengthDiff.To},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 				}
 
@@ -61,16 +59,16 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 							return
 						}
 
-						result = append(result, ApiChange{
-							Id:          RequestPropertyMaxLengthSetId,
-							Level:       WARN,
-							Args:        []any{propertyFullName(propertyPath, propertyName), maxLengthDiff.To},
-							Comment:     commentId(RequestPropertyMaxLengthSetId),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestPropertyMaxLengthSetId,
+							WARN,
+							[]any{propertyFullName(propertyPath, propertyName), maxLengthDiff.To},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					})
 			}
 		}

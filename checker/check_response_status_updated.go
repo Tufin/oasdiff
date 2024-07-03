@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -47,7 +46,6 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 			if operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for _, responseStatus := range operationItem.ResponsesDiff.Deleted {
 				status, err := strconv.Atoi(responseStatus)
 				if err != nil {
@@ -55,15 +53,16 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				}
 
 				if filter(status) {
-					result = append(result, ApiChange{
-						Id:          id,
-						Level:       config.getLogLevel(id, defaultLevel),
-						Args:        []any{responseStatus},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						id,
+						config.getLogLevel(id, defaultLevel),
+						[]any{responseStatus},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 
@@ -75,15 +74,16 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				}
 
 				if filter(status) {
-					result = append(result, ApiChange{
-						Id:          addedId,
-						Level:       config.getLogLevel(addedId, INFO),
-						Args:        []any{responseStatus},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						addedId,
+						config.getLogLevel(addedId, INFO),
+						[]any{responseStatus},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}

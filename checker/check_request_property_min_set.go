@@ -33,16 +33,16 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					minDiff := mediaTypeDiff.SchemaDiff.MinDiff
 					if minDiff.From == nil &&
 						minDiff.To != nil {
-						result = append(result, ApiChange{
-							Id:          RequestBodyMinSetId,
-							Level:       WARN,
-							Args:        []any{minDiff.To},
-							Comment:     commentId(RequestBodyMinSetId),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestBodyMinSetId,
+							WARN,
+							[]any{minDiff.To},
+							commentId(RequestBodyMinSetId),
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 				}
 

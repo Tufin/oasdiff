@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -25,7 +24,6 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -33,16 +31,16 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 					minItemsDiff := mediaTypeDiff.SchemaDiff.MinItemsDiff
 					if minItemsDiff.From == nil &&
 						minItemsDiff.To != nil {
-						result = append(result, ApiChange{
-							Id:          RequestBodyMinItemsSetId,
-							Level:       WARN,
-							Args:        []any{minItemsDiff.To},
-							Comment:     commentId(RequestBodyMinItemsSetId),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestBodyMinItemsSetId,
+							WARN,
+							[]any{minItemsDiff.To},
+							commentId(RequestBodyMinItemsSetId),
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 				}
 
@@ -61,16 +59,16 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 							return
 						}
 
-						result = append(result, ApiChange{
-							Id:          RequestPropertyMinItemsSetId,
-							Level:       WARN,
-							Args:        []any{propertyFullName(propertyPath, propertyName), minItemsDiff.To},
-							Comment:     commentId(RequestPropertyMinItemsSetId),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestPropertyMinItemsSetId,
+							WARN,
+							[]any{propertyFullName(propertyPath, propertyName), minItemsDiff.To},
+							commentId(RequestPropertyMinItemsSetId),
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					})
 			}
 		}
