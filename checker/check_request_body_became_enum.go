@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -20,8 +19,6 @@ func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.O
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
 
-			source := (*operationsSources)[operationItem.Revision]
-
 			if operationItem.RequestBodyDiff == nil ||
 				operationItem.RequestBodyDiff.ContentDiff == nil ||
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
@@ -37,14 +34,16 @@ func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.O
 				if schemaDiff := mediaTypeDiff.SchemaDiff; schemaDiff.EnumDiff == nil || !schemaDiff.EnumDiff.EnumAdded {
 					continue
 				}
-				result = append(result, ApiChange{
-					Id:          RequestBodyBecameEnumId,
-					Level:       ERR,
-					Operation:   operation,
-					OperationId: operationItem.Revision.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, NewApiChange(
+					RequestBodyBecameEnumId,
+					ERR,
+					nil,
+					"",
+					operationsSources,
+					operationItem.Revision,
+					operation,
+					path,
+				))
 			}
 		}
 	}
