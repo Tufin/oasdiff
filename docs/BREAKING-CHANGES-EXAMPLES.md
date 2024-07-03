@@ -1,6 +1,8 @@
 # Examples of Breaking and Non-Breaking Changes
 These examples are automatically generated from unit tests.
 ## Examples of breaking changes
+[Deleting a value from an x-extensible-enum parameter is breaking](../checker/check_request_parameter_x_extensible_enum_value_removed_test.go?plain=1#L11)  
+[Deleting a value from an x-extensible-enum property is breaking](../checker/check_request_property_x_extensible_enum_value_removed_test.go?plain=1#L11)  
 [adding 'allOf' subschema to the request body or request body property is breaking](../checker/check_breaking_test.go?plain=1#L712)  
 [adding a new required property in request body is breaking](../checker/check_breaking_property_test.go?plain=1#L353)  
 [adding a pattern to a schema is breaking for recursive properties](../checker/check_breaking_test.go?plain=1#L490)  

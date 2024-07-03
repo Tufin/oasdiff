@@ -8,6 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
+// BC: Deleting a value from an x-extensible-enum property is breaking
 func TestRequestPropertyXExtensibleEnumValueRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_extensible_enum_base.yaml")
 	require.NoError(t, err)
