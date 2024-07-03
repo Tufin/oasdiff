@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -26,7 +25,6 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 			if operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for responseStatus, responsesDiff := range operationItem.ResponsesDiff.Modified {
 				if responsesDiff.ContentDiff == nil {
 					continue
@@ -35,26 +33,28 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 					continue
 				}
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeDeleted {
-					result = append(result, ApiChange{
-						Id:          ResponseMediaTypeRemovedId,
-						Level:       ERR,
-						Args:        []any{mediaType, responseStatus},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						ResponseMediaTypeRemovedId,
+						ERR,
+						[]any{mediaType, responseStatus},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeAdded {
-					result = append(result, ApiChange{
-						Id:          ResponseMediaTypeAddedId,
-						Level:       INFO,
-						Args:        []any{mediaType, responseStatus},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						ResponseMediaTypeAddedId,
+						INFO,
+						[]any{mediaType, responseStatus},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}

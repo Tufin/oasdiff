@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -20,7 +19,6 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ResponsesDiff == nil {
 				continue
@@ -53,15 +51,16 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 								id = ResponseWriteOnlyPropertyBecameRequiredId
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       INFO,
-								Args:        []any{changedRequiredPropertyName, responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								INFO,
+								[]any{propertyFullName("", changedRequiredPropertyName), responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					}
 
@@ -86,15 +85,16 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 									id = ResponseWriteOnlyPropertyBecameRequiredId
 								}
 
-								result = append(result, ApiChange{
-									Id:          id,
-									Level:       INFO,
-									Args:        []any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), responseStatus},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									id,
+									INFO,
+									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), responseStatus},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						})
 				}

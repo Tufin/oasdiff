@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -23,7 +22,6 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 			if operationItem.ResponsesDiff == nil || operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
 				if responseDiff == nil ||
 					responseDiff.ContentDiff == nil ||
@@ -52,16 +50,16 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							for _, enumVal := range enumDiff.Added {
-								result = append(result, ApiChange{
-									Id:          id,
-									Level:       level,
-									Args:        []any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
-									Comment:     comment,
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									id,
+									level,
+									[]any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
+									comment,
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						})
 				}

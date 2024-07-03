@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -23,7 +22,6 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 			if operationItem.ResponsesDiff == nil || operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
 				if responseDiff == nil ||
 					responseDiff.ContentDiff == nil ||
@@ -37,15 +35,16 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 						if maxLengthDiff.From != nil &&
 							maxLengthDiff.To != nil {
 							if IsIncreasedValue(maxLengthDiff) {
-								result = append(result, ApiChange{
-									Id:          ResponseBodyMaxLengthIncreasedId,
-									Level:       ERR,
-									Args:        []any{maxLengthDiff.From, maxLengthDiff.To},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									ResponseBodyMaxLengthIncreasedId,
+									ERR,
+									[]any{maxLengthDiff.From, maxLengthDiff.To},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						}
 					}
@@ -69,15 +68,16 @@ func ResponsePropertyMaxLengthIncreasedCheck(diffReport *diff.Diff, operationsSo
 								return
 							}
 
-							result = append(result, ApiChange{
-								Id:          ResponsePropertyMaxLengthIncreasedId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyName), maxLengthDiff.From, maxLengthDiff.To, responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								ResponsePropertyMaxLengthIncreasedId,
+								ERR,
+								[]any{propertyFullName(propertyPath, propertyName), maxLengthDiff.From, maxLengthDiff.To, responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 				}
 			}

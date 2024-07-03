@@ -3,7 +3,6 @@ package checker
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -24,7 +23,6 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ResponsesDiff == nil {
 				continue
@@ -52,15 +50,16 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								return
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       level,
-								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								level,
+								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 					CheckAddedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
@@ -75,15 +74,16 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 								return
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       INFO,
-								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								INFO,
+								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 				}
 			}

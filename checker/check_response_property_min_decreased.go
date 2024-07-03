@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -23,7 +22,6 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 			if operationItem.ResponsesDiff == nil || operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
 				if responseDiff == nil ||
 					responseDiff.ContentDiff == nil ||
@@ -37,15 +35,16 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 						if minDiff.From != nil &&
 							minDiff.To != nil {
 							if IsDecreasedValue(minDiff) {
-								result = append(result, ApiChange{
-									Id:          ResponseBodyMinDecreasedId,
-									Level:       ERR,
-									Args:        []any{minDiff.From, minDiff.To},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									ResponseBodyMinDecreasedId,
+									ERR,
+									[]any{minDiff.From, minDiff.To},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						}
 					}
@@ -69,15 +68,16 @@ func ResponsePropertyMinDecreasedCheck(diffReport *diff.Diff, operationsSources 
 								return
 							}
 
-							result = append(result, ApiChange{
-								Id:          ResponsePropertyMinDecreasedId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyName), minDiff.From, minDiff.To, responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								ResponsePropertyMinDecreasedId,
+								ERR,
+								[]any{propertyFullName(propertyPath, propertyName), minDiff.From, minDiff.To, responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 				}
 			}

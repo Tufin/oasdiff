@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -23,7 +22,6 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 				continue
 			}
 
-			source := (*operationsSources)[operationItem.Revision]
 			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
 				if responseDiff == nil ||
 					responseDiff.ContentDiff == nil ||
@@ -40,15 +38,16 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 							}
 
 							for _, enumVal := range enumDiff.Deleted {
-								result = append(result, ApiChange{
-									Id:          ResponsePropertyEnumValueRemovedId,
-									Level:       config.getLogLevel(ResponsePropertyEnumValueRemovedId, INFO),
-									Args:        []any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									ResponsePropertyEnumValueRemovedId,
+									config.getLogLevel(ResponsePropertyEnumValueRemovedId, INFO),
+									[]any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						})
 				}

@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -20,7 +19,6 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ResponsesDiff == nil {
 				continue
@@ -51,15 +49,16 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								level = INFO
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       level,
-								Args:        []any{changedRequiredPropertyName, responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								level,
+								[]any{changedRequiredPropertyName, responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					}
 
