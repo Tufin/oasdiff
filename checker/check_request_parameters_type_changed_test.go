@@ -155,7 +155,7 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 	}, errs[0])
 }
 
-// CL: changing request path parameter type by adding "string" is allowed
+// CL: changing request path parameter type by adding "string"
 func TestRequestPathParamTypeAddString(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
@@ -168,10 +168,19 @@ func TestRequestPathParamTypeAddString(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
-	require.Empty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestParameterTypeChangedId,
+		Args:        []any{"path", "groupId", utils.StringList{"integer"}, "", utils.StringList{"integer", "string"}, ""},
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
+		OperationId: "createOneGroup",
+	}, errs[0])
 }
 
-// CL: changing request path parameter type by replacing "integer" with "number" is allowed
+// CL: changing request path parameter type by replacing "integer" with "number"
 func TestRequestPathParamTypeIntegerToNumber(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_type_changed_base.yaml")
 	require.NoError(t, err)
@@ -184,5 +193,65 @@ func TestRequestPathParamTypeIntegerToNumber(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
-	require.Empty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestParameterTypeChangedId,
+		Args:        []any{"path", "groupId", utils.StringList{"integer", "string"}, "", utils.StringList{"number", "string"}, ""},
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/api/v1.0/groups",
+		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
+		OperationId: "createOneGroup",
+	}, errs[0])
+}
+
+// BC: changing request's query param property type from number to string is breaking
+func TestBreaking_ReqQueryParamTypeNumberToString(t *testing.T) {
+	s1, err := open("../data/checker/request_parameter_property_type_changed_base_num.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/checker/request_parameter_property_type_changed_revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.RequestParameterPropertyTypeChangedId, errs[0].GetId())
+	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was changed from 'number'/'' to 'string'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, checker.WARN, errs[0].GetLevel())
+}
+
+// BC: changing request's query param property type from string to number is breaking
+func TestBreaking_ReqQueryParamTypeStringToNumber(t *testing.T) {
+	s1, err := open("../data/checker/request_parameter_property_type_changed_revision.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/checker/request_parameter_property_type_changed_base_num.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.RequestParameterPropertyTypeChangedId, errs[0].GetId())
+	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was changed from 'string'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, checker.ERR, errs[0].GetLevel())
+}
+
+// CL: changing request's query param property type from integer to number
+func TestBreaking_ReqQueryParamTypeIntegerToNumber(t *testing.T) {
+	s1, err := open("../data/checker/request_parameter_property_type_changed_base_int.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/checker/request_parameter_property_type_changed_base_num.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.RequestParameterPropertyTypeChangedId, errs[0].GetId())
+	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was changed from 'integer'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, checker.INFO, errs[0].GetLevel())
 }

@@ -71,13 +71,12 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 // BC: deleting a tag is not breaking
 func TestBreaking_DeletedTag(t *testing.T) {
 	r := d(t, diff.NewConfig(), 1, 5)
-	require.Len(t, r, 6)
-	require.Equal(t, checker.ResponseBodyTypeChangedId, r[0].GetId())
-	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[1].GetId())
+	require.Len(t, r, 5)
+	require.Equal(t, checker.ResponseSuccessStatusRemovedId, r[0].GetId())
+	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[1].GetId())
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[2].GetId())
-	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, r[3].GetId())
-	require.Equal(t, checker.OptionalResponseHeaderRemovedId, r[4].GetId())
-	require.Equal(t, checker.RequestParameterRemovedId, r[5].GetId())
+	require.Equal(t, checker.OptionalResponseHeaderRemovedId, r[3].GetId())
+	require.Equal(t, checker.RequestParameterRemovedId, r[4].GetId())
 }
 
 // BC: adding an enum value is not breaking

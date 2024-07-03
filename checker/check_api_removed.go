@@ -24,9 +24,10 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 	}
 
 	for _, path := range diffReport.PathsDiff.Deleted {
-		if diffReport.PathsDiff.Base.Value(path) == nil || diffReport.PathsDiff.Base.Value(path).Operations() == nil {
+		if diffReport.PathsDiff.Base.Value(path) == nil {
 			continue
 		}
+
 		for operation := range diffReport.PathsDiff.Base.Value(path).Operations() {
 			op := diffReport.PathsDiff.Base.Value(path).GetOperation(operation)
 			if change := checkAPIRemoval(APIPathRemovedWithoutDeprecationId, APIPathRemovedBeforeSunsetId, op, operationsSources, operation, path); change != nil {

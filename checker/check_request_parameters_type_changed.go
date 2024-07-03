@@ -1,13 +1,14 @@
 package checker
 
 import (
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
 
 const (
-	RequestParameterTypeChangedId = "request-parameter-type-changed"
+	RequestParameterTypeChangedId                = "request-parameter-type-changed"
+	RequestParameterPropertyTypeChangedId        = "request-parameter-property-type-changed"
+	RequestParameterPropertyTypeChangedCommentId = "request-parameter-property-type-changed-warn-comment"
 )
 
 func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -23,6 +24,8 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 			if operationItem.ParametersDiff == nil {
 				continue
 			}
+			source := (*operationsSources)[operationItem.Revision]
+
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {
 					if paramDiff.SchemaDiff == nil {
@@ -33,67 +36,46 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 					typeDiff := schemaDiff.TypeDiff
 					formatDiff := schemaDiff.FormatDiff
 
-					if typeDiff == nil && formatDiff == nil {
-						continue
+					if !typeDiff.Empty() || !formatDiff.Empty() {
+
+						result = append(result, ApiChange{
+							Id:          RequestParameterTypeChangedId,
+							Level:       conditionalError(breakingTypeFormatChangedInRequest(typeDiff, formatDiff, false, schemaDiff), INFO),
+							Args:        []any{paramLocation, paramName, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+							Operation:   operation,
+							OperationId: operationItem.Revision.OperationID,
+							Path:        path,
+							Source:      load.NewSource(source),
+						})
 					}
 
-					if typeAndFormatContained(typeDiff, formatDiff, paramDiff.Revision.Schema.Value.Type) {
-						continue
-					}
+					CheckModifiedPropertiesDiff(
+						schemaDiff,
+						func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
 
-					source := (*operationsSources)[operationItem.Revision]
+							schemaDiff := propertyDiff
+							typeDiff := schemaDiff.TypeDiff
+							formatDiff := schemaDiff.FormatDiff
 
-					typeDiff = getDetailedTypeDiff(schemaDiff)
-					formatDiff = getDetailedFormatDiff(schemaDiff)
+							if !typeDiff.Empty() || !formatDiff.Empty() {
 
-					result = append(result, ApiChange{
-						Id:          RequestParameterTypeChangedId,
-						Level:       ERR,
-						Args:        []any{paramLocation, paramName, typeDiff.Deleted, formatDiff.From, typeDiff.Added, formatDiff.To},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+								level, comment := checkRequestParameterPropertyTypeChanged(typeDiff, formatDiff, schemaDiff)
+
+								result = append(result, ApiChange{
+									Id:          RequestParameterPropertyTypeChangedId,
+									Level:       level,
+									Args:        []any{paramLocation, paramName, propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+									Comment:     comment,
+									Operation:   operation,
+									OperationId: operationItem.Revision.OperationID,
+									Path:        path,
+									Source:      load.NewSource(source),
+								})
+							}
+						})
 				}
 			}
 		}
 	}
 	return result
-}
-
-func typeAndFormatContained(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, revisionType *openapi3.Types) bool {
-
-	if typeDiff != nil && typeDiff.Deleted.Is("integer") && typeDiff.Added.Is("number") {
-		return true
-	}
-
-	if typeDiff != nil && typeDiff.Added.Is("string") {
-		return true
-	}
-
-	if formatDiff != nil && (formatDiff.To == nil || formatDiff.To == "") {
-		// TODO: is this correct?
-		return true
-	}
-
-	if formatDiff != nil && revisionType.Is("string") &&
-		(formatDiff.From == "date" && formatDiff.To == "date-time" ||
-			formatDiff.From == "time" && formatDiff.To == "date-time") {
-		return true
-	}
-
-	if formatDiff != nil && revisionType.Is("number") &&
-		(formatDiff.From == "float" && formatDiff.To == "double") {
-		return true
-	}
-
-	if formatDiff != nil && revisionType.Is("integer") &&
-		(formatDiff.From == "int32" && formatDiff.To == "int64" ||
-			formatDiff.From == "int32" && formatDiff.To == "bigint" ||
-			formatDiff.From == "int64" && formatDiff.To == "bigint") {
-		return true
-	}
-
-	return false
 }
