@@ -332,5 +332,7 @@ These examples are automatically generated from unit tests.
 [removing request property pattern](../checker/check_request_property_pattern_added_or_changed_test.go?plain=1#L60)  
 [removing response body default value or response body property default value](../checker/check_response_property_default_value_changed_test.go?plain=1#L97)  
 [removing response property pattern](../checker/check_response_pattern_added_or_changed_test.go?plain=1#L62)  
+[setting maxLength of request parameters](../checker/check_request_parameters_max_length_set_test.go?plain=1#L12)  
+[setting maxLength of request propreties](../checker/check_request_property_max_length_set_test.go?plain=1#L12)  
 [updating an existing operation id](../checker/check_api_operation_id_updated_test.go?plain=1#L36)  
 [updating an existing tag](../checker/check_api_tag_updated_test.go?plain=1#L64)  
