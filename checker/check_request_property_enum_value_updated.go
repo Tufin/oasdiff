@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -25,7 +24,6 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -40,27 +38,29 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						propName := propertyFullName(propertyPath, propertyName)
 
 						for _, enumVal := range enumDiff.Deleted {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyEnumValueRemovedId,
-								Level:       conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Args:        []any{enumVal, propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyEnumValueRemovedId,
+								conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								[]any{enumVal, propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 
 						for _, enumVal := range enumDiff.Added {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyEnumValueAddedId,
-								Level:       INFO,
-								Args:        []any{enumVal, propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyEnumValueAddedId,
+								INFO,
+								[]any{enumVal, propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 			}

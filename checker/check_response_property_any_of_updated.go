@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -27,7 +26,6 @@ func ResponsePropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 			if operationItem.ResponsesDiff == nil || operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			for responseStatus, responsesDiff := range operationItem.ResponsesDiff.Modified {
 				if responsesDiff.ContentDiff == nil || responsesDiff.ContentDiff.MediaTypeModified == nil {
@@ -41,27 +39,30 @@ func ResponsePropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 					}
 
 					if mediaTypeDiff.SchemaDiff.AnyOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AnyOfDiff.Added) > 0 {
-						result = append(result, ApiChange{
-							Id:          ResponseBodyAnyOfAddedId,
-							Level:       INFO,
-							Args:        []any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String(), responseStatus},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+
+						result = append(result, NewApiChange(
+							ResponseBodyAnyOfAddedId,
+							INFO,
+							[]any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Added.String(), responseStatus},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 
 					if mediaTypeDiff.SchemaDiff.AnyOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted) > 0 {
-						result = append(result, ApiChange{
-							Id:          ResponseBodyAnyOfRemovedId,
-							Level:       INFO,
-							Args:        []any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String(), responseStatus},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							ResponseBodyAnyOfRemovedId,
+							INFO,
+							[]any{mediaTypeDiff.SchemaDiff.AnyOfDiff.Deleted.String(), responseStatus},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 
 					CheckModifiedPropertiesDiff(
@@ -73,28 +74,30 @@ func ResponsePropertyAnyOfUpdatedCheck(diffReport *diff.Diff, operationsSources 
 
 							if len(propertyDiff.AnyOfDiff.Added) > 0 {
 
-								result = append(result, ApiChange{
-									Id:          ResponsePropertyAnyOfAddedId,
-									Level:       INFO,
-									Args:        []any{propertyDiff.AnyOfDiff.Added.String(), propertyFullName(propertyPath, propertyName), responseStatus},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									ResponsePropertyAnyOfAddedId,
+									INFO,
+									[]any{propertyDiff.AnyOfDiff.Added.String(), propertyFullName(propertyPath, propertyName), responseStatus},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 
 							if len(propertyDiff.AnyOfDiff.Deleted) > 0 {
 
-								result = append(result, ApiChange{
-									Id:          ResponsePropertyAnyOfRemovedId,
-									Level:       INFO,
-									Args:        []any{propertyDiff.AnyOfDiff.Deleted.String(), propertyFullName(propertyPath, propertyName), responseStatus},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									ResponsePropertyAnyOfRemovedId,
+									INFO,
+									[]any{propertyDiff.AnyOfDiff.Deleted.String(), propertyFullName(propertyPath, propertyName), responseStatus},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						})
 				}

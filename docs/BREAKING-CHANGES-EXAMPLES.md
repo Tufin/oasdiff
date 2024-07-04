@@ -1,6 +1,8 @@
 # Examples of Breaking and Non-Breaking Changes
 These examples are automatically generated from unit tests.
 ## Examples of breaking changes
+[Deleting a value from an x-extensible-enum parameter is breaking](../checker/check_request_parameter_x_extensible_enum_value_removed_test.go?plain=1#L11)  
+[Deleting a value from an x-extensible-enum property is breaking](../checker/check_request_property_x_extensible_enum_value_removed_test.go?plain=1#L11)  
 [adding 'allOf' subschema to the request body or request body property is breaking](../checker/check_breaking_test.go?plain=1#L712)  
 [adding a new required property in request body is breaking](../checker/check_breaking_property_test.go?plain=1#L353)  
 [adding a pattern to a schema is breaking for recursive properties](../checker/check_breaking_test.go?plain=1#L490)  
@@ -330,5 +332,10 @@ These examples are automatically generated from unit tests.
 [removing request property pattern](../checker/check_request_property_pattern_added_or_changed_test.go?plain=1#L60)  
 [removing response body default value or response body property default value](../checker/check_response_property_default_value_changed_test.go?plain=1#L97)  
 [removing response property pattern](../checker/check_response_pattern_added_or_changed_test.go?plain=1#L62)  
+[setting max of request body](../checker/check_request_property_max_set_test.go?plain=1#L12)  
+[setting max of request propreties](../checker/check_request_property_max_set_test.go?plain=1#L35)  
+[setting maxLength of request body](../checker/check_request_property_max_length_set_test.go?plain=1#L12)  
+[setting maxLength of request parameters](../checker/check_request_parameters_max_length_set_test.go?plain=1#L12)  
+[setting maxLength of request propreties](../checker/check_request_property_max_length_set_test.go?plain=1#L35)  
 [updating an existing operation id](../checker/check_api_operation_id_updated_test.go?plain=1#L36)  
 [updating an existing tag](../checker/check_api_tag_updated_test.go?plain=1#L64)  

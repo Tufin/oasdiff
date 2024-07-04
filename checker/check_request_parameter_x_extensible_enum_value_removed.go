@@ -1,16 +1,11 @@
 package checker
 
 import (
-	"encoding/json"
-
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
 const (
-	UnparsableParameterFromXExtensibleEnumId      = "unparseable-parameter-from-x-extensible-enum"
-	UnparsableParameterToXExtensibleEnumId        = "unparseable-parameter-to-x-extensible-enum"
 	RequestParameterXExtensibleEnumValueRemovedId = "request-parameter-x-extensible-enum-value-removed"
 )
 
@@ -30,7 +25,6 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 			if operationItem.ParametersDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for paramLocation, paramItems := range operationItem.ParametersDiff.Modified {
 				for paramName, paramItem := range paramItems {
 					if paramItem.SchemaDiff == nil {
@@ -45,39 +39,23 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 					if paramItem.SchemaDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension] == nil {
 						continue
 					}
-					from, ok := paramItem.SchemaDiff.Base.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
+					from, ok := paramItem.SchemaDiff.Base.Extensions[diff.XExtensibleEnumExtension].([]interface{})
 					if !ok {
 						continue
 					}
-					to, ok := paramItem.SchemaDiff.Revision.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
+					to, ok := paramItem.SchemaDiff.Revision.Extensions[diff.XExtensibleEnumExtension].([]interface{})
 					if !ok {
 						continue
 					}
-					var fromSlice []string
-					if err := json.Unmarshal(from, &fromSlice); err != nil {
-						result = append(result, ApiChange{
-							Id:          UnparsableParameterFromXExtensibleEnumId,
-							Level:       ERR,
-							Args:        []any{paramLocation, paramName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
-						continue
+
+					fromSlice := make([]string, len(from))
+					for i, item := range from {
+						fromSlice[i] = item.(string)
 					}
-					var toSlice []string
-					if err := json.Unmarshal(to, &toSlice); err != nil {
-						result = append(result, ApiChange{
-							Id:          UnparsableParameterToXExtensibleEnumId,
-							Level:       ERR,
-							Args:        []any{paramLocation, paramName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
-						continue
+
+					toSlice := make([]string, len(to))
+					for i, item := range to {
+						toSlice[i] = item.(string)
 					}
 
 					deletedVals := make([]string, 0)
@@ -88,15 +66,16 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 					}
 
 					for _, enumVal := range deletedVals {
-						result = append(result, ApiChange{
-							Id:          RequestParameterXExtensibleEnumValueRemovedId,
-							Level:       ERR,
-							Args:        []any{enumVal, paramLocation, paramName},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestParameterXExtensibleEnumValueRemovedId,
+							ERR,
+							[]any{enumVal, paramLocation, paramName},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 				}
 			}

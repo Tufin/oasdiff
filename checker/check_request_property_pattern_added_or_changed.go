@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -36,30 +35,30 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							return
 						}
 
-						source := (*operationsSources)[operationItem.Revision]
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if patternDiff.To == "" {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyPatternRemovedId,
-								Level:       INFO,
-								Args:        []any{patternDiff.From, propName},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyPatternRemovedId,
+								INFO,
+								[]any{patternDiff.From, propName},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else if patternDiff.From == "" {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyPatternAddedId,
-								Level:       WARN,
-								Args:        []any{patternDiff.To, propName},
-								Comment:     PatternChangedCommentId,
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyPatternAddedId,
+								WARN,
+								[]any{patternDiff.To, propName},
+								PatternChangedCommentId,
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
 							level := WARN
 							comment := PatternChangedCommentId
@@ -67,16 +66,16 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 								level = INFO
 								comment = ""
 							}
-							result = append(result, ApiChange{
-								Id:          RequestPropertyPatternChangedId,
-								Level:       level,
-								Args:        []any{propName, patternDiff.From, patternDiff.To},
-								Comment:     comment,
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyPatternChangedId,
+								level,
+								[]any{propName, patternDiff.From, patternDiff.To},
+								comment,
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 			}

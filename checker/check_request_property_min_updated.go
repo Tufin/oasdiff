@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -27,7 +26,6 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -36,25 +34,27 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 					if minDiff.From != nil &&
 						minDiff.To != nil {
 						if IsIncreasedValue(minDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMinIncreasedId,
-								Level:       ERR,
-								Args:        []any{minDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMinIncreasedId,
+								ERR,
+								[]any{minDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMinDecreasedId,
-								Level:       INFO,
-								Args:        []any{minDiff.From, minDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMinDecreasedId,
+								INFO,
+								[]any{minDiff.From, minDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					}
 				}
@@ -74,25 +74,27 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsIncreasedValue(minDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyMinIncreasedId,
-								Level:       conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Args:        []any{propName, minDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyMinIncreasedId,
+								conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								[]any{propName, minDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyMinDecreasedId,
-								Level:       INFO,
-								Args:        []any{propName, minDiff.From, minDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyMinDecreasedId,
+								INFO,
+								[]any{propName, minDiff.From, minDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 			}

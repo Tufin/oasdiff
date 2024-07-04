@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -21,7 +20,6 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ResponsesDiff == nil {
 				continue
@@ -59,15 +57,16 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 								args = []any{propName, patternDiff.To, responseStatus}
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       INFO,
-								Args:        args,
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								INFO,
+								args,
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 				}
 			}

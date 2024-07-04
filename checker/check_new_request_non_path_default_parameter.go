@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -40,15 +39,16 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 
 					// TODO: if base operation had this param individually (not through the path) - continue
 
-					result = append(result, ApiChange{
-						Id:          id,
-						Level:       level,
-						Args:        []any{paramLoc, param.Value.Name},
-						Operation:   operation,
-						OperationId: operationItem.OperationID,
-						Path:        path,
-						Source:      load.NewSource((*operationsSources)[operationItem]),
-					})
+					result = append(result, NewApiChange(
+						id,
+						level,
+						[]any{paramLoc, param.Value.Name},
+						"",
+						operationsSources,
+						operationItem,
+						operation,
+						path,
+					))
 				}
 			}
 		}

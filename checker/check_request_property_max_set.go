@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -25,7 +24,6 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -33,16 +31,16 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 					maxDiff := mediaTypeDiff.SchemaDiff.MaxDiff
 					if maxDiff.From == nil &&
 						maxDiff.To != nil {
-						result = append(result, ApiChange{
-							Id:          RequestBodyMaxSetId,
-							Level:       WARN,
-							Args:        []any{maxDiff.To},
-							Comment:     commentId(RequestBodyMaxSetId),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestBodyMaxSetId,
+							WARN,
+							[]any{maxDiff.To},
+							commentId(RequestBodyMaxSetId),
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 				}
 
@@ -61,16 +59,16 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 							return
 						}
 
-						result = append(result, ApiChange{
-							Id:          RequestPropertyMaxSetId,
-							Level:       WARN,
-							Args:        []any{propertyFullName(propertyPath, propertyName), maxDiff.To},
-							Comment:     commentId(RequestPropertyMaxSetId),
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestPropertyMaxSetId,
+							WARN,
+							[]any{propertyFullName(propertyPath, propertyName), maxDiff.To},
+							commentId(RequestPropertyMaxSetId),
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					})
 			}
 		}

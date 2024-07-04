@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -20,7 +19,6 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ResponsesDiff == nil {
 				continue
@@ -39,14 +37,16 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 					}
 
 					if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
-						result = append(result, ApiChange{
-							Id:          ResponseBodyBecameNullableId,
-							Level:       ERR,
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							ResponseBodyBecameNullableId,
+							ERR,
+							nil,
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 
 					CheckModifiedPropertiesDiff(
@@ -60,15 +60,16 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 								return
 							}
 
-							result = append(result, ApiChange{
-								Id:          ResponsePropertyBecameNullableId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								ResponsePropertyBecameNullableId,
+								ERR,
+								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 				}
 			}

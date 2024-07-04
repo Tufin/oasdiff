@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -36,18 +35,16 @@ func RequestParameterMinSetCheck(diffReport *diff.Diff, operationsSources *diff.
 						continue
 					}
 
-					source := (*operationsSources)[operationItem.Revision]
-
-					result = append(result, ApiChange{
-						Id:          RequestParameterMinSetId,
-						Level:       WARN,
-						Args:        []any{paramLocation, paramName, minDiff.To},
-						Comment:     commentId(RequestParameterMinSetId),
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						RequestParameterMinSetId,
+						WARN,
+						[]any{paramLocation, paramName, minDiff.To},
+						commentId(RequestParameterMinSetId),
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}

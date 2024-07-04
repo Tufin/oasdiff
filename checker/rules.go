@@ -143,8 +143,6 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(RequestParameterTypeChangedId, ERR, true, RequestParameterTypeChangedCheck),
 		newBackwardCompatibilityRule(RequestParameterPropertyTypeChangedId, ERR, true, RequestParameterTypeChangedCheck),
 		// RequestParameterXExtensibleEnumValueRemovedCheck
-		newBackwardCompatibilityRule(UnparsableParameterFromXExtensibleEnumId, ERR, true, RequestParameterXExtensibleEnumValueRemovedCheck),
-		newBackwardCompatibilityRule(UnparsableParameterToXExtensibleEnumId, ERR, true, RequestParameterXExtensibleEnumValueRemovedCheck),
 		newBackwardCompatibilityRule(RequestParameterXExtensibleEnumValueRemovedId, ERR, true, RequestParameterXExtensibleEnumValueRemovedCheck),
 		// RequestPropertyAllOfUpdatedCheck
 		newBackwardCompatibilityRule(RequestBodyAllOfAddedId, ERR, true, RequestPropertyAllOfUpdatedCheck),
@@ -239,8 +237,6 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(RequestRequiredPropertyBecameReadOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
 		newBackwardCompatibilityRule(RequestRequiredPropertyBecameNonReadOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
 		// RequestPropertyXExtensibleEnumValueRemovedCheck
-		newBackwardCompatibilityRule(UnparseablePropertyFromXExtensibleEnumId, ERR, true, RequestPropertyXExtensibleEnumValueRemovedCheck),
-		newBackwardCompatibilityRule(UnparseablePropertyToXExtensibleEnumId, ERR, true, RequestPropertyXExtensibleEnumValueRemovedCheck),
 		newBackwardCompatibilityRule(RequestPropertyXExtensibleEnumValueRemovedId, ERR, true, RequestPropertyXExtensibleEnumValueRemovedCheck),
 		// ResponseDiscriminatorUpdatedCheck
 		newBackwardCompatibilityRule(ResponseBodyDiscriminatorAddedId, INFO, true, ResponseDiscriminatorUpdatedCheck),

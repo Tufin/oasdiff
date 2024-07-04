@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -23,7 +22,6 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 			if operationItem.ResponsesDiff == nil || operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
 				if responseDiff == nil ||
 					responseDiff.ContentDiff == nil ||
@@ -37,15 +35,16 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 						if maxDiff.From != nil &&
 							maxDiff.To != nil {
 							if IsIncreasedValue(maxDiff) {
-								result = append(result, ApiChange{
-									Id:          ResponseBodyMaxIncreasedId,
-									Level:       ERR,
-									Args:        []any{maxDiff.From, maxDiff.To},
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									ResponseBodyMaxIncreasedId,
+									ERR,
+									[]any{maxDiff.From, maxDiff.To},
+									"",
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						}
 					}
@@ -69,15 +68,16 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 								return
 							}
 
-							result = append(result, ApiChange{
-								Id:          ResponsePropertyMaxIncreasedId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyName), maxDiff.From, maxDiff.To, responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								ResponsePropertyMaxIncreasedId,
+								ERR,
+								[]any{propertyFullName(propertyPath, propertyName), maxDiff.From, maxDiff.To, responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 				}
 

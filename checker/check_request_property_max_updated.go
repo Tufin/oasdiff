@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -27,7 +26,6 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -36,25 +34,27 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 					if maxDiff.From != nil &&
 						maxDiff.To != nil {
 						if IsDecreasedValue(maxDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMaxDecreasedId,
-								Level:       ERR,
-								Args:        []any{maxDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMaxDecreasedId,
+								ERR,
+								[]any{maxDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
-							result = append(result, ApiChange{
-								Id:          RequestBodyMaxIncreasedId,
-								Level:       INFO,
-								Args:        []any{maxDiff.From, maxDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestBodyMaxIncreasedId,
+								INFO,
+								[]any{maxDiff.From, maxDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					}
 				}
@@ -74,25 +74,27 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsDecreasedValue(maxDiff) {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyMaxDecreasedId,
-								Level:       conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
-								Args:        []any{propName, maxDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyMaxDecreasedId,
+								conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								[]any{propName, maxDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						} else {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyMaxIncreasedId,
-								Level:       INFO,
-								Args:        []any{propName, maxDiff.From, maxDiff.To},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyMaxIncreasedId,
+								INFO,
+								[]any{propName, maxDiff.From, maxDiff.To},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 
 					})

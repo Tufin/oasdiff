@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -19,7 +18,6 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.RequestBodyDiff == nil ||
 				operationItem.RequestBodyDiff.ContentDiff == nil ||
@@ -40,15 +38,16 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 							return
 						}
 
-						result = append(result, ApiChange{
-							Id:          RequestPropertyBecameEnumId,
-							Level:       ERR,
-							Args:        []any{propertyFullName(propertyPath, propertyName)},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestPropertyBecameEnumId,
+							ERR,
+							[]any{propertyFullName(propertyPath, propertyName)},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					})
 			}
 		}

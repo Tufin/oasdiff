@@ -1,16 +1,11 @@
 package checker
 
 import (
-	"encoding/json"
-
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
 const (
-	UnparseablePropertyFromXExtensibleEnumId     = "unparseable-property-from-x-extensible-enum"
-	UnparseablePropertyToXExtensibleEnumId       = "unparseable-property-to-x-extensible-enum"
 	RequestPropertyXExtensibleEnumValueRemovedId = "request-property-x-extensible-enum-value-removed"
 )
 
@@ -29,7 +24,6 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 				operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 			for _, mediaTypeDiff := range modifiedMediaTypes {
@@ -45,39 +39,23 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 						if propertyDiff.ExtensionsDiff.Modified[diff.XExtensibleEnumExtension] == nil {
 							return
 						}
-						from, ok := propertyDiff.Base.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
+						from, ok := propertyDiff.Base.Extensions[diff.XExtensibleEnumExtension].([]interface{})
 						if !ok {
 							return
 						}
-						to, ok := propertyDiff.Base.Extensions[diff.XExtensibleEnumExtension].(json.RawMessage)
+						to, ok := propertyDiff.Revision.Extensions[diff.XExtensibleEnumExtension].([]interface{})
 						if !ok {
 							return
 						}
-						var fromSlice []string
-						if err := json.Unmarshal(from, &fromSlice); err != nil {
-							result = append(result, ApiChange{
-								Id:          UnparseablePropertyFromXExtensibleEnumId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyName)},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
-							return
+
+						fromSlice := make([]string, len(from))
+						for i, item := range from {
+							fromSlice[i] = item.(string)
 						}
-						var toSlice []string
-						if err := json.Unmarshal(to, &toSlice); err != nil {
-							result = append(result, ApiChange{
-								Id:          UnparseablePropertyToXExtensibleEnumId,
-								Level:       ERR,
-								Args:        []any{propertyFullName(propertyPath, propertyName)},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
-							return
+
+						toSlice := make([]string, len(to))
+						for i, item := range to {
+							toSlice[i] = item.(string)
 						}
 
 						deletedVals := make([]string, 0)
@@ -91,15 +69,16 @@ func RequestPropertyXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, oper
 							return
 						}
 						for _, enumVal := range deletedVals {
-							result = append(result, ApiChange{
-								Id:          RequestPropertyXExtensibleEnumValueRemovedId,
-								Level:       ERR,
-								Args:        []any{enumVal, propertyFullName(propertyPath, propertyName)},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								RequestPropertyXExtensibleEnumValueRemovedId,
+								ERR,
+								[]any{enumVal, propertyFullName(propertyPath, propertyName)},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						}
 					})
 			}

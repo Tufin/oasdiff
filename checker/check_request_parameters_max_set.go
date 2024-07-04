@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -36,18 +35,16 @@ func RequestParameterMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.
 						continue
 					}
 
-					source := (*operationsSources)[operationItem.Revision]
-
-					result = append(result, ApiChange{
-						Id:          RequestParameterMaxSetId,
-						Level:       WARN,
-						Args:        []any{paramLocation, paramName, maxDiff.To},
-						Comment:     commentId(RequestParameterMaxSetId),
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						RequestParameterMaxSetId,
+						WARN,
+						[]any{paramLocation, paramName, maxDiff.To},
+						commentId(RequestParameterMaxSetId),
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}

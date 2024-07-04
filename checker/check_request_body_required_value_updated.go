@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -28,8 +27,6 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 				continue
 			}
 
-			source := (*operationsSources)[operationItem.Revision]
-
 			id := RequestBodyBecameOptionalId
 			logLevel := INFO
 			if operationItem.RequestBodyDiff.RequiredDiff.To == true {
@@ -37,14 +34,16 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 				logLevel = ERR
 			}
 
-			result = append(result, ApiChange{
-				Id:          id,
-				Level:       logLevel,
-				Operation:   operation,
-				OperationId: operationItem.Revision.OperationID,
-				Path:        path,
-				Source:      load.NewSource(source),
-			})
+			result = append(result, NewApiChange(
+				id,
+				logLevel,
+				nil,
+				"",
+				operationsSources,
+				operationItem.Revision,
+				operation,
+				path,
+			))
 		}
 	}
 	return result

@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 	"golang.org/x/exp/slices"
 )
 
@@ -23,7 +22,6 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 			continue
 		}
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
-			source := (*operationsSources)[operationItem.Revision]
 
 			if operationItem.ResponsesDiff == nil {
 				continue
@@ -63,15 +61,16 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								id = ResponseOptionalPropertyBecameWriteOnlyId
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       INFO,
-								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								INFO,
+								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 
 					CheckModifiedPropertiesDiff(
@@ -96,15 +95,16 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 								id = ResponseOptionalPropertyBecameReadOnlyId
 							}
 
-							result = append(result, ApiChange{
-								Id:          id,
-								Level:       INFO,
-								Args:        []any{propertyFullName(propertyPath, propertyName), responseStatus},
-								Operation:   operation,
-								OperationId: operationItem.Revision.OperationID,
-								Path:        path,
-								Source:      load.NewSource(source),
-							})
+							result = append(result, NewApiChange(
+								id,
+								INFO,
+								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
+								"",
+								operationsSources,
+								operationItem.Revision,
+								operation,
+								path,
+							))
 						})
 				}
 			}

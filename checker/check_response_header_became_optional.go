@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -25,7 +24,6 @@ func ResponseHeaderBecameOptionalCheck(diffReport *diff.Diff, operationsSources 
 			if operationItem.ResponsesDiff.Modified == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 			for responseStatus, responseDiff := range operationItem.ResponsesDiff.Modified {
 				if responseDiff.HeadersDiff == nil {
 					continue
@@ -40,15 +38,16 @@ func ResponseHeaderBecameOptionalCheck(diffReport *diff.Diff, operationsSources 
 						continue
 					}
 
-					result = append(result, ApiChange{
-						Id:          ResponseHeaderBecameOptionalId,
-						Level:       ERR,
-						Args:        []any{headerName, responseStatus},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						ResponseHeaderBecameOptionalId,
+						ERR,
+						[]any{headerName, responseStatus},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}

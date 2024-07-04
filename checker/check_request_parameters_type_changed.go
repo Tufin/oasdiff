@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -24,7 +23,6 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 			if operationItem.ParametersDiff == nil {
 				continue
 			}
-			source := (*operationsSources)[operationItem.Revision]
 
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {
@@ -38,15 +36,16 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 					if !typeDiff.Empty() || !formatDiff.Empty() {
 
-						result = append(result, ApiChange{
-							Id:          RequestParameterTypeChangedId,
-							Level:       conditionalError(breakingTypeFormatChangedInRequest(typeDiff, formatDiff, false, schemaDiff), INFO),
-							Args:        []any{paramLocation, paramName, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
-							Operation:   operation,
-							OperationId: operationItem.Revision.OperationID,
-							Path:        path,
-							Source:      load.NewSource(source),
-						})
+						result = append(result, NewApiChange(
+							RequestParameterTypeChangedId,
+							conditionalError(breakingTypeFormatChangedInRequest(typeDiff, formatDiff, false, schemaDiff), INFO),
+							[]any{paramLocation, paramName, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+							"",
+							operationsSources,
+							operationItem.Revision,
+							operation,
+							path,
+						))
 					}
 
 					CheckModifiedPropertiesDiff(
@@ -61,16 +60,16 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 								level, comment := checkRequestParameterPropertyTypeChanged(typeDiff, formatDiff, schemaDiff)
 
-								result = append(result, ApiChange{
-									Id:          RequestParameterPropertyTypeChangedId,
-									Level:       level,
-									Args:        []any{paramLocation, paramName, propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
-									Comment:     comment,
-									Operation:   operation,
-									OperationId: operationItem.Revision.OperationID,
-									Path:        path,
-									Source:      load.NewSource(source),
-								})
+								result = append(result, NewApiChange(
+									RequestParameterPropertyTypeChangedId,
+									level,
+									[]any{paramLocation, paramName, propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+									comment,
+									operationsSources,
+									operationItem.Revision,
+									operation,
+									path,
+								))
 							}
 						})
 				}

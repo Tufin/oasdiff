@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -23,35 +22,35 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 
 		for operation, operationItem := range pathItem.OperationsDiff.Modified {
 			op := pathItem.Base.GetOperation(operation)
-			source := (*operationsSources)[op]
 
 			if operationItem.TagsDiff == nil {
 				continue
 			}
 
 			for _, tag := range operationItem.TagsDiff.Deleted {
-				result = append(result, ApiChange{
-					Id:          APITagRemovedId,
-					Level:       config.getLogLevel(APITagRemovedId, INFO),
-					Args:        []any{tag},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
-
+				result = append(result, NewApiChange(
+					APITagRemovedId,
+					config.getLogLevel(APITagRemovedId, INFO),
+					[]any{tag},
+					"",
+					operationsSources,
+					op,
+					operation,
+					path,
+				))
 			}
 
 			for _, tag := range operationItem.TagsDiff.Added {
-				result = append(result, ApiChange{
-					Id:          APITagAddedId,
-					Level:       config.getLogLevel(APITagAddedId, INFO),
-					Args:        []any{tag},
-					Operation:   operation,
-					OperationId: op.OperationID,
-					Path:        path,
-					Source:      load.NewSource(source),
-				})
+				result = append(result, NewApiChange(
+					APITagAddedId,
+					config.getLogLevel(APITagAddedId, INFO),
+					[]any{tag},
+					"",
+					operationsSources,
+					op,
+					operation,
+					path,
+				))
 			}
 		}
 	}

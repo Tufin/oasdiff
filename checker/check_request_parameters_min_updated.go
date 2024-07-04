@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -37,8 +36,6 @@ func RequestParameterMinUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 						continue
 					}
 
-					source := (*operationsSources)[operationItem.Revision]
-
 					id := RequestParameterMinIncreasedId
 					level := ERR
 					if !IsIncreasedValue(minDiff) {
@@ -46,15 +43,16 @@ func RequestParameterMinUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 						level = INFO
 					}
 
-					result = append(result, ApiChange{
-						Id:          id,
-						Level:       level,
-						Args:        []any{paramLocation, paramName, minDiff.From, minDiff.To},
-						Operation:   operation,
-						OperationId: operationItem.Revision.OperationID,
-						Path:        path,
-						Source:      load.NewSource(source),
-					})
+					result = append(result, NewApiChange(
+						id,
+						level,
+						[]any{paramLocation, paramName, minDiff.From, minDiff.To},
+						"",
+						operationsSources,
+						operationItem.Revision,
+						operation,
+						path,
+					))
 				}
 			}
 		}
