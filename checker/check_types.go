@@ -92,7 +92,7 @@ func checkRequestParameterPropertyTypeChanged(typeDiff *diff.StringsDiff, format
 		return ERR, ""
 	}
 
-	// if niether are breaking it's an informational change
+	// if neither are breaking it's an informational change
 	return INFO, ""
 }
 
