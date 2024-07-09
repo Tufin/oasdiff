@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/formatters"
@@ -47,8 +46,6 @@ func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 }
 
 func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
-
-	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
 	diffResult, err := calcDiff(flags)
 	if err != nil {

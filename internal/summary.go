@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/formatters"
@@ -32,8 +31,6 @@ func getSummaryCmd() *cobra.Command {
 }
 
 func runSummary(flags Flags, stdout io.Writer) (bool, *ReturnError) {
-
-	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
 
 	diffResult, err := calcDiff(flags)
 	if err != nil {

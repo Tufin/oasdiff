@@ -6,31 +6,30 @@ import (
 )
 
 type ChangelogFlags struct {
-	base                     *load.Source
-	revision                 *load.Source
-	composed                 bool
-	prefixBase               string
-	prefixRevision           string
-	stripPrefixBase          string
-	stripPrefixRevision      string
-	matchPath                string
-	filterExtension          string
-	format                   string
-	circularReferenceCounter int
-	includePathParams        bool
-	excludeElements          []string
-	includeChecks            []string
-	failOn                   string
-	level                    string
-	flattenAllOf             bool
-	flattenParams            bool
-	insensitiveHeaders       bool
-	lang                     string
-	errIgnoreFile            string
-	warnIgnoreFile           string
-	deprecationDaysBeta      uint
-	deprecationDaysStable    uint
-	color                    string
+	base                  *load.Source
+	revision              *load.Source
+	composed              bool
+	prefixBase            string
+	prefixRevision        string
+	stripPrefixBase       string
+	stripPrefixRevision   string
+	matchPath             string
+	filterExtension       string
+	format                string
+	includePathParams     bool
+	excludeElements       []string
+	includeChecks         []string
+	failOn                string
+	level                 string
+	flattenAllOf          bool
+	flattenParams         bool
+	insensitiveHeaders    bool
+	lang                  string
+	errIgnoreFile         string
+	warnIgnoreFile        string
+	deprecationDaysBeta   uint
+	deprecationDaysStable uint
+	color                 string
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
@@ -68,10 +67,6 @@ func (flags *ChangelogFlags) getFlattenParams() bool {
 
 func (flags *ChangelogFlags) getInsensitiveHeaders() bool {
 	return flags.insensitiveHeaders
-}
-
-func (flags *ChangelogFlags) getCircularReferenceCounter() int {
-	return flags.circularReferenceCounter
 }
 
 func (flags *ChangelogFlags) getIncludeChecks() []string {
@@ -148,10 +143,6 @@ func (flags *ChangelogFlags) refMatchPath() *string {
 
 func (flags *ChangelogFlags) refFilterExtension() *string {
 	return &flags.filterExtension
-}
-
-func (flags *ChangelogFlags) refCircularReferenceCounter() *int {
-	return &flags.circularReferenceCounter
 }
 
 func (flags *ChangelogFlags) refPrefixBase() *string {
