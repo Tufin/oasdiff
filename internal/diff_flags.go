@@ -6,23 +6,22 @@ import (
 )
 
 type DiffFlags struct {
-	base                     *load.Source
-	revision                 *load.Source
-	composed                 bool
-	prefixBase               string
-	prefixRevision           string
-	stripPrefixBase          string
-	stripPrefixRevision      string
-	matchPath                string
-	filterExtension          string
-	format                   string
-	failOnDiff               bool
-	flattenAllOf             bool
-	flattenParams            bool
-	insensitiveHeaders       bool
-	circularReferenceCounter int
-	includePathParams        bool
-	excludeElements          []string
+	base                *load.Source
+	revision            *load.Source
+	composed            bool
+	prefixBase          string
+	prefixRevision      string
+	stripPrefixBase     string
+	stripPrefixRevision string
+	matchPath           string
+	filterExtension     string
+	format              string
+	failOnDiff          bool
+	flattenAllOf        bool
+	flattenParams       bool
+	insensitiveHeaders  bool
+	includePathParams   bool
+	excludeElements     []string
 }
 
 func (flags *DiffFlags) toConfig() *diff.Config {
@@ -60,10 +59,6 @@ func (flags *DiffFlags) getFlattenParams() bool {
 
 func (flags *DiffFlags) getInsensitiveHeaders() bool {
 	return flags.insensitiveHeaders
-}
-
-func (flags *DiffFlags) getCircularReferenceCounter() int {
-	return flags.circularReferenceCounter
 }
 
 func (flags *DiffFlags) getIncludeChecks() []string {
@@ -140,10 +135,6 @@ func (flags *DiffFlags) refMatchPath() *string {
 
 func (flags *DiffFlags) refFilterExtension() *string {
 	return &flags.filterExtension
-}
-
-func (flags *DiffFlags) refCircularReferenceCounter() *int {
-	return &flags.circularReferenceCounter
 }
 
 func (flags *DiffFlags) refPrefixBase() *string {

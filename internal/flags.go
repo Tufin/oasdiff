@@ -14,7 +14,6 @@ type Flags interface {
 	getFlattenAllOf() bool
 	getFlattenParams() bool
 	getInsensitiveHeaders() bool
-	getCircularReferenceCounter() int
 	getIncludeChecks() []string
 	getDeprecationDaysBeta() uint
 	getDeprecationDaysStable() uint
@@ -37,7 +36,6 @@ type Flags interface {
 	refExcludeElements() *[]string
 	refMatchPath() *string
 	refFilterExtension() *string
-	refCircularReferenceCounter() *int
 	refPrefixBase() *string
 	refPrefixRevision() *string
 	refStripPrefixBase() *string

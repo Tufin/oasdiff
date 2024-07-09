@@ -11,7 +11,6 @@ func addCommonDiffFlags(cmd *cobra.Command, flags Flags) {
 	cmd.PersistentFlags().BoolVarP(flags.refComposed(), "composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	cmd.PersistentFlags().StringVarP(flags.refMatchPath(), "match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().StringVarP(flags.refFilterExtension(), "filter-extension", "", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
-	cmd.PersistentFlags().IntVarP(flags.refCircularReferenceCounter(), "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 	cmd.PersistentFlags().StringVarP(flags.refPrefixBase(), "prefix-base", "", "", "add this prefix to paths in base-spec before comparison")
 	cmd.PersistentFlags().StringVarP(flags.refPrefixRevision(), "prefix-revision", "", "", "add this prefix to paths in revised-spec before comparison")
 	cmd.PersistentFlags().StringVarP(flags.refStripPrefixBase(), "strip-prefix-base", "", "", "strip this prefix from paths in base-spec before comparison")
@@ -20,18 +19,32 @@ func addCommonDiffFlags(cmd *cobra.Command, flags Flags) {
 	cmd.PersistentFlags().BoolVarP(flags.refFlattenAllOf(), "flatten-allof", "", false, "merge subschemas under allOf before diff")
 	cmd.PersistentFlags().BoolVarP(flags.refFlattenParams(), "flatten-params", "", false, "merge common parameters at path level with operation parameters")
 	cmd.PersistentFlags().BoolVarP(flags.refInsensitiveHeaders(), "case-insensitive-headers", "", false, "case-insensitive header name comparison")
-	addDeprecatedFlattenFlag(cmd, flags)
+
+	addHiddenFlattenFlag(cmd, flags)
+	addHiddenCircularDepFlag(cmd)
 }
 
-func addDeprecatedFlattenFlag(cmd *cobra.Command, flags Flags) {
-	const flag = "flatten"
+// addHiddenFlattenFlag adds --flatten as a hidden flag
+// --flatten was replaced by --flatten-allof
+// we still accept --flatten as a synonym for --flatten-allof to avoid breaking existing scripts
+func addHiddenFlattenFlag(cmd *cobra.Command, flags Flags) {
+	cmd.PersistentFlags().BoolVarP(flags.refFlattenAllOf(), "flatten", "", false, "merge subschemas under allOf before diff")
+	hideFlag(cmd, "flatten")
+}
 
-	// add this flag for backward compatibility
-	cmd.PersistentFlags().BoolVarP(flags.refFlattenAllOf(), flag, "", false, "merge subschemas under allOf before diff")
+// addHiddenCircularDepFlag adds --max-circular-dep as a hidden flag
+// --max-circular-dep is no longer needed because kin-openapi3 handles circular references automatically since https://github.com/getkin/kin-openapi/pull/970
+// we still accept --max-circular-dep to avoid breaking existing scripts, but we ignore this flag
+func addHiddenCircularDepFlag(cmd *cobra.Command) {
+	var dummy int
+	cmd.PersistentFlags().IntVarP(&dummy, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
+	hideFlag(cmd, "max-circular-dep")
+}
 
-	// ideally we'd like to mark '--flatten' as deprecated but this causes cobra to write an error message to stdout when the flag is used
-	// this messes up the json and yaml output
-	// so instead we just hide the flag
+// hideFlag hides a flag from the help
+// this is an alternative to marking the flag as deprecated
+// marking the flag as deprecated is problematic because it causes cobra to write an error message to stdout which messes up the json and yaml output
+func hideFlag(cmd *cobra.Command, flag string) {
 	if err := cmd.PersistentFlags().MarkHidden(flag); err != nil {
 		// we can ignore this error safely
 		_ = err

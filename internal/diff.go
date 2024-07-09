@@ -35,8 +35,6 @@ func getDiffCmd() *cobra.Command {
 
 func runDiff(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 
-	openapi3.CircularReferenceCounter = flags.getCircularReferenceCounter()
-
 	if flags.getFormat() == string(formatters.FormatJSON) {
 		flags.addExcludeElements(diff.ExcludeEndpointsOption)
 	}

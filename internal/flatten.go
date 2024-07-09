@@ -41,14 +41,12 @@ Spec can be a path to a file, a URL or '-' to read standard input.
 	}
 
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputFlatten), string(formatters.FormatJSON), &flags.format), "format", "f", "output format")
-	cmd.PersistentFlags().IntVarP(&flags.circularReferenceCounter, "max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
+	addHiddenCircularDepFlag(&cmd)
 
 	return &cmd
 }
 
 func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
-
-	openapi3.CircularReferenceCounter = flags.circularReferenceCounter
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
