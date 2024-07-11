@@ -6,7 +6,6 @@ import (
 	"cloud.google.com/go/civil"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -117,13 +116,14 @@ func getDeprecationDays(config *Config, stability string) uint {
 }
 
 func getAPIDeprecatedSunsetMissing(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string) Change {
-	return ApiChange{
-		Id:          APIDeprecatedSunsetMissingId,
-		Level:       ERR,
-		Args:        []any{},
-		Operation:   method,
-		OperationId: operation.OperationID,
-		Path:        path,
-		Source:      load.NewSource((*operationsSources)[operation]),
-	}
+	return NewApiChange(
+		APIDeprecatedSunsetMissingId,
+		ERR,
+		nil,
+		"",
+		operationsSources,
+		operation,
+		method,
+		path,
+	)
 }
