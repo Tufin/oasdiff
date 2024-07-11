@@ -8,7 +8,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -133,15 +132,16 @@ func removeDraftAndAlphaOperationsDiffs(config *Config, diffReport *diff.Diff, r
 }
 
 func getAPIInvalidStabilityLevel(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string, err error) Change {
-	return ApiChange{
-		Id:          APIInvalidStabilityLevelId,
-		Level:       ERR,
-		Args:        []any{err},
-		Operation:   method,
-		OperationId: operation.OperationID,
-		Path:        path,
-		Source:      load.NewSource((*operationsSources)[operation]),
-	}
+	return NewApiChange(
+		APIInvalidStabilityLevelId,
+		ERR,
+		[]any{err},
+		"",
+		operationsSources,
+		operation,
+		method,
+		path,
+	)
 }
 
 func getStabilityLevel(i map[string]interface{}) (string, error) {

@@ -6,7 +6,6 @@ import (
 	"cloud.google.com/go/civil"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 const (
@@ -53,14 +52,16 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 
 func checkAPIRemoval(deprecationId, sunsetId string, op *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method, path string) Change {
 	if !op.Deprecated {
-		return ApiChange{
-			Id:          deprecationId,
-			Level:       ERR,
-			Operation:   method,
-			OperationId: op.OperationID,
-			Path:        path,
-			Source:      load.NewSource((*operationsSources)[op]),
-		}
+		return NewApiChange(
+			deprecationId,
+			ERR,
+			nil,
+			"",
+			operationsSources,
+			op,
+			method,
+			path,
+		)
 	}
 	sunset, ok := getSunset(op.Extensions)
 	if !ok {
@@ -74,27 +75,29 @@ func checkAPIRemoval(deprecationId, sunsetId string, op *openapi3.Operation, ope
 	}
 
 	if civil.DateOf(time.Now()).Before(date) {
-		return ApiChange{
-			Id:          sunsetId,
-			Level:       ERR,
-			Args:        []any{date},
-			Operation:   method,
-			OperationId: op.OperationID,
-			Path:        path,
-			Source:      load.NewSource((*operationsSources)[op]),
-		}
+		return NewApiChange(
+			sunsetId,
+			ERR,
+			[]any{date},
+			"",
+			operationsSources,
+			op,
+			method,
+			path,
+		)
 	}
 	return nil
 }
 
 func getAPIPathSunsetParse(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string, err error) Change {
-	return ApiChange{
-		Id:          APIPathSunsetParseId,
-		Level:       ERR,
-		Args:        []any{err},
-		Operation:   method,
-		OperationId: operation.OperationID,
-		Path:        path,
-		Source:      load.NewSource((*operationsSources)[operation]),
-	}
+	return NewApiChange(
+		APIPathSunsetParseId,
+		ERR,
+		[]any{err},
+		"",
+		operationsSources,
+		operation,
+		method,
+		path,
+	)
 }
