@@ -170,8 +170,9 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(RequestPropertyDefaultValueRemovedId, INFO, true, RequestPropertyDefaultValueChangedCheck), //
 		newBackwardCompatibilityRule(RequestPropertyDefaultValueChangedId, INFO, true, RequestPropertyDefaultValueChangedCheck), //
 		// RequestPropertyEnumValueUpdatedCheck
-		newBackwardCompatibilityRule(RequestPropertyEnumValueRemovedId, ERR, true, RequestPropertyEnumValueUpdatedCheck), // INFO or ERR
-		newBackwardCompatibilityRule(RequestPropertyEnumValueAddedId, INFO, true, RequestPropertyEnumValueUpdatedCheck),  //
+		newBackwardCompatibilityRule(RequestPropertyEnumValueRemovedId, ERR, true, RequestPropertyEnumValueUpdatedCheck),          //
+		newBackwardCompatibilityRule(RequestReadOnlyPropertyEnumValueRemovedId, INFO, true, RequestPropertyEnumValueUpdatedCheck), //
+		newBackwardCompatibilityRule(RequestPropertyEnumValueAddedId, INFO, true, RequestPropertyEnumValueUpdatedCheck),           //
 		// RequestPropertyMaxDecreasedCheck
 		newBackwardCompatibilityRule(RequestBodyMaxDecreasedId, ERR, true, RequestPropertyMaxDecreasedCheck),      //
 		newBackwardCompatibilityRule(RequestBodyMaxIncreasedId, INFO, true, RequestPropertyMaxDecreasedCheck),     //

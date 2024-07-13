@@ -5,8 +5,9 @@ import (
 )
 
 const (
-	RequestPropertyEnumValueRemovedId = "request-property-enum-value-removed"
-	RequestPropertyEnumValueAddedId   = "request-property-enum-value-added"
+	RequestPropertyEnumValueRemovedId         = "request-property-enum-value-removed"
+	RequestReadOnlyPropertyEnumValueRemovedId = "request-readonly-property-enum-value-removed"
+	RequestPropertyEnumValueAddedId           = "request-property-enum-value-added"
 )
 
 func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -38,9 +39,17 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						propName := propertyFullName(propertyPath, propertyName)
 
 						for _, enumVal := range enumDiff.Deleted {
+
+							id := RequestPropertyEnumValueRemovedId
+							level := ERR
+							if propertyDiff.Revision.ReadOnly {
+								id = RequestReadOnlyPropertyEnumValueRemovedId
+								level = INFO
+							}
+
 							result = append(result, NewApiChange(
-								RequestPropertyEnumValueRemovedId,
-								conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								id,
+								level,
 								[]any{enumVal, propName},
 								"",
 								operationsSources,
