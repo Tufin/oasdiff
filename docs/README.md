@@ -68,6 +68,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Extending breaking changes with custom checks](CUSTOMIZING-CHECKS.md)
 - Localization: display breaking changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
 - [Run from Docker](DOCKER.md)
+- [Integrate in GitHub](https://github.com/oasdiff/github-demo/tree/main)
 - [GitHub Action](https://github.com/oasdiff/oasdiff-action)
 - [Cloud Service](OASDIFF-SERVICE.md)
 - [OpenAPI Sync: Get notified when an API provider breaks the API](https://github.com/oasdiff/sync/)
