@@ -102,6 +102,7 @@ request-body-max-decreased: значение max у тела запроса ум
 request-property-max-decreased: значение max у поля запроса %s уменьшено до %s
 request-body-max-length-decreased: значение maxLength у тела запроса уменьшено до %s
 request-property-max-length-decreased: значение maxLength у поля запроса %s уменьшено до %s
+request-read-only-property-max-length-decreased: значение maxLength поля запроса только для чтения %s уменьшено до %s
 request-body-max-length-set: у тела запроса задано значение maxLength в %s
 request-body-max-length-set-comment: Это предупреждение, потому что иногда его требуется установить из соображений безопасности или из-за текущей ошибки в спецификации. Но хорошие клиенты должны быть проверены на поддержку этого ограничения перед внесением таких изменений в спецификацию.
 request-property-max-length-set: у поля запроса %s задано значение maxLength в %s

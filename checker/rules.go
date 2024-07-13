@@ -182,10 +182,11 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(RequestBodyMaxLengthSetId, WARN, true, RequestPropertyMaxLengthSetCheck),     //
 		newBackwardCompatibilityRule(RequestPropertyMaxLengthSetId, WARN, true, RequestPropertyMaxLengthSetCheck), //
 		// RequestPropertyMaxLengthUpdatedCheck
-		newBackwardCompatibilityRule(RequestBodyMaxLengthDecreasedId, ERR, true, RequestPropertyMaxLengthUpdatedCheck),      //
-		newBackwardCompatibilityRule(RequestBodyMaxLengthIncreasedId, INFO, true, RequestPropertyMaxLengthUpdatedCheck),     //
-		newBackwardCompatibilityRule(RequestPropertyMaxLengthDecreasedId, ERR, true, RequestPropertyMaxLengthUpdatedCheck),  // INFO or ERR
-		newBackwardCompatibilityRule(RequestPropertyMaxLengthIncreasedId, INFO, true, RequestPropertyMaxLengthUpdatedCheck), //
+		newBackwardCompatibilityRule(RequestBodyMaxLengthDecreasedId, ERR, true, RequestPropertyMaxLengthUpdatedCheck),              //
+		newBackwardCompatibilityRule(RequestBodyMaxLengthIncreasedId, INFO, true, RequestPropertyMaxLengthUpdatedCheck),             //
+		newBackwardCompatibilityRule(RequestPropertyMaxLengthDecreasedId, ERR, true, RequestPropertyMaxLengthUpdatedCheck),          //
+		newBackwardCompatibilityRule(RequestReadOnlyPropertyMaxLengthDecreasedId, INFO, true, RequestPropertyMaxLengthUpdatedCheck), //
+		newBackwardCompatibilityRule(RequestPropertyMaxLengthIncreasedId, INFO, true, RequestPropertyMaxLengthUpdatedCheck),         //
 		// RequestPropertyMaxSetCheck
 		newBackwardCompatibilityRule(RequestBodyMaxSetId, WARN, true, RequestPropertyMaxSetCheck),     //
 		newBackwardCompatibilityRule(RequestPropertyMaxSetId, WARN, true, RequestPropertyMaxSetCheck), //
