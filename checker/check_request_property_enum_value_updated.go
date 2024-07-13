@@ -6,7 +6,7 @@ import (
 
 const (
 	RequestPropertyEnumValueRemovedId         = "request-property-enum-value-removed"
-	RequestReadOnlyPropertyEnumValueRemovedId = "request-readonly-property-enum-value-removed"
+	RequestReadOnlyPropertyEnumValueRemovedId = "request-read-only-property-enum-value-removed"
 	RequestPropertyEnumValueAddedId           = "request-property-enum-value-added"
 )
 
