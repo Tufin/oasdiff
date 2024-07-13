@@ -5,10 +5,11 @@ import (
 )
 
 const (
-	RequestParameterPatternAddedId   = "request-parameter-pattern-added"
-	RequestParameterPatternRemovedId = "request-parameter-pattern-removed"
-	RequestParameterPatternChangedId = "request-parameter-pattern-changed"
-	PatternChangedCommentId          = "pattern-changed-warn-comment"
+	RequestParameterPatternAddedId       = "request-parameter-pattern-added"
+	RequestParameterPatternRemovedId     = "request-parameter-pattern-removed"
+	RequestParameterPatternChangedId     = "request-parameter-pattern-changed"
+	RequestParameterPatternGeneralizedId = "request-parameter-pattern-generalized"
+	PatternChangedCommentId              = "pattern-changed-warn-comment"
 )
 
 func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -60,14 +61,18 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 							path,
 						))
 					} else {
+						id := RequestParameterPatternChangedId
 						level := WARN
 						comment := PatternChangedCommentId
+
 						if patternDiff.To == ".*" {
+							id = RequestParameterPatternGeneralizedId
 							level = INFO
 							comment = ""
 						}
+
 						result = append(result, NewApiChange(
-							RequestParameterPatternChangedId,
+							id,
 							level,
 							[]any{paramLocation, paramName, patternDiff.From, patternDiff.To},
 							comment,
