@@ -392,6 +392,7 @@ request-parameter-min-length-increased-description: request parameter min length
 request-parameter-min-set-description: request parameter min set
 request-parameter-pattern-added-description: request parameter pattern set
 request-parameter-pattern-changed-description: request parameter pattern changed
+request-parameter-pattern-generalized-description: request parameter pattern generalized
 request-parameter-pattern-removed-description: request parameter pattern unset
 request-parameter-removed-description: request parameter deleted
 request-parameter-type-changed-description: request parameter type changed
@@ -418,9 +419,11 @@ request-property-discriminator-property-name-changed-description: request proper
 request-property-discriminator-removed-description: request property discriminator removed
 request-property-enum-value-added-description: request property enum value added
 request-property-enum-value-removed-description: request property enum value removed
+request-read-only-property-enum-value-removed-description: request read-only property enum value removed
 request-property-max-decreased-description: request property max decreased
 request-property-max-increased-description: request property max increased
 request-property-max-length-decreased-description: request property max length decreased
+request-read-only-property-max-length-decreased-description: request read-only property max length decreased
 request-property-max-length-increased-description: request property max length increased
 request-property-max-length-set-description: request property max length set
 request-property-max-set-description: request property max set
