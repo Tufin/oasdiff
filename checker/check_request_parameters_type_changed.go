@@ -6,6 +6,7 @@ import (
 
 const (
 	RequestParameterTypeChangedId                = "request-parameter-type-changed"
+	RequestParameterTypeGeneralizedId            = "request-parameter-type-generalized"
 	RequestParameterPropertyTypeChangedId        = "request-parameter-property-type-changed"
 	RequestParameterPropertyTypeChangedCommentId = "request-parameter-property-type-changed-warn-comment"
 )
@@ -36,9 +37,17 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 					if !typeDiff.Empty() || !formatDiff.Empty() {
 
+						id := RequestParameterTypeGeneralizedId
+						level := INFO
+
+						if breakingTypeFormatChangedInRequest(typeDiff, formatDiff, false, schemaDiff) {
+							id = RequestParameterTypeChangedId
+							level = ERR
+						}
+
 						result = append(result, NewApiChange(
-							RequestParameterTypeChangedId,
-							conditionalError(breakingTypeFormatChangedInRequest(typeDiff, formatDiff, false, schemaDiff), INFO),
+							id,
+							level,
 							[]any{paramLocation, paramName, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 							"",
 							operationsSources,

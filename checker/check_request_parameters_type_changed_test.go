@@ -170,7 +170,7 @@ func TestRequestPathParamTypeAddString(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestParameterTypeChangedId,
+		Id:          checker.RequestParameterTypeGeneralizedId,
 		Args:        []any{"path", "groupId", utils.StringList{"integer"}, "", utils.StringList{"integer", "string"}, ""},
 		Level:       checker.INFO,
 		Operation:   "POST",
@@ -195,7 +195,7 @@ func TestRequestPathParamTypeIntegerToNumber(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestParameterTypeChangedId,
+		Id:          checker.RequestParameterTypeGeneralizedId,
 		Args:        []any{"path", "groupId", utils.StringList{"integer", "string"}, "", utils.StringList{"number", "string"}, ""},
 		Level:       checker.INFO,
 		Operation:   "POST",
