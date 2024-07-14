@@ -194,10 +194,11 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(RequestBodyMaxSetId, WARN, true, RequestPropertyMaxSetCheck),     //
 		newBackwardCompatibilityRule(RequestPropertyMaxSetId, WARN, true, RequestPropertyMaxSetCheck), //
 		// RequestPropertyMinIncreasedCheck
-		newBackwardCompatibilityRule(RequestBodyMinIncreasedId, ERR, true, RequestPropertyMinIncreasedCheck),      //
-		newBackwardCompatibilityRule(RequestBodyMinDecreasedId, INFO, true, RequestPropertyMinIncreasedCheck),     //
-		newBackwardCompatibilityRule(RequestPropertyMinIncreasedId, ERR, true, RequestPropertyMinIncreasedCheck),  // INFO or ERR
-		newBackwardCompatibilityRule(RequestPropertyMinDecreasedId, INFO, true, RequestPropertyMinIncreasedCheck), //
+		newBackwardCompatibilityRule(RequestBodyMinIncreasedId, ERR, true, RequestPropertyMinIncreasedCheck),              //
+		newBackwardCompatibilityRule(RequestBodyMinDecreasedId, INFO, true, RequestPropertyMinIncreasedCheck),             //
+		newBackwardCompatibilityRule(RequestPropertyMinIncreasedId, ERR, true, RequestPropertyMinIncreasedCheck),          //
+		newBackwardCompatibilityRule(RequestReadOnlyPropertyMinIncreasedId, INFO, true, RequestPropertyMinIncreasedCheck), //
+		newBackwardCompatibilityRule(RequestPropertyMinDecreasedId, ERR, true, RequestPropertyMinIncreasedCheck),          //
 		// RequestPropertyMinItemsIncreasedCheck
 		newBackwardCompatibilityRule(RequestBodyMinItemsIncreasedId, ERR, true, RequestPropertyMinItemsIncreasedCheck),     //
 		newBackwardCompatibilityRule(RequestPropertyMinItemsIncreasedId, ERR, true, RequestPropertyMinItemsIncreasedCheck), //

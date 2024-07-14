@@ -5,10 +5,11 @@ import (
 )
 
 const (
-	RequestBodyMinIncreasedId     = "request-body-min-increased"
-	RequestBodyMinDecreasedId     = "request-body-min-decreased"
-	RequestPropertyMinIncreasedId = "request-property-min-increased"
-	RequestPropertyMinDecreasedId = "request-property-min-decreased"
+	RequestBodyMinIncreasedId             = "request-body-min-increased"
+	RequestBodyMinDecreasedId             = "request-body-min-decreased"
+	RequestPropertyMinIncreasedId         = "request-property-min-increased"
+	RequestReadOnlyPropertyMinIncreasedId = "request-read-only-property-min-increased"
+	RequestPropertyMinDecreasedId         = "request-property-min-decreased"
 )
 
 func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -74,9 +75,18 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsIncreasedValue(minDiff) {
+
+							id := RequestPropertyMinIncreasedId
+							level := ERR
+
+							if propertyDiff.Revision.ReadOnly {
+								id = RequestReadOnlyPropertyMinIncreasedId
+								level = INFO
+							}
+
 							result = append(result, NewApiChange(
-								RequestPropertyMinIncreasedId,
-								conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								id,
+								level,
 								[]any{propName, minDiff.To},
 								"",
 								operationsSources,
