@@ -9,8 +9,7 @@ docker run --rm -t tufin/oasdiff breaking https://raw.githubusercontent.com/Tufi
 
 ### Comparing local files with Docker
 ```bash
-docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff diff /data/openapi-test1.yaml /data/openapi-test3.yaml
+docker run --rm -t -v $(pwd):/specs:ro -w /specs tufin/oasdiff changelog openapi-test1.yaml openapi-test3.yaml
 ```
 
-Replace `$(pwd)/data` by the path that contains your files.  
-Note that the spec paths must begin with `/`.  
+Replace `$(pwd)` by the path that contains your specs.  
