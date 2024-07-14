@@ -281,7 +281,7 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameNonReadOnlyId, INFO, true, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),  //
 		// ResponsePatternAddedOrChangedCheck
 		newBackwardCompatibilityRule(ResponsePropertyPatternAddedId, INFO, true, ResponsePatternAddedOrChangedCheck),   //
-		newBackwardCompatibilityRule(ResponsePropertyPatternChangedId, INFO, true, ResponsePatternAddedOrChangedCheck), // shouldn't this depend on the pattern?
+		newBackwardCompatibilityRule(ResponsePropertyPatternChangedId, INFO, true, ResponsePatternAddedOrChangedCheck), //
 		newBackwardCompatibilityRule(ResponsePropertyPatternRemovedId, INFO, true, ResponsePatternAddedOrChangedCheck), //
 		// ResponsePropertyAllOfUpdatedCheck
 		newBackwardCompatibilityRule(ResponseBodyAllOfAddedId, INFO, true, ResponsePropertyAllOfUpdatedCheck),       //
