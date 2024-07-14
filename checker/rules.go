@@ -141,9 +141,11 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(RequestParameterBecomeRequiredId, ERR, true, RequestParameterRequiredValueUpdatedCheck),  //
 		newBackwardCompatibilityRule(RequestParameterBecomeOptionalId, INFO, true, RequestParameterRequiredValueUpdatedCheck), //
 		// RequestParameterTypeChangedCheck
-		newBackwardCompatibilityRule(RequestParameterTypeChangedId, ERR, true, RequestParameterTypeChangedCheck),         //
-		newBackwardCompatibilityRule(RequestParameterTypeGeneralizedId, INFO, true, RequestParameterTypeChangedCheck),    //
-		newBackwardCompatibilityRule(RequestParameterPropertyTypeChangedId, ERR, true, RequestParameterTypeChangedCheck), // INFO or WARN or ERR
+		newBackwardCompatibilityRule(RequestParameterTypeChangedId, ERR, true, RequestParameterTypeChangedCheck),              //
+		newBackwardCompatibilityRule(RequestParameterTypeGeneralizedId, INFO, true, RequestParameterTypeChangedCheck),         //
+		newBackwardCompatibilityRule(RequestParameterPropertyTypeChangedId, WARN, true, RequestParameterTypeChangedCheck),     //
+		newBackwardCompatibilityRule(RequestParameterPropertyTypeGeneralizedId, INFO, true, RequestParameterTypeChangedCheck), //
+		newBackwardCompatibilityRule(RequestParameterPropertyTypeSpecializedId, ERR, true, RequestParameterTypeChangedCheck),  //
 		// RequestParameterXExtensibleEnumValueRemovedCheck
 		newBackwardCompatibilityRule(RequestParameterXExtensibleEnumValueRemovedId, ERR, true, RequestParameterXExtensibleEnumValueRemovedCheck), //
 		// RequestPropertyAllOfUpdatedCheck

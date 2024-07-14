@@ -222,7 +222,7 @@ func TestBreaking_ReqQueryParamTypeNumberToString(t *testing.T) {
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 }
 
-// BC: changing request's query param property type from string to number is breaking
+// BC: specializing request's query param property type from string to number is breaking
 func TestBreaking_ReqQueryParamTypeStringToNumber(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_property_type_changed_revision.yaml")
 	require.NoError(t, err)
@@ -234,12 +234,12 @@ func TestBreaking_ReqQueryParamTypeStringToNumber(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.RequestParameterPropertyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was changed from 'string'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, checker.RequestParameterPropertyTypeSpecializedId, errs[0].GetId())
+	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was specialized from 'string'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
 }
 
-// CL: changing request's query param property type from integer to number
+// CL: generalizing request's query param property type from integer to number
 func TestBreaking_ReqQueryParamTypeIntegerToNumber(t *testing.T) {
 	s1, err := open("../data/checker/request_parameter_property_type_changed_base_int.yaml")
 	require.NoError(t, err)
@@ -251,7 +251,7 @@ func TestBreaking_ReqQueryParamTypeIntegerToNumber(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
-	require.Equal(t, checker.RequestParameterPropertyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was changed from 'integer'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, checker.RequestParameterPropertyTypeGeneralizedId, errs[0].GetId())
+	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was generalized from 'integer'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, checker.INFO, errs[0].GetLevel())
 }

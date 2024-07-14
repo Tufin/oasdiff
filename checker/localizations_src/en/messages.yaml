@@ -79,6 +79,8 @@ request-parameter-type-changed: for the %s request parameter %s, the type/format
 request-parameter-type-generalized: for the %s request parameter %s, the type/format was generalized from %s/%s to %s/%s
 request-parameter-property-type-changed: for the %s request parameter %s, the type/format of property %s was changed from %s/%s to %s/%s
 request-parameter-property-type-changed-warn-comment: This is a warning because parameter objects can be passed in differnt ways, some of which allow this type change and others do not.
+request-parameter-property-type-generalized: for the %s request parameter %s, the type/format of property %s was generalized from %s/%s to %s/%s
+request-parameter-property-type-specialized: for the %s request parameter %s, the type/format of property %s was specialized from %s/%s to %s/%s
 new-request-path-parameter: added the new path request parameter %s
 request-property-became-required: the request property %s became required
 request-property-became-required-with-default: the request property %s with a default value became required
@@ -399,6 +401,8 @@ request-parameter-removed-description: request parameter deleted
 request-parameter-type-changed-description: request parameter type changed
 request-parameter-type-generalized-description: request parameter type generalized
 request-parameter-property-type-changed-description: request parameter property type changed
+request-parameter-property-type-generalized-description: request parameter property type generalized
+request-parameter-property-type-specialized-description: request parameter property type specialized
 request-parameter-x-extensible-enum-value-removed-description: request parameter-x-extensible-enum value deleted
 request-property-all-of-added-description: sub-schema added to allOf in request property 
 request-property-all-of-removed-description: sub-schema deleted from allOf in request property 
