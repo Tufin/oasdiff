@@ -5,8 +5,10 @@ import (
 )
 
 const (
-	RequestBodyTypeChangedId     = "request-body-type-changed"
-	RequestPropertyTypeChangedId = "request-property-type-changed"
+	RequestBodyTypeGeneralizedId     = "request-body-type-generalized"
+	RequestBodyTypeChangedId         = "request-body-type-changed"
+	RequestPropertyTypeGeneralizedId = "request-property-type-generalized"
+	RequestPropertyTypeChangedId     = "request-property-type-changed"
 )
 
 func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -37,9 +39,17 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 
 				if !typeDiff.Empty() || !formatDiff.Empty() {
 
+					id := RequestBodyTypeGeneralizedId
+					level := INFO
+
+					if breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
+						id = RequestBodyTypeChangedId
+						level = ERR
+					}
+
 					result = append(result, NewApiChange(
-						RequestBodyTypeChangedId,
-						conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
+						id,
+						level,
 						[]any{getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 						"",
 						operationsSources,
@@ -64,9 +74,17 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 
 						if !typeDiff.Empty() || !formatDiff.Empty() {
 
+							id := RequestPropertyTypeGeneralizedId
+							level := INFO
+
+							if breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
+								id = RequestPropertyTypeChangedId
+								level = ERR
+							}
+
 							result = append(result, NewApiChange(
-								RequestPropertyTypeChangedId,
-								conditionalError(breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff), INFO),
+								id,
+								level,
 								[]any{propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 								"",
 								operationsSources,

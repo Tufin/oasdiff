@@ -83,8 +83,10 @@ func TestBreaking_ReqTypeIntegerToNumber(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
-	require.Empty(t, errs)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(checker.NewConfig(), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.RequestBodyTypeGeneralizedId, errs[0].GetId())
+	require.Equal(t, "the request's body type/format was generalized from 'integer'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing request's body schema type from number/none to integer/int32 is breaking

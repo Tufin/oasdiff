@@ -134,7 +134,9 @@ request-property-min-set: the %s request property's min was set to %s
 request-property-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-removed: removed the request property %s
 request-body-type-changed: the request's body type/format changed from %s/%s to %s/%s
+request-body-type-generalized: the request's body type/format was generalized from %s/%s to %s/%s
 request-property-type-changed: the %s request property type/format changed from %s/%s to %s/%s
+request-property-type-generalized: the %s request property type/format was generalized from %s/%s to %s/%s
 request-property-x-extensible-enum-value-removed: removed the x-extensible-enum value %s of the request property %s
 response-header-became-optional: the response header %s became optional for the status %s
 required-response-header-removed: the mandatory response header %s removed for the status %s
@@ -365,6 +367,7 @@ request-body-min-set-description: request body min set
 request-body-one-of-added-description: sub-schema added to oneOf in request body
 request-body-one-of-removed-description: sub-schema deleted from oneOf in request body
 request-body-type-changed-description: request body type changed
+request-body-type-generalized-description: request body type generalized
 request-header-property-became-enum-description: request header property restricted to enum
 request-header-property-became-required-description: request header property became required
 request-optional-property-became-not-read-only-description: request optional property became not read-only
@@ -451,6 +454,7 @@ request-property-pattern-generalized-description: request property pattern gener
 request-property-pattern-removed-description: request property pattern unset
 request-property-removed-description: request property removed
 request-property-type-changed-description: request property type changed
+request-property-type-generalized-description: request property type generalized
 request-property-x-extensible-enum-value-removed-description: request property x-extensible-enum value removed
 request-required-property-became-not-read-only-description: request required property became not read-only
 request-required-property-became-not-write-only-description: request required property became not write-only
