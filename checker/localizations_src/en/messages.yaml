@@ -12,6 +12,7 @@ request-parameter-pattern-generalized: "changed the pattern of the %s request pa
 request-property-pattern-added: "added the pattern %s to the request property %s"
 request-property-pattern-removed: "removed the pattern %s from the request property %s"
 request-property-pattern-changed: "changed the pattern of the request property %s from %s to %s"
+request-property-pattern-generalized: "changed the pattern of the request property %s from %s to a more general pattern %s"
 api-deprecated-sunset-parse: "failed to parse sunset date: %v"
 api-path-sunset-parse: "failed to parse sunset date: %v"
 api-stability-decreased: "endpoint stability level decreased from %s to %s"
@@ -446,6 +447,7 @@ request-property-one-of-added-description: sub-schema added to oneOf in request 
 request-property-one-of-removed-description: sub-schema deleted from oneOf in request property
 request-property-pattern-added-description: request property pattern set
 request-property-pattern-changed-description: request property pattern changed
+request-property-pattern-generalized-description: request property pattern generalized
 request-property-pattern-removed-description: request property pattern unset
 request-property-removed-description: request property removed
 request-property-type-changed-description: request property type changed

@@ -519,6 +519,21 @@ func TestBreaking_ModifyPattern(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyPatternChangedId, errs[0].GetId())
 	require.Equal(t, "changed the pattern of the request property 'created' from '^[a-z]+$' to '.+'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, checker.WARN, errs[0].GetLevel())
+}
+
+// BC: modifying a pattern to .* in a schema is not breaking
+func TestBreaking_GeneralizedPattern(t *testing.T) {
+	s1, err := open("../data/pattern-base.yaml")
+	require.NoError(t, err)
+
+	s2, err := open("../data/pattern-modified.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	require.Empty(t, errs)
 }
 
 // BC: modifying a pattern in request parameter is breaking

@@ -5,9 +5,10 @@ import (
 )
 
 const (
-	RequestPropertyPatternRemovedId = "request-property-pattern-removed"
-	RequestPropertyPatternAddedId   = "request-property-pattern-added"
-	RequestPropertyPatternChangedId = "request-property-pattern-changed"
+	RequestPropertyPatternRemovedId     = "request-property-pattern-removed"
+	RequestPropertyPatternAddedId       = "request-property-pattern-added"
+	RequestPropertyPatternChangedId     = "request-property-pattern-changed"
+	RequestPropertyPatternGeneralizedId = "request-property-pattern-generalized"
 )
 
 func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -60,14 +61,19 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 								path,
 							))
 						} else {
+
+							id := RequestPropertyPatternChangedId
 							level := WARN
 							comment := PatternChangedCommentId
+
 							if patternDiff.To == ".*" {
+								id = RequestPropertyPatternGeneralizedId
 								level = INFO
 								comment = ""
 							}
+
 							result = append(result, NewApiChange(
-								RequestPropertyPatternChangedId,
+								id,
 								level,
 								[]any{propName, patternDiff.From, patternDiff.To},
 								comment,
