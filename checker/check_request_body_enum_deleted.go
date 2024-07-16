@@ -42,7 +42,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 				for _, enumVal := range enumDiff.Deleted {
 					result = append(result, NewApiChange(
 						RequestBodyEnumValueRemovedId,
-						config.getLogLevel(RequestBodyEnumValueRemovedId, INFO),
+						config.getLogLevel(RequestBodyEnumValueRemovedId),
 						[]any{enumVal},
 						"",
 						operationsSources,

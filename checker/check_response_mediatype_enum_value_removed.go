@@ -45,7 +45,7 @@ func ResponseMediaTypeEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 					for _, enumVal := range enumDiff.Deleted {
 						result = append(result, NewApiChange(
 							ResponseMediaTypeEnumValueRemovedId,
-							config.getLogLevel(ResponseMediaTypeEnumValueRemovedId, INFO),
+							config.getLogLevel(ResponseMediaTypeEnumValueRemovedId),
 							[]any{mediaType, enumVal},
 							"",
 							operationsSources,

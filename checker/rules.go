@@ -1,5 +1,11 @@
 package checker
 
+import (
+	"fmt"
+
+	"github.com/tufin/oasdiff/utils"
+)
+
 type BackwardCompatibilityRule struct {
 	Id          string
 	Level       Level
@@ -18,8 +24,10 @@ func newBackwardCompatibilityRule(id string, level Level, required bool, handler
 	}
 }
 
-func GetAllRules() []BackwardCompatibilityRule {
-	return []BackwardCompatibilityRule{
+type BackwardCompatibilityRules []BackwardCompatibilityRule
+
+func GetAllRules() BackwardCompatibilityRules {
+	return BackwardCompatibilityRules{
 		// APIAddedCheck
 		newBackwardCompatibilityRule(EndpointAddedId, INFO, true, APIAddedCheck),
 		// APIComponentsSecurityUpdatedCheck
@@ -45,6 +53,7 @@ func GetAllRules() []BackwardCompatibilityRule {
 		// APIDeprecationCheck
 		newBackwardCompatibilityRule(EndpointReactivatedId, INFO, true, APIDeprecationCheck),
 		newBackwardCompatibilityRule(APIDeprecatedSunsetParseId, ERR, true, APIDeprecationCheck),
+		newBackwardCompatibilityRule(APIDeprecatedSunsetMissingId, ERR, true, APIDeprecationCheck),
 		newBackwardCompatibilityRule(APIInvalidStabilityLevelId, ERR, true, APIDeprecationCheck),
 		newBackwardCompatibilityRule(APISunsetDateTooSmallId, ERR, true, APIDeprecationCheck),
 		newBackwardCompatibilityRule(EndpointDeprecatedId, INFO, true, APIDeprecationCheck),
@@ -298,7 +307,7 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(ResponseBodyBecameNullableId, ERR, true, ResponsePropertyBecameNullableCheck),
 		// ResponsePropertyBecameOptionalCheck
 		newBackwardCompatibilityRule(ResponsePropertyBecameOptionalId, ERR, true, ResponsePropertyBecameOptionalCheck),
-		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyBecameOptionalId, ERR, true, ResponsePropertyBecameOptionalCheck),
+		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyBecameOptionalId, INFO, true, ResponsePropertyBecameOptionalCheck),
 		// ResponsePropertyBecameRequiredCheck
 		newBackwardCompatibilityRule(ResponsePropertyBecameRequiredId, INFO, true, ResponsePropertyBecameRequiredCheck),
 		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyBecameRequiredId, INFO, true, ResponsePropertyBecameRequiredCheck),
@@ -355,39 +364,67 @@ func GetAllRules() []BackwardCompatibilityRule {
 		newBackwardCompatibilityRule(ResponseSuccessStatusRemovedId, ERR, true, ResponseSuccessStatusUpdatedCheck),
 		newBackwardCompatibilityRule(ResponseSuccessStatusAddedId, INFO, true, ResponseSuccessStatusUpdatedCheck),
 		// ResponseNonSuccessStatusUpdatedCheck
-		newBackwardCompatibilityRule(ResponseNonSuccessStatusRemovedId, ERR, false, ResponseNonSuccessStatusUpdatedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(ResponseNonSuccessStatusRemovedId, INFO, false, ResponseNonSuccessStatusUpdatedCheck), // INFO or ERR
 		newBackwardCompatibilityRule(ResponseNonSuccessStatusAddedId, INFO, false, ResponseNonSuccessStatusUpdatedCheck),
 		// APIOperationIdUpdatedCheck
-		newBackwardCompatibilityRule(APIOperationIdRemovedId, ERR, false, APIOperationIdUpdatedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(APIOperationIdRemovedId, INFO, false, APIOperationIdUpdatedCheck), // INFO or ERR
 		newBackwardCompatibilityRule(APIOperationIdAddId, INFO, false, APIOperationIdUpdatedCheck),
 		// APITagUpdatedCheck
-		newBackwardCompatibilityRule(APITagRemovedId, ERR, false, APITagUpdatedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(APITagRemovedId, INFO, false, APITagUpdatedCheck), // INFO or ERR
 		newBackwardCompatibilityRule(APITagAddedId, INFO, false, APITagUpdatedCheck),
 		// APIComponentsSchemaRemovedCheck
-		newBackwardCompatibilityRule(APISchemasRemovedId, ERR, false, APIComponentsSchemaRemovedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(APISchemasRemovedId, INFO, false, APIComponentsSchemaRemovedCheck), // INFO or ERR
 		// ResponseParameterEnumValueRemovedCheck
-		newBackwardCompatibilityRule(ResponsePropertyEnumValueRemovedId, ERR, false, ResponseParameterEnumValueRemovedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(ResponsePropertyEnumValueRemovedId, INFO, false, ResponseParameterEnumValueRemovedCheck), // INFO or ERR
 		// ResponseMediaTypeEnumValueRemovedCheck
-		newBackwardCompatibilityRule(ResponseMediaTypeEnumValueRemovedId, ERR, false, ResponseMediaTypeEnumValueRemovedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(ResponseMediaTypeEnumValueRemovedId, INFO, false, ResponseMediaTypeEnumValueRemovedCheck), // INFO or ERR
 		// RequestBodyEnumValueRemovedCheck
-		newBackwardCompatibilityRule(RequestBodyEnumValueRemovedId, ERR, false, RequestBodyEnumValueRemovedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(RequestBodyEnumValueRemovedId, INFO, false, RequestBodyEnumValueRemovedCheck), // INFO or ERR
 	}
 }
 
-func GetOptionalRules() []BackwardCompatibilityRule {
+func GetOptionalRules() BackwardCompatibilityRules {
+	return BackwardCompatibilityRules{
+		newBackwardCompatibilityRule(ResponseNonSuccessStatusRemovedId, INFO, false, ResponseNonSuccessStatusUpdatedCheck),
+		newBackwardCompatibilityRule(APIOperationIdRemovedId, INFO, false, APIOperationIdUpdatedCheck),
+		newBackwardCompatibilityRule(APITagRemovedId, INFO, false, APITagUpdatedCheck),
+		newBackwardCompatibilityRule(APISchemasRemovedId, INFO, false, APIComponentsSchemaRemovedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyEnumValueRemovedId, INFO, false, ResponseParameterEnumValueRemovedCheck),
+		newBackwardCompatibilityRule(ResponseMediaTypeEnumValueRemovedId, INFO, false, ResponseMediaTypeEnumValueRemovedCheck),
+		newBackwardCompatibilityRule(RequestBodyEnumValueRemovedId, INFO, false, RequestBodyEnumValueRemovedCheck),
+	}
+}
 
-	result := []BackwardCompatibilityRule{}
+func GetRequiredRules() BackwardCompatibilityRules {
+	result := BackwardCompatibilityRules{}
 	for _, rule := range GetAllRules() {
 		if rule.Required {
-			continue
+			result = append(result, rule)
 		}
+	}
+	return result
+}
 
-		if rule.Level == INFO {
-			// rules with level INFO are not breaking
-			continue
+// rulesToChecks return a unique list of checks from a list of rules
+func rulesToChecks(rules BackwardCompatibilityRules) BackwardCompatibilityChecks {
+	result := BackwardCompatibilityChecks{}
+	m := utils.StringSet{}
+	for _, rule := range rules {
+		// functions are not comparable, so we convert them to strings
+		pStr := fmt.Sprintf("%v", rule.Handler)
+		if !m.Contains(pStr) {
+			m.Add(pStr)
+			result = append(result, rule.Handler)
 		}
+	}
+	return result
+}
 
-		result = append(result, rule)
+// rulesToLevels return a map of check IDs to levels
+func rulesToLevels(rules BackwardCompatibilityRules) map[string]Level {
+	result := map[string]Level{}
+	for _, rule := range rules {
+		result[rule.Id] = rule.Level
 	}
 	return result
 }
@@ -397,17 +434,6 @@ func GetOptionalRuleIds() []string {
 	result := []string{}
 	for _, rule := range GetOptionalRules() {
 		result = append(result, rule.Id)
-	}
-	return result
-}
-
-func GetRequiredRules() []BackwardCompatibilityRule {
-
-	result := []BackwardCompatibilityRule{}
-	for _, rule := range GetAllRules() {
-		if rule.Required {
-			result = append(result, rule)
-		}
 	}
 	return result
 }

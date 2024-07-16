@@ -18,7 +18,7 @@ func APIComponentsSchemaRemovedCheck(diffReport *diff.Diff, operationsSources *d
 	for _, deletedSchema := range diffReport.ComponentsDiff.SchemasDiff.Deleted {
 		result = append(result, ComponentChange{
 			Id:        APISchemasRemovedId,
-			Level:     config.getLogLevel(APISchemasRemovedId, INFO),
+			Level:     config.getLogLevel(APISchemasRemovedId),
 			Args:      []any{deletedSchema},
 			Component: ComponentSchemas,
 		})
