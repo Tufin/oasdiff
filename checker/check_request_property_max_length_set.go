@@ -33,7 +33,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 						maxLengthDiff.To != nil {
 						result = append(result, NewApiChange(
 							RequestBodyMaxLengthSetId,
-							WARN,
+							config,
 							[]any{maxLengthDiff.To},
 							commentId(RequestBodyMaxLengthSetId),
 							operationsSources,
@@ -61,7 +61,7 @@ func RequestPropertyMaxLengthSetCheck(diffReport *diff.Diff, operationsSources *
 
 						result = append(result, NewApiChange(
 							RequestPropertyMaxLengthSetId,
-							WARN,
+							config,
 							[]any{propertyFullName(propertyPath, propertyName), maxLengthDiff.To},
 							commentId(RequestPropertyMaxLengthSetId),
 							operationsSources,

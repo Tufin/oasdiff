@@ -32,7 +32,7 @@ func RequestPropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsSo
 			appendResultItem := func(messageId string, a ...any) {
 				result = append(result, NewApiChange(
 					messageId,
-					INFO,
+					config,
 					a,
 					"",
 					operationsSources,

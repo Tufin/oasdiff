@@ -34,7 +34,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 						if IsIncreasedValue(minItemsDiff) {
 							result = append(result, NewApiChange(
 								RequestBodyMinItemsIncreasedId,
-								ERR,
+								config,
 								[]any{minItemsDiff.To},
 								"",
 								operationsSources,
@@ -66,7 +66,7 @@ func RequestPropertyMinItemsIncreasedCheck(diffReport *diff.Diff, operationsSour
 
 						result = append(result, NewApiChange(
 							RequestPropertyMinItemsIncreasedId,
-							ERR,
+							config,
 							[]any{propertyFullName(propertyPath, propertyName), minItemsDiff.To},
 							"",
 							operationsSources,

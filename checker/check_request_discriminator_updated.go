@@ -40,7 +40,7 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 			appendResultItem := func(messageId string, a ...any) {
 				result = append(result, NewApiChange(
 					messageId,
-					INFO,
+					config,
 					a,
 					"",
 					operationsSources,

@@ -36,7 +36,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						if IsIncreasedValue(minLengthDiff) {
 							result = append(result, NewApiChange(
 								RequestBodyMinLengthIncreasedId,
-								ERR,
+								config,
 								[]any{minLengthDiff.From, minLengthDiff.To},
 								"",
 								operationsSources,
@@ -47,7 +47,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						} else {
 							result = append(result, NewApiChange(
 								RequestBodyMinLengthDecreasedId,
-								INFO,
+								config,
 								[]any{minLengthDiff.From, minLengthDiff.To},
 								"",
 								operationsSources,
@@ -76,7 +76,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						if IsDecreasedValue(minLengthDiff) {
 							result = append(result, NewApiChange(
 								RequestPropertyMinLengthDecreasedId,
-								INFO,
+								config,
 								[]any{propName, minLengthDiff.From, minLengthDiff.To},
 								"",
 								operationsSources,
@@ -87,7 +87,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						} else {
 							result = append(result, NewApiChange(
 								RequestPropertyMinLengthIncreasedId,
-								ERR,
+								config,
 								[]any{propName, minLengthDiff.From, minLengthDiff.To},
 								"",
 								operationsSources,

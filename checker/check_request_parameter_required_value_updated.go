@@ -33,16 +33,14 @@ func RequestParameterRequiredValueUpdatedCheck(diffReport *diff.Diff, operations
 					}
 
 					id := RequestParameterBecomeRequiredId
-					level := ERR
 
 					if requiredDiff.To != true {
 						id = RequestParameterBecomeOptionalId
-						level = INFO
 					}
 
 					result = append(result, NewApiChange(
 						id,
-						level,
+						config,
 						[]any{paramLocation, paramName},
 						"",
 						operationsSources,

@@ -40,7 +40,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 
 						result = append(result, NewApiChange(
 							RequestPropertyBecameEnumId,
-							ERR,
+							config,
 							[]any{propertyFullName(propertyPath, propertyName)},
 							"",
 							operationsSources,

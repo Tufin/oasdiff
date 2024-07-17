@@ -38,7 +38,7 @@ func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 					if required {
 						result = append(result, NewApiChange(
 							RequiredResponseHeaderRemovedId,
-							ERR,
+							config,
 							[]any{headerName, responseStatus},
 							"",
 							operationsSources,
@@ -49,7 +49,7 @@ func ResponseHeaderRemovedCheck(diffReport *diff.Diff, operationsSources *diff.O
 					} else {
 						result = append(result, NewApiChange(
 							OptionalResponseHeaderRemovedId,
-							WARN,
+							config,
 							[]any{headerName, responseStatus},
 							"",
 							operationsSources,

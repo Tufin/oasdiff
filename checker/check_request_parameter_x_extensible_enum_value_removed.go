@@ -68,7 +68,7 @@ func RequestParameterXExtensibleEnumValueRemovedCheck(diffReport *diff.Diff, ope
 					for _, enumVal := range deletedVals {
 						result = append(result, NewApiChange(
 							RequestParameterXExtensibleEnumValueRemovedId,
-							ERR,
+							config,
 							[]any{enumVal, paramLocation, paramName},
 							"",
 							operationsSources,

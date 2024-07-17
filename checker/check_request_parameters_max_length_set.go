@@ -37,7 +37,7 @@ func RequestParameterMaxLengthSetCheck(diffReport *diff.Diff, operationsSources 
 
 					result = append(result, NewApiChange(
 						RequestParameterMaxLengthSetId,
-						WARN,
+						config,
 						[]any{paramLocation, paramName, maxLengthDiff.To},
 						commentId(RequestParameterMaxLengthSetId),
 						operationsSources,

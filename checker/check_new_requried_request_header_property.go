@@ -44,7 +44,7 @@ func NewRequiredRequestHeaderPropertyCheck(diffReport *diff.Diff, operationsSour
 
 							result = append(result, NewApiChange(
 								NewRequiredRequestHeaderPropertyId,
-								ERR,
+								config,
 								[]any{paramName, propertyFullName(propertyPath, newPropertyName)},
 								"",
 								operationsSources,

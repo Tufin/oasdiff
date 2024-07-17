@@ -39,10 +39,8 @@ func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 					CheckDeletedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
-							level := ERR
 							id := ResponseRequiredPropertyRemovedId
 							if propertyItem.WriteOnly {
-								level = INFO
 								id = ResponseRequiredWriteOnlyPropertyRemovedId
 							}
 							if !slices.Contains(parent.Base.Required, propertyName) {
@@ -52,7 +50,7 @@ func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								"",
 								operationsSources,
@@ -75,7 +73,7 @@ func ResponseRequiredPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 
 							result = append(result, NewApiChange(
 								id,
-								INFO,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								"",
 								operationsSources,

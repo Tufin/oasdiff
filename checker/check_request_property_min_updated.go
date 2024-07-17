@@ -37,7 +37,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						if IsIncreasedValue(minDiff) {
 							result = append(result, NewApiChange(
 								RequestBodyMinIncreasedId,
-								ERR,
+								config,
 								[]any{minDiff.To},
 								"",
 								operationsSources,
@@ -48,7 +48,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						} else {
 							result = append(result, NewApiChange(
 								RequestBodyMinDecreasedId,
-								INFO,
+								config,
 								[]any{minDiff.From, minDiff.To},
 								"",
 								operationsSources,
@@ -77,16 +77,14 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						if IsIncreasedValue(minDiff) {
 
 							id := RequestPropertyMinIncreasedId
-							level := ERR
 
 							if propertyDiff.Revision.ReadOnly {
 								id = RequestReadOnlyPropertyMinIncreasedId
-								level = INFO
 							}
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{propName, minDiff.To},
 								"",
 								operationsSources,
@@ -97,7 +95,7 @@ func RequestPropertyMinIncreasedCheck(diffReport *diff.Diff, operationsSources *
 						} else {
 							result = append(result, NewApiChange(
 								RequestPropertyMinDecreasedId,
-								INFO,
+								config,
 								[]any{propName, minDiff.From, minDiff.To},
 								"",
 								operationsSources,

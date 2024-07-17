@@ -37,15 +37,13 @@ func RequestParameterMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSour
 					}
 
 					id := RequestParameterMinLengthIncreasedId
-					level := ERR
 					if IsDecreasedValue(minLengthDiff) {
 						id = RequestParameterMinLengthDecreasedId
-						level = INFO
 					}
 
 					result = append(result, NewApiChange(
 						id,
-						level,
+						config,
 						[]any{paramLocation, paramName, minLengthDiff.From, minLengthDiff.To},
 						"",
 						operationsSources,

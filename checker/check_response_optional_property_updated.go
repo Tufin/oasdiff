@@ -39,10 +39,8 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 					CheckDeletedPropertiesDiff(
 						mediaTypeDiff.SchemaDiff,
 						func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
-							level := WARN
 							id := ResponseOptionalPropertyRemovedId
 							if propertyItem.WriteOnly {
-								level = INFO
 								id = ResponseOptionalWriteOnlyPropertyRemovedId
 							}
 							if slices.Contains(parent.Base.Required, propertyName) {
@@ -52,7 +50,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								"",
 								operationsSources,
@@ -76,7 +74,7 @@ func ResponseOptionalPropertyUpdatedCheck(diffReport *diff.Diff, operationsSourc
 
 							result = append(result, NewApiChange(
 								id,
-								INFO,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								"",
 								operationsSources,

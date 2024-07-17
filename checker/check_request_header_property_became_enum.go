@@ -37,7 +37,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 					if paramDiff.SchemaDiff.EnumDiff != nil && paramDiff.SchemaDiff.EnumDiff.EnumAdded {
 						result = append(result, NewApiChange(
 							RequestHeaderPropertyBecameEnumId,
-							ERR,
+							config,
 							[]any{paramName},
 							"",
 							operationsSources,
@@ -57,7 +57,7 @@ func RequestHeaderPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSourc
 
 							result = append(result, NewApiChange(
 								RequestHeaderPropertyBecameEnumId,
-								ERR,
+								config,
 								[]any{paramName, propertyFullName(propertyPath, propertyName)},
 								"",
 								operationsSources,

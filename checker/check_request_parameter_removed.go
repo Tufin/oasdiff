@@ -25,7 +25,7 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 				for _, paramName := range paramItems {
 					result = append(result, NewApiChange(
 						RequestParameterRemovedId,
-						WARN,
+						config,
 						[]any{paramLocation, paramName},
 						"",
 						operationsSources,

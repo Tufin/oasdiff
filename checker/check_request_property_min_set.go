@@ -33,7 +33,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						minDiff.To != nil {
 						result = append(result, NewApiChange(
 							RequestBodyMinSetId,
-							WARN,
+							config,
 							[]any{minDiff.To},
 							commentId(RequestBodyMinSetId),
 							operationsSources,
@@ -61,7 +61,7 @@ func RequestPropertyMinSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 
 						result = append(result, NewApiChange(
 							RequestPropertyMinSetId,
-							WARN,
+							config,
 							[]any{propertyFullName(propertyPath, propertyName), minDiff.To},
 							commentId(RequestPropertyMinSetId),
 							operationsSources,

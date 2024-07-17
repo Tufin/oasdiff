@@ -39,7 +39,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 					if mediaTypeDiff.SchemaDiff.NullableDiff != nil && mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
 						result = append(result, NewApiChange(
 							ResponseBodyBecameNullableId,
-							ERR,
+							config,
 							nil,
 							"",
 							operationsSources,
@@ -62,7 +62,7 @@ func ResponsePropertyBecameNullableCheck(diffReport *diff.Diff, operationsSource
 
 							result = append(result, NewApiChange(
 								ResponsePropertyBecameNullableId,
-								ERR,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								"",
 								operationsSources,

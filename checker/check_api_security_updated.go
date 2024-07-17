@@ -86,7 +86,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 
 				result = append(result, NewApiChange(
 					APISecurityAddedCheckId,
-					INFO,
+					config,
 					[]any{addedSecurity},
 					"",
 					operationsSources,
@@ -103,7 +103,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 
 				result = append(result, NewApiChange(
 					APISecurityRemovedCheckId,
-					INFO,
+					config,
 					[]any{deletedSecurity},
 					"",
 					operationsSources,
@@ -121,7 +121,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 					for _, addedScope := range updatedSecuritySchemeScopes.Added {
 						result = append(result, NewApiChange(
 							APISecurityScopeAddedId,
-							INFO,
+							config,
 							[]any{addedScope, securitySchemeName},
 							"",
 							operationsSources,
@@ -133,7 +133,7 @@ func APISecurityUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Oper
 					for _, deletedScope := range updatedSecuritySchemeScopes.Deleted {
 						result = append(result, NewApiChange(
 							APISecurityScopeRemovedId,
-							INFO,
+							config,
 							[]any{deletedScope, securitySchemeName},
 							"",
 							operationsSources,

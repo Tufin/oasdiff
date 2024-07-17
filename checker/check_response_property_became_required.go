@@ -53,7 +53,7 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 
 							result = append(result, NewApiChange(
 								id,
-								INFO,
+								config,
 								[]any{propertyFullName("", changedRequiredPropertyName), responseStatus},
 								"",
 								operationsSources,
@@ -87,7 +87,7 @@ func ResponsePropertyBecameRequiredCheck(diffReport *diff.Diff, operationsSource
 
 								result = append(result, NewApiChange(
 									id,
-									INFO,
+									config,
 									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), responseStatus},
 									"",
 									operationsSources,

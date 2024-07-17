@@ -28,15 +28,13 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 			}
 
 			id := RequestBodyBecameOptionalId
-			logLevel := INFO
 			if operationItem.RequestBodyDiff.RequiredDiff.To == true {
 				id = RequestBodyBecameRequiredId
-				logLevel = ERR
 			}
 
 			result = append(result, NewApiChange(
 				id,
-				logLevel,
+				config,
 				nil,
 				"",
 				operationsSources,

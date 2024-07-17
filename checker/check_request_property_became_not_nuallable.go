@@ -37,7 +37,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 					if mediaTypeDiff.SchemaDiff.NullableDiff.From == true {
 						result = append(result, NewApiChange(
 							RequestBodyBecomeNotNullableId,
-							ERR,
+							config,
 							nil,
 							"",
 							operationsSources,
@@ -48,7 +48,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 					} else if mediaTypeDiff.SchemaDiff.NullableDiff.To == true {
 						result = append(result, NewApiChange(
 							RequestBodyBecomeNullableId,
-							INFO,
+							config,
 							nil,
 							"",
 							operationsSources,
@@ -72,7 +72,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						if nullableDiff.From == true {
 							result = append(result, NewApiChange(
 								RequestPropertyBecomeNotNullableId,
-								ERR,
+								config,
 								[]any{propName},
 								"",
 								operationsSources,
@@ -83,7 +83,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 						} else if nullableDiff.To == true {
 							result = append(result, NewApiChange(
 								RequestPropertyBecomeNullableId,
-								INFO,
+								config,
 								[]any{propName},
 								"",
 								operationsSources,

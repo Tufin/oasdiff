@@ -29,10 +29,8 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 					continue
 				}
 				id := NewRequiredRequestDefaultParameterToExistingPathId
-				level := ERR
 				if !param.Value.Required {
 					id = NewOptionalRequestDefaultParameterToExistingPathId
-					level = INFO
 				}
 
 				for operation, operationItem := range pathItem.Revision.Operations() {
@@ -41,7 +39,7 @@ func NewRequestNonPathDefaultParameterCheck(diffReport *diff.Diff, operationsSou
 
 					result = append(result, NewApiChange(
 						id,
-						level,
+						config,
 						[]any{paramLoc, param.Value.Name},
 						"",
 						operationsSources,

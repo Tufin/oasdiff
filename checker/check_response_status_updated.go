@@ -55,7 +55,7 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				if filter(status) {
 					result = append(result, NewApiChange(
 						id,
-						config.getLogLevel(id),
+						config,
 						[]any{responseStatus},
 						"",
 						operationsSources,
@@ -76,7 +76,7 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				if filter(status) {
 					result = append(result, NewApiChange(
 						addedId,
-						config.getLogLevel(addedId),
+						config,
 						[]any{responseStatus},
 						"",
 						operationsSources,

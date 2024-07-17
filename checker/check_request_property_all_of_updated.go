@@ -38,7 +38,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 				if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Added) > 0 {
 					result = append(result, NewApiChange(
 						RequestBodyAllOfAddedId,
-						ERR,
+						config,
 						[]any{mediaTypeDiff.SchemaDiff.AllOfDiff.Added.String()},
 						"",
 						operationsSources,
@@ -51,7 +51,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 				if mediaTypeDiff.SchemaDiff.AllOfDiff != nil && len(mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted) > 0 {
 					result = append(result, NewApiChange(
 						RequestBodyAllOfRemovedId,
-						WARN,
+						config,
 						[]any{mediaTypeDiff.SchemaDiff.AllOfDiff.Deleted.String()},
 						"",
 						operationsSources,
@@ -73,7 +73,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 						if len(propertyDiff.AllOfDiff.Added) > 0 {
 							result = append(result, NewApiChange(
 								RequestPropertyAllOfAddedId,
-								ERR,
+								config,
 								[]any{propertyDiff.AllOfDiff.Added.String(), propName},
 								"",
 								operationsSources,
@@ -86,7 +86,7 @@ func RequestPropertyAllOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 						if len(propertyDiff.AllOfDiff.Deleted) > 0 {
 							result = append(result, NewApiChange(
 								RequestPropertyAllOfRemovedId,
-								WARN,
+								config,
 								[]any{propertyDiff.AllOfDiff.Deleted.String(), propName},
 								"",
 								operationsSources,

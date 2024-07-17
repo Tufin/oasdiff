@@ -37,16 +37,14 @@ func RequestParameterMaxUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 					}
 
 					id := RequestParameterMaxDecreasedId
-					level := ERR
 
 					if !IsDecreasedValue(maxDiff) {
 						id = RequestParameterMaxIncreasedId
-						level = INFO
 					}
 
 					result = append(result, NewApiChange(
 						id,
-						level,
+						config,
 						[]any{paramLocation, paramName, maxDiff.From, maxDiff.To},
 						"",
 						operationsSources,

@@ -33,7 +33,7 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 						maxDiff.To != nil {
 						result = append(result, NewApiChange(
 							RequestBodyMaxSetId,
-							WARN,
+							config,
 							[]any{maxDiff.To},
 							commentId(RequestBodyMaxSetId),
 							operationsSources,
@@ -61,7 +61,7 @@ func RequestPropertyMaxSetCheck(diffReport *diff.Diff, operationsSources *diff.O
 
 						result = append(result, NewApiChange(
 							RequestPropertyMaxSetId,
-							WARN,
+							config,
 							[]any{propertyFullName(propertyPath, propertyName), maxDiff.To},
 							commentId(RequestPropertyMaxSetId),
 							operationsSources,

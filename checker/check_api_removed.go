@@ -29,7 +29,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 
 		for operation := range diffReport.PathsDiff.Base.Value(path).Operations() {
 			op := diffReport.PathsDiff.Base.Value(path).GetOperation(operation)
-			if change := checkAPIRemoval(APIPathRemovedWithoutDeprecationId, APIPathRemovedBeforeSunsetId, op, operationsSources, operation, path); change != nil {
+			if change := checkAPIRemoval(config, APIPathRemovedWithoutDeprecationId, APIPathRemovedBeforeSunsetId, op, operationsSources, operation, path); change != nil {
 				result = append(result, change)
 			}
 		}
@@ -41,7 +41,7 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 		}
 		for _, operation := range pathItem.OperationsDiff.Deleted {
 			op := pathItem.Base.GetOperation(operation)
-			if change := checkAPIRemoval(APIRemovedWithoutDeprecationId, APIRemovedBeforeSunsetId, op, operationsSources, operation, path); change != nil {
+			if change := checkAPIRemoval(config, APIRemovedWithoutDeprecationId, APIRemovedBeforeSunsetId, op, operationsSources, operation, path); change != nil {
 				result = append(result, change)
 			}
 		}
@@ -50,11 +50,11 @@ func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSo
 	return result
 }
 
-func checkAPIRemoval(deprecationId, sunsetId string, op *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method, path string) Change {
+func checkAPIRemoval(config *Config, deprecationId, sunsetId string, op *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method, path string) Change {
 	if !op.Deprecated {
 		return NewApiChange(
 			deprecationId,
-			ERR,
+			config,
 			nil,
 			"",
 			operationsSources,
@@ -71,13 +71,13 @@ func checkAPIRemoval(deprecationId, sunsetId string, op *openapi3.Operation, ope
 
 	date, err := getSunsetDate(sunset)
 	if err != nil {
-		return getAPIPathSunsetParse(op, operationsSources, method, path, err)
+		return getAPIPathSunsetParse(config, op, operationsSources, method, path, err)
 	}
 
 	if civil.DateOf(time.Now()).Before(date) {
 		return NewApiChange(
 			sunsetId,
-			ERR,
+			config,
 			[]any{date},
 			"",
 			operationsSources,
@@ -89,10 +89,10 @@ func checkAPIRemoval(deprecationId, sunsetId string, op *openapi3.Operation, ope
 	return nil
 }
 
-func getAPIPathSunsetParse(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string, err error) Change {
+func getAPIPathSunsetParse(config *Config, operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string, err error) Change {
 	return NewApiChange(
 		APIPathSunsetParseId,
-		ERR,
+		config,
 		[]any{err},
 		"",
 		operationsSources,

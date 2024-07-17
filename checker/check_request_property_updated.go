@@ -37,7 +37,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 
 							result = append(result, NewApiChange(
 								RequestPropertyRemovedId,
-								WARN,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName)},
 								"",
 								operationsSources,
@@ -60,7 +60,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							if propertyItem.Default == nil {
 								result = append(result, NewApiChange(
 									NewRequiredRequestPropertyId,
-									ERR,
+									config,
 									[]any{propName},
 									"",
 									operationsSources,
@@ -71,7 +71,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							} else {
 								result = append(result, NewApiChange(
 									NewRequiredRequestPropertyWithDefaultId,
-									INFO,
+									config,
 									[]any{propName},
 									"",
 									operationsSources,
@@ -83,7 +83,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 						} else {
 							result = append(result, NewApiChange(
 								NewOptionalRequestPropertyId,
-								INFO,
+								config,
 								[]any{propName},
 								"",
 								operationsSources,

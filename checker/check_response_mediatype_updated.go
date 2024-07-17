@@ -35,7 +35,7 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeDeleted {
 					result = append(result, NewApiChange(
 						ResponseMediaTypeRemovedId,
-						ERR,
+						config,
 						[]any{mediaType, responseStatus},
 						"",
 						operationsSources,
@@ -47,7 +47,7 @@ func ResponseMediaTypeUpdatedCheck(diffReport *diff.Diff, operationsSources *dif
 				for _, mediaType := range responsesDiff.ContentDiff.MediaTypeAdded {
 					result = append(result, NewApiChange(
 						ResponseMediaTypeAddedId,
-						INFO,
+						config,
 						[]any{mediaType, responseStatus},
 						"",
 						operationsSources,

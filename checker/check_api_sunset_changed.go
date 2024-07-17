@@ -38,7 +38,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			if operationDiff.ExtensionsDiff.Deleted.Contains(diff.SunsetExtension) {
 				result = append(result, NewApiChange(
 					APISunsetDeletedId,
-					ERR,
+					config,
 					nil,
 					"",
 					operationsSources,
@@ -55,13 +55,13 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			date, err := getSunsetDate(opRevision.Extensions[diff.SunsetExtension])
 			if err != nil {
-				result = append(result, getAPIPathSunsetParse(opRevision, operationsSources, path, operation, err))
+				result = append(result, getAPIPathSunsetParse(config, opRevision, operationsSources, path, operation, err))
 				continue
 			}
 
 			baseDate, err := getSunsetDate(opBase.Extensions[diff.SunsetExtension])
 			if err != nil {
-				result = append(result, getAPIPathSunsetParse(opBase, operationsSources, path, operation, err))
+				result = append(result, getAPIPathSunsetParse(config, opBase, operationsSources, path, operation, err))
 				continue
 			}
 
@@ -78,7 +78,7 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 			if baseDate.After(date) && days < int(deprecationDays) {
 				result = append(result, NewApiChange(
 					APISunsetDateChangedTooSmallId,
-					ERR,
+					config,
 					[]any{baseDate, date, baseDate, deprecationDays},
 					"",
 					operationsSources,
@@ -115,10 +115,10 @@ func getDeprecationDays(config *Config, stability string) uint {
 	}
 }
 
-func getAPIDeprecatedSunsetMissing(operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string) Change {
+func getAPIDeprecatedSunsetMissing(config *Config, operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string) Change {
 	return NewApiChange(
 		APIDeprecatedSunsetMissingId,
-		ERR,
+		config,
 		nil,
 		"",
 		operationsSources,

@@ -59,7 +59,7 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 
 							result = append(result, NewApiChange(
 								id,
-								INFO,
+								config,
 								args,
 								"",
 								operationsSources,

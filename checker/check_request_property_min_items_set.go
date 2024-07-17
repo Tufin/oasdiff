@@ -33,7 +33,7 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 						minItemsDiff.To != nil {
 						result = append(result, NewApiChange(
 							RequestBodyMinItemsSetId,
-							WARN,
+							config,
 							[]any{minItemsDiff.To},
 							commentId(RequestBodyMinItemsSetId),
 							operationsSources,
@@ -61,7 +61,7 @@ func RequestPropertyMinItemsSetCheck(diffReport *diff.Diff, operationsSources *d
 
 						result = append(result, NewApiChange(
 							RequestPropertyMinItemsSetId,
-							WARN,
+							config,
 							[]any{propertyFullName(propertyPath, propertyName), minItemsDiff.To},
 							commentId(RequestPropertyMinItemsSetId),
 							operationsSources,
