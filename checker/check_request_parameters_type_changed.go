@@ -6,7 +6,10 @@ import (
 
 const (
 	RequestParameterTypeChangedId                = "request-parameter-type-changed"
+	RequestParameterTypeGeneralizedId            = "request-parameter-type-generalized"
 	RequestParameterPropertyTypeChangedId        = "request-parameter-property-type-changed"
+	RequestParameterPropertyTypeGeneralizedId    = "request-parameter-property-type-generalized"
+	RequestParameterPropertyTypeSpecializedId    = "request-parameter-property-type-specialized"
 	RequestParameterPropertyTypeChangedCommentId = "request-parameter-property-type-changed-warn-comment"
 )
 
@@ -36,9 +39,17 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 					if !typeDiff.Empty() || !formatDiff.Empty() {
 
+						id := RequestParameterTypeGeneralizedId
+						level := INFO
+
+						if breakingTypeFormatChangedInRequest(typeDiff, formatDiff, false, schemaDiff) {
+							id = RequestParameterTypeChangedId
+							level = ERR
+						}
+
 						result = append(result, NewApiChange(
-							RequestParameterTypeChangedId,
-							conditionalError(breakingTypeFormatChangedInRequest(typeDiff, formatDiff, false, schemaDiff), INFO),
+							id,
+							level,
 							[]any{paramLocation, paramName, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 							"",
 							operationsSources,
@@ -58,10 +69,10 @@ func RequestParameterTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 							if !typeDiff.Empty() || !formatDiff.Empty() {
 
-								level, comment := checkRequestParameterPropertyTypeChanged(typeDiff, formatDiff, schemaDiff)
+								id, level, comment := checkRequestParameterPropertyTypeChanged(typeDiff, formatDiff, schemaDiff)
 
 								result = append(result, NewApiChange(
-									RequestParameterPropertyTypeChangedId,
+									id,
 									level,
 									[]any{paramLocation, paramName, propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 									comment,

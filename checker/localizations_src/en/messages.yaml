@@ -8,9 +8,11 @@ total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
 request-parameter-pattern-added: "added the pattern %s to the %s request parameter %s"
 request-parameter-pattern-removed: "removed the pattern %s from the %s request parameter %s"
 request-parameter-pattern-changed: "changed the pattern of the %s request parameter %s from %s to %s"
+request-parameter-pattern-generalized: "changed the pattern of the %s request parameter %s from %s to a more general pattern %s"
 request-property-pattern-added: "added the pattern %s to the request property %s"
 request-property-pattern-removed: "removed the pattern %s from the request property %s"
 request-property-pattern-changed: "changed the pattern of the request property %s from %s to %s"
+request-property-pattern-generalized: "changed the pattern of the request property %s from %s to a more general pattern %s"
 api-deprecated-sunset-parse: "failed to parse sunset date: %v"
 api-path-sunset-parse: "failed to parse sunset date: %v"
 api-stability-decreased: "endpoint stability level decreased from %s to %s"
@@ -75,8 +77,11 @@ request-parameter-min-items-set-comment: This is a warning because sometimes it 
 request-parameter-min-set: for the %s request parameter %s, the min was set to %s
 request-parameter-min-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
 request-parameter-type-changed: for the %s request parameter %s, the type/format was changed from %s/%s to %s/%s
+request-parameter-type-generalized: for the %s request parameter %s, the type/format was generalized from %s/%s to %s/%s
 request-parameter-property-type-changed: for the %s request parameter %s, the type/format of property %s was changed from %s/%s to %s/%s
 request-parameter-property-type-changed-warn-comment: This is a warning because parameter objects can be passed in differnt ways, some of which allow this type change and others do not.
+request-parameter-property-type-generalized: for the %s request parameter %s, the type/format of property %s was generalized from %s/%s to %s/%s
+request-parameter-property-type-specialized: for the %s request parameter %s, the type/format of property %s was specialized from %s/%s to %s/%s
 new-request-path-parameter: added the new path request parameter %s
 request-property-became-required: the request property %s became required
 request-property-became-required-with-default: the request property %s with a default value became required
@@ -87,11 +92,13 @@ request-property-became-nullable: the request property %s became nullable
 request-body-became-nullable: the request's body became nullable
 request-property-became-enum: request property %s was restricted to a list of enum values
 request-property-enum-value-removed: removed the enum value %s of the request property %s
+request-read-only-property-enum-value-removed: removed the enum value %s of the request read-only property %s
 request-property-enum-value-added: added the new %s enum value to the request property %s
 request-body-max-decreased: the request's body max was decreased to %s
 request-property-max-decreased: the %s request property's max was decreased to %s
 request-body-max-length-decreased: the request's body maxLength was decreased to %s
 request-property-max-length-decreased: the %s request property's maxLength was decreased to %s
+request-read-only-property-max-length-decreased: the %s request read-only property's maxLength was decreased to %s
 request-body-min-length-increased: the request's body minLength was increased from %s to %s
 request-property-min-length-increased: the %s request property's minLength was increased from %s to %s
 request-body-min-length-decreased: the request's body minLength was decreased from %s to %s
@@ -110,6 +117,7 @@ request-property-max-set: the %s request property's max was set to %s
 request-property-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-body-min-increased: the request's body min was increased to %s
 request-property-min-increased: the %s request property's min was increased to %s
+request-read-only-property-min-increased: the %s request read-only property's min was increased to %s
 request-body-min-items-increased: the request's body minItems was increased to %s
 request-property-min-items-increased: the %s request property's minItems was increased to %s
 request-body-min-decreased: the request's body min was decreased to from %s to %s
@@ -126,7 +134,9 @@ request-property-min-set: the %s request property's min was set to %s
 request-property-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-removed: removed the request property %s
 request-body-type-changed: the request's body type/format changed from %s/%s to %s/%s
+request-body-type-generalized: the request's body type/format was generalized from %s/%s to %s/%s
 request-property-type-changed: the %s request property type/format changed from %s/%s to %s/%s
+request-property-type-generalized: the %s request property type/format was generalized from %s/%s to %s/%s
 request-property-x-extensible-enum-value-removed: removed the x-extensible-enum value %s of the request property %s
 response-header-became-optional: the response header %s became optional for the status %s
 required-response-header-removed: the mandatory response header %s removed for the status %s
@@ -357,6 +367,7 @@ request-body-min-set-description: request body min set
 request-body-one-of-added-description: sub-schema added to oneOf in request body
 request-body-one-of-removed-description: sub-schema deleted from oneOf in request body
 request-body-type-changed-description: request body type changed
+request-body-type-generalized-description: request body type generalized
 request-header-property-became-enum-description: request header property restricted to enum
 request-header-property-became-required-description: request header property became required
 request-optional-property-became-not-read-only-description: request optional property became not read-only
@@ -389,10 +400,14 @@ request-parameter-min-length-increased-description: request parameter min length
 request-parameter-min-set-description: request parameter min set
 request-parameter-pattern-added-description: request parameter pattern set
 request-parameter-pattern-changed-description: request parameter pattern changed
+request-parameter-pattern-generalized-description: request parameter pattern generalized
 request-parameter-pattern-removed-description: request parameter pattern unset
 request-parameter-removed-description: request parameter deleted
 request-parameter-type-changed-description: request parameter type changed
+request-parameter-type-generalized-description: request parameter type generalized
 request-parameter-property-type-changed-description: request parameter property type changed
+request-parameter-property-type-generalized-description: request parameter property type generalized
+request-parameter-property-type-specialized-description: request parameter property type specialized
 request-parameter-x-extensible-enum-value-removed-description: request parameter-x-extensible-enum value deleted
 request-property-all-of-added-description: sub-schema added to allOf in request property 
 request-property-all-of-removed-description: sub-schema deleted from allOf in request property 
@@ -415,14 +430,17 @@ request-property-discriminator-property-name-changed-description: request proper
 request-property-discriminator-removed-description: request property discriminator removed
 request-property-enum-value-added-description: request property enum value added
 request-property-enum-value-removed-description: request property enum value removed
+request-read-only-property-enum-value-removed-description: request read-only property enum value removed
 request-property-max-decreased-description: request property max decreased
 request-property-max-increased-description: request property max increased
 request-property-max-length-decreased-description: request property max length decreased
+request-read-only-property-max-length-decreased-description: request read-only property max length decreased
 request-property-max-length-increased-description: request property max length increased
 request-property-max-length-set-description: request property max length set
 request-property-max-set-description: request property max set
 request-property-min-decreased-description: request property min decreased
 request-property-min-increased-description: request property min increased
+request-read-only-property-min-increased-description: request read-only property min increased
 request-property-min-items-increased-description: request property min items increased
 request-property-min-items-set-description: request property min items set
 request-property-min-length-decreased-description: request property min length decreased
@@ -432,9 +450,11 @@ request-property-one-of-added-description: sub-schema added to oneOf in request 
 request-property-one-of-removed-description: sub-schema deleted from oneOf in request property
 request-property-pattern-added-description: request property pattern set
 request-property-pattern-changed-description: request property pattern changed
+request-property-pattern-generalized-description: request property pattern generalized
 request-property-pattern-removed-description: request property pattern unset
 request-property-removed-description: request property removed
 request-property-type-changed-description: request property type changed
+request-property-type-generalized-description: request property type generalized
 request-property-x-extensible-enum-value-removed-description: request property x-extensible-enum value removed
 request-required-property-became-not-read-only-description: request required property became not read-only
 request-required-property-became-not-write-only-description: request required property became not write-only

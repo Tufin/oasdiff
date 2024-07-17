@@ -40,7 +40,7 @@ func ResponseParameterEnumValueRemovedCheck(diffReport *diff.Diff, operationsSou
 							for _, enumVal := range enumDiff.Deleted {
 								result = append(result, NewApiChange(
 									ResponsePropertyEnumValueRemovedId,
-									config.getLogLevel(ResponsePropertyEnumValueRemovedId, INFO),
+									config.getLogLevel(ResponsePropertyEnumValueRemovedId),
 									[]any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
 									"",
 									operationsSources,

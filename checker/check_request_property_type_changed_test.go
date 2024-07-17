@@ -173,6 +173,7 @@ func TestRequestPropertyFormatChangedCheck(t *testing.T) {
 	}, errs[0])
 }
 
+// CL: generalizing request property format
 func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 	s1, err := open("../data/checker/request_property_type_changed_base.yaml")
 	require.NoError(t, err)
@@ -188,7 +189,7 @@ func TestRequestPropertyFormatChangedCheckNonBreaking(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestPropertyTypeChangedId,
+		Id:          checker.RequestPropertyTypeGeneralizedId,
 		Level:       checker.INFO,
 		Args:        []any{"age", utils.StringList{"integer"}, "int32", utils.StringList{"number"}, "int32"},
 		Operation:   "POST",

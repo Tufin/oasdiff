@@ -36,6 +36,34 @@ func TestRequestPropertyEnumValueRemovedCheck(t *testing.T) {
 	require.Equal(t, "removed the enum value 'bird' of the request property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
+// CL: removing request read-only property enum values
+func TestRequestReadOnlyPropertyEnumValueRemovedCheck(t *testing.T) {
+	s1, err := open("../data/checker/request_property_enum_value_updated_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_property_enum_value_updated_base.yaml")
+	require.NoError(t, err)
+
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["category"].Value.Enum = []interface{}{"dog", "cat"}
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["category"].Value.ReadOnly = true
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyEnumValueUpdatedCheck), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestReadOnlyPropertyEnumValueRemovedId,
+		Level:       checker.INFO,
+		Args:        []any{"bird", "category"},
+		Operation:   "POST",
+		OperationId: "updatePet",
+		Path:        "/pets",
+		Source:      load.NewSource("../data/checker/request_property_enum_value_updated_base.yaml"),
+	}, errs[0])
+	require.Equal(t, "removed the enum value 'bird' of the request read-only property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
+
 // CL: adding request property enum values
 func TestRequestPropertyEnumValueAddedCheck(t *testing.T) {
 	s1, err := open("../data/checker/request_property_enum_value_updated_base.yaml")

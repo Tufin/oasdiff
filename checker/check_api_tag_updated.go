@@ -30,7 +30,7 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 			for _, tag := range operationItem.TagsDiff.Deleted {
 				result = append(result, NewApiChange(
 					APITagRemovedId,
-					config.getLogLevel(APITagRemovedId, INFO),
+					config.getLogLevel(APITagRemovedId),
 					[]any{tag},
 					"",
 					operationsSources,
@@ -43,7 +43,7 @@ func APITagUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.Operation
 			for _, tag := range operationItem.TagsDiff.Added {
 				result = append(result, NewApiChange(
 					APITagAddedId,
-					config.getLogLevel(APITagAddedId, INFO),
+					config.getLogLevel(APITagAddedId),
 					[]any{tag},
 					"",
 					operationsSources,

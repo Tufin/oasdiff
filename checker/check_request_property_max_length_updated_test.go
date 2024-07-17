@@ -90,6 +90,37 @@ func TestRequestPropertyMaxLengthDecreasedCheck(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
+	require.Equal(t, "the 'description' request property's maxLength was decreased to '50'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
+
+// CL: decreasing max length of request read-only property
+func TestRequestReadOnlyPropertyMaxLengthDecreasedCheck(t *testing.T) {
+	s1, err := open("../data/checker/request_body_max_length_decreased_base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/checker/request_body_max_length_decreased_base.yaml")
+	require.NoError(t, err)
+
+	maxLength := uint64(100)
+	newMaxLength := uint64(50)
+	s1.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &maxLength
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.MaxLength = &newMaxLength
+	s2.Spec.Paths.Value("/pets").Post.RequestBody.Value.Content["application/json"].Schema.Value.Properties["description"].Value.ReadOnly = true
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyMaxLengthUpdatedCheck), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestReadOnlyPropertyMaxLengthDecreasedId,
+		Args:        []any{"description", newMaxLength},
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/pets",
+		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
+		OperationId: "addPet",
+	}, errs[0])
+	require.Equal(t, "the 'description' request read-only property's maxLength was decreased to '50'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: increasing max length of request property

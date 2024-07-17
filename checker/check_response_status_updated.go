@@ -19,7 +19,7 @@ func ResponseSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSources 
 		return status >= 200 && status <= 299
 	}
 
-	return responseStatusUpdated(diffReport, operationsSources, config, success, ResponseSuccessStatusRemovedId, ERR)
+	return responseStatusUpdated(diffReport, operationsSources, config, success, ResponseSuccessStatusRemovedId)
 }
 
 func ResponseNonSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -27,10 +27,10 @@ func ResponseNonSuccessStatusUpdatedCheck(diffReport *diff.Diff, operationsSourc
 		return status < 200 || status > 299
 	}
 
-	return responseStatusUpdated(diffReport, operationsSources, config, notSuccess, ResponseNonSuccessStatusRemovedId, INFO)
+	return responseStatusUpdated(diffReport, operationsSources, config, notSuccess, ResponseNonSuccessStatusRemovedId)
 }
 
-func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config, filter func(int) bool, id string, defaultLevel Level) Changes {
+func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config, filter func(int) bool, id string) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -55,7 +55,7 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				if filter(status) {
 					result = append(result, NewApiChange(
 						id,
-						config.getLogLevel(id, defaultLevel),
+						config.getLogLevel(id),
 						[]any{responseStatus},
 						"",
 						operationsSources,
@@ -76,7 +76,7 @@ func responseStatusUpdated(diffReport *diff.Diff, operationsSources *diff.Operat
 				if filter(status) {
 					result = append(result, NewApiChange(
 						addedId,
-						config.getLogLevel(addedId, INFO),
+						config.getLogLevel(addedId),
 						[]any{responseStatus},
 						"",
 						operationsSources,

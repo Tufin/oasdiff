@@ -36,7 +36,7 @@ func APIOperationIdUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.O
 
 			result = append(result, NewApiChange(
 				id,
-				config.getLogLevel(id, INFO),
+				config.getLogLevel(id),
 				args,
 				"",
 				operationsSources,

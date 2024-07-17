@@ -5,10 +5,11 @@ import (
 )
 
 const (
-	RequestBodyMaxLengthDecreasedId     = "request-body-max-length-decreased"
-	RequestBodyMaxLengthIncreasedId     = "request-body-max-length-increased"
-	RequestPropertyMaxLengthDecreasedId = "request-property-max-length-decreased"
-	RequestPropertyMaxLengthIncreasedId = "request-property-max-length-increased"
+	RequestBodyMaxLengthDecreasedId             = "request-body-max-length-decreased"
+	RequestBodyMaxLengthIncreasedId             = "request-body-max-length-increased"
+	RequestPropertyMaxLengthDecreasedId         = "request-property-max-length-decreased"
+	RequestReadOnlyPropertyMaxLengthDecreasedId = "request-read-only-property-max-length-decreased"
+	RequestPropertyMaxLengthIncreasedId         = "request-property-max-length-increased"
 )
 
 func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -74,9 +75,18 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						propName := propertyFullName(propertyPath, propertyName)
 
 						if IsDecreasedValue(maxLengthDiff) {
+
+							id := RequestPropertyMaxLengthDecreasedId
+							level := ERR
+
+							if propertyDiff.Revision.ReadOnly {
+								id = RequestReadOnlyPropertyMaxLengthDecreasedId
+								level = INFO
+							}
+
 							result = append(result, NewApiChange(
-								RequestPropertyMaxLengthDecreasedId,
-								conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								id,
+								level,
 								[]any{propName, maxLengthDiff.To},
 								"",
 								operationsSources,

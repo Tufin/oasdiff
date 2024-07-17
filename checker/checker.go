@@ -37,7 +37,7 @@ func CheckBackwardCompatibilityUntilLevel(config *Config, diffReport *diff.Diff,
 
 	filteredResult := make(Changes, 0)
 	for _, change := range result {
-		if change.GetLevel() >= level {
+		if config.getLogLevel(change.GetId()) >= level {
 			filteredResult = append(filteredResult, change)
 		}
 	}
