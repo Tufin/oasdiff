@@ -431,6 +431,14 @@ func rulesToChecks(rules BackwardCompatibilityRules) BackwardCompatibilityChecks
 	return result
 }
 
+func GetOptionalRuleIds() []string {
+	return rulesToIIs(GetOptionalRules())
+}
+
+func GetAllRuleIds() []string {
+	return rulesToIIs(GetAllRules())
+}
+
 // rulesToLevels return a map of check IDs to levels
 func rulesToLevels(rules BackwardCompatibilityRules) map[string]Level {
 	result := map[string]Level{}
@@ -440,10 +448,9 @@ func rulesToLevels(rules BackwardCompatibilityRules) map[string]Level {
 	return result
 }
 
-func GetOptionalRuleIds() []string {
-
+func rulesToIIs(rules BackwardCompatibilityRules) []string {
 	result := []string{}
-	for _, rule := range GetOptionalRules() {
+	for _, rule := range rules {
 		result = append(result, rule.Id)
 	}
 	return result

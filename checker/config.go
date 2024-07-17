@@ -37,6 +37,14 @@ func (config *Config) WithOptionalChecks(ids []string) *Config {
 	return config
 }
 
+func (config *Config) WithSeverityLevels(severityLevels map[string]Level) *Config {
+	for id, level := range severityLevels {
+		config.LogLevels[id] = level
+	}
+
+	return config
+}
+
 // WithDeprecation sets the number of days before sunset for deprecation warnings.
 func (config *Config) WithDeprecation(deprecationDaysBeta uint, deprecationDaysStable uint) *Config {
 	config.MinSunsetBetaDays = deprecationDaysBeta

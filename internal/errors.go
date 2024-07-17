@@ -48,6 +48,13 @@ func getErrFailedPrint(what string, err error) *ReturnError {
 	)
 }
 
+func getErrFailedToLoadSeverityLevels(source string, err error) *ReturnError {
+	return getError(
+		fmt.Errorf("failed to load custom severity levels from %s: %w", source, err),
+		106,
+	)
+}
+
 func getErrUnsupportedFormat(format, cmd string) *ReturnError {
 	return getError(
 		fmt.Errorf("format %q is not supported by %q", format, cmd),

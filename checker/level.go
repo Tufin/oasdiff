@@ -16,11 +16,11 @@ const (
 
 func NewLevel(level string) (Level, error) {
 	switch level {
-	case "ERR":
+	case "ERR", "err":
 		return ERR, nil
-	case "WARN":
+	case "WARN", "warn":
 		return WARN, nil
-	case "INFO":
+	case "INFO", "info":
 		return INFO, nil
 	}
 	return INFO, fmt.Errorf("invalid level %s", level)

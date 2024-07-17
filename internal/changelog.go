@@ -47,14 +47,19 @@ func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 
 func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
 
-	diffResult, err := calcDiff(flags)
-	if err != nil {
-		return false, err
+	diffResult, returnErr := calcDiff(flags)
+	if returnErr != nil {
+		return false, returnErr
+	}
+
+	severityLevels, returnErr := processSeverityLevels(flags.getSeverityLevelsFile())
+	if returnErr != nil {
+		return false, returnErr
 	}
 
 	errs, returnErr := filterIgnored(
 		checker.CheckBackwardCompatibilityUntilLevel(
-			checker.NewConfig(checker.GetAllChecks()).WithOptionalChecks(flags.getIncludeChecks()).WithDeprecation(flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable()),
+			checker.NewConfig(checker.GetAllChecks()).WithOptionalChecks(flags.getIncludeChecks()).WithSeverityLevels(severityLevels).WithDeprecation(flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable()),
 			diffResult.diffReport,
 			diffResult.operationsSources,
 			level),
