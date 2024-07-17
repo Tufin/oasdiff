@@ -52,10 +52,12 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 		return false, err
 	}
 
-	bcConfig := checker.NewConfig().WithOptionalChecks(flags.getIncludeChecks()).WithDeprecation(flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
-
 	errs, returnErr := filterIgnored(
-		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffResult.diffReport, diffResult.operationsSources, level),
+		checker.CheckBackwardCompatibilityUntilLevel(
+			checker.NewConfig(checker.GetAllChecks()).WithOptionalChecks(flags.getIncludeChecks()).WithDeprecation(flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable()),
+			diffResult.diffReport,
+			diffResult.operationsSources,
+			level),
 		flags.getWarnIgnoreFile(),
 		flags.getErrIgnoreFile(),
 		checker.NewLocalizer(flags.getLang()))

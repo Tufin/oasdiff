@@ -406,6 +406,16 @@ func GetRequiredRules() BackwardCompatibilityRules {
 	return result
 }
 
+// GetCheckLevels gets levels for all backward compatibility checks
+func GetCheckLevels() map[string]Level {
+	return rulesToLevels(GetAllRules())
+}
+
+// GetAllChecks gets all backward compatibility checks
+func GetAllChecks() BackwardCompatibilityChecks {
+	return rulesToChecks(GetAllRules())
+}
+
 // rulesToChecks return a unique list of checks from a list of rules
 func rulesToChecks(rules BackwardCompatibilityRules) BackwardCompatibilityChecks {
 	result := BackwardCompatibilityChecks{}

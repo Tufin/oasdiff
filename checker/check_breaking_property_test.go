@@ -30,7 +30,7 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.NewRequiredRequestHeaderPropertyId, errs[0].GetId())
@@ -50,7 +50,7 @@ func TestBreaking_NewNonRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -74,7 +74,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestHeaderPropertyBecameRequiredId, errs[0].GetId())
@@ -100,7 +100,7 @@ func TestBreaking_PropertyRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -114,7 +114,7 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponsePropertyBecameOptionalId, errs[0].GetId())
@@ -130,7 +130,7 @@ func TestBreaking_ReqBodyBecameEnum(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyBecameEnumId, errs[0].GetId())
@@ -146,7 +146,7 @@ func TestBreaking_ReqBodyEnumValueAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -160,7 +160,7 @@ func TestBreaking_ReqBodyBecameEnumAndTypeChanged(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.RequestBodyBecameEnumId, errs[0].GetId())
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[1].GetId())
@@ -176,7 +176,7 @@ func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameEnumId, errs[0].GetId())
@@ -192,7 +192,7 @@ func TestBreaking_ReqParameterBecameEnum(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterBecameEnumId, errs[0].GetId())
@@ -208,7 +208,7 @@ func TestBreaking_ReqParameterHeaderPropertyBecameEnum(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestHeaderPropertyBecameEnumId, errs[0].GetId())
@@ -224,7 +224,7 @@ func TestBreaking_RespBodyNullable(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyBecameNullableId, errs[0].GetId())
@@ -240,7 +240,7 @@ func TestBreaking_ReqBodyPropertyNotNullable(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecomeNotNullableId, errs[0].GetId())
@@ -256,7 +256,7 @@ func TestBreaking_RespBodyPropertyNullable(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponsePropertyBecameNullableId, errs[0].GetId())
@@ -272,7 +272,7 @@ func TestBreaking_RespBodyEmbeddedPropertyNullable(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponsePropertyBecameNullableId, errs[0].GetId())
@@ -288,7 +288,7 @@ func TestBreaking_RespBodyDeleteAndDisableRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 }
 
@@ -302,7 +302,7 @@ func TestBreaking_ReqBodyNewRequiredPropertyNew(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -316,7 +316,7 @@ func TestBreaking_RespBodyRequiredPropertyEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -330,7 +330,7 @@ func TestBreaking_ReqBodyRequiredPropertyDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -344,7 +344,7 @@ func TestBreaking_ReqBodyRequiredPropertyEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
@@ -360,7 +360,7 @@ func TestBreaking_ReqBodyNewRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.NewRequiredRequestPropertyId, errs[0].GetId())
@@ -376,7 +376,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
@@ -393,7 +393,7 @@ func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Contains(t, errs, checker.ApiChange{
 		Id:        checker.RequestPropertyRemovedId,
 		Args:      []any{"roleAssignments/items/role"},
@@ -414,7 +414,7 @@ func TestBreaking_RespBodyNewRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -428,7 +428,7 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseRequiredPropertyRemovedId, errs[0].GetId())
@@ -444,7 +444,7 @@ func TestBreaking_RespBodyNewAllOfRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -458,7 +458,7 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseRequiredPropertyRemovedId, errs[0].GetId())
@@ -474,7 +474,7 @@ func TestBreaking_ReadOnlyNewRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -488,7 +488,7 @@ func TestBreaking_ReadOnlyPropertyRequiredEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -502,7 +502,7 @@ func TestBreaking_WriteOnlyDeleteRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
@@ -519,7 +519,7 @@ func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 3)
 	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
@@ -540,7 +540,7 @@ func TestBreaking_WriteOnlyPropertyRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -554,7 +554,7 @@ func TestBreaking_RequiredPropertyWriteOnlyEnabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -568,7 +568,7 @@ func TestBreaking_RequiredPropertyWriteOnlyDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
 	require.Equal(t, checker.ResponseRequiredPropertyBecameNonWriteOnlyId, errs[0].GetId())
@@ -587,7 +587,7 @@ func TestBreaking_Body(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
@@ -604,7 +604,7 @@ func TestBreaking_Items(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
@@ -621,7 +621,7 @@ func TestBreaking_ItemsWithDefault(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -635,7 +635,7 @@ func TestBreaking_AnyOf(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
@@ -651,7 +651,7 @@ func TestBreaking_NestedProp(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
@@ -667,6 +667,6 @@ func TestBreaking_OneOf(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 3)
 }

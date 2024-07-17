@@ -23,7 +23,7 @@ func TestBreaking_RespTypeStringToNumber(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the response's body type/format changed from 'string'/'' to 'number'/'' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -43,7 +43,7 @@ func TestBreaking_RespTypeNumberToString(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the response's body type/format changed from 'number'/'' to 'string'/'' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -63,7 +63,7 @@ func TestBreaking_RespTypeNumberToInteger(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -81,7 +81,7 @@ func TestBreaking_RespTypeIntegerToNumber(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the response's body type/format changed from 'integer'/'' to 'number'/'' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -102,7 +102,7 @@ func TestBreaking_RespTypeNumberToInt32(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -116,7 +116,7 @@ func TestBreaking_RespTypeChanged(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, "response-property-type-changed", errs[0].GetId())
 	require.Equal(t, "the '/items/testField' response's property type/format changed from 'string'/'' to 'integer'/'int32' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))

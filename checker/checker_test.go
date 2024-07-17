@@ -19,7 +19,7 @@ func TestBreaking_StabilityLevelDecreased(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 
 	require.IsType(t, checker.ApiChange{}, errs[0])
@@ -41,7 +41,7 @@ func TestBreaking_StabilityLevelIncreased(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -55,7 +55,7 @@ func TestBreaking_InvalidStabilityLevelInRevision(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIInvalidStabilityLevelId, errs[0].GetId())
 	require.Equal(t, "failed to parse stability level: 'value is not one of draft, alpha, beta or stable: \"invalid\"'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -72,7 +72,7 @@ func TestBreaking_InvalidStabilityLevelInBase(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIInvalidStabilityLevelId, errs[0].GetId())
 	require.Equal(t, "failed to parse stability level: 'value is not one of draft, alpha, beta or stable: \"invalid\"'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -89,7 +89,7 @@ func TestBreaking_InvalidNonJsonStabilityLevel(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIInvalidStabilityLevelId, errs[0].GetId())
 	require.Equal(t, "failed to parse stability level: 'x-stability-level isn't a string nor valid json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))

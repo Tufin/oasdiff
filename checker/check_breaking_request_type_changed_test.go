@@ -23,7 +23,7 @@ func TestBreaking_ReqTypeStringToNumber(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format changed from 'string'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -43,7 +43,7 @@ func TestBreaking_ReqTypeNumberToString(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format changed from 'number'/'' to 'string'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -63,7 +63,7 @@ func TestBreaking_ReqTypeNumberToInteger(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format changed from 'number'/'' to 'integer'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -83,7 +83,7 @@ func TestBreaking_ReqTypeIntegerToNumber(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(checker.NewConfig(), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(allChecksConfig(), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeGeneralizedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format was generalized from 'integer'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -104,7 +104,7 @@ func TestBreaking_ReqTypeNumberToInt32(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[0].GetId())
 	require.Equal(t, "the request's body type/format changed from 'number'/'' to 'integer'/'int32'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))

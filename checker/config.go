@@ -15,13 +15,10 @@ const (
 )
 
 // NewConfig creates a new configuration with default values.
-func NewConfig() *Config {
-
-	rules := GetAllRules()
-
+func NewConfig(checks BackwardCompatibilityChecks) *Config {
 	return &Config{
-		Checks:              rulesToChecks(rules),
-		LogLevels:           rulesToLevels(rules),
+		Checks:              checks,
+		LogLevels:           GetCheckLevels(),
 		MinSunsetBetaDays:   DefaultBetaDeprecationDays,
 		MinSunsetStableDays: DefaultStableDeprecationDays,
 	}
