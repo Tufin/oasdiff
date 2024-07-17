@@ -109,6 +109,10 @@ func (flags *DiffFlags) getAsymmetric() bool {
 	return false
 }
 
+func (flags *DiffFlags) getSeverityLevelsFile() string {
+	return ""
+}
+
 func (flags *DiffFlags) setBase(source *load.Source) {
 	flags.base = source
 }
@@ -198,5 +202,9 @@ func (flags *DiffFlags) refDeprecationDaysStable() *uint {
 }
 
 func (flags *DiffFlags) refColor() *string {
+	return nil
+}
+
+func (flags *DiffFlags) refSeverityLevelsFile() *string {
 	return nil
 }
