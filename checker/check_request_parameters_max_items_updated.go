@@ -37,15 +37,13 @@ func RequestParameterMaxItemsUpdatedCheck(diffReport *diff.Diff, operationsSourc
 					}
 
 					id := RequestParameterMaxItemsDecreasedId
-					level := ERR
 					if IsIncreasedValue(maxItemsDiff) {
 						id = RequestParameterMaxItemsIncreasedId
-						level = INFO
 					}
 
 					result = append(result, NewApiChange(
 						id,
-						level,
+						config,
 						[]any{paramLocation, paramName, maxItemsDiff.From, maxItemsDiff.To},
 						"",
 						operationsSources,

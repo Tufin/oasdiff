@@ -41,15 +41,13 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						for _, enumVal := range enumDiff.Deleted {
 
 							id := RequestPropertyEnumValueRemovedId
-							level := ERR
 							if propertyDiff.Revision.ReadOnly {
 								id = RequestReadOnlyPropertyEnumValueRemovedId
-								level = INFO
 							}
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{enumVal, propName},
 								"",
 								operationsSources,
@@ -62,7 +60,7 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						for _, enumVal := range enumDiff.Added {
 							result = append(result, NewApiChange(
 								RequestPropertyEnumValueAddedId,
-								INFO,
+								config,
 								[]any{enumVal, propName},
 								"",
 								operationsSources,

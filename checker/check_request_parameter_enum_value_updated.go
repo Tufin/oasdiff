@@ -37,7 +37,7 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 					for _, enumVal := range enumDiff.Deleted {
 						result = append(result, NewApiChange(
 							RequestParameterEnumValueRemovedId,
-							ERR,
+							config,
 							[]any{enumVal, paramLocation, paramName},
 							"",
 							operationsSources,
@@ -49,7 +49,7 @@ func RequestParameterEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSour
 					for _, enumVal := range enumDiff.Added {
 						result = append(result, NewApiChange(
 							RequestParameterEnumValueAddedId,
-							INFO,
+							config,
 							[]any{enumVal, paramLocation, paramName},
 							"",
 							operationsSources,

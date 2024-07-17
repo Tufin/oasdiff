@@ -39,19 +39,17 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 					if mediaTypeDiff.SchemaDiff.RequiredDiff != nil {
 						for _, changedRequiredPropertyName := range mediaTypeDiff.SchemaDiff.RequiredDiff.Deleted {
 							id := ResponsePropertyBecameOptionalId
-							level := ERR
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 								// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 								continue
 							}
 							if mediaTypeDiff.SchemaDiff.Revision.Properties[changedRequiredPropertyName].Value.WriteOnly {
 								id = ResponseWriteOnlyPropertyBecameOptionalId
-								level = INFO
 							}
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{changedRequiredPropertyName, responseStatus},
 								"",
 								operationsSources,
@@ -70,24 +68,25 @@ func ResponsePropertyBecameOptionalCheck(diffReport *diff.Diff, operationsSource
 								return
 							}
 							for _, changedRequiredPropertyName := range requiredDiff.Deleted {
-								level := ERR
-								id := ResponsePropertyBecameOptionalId
 
 								if propertyDiff.Base.Properties[changedRequiredPropertyName] == nil {
 									continue
 								}
-								if propertyDiff.Base.Properties[changedRequiredPropertyName].Value.WriteOnly {
-									level = INFO
-									id = ResponseWriteOnlyPropertyBecameOptionalId
-								}
+
 								if propertyDiff.Revision.Properties[changedRequiredPropertyName] == nil {
 									// removed properties processed by the ResponseRequiredPropertyUpdatedCheck check
 									continue
 								}
 
+								id := ResponsePropertyBecameOptionalId
+
+								if propertyDiff.Base.Properties[changedRequiredPropertyName].Value.WriteOnly {
+									id = ResponseWriteOnlyPropertyBecameOptionalId
+								}
+
 								result = append(result, NewApiChange(
 									id,
-									level,
+									config,
 									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), responseStatus},
 									"",
 									operationsSources,

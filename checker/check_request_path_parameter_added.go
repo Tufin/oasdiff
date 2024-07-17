@@ -29,7 +29,7 @@ func NewRequestPathParameterCheck(diffReport *diff.Diff, operationsSources *diff
 				for _, paramName := range paramItems {
 					result = append(result, NewApiChange(
 						NewRequestPathParameterId,
-						ERR,
+						config,
 						[]any{paramName},
 						"",
 						operationsSources,

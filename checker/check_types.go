@@ -77,7 +77,7 @@ Imagine that the OpenAPI type of property "id" was changed from "number" to "str
 In the first example, the change is non-breaking, because the PHP format for numbers and strings is the same: we refer to this as non-strongly-typed.
 But in the second example, the change is breaking, because the JSON format requires quotes for strings: we refer to this as strongly-typed.
 */
-func checkRequestParameterPropertyTypeChanged(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, schemaDiff *diff.SchemaDiff) (string, Level, string) {
+func checkRequestParameterPropertyTypeChanged(typeDiff *diff.StringsDiff, formatDiff *diff.ValueDiff, schemaDiff *diff.SchemaDiff) (string, string) {
 
 	// since we don't know if the object is strogly-typed or not, we check both
 	stronglyTyped := breakingTypeFormatChangedInRequest(typeDiff, formatDiff, true, schemaDiff)
@@ -85,16 +85,16 @@ func checkRequestParameterPropertyTypeChanged(typeDiff *diff.StringsDiff, format
 
 	// if strongly-typed and non-strongly-typed don't agree, it's a warning since we can't be sure that it's breaking
 	if stronglyTyped != nonStronglyTyped {
-		return RequestParameterPropertyTypeChangedId, WARN, RequestParameterPropertyTypeChangedCommentId
+		return RequestParameterPropertyTypeChangedId, RequestParameterPropertyTypeChangedCommentId
 	}
 
 	// if both are breaking it's an error
 	if stronglyTyped {
-		return RequestParameterPropertyTypeSpecializedId, ERR, ""
+		return RequestParameterPropertyTypeSpecializedId, ""
 	}
 
 	// if neither are breaking it's an informational change
-	return RequestParameterPropertyTypeGeneralizedId, INFO, ""
+	return RequestParameterPropertyTypeGeneralizedId, ""
 }
 
 /*

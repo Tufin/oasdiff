@@ -41,7 +41,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 						if patternDiff.To == "" {
 							result = append(result, NewApiChange(
 								RequestPropertyPatternRemovedId,
-								INFO,
+								config,
 								[]any{patternDiff.From, propName},
 								"",
 								operationsSources,
@@ -52,7 +52,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 						} else if patternDiff.From == "" {
 							result = append(result, NewApiChange(
 								RequestPropertyPatternAddedId,
-								WARN,
+								config,
 								[]any{patternDiff.To, propName},
 								PatternChangedCommentId,
 								operationsSources,
@@ -63,18 +63,16 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 						} else {
 
 							id := RequestPropertyPatternChangedId
-							level := WARN
 							comment := PatternChangedCommentId
 
 							if patternDiff.To == ".*" {
 								id = RequestPropertyPatternGeneralizedId
-								level = INFO
 								comment = ""
 							}
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{propName, patternDiff.From, patternDiff.To},
 								comment,
 								operationsSources,

@@ -96,6 +96,7 @@ request-read-only-property-enum-value-removed: removed the enum value %s of the 
 request-property-enum-value-added: added the new %s enum value to the request property %s
 request-body-max-decreased: the request's body max was decreased to %s
 request-property-max-decreased: the %s request property's max was decreased to %s
+request-read-only-property-max-decreased: the %s request read-only property's max was decreased to %s
 request-body-max-length-decreased: the request's body maxLength was decreased to %s
 request-property-max-length-decreased: the %s request property's maxLength was decreased to %s
 request-read-only-property-max-length-decreased: the %s request read-only property's maxLength was decreased to %s
@@ -432,6 +433,7 @@ request-property-enum-value-added-description: request property enum value added
 request-property-enum-value-removed-description: request property enum value removed
 request-read-only-property-enum-value-removed-description: request read-only property enum value removed
 request-property-max-decreased-description: request property max decreased
+request-read-only-property-max-decreased-description: request read-only property max decreased
 request-property-max-increased-description: request property max increased
 request-property-max-length-decreased-description: request property max length decreased
 request-read-only-property-max-length-decreased-description: request read-only property max length decreased

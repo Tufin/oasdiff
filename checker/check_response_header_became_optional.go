@@ -40,7 +40,7 @@ func ResponseHeaderBecameOptionalCheck(diffReport *diff.Diff, operationsSources 
 
 					result = append(result, NewApiChange(
 						ResponseHeaderBecameOptionalId,
-						ERR,
+						config,
 						[]any{headerName, responseStatus},
 						"",
 						operationsSources,

@@ -56,18 +56,16 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							}
 
 							id := ResponseRequiredPropertyBecameNonWriteOnlyId
-							level := WARN
 							comment := commentId(ResponseRequiredPropertyBecameNonWriteOnlyId)
 
 							if writeOnlyDiff.To == true {
 								id = ResponseRequiredPropertyBecameWriteOnlyId
-								level = INFO
 								comment = ""
 							}
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								comment,
 								operationsSources,
@@ -94,16 +92,14 @@ func ResponseRequiredPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 							}
 
 							id := ResponseRequiredPropertyBecameNonReadOnlyId
-							level := INFO
 
 							if readOnlyDiff.To == true {
 								id = ResponseRequiredPropertyBecameReadOnlyId
-								level = INFO
 							}
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								"",
 								operationsSources,

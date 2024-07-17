@@ -36,7 +36,7 @@ func RequestBodyBecameEnumCheck(diffReport *diff.Diff, operationsSources *diff.O
 				}
 				result = append(result, NewApiChange(
 					RequestBodyBecameEnumId,
-					ERR,
+					config,
 					nil,
 					"",
 					operationsSources,

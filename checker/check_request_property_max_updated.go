@@ -5,10 +5,11 @@ import (
 )
 
 const (
-	RequestBodyMaxDecreasedId     = "request-body-max-decreased"
-	RequestBodyMaxIncreasedId     = "request-body-max-increased"
-	RequestPropertyMaxDecreasedId = "request-property-max-decreased"
-	RequestPropertyMaxIncreasedId = "request-property-max-increased"
+	RequestBodyMaxDecreasedId             = "request-body-max-decreased"
+	RequestBodyMaxIncreasedId             = "request-body-max-increased"
+	RequestPropertyMaxDecreasedId         = "request-property-max-decreased"
+	RequestReadOnlyPropertyMaxDecreasedId = "request-read-only-property-max-decreased"
+	RequestPropertyMaxIncreasedId         = "request-property-max-increased"
 )
 
 func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
@@ -36,7 +37,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						if IsDecreasedValue(maxDiff) {
 							result = append(result, NewApiChange(
 								RequestBodyMaxDecreasedId,
-								ERR,
+								config,
 								[]any{maxDiff.To},
 								"",
 								operationsSources,
@@ -47,7 +48,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						} else {
 							result = append(result, NewApiChange(
 								RequestBodyMaxIncreasedId,
-								INFO,
+								config,
 								[]any{maxDiff.From, maxDiff.To},
 								"",
 								operationsSources,
@@ -73,10 +74,15 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 
 						propName := propertyFullName(propertyPath, propertyName)
 
+						id := RequestPropertyMaxDecreasedId
+						if propertyDiff.Revision.ReadOnly {
+							id = RequestReadOnlyPropertyMaxDecreasedId
+						}
+
 						if IsDecreasedValue(maxDiff) {
 							result = append(result, NewApiChange(
-								RequestPropertyMaxDecreasedId,
-								conditionalError(!propertyDiff.Revision.ReadOnly, INFO),
+								id,
+								config,
 								[]any{propName, maxDiff.To},
 								"",
 								operationsSources,
@@ -87,7 +93,7 @@ func RequestPropertyMaxDecreasedCheck(diffReport *diff.Diff, operationsSources *
 						} else {
 							result = append(result, NewApiChange(
 								RequestPropertyMaxIncreasedId,
-								INFO,
+								config,
 								[]any{propName, maxDiff.From, maxDiff.To},
 								"",
 								operationsSources,

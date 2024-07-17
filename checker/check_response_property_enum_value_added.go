@@ -39,20 +39,18 @@ func ResponsePropertyEnumValueAddedCheck(diffReport *diff.Diff, operationsSource
 							}
 
 							id := ResponsePropertyEnumValueAddedId
-							level := WARN
 							comment := commentId(ResponsePropertyEnumValueAddedId)
 
 							if propertyDiff.Revision.WriteOnly {
 								// Document write-only enum update
 								id = ResponseWriteOnlyPropertyEnumValueAddedId
-								level = INFO
 								comment = ""
 							}
 
 							for _, enumVal := range enumDiff.Added {
 								result = append(result, NewApiChange(
 									id,
-									level,
+									config,
 									[]any{enumVal, propertyFullName(propertyPath, propertyName), responseStatus},
 									comment,
 									operationsSources,

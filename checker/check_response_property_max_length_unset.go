@@ -36,7 +36,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 							maxLengthDiff.To == nil {
 							result = append(result, NewApiChange(
 								ResponseBodyMaxLengthUnsetId,
-								ERR,
+								config,
 								[]any{maxLengthDiff.From},
 								"",
 								operationsSources,
@@ -64,7 +64,7 @@ func ResponsePropertyMaxLengthUnsetCheck(diffReport *diff.Diff, operationsSource
 
 							result = append(result, NewApiChange(
 								ResponsePropertyMaxLengthUnsetId,
-								ERR,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), maxLengthDiff.From, responseStatus},
 								"",
 								operationsSources,

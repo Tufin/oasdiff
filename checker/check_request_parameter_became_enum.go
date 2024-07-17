@@ -36,7 +36,7 @@ func RequestParameterBecameEnumCheck(diffReport *diff.Diff, operationsSources *d
 
 					result = append(result, NewApiChange(
 						RequestParameterBecameEnumId,
-						ERR,
+						config,
 						[]any{paramLocation, paramName},
 						"",
 						operationsSources,

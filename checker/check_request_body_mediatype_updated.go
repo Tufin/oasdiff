@@ -29,7 +29,7 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 			for _, mediaType := range addedMediaTypes {
 				result = append(result, NewApiChange(
 					RequestBodyMediaTypeAddedId,
-					INFO,
+					config,
 					[]any{mediaType},
 					"",
 					operationsSources,
@@ -43,7 +43,7 @@ func RequestBodyMediaTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 			for _, mediaType := range removedMediaTypes {
 				result = append(result, NewApiChange(
 					RequestBodyMediaTypeRemovedId,
-					ERR,
+					config,
 					[]any{mediaType},
 					"",
 					operationsSources,

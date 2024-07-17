@@ -60,7 +60,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 
 							result = append(result, NewApiChange(
 								id,
-								INFO,
+								config,
 								[]any{propName},
 								"",
 								operationsSources,
@@ -77,7 +77,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						}
 						result = append(result, NewApiChange(
 							id,
-							INFO,
+							config,
 							[]any{propName},
 							"",
 							operationsSources,
@@ -108,7 +108,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 							}
 							result = append(result, NewApiChange(
 								id,
-								INFO,
+								config,
 								[]any{propName},
 								"",
 								operationsSources,
@@ -125,7 +125,7 @@ func RequestPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, operationsSour
 						}
 						result = append(result, NewApiChange(
 							id,
-							INFO,
+							config,
 							[]any{propName},
 							"",
 							operationsSources,

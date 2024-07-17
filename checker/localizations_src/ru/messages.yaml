@@ -104,6 +104,7 @@ request-body-max-length-increased: максимальная длина тела 
 request-property-max-length-increased: максимальная длина свойства запроса %s была увеличена с %s до %s
 request-body-max-decreased: значение max у тела запроса уменьшено до %s
 request-property-max-decreased: значение max у поля запроса %s уменьшено до %s
+request-read-only-property-max-decreased: максимальное значение поля запроса только для чтения %s уменьшено до %s
 request-body-max-length-decreased: значение maxLength у тела запроса уменьшено до %s
 request-property-max-length-decreased: значение maxLength у поля запроса %s уменьшено до %s
 request-read-only-property-max-length-decreased: значение maxLength поля запроса только для чтения %s уменьшено до %s

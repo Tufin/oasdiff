@@ -18,7 +18,7 @@ func APIAddedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSour
 	appendErr := func(path, method string, operation *openapi3.Operation) {
 		result = append(result, NewApiChange(
 			EndpointAddedId,
-			INFO,
+			config,
 			nil,
 			"",
 			operationsSources,

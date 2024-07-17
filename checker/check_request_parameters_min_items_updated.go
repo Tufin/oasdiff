@@ -37,15 +37,13 @@ func RequestParameterMinItemsUpdatedCheck(diffReport *diff.Diff, operationsSourc
 					}
 
 					id := RequestParameterMinItemsIncreasedId
-					level := ERR
 					if !IsIncreasedValue(minItemsDiff) {
 						id = RequestParameterMinItemsDecreasedId
-						level = INFO
 					}
 
 					result = append(result, NewApiChange(
 						id,
-						level,
+						config,
 						[]any{paramLocation, paramName, minItemsDiff.From, minItemsDiff.To},
 						"",
 						operationsSources,

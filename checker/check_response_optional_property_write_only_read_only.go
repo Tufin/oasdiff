@@ -63,7 +63,7 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 
 							result = append(result, NewApiChange(
 								id,
-								INFO,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								"",
 								operationsSources,
@@ -97,7 +97,7 @@ func ResponseOptionalPropertyWriteOnlyReadOnlyCheck(diffReport *diff.Diff, opera
 
 							result = append(result, NewApiChange(
 								id,
-								INFO,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), responseStatus},
 								"",
 								operationsSources,

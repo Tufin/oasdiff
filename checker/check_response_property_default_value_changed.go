@@ -30,7 +30,7 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 			appendResultItem := func(messageId string, a ...any) {
 				result = append(result, NewApiChange(
 					messageId,
-					INFO,
+					config,
 					a,
 					"",
 					operationsSources,

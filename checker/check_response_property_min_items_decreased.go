@@ -37,7 +37,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 							if IsDecreasedValue(minItemsDiff) {
 								result = append(result, NewApiChange(
 									ResponseBodyMinItemsDecreasedId,
-									ERR,
+									config,
 									[]any{minItemsDiff.From, minItemsDiff.To},
 									"",
 									operationsSources,
@@ -70,7 +70,7 @@ func ResponsePropertyMinItemsDecreasedCheck(diffReport *diff.Diff, operationsSou
 
 							result = append(result, NewApiChange(
 								ResponsePropertyMinItemsDecreasedId,
-								ERR,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), minItemsDiff.From, minItemsDiff.To, responseStatus},
 								"",
 								operationsSources,

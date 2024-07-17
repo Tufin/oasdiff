@@ -28,10 +28,10 @@ type ApiChange struct {
 	SourceColumnEnd int
 }
 
-func NewApiChange(id string, level Level, args []any, comment string, operationsSources *diff.OperationsSourcesMap, operation *openapi3.Operation, method, path string) ApiChange {
+func NewApiChange(id string, config *Config, args []any, comment string, operationsSources *diff.OperationsSourcesMap, operation *openapi3.Operation, method, path string) ApiChange {
 	return ApiChange{
 		Id:          id,
-		Level:       level,
+		Level:       config.getLogLevel(id),
 		Args:        args,
 		Comment:     comment,
 		OperationId: operation.OperationID,

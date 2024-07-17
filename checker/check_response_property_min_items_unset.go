@@ -36,7 +36,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 							minItemsDiff.To == nil {
 							result = append(result, NewApiChange(
 								ResponseBodyMinItemsUnsetId,
-								ERR,
+								config,
 								[]any{minItemsDiff.From},
 								"",
 								operationsSources,
@@ -64,7 +64,7 @@ func ResponsePropertyMinItemsUnsetCheck(diffReport *diff.Diff, operationsSources
 
 							result = append(result, NewApiChange(
 								ResponsePropertyMinItemsUnsetId,
-								ERR,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), minItemsDiff.From, responseStatus},
 								"",
 								operationsSources,

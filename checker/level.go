@@ -63,11 +63,3 @@ func (level Level) PrettyString() string {
 func (level Level) IsBreaking() bool {
 	return level == ERR || level == WARN
 }
-
-func conditionalError(isConditionSatisfied bool, defaultLevel Level) Level {
-	if isConditionSatisfied {
-		return ERR
-	}
-
-	return defaultLevel
-}

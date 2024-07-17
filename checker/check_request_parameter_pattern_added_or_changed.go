@@ -41,7 +41,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 					if patternDiff.From == "" {
 						result = append(result, NewApiChange(
 							RequestParameterPatternAddedId,
-							WARN,
+							config,
 							[]any{patternDiff.To, paramLocation, paramName},
 							PatternChangedCommentId,
 							operationsSources,
@@ -52,7 +52,7 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 					} else if patternDiff.To == "" {
 						result = append(result, NewApiChange(
 							RequestParameterPatternRemovedId,
-							INFO,
+							config,
 							[]any{patternDiff.From, paramLocation, paramName},
 							"",
 							operationsSources,
@@ -62,18 +62,16 @@ func RequestParameterPatternAddedOrChangedCheck(diffReport *diff.Diff, operation
 						))
 					} else {
 						id := RequestParameterPatternChangedId
-						level := WARN
 						comment := PatternChangedCommentId
 
 						if patternDiff.To == ".*" {
 							id = RequestParameterPatternGeneralizedId
-							level = INFO
 							comment = ""
 						}
 
 						result = append(result, NewApiChange(
 							id,
-							level,
+							config,
 							[]any{paramLocation, paramName, patternDiff.From, patternDiff.To},
 							comment,
 							operationsSources,

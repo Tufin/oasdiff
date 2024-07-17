@@ -26,7 +26,7 @@ func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 			appendResultItem := func(messageId string, a ...any) {
 				result = append(result, NewApiChange(
 					messageId,
-					ERR,
+					config,
 					a,
 					"",
 					operationsSources,

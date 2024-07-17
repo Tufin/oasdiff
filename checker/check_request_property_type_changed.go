@@ -40,16 +40,14 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 				if !typeDiff.Empty() || !formatDiff.Empty() {
 
 					id := RequestBodyTypeGeneralizedId
-					level := INFO
 
 					if breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
 						id = RequestBodyTypeChangedId
-						level = ERR
 					}
 
 					result = append(result, NewApiChange(
 						id,
-						level,
+						config,
 						[]any{getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 						"",
 						operationsSources,
@@ -75,16 +73,14 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 						if !typeDiff.Empty() || !formatDiff.Empty() {
 
 							id := RequestPropertyTypeGeneralizedId
-							level := INFO
 
 							if breakingTypeFormatChangedInRequestProperty(typeDiff, formatDiff, mediaType, schemaDiff) {
 								id = RequestPropertyTypeChangedId
-								level = ERR
 							}
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 								"",
 								operationsSources,

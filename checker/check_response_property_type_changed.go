@@ -39,7 +39,7 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 							result = append(result, NewApiChange(
 								ResponseBodyTypeChangedId,
-								ERR,
+								config,
 								[]any{getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff), responseStatus},
 								"",
 								operationsSources,
@@ -65,7 +65,7 @@ func ResponsePropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *
 
 								result = append(result, NewApiChange(
 									ResponsePropertyTypeChangedId,
-									ERR,
+									config,
 									[]any{propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff), responseStatus},
 									"",
 									operationsSources,

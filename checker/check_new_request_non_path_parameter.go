@@ -32,14 +32,12 @@ func NewRequestNonPathParameterCheck(diffReport *diff.Diff, operationsSources *d
 					for _, param := range operationItem.Revision.Parameters {
 						if param.Value.Name == paramName {
 							id := NewRequiredRequestParameterId
-							level := ERR
 							if !param.Value.Required {
 								id = NewOptionalRequestParameterId
-								level = INFO
 							}
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{paramLocation, paramName},
 								"",
 								operationsSources,

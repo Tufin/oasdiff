@@ -42,7 +42,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							if schemaDiff.Revision.Properties[changedRequiredPropertyName].Value.Default == nil {
 								result = append(result, NewApiChange(
 									RequestPropertyBecameRequiredId,
-									ERR,
+									config,
 									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 									"",
 									operationsSources,
@@ -54,7 +54,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								// property has a default value, so making it required is not a breaking change
 								result = append(result, NewApiChange(
 									RequestPropertyBecameRequiredWithDefaultId,
-									INFO,
+									config,
 									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 									"",
 									operationsSources,
@@ -71,7 +71,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 
 							result = append(result, NewApiChange(
 								RequestPropertyBecameOptionalId,
-								INFO,
+								config,
 								[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
 								"",
 								operationsSources,

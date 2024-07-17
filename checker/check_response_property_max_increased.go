@@ -37,7 +37,7 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 							if IsIncreasedValue(maxDiff) {
 								result = append(result, NewApiChange(
 									ResponseBodyMaxIncreasedId,
-									ERR,
+									config,
 									[]any{maxDiff.From, maxDiff.To},
 									"",
 									operationsSources,
@@ -70,7 +70,7 @@ func ResponsePropertyMaxIncreasedCheck(diffReport *diff.Diff, operationsSources 
 
 							result = append(result, NewApiChange(
 								ResponsePropertyMaxIncreasedId,
-								ERR,
+								config,
 								[]any{propertyFullName(propertyPath, propertyName), maxDiff.From, maxDiff.To, responseStatus},
 								"",
 								operationsSources,

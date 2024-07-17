@@ -37,7 +37,7 @@ func RequestParameterMinSetCheck(diffReport *diff.Diff, operationsSources *diff.
 
 					result = append(result, NewApiChange(
 						RequestParameterMinSetId,
-						WARN,
+						config,
 						[]any{paramLocation, paramName, minDiff.To},
 						commentId(RequestParameterMinSetId),
 						operationsSources,

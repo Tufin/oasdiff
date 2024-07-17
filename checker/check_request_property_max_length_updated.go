@@ -37,7 +37,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						if IsDecreasedValue(maxLengthDiff) {
 							result = append(result, NewApiChange(
 								RequestBodyMaxLengthDecreasedId,
-								ERR,
+								config,
 								[]any{maxLengthDiff.To},
 								"",
 								operationsSources,
@@ -48,7 +48,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						} else {
 							result = append(result, NewApiChange(
 								RequestBodyMaxLengthIncreasedId,
-								INFO,
+								config,
 								[]any{maxLengthDiff.From, maxLengthDiff.To},
 								"",
 								operationsSources,
@@ -77,16 +77,14 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						if IsDecreasedValue(maxLengthDiff) {
 
 							id := RequestPropertyMaxLengthDecreasedId
-							level := ERR
 
 							if propertyDiff.Revision.ReadOnly {
 								id = RequestReadOnlyPropertyMaxLengthDecreasedId
-								level = INFO
 							}
 
 							result = append(result, NewApiChange(
 								id,
-								level,
+								config,
 								[]any{propName, maxLengthDiff.To},
 								"",
 								operationsSources,
@@ -97,7 +95,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 						} else {
 							result = append(result, NewApiChange(
 								RequestPropertyMaxLengthIncreasedId,
-								INFO,
+								config,
 								[]any{propName, maxLengthDiff.From, maxLengthDiff.To},
 								"",
 								operationsSources,
