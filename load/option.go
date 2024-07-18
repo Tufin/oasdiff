@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/flatten/headers"
 )
 
-// option functions can be used to preprocess specs after loading them
+// Option functions can be used to preprocess specs after loading them
 type Option func(Loader, []*SpecInfo) ([]*SpecInfo, error)
 
 // WithIdentity returns the original SpecInfos
