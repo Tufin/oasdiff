@@ -39,7 +39,6 @@ func TestTextFormatter_RenderChecks(t *testing.T) {
 			Id:          "change_id",
 			Level:       "info",
 			Description: "This is a breaking change.",
-			Required:    true,
 		},
 	}
 
