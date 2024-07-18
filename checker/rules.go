@@ -10,16 +10,14 @@ type BackwardCompatibilityRule struct {
 	Id          string
 	Level       Level
 	Description string
-	Required    bool
 	Handler     BackwardCompatibilityCheck `json:"-" yaml:"-"`
 }
 
-func newBackwardCompatibilityRule(id string, level Level, required bool, handler BackwardCompatibilityCheck) BackwardCompatibilityRule {
+func newBackwardCompatibilityRule(id string, level Level, handler BackwardCompatibilityCheck) BackwardCompatibilityRule {
 	return BackwardCompatibilityRule{
 		Id:          id,
 		Level:       level,
 		Description: descriptionId(id),
-		Required:    required,
 		Handler:     handler,
 	}
 }
@@ -29,381 +27,381 @@ type BackwardCompatibilityRules []BackwardCompatibilityRule
 func GetAllRules() BackwardCompatibilityRules {
 	return BackwardCompatibilityRules{
 		// APIAddedCheck
-		newBackwardCompatibilityRule(EndpointAddedId, INFO, true, APIAddedCheck),
+		newBackwardCompatibilityRule(EndpointAddedId, INFO, APIAddedCheck),
 		// APIComponentsSecurityUpdatedCheck
-		newBackwardCompatibilityRule(APIComponentsSecurityRemovedId, INFO, true, APIComponentsSecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIComponentsSecurityAddedId, INFO, true, APIComponentsSecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIComponentsSecurityComponentOauthUrlUpdatedId, INFO, true, APIComponentsSecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIComponentsSecurityTypeUpdatedId, INFO, true, APIComponentsSecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIComponentsSecurityOauthTokenUrlUpdatedId, INFO, true, APIComponentsSecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIComponentSecurityOauthScopeAddedId, INFO, true, APIComponentsSecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIComponentSecurityOauthScopeRemovedId, INFO, true, APIComponentsSecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIComponentSecurityOauthScopeUpdatedId, INFO, true, APIComponentsSecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIComponentsSecurityRemovedId, INFO, APIComponentsSecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIComponentsSecurityAddedId, INFO, APIComponentsSecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIComponentsSecurityComponentOauthUrlUpdatedId, INFO, APIComponentsSecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIComponentsSecurityTypeUpdatedId, INFO, APIComponentsSecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIComponentsSecurityOauthTokenUrlUpdatedId, INFO, APIComponentsSecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIComponentSecurityOauthScopeAddedId, INFO, APIComponentsSecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIComponentSecurityOauthScopeRemovedId, INFO, APIComponentsSecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIComponentSecurityOauthScopeUpdatedId, INFO, APIComponentsSecurityUpdatedCheck),
 		// APISecurityUpdatedCheck
-		newBackwardCompatibilityRule(APISecurityRemovedCheckId, INFO, true, APISecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APISecurityAddedCheckId, INFO, true, APISecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APISecurityScopeAddedId, INFO, true, APISecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APISecurityScopeRemovedId, INFO, true, APISecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIGlobalSecurityRemovedCheckId, INFO, true, APISecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIGlobalSecurityAddedCheckId, INFO, true, APISecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIGlobalSecurityScopeAddedId, INFO, true, APISecurityUpdatedCheck),
-		newBackwardCompatibilityRule(APIGlobalSecurityScopeRemovedId, INFO, true, APISecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APISecurityRemovedCheckId, INFO, APISecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APISecurityAddedCheckId, INFO, APISecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APISecurityScopeAddedId, INFO, APISecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APISecurityScopeRemovedId, INFO, APISecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIGlobalSecurityRemovedCheckId, INFO, APISecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIGlobalSecurityAddedCheckId, INFO, APISecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIGlobalSecurityScopeAddedId, INFO, APISecurityUpdatedCheck),
+		newBackwardCompatibilityRule(APIGlobalSecurityScopeRemovedId, INFO, APISecurityUpdatedCheck),
 		// Stability Descreased Check is run as part of CheckBackwardCompatibility
-		newBackwardCompatibilityRule(APIStabilityDecreasedId, ERR, true, nil),
+		newBackwardCompatibilityRule(APIStabilityDecreasedId, ERR, nil),
 		// APIDeprecationCheck
-		newBackwardCompatibilityRule(EndpointReactivatedId, INFO, true, APIDeprecationCheck),
-		newBackwardCompatibilityRule(APIDeprecatedSunsetParseId, ERR, true, APIDeprecationCheck),
-		newBackwardCompatibilityRule(APIDeprecatedSunsetMissingId, ERR, true, APIDeprecationCheck),
-		newBackwardCompatibilityRule(APIInvalidStabilityLevelId, ERR, true, APIDeprecationCheck),
-		newBackwardCompatibilityRule(APISunsetDateTooSmallId, ERR, true, APIDeprecationCheck),
-		newBackwardCompatibilityRule(EndpointDeprecatedId, INFO, true, APIDeprecationCheck),
+		newBackwardCompatibilityRule(EndpointReactivatedId, INFO, APIDeprecationCheck),
+		newBackwardCompatibilityRule(APIDeprecatedSunsetParseId, ERR, APIDeprecationCheck),
+		newBackwardCompatibilityRule(APIDeprecatedSunsetMissingId, ERR, APIDeprecationCheck),
+		newBackwardCompatibilityRule(APIInvalidStabilityLevelId, ERR, APIDeprecationCheck),
+		newBackwardCompatibilityRule(APISunsetDateTooSmallId, ERR, APIDeprecationCheck),
+		newBackwardCompatibilityRule(EndpointDeprecatedId, INFO, APIDeprecationCheck),
 		// APIRemovedCheck
-		newBackwardCompatibilityRule(APIPathRemovedWithoutDeprecationId, ERR, true, APIRemovedCheck),
-		newBackwardCompatibilityRule(APIPathSunsetParseId, ERR, true, APIRemovedCheck),
-		newBackwardCompatibilityRule(APIPathRemovedBeforeSunsetId, ERR, true, APIRemovedCheck),
-		newBackwardCompatibilityRule(APIRemovedWithoutDeprecationId, ERR, true, APIRemovedCheck),
-		newBackwardCompatibilityRule(APIRemovedBeforeSunsetId, ERR, true, APIRemovedCheck),
+		newBackwardCompatibilityRule(APIPathRemovedWithoutDeprecationId, ERR, APIRemovedCheck),
+		newBackwardCompatibilityRule(APIPathSunsetParseId, ERR, APIRemovedCheck),
+		newBackwardCompatibilityRule(APIPathRemovedBeforeSunsetId, ERR, APIRemovedCheck),
+		newBackwardCompatibilityRule(APIRemovedWithoutDeprecationId, ERR, APIRemovedCheck),
+		newBackwardCompatibilityRule(APIRemovedBeforeSunsetId, ERR, APIRemovedCheck),
 		// APISunsetChangedCheck
-		newBackwardCompatibilityRule(APISunsetDeletedId, ERR, true, APISunsetChangedCheck),
-		newBackwardCompatibilityRule(APISunsetDateChangedTooSmallId, ERR, true, APISunsetChangedCheck),
+		newBackwardCompatibilityRule(APISunsetDeletedId, ERR, APISunsetChangedCheck),
+		newBackwardCompatibilityRule(APISunsetDateChangedTooSmallId, ERR, APISunsetChangedCheck),
 		// AddedRequiredRequestBodyCheck
-		newBackwardCompatibilityRule(AddedRequiredRequestBodyId, ERR, true, AddedRequestBodyCheck),
-		newBackwardCompatibilityRule(AddedOptionalRequestBodyId, INFO, true, AddedRequestBodyCheck),
+		newBackwardCompatibilityRule(AddedRequiredRequestBodyId, ERR, AddedRequestBodyCheck),
+		newBackwardCompatibilityRule(AddedOptionalRequestBodyId, INFO, AddedRequestBodyCheck),
 		// NewRequestNonPathDefaultParameterCheck
-		newBackwardCompatibilityRule(NewRequiredRequestDefaultParameterToExistingPathId, ERR, true, NewRequestNonPathDefaultParameterCheck),
-		newBackwardCompatibilityRule(NewOptionalRequestDefaultParameterToExistingPathId, INFO, true, NewRequestNonPathDefaultParameterCheck),
+		newBackwardCompatibilityRule(NewRequiredRequestDefaultParameterToExistingPathId, ERR, NewRequestNonPathDefaultParameterCheck),
+		newBackwardCompatibilityRule(NewOptionalRequestDefaultParameterToExistingPathId, INFO, NewRequestNonPathDefaultParameterCheck),
 		// NewRequestNonPathParameterCheck
-		newBackwardCompatibilityRule(NewRequiredRequestParameterId, ERR, true, NewRequestNonPathParameterCheck),
-		newBackwardCompatibilityRule(NewOptionalRequestParameterId, INFO, true, NewRequestNonPathParameterCheck),
+		newBackwardCompatibilityRule(NewRequiredRequestParameterId, ERR, NewRequestNonPathParameterCheck),
+		newBackwardCompatibilityRule(NewOptionalRequestParameterId, INFO, NewRequestNonPathParameterCheck),
 		// NewRequestPathParameterCheck
-		newBackwardCompatibilityRule(NewRequestPathParameterId, ERR, true, NewRequestPathParameterCheck),
+		newBackwardCompatibilityRule(NewRequestPathParameterId, ERR, NewRequestPathParameterCheck),
 		// NewRequiredRequestHeaderPropertyCheck
-		newBackwardCompatibilityRule(NewRequiredRequestHeaderPropertyId, ERR, true, NewRequiredRequestHeaderPropertyCheck),
+		newBackwardCompatibilityRule(NewRequiredRequestHeaderPropertyId, ERR, NewRequiredRequestHeaderPropertyCheck),
 		// RequestBodyBecameEnumCheck
-		newBackwardCompatibilityRule(RequestBodyBecameEnumId, ERR, true, RequestBodyBecameEnumCheck),
+		newBackwardCompatibilityRule(RequestBodyBecameEnumId, ERR, RequestBodyBecameEnumCheck),
 		// RequestBodyMediaTypeChangedCheck
-		newBackwardCompatibilityRule(RequestBodyMediaTypeAddedId, INFO, true, RequestBodyMediaTypeChangedCheck),
-		newBackwardCompatibilityRule(RequestBodyMediaTypeRemovedId, ERR, true, RequestBodyMediaTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestBodyMediaTypeAddedId, INFO, RequestBodyMediaTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestBodyMediaTypeRemovedId, ERR, RequestBodyMediaTypeChangedCheck),
 		// RequestBodyRequiredUpdatedCheck
-		newBackwardCompatibilityRule(RequestBodyBecameOptionalId, INFO, true, RequestBodyRequiredUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyBecameRequiredId, ERR, true, RequestBodyRequiredUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyBecameOptionalId, INFO, RequestBodyRequiredUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyBecameRequiredId, ERR, RequestBodyRequiredUpdatedCheck),
 		// RequestDiscriminatorUpdatedCheck
-		newBackwardCompatibilityRule(RequestBodyDiscriminatorAddedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyDiscriminatorRemovedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyDiscriminatorPropertyNameChangedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyDiscriminatorMappingAddedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyDiscriminatorMappingDeletedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyDiscriminatorMappingChangedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDiscriminatorAddedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDiscriminatorRemovedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDiscriminatorPropertyNameChangedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDiscriminatorMappingAddedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDiscriminatorMappingDeletedId, INFO, true, RequestDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDiscriminatorMappingChangedId, INFO, true, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyDiscriminatorAddedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyDiscriminatorRemovedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyDiscriminatorPropertyNameChangedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyDiscriminatorMappingAddedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyDiscriminatorMappingDeletedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyDiscriminatorMappingChangedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDiscriminatorAddedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDiscriminatorRemovedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDiscriminatorPropertyNameChangedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDiscriminatorMappingAddedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDiscriminatorMappingDeletedId, INFO, RequestDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDiscriminatorMappingChangedId, INFO, RequestDiscriminatorUpdatedCheck),
 		// RequestHeaderPropertyBecameEnumCheck
-		newBackwardCompatibilityRule(RequestHeaderPropertyBecameEnumId, ERR, true, RequestHeaderPropertyBecameEnumCheck),
+		newBackwardCompatibilityRule(RequestHeaderPropertyBecameEnumId, ERR, RequestHeaderPropertyBecameEnumCheck),
 		// RequestHeaderPropertyBecameRequiredCheck
-		newBackwardCompatibilityRule(RequestHeaderPropertyBecameRequiredId, ERR, true, RequestHeaderPropertyBecameRequiredCheck),
+		newBackwardCompatibilityRule(RequestHeaderPropertyBecameRequiredId, ERR, RequestHeaderPropertyBecameRequiredCheck),
 		// RequestParameterBecameEnumCheck
-		newBackwardCompatibilityRule(RequestParameterBecameEnumId, ERR, true, RequestParameterBecameEnumCheck),
+		newBackwardCompatibilityRule(RequestParameterBecameEnumId, ERR, RequestParameterBecameEnumCheck),
 		// RequestParameterDefaultValueChangedCheck
-		newBackwardCompatibilityRule(RequestParameterDefaultValueChangedId, ERR, true, RequestParameterDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterDefaultValueAddedId, ERR, true, RequestParameterDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterDefaultValueRemovedId, ERR, true, RequestParameterDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterDefaultValueChangedId, ERR, RequestParameterDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterDefaultValueAddedId, ERR, RequestParameterDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterDefaultValueRemovedId, ERR, RequestParameterDefaultValueChangedCheck),
 		// RequestParameterEnumValueUpdatedCheck
-		newBackwardCompatibilityRule(RequestParameterEnumValueAddedId, INFO, true, RequestParameterEnumValueUpdatedCheck),
-		newBackwardCompatibilityRule(RequestParameterEnumValueRemovedId, ERR, true, RequestParameterEnumValueUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterEnumValueAddedId, INFO, RequestParameterEnumValueUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterEnumValueRemovedId, ERR, RequestParameterEnumValueUpdatedCheck),
 		// RequestParameterMaxItemsUpdatedCheck
-		newBackwardCompatibilityRule(RequestParameterMaxItemsIncreasedId, INFO, true, RequestParameterMaxItemsUpdatedCheck),
-		newBackwardCompatibilityRule(RequestParameterMaxItemsDecreasedId, ERR, true, RequestParameterMaxItemsUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMaxItemsIncreasedId, INFO, RequestParameterMaxItemsUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMaxItemsDecreasedId, ERR, RequestParameterMaxItemsUpdatedCheck),
 		// RequestParameterMaxLengthSetCheck
-		newBackwardCompatibilityRule(RequestParameterMaxLengthSetId, WARN, true, RequestParameterMaxLengthSetCheck),
+		newBackwardCompatibilityRule(RequestParameterMaxLengthSetId, WARN, RequestParameterMaxLengthSetCheck),
 		// RequestParameterMaxLengthUpdatedCheck
-		newBackwardCompatibilityRule(RequestParameterMaxLengthIncreasedId, INFO, true, RequestParameterMaxLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestParameterMaxLengthDecreasedId, ERR, true, RequestParameterMaxLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMaxLengthIncreasedId, INFO, RequestParameterMaxLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMaxLengthDecreasedId, ERR, RequestParameterMaxLengthUpdatedCheck),
 		// RequestParameterMaxSetCheck
-		newBackwardCompatibilityRule(RequestParameterMaxSetId, WARN, true, RequestParameterMaxSetCheck),
+		newBackwardCompatibilityRule(RequestParameterMaxSetId, WARN, RequestParameterMaxSetCheck),
 		// RequestParameterMaxUpdatedCheck
-		newBackwardCompatibilityRule(RequestParameterMaxIncreasedId, INFO, true, RequestParameterMaxUpdatedCheck),
-		newBackwardCompatibilityRule(RequestParameterMaxDecreasedId, ERR, true, RequestParameterMaxUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMaxIncreasedId, INFO, RequestParameterMaxUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMaxDecreasedId, ERR, RequestParameterMaxUpdatedCheck),
 		// RequestParameterMinItemsSetCheck
-		newBackwardCompatibilityRule(RequestParameterMinItemsSetId, WARN, true, RequestParameterMinItemsSetCheck),
+		newBackwardCompatibilityRule(RequestParameterMinItemsSetId, WARN, RequestParameterMinItemsSetCheck),
 		// RequestParameterMinItemsUpdatedCheck
-		newBackwardCompatibilityRule(RequestParameterMinItemsIncreasedId, ERR, true, RequestParameterMinItemsUpdatedCheck),
-		newBackwardCompatibilityRule(RequestParameterMinItemsDecreasedId, INFO, true, RequestParameterMinItemsUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMinItemsIncreasedId, ERR, RequestParameterMinItemsUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMinItemsDecreasedId, INFO, RequestParameterMinItemsUpdatedCheck),
 		// RequestParameterMinLengthUpdatedCheck
-		newBackwardCompatibilityRule(RequestParameterMinLengthIncreasedId, ERR, true, RequestParameterMinLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestParameterMinLengthDecreasedId, INFO, true, RequestParameterMinLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMinLengthIncreasedId, ERR, RequestParameterMinLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMinLengthDecreasedId, INFO, RequestParameterMinLengthUpdatedCheck),
 		// RequestParameterMinSetCheck
-		newBackwardCompatibilityRule(RequestParameterMinSetId, WARN, true, RequestParameterMinSetCheck),
+		newBackwardCompatibilityRule(RequestParameterMinSetId, WARN, RequestParameterMinSetCheck),
 		// RequestParameterMinUpdatedCheck
-		newBackwardCompatibilityRule(RequestParameterMinIncreasedId, ERR, true, RequestParameterMinUpdatedCheck),
-		newBackwardCompatibilityRule(RequestParameterMinDecreasedId, INFO, true, RequestParameterMinUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMinIncreasedId, ERR, RequestParameterMinUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterMinDecreasedId, INFO, RequestParameterMinUpdatedCheck),
 		// RequestParameterPatternAddedOrChangedCheck
-		newBackwardCompatibilityRule(RequestParameterPatternAddedId, WARN, true, RequestParameterPatternAddedOrChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterPatternRemovedId, INFO, true, RequestParameterPatternAddedOrChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterPatternChangedId, WARN, true, RequestParameterPatternAddedOrChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterPatternGeneralizedId, INFO, true, RequestParameterPatternAddedOrChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterPatternAddedId, WARN, RequestParameterPatternAddedOrChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterPatternRemovedId, INFO, RequestParameterPatternAddedOrChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterPatternChangedId, WARN, RequestParameterPatternAddedOrChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterPatternGeneralizedId, INFO, RequestParameterPatternAddedOrChangedCheck),
 		// RequestParameterRemovedCheck
-		newBackwardCompatibilityRule(RequestParameterRemovedId, WARN, true, RequestParameterRemovedCheck),
+		newBackwardCompatibilityRule(RequestParameterRemovedId, WARN, RequestParameterRemovedCheck),
 		// RequestParameterRequiredValueUpdatedCheck
-		newBackwardCompatibilityRule(RequestParameterBecomeRequiredId, ERR, true, RequestParameterRequiredValueUpdatedCheck),
-		newBackwardCompatibilityRule(RequestParameterBecomeOptionalId, INFO, true, RequestParameterRequiredValueUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterBecomeRequiredId, ERR, RequestParameterRequiredValueUpdatedCheck),
+		newBackwardCompatibilityRule(RequestParameterBecomeOptionalId, INFO, RequestParameterRequiredValueUpdatedCheck),
 		// RequestParameterTypeChangedCheck
-		newBackwardCompatibilityRule(RequestParameterTypeChangedId, ERR, true, RequestParameterTypeChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterTypeGeneralizedId, INFO, true, RequestParameterTypeChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterPropertyTypeChangedId, WARN, true, RequestParameterTypeChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterPropertyTypeGeneralizedId, INFO, true, RequestParameterTypeChangedCheck),
-		newBackwardCompatibilityRule(RequestParameterPropertyTypeSpecializedId, ERR, true, RequestParameterTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterTypeChangedId, ERR, RequestParameterTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterTypeGeneralizedId, INFO, RequestParameterTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterPropertyTypeChangedId, WARN, RequestParameterTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterPropertyTypeGeneralizedId, INFO, RequestParameterTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestParameterPropertyTypeSpecializedId, ERR, RequestParameterTypeChangedCheck),
 		// RequestParameterXExtensibleEnumValueRemovedCheck
-		newBackwardCompatibilityRule(RequestParameterXExtensibleEnumValueRemovedId, ERR, true, RequestParameterXExtensibleEnumValueRemovedCheck),
+		newBackwardCompatibilityRule(RequestParameterXExtensibleEnumValueRemovedId, ERR, RequestParameterXExtensibleEnumValueRemovedCheck),
 		// RequestPropertyAllOfUpdatedCheck
-		newBackwardCompatibilityRule(RequestBodyAllOfAddedId, ERR, true, RequestPropertyAllOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyAllOfRemovedId, WARN, true, RequestPropertyAllOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyAllOfAddedId, ERR, true, RequestPropertyAllOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyAllOfRemovedId, WARN, true, RequestPropertyAllOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyAllOfAddedId, ERR, RequestPropertyAllOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyAllOfRemovedId, WARN, RequestPropertyAllOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyAllOfAddedId, ERR, RequestPropertyAllOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyAllOfRemovedId, WARN, RequestPropertyAllOfUpdatedCheck),
 		// RequestPropertyAnyOfUpdatedCheck
-		newBackwardCompatibilityRule(RequestBodyAnyOfAddedId, INFO, true, RequestPropertyAnyOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyAnyOfRemovedId, ERR, true, RequestPropertyAnyOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyAnyOfAddedId, INFO, true, RequestPropertyAnyOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyAnyOfRemovedId, ERR, true, RequestPropertyAnyOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyAnyOfAddedId, INFO, RequestPropertyAnyOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyAnyOfRemovedId, ERR, RequestPropertyAnyOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyAnyOfAddedId, INFO, RequestPropertyAnyOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyAnyOfRemovedId, ERR, RequestPropertyAnyOfUpdatedCheck),
 		// RequestPropertyBecameEnumCheck
-		newBackwardCompatibilityRule(RequestPropertyBecameEnumId, ERR, true, RequestPropertyBecameEnumCheck),
+		newBackwardCompatibilityRule(RequestPropertyBecameEnumId, ERR, RequestPropertyBecameEnumCheck),
 		// RequestPropertyBecameNotNullableCheck
-		newBackwardCompatibilityRule(RequestBodyBecomeNotNullableId, ERR, true, RequestPropertyBecameNotNullableCheck),
-		newBackwardCompatibilityRule(RequestBodyBecomeNullableId, INFO, true, RequestPropertyBecameNotNullableCheck),
-		newBackwardCompatibilityRule(RequestPropertyBecomeNotNullableId, ERR, true, RequestPropertyBecameNotNullableCheck),
-		newBackwardCompatibilityRule(RequestPropertyBecomeNullableId, INFO, true, RequestPropertyBecameNotNullableCheck),
+		newBackwardCompatibilityRule(RequestBodyBecomeNotNullableId, ERR, RequestPropertyBecameNotNullableCheck),
+		newBackwardCompatibilityRule(RequestBodyBecomeNullableId, INFO, RequestPropertyBecameNotNullableCheck),
+		newBackwardCompatibilityRule(RequestPropertyBecomeNotNullableId, ERR, RequestPropertyBecameNotNullableCheck),
+		newBackwardCompatibilityRule(RequestPropertyBecomeNullableId, INFO, RequestPropertyBecameNotNullableCheck),
 		// RequestPropertyDefaultValueChangedCheck
-		newBackwardCompatibilityRule(RequestBodyDefaultValueAddedId, INFO, true, RequestPropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(RequestBodyDefaultValueRemovedId, INFO, true, RequestPropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(RequestBodyDefaultValueChangedId, INFO, true, RequestPropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDefaultValueAddedId, INFO, true, RequestPropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDefaultValueRemovedId, INFO, true, RequestPropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(RequestPropertyDefaultValueChangedId, INFO, true, RequestPropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestBodyDefaultValueAddedId, INFO, RequestPropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestBodyDefaultValueRemovedId, INFO, RequestPropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestBodyDefaultValueChangedId, INFO, RequestPropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDefaultValueAddedId, INFO, RequestPropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDefaultValueRemovedId, INFO, RequestPropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(RequestPropertyDefaultValueChangedId, INFO, RequestPropertyDefaultValueChangedCheck),
 		// RequestPropertyEnumValueUpdatedCheck
-		newBackwardCompatibilityRule(RequestPropertyEnumValueRemovedId, ERR, true, RequestPropertyEnumValueUpdatedCheck),
-		newBackwardCompatibilityRule(RequestReadOnlyPropertyEnumValueRemovedId, INFO, true, RequestPropertyEnumValueUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyEnumValueAddedId, INFO, true, RequestPropertyEnumValueUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyEnumValueRemovedId, ERR, RequestPropertyEnumValueUpdatedCheck),
+		newBackwardCompatibilityRule(RequestReadOnlyPropertyEnumValueRemovedId, INFO, RequestPropertyEnumValueUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyEnumValueAddedId, INFO, RequestPropertyEnumValueUpdatedCheck),
 		// RequestPropertyMaxDecreasedCheck
-		newBackwardCompatibilityRule(RequestBodyMaxDecreasedId, ERR, true, RequestPropertyMaxDecreasedCheck),
-		newBackwardCompatibilityRule(RequestBodyMaxIncreasedId, INFO, true, RequestPropertyMaxDecreasedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMaxDecreasedId, ERR, true, RequestPropertyMaxDecreasedCheck),
-		newBackwardCompatibilityRule(RequestReadOnlyPropertyMaxDecreasedId, INFO, true, RequestPropertyMaxDecreasedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMaxIncreasedId, INFO, true, RequestPropertyMaxDecreasedCheck),
+		newBackwardCompatibilityRule(RequestBodyMaxDecreasedId, ERR, RequestPropertyMaxDecreasedCheck),
+		newBackwardCompatibilityRule(RequestBodyMaxIncreasedId, INFO, RequestPropertyMaxDecreasedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMaxDecreasedId, ERR, RequestPropertyMaxDecreasedCheck),
+		newBackwardCompatibilityRule(RequestReadOnlyPropertyMaxDecreasedId, INFO, RequestPropertyMaxDecreasedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMaxIncreasedId, INFO, RequestPropertyMaxDecreasedCheck),
 		// RequestPropertyMaxLengthSetCheck
-		newBackwardCompatibilityRule(RequestBodyMaxLengthSetId, WARN, true, RequestPropertyMaxLengthSetCheck),
-		newBackwardCompatibilityRule(RequestPropertyMaxLengthSetId, WARN, true, RequestPropertyMaxLengthSetCheck),
+		newBackwardCompatibilityRule(RequestBodyMaxLengthSetId, WARN, RequestPropertyMaxLengthSetCheck),
+		newBackwardCompatibilityRule(RequestPropertyMaxLengthSetId, WARN, RequestPropertyMaxLengthSetCheck),
 		// RequestPropertyMaxLengthUpdatedCheck
-		newBackwardCompatibilityRule(RequestBodyMaxLengthDecreasedId, ERR, true, RequestPropertyMaxLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyMaxLengthIncreasedId, INFO, true, RequestPropertyMaxLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMaxLengthDecreasedId, ERR, true, RequestPropertyMaxLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestReadOnlyPropertyMaxLengthDecreasedId, INFO, true, RequestPropertyMaxLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMaxLengthIncreasedId, INFO, true, RequestPropertyMaxLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyMaxLengthDecreasedId, ERR, RequestPropertyMaxLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyMaxLengthIncreasedId, INFO, RequestPropertyMaxLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMaxLengthDecreasedId, ERR, RequestPropertyMaxLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestReadOnlyPropertyMaxLengthDecreasedId, INFO, RequestPropertyMaxLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMaxLengthIncreasedId, INFO, RequestPropertyMaxLengthUpdatedCheck),
 		// RequestPropertyMaxSetCheck
-		newBackwardCompatibilityRule(RequestBodyMaxSetId, WARN, true, RequestPropertyMaxSetCheck),
-		newBackwardCompatibilityRule(RequestPropertyMaxSetId, WARN, true, RequestPropertyMaxSetCheck),
+		newBackwardCompatibilityRule(RequestBodyMaxSetId, WARN, RequestPropertyMaxSetCheck),
+		newBackwardCompatibilityRule(RequestPropertyMaxSetId, WARN, RequestPropertyMaxSetCheck),
 		// RequestPropertyMinIncreasedCheck
-		newBackwardCompatibilityRule(RequestBodyMinIncreasedId, ERR, true, RequestPropertyMinIncreasedCheck),
-		newBackwardCompatibilityRule(RequestBodyMinDecreasedId, INFO, true, RequestPropertyMinIncreasedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMinIncreasedId, ERR, true, RequestPropertyMinIncreasedCheck),
-		newBackwardCompatibilityRule(RequestReadOnlyPropertyMinIncreasedId, INFO, true, RequestPropertyMinIncreasedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMinDecreasedId, INFO, true, RequestPropertyMinIncreasedCheck),
+		newBackwardCompatibilityRule(RequestBodyMinIncreasedId, ERR, RequestPropertyMinIncreasedCheck),
+		newBackwardCompatibilityRule(RequestBodyMinDecreasedId, INFO, RequestPropertyMinIncreasedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMinIncreasedId, ERR, RequestPropertyMinIncreasedCheck),
+		newBackwardCompatibilityRule(RequestReadOnlyPropertyMinIncreasedId, INFO, RequestPropertyMinIncreasedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMinDecreasedId, INFO, RequestPropertyMinIncreasedCheck),
 		// RequestPropertyMinItemsIncreasedCheck
-		newBackwardCompatibilityRule(RequestBodyMinItemsIncreasedId, ERR, true, RequestPropertyMinItemsIncreasedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMinItemsIncreasedId, ERR, true, RequestPropertyMinItemsIncreasedCheck),
+		newBackwardCompatibilityRule(RequestBodyMinItemsIncreasedId, ERR, RequestPropertyMinItemsIncreasedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMinItemsIncreasedId, ERR, RequestPropertyMinItemsIncreasedCheck),
 		// RequestPropertyMinItemsSetCheck
-		newBackwardCompatibilityRule(RequestBodyMinItemsSetId, WARN, true, RequestPropertyMinItemsSetCheck),
-		newBackwardCompatibilityRule(RequestPropertyMinItemsSetId, WARN, true, RequestPropertyMinItemsSetCheck),
+		newBackwardCompatibilityRule(RequestBodyMinItemsSetId, WARN, RequestPropertyMinItemsSetCheck),
+		newBackwardCompatibilityRule(RequestPropertyMinItemsSetId, WARN, RequestPropertyMinItemsSetCheck),
 		// RequestPropertyMinLengthUpdatedCheck
-		newBackwardCompatibilityRule(RequestBodyMinLengthIncreasedId, ERR, true, RequestPropertyMinLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyMinLengthDecreasedId, INFO, true, RequestPropertyMinLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMinLengthIncreasedId, ERR, true, RequestPropertyMinLengthUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyMinLengthDecreasedId, INFO, true, RequestPropertyMinLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyMinLengthIncreasedId, ERR, RequestPropertyMinLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyMinLengthDecreasedId, INFO, RequestPropertyMinLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMinLengthIncreasedId, ERR, RequestPropertyMinLengthUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyMinLengthDecreasedId, INFO, RequestPropertyMinLengthUpdatedCheck),
 		// RequestPropertyMinSetCheck
-		newBackwardCompatibilityRule(RequestBodyMinSetId, WARN, true, RequestPropertyMinSetCheck),
-		newBackwardCompatibilityRule(RequestPropertyMinSetId, WARN, true, RequestPropertyMinSetCheck),
+		newBackwardCompatibilityRule(RequestBodyMinSetId, WARN, RequestPropertyMinSetCheck),
+		newBackwardCompatibilityRule(RequestPropertyMinSetId, WARN, RequestPropertyMinSetCheck),
 		// RequestPropertyOneOfUpdatedCheck
-		newBackwardCompatibilityRule(RequestBodyOneOfAddedId, INFO, true, RequestPropertyOneOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestBodyOneOfRemovedId, ERR, true, RequestPropertyOneOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyOneOfAddedId, INFO, true, RequestPropertyOneOfUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyOneOfRemovedId, ERR, true, RequestPropertyOneOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyOneOfAddedId, INFO, RequestPropertyOneOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestBodyOneOfRemovedId, ERR, RequestPropertyOneOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyOneOfAddedId, INFO, RequestPropertyOneOfUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyOneOfRemovedId, ERR, RequestPropertyOneOfUpdatedCheck),
 		// RequestPropertyPatternUpdatedCheck
-		newBackwardCompatibilityRule(RequestPropertyPatternRemovedId, INFO, true, RequestPropertyPatternUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyPatternAddedId, WARN, true, RequestPropertyPatternUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyPatternChangedId, WARN, true, RequestPropertyPatternUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyPatternGeneralizedId, INFO, true, RequestPropertyPatternUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyPatternRemovedId, INFO, RequestPropertyPatternUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyPatternAddedId, WARN, RequestPropertyPatternUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyPatternChangedId, WARN, RequestPropertyPatternUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyPatternGeneralizedId, INFO, RequestPropertyPatternUpdatedCheck),
 		// RequestPropertyRequiredUpdatedCheck
-		newBackwardCompatibilityRule(RequestPropertyBecameRequiredId, ERR, true, RequestPropertyRequiredUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyBecameRequiredWithDefaultId, INFO, true, RequestPropertyRequiredUpdatedCheck),
-		newBackwardCompatibilityRule(RequestPropertyBecameOptionalId, INFO, true, RequestPropertyRequiredUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyBecameRequiredId, ERR, RequestPropertyRequiredUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyBecameRequiredWithDefaultId, INFO, RequestPropertyRequiredUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyBecameOptionalId, INFO, RequestPropertyRequiredUpdatedCheck),
 		// RequestPropertyTypeChangedCheck
-		newBackwardCompatibilityRule(RequestBodyTypeGeneralizedId, INFO, true, RequestPropertyTypeChangedCheck),
-		newBackwardCompatibilityRule(RequestBodyTypeChangedId, ERR, true, RequestPropertyTypeChangedCheck),
-		newBackwardCompatibilityRule(RequestPropertyTypeGeneralizedId, INFO, true, RequestPropertyTypeChangedCheck),
-		newBackwardCompatibilityRule(RequestPropertyTypeChangedId, ERR, true, RequestPropertyTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestBodyTypeGeneralizedId, INFO, RequestPropertyTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestBodyTypeChangedId, ERR, RequestPropertyTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestPropertyTypeGeneralizedId, INFO, RequestPropertyTypeChangedCheck),
+		newBackwardCompatibilityRule(RequestPropertyTypeChangedId, ERR, RequestPropertyTypeChangedCheck),
 		// RequestPropertyUpdatedCheck
-		newBackwardCompatibilityRule(RequestPropertyRemovedId, WARN, true, RequestPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(NewRequiredRequestPropertyId, ERR, true, RequestPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(NewRequiredRequestPropertyWithDefaultId, INFO, true, RequestPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(NewOptionalRequestPropertyId, INFO, true, RequestPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(RequestPropertyRemovedId, WARN, RequestPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(NewRequiredRequestPropertyId, ERR, RequestPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(NewRequiredRequestPropertyWithDefaultId, INFO, RequestPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(NewOptionalRequestPropertyId, INFO, RequestPropertyUpdatedCheck),
 		// RequestPropertyWriteOnlyReadOnlyCheck
-		newBackwardCompatibilityRule(RequestOptionalPropertyBecameNonWriteOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(RequestOptionalPropertyBecameWriteOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(RequestOptionalPropertyBecameReadOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(RequestOptionalPropertyBecameNonReadOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(RequestRequiredPropertyBecameNonWriteOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(RequestRequiredPropertyBecameWriteOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(RequestRequiredPropertyBecameReadOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(RequestRequiredPropertyBecameNonReadOnlyCheckId, INFO, true, RequestPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(RequestOptionalPropertyBecameNonWriteOnlyCheckId, INFO, RequestPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(RequestOptionalPropertyBecameWriteOnlyCheckId, INFO, RequestPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(RequestOptionalPropertyBecameReadOnlyCheckId, INFO, RequestPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(RequestOptionalPropertyBecameNonReadOnlyCheckId, INFO, RequestPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(RequestRequiredPropertyBecameNonWriteOnlyCheckId, INFO, RequestPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(RequestRequiredPropertyBecameWriteOnlyCheckId, INFO, RequestPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(RequestRequiredPropertyBecameReadOnlyCheckId, INFO, RequestPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(RequestRequiredPropertyBecameNonReadOnlyCheckId, INFO, RequestPropertyWriteOnlyReadOnlyCheck),
 		// RequestPropertyXExtensibleEnumValueRemovedCheck
-		newBackwardCompatibilityRule(RequestPropertyXExtensibleEnumValueRemovedId, ERR, true, RequestPropertyXExtensibleEnumValueRemovedCheck),
+		newBackwardCompatibilityRule(RequestPropertyXExtensibleEnumValueRemovedId, ERR, RequestPropertyXExtensibleEnumValueRemovedCheck),
 		// ResponseDiscriminatorUpdatedCheck
-		newBackwardCompatibilityRule(ResponseBodyDiscriminatorAddedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseBodyDiscriminatorRemovedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseBodyDiscriminatorPropertyNameChangedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseBodyDiscriminatorMappingAddedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseBodyDiscriminatorMappingDeletedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseBodyDiscriminatorMappingChangedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorAddedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorRemovedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorPropertyNameChangedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingAddedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingDeletedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingChangedId, INFO, true, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDiscriminatorAddedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDiscriminatorRemovedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDiscriminatorPropertyNameChangedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDiscriminatorMappingAddedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDiscriminatorMappingDeletedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDiscriminatorMappingChangedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorAddedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorRemovedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorPropertyNameChangedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingAddedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingDeletedId, INFO, ResponseDiscriminatorUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDiscriminatorMappingChangedId, INFO, ResponseDiscriminatorUpdatedCheck),
 		// ResponseHeaderBecameOptionalCheck
-		newBackwardCompatibilityRule(ResponseHeaderBecameOptionalId, ERR, true, ResponseHeaderBecameOptionalCheck),
+		newBackwardCompatibilityRule(ResponseHeaderBecameOptionalId, ERR, ResponseHeaderBecameOptionalCheck),
 		// ResponseHeaderRemovedCheck
-		newBackwardCompatibilityRule(RequiredResponseHeaderRemovedId, ERR, true, ResponseHeaderRemovedCheck),
-		newBackwardCompatibilityRule(OptionalResponseHeaderRemovedId, WARN, true, ResponseHeaderRemovedCheck),
+		newBackwardCompatibilityRule(RequiredResponseHeaderRemovedId, ERR, ResponseHeaderRemovedCheck),
+		newBackwardCompatibilityRule(OptionalResponseHeaderRemovedId, WARN, ResponseHeaderRemovedCheck),
 		// ResponseMediaTypeUpdatedCheck
-		newBackwardCompatibilityRule(ResponseMediaTypeRemovedId, ERR, true, ResponseMediaTypeUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseMediaTypeAddedId, INFO, true, ResponseMediaTypeUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseMediaTypeRemovedId, ERR, ResponseMediaTypeUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseMediaTypeAddedId, INFO, ResponseMediaTypeUpdatedCheck),
 		// ResponseOptionalPropertyUpdatedCheck
-		newBackwardCompatibilityRule(ResponseOptionalPropertyRemovedId, WARN, true, ResponseOptionalPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseOptionalWriteOnlyPropertyRemovedId, INFO, true, ResponseOptionalPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseOptionalPropertyAddedId, INFO, true, ResponseOptionalPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseOptionalWriteOnlyPropertyAddedId, INFO, true, ResponseOptionalPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseOptionalPropertyRemovedId, WARN, ResponseOptionalPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseOptionalWriteOnlyPropertyRemovedId, INFO, ResponseOptionalPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseOptionalPropertyAddedId, INFO, ResponseOptionalPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseOptionalWriteOnlyPropertyAddedId, INFO, ResponseOptionalPropertyUpdatedCheck),
 		// ResponseOptionalPropertyWriteOnlyReadOnlyCheck
-		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameNonWriteOnlyId, INFO, true, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameWriteOnlyId, INFO, true, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameReadOnlyId, INFO, true, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameNonReadOnlyId, INFO, true, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameNonWriteOnlyId, INFO, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameWriteOnlyId, INFO, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameReadOnlyId, INFO, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(ResponseOptionalPropertyBecameNonReadOnlyId, INFO, ResponseOptionalPropertyWriteOnlyReadOnlyCheck),
 		// ResponsePatternAddedOrChangedCheck
-		newBackwardCompatibilityRule(ResponsePropertyPatternAddedId, INFO, true, ResponsePatternAddedOrChangedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyPatternChangedId, INFO, true, ResponsePatternAddedOrChangedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyPatternRemovedId, INFO, true, ResponsePatternAddedOrChangedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyPatternAddedId, INFO, ResponsePatternAddedOrChangedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyPatternChangedId, INFO, ResponsePatternAddedOrChangedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyPatternRemovedId, INFO, ResponsePatternAddedOrChangedCheck),
 		// ResponsePropertyAllOfUpdatedCheck
-		newBackwardCompatibilityRule(ResponseBodyAllOfAddedId, INFO, true, ResponsePropertyAllOfUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseBodyAllOfRemovedId, INFO, true, ResponsePropertyAllOfUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyAllOfAddedId, INFO, true, ResponsePropertyAllOfUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyAllOfRemovedId, INFO, true, ResponsePropertyAllOfUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyAllOfAddedId, INFO, ResponsePropertyAllOfUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyAllOfRemovedId, INFO, ResponsePropertyAllOfUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyAllOfAddedId, INFO, ResponsePropertyAllOfUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyAllOfRemovedId, INFO, ResponsePropertyAllOfUpdatedCheck),
 		// ResponsePropertyAnyOfUpdatedCheck
-		newBackwardCompatibilityRule(ResponseBodyAnyOfAddedId, INFO, true, ResponsePropertyAnyOfUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseBodyAnyOfRemovedId, INFO, true, ResponsePropertyAnyOfUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyAnyOfAddedId, INFO, true, ResponsePropertyAnyOfUpdatedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyAnyOfRemovedId, INFO, true, ResponsePropertyAnyOfUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyAnyOfAddedId, INFO, ResponsePropertyAnyOfUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseBodyAnyOfRemovedId, INFO, ResponsePropertyAnyOfUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyAnyOfAddedId, INFO, ResponsePropertyAnyOfUpdatedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyAnyOfRemovedId, INFO, ResponsePropertyAnyOfUpdatedCheck),
 		// ResponsePropertyBecameNullableCheck
-		newBackwardCompatibilityRule(ResponsePropertyBecameNullableId, ERR, true, ResponsePropertyBecameNullableCheck),
-		newBackwardCompatibilityRule(ResponseBodyBecameNullableId, ERR, true, ResponsePropertyBecameNullableCheck),
+		newBackwardCompatibilityRule(ResponsePropertyBecameNullableId, ERR, ResponsePropertyBecameNullableCheck),
+		newBackwardCompatibilityRule(ResponseBodyBecameNullableId, ERR, ResponsePropertyBecameNullableCheck),
 		// ResponsePropertyBecameOptionalCheck
-		newBackwardCompatibilityRule(ResponsePropertyBecameOptionalId, ERR, true, ResponsePropertyBecameOptionalCheck),
-		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyBecameOptionalId, INFO, true, ResponsePropertyBecameOptionalCheck),
+		newBackwardCompatibilityRule(ResponsePropertyBecameOptionalId, ERR, ResponsePropertyBecameOptionalCheck),
+		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyBecameOptionalId, INFO, ResponsePropertyBecameOptionalCheck),
 		// ResponsePropertyBecameRequiredCheck
-		newBackwardCompatibilityRule(ResponsePropertyBecameRequiredId, INFO, true, ResponsePropertyBecameRequiredCheck),
-		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyBecameRequiredId, INFO, true, ResponsePropertyBecameRequiredCheck),
+		newBackwardCompatibilityRule(ResponsePropertyBecameRequiredId, INFO, ResponsePropertyBecameRequiredCheck),
+		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyBecameRequiredId, INFO, ResponsePropertyBecameRequiredCheck),
 		// ResponsePropertyDefaultValueChangedCheck
-		newBackwardCompatibilityRule(ResponseBodyDefaultValueAddedId, INFO, true, ResponsePropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(ResponseBodyDefaultValueRemovedId, INFO, true, ResponsePropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(ResponseBodyDefaultValueChangedId, INFO, true, ResponsePropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDefaultValueAddedId, INFO, true, ResponsePropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDefaultValueRemovedId, INFO, true, ResponsePropertyDefaultValueChangedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyDefaultValueChangedId, INFO, true, ResponsePropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDefaultValueAddedId, INFO, ResponsePropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDefaultValueRemovedId, INFO, ResponsePropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(ResponseBodyDefaultValueChangedId, INFO, ResponsePropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDefaultValueAddedId, INFO, ResponsePropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDefaultValueRemovedId, INFO, ResponsePropertyDefaultValueChangedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyDefaultValueChangedId, INFO, ResponsePropertyDefaultValueChangedCheck),
 		// ResponsePropertyEnumValueAddedCheck
-		newBackwardCompatibilityRule(ResponsePropertyEnumValueAddedId, WARN, true, ResponsePropertyEnumValueAddedCheck),
-		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyEnumValueAddedId, INFO, true, ResponsePropertyEnumValueAddedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyEnumValueAddedId, WARN, ResponsePropertyEnumValueAddedCheck),
+		newBackwardCompatibilityRule(ResponseWriteOnlyPropertyEnumValueAddedId, INFO, ResponsePropertyEnumValueAddedCheck),
 		// ResponsePropertyMaxIncreasedCheck
-		newBackwardCompatibilityRule(ResponseBodyMaxIncreasedId, ERR, true, ResponsePropertyMaxIncreasedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyMaxIncreasedId, ERR, true, ResponsePropertyMaxIncreasedCheck),
+		newBackwardCompatibilityRule(ResponseBodyMaxIncreasedId, ERR, ResponsePropertyMaxIncreasedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyMaxIncreasedId, ERR, ResponsePropertyMaxIncreasedCheck),
 		// ResponsePropertyMaxLengthIncreasedCheck
-		newBackwardCompatibilityRule(ResponseBodyMaxLengthIncreasedId, ERR, true, ResponsePropertyMaxLengthIncreasedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyMaxLengthIncreasedId, ERR, true, ResponsePropertyMaxLengthIncreasedCheck),
+		newBackwardCompatibilityRule(ResponseBodyMaxLengthIncreasedId, ERR, ResponsePropertyMaxLengthIncreasedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyMaxLengthIncreasedId, ERR, ResponsePropertyMaxLengthIncreasedCheck),
 		// ResponsePropertyMaxLengthUnsetCheck
-		newBackwardCompatibilityRule(ResponseBodyMaxLengthUnsetId, ERR, true, ResponsePropertyMaxLengthUnsetCheck),
-		newBackwardCompatibilityRule(ResponsePropertyMaxLengthUnsetId, ERR, true, ResponsePropertyMaxLengthUnsetCheck),
+		newBackwardCompatibilityRule(ResponseBodyMaxLengthUnsetId, ERR, ResponsePropertyMaxLengthUnsetCheck),
+		newBackwardCompatibilityRule(ResponsePropertyMaxLengthUnsetId, ERR, ResponsePropertyMaxLengthUnsetCheck),
 		// ResponsePropertyMinDecreasedCheck
-		newBackwardCompatibilityRule(ResponseBodyMinDecreasedId, ERR, true, ResponsePropertyMinDecreasedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyMinDecreasedId, ERR, true, ResponsePropertyMinDecreasedCheck),
+		newBackwardCompatibilityRule(ResponseBodyMinDecreasedId, ERR, ResponsePropertyMinDecreasedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyMinDecreasedId, ERR, ResponsePropertyMinDecreasedCheck),
 		// ResponsePropertyMinItemsDecreasedCheck
-		newBackwardCompatibilityRule(ResponseBodyMinItemsDecreasedId, ERR, true, ResponsePropertyMinItemsDecreasedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyMinItemsDecreasedId, ERR, true, ResponsePropertyMinItemsDecreasedCheck),
+		newBackwardCompatibilityRule(ResponseBodyMinItemsDecreasedId, ERR, ResponsePropertyMinItemsDecreasedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyMinItemsDecreasedId, ERR, ResponsePropertyMinItemsDecreasedCheck),
 		// ResponsePropertyMinItemsUnsetCheck
-		newBackwardCompatibilityRule(ResponseBodyMinItemsUnsetId, ERR, true, ResponsePropertyMinItemsUnsetCheck),
-		newBackwardCompatibilityRule(ResponsePropertyMinItemsUnsetId, ERR, true, ResponsePropertyMinItemsUnsetCheck),
+		newBackwardCompatibilityRule(ResponseBodyMinItemsUnsetId, ERR, ResponsePropertyMinItemsUnsetCheck),
+		newBackwardCompatibilityRule(ResponsePropertyMinItemsUnsetId, ERR, ResponsePropertyMinItemsUnsetCheck),
 		// ResponsePropertyMinLengthDecreasedCheck
-		newBackwardCompatibilityRule(ResponseBodyMinLengthDecreasedId, ERR, true, ResponsePropertyMinLengthDecreasedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyMinLengthDecreasedId, ERR, true, ResponsePropertyMinLengthDecreasedCheck),
+		newBackwardCompatibilityRule(ResponseBodyMinLengthDecreasedId, ERR, ResponsePropertyMinLengthDecreasedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyMinLengthDecreasedId, ERR, ResponsePropertyMinLengthDecreasedCheck),
 		// ResponsePropertyOneOfUpdated
-		newBackwardCompatibilityRule(ResponseBodyOneOfAddedId, INFO, true, ResponsePropertyOneOfUpdated),
-		newBackwardCompatibilityRule(ResponseBodyOneOfRemovedId, INFO, true, ResponsePropertyOneOfUpdated),
-		newBackwardCompatibilityRule(ResponsePropertyOneOfAddedId, INFO, true, ResponsePropertyOneOfUpdated),
-		newBackwardCompatibilityRule(ResponsePropertyOneOfRemovedId, INFO, true, ResponsePropertyOneOfUpdated),
+		newBackwardCompatibilityRule(ResponseBodyOneOfAddedId, INFO, ResponsePropertyOneOfUpdated),
+		newBackwardCompatibilityRule(ResponseBodyOneOfRemovedId, INFO, ResponsePropertyOneOfUpdated),
+		newBackwardCompatibilityRule(ResponsePropertyOneOfAddedId, INFO, ResponsePropertyOneOfUpdated),
+		newBackwardCompatibilityRule(ResponsePropertyOneOfRemovedId, INFO, ResponsePropertyOneOfUpdated),
 		// ResponsePropertyTypeChangedCheck
-		newBackwardCompatibilityRule(ResponseBodyTypeChangedId, ERR, true, ResponsePropertyTypeChangedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyTypeChangedId, ERR, true, ResponsePropertyTypeChangedCheck),
+		newBackwardCompatibilityRule(ResponseBodyTypeChangedId, ERR, ResponsePropertyTypeChangedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyTypeChangedId, ERR, ResponsePropertyTypeChangedCheck),
 		// ResponseRequiredPropertyUpdatedCheck
-		newBackwardCompatibilityRule(ResponseRequiredPropertyRemovedId, ERR, true, ResponseRequiredPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseRequiredWriteOnlyPropertyRemovedId, INFO, true, ResponseRequiredPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseRequiredPropertyAddedId, INFO, true, ResponseRequiredPropertyUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseRequiredWriteOnlyPropertyAddedId, INFO, true, ResponseRequiredPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseRequiredPropertyRemovedId, ERR, ResponseRequiredPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseRequiredWriteOnlyPropertyRemovedId, INFO, ResponseRequiredPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseRequiredPropertyAddedId, INFO, ResponseRequiredPropertyUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseRequiredWriteOnlyPropertyAddedId, INFO, ResponseRequiredPropertyUpdatedCheck),
 		// ResponseRequiredPropertyWriteOnlyReadOnlyCheck
-		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameNonWriteOnlyId, WARN, true, ResponseRequiredPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameWriteOnlyId, INFO, true, ResponseRequiredPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameReadOnlyId, INFO, true, ResponseRequiredPropertyWriteOnlyReadOnlyCheck),
-		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameNonReadOnlyId, INFO, true, ResponseRequiredPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameNonWriteOnlyId, WARN, ResponseRequiredPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameWriteOnlyId, INFO, ResponseRequiredPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameReadOnlyId, INFO, ResponseRequiredPropertyWriteOnlyReadOnlyCheck),
+		newBackwardCompatibilityRule(ResponseRequiredPropertyBecameNonReadOnlyId, INFO, ResponseRequiredPropertyWriteOnlyReadOnlyCheck),
 		// ResponseSuccessStatusUpdatedCheck
-		newBackwardCompatibilityRule(ResponseSuccessStatusRemovedId, ERR, true, ResponseSuccessStatusUpdatedCheck),
-		newBackwardCompatibilityRule(ResponseSuccessStatusAddedId, INFO, true, ResponseSuccessStatusUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseSuccessStatusRemovedId, ERR, ResponseSuccessStatusUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseSuccessStatusAddedId, INFO, ResponseSuccessStatusUpdatedCheck),
 		// ResponseNonSuccessStatusUpdatedCheck
-		newBackwardCompatibilityRule(ResponseNonSuccessStatusRemovedId, INFO, false, ResponseNonSuccessStatusUpdatedCheck), // INFO or ERR
-		newBackwardCompatibilityRule(ResponseNonSuccessStatusAddedId, INFO, false, ResponseNonSuccessStatusUpdatedCheck),
+		newBackwardCompatibilityRule(ResponseNonSuccessStatusRemovedId, INFO, ResponseNonSuccessStatusUpdatedCheck), // optional
+		newBackwardCompatibilityRule(ResponseNonSuccessStatusAddedId, INFO, ResponseNonSuccessStatusUpdatedCheck),
 		// APIOperationIdUpdatedCheck
-		newBackwardCompatibilityRule(APIOperationIdRemovedId, INFO, false, APIOperationIdUpdatedCheck), // INFO or ERR
-		newBackwardCompatibilityRule(APIOperationIdAddId, INFO, false, APIOperationIdUpdatedCheck),
+		newBackwardCompatibilityRule(APIOperationIdRemovedId, INFO, APIOperationIdUpdatedCheck), // optional
+		newBackwardCompatibilityRule(APIOperationIdAddId, INFO, APIOperationIdUpdatedCheck),
 		// APITagUpdatedCheck
-		newBackwardCompatibilityRule(APITagRemovedId, INFO, false, APITagUpdatedCheck), // INFO or ERR
-		newBackwardCompatibilityRule(APITagAddedId, INFO, false, APITagUpdatedCheck),
+		newBackwardCompatibilityRule(APITagRemovedId, INFO, APITagUpdatedCheck), // optional
+		newBackwardCompatibilityRule(APITagAddedId, INFO, APITagUpdatedCheck),
 		// APIComponentsSchemaRemovedCheck
-		newBackwardCompatibilityRule(APISchemasRemovedId, INFO, false, APIComponentsSchemaRemovedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(APISchemasRemovedId, INFO, APIComponentsSchemaRemovedCheck), // optional
 		// ResponseParameterEnumValueRemovedCheck
-		newBackwardCompatibilityRule(ResponsePropertyEnumValueRemovedId, INFO, false, ResponseParameterEnumValueRemovedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(ResponsePropertyEnumValueRemovedId, INFO, ResponseParameterEnumValueRemovedCheck), // optional
 		// ResponseMediaTypeEnumValueRemovedCheck
-		newBackwardCompatibilityRule(ResponseMediaTypeEnumValueRemovedId, INFO, false, ResponseMediaTypeEnumValueRemovedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(ResponseMediaTypeEnumValueRemovedId, INFO, ResponseMediaTypeEnumValueRemovedCheck), // optional
 		// RequestBodyEnumValueRemovedCheck
-		newBackwardCompatibilityRule(RequestBodyEnumValueRemovedId, INFO, false, RequestBodyEnumValueRemovedCheck), // INFO or ERR
+		newBackwardCompatibilityRule(RequestBodyEnumValueRemovedId, INFO, RequestBodyEnumValueRemovedCheck), // optional
 	}
 }
 
 func GetOptionalRules() BackwardCompatibilityRules {
 	return BackwardCompatibilityRules{
-		newBackwardCompatibilityRule(ResponseNonSuccessStatusRemovedId, INFO, false, ResponseNonSuccessStatusUpdatedCheck),
-		newBackwardCompatibilityRule(APIOperationIdRemovedId, INFO, false, APIOperationIdUpdatedCheck),
-		newBackwardCompatibilityRule(APITagRemovedId, INFO, false, APITagUpdatedCheck),
-		newBackwardCompatibilityRule(APISchemasRemovedId, INFO, false, APIComponentsSchemaRemovedCheck),
-		newBackwardCompatibilityRule(ResponsePropertyEnumValueRemovedId, INFO, false, ResponseParameterEnumValueRemovedCheck),
-		newBackwardCompatibilityRule(ResponseMediaTypeEnumValueRemovedId, INFO, false, ResponseMediaTypeEnumValueRemovedCheck),
-		newBackwardCompatibilityRule(RequestBodyEnumValueRemovedId, INFO, false, RequestBodyEnumValueRemovedCheck),
+		newBackwardCompatibilityRule(ResponseNonSuccessStatusRemovedId, INFO, ResponseNonSuccessStatusUpdatedCheck),
+		newBackwardCompatibilityRule(APIOperationIdRemovedId, INFO, APIOperationIdUpdatedCheck),
+		newBackwardCompatibilityRule(APITagRemovedId, INFO, APITagUpdatedCheck),
+		newBackwardCompatibilityRule(APISchemasRemovedId, INFO, APIComponentsSchemaRemovedCheck),
+		newBackwardCompatibilityRule(ResponsePropertyEnumValueRemovedId, INFO, ResponseParameterEnumValueRemovedCheck),
+		newBackwardCompatibilityRule(ResponseMediaTypeEnumValueRemovedId, INFO, ResponseMediaTypeEnumValueRemovedCheck),
+		newBackwardCompatibilityRule(RequestBodyEnumValueRemovedId, INFO, RequestBodyEnumValueRemovedCheck),
 	}
 }
 
-func GetRequiredRules() BackwardCompatibilityRules {
-	result := BackwardCompatibilityRules{}
-	for _, rule := range GetAllRules() {
-		if rule.Required {
-			result = append(result, rule)
-		}
-	}
-	return result
+// GetCheckLevels gets levels for all backward compatibility checks
+func GetCheckLevels() map[string]Level {
+	return rulesToLevels(GetAllRules())
+}
+
+// GetAllChecks gets all backward compatibility checks
+func GetAllChecks() BackwardCompatibilityChecks {
+	return rulesToChecks(GetAllRules())
 }
 
 // rulesToChecks return a unique list of checks from a list of rules
@@ -421,6 +419,14 @@ func rulesToChecks(rules BackwardCompatibilityRules) BackwardCompatibilityChecks
 	return result
 }
 
+func GetOptionalRuleIds() []string {
+	return rulesToIIs(GetOptionalRules())
+}
+
+func GetAllRuleIds() []string {
+	return rulesToIIs(GetAllRules())
+}
+
 // rulesToLevels return a map of check IDs to levels
 func rulesToLevels(rules BackwardCompatibilityRules) map[string]Level {
 	result := map[string]Level{}
@@ -430,10 +436,9 @@ func rulesToLevels(rules BackwardCompatibilityRules) map[string]Level {
 	return result
 }
 
-func GetOptionalRuleIds() []string {
-
+func rulesToIIs(rules BackwardCompatibilityRules) []string {
 	result := []string{}
-	for _, rule := range GetOptionalRules() {
+	for _, rule := range rules {
 		result = append(result, rule.Id)
 	}
 	return result

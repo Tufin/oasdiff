@@ -15,10 +15,10 @@ func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *di
 	t.Helper()
 
 	// Check no breaking change is detected
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 	// Check changelog captures the change
-	errs = checker.CheckBackwardCompatibilityUntilLevel(checker.NewConfig(), d, osm, checker.INFO)
+	errs = checker.CheckBackwardCompatibilityUntilLevel(allChecksConfig(), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.INFO, errs[0].GetLevel())
 	require.Equal(t, changeId, errs[0].GetId())
@@ -31,7 +31,7 @@ func TestBreaking_Same(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -46,7 +46,7 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -125,7 +125,7 @@ func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -139,7 +139,7 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	changes := checker.CheckBackwardCompatibilityUntilLevel(checker.NewConfig(), d, osm, checker.INFO)
+	changes := checker.CheckBackwardCompatibilityUntilLevel(allChecksConfig(), d, osm, checker.INFO)
 	require.NotEmpty(t, changes)
 	require.Equal(t, checker.RequestParameterBecomeOptionalId, changes[0].GetId())
 	require.Len(t, changes, 1)
@@ -159,7 +159,7 @@ func TestBreaking_NewRequiredResponseHeader(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -191,7 +191,7 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -205,7 +205,7 @@ func TestBreaking_DeprecatedOperation(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(checker.NewConfig(), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(allChecksConfig(), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, errs[0].GetLevel(), checker.INFO)
 }
@@ -219,7 +219,7 @@ func TestBreaking_DeprecatedParameter(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -232,7 +232,7 @@ func TestBreaking_DeprecatedHeader(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -245,7 +245,7 @@ func TestBreaking_DeprecatedSchema(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 
@@ -259,7 +259,7 @@ func TestBreaking_Servers(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(checker.NewConfig(), d, osm)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Empty(t, errs)
 }
 

@@ -47,15 +47,22 @@ func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
 
 func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
 
-	diffResult, err := calcDiff(flags)
-	if err != nil {
-		return false, err
+	diffResult, returnErr := calcDiff(flags)
+	if returnErr != nil {
+		return false, returnErr
 	}
 
-	bcConfig := checker.NewConfig().WithOptionalChecks(flags.getIncludeChecks()).WithDeprecation(flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable())
+	severityLevels, returnErr := getCustomSeverityLevels(flags.getSeverityLevelsFile())
+	if returnErr != nil {
+		return false, returnErr
+	}
 
 	errs, returnErr := filterIgnored(
-		checker.CheckBackwardCompatibilityUntilLevel(bcConfig, diffResult.diffReport, diffResult.operationsSources, level),
+		checker.CheckBackwardCompatibilityUntilLevel(
+			checker.NewConfig(checker.GetAllChecks()).WithOptionalChecks(flags.getIncludeChecks()).WithSeverityLevels(severityLevels).WithDeprecation(flags.getDeprecationDaysBeta(), flags.getDeprecationDaysStable()),
+			diffResult.diffReport,
+			diffResult.operationsSources,
+			level),
 		flags.getWarnIgnoreFile(),
 		flags.getErrIgnoreFile(),
 		checker.NewLocalizer(flags.getLang()))
@@ -125,4 +132,17 @@ func outputChangelog(flags Flags, stdout io.Writer, errs checker.Changes, specIn
 	_, _ = fmt.Fprintf(stdout, "%s\n", bytes)
 
 	return nil
+}
+
+func getCustomSeverityLevels(severityLevelsFile string) (map[string]checker.Level, *ReturnError) {
+	if severityLevelsFile == "" {
+		return nil, nil
+	}
+
+	m, err := checker.ProcessSeverityLevels(severityLevelsFile)
+	if err != nil {
+		return nil, getErrFailedToLoadSeverityLevels(severityLevelsFile, err)
+	}
+
+	return m, nil
 }

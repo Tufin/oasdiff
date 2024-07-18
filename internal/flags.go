@@ -26,6 +26,7 @@ type Flags interface {
 	getLevel() string
 	getFailOnDiff() bool
 	getAsymmetric() bool
+	getSeverityLevelsFile() string
 
 	setBase(source *load.Source)
 	setRevision(source *load.Source)
@@ -52,4 +53,5 @@ type Flags interface {
 	refDeprecationDaysBeta() *uint
 	refDeprecationDaysStable() *uint
 	refColor() *string
+	refSeverityLevelsFile() *string
 }

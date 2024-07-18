@@ -15,13 +15,10 @@ const (
 )
 
 // NewConfig creates a new configuration with default values.
-func NewConfig() *Config {
-
-	rules := GetAllRules()
-
+func NewConfig(checks BackwardCompatibilityChecks) *Config {
 	return &Config{
-		Checks:              rulesToChecks(rules),
-		LogLevels:           rulesToLevels(rules),
+		Checks:              checks,
+		LogLevels:           GetCheckLevels(),
 		MinSunsetBetaDays:   DefaultBetaDeprecationDays,
 		MinSunsetStableDays: DefaultStableDeprecationDays,
 	}
@@ -37,6 +34,14 @@ func (config *Config) WithOptionalChecks(ids []string) *Config {
 	for _, id := range ids {
 		config.LogLevels[id] = ERR
 	}
+	return config
+}
+
+func (config *Config) WithSeverityLevels(severityLevels map[string]Level) *Config {
+	for id, level := range severityLevels {
+		config.LogLevels[id] = level
+	}
+
 	return config
 }
 

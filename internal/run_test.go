@@ -326,3 +326,11 @@ func Test_InvalidEnumValue(t *testing.T) {
 	require.Equal(t, `Error: invalid argument "xxx" for "-e, --exclude-elements" flag: xxx is not one of the allowed values: description, endpoints, examples, extensions, summary, or title
 `, stderr.String())
 }
+
+func Test_CustomSeverityLevels(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --severity-levels ../data/severity-levels.txt"), io.Discard, io.Discard))
+}
+
+func Test_CustomSeverityLevelsInvalidFile(t *testing.T) {
+	require.Equal(t, 106, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --severity-levels ../data/invalid.txt"), io.Discard, io.Discard))
+}

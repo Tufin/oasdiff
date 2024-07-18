@@ -1,0 +1,2 @@
+api-security-removed                        warn
+request-parameter-enum-value-added          err

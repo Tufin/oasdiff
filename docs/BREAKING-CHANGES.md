@@ -27,6 +27,7 @@ To see the full list of checks and their descriptions, run:
 ```
 oasdiff checks
 ```
+See also [Customizing Severity Levels](#customizing-severity-levels)
 
 ### Preventing Breaking Changes
 A common way to use oasdiff is by running it as a step the CI/CD pipeline to detect changes.  
@@ -100,14 +101,16 @@ This method allows adding new entries to enums used in responses which is very u
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
-### Optional Checks
-Oasdiff supports a few optional checks which can be added with the `--include-checks` flag. For example:
+### Customizing Severity Levels
+Oasdiff allows you to change the default severity levels according to your needs.  
+For example, the default severity level of the `api-security-removed` check is `INFO`. You can verify this by running `oasdiff checks`.  
+To change the `api-security-removed` check's severity level to `ERR` use the following command:
 ```
-oasdiff breaking data/openapi-test1.yaml data/openapi-test3.yaml --include-checks response-non-success-status-removed
+oasdiff changelog data/checker/api_security_added_revision.yaml data/checker/api_security_added_base.yaml --severity-levels oasdiff-levels.txt
 ```
-To see a list of optional checks, run:
+Where the file `oasdiff-levels.txt` contains a single line:
 ```
-oasdiff checks --required false
+api-security-removed    err
 ```
 
 [Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  

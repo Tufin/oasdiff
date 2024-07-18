@@ -20,7 +20,6 @@ type ChecksFlags struct {
 	format   string
 	severity []string
 	tags     []string
-	required string
 }
 
 func getChecksCmd() *cobra.Command {
@@ -49,26 +48,12 @@ func getChecksCmd() *cobra.Command {
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChecks), string(formatters.FormatText), &flags.format), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumSliceValue([]string{"info", "warn", "error"}, nil, &flags.severity), "severity", "s", "list of severities to include (experimental)")
 	cmd.PersistentFlags().StringSliceVarP(&flags.tags, "tags", "t", []string{}, "list of tags to include, eg. parameter, request (experimental)")
-	enumWithOptions(&cmd, newEnumValue([]string{"true", "false", "all"}, "all", &flags.required), "required", "r", "filter by required / optional")
 
 	return &cmd
 }
 
 func runChecks(stdout io.Writer, flags ChecksFlags) *ReturnError {
-	return outputChecks(stdout, flags, getRules(flags.required))
-}
-
-func getRules(required string) []checker.BackwardCompatibilityRule {
-	switch required {
-	case "all":
-		return checker.GetAllRules()
-	case "false":
-		return checker.GetOptionalRules()
-	case "true":
-		return checker.GetRequiredRules()
-	}
-
-	return nil
+	return outputChecks(stdout, flags, checker.GetAllRules())
 }
 
 func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardCompatibilityRule) *ReturnError {
@@ -114,7 +99,6 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 			Id:          rule.Id,
 			Level:       rule.Level.String(),
 			Description: rule.Description,
-			Required:    rule.Required,
 		})
 	}
 

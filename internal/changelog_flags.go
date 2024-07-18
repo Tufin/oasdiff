@@ -30,6 +30,7 @@ type ChangelogFlags struct {
 	deprecationDaysBeta   uint
 	deprecationDaysStable uint
 	color                 string
+	severityLevelsFile    string
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
@@ -115,6 +116,10 @@ func (flags *ChangelogFlags) getFailOnDiff() bool {
 
 func (flags *ChangelogFlags) getAsymmetric() bool {
 	return false
+}
+
+func (flags *ChangelogFlags) getSeverityLevelsFile() string {
+	return flags.severityLevelsFile
 }
 
 func (flags *ChangelogFlags) setBase(source *load.Source) {
@@ -207,4 +212,8 @@ func (flags *ChangelogFlags) refDeprecationDaysStable() *uint {
 
 func (flags *ChangelogFlags) refColor() *string {
 	return &flags.color
+}
+
+func (flags *ChangelogFlags) refSeverityLevelsFile() *string {
+	return &flags.severityLevelsFile
 }

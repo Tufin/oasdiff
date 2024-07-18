@@ -1,9 +1,14 @@
 package checker
 
 import (
+	"bufio"
 	"fmt"
+	"io"
+	"os"
+	"strings"
 
 	"github.com/TwiN/go-color"
+	"github.com/tufin/oasdiff/utils"
 )
 
 type Level int
@@ -16,11 +21,11 @@ const (
 
 func NewLevel(level string) (Level, error) {
 	switch level {
-	case "ERR":
+	case "ERR", "err":
 		return ERR, nil
-	case "WARN":
+	case "WARN", "warn":
 		return WARN, nil
-	case "INFO":
+	case "INFO", "info":
 		return INFO, nil
 	}
 	return INFO, fmt.Errorf("invalid level %s", level)
@@ -62,4 +67,50 @@ func (level Level) PrettyString() string {
 
 func (level Level) IsBreaking() bool {
 	return level == ERR || level == WARN
+}
+
+// ProcessSeverityLevels reads a file with severity levels and returns a map of severity levels
+func ProcessSeverityLevels(file string) (map[string]Level, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	return GetSeverityLevels(f)
+}
+
+// GetSeverityLevels reads severity levels from a reader and returns a map of severity levels
+func GetSeverityLevels(source io.Reader) (map[string]Level, error) {
+
+	result := map[string]Level{}
+
+	validIds := utils.StringList(GetAllRuleIds()).ToStringSet()
+
+	scanner := bufio.NewScanner(source)
+
+	lineNum := 0
+	for scanner.Scan() {
+		lineNum++
+		line := scanner.Text()
+		frags := strings.Fields(line)
+
+		if len(frags) != 2 {
+			return nil, fmt.Errorf("invalid line #%d: %s", lineNum, line)
+		}
+
+		id := frags[0]
+		if !validIds.Contains(id) {
+			return nil, fmt.Errorf("invalid rule id %q on line %d", id, lineNum)
+		}
+
+		level, err := NewLevel(frags[1])
+		if err != nil {
+			return nil, fmt.Errorf("invalid level %q on line %d", frags[1], lineNum)
+		}
+
+		result[id] = level
+	}
+
+	return result, nil
 }
