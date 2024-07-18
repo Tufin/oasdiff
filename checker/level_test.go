@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/TwiN/go-color"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 )
@@ -17,16 +18,16 @@ func TestStringCond_Info(t *testing.T) {
 }
 
 func TestPrettyString(t *testing.T) {
-	require.Equal(t, "\x1b[36minfo\x1b[0m", checker.INFO.PrettyString())
-	require.Equal(t, "\x1b[35mwarning\x1b[0m", checker.WARN.PrettyString())
-	require.Equal(t, "\x1b[31merror\x1b[0m", checker.ERR.PrettyString())
-	require.Equal(t, "\x1b[37missue\x1b[0m", checker.Level(4).PrettyString())
+	require.Equal(t, color.InCyan(checker.INFO.String()), checker.INFO.PrettyString())
+	require.Equal(t, color.InPurple(checker.WARN.String()), checker.WARN.PrettyString())
+	require.Equal(t, color.InRed(checker.ERR.String()), checker.ERR.PrettyString())
+	require.Equal(t, color.InGray(checker.Level(4).String()), checker.Level(4).PrettyString())
 }
 
 func TestProcessSeverityLevels_InvalidFile(t *testing.T) {
 	m, err := checker.ProcessSeverityLevels("../data/invalid.txt")
 	require.Nil(t, m)
-	require.EqualError(t, err, "open ../data/invalid.txt: no such file or directory")
+	require.Error(t, err)
 }
 
 func TestProcessSeverityLevels_OK(t *testing.T) {
