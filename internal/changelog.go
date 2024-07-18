@@ -52,7 +52,7 @@ func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *Re
 		return false, returnErr
 	}
 
-	severityLevels, returnErr := processSeverityLevels(flags.getSeverityLevelsFile())
+	severityLevels, returnErr := getCustomSeverityLevels(flags.getSeverityLevelsFile())
 	if returnErr != nil {
 		return false, returnErr
 	}
@@ -132,4 +132,17 @@ func outputChangelog(flags Flags, stdout io.Writer, errs checker.Changes, specIn
 	_, _ = fmt.Fprintf(stdout, "%s\n", bytes)
 
 	return nil
+}
+
+func getCustomSeverityLevels(severityLevelsFile string) (map[string]checker.Level, *ReturnError) {
+	if severityLevelsFile == "" {
+		return nil, nil
+	}
+
+	m, err := checker.ProcessSeverityLevels(severityLevelsFile)
+	if err != nil {
+		return nil, getErrFailedToLoadSeverityLevels(severityLevelsFile, err)
+	}
+
+	return m, nil
 }

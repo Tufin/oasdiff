@@ -330,3 +330,7 @@ func Test_InvalidEnumValue(t *testing.T) {
 func Test_CustomSeverityLevels(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --severity-levels ../data/severity-levels.txt"), io.Discard, io.Discard))
 }
+
+func Test_CustomSeverityLevelsInvalidFile(t *testing.T) {
+	require.Equal(t, 106, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --severity-levels ../data/invalid.txt"), io.Discard, io.Discard))
+}
