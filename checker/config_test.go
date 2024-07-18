@@ -32,3 +32,8 @@ func TestNewConfigWithOptionalCheck(t *testing.T) {
 	config := allChecksConfig().WithOptionalCheck("id")
 	require.Equal(t, checker.ERR, config.LogLevels["id"])
 }
+
+func TestNewConfigWithSeverityLevels(t *testing.T) {
+	config := allChecksConfig().WithSeverityLevels(map[string]checker.Level{"id": checker.ERR})
+	require.Equal(t, checker.ERR, config.LogLevels["id"])
+}
