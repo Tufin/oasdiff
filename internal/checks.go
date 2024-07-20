@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"sort"
-	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/tufin/oasdiff/checker"
@@ -46,8 +45,8 @@ func getChecksCmd() *cobra.Command {
 
 	enumWithOptions(&cmd, newEnumValue(localizations.GetSupportedLanguages(), localizations.LangDefault, &flags.lang), "lang", "l", "language for localized output")
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChecks), string(formatters.FormatText), &flags.format), "format", "f", "output format")
-	enumWithOptions(&cmd, newEnumSliceValue([]string{"info", "warn", "error"}, nil, &flags.severity), "severity", "s", "list of severities to include (experimental)")
-	cmd.PersistentFlags().StringSliceVarP(&flags.tags, "tags", "t", []string{}, "list of tags to include, eg. parameter, request (experimental)")
+	enumWithOptions(&cmd, newEnumSliceValue([]string{"info", "warn", "error"}, nil, &flags.severity), "severity", "s", "include only checks with any of specified severities")
+	enumWithOptions(&cmd, newEnumSliceValue(getAllTags(), nil, &flags.tags), "tags", "t", "include only checks with all specified tags")
 
 	return &cmd
 }
@@ -81,18 +80,9 @@ func outputChecks(stdout io.Writer, flags ChecksFlags, rules []checker.BackwardC
 			}
 		}
 
-		// tags (experimental, the string contains approach is not very robust)
-		if len(flags.tags) > 0 {
-			match := false
-			for _, tag := range flags.tags {
-				if strings.Contains(rule.Id, tag) {
-					match = true
-				}
-			}
-
-			if !match {
-				continue
-			}
+		// tags
+		if !matchTags(flags.tags, rule) {
+			continue
 		}
 
 		checks = append(checks, formatters.Check{
