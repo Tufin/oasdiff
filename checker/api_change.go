@@ -20,6 +20,7 @@ type ApiChange struct {
 	OperationId string
 	Path        string
 	Source      *load.Source
+	Attributes  map[string]any
 
 	SourceFile      string
 	SourceLine      int
@@ -38,7 +39,23 @@ func NewApiChange(id string, config *Config, args []any, comment string, operati
 		Operation:   method,
 		Path:        path,
 		Source:      load.NewSource((*operationsSources)[operation]),
+		Attributes:  getAttributes(config, operation),
 	}
+}
+
+func getAttributes(config *Config, operation *openapi3.Operation) map[string]any {
+	result := map[string]any{}
+	for _, tag := range config.Attributes {
+		if val, ok := operation.Extensions[tag]; ok {
+			result[tag] = val
+		}
+	}
+
+	if len(result) == 0 {
+		return nil
+	}
+
+	return result
 }
 
 func (c ApiChange) GetSection() string {
@@ -97,6 +114,10 @@ func (c ApiChange) GetPath() string {
 
 func (c ApiChange) GetSource() string {
 	return c.Source.String()
+}
+
+func (c ApiChange) GetAttributes() map[string]any {
+	return c.Attributes
 }
 
 func (c ApiChange) GetSourceFile() string {

@@ -13,6 +13,7 @@ type Change interface {
 	GetOperationId() string
 	GetPath() string
 	GetSource() string
+	GetAttributes() map[string]any
 	GetSourceFile() string
 	GetSourceLine() int
 	GetSourceLineEnd() int

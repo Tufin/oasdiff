@@ -74,6 +74,10 @@ func (c SecurityChange) GetSource() string {
 	return ""
 }
 
+func (c SecurityChange) GetAttributes() map[string]any {
+	return nil
+}
+
 func (c SecurityChange) GetSourceFile() string {
 	return c.SourceFile
 }

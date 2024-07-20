@@ -113,6 +113,10 @@ func (flags *DiffFlags) getSeverityLevelsFile() string {
 	return ""
 }
 
+func (flags *DiffFlags) getAttributes() []string {
+	return nil
+}
+
 func (flags *DiffFlags) setBase(source *load.Source) {
 	flags.base = source
 }
@@ -206,5 +210,9 @@ func (flags *DiffFlags) refColor() *string {
 }
 
 func (flags *DiffFlags) refSeverityLevelsFile() *string {
+	return nil
+}
+
+func (flags *DiffFlags) refAttributes() *[]string {
 	return nil
 }

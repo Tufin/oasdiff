@@ -1,0 +1,24 @@
+openapi: 3.0.1
+info:
+  title: Test API
+  version: v1
+paths:
+  /partner-api/test/some-method:
+    get:
+      x-test: "abc"
+      x-test2: "def"
+      tags:
+        - Test
+      responses:
+        "201":
+          description: Success
+  /partner-api/test/another-method:
+    get:
+      x-test: 
+        - "xyz"
+        - 456
+      tags:
+        - Test
+      responses:
+        "201":
+          description: Success

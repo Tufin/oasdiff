@@ -62,4 +62,5 @@ func addCommonBreakingFlags(cmd *cobra.Command, flags Flags) {
 	enumWithOptions(cmd, newEnumValue([]string{"auto", "always", "never"}, "auto", flags.refColor()), "color", "", "when to colorize textual output")
 	enumWithOptions(cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChangelog), string(formatters.FormatText), flags.refFormat()), "format", "f", "output format")
 	cmd.PersistentFlags().StringVarP(flags.refSeverityLevelsFile(), "severity-levels", "", "", "configuration file for custom severity levels")
+	cmd.PersistentFlags().StringSliceVarP(flags.refAttributes(), "attributes", "", nil, "list of attributes to add to the output")
 }

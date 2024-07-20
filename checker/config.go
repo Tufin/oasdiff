@@ -7,6 +7,7 @@ type Config struct {
 	MinSunsetBetaDays   uint
 	MinSunsetStableDays uint
 	LogLevels           map[string]Level
+	Attributes          []string
 }
 
 const (
@@ -60,6 +61,12 @@ func (config *Config) WithSingleCheck(check BackwardCompatibilityCheck) *Config 
 // WithChecks sets a list of checks to be used.
 func (config *Config) WithChecks(checks BackwardCompatibilityChecks) *Config {
 	config.Checks = checks
+	return config
+}
+
+// WithAttributes sets a list of attributes to be used.
+func (config *Config) WithAttributes(attributes []string) *Config {
+	config.Attributes = attributes
 	return config
 }
 
