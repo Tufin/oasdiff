@@ -97,7 +97,7 @@ func (s *enumSliceValue) Set(val string) error {
 }
 
 func (s *enumSliceValue) Type() string {
-	return "csv"
+	return "strings"
 }
 
 func (s *enumSliceValue) String() string {
