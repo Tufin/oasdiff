@@ -58,7 +58,6 @@ func (s *enumSliceValue) checkAllowedValues(values []string) error {
 		if len(notAllowed) == 1 {
 			verb = "is"
 		}
-		// TODO: find a better way to document the options
 		return fmt.Errorf("%s %s not one of the allowed values: %s", strings.Join(notAllowed.ToStringList(), ","), verb, s.listOf())
 	}
 	return nil
