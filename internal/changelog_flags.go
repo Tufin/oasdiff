@@ -6,6 +6,8 @@ import (
 )
 
 type ChangelogFlags struct {
+	CommonFlags
+
 	base                  *load.Source
 	revision              *load.Source
 	composed              bool
@@ -31,7 +33,6 @@ type ChangelogFlags struct {
 	deprecationDaysStable uint
 	color                 string
 	severityLevelsFile    string
-	attributes            []string
 }
 
 func (flags *ChangelogFlags) toConfig() *diff.Config {
@@ -121,10 +122,6 @@ func (flags *ChangelogFlags) getAsymmetric() bool {
 
 func (flags *ChangelogFlags) getSeverityLevelsFile() string {
 	return flags.severityLevelsFile
-}
-
-func (flags *ChangelogFlags) getAttributes() []string {
-	return flags.attributes
 }
 
 func (flags *ChangelogFlags) setBase(source *load.Source) {
@@ -221,8 +218,4 @@ func (flags *ChangelogFlags) refColor() *string {
 
 func (flags *ChangelogFlags) refSeverityLevelsFile() *string {
 	return &flags.severityLevelsFile
-}
-
-func (flags *ChangelogFlags) refAttributes() *[]string {
-	return &flags.attributes
 }

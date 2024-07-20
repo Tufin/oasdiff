@@ -57,3 +57,15 @@ type Flags interface {
 	refSeverityLevelsFile() *string
 	refAttributes() *[]string
 }
+
+type CommonFlags struct {
+	attributes []string
+}
+
+func (flags *CommonFlags) getAttributes() []string {
+	return flags.attributes
+}
+
+func (flags *CommonFlags) refAttributes() *[]string {
+	return &flags.attributes
+}
