@@ -23,3 +23,11 @@ type Change interface {
 	SingleLineError(l Localizer, colorMode ColorMode) string
 	MultiLineError(l Localizer, colorMode ColorMode) string
 }
+
+type CommonChange struct {
+	Attributes map[string]any
+}
+
+func (c CommonChange) GetAttributes() map[string]any {
+	return c.Attributes
+}

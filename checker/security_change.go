@@ -9,6 +9,8 @@ import (
 
 // SecurityChange represents a change in the Security Section (not to be confised with components/securitySchemes)
 type SecurityChange struct {
+	CommonChange
+
 	Id      string
 	Args    []any
 	Comment string
@@ -72,10 +74,6 @@ func (SecurityChange) GetPath() string {
 
 func (c SecurityChange) GetSource() string {
 	return ""
-}
-
-func (c SecurityChange) GetAttributes() map[string]any {
-	return nil
 }
 
 func (c SecurityChange) GetSourceFile() string {

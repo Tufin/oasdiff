@@ -12,6 +12,8 @@ import (
 
 // ApiChange represnts a change in the Paths Section of an OpenAPI spec
 type ApiChange struct {
+	CommonChange
+
 	Id          string
 	Args        []any
 	Comment     string
@@ -20,7 +22,6 @@ type ApiChange struct {
 	OperationId string
 	Path        string
 	Source      *load.Source
-	Attributes  map[string]any
 
 	SourceFile      string
 	SourceLine      int
@@ -39,7 +40,9 @@ func NewApiChange(id string, config *Config, args []any, comment string, operati
 		Operation:   method,
 		Path:        path,
 		Source:      load.NewSource((*operationsSources)[operation]),
-		Attributes:  getAttributes(config, operation),
+		CommonChange: CommonChange{
+			Attributes: getAttributes(config, operation),
+		},
 	}
 }
 
@@ -114,10 +117,6 @@ func (c ApiChange) GetPath() string {
 
 func (c ApiChange) GetSource() string {
 	return c.Source.String()
-}
-
-func (c ApiChange) GetAttributes() map[string]any {
-	return c.Attributes
 }
 
 func (c ApiChange) GetSourceFile() string {

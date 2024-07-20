@@ -9,6 +9,8 @@ import (
 
 // ComponentChange represnts a change in the Components Section: https://swagger.io/docs/specification/components/
 type ComponentChange struct {
+	CommonChange
+
 	Id        string
 	Args      []any
 	Comment   string
@@ -73,10 +75,6 @@ func (ComponentChange) GetPath() string {
 
 func (c ComponentChange) GetSource() string {
 	return ""
-}
-
-func (c ComponentChange) GetAttributes() map[string]any {
-	return nil
 }
 
 func (c ComponentChange) GetSourceFile() string {
