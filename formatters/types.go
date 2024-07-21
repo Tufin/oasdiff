@@ -8,6 +8,7 @@ const (
 	FormatYAML          Format = "yaml"
 	FormatJSON          Format = "json"
 	FormatText          Format = "text"
+	FormatMarkup        Format = "markup"
 	FormatSingleLine    Format = "singleline"
 	FormatHTML          Format = "html"
 	FormatGithubActions Format = "githubactions"

@@ -34,7 +34,7 @@ func (f HTMLFormatter) RenderDiff(diff *diff.Diff, opts RenderOpts) ([]byte, err
 }
 
 //go:embed templates/changelog.html
-var changelog string
+var changelogHtml string
 
 type TemplateData struct {
 	APIChanges      ChangesByEndpoint
@@ -43,7 +43,7 @@ type TemplateData struct {
 }
 
 func (f HTMLFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
-	tmpl := template.Must(template.New("changelog").Parse(changelog))
+	tmpl := template.Must(template.New("changelog").Parse(changelogHtml))
 
 	var out bytes.Buffer
 	if err := tmpl.Execute(&out, TemplateData{GroupChanges(changes, f.Localizer), specInfoPair.GetBaseVersion(), specInfoPair.GetRevisionVersion()}); err != nil {
