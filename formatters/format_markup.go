@@ -32,12 +32,14 @@ var changelogMarkdown string
 
 func (f MarkupFormatter) RenderChangelog(changes checker.Changes, opts RenderOpts, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	tmpl := template.Must(template.New("changelog").Parse(changelogMarkdown))
+	return ExecuteTextTemplate(tmpl, GroupChanges(changes, f.Localizer), specInfoPair)
+}
 
+func ExecuteTextTemplate(tmpl *template.Template, changes ChangesByEndpoint, specInfoPair *load.SpecInfoPair) ([]byte, error) {
 	var out bytes.Buffer
-	if err := tmpl.Execute(&out, TemplateData{GroupChanges(changes, f.Localizer), specInfoPair.GetBaseVersion(), specInfoPair.GetRevisionVersion()}); err != nil {
+	if err := tmpl.Execute(&out, TemplateData{changes, specInfoPair.GetBaseVersion(), specInfoPair.GetRevisionVersion()}); err != nil {
 		return nil, err
 	}
-
 	return out.Bytes(), nil
 }
 

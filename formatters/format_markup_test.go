@@ -2,6 +2,7 @@ package formatters_test
 
 import (
 	"testing"
+	"text/template"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -50,5 +51,10 @@ func TestMarkupFormatter_NotImplemented(t *testing.T) {
 	assert.Error(t, err)
 
 	_, err = markupFormatter.RenderSummary(nil, formatters.NewRenderOpts())
+	assert.Error(t, err)
+}
+
+func TestExecuteMarkupTemplate_Err(t *testing.T) {
+	_, err := formatters.ExecuteTextTemplate(&template.Template{}, nil, nil)
 	assert.Error(t, err)
 }
