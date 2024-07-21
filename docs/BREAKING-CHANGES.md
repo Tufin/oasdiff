@@ -101,6 +101,11 @@ This method allows adding new entries to enums used in responses which is very u
 In most cases the `x-extensible-enum` is similar to enum values, except it allows adding new entries in messages sent to the client (responses or callbacks).
 If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing changes for you, but if you do, oasdiff will identify breaking changes related to `x-extensible-enum` parameters and properties.
 
+### Localization
+To display changes in other languages, use the `--lang` flag.  
+Currently English and Russian are supported.  
+[Please improve oasdiff by adding your own language](https://github.com/Tufin/oasdiff/issues/383).
+
 ### Customizing Severity Levels
 Oasdiff allows you to change the default severity levels according to your needs.  
 For example, the default severity level of the `api-security-removed` check is `INFO`. You can verify this by running `oasdiff checks`.  
@@ -113,17 +118,9 @@ Where the file `oasdiff-levels.txt` contains a single line:
 api-security-removed    err
 ```
 
-[Here are some examples of breaking and non-breaking changes that oasdiff supports](BREAKING-CHANGES-EXAMPLES.md).  
-This document is automatically generated from oasdiff unit tests.
-
-### Localization
-To display changes in other languages, use the `--lang` flag.  
-Currently English and Russian are supported.  
-[Please improve oasdiff by adding your own language](https://github.com/Tufin/oasdiff/issues/383).
-
 ### Customizing Breaking Changes Checks
-If you encounter a change that isn't considered breaking by oasdiff you may:
-1. Check if the change is already available as an [optional check](#optional-checks).  
+If you encounter a change that isn't reported, you may:
+1. Run `oasdiff changelog` to see if the check is available as an info-level check, and [customize the level as needed](#customizing-breaking-changes-checks).  
 2. Add a [custom check](CUSTOMIZING-CHECKS.md)
 
 ### Additional Options
@@ -133,6 +130,7 @@ If you encounter a change that isn't considered breaking by oasdiff you may:
 - [Path parameter renaming](PATH-PARAM-RENAME.md)
 - [Case-insensitive header comparison](HEADER-DIFF.md)
 - [Comparing multiple specs](COMPOSED.md)
+- [Adding OpenAPI Extensions to the changelog output](ATTRIBUTES.md)
 - [Running from docker](DOCKER.md)
 - [Embedding in your go program](GO.md)
 
