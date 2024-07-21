@@ -2,7 +2,10 @@ package formatters_test
 
 import (
 	"fmt"
+	"html/template"
 	"testing"
+
+	_ "embed"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -70,5 +73,15 @@ func TestHtmlFormatter_NotImplemented(t *testing.T) {
 	assert.Error(t, err)
 
 	_, err = htmlFormatter.RenderSummary(nil, formatters.NewRenderOpts())
+	assert.Error(t, err)
+}
+
+//go:embed templates/changelog.html
+var changelogHtml string
+
+func TestExecuteHtmlTemplate_Err(t *testing.T) {
+	tmpl := template.Must(template.New("changelog").Parse(changelogHtml))
+	tmpl.Tree = nil
+	_, err := formatters.ExecuteHtmlTemplate(tmpl, nil, nil)
 	assert.Error(t, err)
 }

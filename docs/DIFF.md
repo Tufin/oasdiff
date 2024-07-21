@@ -8,7 +8,8 @@ The default diff output format is `yaml`.
 Additional formats can be generated using the `--format` flag:
 - yaml: includes all diff details
 - json: includes all diff details
-- text: designed to be more user-friendly and provide only the most important parts of the diff (also compatible with markdown)
+- text: designed to be more user-friendly and provide only the most important parts of the diff (same as markdown)
+- markdown: designed to be more user-friendly and provide only the most important parts of the diff (same as text)
 - html: designed to be more user-friendly and provide only the most important parts of the diff (see also [changelog with html](BREAKING-CHANGES.md#output-formats))
 
 Notes: 
