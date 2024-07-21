@@ -49,11 +49,11 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 ## Features 
 - Detect [breaking changes](BREAKING-CHANGES.md)
 - Display a user-friendly [changelog](BREAKING-CHANGES.md) of all important API changes
-- OpenAPI [diff](DIFF.md) in YAML, JSON, Text, Markdown or HTML
+- Generate comprehensive [diff](DIFF.md) reports including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
+- Output reports in YAML, JSON, Text, Markdown, HTML, JUnit XML or the [github actions annotation format](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-a-warning-message)
 - Compare local files or remote files over http/s
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](COMPOSED.md)
-- Comprehensive diff including all aspects of [OpenAPI Specification](https://swagger.io/specification/): paths, operations, parameters, request bodies, responses, schemas, enums, callbacks, security etc.
 - [API deprecation](DEPRECATION.md)
 - [API stability levels](STABILITY.md)
 - [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md#duplicate-endpoints)
