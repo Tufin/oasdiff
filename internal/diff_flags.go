@@ -6,6 +6,8 @@ import (
 )
 
 type DiffFlags struct {
+	CommonFlags
+
 	base                *load.Source
 	revision            *load.Source
 	composed            bool

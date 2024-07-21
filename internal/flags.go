@@ -27,6 +27,7 @@ type Flags interface {
 	getFailOnDiff() bool
 	getAsymmetric() bool
 	getSeverityLevelsFile() string
+	getAttributes() []string
 
 	setBase(source *load.Source)
 	setRevision(source *load.Source)
@@ -54,4 +55,17 @@ type Flags interface {
 	refDeprecationDaysStable() *uint
 	refColor() *string
 	refSeverityLevelsFile() *string
+	refAttributes() *[]string
+}
+
+type CommonFlags struct {
+	attributes []string
+}
+
+func (flags *CommonFlags) getAttributes() []string {
+	return flags.attributes
+}
+
+func (flags *CommonFlags) refAttributes() *[]string {
+	return &flags.attributes
 }

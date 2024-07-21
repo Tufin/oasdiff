@@ -12,6 +12,8 @@ import (
 
 // ApiChange represnts a change in the Paths Section of an OpenAPI spec
 type ApiChange struct {
+	CommonChange
+
 	Id          string
 	Args        []any
 	Comment     string
@@ -38,7 +40,25 @@ func NewApiChange(id string, config *Config, args []any, comment string, operati
 		Operation:   method,
 		Path:        path,
 		Source:      load.NewSource((*operationsSources)[operation]),
+		CommonChange: CommonChange{
+			Attributes: getAttributes(config, operation),
+		},
 	}
+}
+
+func getAttributes(config *Config, operation *openapi3.Operation) map[string]any {
+	result := map[string]any{}
+	for _, tag := range config.Attributes {
+		if val, ok := operation.Extensions[tag]; ok {
+			result[tag] = val
+		}
+	}
+
+	if len(result) == 0 {
+		return nil
+	}
+
+	return result
 }
 
 func (c ApiChange) GetSection() string {

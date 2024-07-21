@@ -247,6 +247,10 @@ func Test_Changelog(t *testing.T) {
 	require.Len(t, cl, 1)
 }
 
+func Test_ChangelogWithAttributes(t *testing.T) {
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --attributes x-beta,x-extension-test  -f yaml"), io.Discard, io.Discard))
+}
+
 func Test_BreakingChangesChangelogOptionalCheckersAreInfoLevel(t *testing.T) {
 	var stdout bytes.Buffer
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_include_checks_base.yaml ../data/run_test/changelog_include_checks_revision.yaml --format json"), &stdout, io.Discard))

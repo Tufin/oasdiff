@@ -9,6 +9,8 @@ import (
 
 // ComponentChange represnts a change in the Components Section: https://swagger.io/docs/specification/components/
 type ComponentChange struct {
+	CommonChange
+
 	Id        string
 	Args      []any
 	Comment   string

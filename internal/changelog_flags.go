@@ -6,6 +6,8 @@ import (
 )
 
 type ChangelogFlags struct {
+	CommonFlags
+
 	base                  *load.Source
 	revision              *load.Source
 	composed              bool
