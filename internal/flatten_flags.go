@@ -7,8 +7,7 @@ import (
 type FlattenFlags struct {
 	CommonFlags
 
-	spec   *load.Source
-	format string
+	spec *load.Source
 }
 
 func NewFlattenFlags() *FlattenFlags {
