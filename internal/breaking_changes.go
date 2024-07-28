@@ -9,19 +9,21 @@ import (
 
 func getBreakingChangesCmd() *cobra.Command {
 
-	flags := ChangelogFlags{}
+	flags := NewChangelogFlags()
 
 	cmd := cobra.Command{
 		Use:   "breaking base revision [flags]",
 		Short: "Display breaking changes",
 		Long:  "Display breaking changes between base and revision specs." + specHelp,
-		Args:  getParseArgs(&flags),
-		RunE:  getRun(&flags, runBreakingChanges),
+		Args:  getParseArgs(flags),
+		RunE:  getRun(flags, runBreakingChanges),
 	}
 
-	addCommonDiffFlags(&cmd, &flags)
-	addCommonBreakingFlags(&cmd, &flags)
-	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn}, "", &flags.failOn), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
+	addCommonDiffFlags(&cmd, flags)
+	addCommonBreakingFlags(&cmd, flags)
+	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn}, ""), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
+
+	bindViperFlags(&cmd, flags.getViper())
 
 	return &cmd
 }

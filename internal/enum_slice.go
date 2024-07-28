@@ -17,12 +17,11 @@ type enumSliceValue struct {
 	changed       bool
 }
 
-func newEnumSliceValue(allowedValues []string, val []string, p *[]string) *enumSliceValue {
+func newEnumSliceValue(allowedValues []string, val []string) *enumSliceValue {
 	result := new(enumSliceValue)
 	slices.Sort(allowedValues)
 	result.allowedValues = allowedValues
-	result.value = p
-	*result.value = val
+	result.value = &val
 	return result
 }
 

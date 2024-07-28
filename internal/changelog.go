@@ -14,20 +14,22 @@ const changelogCmd = "changelog"
 
 func getChangelogCmd() *cobra.Command {
 
-	flags := ChangelogFlags{}
+	flags := NewChangelogFlags()
 
 	cmd := cobra.Command{
 		Use:   "changelog base revision [flags]",
 		Short: "Display changelog",
 		Long:  "Display changes between base and revision specs." + specHelp,
-		Args:  getParseArgs(&flags),
-		RunE:  getRun(&flags, runChangelog),
+		Args:  getParseArgs(flags),
+		RunE:  getRun(flags, runChangelog),
 	}
 
-	addCommonDiffFlags(&cmd, &flags)
-	addCommonBreakingFlags(&cmd, &flags)
-	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, "", &flags.failOn), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
-	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, LevelInfo, &flags.level), "level", "", "output errors with this level or higher")
+	addCommonDiffFlags(&cmd, flags)
+	addCommonBreakingFlags(&cmd, flags)
+	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, ""), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
+	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, LevelInfo), "level", "", "output errors with this level or higher")
+
+	bindViperFlags(&cmd, flags.getViper())
 
 	return &cmd
 }
@@ -37,9 +39,10 @@ func enumWithOptions(cmd *cobra.Command, value enumVal, name, shorthand, usage s
 }
 
 func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
+
 	level, err := checker.NewLevel(flags.getLevel())
 	if err != nil {
-		return false, getErrInvalidFlags(fmt.Errorf("invalid level value %s", flags.getLevel()))
+		return false, getErrInvalidFlags(fmt.Errorf("invalid level value: %q", flags.getLevel()))
 	}
 
 	return getChangelog(flags, stdout, level)

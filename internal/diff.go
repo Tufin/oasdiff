@@ -15,20 +15,22 @@ const diffCmd = "diff"
 
 func getDiffCmd() *cobra.Command {
 
-	flags := DiffFlags{}
+	flags := NewDiffFlags()
 
 	cmd := cobra.Command{
 		Use:   "diff base revision [flags]",
 		Short: "Generate a diff report",
 		Long:  "Generate a diff report between base and revision specs." + specHelp,
-		Args:  getParseArgs(&flags),
-		RunE:  getRun(&flags, runDiff),
+		Args:  getParseArgs(flags),
+		RunE:  getRun(flags, runDiff),
 	}
 
-	addCommonDiffFlags(&cmd, &flags)
-	enumWithOptions(&cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil, flags.refExcludeElements()), "exclude-elements", "e", "elements to exclude")
-	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputDiff), string(formatters.FormatYAML), &flags.format), "format", "f", "output format")
-	cmd.PersistentFlags().BoolVarP(&flags.failOnDiff, "fail-on-diff", "o", false, "exit with return code 1 when any change is found")
+	addCommonDiffFlags(&cmd, flags)
+	enumWithOptions(&cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil), "exclude-elements", "e", "elements to exclude")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputDiff), string(formatters.FormatYAML)), "format", "f", "output format")
+	cmd.PersistentFlags().BoolP("fail-on-diff", "o", false, "exit with return code 1 when any change is found")
+
+	bindViperFlags(&cmd, flags.getViper())
 
 	return &cmd
 }
@@ -100,7 +102,7 @@ func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 
 	flattenAllOf := load.GetOption(load.WithFlattenAllOf(), flags.getFlattenAllOf())
 	flattenParams := load.GetOption(load.WithFlattenParams(), flags.getFlattenParams())
-	lowerHeaderNames := load.GetOption(load.WithLowercaseHeaders(), flags.getInsensitiveHeaders())
+	lowerHeaderNames := load.GetOption(load.WithLowercaseHeaders(), flags.getCaseInsensitiveHeaders())
 
 	s1, err := load.NewSpecInfo(loader, flags.getBase(), flattenAllOf, flattenParams, lowerHeaderNames)
 	if err != nil {
@@ -129,7 +131,7 @@ func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 
 	flattenAllOf := load.GetOption(load.WithFlattenAllOf(), flags.getFlattenAllOf())
 	flattenParams := load.GetOption(load.WithFlattenParams(), flags.getFlattenParams())
-	lowerHeaderNames := load.GetOption(load.WithLowercaseHeaders(), flags.getInsensitiveHeaders())
+	lowerHeaderNames := load.GetOption(load.WithLowercaseHeaders(), flags.getCaseInsensitiveHeaders())
 
 	s1, err := load.NewSpecInfoFromGlob(loader, flags.getBase().Path, flattenAllOf, flattenParams, lowerHeaderNames)
 	if err != nil {

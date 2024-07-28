@@ -14,9 +14,10 @@ import (
 type Level int
 
 const (
-	ERR  Level = 3
-	WARN Level = 2
-	INFO Level = 1
+	ERR     Level = 3
+	WARN    Level = 2
+	INFO    Level = 1
+	INVALID Level = 0
 )
 
 func NewLevel(level string) (Level, error) {
@@ -28,7 +29,7 @@ func NewLevel(level string) (Level, error) {
 	case "INFO", "info":
 		return INFO, nil
 	}
-	return INFO, fmt.Errorf("invalid level %s", level)
+	return INVALID, fmt.Errorf("invalid level %s", level)
 }
 
 func (level Level) StringCond(colorMode ColorMode) string {

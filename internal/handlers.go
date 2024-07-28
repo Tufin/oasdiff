@@ -38,6 +38,8 @@ type runner func(flags Flags, stdout io.Writer) (bool, *ReturnError)
 func getRun(flags Flags, runner runner) cobra.PositionalArgs {
 	return func(cmd *cobra.Command, args []string) error {
 
+		readConfFile(flags.getViper())
+
 		flags.setBase(load.NewSource(args[0]))
 		flags.setRevision(load.NewSource(args[1]))
 

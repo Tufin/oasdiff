@@ -14,7 +14,7 @@ const flattenCmd = "flatten"
 
 func getFlattenCmd() *cobra.Command {
 
-	flags := FlattenFlags{}
+	flags := NewFlattenFlags()
 
 	cmd := cobra.Command{
 		Use:   "flatten spec",
@@ -30,7 +30,7 @@ Spec can be a path to a file, a URL or '-' to read standard input.
 			// by now flags have been parsed successfully, so we don't need to show usage on any errors
 			cmd.Root().SilenceUsage = true
 
-			err := runFlatten(&flags, cmd.OutOrStdout())
+			err := runFlatten(flags, cmd.OutOrStdout())
 			if err != nil {
 				setReturnValue(cmd, err.Code)
 				return err
@@ -40,8 +40,10 @@ Spec can be a path to a file, a URL or '-' to read standard input.
 		},
 	}
 
-	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputFlatten), string(formatters.FormatJSON), &flags.format), "format", "f", "output format")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputFlatten), string(formatters.FormatJSON)), "format", "f", "output format")
 	addHiddenCircularDepFlag(&cmd)
+
+	bindViperFlags(&cmd, flags.getViper())
 
 	return &cmd
 }
@@ -56,7 +58,7 @@ func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
 	}
 
 	// TODO: get the original format of the spec
-	format := flags.format
+	format := flags.getViper().GetString("format")
 
 	if returnErr := outputFlattenedSpec(stdout, spec.Spec, format); returnErr != nil {
 		return returnErr

@@ -248,7 +248,7 @@ func Test_Changelog(t *testing.T) {
 }
 
 func Test_ChangelogWithAttributes(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --attributes x-beta,x-extension-test  -f yaml"), io.Discard, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --attributes x-beta,x-extension-test -f yaml"), io.Discard, io.Discard))
 }
 
 func Test_BreakingChangesChangelogOptionalCheckersAreInfoLevel(t *testing.T) {

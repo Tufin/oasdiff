@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"github.com/spf13/viper"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
@@ -8,12 +9,13 @@ import (
 type Flags interface {
 	toConfig() *diff.Config
 
+	getViper() *viper.Viper
 	getComposed() bool
 	getBase() *load.Source
 	getRevision() *load.Source
 	getFlattenAllOf() bool
 	getFlattenParams() bool
-	getInsensitiveHeaders() bool
+	getCaseInsensitiveHeaders() bool
 	getIncludeChecks() []string
 	getDeprecationDaysBeta() uint
 	getDeprecationDaysStable() uint
@@ -25,47 +27,30 @@ type Flags interface {
 	getFailOn() string
 	getLevel() string
 	getFailOnDiff() bool
-	getAsymmetric() bool
 	getSeverityLevelsFile() string
 	getAttributes() []string
+	getExcludeElements() []string
 
 	setBase(source *load.Source)
 	setRevision(source *load.Source)
 
 	addExcludeElements(string)
-
-	refComposed() *bool
-	refExcludeElements() *[]string
-	refMatchPath() *string
-	refFilterExtension() *string
-	refPrefixBase() *string
-	refPrefixRevision() *string
-	refStripPrefixBase() *string
-	refStripPrefixRevision() *string
-	refIncludePathParams() *bool
-	refFlattenAllOf() *bool
-	refFlattenParams() *bool
-	refInsensitiveHeaders() *bool
-	refLang() *string
-	refFormat() *string
-	refErrIgnoreFile() *string
-	refWarnIgnoreFile() *string
-	refIncludeChecks() *[]string
-	refDeprecationDaysBeta() *uint
-	refDeprecationDaysStable() *uint
-	refColor() *string
-	refSeverityLevelsFile() *string
-	refAttributes() *[]string
 }
 
 type CommonFlags struct {
-	attributes []string
+	v *viper.Viper
+}
+
+func NewCommonFlags() CommonFlags {
+	return CommonFlags{
+		v: viper.New(),
+	}
+}
+
+func (flags *CommonFlags) getViper() *viper.Viper {
+	return flags.v
 }
 
 func (flags *CommonFlags) getAttributes() []string {
-	return flags.attributes
-}
-
-func (flags *CommonFlags) refAttributes() *[]string {
-	return &flags.attributes
+	return flags.getViper().GetStringSlice("attributes")
 }

@@ -8,39 +8,33 @@ import (
 type DiffFlags struct {
 	CommonFlags
 
-	base                *load.Source
-	revision            *load.Source
-	composed            bool
-	prefixBase          string
-	prefixRevision      string
-	stripPrefixBase     string
-	stripPrefixRevision string
-	matchPath           string
-	filterExtension     string
-	format              string
-	failOnDiff          bool
-	flattenAllOf        bool
-	flattenParams       bool
-	insensitiveHeaders  bool
-	includePathParams   bool
-	excludeElements     []string
+	base     *load.Source
+	revision *load.Source
+}
+
+func NewDiffFlags() *DiffFlags {
+	return &DiffFlags{
+		CommonFlags: NewCommonFlags(),
+	}
 }
 
 func (flags *DiffFlags) toConfig() *diff.Config {
-	config := diff.NewConfig().WithExcludeElements(flags.excludeElements)
-	config.PathFilter = flags.matchPath
-	config.FilterExtension = flags.filterExtension
-	config.PathPrefixBase = flags.prefixBase
-	config.PathPrefixRevision = flags.prefixRevision
-	config.PathStripPrefixBase = flags.stripPrefixBase
-	config.PathStripPrefixRevision = flags.stripPrefixRevision
-	config.IncludePathParams = flags.includePathParams
+	v := flags.getViper()
+
+	config := diff.NewConfig().WithExcludeElements(flags.getExcludeElements())
+	config.PathFilter = v.GetString("match-path")
+	config.FilterExtension = v.GetString("filter-extension")
+	config.PathPrefixBase = v.GetString("prefix-base")
+	config.PathPrefixRevision = v.GetString("prefix-revision")
+	config.PathStripPrefixBase = v.GetString("strip-prefix-base")
+	config.PathStripPrefixRevision = v.GetString("strip-prefix-revision")
+	config.IncludePathParams = v.GetBool("include-path-params")
 
 	return config
 }
 
 func (flags *DiffFlags) getComposed() bool {
-	return flags.composed
+	return flags.getViper().GetBool("composed")
 }
 
 func (flags *DiffFlags) getBase() *load.Source {
@@ -52,15 +46,15 @@ func (flags *DiffFlags) getRevision() *load.Source {
 }
 
 func (flags *DiffFlags) getFlattenAllOf() bool {
-	return flags.flattenAllOf
+	return flags.getViper().GetBool("flatten-allof") || flags.getViper().GetBool("flatten")
 }
 
 func (flags *DiffFlags) getFlattenParams() bool {
-	return flags.flattenParams
+	return flags.getViper().GetBool("flatten-params")
 }
 
-func (flags *DiffFlags) getInsensitiveHeaders() bool {
-	return flags.insensitiveHeaders
+func (flags *DiffFlags) getCaseInsensitiveHeaders() bool {
+	return flags.getViper().GetBool("case-insensitive-headers")
 }
 
 func (flags *DiffFlags) getIncludeChecks() []string {
@@ -92,7 +86,7 @@ func (flags *DiffFlags) getErrIgnoreFile() string {
 }
 
 func (flags *DiffFlags) getFormat() string {
-	return flags.format
+	return flags.getViper().GetString("format")
 }
 
 func (flags *DiffFlags) getFailOn() string {
@@ -104,15 +98,15 @@ func (flags *DiffFlags) getLevel() string {
 }
 
 func (flags *DiffFlags) getFailOnDiff() bool {
-	return flags.failOnDiff
-}
-
-func (flags *DiffFlags) getAsymmetric() bool {
-	return false
+	return flags.getViper().GetBool("fail-on-diff")
 }
 
 func (flags *DiffFlags) getSeverityLevelsFile() string {
 	return ""
+}
+
+func (flags *DiffFlags) getExcludeElements() []string {
+	return fixViperStringSlice(flags.getViper().GetStringSlice("exclude-elements"))
 }
 
 func (flags *DiffFlags) setBase(source *load.Source) {
@@ -124,89 +118,5 @@ func (flags *DiffFlags) setRevision(source *load.Source) {
 }
 
 func (flags *DiffFlags) addExcludeElements(element string) {
-	flags.excludeElements = append(flags.excludeElements, element)
-}
-
-func (flags *DiffFlags) refComposed() *bool {
-	return &flags.composed
-}
-
-func (flags *DiffFlags) refExcludeElements() *[]string {
-	return &flags.excludeElements
-}
-
-func (flags *DiffFlags) refMatchPath() *string {
-	return &flags.matchPath
-}
-
-func (flags *DiffFlags) refFilterExtension() *string {
-	return &flags.filterExtension
-}
-
-func (flags *DiffFlags) refPrefixBase() *string {
-	return &flags.prefixBase
-}
-
-func (flags *DiffFlags) refPrefixRevision() *string {
-	return &flags.prefixRevision
-}
-
-func (flags *DiffFlags) refStripPrefixBase() *string {
-	return &flags.stripPrefixBase
-}
-
-func (flags *DiffFlags) refStripPrefixRevision() *string {
-	return &flags.stripPrefixRevision
-}
-
-func (flags *DiffFlags) refIncludePathParams() *bool {
-	return &flags.includePathParams
-}
-
-func (flags *DiffFlags) refFlattenAllOf() *bool {
-	return &flags.flattenAllOf
-}
-
-func (flags *DiffFlags) refFlattenParams() *bool {
-	return &flags.flattenParams
-}
-
-func (flags *DiffFlags) refInsensitiveHeaders() *bool {
-	return &flags.insensitiveHeaders
-}
-
-func (flags *DiffFlags) refLang() *string {
-	return nil
-}
-
-func (flags *DiffFlags) refFormat() *string {
-	return nil
-}
-
-func (flags *DiffFlags) refErrIgnoreFile() *string {
-	return nil
-}
-
-func (flags *DiffFlags) refWarnIgnoreFile() *string {
-	return nil
-}
-
-func (flags *DiffFlags) refIncludeChecks() *[]string {
-	return nil
-}
-
-func (flags *DiffFlags) refDeprecationDaysBeta() *uint {
-	return nil
-}
-
-func (flags *DiffFlags) refDeprecationDaysStable() *uint {
-	return nil
-}
-
-func (flags *DiffFlags) refColor() *string {
-	return nil
-}
-
-func (flags *DiffFlags) refSeverityLevelsFile() *string {
-	return nil
+	flags.getViper().Set("exclude-elements", append(flags.getViper().GetStringSlice("exclude-elements"), element))
 }
