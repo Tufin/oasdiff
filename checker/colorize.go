@@ -15,6 +15,8 @@ const (
 	ColorInvalid
 )
 
+var SupportedColorValues = []string{"auto", "always", "never"}
+
 func NewColorMode(color string) (ColorMode, error) {
 	switch color {
 	case "always":

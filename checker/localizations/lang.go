@@ -6,6 +6,4 @@ const (
 	LangRu      = "ru"
 )
 
-func GetSupportedLanguages() []string {
-	return []string{LangEn, LangRu}
-}
+var SupportedLanguages = []string{LangEn, LangRu}

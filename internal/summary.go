@@ -26,8 +26,6 @@ func getSummaryCmd() *cobra.Command {
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputSummary), string(formatters.FormatYAML)), "format", "f", "output format")
 	cmd.PersistentFlags().BoolP("fail-on-diff", "", false, "exit with return code 1 when any change is found")
 
-	// bindViperFlags(&cmd, flags.getViper())
-
 	return &cmd
 }
 

@@ -51,14 +51,14 @@ func hideFlag(cmd *cobra.Command, flag string) {
 }
 
 func addCommonBreakingFlags(cmd *cobra.Command) {
-	enumWithOptions(cmd, newEnumValue(localizations.GetSupportedLanguages(), localizations.LangDefault), "lang", "l", "language for localized output")
+	enumWithOptions(cmd, newEnumValue(localizations.SupportedLanguages, localizations.LangDefault), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().String("err-ignore", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().String("warn-ignore", "", "configuration file for ignoring warnings")
 	cmd.PersistentFlags().VarPF(newEnumSliceValue(checker.GetOptionalRuleIds(), nil), "include-checks", "i", "optional checks")
 	hideFlag(cmd, "include-checks")
 	cmd.PersistentFlags().Uint("deprecation-days-beta", checker.DefaultBetaDeprecationDays, "min days required between deprecating a beta resource and removing it")
 	cmd.PersistentFlags().Uint("deprecation-days-stable", checker.DefaultStableDeprecationDays, "min days required between deprecating a stable resource and removing it")
-	enumWithOptions(cmd, newEnumValue([]string{"auto", "always", "never"}, "auto"), "color", "", "when to colorize textual output")
+	enumWithOptions(cmd, newEnumValue(checker.SupportedColorValues, "auto"), "color", "", "when to colorize textual output")
 	enumWithOptions(cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChangelog), string(formatters.FormatText)), "format", "f", "output format")
 	cmd.PersistentFlags().String("severity-levels", "", "configuration file for custom severity levels")
 	cmd.PersistentFlags().StringSlice("attributes", nil, "OpenAPI Extensions to include in json or yaml output")
