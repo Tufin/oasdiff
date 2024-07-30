@@ -46,11 +46,6 @@ func (config *Config) WithExcludeElements(excludeElements []string) *Config {
 	return config
 }
 
-func (config *Config) WithExcludeExtensions() *Config {
-	config.ExcludeElements.Add(ExcludeExtensionsOption)
-	return config
-}
-
 func (config *Config) IsExcludeExamples() bool {
 	return config.ExcludeElements.Contains(ExcludeExamplesOption)
 }

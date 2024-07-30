@@ -16,25 +16,13 @@ const checksCmd = "checks"
 
 func getChecksCmd() *cobra.Command {
 
-	flags := NewChecksFlags()
-
 	cmd := cobra.Command{
 		Use:               "checks [flags]",
 		Short:             "Display checks",
 		Long:              `Display a list of all supported checks.`,
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions, // see https://github.com/spf13/cobra/issues/1969
-		RunE: func(cmd *cobra.Command, args []string) error {
-			// by now flags have been parsed successfully, so we don't need to show usage on any errors
-			cmd.Root().SilenceUsage = true
-
-			if err := runChecks(cmd.OutOrStdout(), flags); err != nil {
-				setReturnValue(cmd, err.Code)
-				return err
-			}
-
-			return nil
-		},
+		RunE:              getRun(runChecks),
 	}
 
 	enumWithOptions(&cmd, newEnumValue(localizations.GetSupportedLanguages(), localizations.LangDefault), "lang", "l", "language for localized output")
@@ -42,16 +30,16 @@ func getChecksCmd() *cobra.Command {
 	enumWithOptions(&cmd, newEnumSliceValue([]string{"info", "warn", "error"}, nil), "severity", "s", "include only checks with any of specified severities")
 	enumWithOptions(&cmd, newEnumSliceValue(getAllTags(), nil), "tags", "t", "include only checks with all specified tags")
 
-	bindViperFlags(&cmd, flags.getViper())
+	// bindViperFlags(&cmd, flags.getViper())
 
 	return &cmd
 }
 
-func runChecks(stdout io.Writer, flags *ChecksFlags) *ReturnError {
-	return outputChecks(stdout, flags, checker.GetAllRules())
+func runChecks(flags *Flags, stdout io.Writer) (bool, *ReturnError) {
+	return false, outputChecks(stdout, flags, checker.GetAllRules())
 }
 
-func outputChecks(stdout io.Writer, flags *ChecksFlags, rules []checker.BackwardCompatibilityRule) *ReturnError {
+func outputChecks(stdout io.Writer, flags *Flags, rules []checker.BackwardCompatibilityRule) *ReturnError {
 
 	format := flags.getViper().GetString("format")
 

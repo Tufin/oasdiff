@@ -12,7 +12,7 @@ const specHelp = `
 Base and revision can be a path to a file, a URL, or '-' to read standard input.
 In 'composed' mode, base and revision can be a glob and oasdiff will compare matching endpoints between the two sets of files.`
 
-func getParseArgs(flags Flags) cobra.PositionalArgs {
+func getParseArgs() cobra.PositionalArgs {
 	return func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
 			return errors.New("please specify base and revision arguments as a path to a file, a glob (in composed mode), a URL, or '-' to read standard input")
@@ -20,10 +20,8 @@ func getParseArgs(flags Flags) cobra.PositionalArgs {
 		if len(args) > 2 {
 			return errors.New("invalid arguments after base and revision")
 		}
-		if flags.getComposed() {
-			if args[0] == "-" || args[1] == "-" {
-				return errors.New("can't read from stdin in composed mode")
-			}
+		if err := checkStdinWithComposed(cmd, args); err != nil {
+			return err
 		}
 		if err := checkColor(cmd); err != nil {
 			return err
@@ -33,15 +31,25 @@ func getParseArgs(flags Flags) cobra.PositionalArgs {
 	}
 }
 
-type runner func(flags Flags, stdout io.Writer) (bool, *ReturnError)
+type runner func(flags *Flags, stdout io.Writer) (bool, *ReturnError)
 
-func getRun(flags Flags, runner runner) cobra.PositionalArgs {
+func getRun(runner runner) cobra.PositionalArgs {
 	return func(cmd *cobra.Command, args []string) error {
 
-		readConfFile(flags.getViper())
+		flags := NewFlags()
 
-		flags.setBase(load.NewSource(args[0]))
-		flags.setRevision(load.NewSource(args[1]))
+		if err := initViper(cmd, flags.getViper()); err != nil {
+			setReturnValue(cmd, err.Code)
+			return err
+		}
+
+		if len(args) > 0 {
+			flags.setBase(load.NewSource(args[0]))
+		}
+
+		if len(args) > 1 {
+			flags.setRevision(load.NewSource(args[1]))
+		}
 
 		// by now flags have been parsed successfully so we don't need to show usage on any errors
 		cmd.Root().SilenceUsage = true
@@ -71,4 +79,22 @@ func checkColor(cmd *cobra.Command) error {
 	}
 
 	return errors.New(`--color flag is only relevant with 'text' or 'singleline' formats`)
+}
+
+func checkStdinWithComposed(cmd *cobra.Command, args []string) error {
+
+	composed, err := cmd.Flags().GetBool("composed")
+	if err != nil {
+		return errors.New("failed to get composed flag")
+	}
+
+	if !composed {
+		return nil
+	}
+
+	if args[0] == "-" || args[1] == "-" {
+		return errors.New("can't read from stdin in composed mode")
+	}
+
+	return nil
 }

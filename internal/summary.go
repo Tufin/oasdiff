@@ -13,27 +13,25 @@ const summaryCmd = "summary"
 
 func getSummaryCmd() *cobra.Command {
 
-	flags := NewDiffFlags()
-
 	cmd := cobra.Command{
 		Use:   "summary base revision [flags]",
 		Short: "Generate a diff summary",
 		Long:  "Display a summary of changes between base and revision specs." + specHelp,
-		Args:  getParseArgs(flags),
-		RunE:  getRun(flags, runSummary),
+		Args:  getParseArgs(),
+		RunE:  getRun(runSummary),
 	}
 
-	addCommonDiffFlags(&cmd, flags)
+	addCommonDiffFlags(&cmd)
 	enumWithOptions(&cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil), "exclude-elements", "e", "elements to exclude")
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputSummary), string(formatters.FormatYAML)), "format", "f", "output format")
 	cmd.PersistentFlags().BoolP("fail-on-diff", "", false, "exit with return code 1 when any change is found")
 
-	bindViperFlags(&cmd, flags.getViper())
+	// bindViperFlags(&cmd, flags.getViper())
 
 	return &cmd
 }
 
-func runSummary(flags Flags, stdout io.Writer) (bool, *ReturnError) {
+func runSummary(flags *Flags, stdout io.Writer) (bool, *ReturnError) {
 
 	diffResult, err := calcDiff(flags)
 	if err != nil {

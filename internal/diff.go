@@ -15,27 +15,23 @@ const diffCmd = "diff"
 
 func getDiffCmd() *cobra.Command {
 
-	flags := NewDiffFlags()
-
 	cmd := cobra.Command{
 		Use:   "diff base revision [flags]",
 		Short: "Generate a diff report",
 		Long:  "Generate a diff report between base and revision specs." + specHelp,
-		Args:  getParseArgs(flags),
-		RunE:  getRun(flags, runDiff),
+		Args:  getParseArgs(),
+		RunE:  getRun(runDiff),
 	}
 
-	addCommonDiffFlags(&cmd, flags)
+	addCommonDiffFlags(&cmd)
 	enumWithOptions(&cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil), "exclude-elements", "e", "elements to exclude")
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputDiff), string(formatters.FormatYAML)), "format", "f", "output format")
 	cmd.PersistentFlags().BoolP("fail-on-diff", "o", false, "exit with return code 1 when any change is found")
 
-	bindViperFlags(&cmd, flags.getViper())
-
 	return &cmd
 }
 
-func runDiff(flags Flags, stdout io.Writer) (bool, *ReturnError) {
+func runDiff(flags *Flags, stdout io.Writer) (bool, *ReturnError) {
 
 	if flags.getFormat() == string(formatters.FormatJSON) {
 		flags.addExcludeElements(diff.ExcludeEndpointsOption)
@@ -72,7 +68,7 @@ func outputDiff(stdout io.Writer, diffReport *diff.Diff, format string) *ReturnE
 	return nil
 }
 
-func calcDiff(flags Flags) (*diffResult, *ReturnError) {
+func calcDiff(flags *Flags) (*diffResult, *ReturnError) {
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
@@ -98,7 +94,7 @@ func newDiffResult(d *diff.Diff, o *diff.OperationsSourcesMap, s *load.SpecInfoP
 	}
 }
 
-func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
+func normalDiff(loader load.Loader, flags *Flags) (*diffResult, *ReturnError) {
 
 	flattenAllOf := load.GetOption(load.WithFlattenAllOf(), flags.getFlattenAllOf())
 	flattenParams := load.GetOption(load.WithFlattenParams(), flags.getFlattenParams())
@@ -127,7 +123,7 @@ func normalDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
 	return newDiffResult(diffReport, operationsSources, load.NewSpecInfoPair(s1, s2)), nil
 }
 
-func composedDiff(loader load.Loader, flags Flags) (*diffResult, *ReturnError) {
+func composedDiff(loader load.Loader, flags *Flags) (*diffResult, *ReturnError) {
 
 	flattenAllOf := load.GetOption(load.WithFlattenAllOf(), flags.getFlattenAllOf())
 	flattenParams := load.GetOption(load.WithFlattenParams(), flags.getFlattenParams())

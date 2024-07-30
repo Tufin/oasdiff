@@ -7,7 +7,7 @@ import (
 	"github.com/tufin/oasdiff/formatters"
 )
 
-func addCommonDiffFlags(cmd *cobra.Command, flags Flags) {
+func addCommonDiffFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().BoolP("composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	cmd.PersistentFlags().String("match-path", "p", "include only paths that match this regular expression")
 	cmd.PersistentFlags().String("filter-extension", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
@@ -20,14 +20,14 @@ func addCommonDiffFlags(cmd *cobra.Command, flags Flags) {
 	cmd.PersistentFlags().Bool("flatten-params", false, "merge common parameters at path level with operation parameters")
 	cmd.PersistentFlags().Bool("case-insensitive-headers", false, "case-insensitive header name comparison")
 
-	addHiddenFlattenFlag(cmd, flags)
+	addHiddenFlattenFlag(cmd)
 	addHiddenCircularDepFlag(cmd)
 }
 
 // addHiddenFlattenFlag adds --flatten as a hidden flag
 // --flatten was replaced by --flatten-allof
 // we still accept --flatten as a synonym for --flatten-allof to avoid breaking existing scripts
-func addHiddenFlattenFlag(cmd *cobra.Command, flags Flags) {
+func addHiddenFlattenFlag(cmd *cobra.Command) {
 	cmd.PersistentFlags().BoolP("flatten", "", false, "merge subschemas under allOf before diff")
 	hideFlag(cmd, "flatten")
 }
@@ -50,7 +50,7 @@ func hideFlag(cmd *cobra.Command, flag string) {
 	}
 }
 
-func addCommonBreakingFlags(cmd *cobra.Command, flags Flags) {
+func addCommonBreakingFlags(cmd *cobra.Command) {
 	enumWithOptions(cmd, newEnumValue(localizations.GetSupportedLanguages(), localizations.LangDefault), "lang", "l", "language for localized output")
 	cmd.PersistentFlags().String("err-ignore", "", "configuration file for ignoring errors")
 	cmd.PersistentFlags().String("warn-ignore", "", "configuration file for ignoring warnings")
