@@ -121,7 +121,7 @@ func validate(v IViper) error {
 		return err
 	}
 
-	if err := validateString(formatters.GetSupportedFormats(), config.Format, "format"); err != nil {
+	if err := validateString(formatters.SupportedFormats, config.Format, "format"); err != nil {
 		return err
 	}
 
