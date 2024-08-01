@@ -16,14 +16,7 @@ const (
 	FormatSarif         Format = "sarif"
 )
 
-func GetSupportedFormats() []string {
-	formats := []Format{FormatYAML, FormatJSON, FormatText, FormatMarkup, FormatSingleLine, FormatHTML, FormatGithubActions, FormatJUnit, FormatSarif}
-	result := make([]string, len(formats))
-	for i, f := range formats {
-		result[i] = string(f)
-	}
-	return result
-}
+var SupportedFormats = []string{"yaml", "json", "text", "markup", "singleline", "html", "githubactions", "junit", "sarif"}
 
 // FormatterOpts can be used to pass properties to the formatter (e.g. colors)
 type FormatterOpts struct {
