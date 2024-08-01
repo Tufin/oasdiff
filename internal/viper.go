@@ -14,7 +14,15 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func initViper(cmd *cobra.Command, v *viper.Viper) *ReturnError {
+type IViper interface {
+	SetConfigName(in string)
+	AddConfigPath(in string)
+	ReadInConfig() error
+	BindPFlag(key string, flag *pflag.Flag) error
+	UnmarshalExact(rawVal any, opts ...viper.DecoderConfigOption) error
+}
+
+func RunViper(cmd *cobra.Command, v IViper) *ReturnError {
 	if err := readConfFile(v); err != nil {
 		return getErrConfigFileProblem(err)
 	}
@@ -30,7 +38,7 @@ func initViper(cmd *cobra.Command, v *viper.Viper) *ReturnError {
 	return nil
 }
 
-func readConfFile(v *viper.Viper) error {
+func readConfFile(v IViper) error {
 	v.SetConfigName(".oasdiff")
 	v.AddConfigPath(".")
 
@@ -38,19 +46,20 @@ func readConfFile(v *viper.Viper) error {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// Config file not found; ignore error
 		} else {
-			return fmt.Errorf("config file error: %s \n", err)
+			return fmt.Errorf("read error: %s \n", err)
 		}
 	}
 
 	return nil
 }
 
-func bindFlags(cmd *cobra.Command, v *viper.Viper) error {
+func bindFlags(cmd *cobra.Command, v IViper) error {
 	var result error
-	cmd.PersistentFlags().VisitAll(func(flag *pflag.Flag) {
+	persitentFlags := cmd.PersistentFlags()
+	persitentFlags.VisitAll(func(flag *pflag.Flag) {
 		name := flag.Name
-		if err := v.BindPFlag(name, cmd.PersistentFlags().Lookup(name)); err != nil {
-			result = fmt.Errorf("error binding flag %q to viper", name)
+		if err := v.BindPFlag(name, persitentFlags.Lookup(name)); err != nil {
+			result = fmt.Errorf("error binding flag %q to viper: %v", name, err)
 			return
 		}
 	})
@@ -68,40 +77,40 @@ func fixViperStringSlice(viperString []string) []string {
 	return viperString
 }
 
-func validate(v *viper.Viper) error {
-	type Config struct {
-		Attributes             []string `mapstructure:"attributes"`
-		Composed               bool     `mapstructure:"composed"`
-		FlattenAllof           bool     `mapstructure:"flatten-allof"`
-		FlattenParams          bool     `mapstructure:"flatten-params"`
-		CaseInsensitiveHeaders bool     `mapstructure:"case-insensitive-headers"`
-		DeprecationDaysBeta    uint     `mapstructure:"deprecation-days-beta"`
-		DeprecationDaysStable  uint     `mapstructure:"deprecation-days-stable"`
-		Lang                   string   `mapstructure:"lang"`
-		Color                  string   `mapstructure:"color"`
-		WarnIgnore             string   `mapstructure:"warn-ignore"`
-		ErrIgnore              string   `mapstructure:"err-ignore"`
-		Format                 string   `mapstructure:"format"`
-		FailOn                 string   `mapstructure:"fail-on"`
-		Level                  string   `mapstructure:"level"`
-		FailOnDiff             bool     `mapstructure:"fail-on-diff"`
-		SeverityLevels         string   `mapstructure:"severity-levels"`
-		ExcludeElements        []string `mapstructure:"exclude-elements"`
-		Severity               []string `mapstructure:"severity"`
-		Tags                   []string `mapstructure:"tags"`
-		MatchPath              string   `mapstructure:"match-path"`
-		FilterExtension        string   `mapstructure:"filter-extension"`
-		PrefixBase             string   `mapstructure:"prefix-base"`
-		PrefixRevision         string   `mapstructure:"prefix-revision"`
-		StripPrefixBase        string   `mapstructure:"strip-prefix-base"`
-		StripPrefixRevision    string   `mapstructure:"strip-prefix-revision"`
-		IncludePathParams      bool     `mapstructure:"include-path-params"`
-	}
+type Config struct {
+	Attributes             []string `mapstructure:"attributes"`
+	Composed               bool     `mapstructure:"composed"`
+	FlattenAllof           bool     `mapstructure:"flatten-allof"`
+	FlattenParams          bool     `mapstructure:"flatten-params"`
+	CaseInsensitiveHeaders bool     `mapstructure:"case-insensitive-headers"`
+	DeprecationDaysBeta    uint     `mapstructure:"deprecation-days-beta"`
+	DeprecationDaysStable  uint     `mapstructure:"deprecation-days-stable"`
+	Lang                   string   `mapstructure:"lang"`
+	Color                  string   `mapstructure:"color"`
+	WarnIgnore             string   `mapstructure:"warn-ignore"`
+	ErrIgnore              string   `mapstructure:"err-ignore"`
+	Format                 string   `mapstructure:"format"`
+	FailOn                 string   `mapstructure:"fail-on"`
+	Level                  string   `mapstructure:"level"`
+	FailOnDiff             bool     `mapstructure:"fail-on-diff"`
+	SeverityLevels         string   `mapstructure:"severity-levels"`
+	ExcludeElements        []string `mapstructure:"exclude-elements"`
+	Severity               []string `mapstructure:"severity"`
+	Tags                   []string `mapstructure:"tags"`
+	MatchPath              string   `mapstructure:"match-path"`
+	FilterExtension        string   `mapstructure:"filter-extension"`
+	PrefixBase             string   `mapstructure:"prefix-base"`
+	PrefixRevision         string   `mapstructure:"prefix-revision"`
+	StripPrefixBase        string   `mapstructure:"strip-prefix-base"`
+	StripPrefixRevision    string   `mapstructure:"strip-prefix-revision"`
+	IncludePathParams      bool     `mapstructure:"include-path-params"`
+}
 
+func validate(v IViper) error {
 	var config Config
 
 	if err := v.UnmarshalExact(&config); err != nil {
-		return fmt.Errorf("config file error: %s \n", err)
+		return fmt.Errorf("validation error: %s \n", err)
 	}
 
 	if err := validateString(localizations.SupportedLanguages, config.Lang, "lang"); err != nil {

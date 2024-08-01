@@ -38,7 +38,7 @@ func getRun(runner runner) cobra.PositionalArgs {
 
 		flags := NewFlags()
 
-		if err := initViper(cmd, flags.getViper()); err != nil {
+		if err := RunViper(cmd, flags.getViper()); err != nil {
 			setReturnValue(cmd, err.Code)
 			return err
 		}
