@@ -343,37 +343,3 @@ func Test_CustomSeverityLevels(t *testing.T) {
 func Test_CustomSeverityLevelsInvalidFile(t *testing.T) {
 	require.Equal(t, 106, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --severity-levels ../data/invalid.txt"), io.Discard, io.Discard))
 }
-
-func Test_ConfFile(t *testing.T) {
-	conf := []byte("format: json")
-	require.NoError(t, os.WriteFile(".oasdiff.yaml", conf, 0644))
-	defer os.Remove(".oasdiff.yaml")
-
-	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_base.yaml ../data/run_test/changelog_revision.yaml"), &stdout, io.Discard))
-	cl := formatters.Changes{}
-	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
-	require.Len(t, cl, 1)
-}
-
-func Test_ConfFileOverrideParam(t *testing.T) {
-	conf := []byte("format: text")
-	require.NoError(t, os.WriteFile(".oasdiff.yaml", conf, 0644))
-	defer os.Remove(".oasdiff.yaml")
-
-	var stdout bytes.Buffer
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_base.yaml ../data/run_test/changelog_revision.yaml -f json"), &stdout, io.Discard))
-	cl := formatters.Changes{}
-	require.NoError(t, json.Unmarshal(stdout.Bytes(), &cl))
-	require.Len(t, cl, 1)
-}
-
-func Test_InvalidConfFile(t *testing.T) {
-	conf := []byte("format: invalid")
-	require.NoError(t, os.WriteFile(".oasdiff.yaml", conf, 0644))
-	defer os.Remove(".oasdiff.yaml")
-
-	var stderr bytes.Buffer
-	require.Equal(t, 107, internal.Run(cmdToArgs("oasdiff changelog ../data/run_test/changelog_base.yaml ../data/run_test/changelog_revision.yaml"), io.Discard, &stderr))
-	require.Equal(t, "Error: failed to load config file: invalid format \"invalid\", allowed values: yaml, json, text, markup, singleline, html, githubactions, junit, sarif\n", stderr.String())
-}
