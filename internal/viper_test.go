@@ -159,7 +159,7 @@ func TestViper_InvalidSeverity(t *testing.T) {
 		return nil
 	}
 
-	require.EqualError(t, internal.RunViper(&cmd, v), "failed to load config file: invalid severity \"invalid\", allowed values: info, warn, error")
+	require.EqualError(t, internal.RunViper(&cmd, v), "failed to load config file: invalid severity \"invalid\", allowed values: error, warn, info")
 }
 
 func TestViper_InvalidTags(t *testing.T) {

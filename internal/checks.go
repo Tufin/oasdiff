@@ -25,7 +25,7 @@ func getChecksCmd() *cobra.Command {
 		RunE:              getRun(runChecks),
 	}
 
-	enumWithOptions(&cmd, newEnumValue(localizations.SupportedLanguages, localizations.LangDefault), "lang", "l", "language for localized output")
+	enumWithOptions(&cmd, newEnumValue(localizations.GetSupportedLanguages(), localizations.LangDefault), "lang", "l", "language for localized output")
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputChecks), string(formatters.FormatText)), "format", "f", "output format")
 	enumWithOptions(&cmd, newEnumSliceValue([]string{"info", "warn", "error"}, nil), "severity", "s", "include only checks with any of specified severities")
 	enumWithOptions(&cmd, newEnumSliceValue(getAllTags(), nil), "tags", "t", "include only checks with all specified tags")

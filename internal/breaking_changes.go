@@ -19,7 +19,7 @@ func getBreakingChangesCmd() *cobra.Command {
 
 	addCommonDiffFlags(&cmd)
 	addCommonBreakingFlags(&cmd)
-	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn}, ""), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
+	enumWithOptions(&cmd, newEnumValue(GetBreakingLevels(), ""), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
 
 	return &cmd
 }

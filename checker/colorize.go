@@ -15,7 +15,9 @@ const (
 	ColorInvalid
 )
 
-var SupportedColorValues = []string{"auto", "always", "never"}
+func GetSupportedColorValues() []string {
+	return []string{"auto", "always", "never"}
+}
 
 func NewColorMode(color string) (ColorMode, error) {
 	switch color {

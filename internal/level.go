@@ -6,4 +6,14 @@ const (
 	LevelInfo = "INFO"
 )
 
-var SupportedLevels = []string{LevelErr, LevelWarn, LevelInfo}
+func GetSupportedLevels() []string {
+	return []string{LevelErr, LevelWarn, LevelInfo}
+}
+
+func GetBreakingLevels() []string {
+	return []string{LevelErr, LevelWarn}
+}
+
+func GetSupportedLevelsLower() []string {
+	return []string{"error", "warn", "info"}
+}

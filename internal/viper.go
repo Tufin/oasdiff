@@ -106,6 +106,8 @@ type Config struct {
 	IncludePathParams      bool     `mapstructure:"include-path-params"`
 }
 
+// validate checks that each of the provided configuration values is one of the generally accepted values
+// note that validataion ignores the specific sub-command that was used and is therefor not as strict as the command-specific validation
 func validate(v IViper) error {
 	var config Config
 
@@ -113,31 +115,31 @@ func validate(v IViper) error {
 		return fmt.Errorf("validation error: %s \n", err)
 	}
 
-	if err := validateString(localizations.SupportedLanguages, config.Lang, "lang"); err != nil {
+	if err := validateString(localizations.GetSupportedLanguages(), config.Lang, "lang"); err != nil {
 		return err
 	}
 
-	if err := validateString(checker.SupportedColorValues, config.Color, "color"); err != nil {
+	if err := validateString(checker.GetSupportedColorValues(), config.Color, "color"); err != nil {
 		return err
 	}
 
-	if err := validateString(formatters.SupportedFormats, config.Format, "format"); err != nil {
+	if err := validateString(formatters.GetSupportedFormats(), config.Format, "format"); err != nil {
 		return err
 	}
 
-	if err := validateString(SupportedLevels, config.FailOn, "fail-on"); err != nil {
+	if err := validateString(GetSupportedLevels(), config.FailOn, "fail-on"); err != nil {
 		return err
 	}
 
-	if err := validateString(SupportedLevels, config.Level, "level"); err != nil {
+	if err := validateString(GetSupportedLevels(), config.Level, "level"); err != nil {
 		return err
 	}
 
-	if err := validateStrings(diff.ExcludeDiffOptions, config.ExcludeElements, "exclude-elements"); err != nil {
+	if err := validateStrings(diff.GetExcludeDiffOptions(), config.ExcludeElements, "exclude-elements"); err != nil {
 		return err
 	}
 
-	if err := validateStrings([]string{"info", "warn", "error"}, config.Severity, "severity"); err != nil {
+	if err := validateStrings(GetSupportedLevelsLower(), config.Severity, "severity"); err != nil {
 		return err
 	}
 

@@ -24,8 +24,8 @@ func getChangelogCmd() *cobra.Command {
 
 	addCommonDiffFlags(&cmd)
 	addCommonBreakingFlags(&cmd)
-	enumWithOptions(&cmd, newEnumValue(SupportedLevels, ""), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
-	enumWithOptions(&cmd, newEnumValue(SupportedLevels, LevelInfo), "level", "", "output errors with this level or higher")
+	enumWithOptions(&cmd, newEnumValue(GetSupportedLevels(), ""), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
+	enumWithOptions(&cmd, newEnumValue(GetSupportedLevels(), LevelInfo), "level", "", "output errors with this level or higher")
 
 	return &cmd
 }

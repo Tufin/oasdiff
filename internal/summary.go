@@ -22,7 +22,7 @@ func getSummaryCmd() *cobra.Command {
 	}
 
 	addCommonDiffFlags(&cmd)
-	enumWithOptions(&cmd, newEnumSliceValue(diff.ExcludeDiffOptions, nil), "exclude-elements", "e", "elements to exclude")
+	enumWithOptions(&cmd, newEnumSliceValue(diff.GetExcludeDiffOptions(), nil), "exclude-elements", "e", "elements to exclude")
 	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputSummary), string(formatters.FormatYAML)), "format", "f", "output format")
 	cmd.PersistentFlags().BoolP("fail-on-diff", "", false, "exit with return code 1 when any change is found")
 

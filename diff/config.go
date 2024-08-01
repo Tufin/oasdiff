@@ -25,13 +25,15 @@ const (
 	ExcludeExtensionsOption  = "extensions"
 )
 
-var ExcludeDiffOptions = []string{
-	ExcludeExamplesOption,
-	ExcludeDescriptionOption,
-	ExcludeEndpointsOption,
-	ExcludeTitleOption,
-	ExcludeSummaryOption,
-	ExcludeExtensionsOption,
+func GetExcludeDiffOptions() []string {
+	return []string{
+		ExcludeExamplesOption,
+		ExcludeDescriptionOption,
+		ExcludeEndpointsOption,
+		ExcludeTitleOption,
+		ExcludeSummaryOption,
+		ExcludeExtensionsOption,
+	}
 }
 
 // NewConfig returns a default configuration
