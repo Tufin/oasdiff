@@ -39,7 +39,9 @@ func RunViper(cmd *cobra.Command, v IViper) *ReturnError {
 }
 
 func readConfFile(v IViper) error {
-	v.SetConfigName(".oasdiff")
+
+	// the config file should be named oasdiff.{json,yaml,yml,toml,hcl} in the directory where the command is run
+	v.SetConfigName("oasdiff")
 	v.AddConfigPath(".")
 
 	if err := v.ReadInConfig(); err != nil {

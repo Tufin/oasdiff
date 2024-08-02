@@ -132,6 +132,7 @@ If you encounter a change that isn't reported, you may:
 - [Case-insensitive header comparison](HEADER-DIFF.md)
 - [Comparing multiple specs](COMPOSED.md)
 - [Adding OpenAPI Extensions to the changelog output](ATTRIBUTES.md)
+- [Customize with configuration files](CONFIG-FILES.md)
 - [Running from docker](DOCKER.md)
 - [Embedding in your go program](GO.md)
 
