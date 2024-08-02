@@ -40,7 +40,7 @@ func runFlatten(flags *Flags, stdout io.Writer) (bool, *ReturnError) {
 	}
 
 	// TODO: get the original format of the spec
-	format := flags.getViper().GetString("format")
+	format := flags.getFormat()
 
 	if returnErr := outputFlattenedSpec(stdout, spec.Spec, format); returnErr != nil {
 		return false, returnErr

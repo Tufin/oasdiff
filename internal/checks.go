@@ -39,11 +39,11 @@ func runChecks(flags *Flags, stdout io.Writer) (bool, *ReturnError) {
 
 func outputChecks(stdout io.Writer, flags *Flags, rules []checker.BackwardCompatibilityRule) *ReturnError {
 
-	format := flags.getViper().GetString("format")
+	format := flags.getFormat()
 
 	// formatter lookup
 	formatter, err := formatters.Lookup(format, formatters.FormatterOpts{
-		Language: flags.getViper().GetString("lang"),
+		Language: flags.getLang(),
 	})
 	if err != nil {
 		return getErrUnsupportedFormat(format, checksCmd)
