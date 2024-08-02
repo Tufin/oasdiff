@@ -14,8 +14,6 @@ const flattenCmd = "flatten"
 
 func getFlattenCmd() *cobra.Command {
 
-	flags := FlattenFlags{}
-
 	cmd := cobra.Command{
 		Use:   "flatten spec",
 		Short: "Merge allOf",
@@ -23,46 +21,32 @@ func getFlattenCmd() *cobra.Command {
 Spec can be a path to a file, a URL or '-' to read standard input.
 `,
 		Args: cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-
-			flags.spec = load.NewSource(args[0])
-
-			// by now flags have been parsed successfully, so we don't need to show usage on any errors
-			cmd.Root().SilenceUsage = true
-
-			err := runFlatten(&flags, cmd.OutOrStdout())
-			if err != nil {
-				setReturnValue(cmd, err.Code)
-				return err
-			}
-
-			return nil
-		},
+		RunE: getRun(runFlatten),
 	}
 
-	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputFlatten), string(formatters.FormatJSON), &flags.format), "format", "f", "output format")
+	enumWithOptions(&cmd, newEnumValue(formatters.SupportedFormatsByContentType(formatters.OutputFlatten), string(formatters.FormatJSON)), "format", "f", "output format")
 	addHiddenCircularDepFlag(&cmd)
 
 	return &cmd
 }
 
-func runFlatten(flags *FlattenFlags, stdout io.Writer) *ReturnError {
+func runFlatten(flags *Flags, stdout io.Writer) (bool, *ReturnError) {
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
-	spec, err := load.NewSpecInfo(loader, flags.spec, load.WithFlattenAllOf())
+	spec, err := load.NewSpecInfo(loader, flags.getBase(), load.WithFlattenAllOf())
 	if err != nil {
-		return getErrFailedToLoadSpec("original", flags.spec, err)
+		return false, getErrFailedToLoadSpec("original", flags.getBase(), err)
 	}
 
 	// TODO: get the original format of the spec
-	format := flags.format
+	format := flags.getFormat()
 
 	if returnErr := outputFlattenedSpec(stdout, spec.Spec, format); returnErr != nil {
-		return returnErr
+		return false, returnErr
 	}
 
-	return nil
+	return false, nil
 }
 
 func outputFlattenedSpec(stdout io.Writer, spec *openapi3.T, format string) *ReturnError {

@@ -20,11 +20,10 @@ type enumValue struct {
 	allowedValues []string
 }
 
-func newEnumValue(allowedValues []string, val string, p *string) *enumValue {
+func newEnumValue(allowedValues []string, val string) *enumValue {
 	result := new(enumValue)
 	result.allowedValues = allowedValues
-	result.value = p
-	*result.value = val
+	result.value = &val
 	return result
 }
 

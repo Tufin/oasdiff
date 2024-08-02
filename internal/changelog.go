@@ -14,20 +14,18 @@ const changelogCmd = "changelog"
 
 func getChangelogCmd() *cobra.Command {
 
-	flags := ChangelogFlags{}
-
 	cmd := cobra.Command{
 		Use:   "changelog base revision [flags]",
 		Short: "Display changelog",
 		Long:  "Display changes between base and revision specs." + specHelp,
-		Args:  getParseArgs(&flags),
-		RunE:  getRun(&flags, runChangelog),
+		Args:  getParseArgs(),
+		RunE:  getRun(runChangelog),
 	}
 
-	addCommonDiffFlags(&cmd, &flags)
-	addCommonBreakingFlags(&cmd, &flags)
-	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, "", &flags.failOn), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
-	enumWithOptions(&cmd, newEnumValue([]string{LevelErr, LevelWarn, LevelInfo}, LevelInfo, &flags.level), "level", "", "output errors with this level or higher")
+	addCommonDiffFlags(&cmd)
+	addCommonBreakingFlags(&cmd)
+	enumWithOptions(&cmd, newEnumValue(GetSupportedLevels(), ""), "fail-on", "o", "exit with return code 1 when output includes errors with this level or higher")
+	enumWithOptions(&cmd, newEnumValue(GetSupportedLevels(), LevelInfo), "level", "", "output errors with this level or higher")
 
 	return &cmd
 }
@@ -36,16 +34,17 @@ func enumWithOptions(cmd *cobra.Command, value enumVal, name, shorthand, usage s
 	cmd.PersistentFlags().VarP(value, name, shorthand, usage+": "+value.listOf())
 }
 
-func runChangelog(flags Flags, stdout io.Writer) (bool, *ReturnError) {
+func runChangelog(flags *Flags, stdout io.Writer) (bool, *ReturnError) {
+
 	level, err := checker.NewLevel(flags.getLevel())
 	if err != nil {
-		return false, getErrInvalidFlags(fmt.Errorf("invalid level value %s", flags.getLevel()))
+		return false, getErrInvalidFlags(fmt.Errorf("invalid level value: %q", flags.getLevel()))
 	}
 
 	return getChangelog(flags, stdout, level)
 }
 
-func getChangelog(flags Flags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
+func getChangelog(flags *Flags, stdout io.Writer, level checker.Level) (bool, *ReturnError) {
 
 	diffResult, returnErr := calcDiff(flags)
 	if returnErr != nil {
@@ -107,7 +106,7 @@ func filterIgnored(errs checker.Changes, warnIgnoreFile string, errIgnoreFile st
 	return errs, nil
 }
 
-func outputChangelog(flags Flags, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
+func outputChangelog(flags *Flags, stdout io.Writer, errs checker.Changes, specInfoPair *load.SpecInfoPair) *ReturnError {
 
 	// formatter lookup
 	formatter, err := formatters.Lookup(flags.getFormat(), formatters.FormatterOpts{

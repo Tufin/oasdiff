@@ -104,6 +104,7 @@ oasdiff diff data/openapi-test1.yaml data/openapi-test3.yaml --exclude-elements 
 - [Path parameter renaming](PATH-PARAM-RENAME.md)
 - [Case-insensitive header comparison](HEADER-DIFF.md)
 - [Comparing multiple specs](COMPOSED.md)
+- [Customize with configuration files](CONFIG-FILES.md)
 - [Running from docker](DOCKER.md)
 - [Embedding in your go program](GO.md)
 

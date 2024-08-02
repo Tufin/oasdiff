@@ -105,7 +105,7 @@ func TestModifiedExtension(t *testing.T) {
 }
 
 func TestExcludedExtension(t *testing.T) {
-	require.Nil(t, d(t, diff.NewConfig().WithExcludeExtensions(), 1, 3).ExtensionsDiff)
+	require.Nil(t, d(t, diff.NewConfig().WithExcludeElements([]string{diff.ExcludeExtensionsOption}), 1, 3).ExtensionsDiff)
 }
 
 func TestDiff_AddedGlobalTag(t *testing.T) {
@@ -851,7 +851,7 @@ func TestDiff_ExtensionsExcluded(t *testing.T) {
 	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/extensions/revision.yaml"))
 	require.NoError(t, err)
 
-	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeExtensions(), s1, s2)
+	d, _, err := diff.GetWithOperationsSourcesMap(diff.NewConfig().WithExcludeElements([]string{diff.ExcludeExtensionsOption}), s1, s2)
 	require.NoError(t, err)
 	require.Empty(t, d)
 }

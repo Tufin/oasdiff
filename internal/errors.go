@@ -55,6 +55,13 @@ func getErrFailedToLoadSeverityLevels(source string, err error) *ReturnError {
 	)
 }
 
+func getErrConfigFileProblem(err error) *ReturnError {
+	return getError(
+		fmt.Errorf("failed to load config file: %w", err),
+		107,
+	)
+}
+
 func getErrUnsupportedFormat(format, cmd string) *ReturnError {
 	return getError(
 		fmt.Errorf("format %q is not supported by %q", format, cmd),

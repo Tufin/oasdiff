@@ -33,14 +33,14 @@ func (config *Config) WithOptionalCheck(id string) *Config {
 // WithOptionalChecks overrides the log level of the given checks to ERR so they will appear in `oasdiff breaking`
 func (config *Config) WithOptionalChecks(ids []string) *Config {
 	for _, id := range ids {
-		config.LogLevels[id] = ERR
+		config.setLogLevel(id, ERR)
 	}
 	return config
 }
 
 func (config *Config) WithSeverityLevels(severityLevels map[string]Level) *Config {
 	for id, level := range severityLevels {
-		config.LogLevels[id] = level
+		config.setLogLevel(id, level)
 	}
 
 	return config
@@ -74,9 +74,17 @@ func (config *Config) getLogLevel(checkId string) Level {
 	level, ok := config.LogLevels[checkId]
 
 	if !ok {
-		log.Fatal("check id not found: ", checkId)
+		log.Fatal("failed to get log level with invalid check id: ", checkId)
 	}
 
 	return level
 
+}
+
+func (config *Config) setLogLevel(checkId string, level Level) {
+	if _, ok := config.LogLevels[checkId]; !ok {
+		log.Fatal("failed to set log level with invalid check id: ", checkId)
+	}
+
+	config.LogLevels[checkId] = level
 }

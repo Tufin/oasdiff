@@ -1,71 +1,136 @@
 package internal
 
 import (
+	"github.com/spf13/viper"
 	"github.com/tufin/oasdiff/diff"
 	"github.com/tufin/oasdiff/load"
 )
 
-type Flags interface {
-	toConfig() *diff.Config
-
-	getComposed() bool
-	getBase() *load.Source
-	getRevision() *load.Source
-	getFlattenAllOf() bool
-	getFlattenParams() bool
-	getInsensitiveHeaders() bool
-	getIncludeChecks() []string
-	getDeprecationDaysBeta() uint
-	getDeprecationDaysStable() uint
-	getLang() string
-	getColor() string
-	getWarnIgnoreFile() string
-	getErrIgnoreFile() string
-	getFormat() string
-	getFailOn() string
-	getLevel() string
-	getFailOnDiff() bool
-	getAsymmetric() bool
-	getSeverityLevelsFile() string
-	getAttributes() []string
-
-	setBase(source *load.Source)
-	setRevision(source *load.Source)
-
-	addExcludeElements(string)
-
-	refComposed() *bool
-	refExcludeElements() *[]string
-	refMatchPath() *string
-	refFilterExtension() *string
-	refPrefixBase() *string
-	refPrefixRevision() *string
-	refStripPrefixBase() *string
-	refStripPrefixRevision() *string
-	refIncludePathParams() *bool
-	refFlattenAllOf() *bool
-	refFlattenParams() *bool
-	refInsensitiveHeaders() *bool
-	refLang() *string
-	refFormat() *string
-	refErrIgnoreFile() *string
-	refWarnIgnoreFile() *string
-	refIncludeChecks() *[]string
-	refDeprecationDaysBeta() *uint
-	refDeprecationDaysStable() *uint
-	refColor() *string
-	refSeverityLevelsFile() *string
-	refAttributes() *[]string
+type Flags struct {
+	v        *viper.Viper
+	base     *load.Source
+	revision *load.Source
 }
 
-type CommonFlags struct {
-	attributes []string
+func NewFlags() *Flags {
+	return &Flags{
+		v: viper.New(),
+	}
 }
 
-func (flags *CommonFlags) getAttributes() []string {
-	return flags.attributes
+func (flags *Flags) toConfig() *diff.Config {
+	config := diff.NewConfig().WithExcludeElements(flags.getExcludeElements())
+	config.PathFilter = flags.v.GetString("match-path")
+	config.FilterExtension = flags.v.GetString("filter-extension")
+	config.PathPrefixBase = flags.v.GetString("prefix-base")
+	config.PathPrefixRevision = flags.v.GetString("prefix-revision")
+	config.PathStripPrefixBase = flags.v.GetString("strip-prefix-base")
+	config.PathStripPrefixRevision = flags.v.GetString("strip-prefix-revision")
+	config.IncludePathParams = flags.v.GetBool("include-path-params")
+
+	return config
 }
 
-func (flags *CommonFlags) refAttributes() *[]string {
-	return &flags.attributes
+func (flags *Flags) getViper() *viper.Viper {
+	return flags.v
+}
+
+func (flags *Flags) getAttributes() []string {
+	return flags.v.GetStringSlice("attributes")
+}
+
+func (flags *Flags) getComposed() bool {
+	return flags.v.GetBool("composed")
+}
+
+func (flags *Flags) getBase() *load.Source {
+	return flags.base
+}
+
+func (flags *Flags) getRevision() *load.Source {
+	return flags.revision
+}
+
+func (flags *Flags) getFlattenAllOf() bool {
+	return flags.v.GetBool("flatten-allof") || flags.v.GetBool("flatten")
+}
+
+func (flags *Flags) getFlattenParams() bool {
+	return flags.v.GetBool("flatten-params")
+}
+
+func (flags *Flags) getCaseInsensitiveHeaders() bool {
+	return flags.v.GetBool("case-insensitive-headers")
+}
+
+func (flags *Flags) getIncludeChecks() []string {
+	return fixViperStringSlice(flags.v.GetStringSlice("include-checks"))
+}
+
+func (flags *Flags) getDeprecationDaysBeta() uint {
+	return flags.v.GetUint("deprecation-days-beta")
+}
+
+func (flags *Flags) getDeprecationDaysStable() uint {
+	return flags.v.GetUint("deprecation-days-stable")
+}
+
+func (flags *Flags) getLang() string {
+	return flags.v.GetString("lang")
+}
+
+func (flags *Flags) getColor() string {
+	return flags.v.GetString("color")
+}
+
+func (flags *Flags) getWarnIgnoreFile() string {
+	return flags.v.GetString("warn-ignore")
+}
+
+func (flags *Flags) getErrIgnoreFile() string {
+	return flags.v.GetString("err-ignore")
+}
+
+func (flags *Flags) getFormat() string {
+	return flags.v.GetString("format")
+}
+
+func (flags *Flags) getFailOn() string {
+	return flags.v.GetString("fail-on")
+}
+
+func (flags *Flags) getLevel() string {
+	return flags.v.GetString("level")
+}
+
+func (flags *Flags) getFailOnDiff() bool {
+	return flags.v.GetBool("fail-on-diff")
+}
+
+func (flags *Flags) getSeverityLevelsFile() string {
+	return flags.v.GetString("severity-levels")
+}
+
+func (flags *Flags) getExcludeElements() []string {
+	return fixViperStringSlice(flags.v.GetStringSlice("exclude-elements"))
+}
+
+func (flags *Flags) setBase(source *load.Source) {
+	flags.base = source
+}
+
+func (flags *Flags) setRevision(source *load.Source) {
+	flags.revision = source
+}
+
+func (flags *Flags) addExcludeElements(element string) {
+	flags.v.Set("exclude-elements", append(flags.v.GetStringSlice("exclude-elements"), element))
+}
+
+func (flags *Flags) getSeverity() []string {
+	return fixViperStringSlice(flags.v.GetStringSlice("severity"))
+}
+
+func (flags *Flags) getTags() []string {
+	return fixViperStringSlice(flags.v.GetStringSlice("tags"))
 }

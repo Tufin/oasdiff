@@ -67,6 +67,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [Filtering endpoints](FILTERING-ENDPOINTS.md)
 - [Extending breaking changes with custom checks](CUSTOMIZING-CHECKS.md)
 - Localization: display breaking changes and changelog messages in English or Russian ([please contribute support for your language](https://github.com/Tufin/oasdiff/issues/383))
+- [Customize with configuration files](CONFIG-FILES.md)
 - [Run from Docker](DOCKER.md)
 - [Integrate in GitHub](https://github.com/oasdiff/github-demo/tree/main)
 - [GitHub Action](https://github.com/oasdiff/oasdiff-action)

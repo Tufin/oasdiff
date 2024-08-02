@@ -29,11 +29,13 @@ func TestNewConfigWithDeprecation(t *testing.T) {
 }
 
 func TestNewConfigWithOptionalCheck(t *testing.T) {
-	config := allChecksConfig().WithOptionalCheck("id")
-	require.Equal(t, checker.ERR, config.LogLevels["id"])
+	const id = checker.RequestPropertyDefaultValueChangedId
+	config := allChecksConfig().WithOptionalCheck(id)
+	require.Equal(t, checker.ERR, config.LogLevels[id])
 }
 
 func TestNewConfigWithSeverityLevels(t *testing.T) {
-	config := allChecksConfig().WithSeverityLevels(map[string]checker.Level{"id": checker.ERR})
-	require.Equal(t, checker.ERR, config.LogLevels["id"])
+	const id = checker.RequestPropertyDefaultValueChangedId
+	config := allChecksConfig().WithSeverityLevels(map[string]checker.Level{id: checker.ERR})
+	require.Equal(t, checker.ERR, config.LogLevels[id])
 }

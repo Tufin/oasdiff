@@ -25,13 +25,15 @@ const (
 	ExcludeExtensionsOption  = "extensions"
 )
 
-var ExcludeDiffOptions = []string{
-	ExcludeExamplesOption,
-	ExcludeDescriptionOption,
-	ExcludeEndpointsOption,
-	ExcludeTitleOption,
-	ExcludeSummaryOption,
-	ExcludeExtensionsOption,
+func GetExcludeDiffOptions() []string {
+	return []string{
+		ExcludeExamplesOption,
+		ExcludeDescriptionOption,
+		ExcludeEndpointsOption,
+		ExcludeTitleOption,
+		ExcludeSummaryOption,
+		ExcludeExtensionsOption,
+	}
 }
 
 // NewConfig returns a default configuration
@@ -43,11 +45,6 @@ func NewConfig() *Config {
 
 func (config *Config) WithExcludeElements(excludeElements []string) *Config {
 	config.ExcludeElements = utils.StringList(excludeElements).ToStringSet()
-	return config
-}
-
-func (config *Config) WithExcludeExtensions() *Config {
-	config.ExcludeElements.Add(ExcludeExtensionsOption)
 	return config
 }
 
