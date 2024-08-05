@@ -121,7 +121,7 @@ api-security-removed    err
 
 ### Customizing Breaking Changes Checks
 If you encounter a change that isn't reported, you may:
-1. Run `oasdiff checks` to see if the check is available, and [customize the level as needed](#customizing-security-levels).  
+1. Run `oasdiff checks` to see if the check is available, and [customize the level as needed](#customizing-severity-levels).  
 2. Add a [custom check](CUSTOMIZING-CHECKS.md)
 
 ### Additional Options
