@@ -30,6 +30,10 @@ brew install oasdiff
 curl -fsSL https://raw.githubusercontent.com/tufin/oasdiff/main/install.sh | sh
 ```
 
+### Install with asdf
+
+https://github.com/oasdiff/asdf-oasdiff
+
 ### Manually install on macOS, Windows and Linux
 Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
 
