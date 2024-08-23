@@ -2,6 +2,12 @@ module github.com/tufin/oasdiff
 
 go 1.22.5
 
+replace gopkg.in/yaml.v3 => github.com/oasdiff/yaml3 v0.0.0-20240819204501-233901bce7fe
+
+replace github.com/invopop/yaml => github.com/oasdiff/yaml v0.0.0-20240822113848-2830227c9671
+
+replace github.com/getkin/kin-openapi => github.com/oasdiff/kin-openapi v0.0.0-20240822114340-77f909bcefa1
+
 require (
 	cloud.google.com/go v0.115.0
 	github.com/TwiN/go-color v1.4.1

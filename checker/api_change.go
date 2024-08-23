@@ -31,6 +31,9 @@ type ApiChange struct {
 }
 
 func NewApiChange(id string, config *Config, args []any, comment string, operationsSources *diff.OperationsSourcesMap, operation *openapi3.Operation, method, path string) ApiChange {
+
+	line, col := getOrigin(operation)
+
 	return ApiChange{
 		Id:          id,
 		Level:       config.getLogLevel(id),
@@ -43,7 +46,20 @@ func NewApiChange(id string, config *Config, args []any, comment string, operati
 		CommonChange: CommonChange{
 			Attributes: getAttributes(config, operation),
 		},
+		SourceLine:   line,
+		SourceColumn: col,
 	}
+}
+
+func getOrigin(operation *openapi3.Operation) (int, int) {
+	if operation == nil || operation.Origin == nil {
+		return 0, 0
+	}
+
+	line := operation.Origin.Key.Line
+	col := operation.Origin.Key.Column
+
+	return line, col
 }
 
 func getAttributes(config *Config, operation *openapi3.Operation) map[string]any {
