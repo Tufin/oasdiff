@@ -9,7 +9,7 @@ import (
 
 func addCommonDiffFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().BoolP("composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
-	cmd.PersistentFlags().String("match-path", "p", "include only paths that match this regular expression")
+	cmd.PersistentFlags().StringP("match-path", "p", "", "include only paths that match this regular expression")
 	cmd.PersistentFlags().String("filter-extension", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().String("prefix-base", "", "add this prefix to paths in base-spec before comparison")
 	cmd.PersistentFlags().String("prefix-revision", "", "add this prefix to paths in revised-spec before comparison")
@@ -28,7 +28,7 @@ func addCommonDiffFlags(cmd *cobra.Command) {
 // --flatten was replaced by --flatten-allof
 // we still accept --flatten as a synonym for --flatten-allof to avoid breaking existing scripts
 func addHiddenFlattenFlag(cmd *cobra.Command) {
-	cmd.PersistentFlags().BoolP("flatten", "", false, "merge subschemas under allOf before diff")
+	cmd.PersistentFlags().Bool("flatten", false, "merge subschemas under allOf before diff")
 	hideFlag(cmd, "flatten")
 }
 
@@ -36,7 +36,7 @@ func addHiddenFlattenFlag(cmd *cobra.Command) {
 // --max-circular-dep is no longer needed because kin-openapi3 handles circular references automatically since https://github.com/getkin/kin-openapi/pull/970
 // we still accept --max-circular-dep to avoid breaking existing scripts, but we ignore this flag
 func addHiddenCircularDepFlag(cmd *cobra.Command) {
-	cmd.PersistentFlags().IntP("max-circular-dep", "", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
+	cmd.PersistentFlags().Int("max-circular-dep", 5, "maximum allowed number of circular dependencies between objects in OpenAPI specs")
 	hideFlag(cmd, "max-circular-dep")
 }
 
