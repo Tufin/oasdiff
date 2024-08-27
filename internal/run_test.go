@@ -252,7 +252,7 @@ func Test_ChangelogWithAttributes(t *testing.T) {
 	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --attributes x-beta,x-extension-test -f yaml"), &stdout, io.Discard))
 	cl := formatters.Changes{}
 	require.NoError(t, yaml.Unmarshal(stdout.Bytes(), &cl))
-	require.Len(t, cl, 19)
+	require.Len(t, cl, 21)
 	require.Equal(t, map[string]interface{}{"x-beta": true, "x-extension-test": interface{}(nil)}, cl[12].Attributes)
 }
 
@@ -342,4 +342,20 @@ func Test_CustomSeverityLevels(t *testing.T) {
 
 func Test_CustomSeverityLevelsInvalidFile(t *testing.T) {
 	require.Equal(t, 106, internal.Run(cmdToArgs("oasdiff changelog ../data/openapi-test1.yaml ../data/openapi-test3.yaml --severity-levels ../data/invalid.txt"), io.Discard, io.Discard))
+}
+
+func Test_Changelog_WithoutPathFilter(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/path-filter/base.yaml ../data/path-filter/revision.yaml --format json"), &stdout, io.Discard))
+	bc := formatters.Changes{}
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
+	require.Len(t, bc, 2)
+}
+
+func Test_Changelog_WithPathFilter(t *testing.T) {
+	var stdout bytes.Buffer
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff changelog ../data/path-filter/base.yaml ../data/path-filter/revision.yaml --format json -p a"), &stdout, io.Discard))
+	bc := formatters.Changes{}
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &bc))
+	require.Len(t, bc, 1)
 }
