@@ -22,25 +22,27 @@ func TestRequestPropertyOneOfAdded(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.ElementsMatch(t, []checker.ApiChange{
-		{
-			Id:          checker.RequestBodyOneOfAddedId,
-			Args:        []any{"#/components/schemas/Rabbit"},
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/pets",
-			Source:      load.NewSource("../data/checker/request_property_one_of_added_revision.yaml"),
-			OperationId: "updatePets",
-		},
-		{
-			Id:          checker.RequestPropertyOneOfAddedId,
-			Args:        []any{"#/components/schemas/Breed3", "/oneOf[#/components/schemas/Dog]/breed"},
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/pets",
-			Source:      load.NewSource("../data/checker/request_property_one_of_added_revision.yaml"),
-			OperationId: "updatePets",
-		}}, errs)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestBodyOneOfAddedId,
+		Args:        []any{"#/components/schemas/Rabbit", "application/json"},
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/pets",
+		Source:      load.NewSource("../data/checker/request_property_one_of_added_revision.yaml"),
+		OperationId: "updatePets",
+	}, errs[0])
+	require.Equal(t, "added '#/components/schemas/Rabbit' to media-type 'application/json' of request body 'oneOf' list", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestPropertyOneOfAddedId,
+		Args:        []any{"#/components/schemas/Breed3", "/oneOf[#/components/schemas/Dog]/breed", "application/json"},
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/pets",
+		Source:      load.NewSource("../data/checker/request_property_one_of_added_revision.yaml"),
+		OperationId: "updatePets",
+	}, errs[1])
+	require.Equal(t, "added '#/components/schemas/Breed3' to '/oneOf[#/components/schemas/Dog]/breed' request property of media-type 'application/json' 'oneOf' list", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing 'oneOf' schema from the request body or request body property
@@ -56,23 +58,25 @@ func TestRequestPropertyOneOfRemoved(t *testing.T) {
 
 	require.Len(t, errs, 2)
 
-	require.ElementsMatch(t, []checker.ApiChange{
-		{
-			Id:          checker.RequestBodyOneOfRemovedId,
-			Args:        []any{"#/components/schemas/Rabbit"},
-			Level:       checker.ERR,
-			Operation:   "POST",
-			Path:        "/pets",
-			Source:      load.NewSource("../data/checker/request_property_one_of_removed_revision.yaml"),
-			OperationId: "updatePets",
-		},
-		{
-			Id:          checker.RequestPropertyOneOfRemovedId,
-			Args:        []any{"#/components/schemas/Breed3", "/oneOf[#/components/schemas/Dog]/breed"},
-			Level:       checker.ERR,
-			Operation:   "POST",
-			Path:        "/pets",
-			Source:      load.NewSource("../data/checker/request_property_one_of_removed_revision.yaml"),
-			OperationId: "updatePets",
-		}}, errs)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestBodyOneOfRemovedId,
+		Args:        []any{"#/components/schemas/Rabbit", "application/json"},
+		Level:       checker.ERR,
+		Operation:   "POST",
+		Path:        "/pets",
+		Source:      load.NewSource("../data/checker/request_property_one_of_removed_revision.yaml"),
+		OperationId: "updatePets",
+	}, errs[0])
+	require.Equal(t, "removed '#/components/schemas/Rabbit' from media-type 'application/json' of request body 'oneOf' list", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.RequestPropertyOneOfRemovedId,
+		Args:        []any{"#/components/schemas/Breed3", "/oneOf[#/components/schemas/Dog]/breed", "application/json"},
+		Level:       checker.ERR,
+		Operation:   "POST",
+		Path:        "/pets",
+		Source:      load.NewSource("../data/checker/request_property_one_of_removed_revision.yaml"),
+		OperationId: "updatePets",
+	}, errs[1])
+	require.Equal(t, "removed '#/components/schemas/Breed3' from '/oneOf[#/components/schemas/Dog]/breed' request property of media-type 'application/json' 'oneOf' list", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

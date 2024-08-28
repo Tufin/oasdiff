@@ -591,7 +591,8 @@ func TestBreaking_Body(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
-	require.Equal(t, []interface{}{"id"}, errs[0].GetArgs())
+	require.Equal(t, []interface{}{"id", "application/json"}, errs[0].GetArgs())
+	require.Equal(t, "request property 'id' of media-type 'application/json' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing property in request body items to required is breaking
@@ -608,7 +609,8 @@ func TestBreaking_Items(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
-	require.Equal(t, []interface{}{"/items/id"}, errs[0].GetArgs())
+	require.Equal(t, []interface{}{"/items/id", "application/json"}, errs[0].GetArgs())
+	require.Equal(t, "request property '/items/id' of media-type 'application/json' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing property in request body items to required with a default value is not breaking
@@ -639,6 +641,7 @@ func TestBreaking_AnyOf(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
+	require.Equal(t, "request property '/anyOf[subschema #1]/id' of media-type 'application/json' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing property under another property in request body to required is breaking
@@ -655,6 +658,7 @@ func TestBreaking_NestedProp(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameRequiredId, errs[0].GetId())
+	require.Equal(t, "request property 'id/userId' of media-type 'application/json' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing a response property to optional under AllOf, AnyOf or OneOf is breaking
@@ -669,4 +673,7 @@ func TestBreaking_OneOf(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 3)
+	require.Equal(t, "property '/allOf[#/components/schemas/ProblemSchema]/changedProperty' became optional for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "property '/anyOf[#/components/schemas/ProblemSchema]/changedProperty' became optional for response status '200'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "property '/oneOf[#/components/schemas/ProblemSchema]/changedProperty' became optional for response status '200'", errs[2].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

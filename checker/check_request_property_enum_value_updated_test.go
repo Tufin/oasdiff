@@ -27,13 +27,13 @@ func TestRequestPropertyEnumValueRemovedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyEnumValueRemovedId,
 		Level:       checker.ERR,
-		Args:        []any{"bird", "category"},
+		Args:        []any{"bird", "category", "application/json"},
 		Operation:   "POST",
 		OperationId: "updatePet",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_enum_value_updated_base.yaml"),
 	}, errs[0])
-	require.Equal(t, "removed the enum value 'bird' of the request property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed enum value 'bird' of request property 'category' of media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing request read-only property enum values
@@ -55,13 +55,13 @@ func TestRequestReadOnlyPropertyEnumValueRemovedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestReadOnlyPropertyEnumValueRemovedId,
 		Level:       checker.INFO,
-		Args:        []any{"bird", "category"},
+		Args:        []any{"bird", "category", "application/json"},
 		Operation:   "POST",
 		OperationId: "updatePet",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_enum_value_updated_base.yaml"),
 	}, errs[0])
-	require.Equal(t, "removed the enum value 'bird' of the request read-only property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed enum value 'bird' of request read-only property 'category' of media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding request property enum values
@@ -82,11 +82,11 @@ func TestRequestPropertyEnumValueAddedCheck(t *testing.T) {
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyEnumValueAddedId,
 		Level:       checker.INFO,
-		Args:        []any{"bird", "category"},
+		Args:        []any{"bird", "category", "application/json"},
 		Operation:   "POST",
 		OperationId: "updatePet",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_property_enum_value_updated_base.yaml"),
 	}, errs[0])
-	require.Equal(t, "added the new 'bird' enum value to the request property 'category'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "added 'bird' enum value to request property 'category' of media type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

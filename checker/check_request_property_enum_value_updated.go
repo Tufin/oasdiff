@@ -27,7 +27,7 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 			}
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				CheckModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
@@ -48,7 +48,7 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								id,
 								config,
-								[]any{enumVal, propName},
+								[]any{enumVal, propName, mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -61,7 +61,7 @@ func RequestPropertyEnumValueUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								RequestPropertyEnumValueAddedId,
 								config,
-								[]any{enumVal, propName},
+								[]any{enumVal, propName, mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,

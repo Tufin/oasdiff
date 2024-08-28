@@ -33,6 +33,7 @@ func TestRequestPathParamTypeChanged(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "for 'path' request parameter 'groupId', type/format was changed from 'string'/'' to 'integer'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing request query parameter type
@@ -57,6 +58,7 @@ func TestRequestQueryParamTypeChanged(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "for 'query' request parameter 'token', type/format was changed from 'string'/'uuid' to 'integer'/'uuid'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing request header parameter type
@@ -81,6 +83,7 @@ func TestRequestQueryHeaderTypeChanged(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "for 'header' request parameter 'X-Request-ID', type/format was changed from 'string'/'uuid' to 'integer'/'uuid'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing request path parameter format
@@ -105,6 +108,7 @@ func TestRequestPathParamFormatChanged(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "for 'path' request parameter 'groupId', type/format was changed from 'string'/'' to 'string'/'uuid'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing request query parameter format
@@ -129,6 +133,7 @@ func TestRequestQueryParamFormatChanged(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "for 'query' request parameter 'token', type/format was changed from 'string'/'uuid' to 'string'/'uri'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing request header parameter format
@@ -153,6 +158,7 @@ func TestRequestQueryHeaderFormatChanged(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "for 'header' request parameter 'X-Request-ID', type/format was changed from 'string'/'uuid' to 'string'/'uri'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing request path parameter type by adding "string"
@@ -178,6 +184,7 @@ func TestRequestPathParamTypeAddString(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "for 'path' request parameter 'groupId', type/format was generalized from 'integer'/'' to 'integer, string'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing request path parameter type by replacing "integer" with "number"
@@ -203,6 +210,7 @@ func TestRequestPathParamTypeIntegerToNumber(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_parameter_type_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "for 'path' request parameter 'groupId', type/format was generalized from 'integer, string'/'' to 'number, string'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing request's query param property type from number to string is breaking
@@ -218,7 +226,7 @@ func TestBreaking_ReqQueryParamTypeNumberToString(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterPropertyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was changed from 'number'/'' to 'string'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "for 'query' request parameter 'filters', type/format of property 'groupId' was changed from 'number'/'' to 'string'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
 }
 
@@ -235,7 +243,7 @@ func TestBreaking_ReqQueryParamTypeStringToNumber(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterPropertyTypeSpecializedId, errs[0].GetId())
-	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was specialized from 'string'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "for 'query' request parameter 'filters', type/format of property 'groupId' was specialized from 'string'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, checker.ERR, errs[0].GetLevel())
 }
 
@@ -252,6 +260,6 @@ func TestBreaking_ReqQueryParamTypeIntegerToNumber(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterTypeChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterPropertyTypeGeneralizedId, errs[0].GetId())
-	require.Equal(t, "for the 'query' request parameter 'filters', the type/format of property 'groupId' was generalized from 'integer'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "for 'query' request parameter 'filters', type/format of property 'groupId' was generalized from 'integer'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, checker.INFO, errs[0].GetLevel())
 }

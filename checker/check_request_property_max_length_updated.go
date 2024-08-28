@@ -29,7 +29,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 			}
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				if mediaTypeDiff.SchemaDiff != nil && mediaTypeDiff.SchemaDiff.MaxLengthDiff != nil {
 					maxLengthDiff := mediaTypeDiff.SchemaDiff.MaxLengthDiff
 					if maxLengthDiff.From != nil &&
@@ -38,7 +38,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								RequestBodyMaxLengthDecreasedId,
 								config,
-								[]any{maxLengthDiff.To},
+								[]any{mediaType, maxLengthDiff.From, maxLengthDiff.To},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -49,7 +49,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								RequestBodyMaxLengthIncreasedId,
 								config,
-								[]any{maxLengthDiff.From, maxLengthDiff.To},
+								[]any{mediaType, maxLengthDiff.From, maxLengthDiff.To},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -85,7 +85,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								id,
 								config,
-								[]any{propName, maxLengthDiff.To},
+								[]any{propName, mediaType, maxLengthDiff.From, maxLengthDiff.To},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -96,7 +96,7 @@ func RequestPropertyMaxLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								RequestPropertyMaxLengthIncreasedId,
 								config,
-								[]any{propName, maxLengthDiff.From, maxLengthDiff.To},
+								[]any{propName, mediaType, maxLengthDiff.From, maxLengthDiff.To},
 								"",
 								operationsSources,
 								operationItem.Revision,

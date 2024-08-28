@@ -28,7 +28,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 				continue
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				if mediaTypeDiff.SchemaDiff == nil {
 					continue
 				}
@@ -73,7 +73,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, NewApiChange(
 								RequestPropertyBecomeNotNullableId,
 								config,
-								[]any{propName},
+								[]any{propName, mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -84,7 +84,7 @@ func RequestPropertyBecameNotNullableCheck(diffReport *diff.Diff, operationsSour
 							result = append(result, NewApiChange(
 								RequestPropertyBecomeNullableId,
 								config,
-								[]any{propName},
+								[]any{propName, mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,

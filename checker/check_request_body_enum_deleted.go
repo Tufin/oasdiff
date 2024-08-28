@@ -30,7 +30,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 
 			mediaTypeChanges := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
 
-			for _, mediaTypeItem := range mediaTypeChanges {
+			for mediaType, mediaTypeItem := range mediaTypeChanges {
 				if mediaTypeItem.SchemaDiff == nil {
 					continue
 				}
@@ -43,7 +43,7 @@ func RequestBodyEnumValueRemovedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, NewApiChange(
 						RequestBodyEnumValueRemovedId,
 						config,
-						[]any{enumVal},
+						[]any{enumVal, mediaType},
 						"",
 						operationsSources,
 						operationItem.Revision,
