@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-// CL: changing request property pattern
+// CL: changing request property pattern: request-property-pattern-changed
 func TestRequestPropertyPatternChanged(t *testing.T) {
 	s1, err := open("../data/checker/request_property_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)
@@ -35,7 +35,7 @@ func TestRequestPropertyPatternChanged(t *testing.T) {
 	require.Equal(t, "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')", errs[0].GetComment(checker.NewDefaultLocalizer()))
 }
 
-// CL: generalizing request property pattern
+// CL: generalizing request property pattern: request-property-pattern-generalized
 func TestRequestPropertyPatternGeneralized(t *testing.T) {
 	s1, err := open("../data/checker/request_property_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)
@@ -59,7 +59,7 @@ func TestRequestPropertyPatternGeneralized(t *testing.T) {
 	require.Equal(t, "changed pattern of the request property 'name' of media-type 'application/json' from '^\\w+$' to a more general pattern '.*'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding request property pattern
+// CL: adding request property pattern: request-property-pattern-added
 func TestRequestPropertyPatternAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_property_pattern_added_or_changed_revision.yaml")
 	require.NoError(t, err)
@@ -83,7 +83,7 @@ func TestRequestPropertyPatternAdded(t *testing.T) {
 	require.Equal(t, "added pattern '^\\w+$' to the request property 'name' of media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing request property pattern
+// CL: removing request property pattern: request-property-pattern-removed
 func TestRequestPropertyPatternRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_property_pattern_added_or_changed_base.yaml")
 	require.NoError(t, err)

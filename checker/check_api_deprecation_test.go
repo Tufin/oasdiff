@@ -45,7 +45,7 @@ func TestBreaking_DeprecationPast(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: deprecating an operation with a deprecation policy and an invalid sunset date is breaking
+// BC: deprecating an operation with a deprecation policy and an invalid sunset date is breaking: api-deprecated-sunset-parse
 func TestBreaking_DeprecationWithInvalidSunset(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("base.yaml"))
@@ -64,7 +64,7 @@ func TestBreaking_DeprecationWithInvalidSunset(t *testing.T) {
 	require.Equal(t, "failed to parse sunset date: 'sunset date doesn't conform with RFC3339: invalid'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: deprecating an operation with a deprecation policy and an invalid stability level is breaking
+// BC: deprecating an operation with a deprecation policy and an invalid stability level is breaking: api-invalid-stability-level
 func TestBreaking_DeprecationWithInvalidStabilityLevel(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("base.yaml"))
@@ -100,7 +100,7 @@ func TestBreaking_DeprecationWithoutSunsetNoPolicy(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: deprecating an operation with a deprecation policy but without specifying sunset date is breaking
+// BC: deprecating an operation with a deprecation policy but without specifying sunset date is breaking: api-deprecated-sunset-missing
 func TestBreaking_DeprecationWithoutSunsetWithPolicy(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("base.yaml"))
@@ -211,7 +211,7 @@ func toJson(t *testing.T, value string) json.RawMessage {
 	return data
 }
 
-// BC: deprecating an operation with a deprecation policy and sunset date before required deprecation period is breaking
+// BC: deprecating an operation with a deprecation policy and sunset date before required deprecation period is breaking: api-sunset-date-too-small
 func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 	s1, err := open(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
@@ -231,7 +231,7 @@ func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
 	require.Equal(t, fmt.Sprintf("sunset date '%s' is too small, must be at least '10' days from now", sunsetDate), errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: deprecating an operation with a deprecation policy and sunset date after required deprecation period is not breaking
+// BC: deprecating an operation with a deprecation policy and sunset date after required deprecation period is not breaking: endpoint-deprecated
 func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("base.yaml"))
@@ -249,6 +249,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	require.Len(t, errs, 1)
 	// only a non-breaking change detected
 	require.Equal(t, checker.INFO, errs[0].GetLevel())
+	require.Equal(t, checker.EndpointDeprecatedId, errs[0].GetId())
 	require.Equal(t, "endpoint deprecated", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
@@ -267,7 +268,7 @@ func TestBreaking_DeprecationPathPast(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// CL: path operations that became deprecated
+// CL: path operations that became deprecated: endpoint-deprecated
 func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 	s1, err := open("../data/deprecation/base.yaml")
 	require.NoError(t, err)
@@ -290,7 +291,7 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 	require.Equal(t, "endpoint deprecated", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: path operations that were re-activated
+// CL: path operations that were re-activated: endpoint-reactivated
 func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	s1, err := open("../data/deprecation/deprecated-future.yaml")
 	require.NoError(t, err)
@@ -313,6 +314,7 @@ func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
 	require.Equal(t, "endpoint reactivated", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
+// BC: specifying an invalid stability level is breaking: api-invalid-stability-level
 func TestBreaking_InvaidStability(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("invalid-stability.yaml"))

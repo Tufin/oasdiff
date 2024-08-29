@@ -536,7 +536,7 @@ func TestBreaking_GeneralizedPattern(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: modifying a pattern in request parameter is breaking
+// BC: modifying a pattern in request parameter is breaking: request-parameter-pattern-removed
 func TestBreaking_ModifyParameterPattern(t *testing.T) {
 	s1, err := open("../data/pattern-parameter-base.yaml")
 	require.NoError(t, err)

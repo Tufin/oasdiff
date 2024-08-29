@@ -5,15 +5,15 @@ request-body-added-optional: added optional request body
 request-parameter-removed: deleted the %s request parameter %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
-request-parameter-pattern-added: added pattern %s to the %s request parameter %s
-request-parameter-pattern-removed: removed pattern %s from the %s request parameter %s
-request-parameter-pattern-changed: changed pattern of the %s request parameter %s from %s to %s
-request-parameter-pattern-generalized: changed pattern of the %s request parameter %s from %s to a more general pattern %s
-request-property-pattern-added: added pattern %s to the request property %s of media-type %s # done
-request-property-pattern-removed: removed pattern %s from the request property %s of media-type %s # done
-request-property-pattern-changed: changed pattern of the request property %s of media-type %s from %s to %s # done
-request-property-pattern-generalized: changed pattern of the request property %s of media-type %s from %s to a more general pattern %s # done
-api-deprecated-sunset-parse: "failed to parse sunset date: %v"
+request-parameter-pattern-added: added pattern %s to the %s request parameter %s # tested
+request-parameter-pattern-removed: removed pattern %s from the %s request parameter %s # tested
+request-parameter-pattern-changed: changed pattern of the %s request parameter %s from %s to %s # tested
+request-parameter-pattern-generalized: changed pattern of the %s request parameter %s from %s to a more general pattern %s # tested
+request-property-pattern-added: added pattern %s to the request property %s of media-type %s # tested
+request-property-pattern-removed: removed pattern %s from the request property %s of media-type %s # tested
+request-property-pattern-changed: changed pattern of the request property %s of media-type %s from %s to %s # tested
+request-property-pattern-generalized: changed pattern of the request property %s of media-type %s from %s to a more general pattern %s # tested
+api-deprecated-sunset-parse: "failed to parse sunset date: %v" # tested
 api-path-sunset-parse: "failed to parse sunset date: %v"
 api-stability-decreased: endpoint stability level decreased from %s to %s
 api-invalid-stability-level: "failed to parse stability level: %v"
@@ -35,19 +35,19 @@ sunset-deleted: api sunset date deleted, but deprecated=true kept
 api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %s days from now
 new-required-request-parameter: added required %s request parameter %s
 new-optional-request-parameter: added optional %s request parameter %s
-new-required-request-property: added required request property %s to media-type %s # done
-new-required-request-property-with-default: added required request property %s with a default value to media-type %s # done
-new-optional-request-property: added optional request property %s to media-type %s # done
-new-required-request-header-property: added required %s request header property %s # done
+new-required-request-property: added required request property %s to media-type %s # tested
+new-required-request-property-with-default: added required request property %s with a default value to media-type %s # tested
+new-optional-request-property: added optional request property %s to media-type %s # tested
+new-required-request-header-property: added required %s request header property %s # tested
 request-body-became-required: request body became required
 request-body-became-optional: request body became optional
-request-body-became-enum: media-type %s of request body was restricted to a list of enum values # done
-request-body-enum-value-removed: enum value %s removed from media-type %s of request body # done
+request-body-became-enum: media-type %s of request body was restricted to a list of enum values # tested
+request-body-enum-value-removed: enum value %s removed from media-type %s of request body # tested
 response-mediatype-enum-value-removed: response schema %s enum value removed %s
-request-header-property-became-required: property %s of request header %s became required # done
-request-header-property-became-enum: property %s of request header %s was restricted to a list of enum values # done
-request-parameter-became-required: "%s request parameter %s became required" # done
-request-parameter-became-optional: "%s request parameter %s became optional" # done
+request-header-property-became-required: property %s of request header %s became required # tested
+request-header-property-became-enum: property %s of request header %s was restricted to a list of enum values # tested
+request-parameter-became-required: "%s request parameter %s became required" # tested
+request-parameter-became-optional: "%s request parameter %s became optional" # tested
 request-parameter-became-enum: "%s request parameter %s was restricted to a list of enum values"
 request-parameter-enum-value-removed: removed enum value %s from the %s request parameter %s
 request-parameter-enum-value-added: added enum value %s to the %s request parameter %s
@@ -77,9 +77,9 @@ request-parameter-property-type-changed: for %s request parameter %s, type/forma
 request-parameter-property-type-generalized: for %s request parameter %s, type/format of property %s was generalized from %s/%s to %s/%s
 request-parameter-property-type-specialized: for %s request parameter %s, type/format of property %s was specialized from %s/%s to %s/%s
 new-request-path-parameter: added path request parameter %s
-request-property-became-required: request property %s of media-type %s became required # done
-request-property-became-required-with-default: request property %s with a default value became required in media-type %s # done
-request-property-became-optional: request property %s of media-type %s became optional # done
+request-property-became-required: request property %s of media-type %s became required # tested
+request-property-became-required-with-default: request property %s with a default value became required in media-type %s # tested
+request-property-became-optional: request property %s of media-type %s became optional # tested
 request-property-became-not-nullable: request property %s of media-type %s became not nullable
 request-body-became-not-nullable: media-type %s of request body became not nullable
 request-property-became-nullable: request property %s of media-type %s became nullable
@@ -162,22 +162,22 @@ response-property-max-increased: max value of %s response property was increased
 response-body-min-decreased: min value of response body was decreased from %s to %s
 response-property-min-decreased: min value of %s response property was decreased from %s to %s for response status %s
 api-security-added: endpoint scheme security %s was added
-api-security-removed: removed endpoint scheme security %s # done
+api-security-removed: removed endpoint scheme security %s # tested
 api-security-updated: endpoint scheme security %s was updated from %s to %s
 api-global-security-added: security scheme %s was added
-api-global-security-removed: removed security scheme %s # done
+api-global-security-removed: removed security scheme %s # tested
 api-global-security-scope-removed: removed security scope %s from global security scheme %s
 api-global-security-scope-added: security scope %s was added to global security scheme %s
-api-security-scope-removed: removed security scope %s from endpoint security scheme %s # done
+api-security-scope-removed: removed security scope %s from endpoint security scheme %s # tested
 api-stability-decreased-description: endpoint stability level decreased
 api-security-scope-added: security scope %s was added to endpoint security scheme %s
 api-security-component-type-changed: component security scheme %s type changed from %s to %s
 api-security-component-oauth-url-changed: component security scheme %s oauth url changed from %s to %s
 api-security-component-oauth-token-url-changed: component security scheme %s oauth token url changed from %s to %s
 api-security-component-added: component security scheme %s was added
-api-security-component-removed: removed component security scheme %s # done
+api-security-component-removed: removed component security scheme %s # tested
 api-security-component-oauth-scope-added: component security scheme %s oauth scope %s was added
-api-security-component-oauth-scope-removed: removed component security scheme %s oauth scope %s # done
+api-security-component-oauth-scope-removed: removed component security scheme %s oauth scope %s # tested
 api-security-component-oauth-scope-changed: component security scheme %s oauth scope %s was updated from %s to %s
 response-optional-property-added: added optional property %s to response status %s
 response-optional-write-only-property-added: added optional write-only property %s to response status %s
@@ -197,9 +197,9 @@ response-optional-property-became-write-only: response optional property %s beca
 response-optional-property-became-read-only: response optional property %s became read-only for status %s
 response-optional-property-became-not-write-only: response optional property %s became not write-only for status %s
 response-optional-property-became-not-read-only: response optional property %s became not read-only for status %s
-response-property-pattern-changed: changed pattern from %s to %s in property %s for response status %s # done
-response-property-pattern-added: added pattern %s to property %s for response status %s # done
-response-property-pattern-removed: removed pattern %s from property %s for response status %s # done
+response-property-pattern-changed: changed pattern from %s to %s in property %s for response status %s # tested
+response-property-pattern-added: added pattern %s to property %s for response status %s # tested
+response-property-pattern-removed: removed pattern %s from property %s for response status %s # tested
 response-property-default-value-added: added default value %s to response property %s for response status %s
 response-property-default-value-changed: changed default value from %s to %s for property %s for response status %s
 response-property-default-value-removed: removed default value %s of property %s for response status %s

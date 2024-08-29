@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-// CL: removing an existing operation id
+// CL: removing an existing operation id: api-operation-id-removed
 func TestOperationIdRemoved(t *testing.T) {
 	s1, err := open("../data/checker/operation_id_removed_base.yaml")
 	require.NoError(t, err)
@@ -31,9 +31,11 @@ func TestOperationIdRemoved(t *testing.T) {
 		Source:      load.NewSource("../data/checker/operation_id_removed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+
+	require.Equal(t, "api operation id 'createOneGroup' removed and replaced with ''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: updating an existing operation id
+// CL: updating an existing operation id: api-operation-id-removed
 func TestOperationIdUpdated(t *testing.T) {
 	s1, err := open("../data/checker/operation_id_removed_base.yaml")
 	require.NoError(t, err)
@@ -59,7 +61,7 @@ func TestOperationIdUpdated(t *testing.T) {
 	require.Equal(t, "api operation id 'createOneGroup' removed and replaced with 'newOperationId'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding a new operation id
+// CL: adding a new operation id: api-operation-id-added
 func TestOperationIdAdded(t *testing.T) {
 	s1, err := open("../data/checker/operation_id_added_base.yaml")
 	require.NoError(t, err)

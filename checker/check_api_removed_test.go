@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// BC: deleting an operation before sunset date is breaking
+// BC: deleting an operation before sunset date is breaking: api-removed-before-sunset
 func TestBreaking_RemoveBeforeSunset(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
@@ -41,7 +41,7 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not alpha stability level
+// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not alpha stability level: api-path-removed-without-deprecation
 func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
@@ -61,7 +61,7 @@ func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 	require.Equal(t, "api path removed without deprecation", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not draft stability level
+// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not draft stability level: api-path-removed-without-deprecation
 func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
@@ -83,7 +83,7 @@ func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
 	require.Equal(t, "api path removed without deprecation", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: deleting a path with some operations having sunset date in the future is breaking
+// BC: deleting a path with some operations having sunset date in the future is breaking: api-path-removed-before-sunset
 func TestBreaking_DeprecationPathMixed(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-path-mixed.yaml"))
@@ -101,7 +101,7 @@ func TestBreaking_DeprecationPathMixed(t *testing.T) {
 	require.Equal(t, "api path removed before the sunset date '9999-08-10'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: removing a deprecated enpoint with an invalid date is breaking
+// BC: removing a deprecated enpoint with an invalid date is breaking: api-path-sunset-parse
 func TestBreaking_RemoveEndpointWithInvalidSunset(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-invalid.yaml"))
@@ -122,7 +122,7 @@ func TestBreaking_RemoveEndpointWithInvalidSunset(t *testing.T) {
 	require.Equal(t, "../data/deprecation/deprecated-invalid.yaml", errs[0].GetSource())
 }
 
-// test sunset date without double quotes, see https://github.com/Tufin/oasdiff/pull/198/files
+// test sunset date without double quotes, see https://github.com/Tufin/oasdiff/pull/198/files: api-path-removed-before-sunset
 func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-path-mixed-rfc3339-sunset.yaml"))
