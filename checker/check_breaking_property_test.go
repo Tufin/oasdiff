@@ -2,6 +2,7 @@ package checker_test
 
 import (
 	"fmt"
+	"sort"
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -34,6 +35,7 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.NewRequiredRequestHeaderPropertyId, errs[0].GetId())
+	require.Equal(t, "added required 'network-policies' request header's property 'courseId'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: new optional property in request header is not breaking
@@ -78,6 +80,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestHeaderPropertyBecameRequiredId, errs[0].GetId())
+	require.Equal(t, "'network-policies' request header's property 'courseId' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing property in request header to optional is not breaking
@@ -118,6 +121,7 @@ func TestBreaking_RespBodyRequiredPropertyDisabled(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponsePropertyBecameOptionalId, errs[0].GetId())
+	require.Equal(t, "property 'helpAndSupport/title' became optional for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing a request body to enum is breaking
@@ -134,6 +138,7 @@ func TestBreaking_ReqBodyBecameEnum(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestBodyBecameEnumId, errs[0].GetId())
+	require.Equal(t, "media-type 'application/json' of request body was restricted to a list of enum values", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: adding an enum value to request body is not breaking
@@ -162,8 +167,12 @@ func TestBreaking_ReqBodyBecameEnumAndTypeChanged(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 2)
+
 	require.Equal(t, checker.RequestBodyBecameEnumId, errs[0].GetId())
+	require.Equal(t, "media-type 'application/json' of request body was restricted to a list of enum values", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
 	require.Equal(t, checker.RequestBodyTypeChangedId, errs[1].GetId())
+	require.Equal(t, "type/format of media-type 'application/json' of request body changed from 'string'/'' to 'int'/''", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing property in request body to enum is breaking
@@ -180,6 +189,7 @@ func TestBreaking_ReqPropertyBecameEnum(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyBecameEnumId, errs[0].GetId())
+	require.Equal(t, "request property 'name' of media-type 'application/json' was restricted to a list of enum values", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing path param to enum is breaking
@@ -196,6 +206,7 @@ func TestBreaking_ReqParameterBecameEnum(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestParameterBecameEnumId, errs[0].GetId())
+	require.Equal(t, "'path' request parameter 'bookId' was restricted to a list of enum values", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing property in request header to enum is breaking
@@ -212,6 +223,7 @@ func TestBreaking_ReqParameterHeaderPropertyBecameEnum(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestHeaderPropertyBecameEnumId, errs[0].GetId())
+	require.Equal(t, "'bookId' request header's property 'name' was restricted to a list of enum values", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing a response body to nullable is breaking
@@ -228,6 +240,7 @@ func TestBreaking_RespBodyNullable(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyBecameNullableId, errs[0].GetId())
+	require.Equal(t, "response body became nullable", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing a request property to not nullable is breaking
@@ -396,12 +409,13 @@ func TestBreaking_ReqBodyDeleteRequiredProperty2(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Contains(t, errs, checker.ApiChange{
 		Id:        checker.RequestPropertyRemovedId,
-		Args:      []any{"roleAssignments/items/role"},
+		Args:      []any{"roleAssignments/items/role", "application/json"},
 		Level:     checker.WARN,
 		Operation: "POST",
 		Path:      "/api/roleMappings",
 		Source:    load.NewSource("../data/required-properties/request-property-items-2.yaml"),
 	})
+	require.Equal(t, "removed request property 'roleAssignments/items/role' of media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: adding a new required property in response body is not breaking
@@ -432,6 +446,7 @@ func TestBreaking_RespBodyDeleteRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseRequiredPropertyRemovedId, errs[0].GetId())
+	require.Equal(t, "removed required property 'helpAndSupport/title' from response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: adding a new required property under AllOf in response body is not breaking
@@ -462,6 +477,7 @@ func TestBreaking_RespBodyDeleteAllOfRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseRequiredPropertyRemovedId, errs[0].GetId())
+	require.Equal(t, "removed required property '/allOf[subschema #1]/bazqux' from response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: adding a new required read-only property in request body is not breaking
@@ -507,6 +523,7 @@ func TestBreaking_WriteOnlyDeleteRequiredProperty(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
+	require.Equal(t, "removed request property 'test' of media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deleting a non-required non-write-only property in response body is breaking with warning
@@ -522,12 +539,23 @@ func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 3)
+
+	sort.Sort(errs) // sort to make sure the order is consistent
+
 	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
-	require.Equal(t, checker.ResponseOptionalPropertyRemovedId, errs[1].GetId())
+	require.Equal(t, "/api/atlas/v1.0/groups", errs[0].GetPath())
+	require.Equal(t, "removed request property 'test' of media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
 	require.Equal(t, checker.WARN, errs[1].GetLevel())
-	require.Equal(t, checker.ResponseOptionalPropertyRemovedId, errs[2].GetId())
+	require.Equal(t, checker.ResponseOptionalPropertyRemovedId, errs[1].GetId())
+	require.Equal(t, "/api/atlas/v1.0/groups", errs[1].GetPath())
+	require.Equal(t, "removed optional property 'test' from response status '200'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
 	require.Equal(t, checker.WARN, errs[2].GetLevel())
+	require.Equal(t, checker.ResponseOptionalPropertyRemovedId, errs[2].GetId())
+	require.Equal(t, "/api/atlas/v1.0/groups/{groupId}", errs[2].GetPath())
+	require.Equal(t, "removed optional property 'test' from response status '200'", errs[2].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing write-only property in response body to optional is not breaking
@@ -571,10 +599,16 @@ func TestBreaking_RequiredPropertyWriteOnlyDisabled(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 2)
+
 	require.Equal(t, checker.ResponseRequiredPropertyBecameNonWriteOnlyId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
+	require.Equal(t, "/api/atlas/v1.0/groups", errs[0].GetPath())
+	require.Equal(t, "response required property 'test' became not write-only for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
 	require.Equal(t, checker.ResponseRequiredPropertyBecameNonWriteOnlyId, errs[1].GetId())
 	require.Equal(t, checker.WARN, errs[1].GetLevel())
+	require.Equal(t, "/api/atlas/v1.0/groups/{groupId}", errs[1].GetPath())
+	require.Equal(t, "response required property 'test' became not write-only for status '200'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing property in request body to required is breaking
