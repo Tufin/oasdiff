@@ -32,7 +32,7 @@ func TestRequiredRequestPropertyAdded(t *testing.T) {
 	require.Equal(t, "added required request property 'description' to media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding two new request properties, one required, one optional
+// CL: adding two new request properties, one required, one optional: new-required-request-property, new-optional-request-property
 func TestRequiredRequestPropertiesAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_property_added_base.yaml")
 	require.NoError(t, err)
@@ -114,7 +114,7 @@ func TestRequiredRequestPropertyRemoved(t *testing.T) {
 	require.Equal(t, "removed request property 'description' of media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding a new required request property with a default value
+// CL: adding a new required request property with a default value: new-required-request-property-with-default
 func TestRequiredRequestPropertyAddedWithDefault(t *testing.T) {
 	s1, err := open("../data/checker/request_property_added_base.yaml")
 	require.NoError(t, err)

@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// BC: decreasing stability level is breaking
+// BC: decreasing stability level is breaking: api-stability-decreased
 func TestBreaking_StabilityLevelDecreased(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("base-beta-stability.yaml"))

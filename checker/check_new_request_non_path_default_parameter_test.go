@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-// BC: new header, query and cookie required request default param is breaking
+// BC: new header, query and cookie required request default param is breaking: new-required-request-default-parameter-to-existing-path, new-optional-request-default-parameter-to-existing-path
 func TestNewRequestNonPathParameter_DetectsNewRequiredPathsAndNewOperations(t *testing.T) {
 	s1, err := open("../data/request_params/base.yaml")
 	require.NoError(t, err)

@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: new header, query and cookie request params
+// CL: new header, query and cookie request params: new-optional-request-parameter
 func TestNewRequestNonPathParameter_DetectsNewPathsAndNewOperations(t *testing.T) {
 	s1, err := open("../data/request_params/base.yaml")
 	require.NoError(t, err)

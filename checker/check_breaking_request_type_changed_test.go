@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// BC: changing request's body schema type from string to number is breaking
+// BC: changing request's body schema type from string to number is breaking: request-body-type-changed
 func TestBreaking_ReqTypeStringToNumber(t *testing.T) {
 	file := "../data/type-change/simple-request.yaml"
 
@@ -29,7 +29,7 @@ func TestBreaking_ReqTypeStringToNumber(t *testing.T) {
 	require.Equal(t, "type/format of media-type 'application/json' of request body changed from 'string'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: changing request's body schema type from number to string is breaking
+// BC: changing request's body schema type from number to string is breaking: request-body-type-changed
 func TestBreaking_ReqTypeNumberToString(t *testing.T) {
 	file := "../data/type-change/simple-request.yaml"
 
@@ -49,7 +49,7 @@ func TestBreaking_ReqTypeNumberToString(t *testing.T) {
 	require.Equal(t, "type/format of media-type 'application/json' of request body changed from 'number'/'' to 'string'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: changing request's body schema type from number to integer is breaking
+// BC: changing request's body schema type from number to integer is breaking: request-body-type-changed
 func TestBreaking_ReqTypeNumberToInteger(t *testing.T) {
 	file := "../data/type-change/simple-request.yaml"
 
@@ -69,7 +69,7 @@ func TestBreaking_ReqTypeNumberToInteger(t *testing.T) {
 	require.Equal(t, "type/format of media-type 'application/json' of request body changed from 'number'/'' to 'integer'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: changing request's body schema type from integer to number is not breaking
+// BC: changing request's body schema type from integer to number is not breaking: request-body-type-generalized
 func TestBreaking_ReqTypeIntegerToNumber(t *testing.T) {
 	file := "../data/type-change/simple-request.yaml"
 
@@ -89,7 +89,7 @@ func TestBreaking_ReqTypeIntegerToNumber(t *testing.T) {
 	require.Equal(t, "type/format of media-type 'application/json' of request body was generalized from 'integer'/'' to 'number'/''", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: changing request's body schema type from number/none to integer/int32 is breaking
+// BC: changing request's body schema type from number/none to integer/int32 is breaking: request-body-type-changed
 func TestBreaking_ReqTypeNumberToInt32(t *testing.T) {
 	file := "../data/type-change/simple-request.yaml"
 

@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: changing security component oauth's url
+// CL: changing security component oauth's url: api-security-component-oauth-url-changed
 func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -30,7 +30,7 @@ func TestComponentSecurityOauthURLUpdated(t *testing.T) {
 	require.Equal(t, "component security scheme 'petstore_auth' oauth url changed from 'http://example.org/api/oauth/dialog' to 'http://example.new.org/api/oauth/dialog'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: changing security component token url
+// CL: changing security component token url: api-security-component-oauth-token-url-changed
 func TestComponentSecurityOauthTokenUpdated(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -52,7 +52,7 @@ func TestComponentSecurityOauthTokenUpdated(t *testing.T) {
 	require.Equal(t, "component security scheme 'petstore_auth' oauth token url changed from '' to 'http://example.new.org/api/oauth/dialog'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: changing security component type
+// CL: changing security component type: api-security-component-type-changed
 func TestComponentSecurityTypeUpdated(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -74,7 +74,7 @@ func TestComponentSecurityTypeUpdated(t *testing.T) {
 	require.Equal(t, "component security scheme 'petstore_auth' type changed from 'oauth2' to 'http'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding a new security component
+// CL: adding a new security component: api-security-component-added
 func TestComponentSecurityAdded(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -94,7 +94,7 @@ func TestComponentSecurityAdded(t *testing.T) {
 	require.Equal(t, "component security scheme 'BasicAuth' was added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing a new security component
+// CL: removing a new security component: api-security-component-removed
 func TestComponentSecurityRemoved(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_revision.yaml")
 	require.NoError(t, err)
@@ -114,7 +114,7 @@ func TestComponentSecurityRemoved(t *testing.T) {
 	require.Equal(t, "removed component security scheme 'BasicAuth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding a new oauth security scope
+// CL: adding a new oauth security scope: api-security-component-oauth-scope-added
 func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -136,7 +136,7 @@ func TestComponentSecurityOauthScopeAdded(t *testing.T) {
 	require.Equal(t, "component security scheme 'petstore_auth' oauth scope 'admin:pets' was added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing a new oauth security scope
+// CL: removing a new oauth security scope: api-security-component-oauth-scope-removed
 func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -159,7 +159,7 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	require.Equal(t, "removed component security scheme 'petstore_auth' oauth scope 'admin:pets'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing a new oauth security scope
+// CL: removing a new oauth security scope: api-security-component-oauth-scope-changed
 func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 	s1, err := open("../data/checker/component_security_updated_base.yaml")
 	require.NoError(t, err)
