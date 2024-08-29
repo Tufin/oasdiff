@@ -2,7 +2,6 @@ package checker_test
 
 import (
 	"fmt"
-	"sort"
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -539,8 +538,6 @@ func TestBreaking_WriteOnlyDeleteNonRequiredProperty(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 3)
-
-	sort.Sort(errs) // sort to make sure the order is consistent
 
 	require.Equal(t, checker.RequestPropertyRemovedId, errs[0].GetId())
 	require.Equal(t, checker.WARN, errs[0].GetLevel())
