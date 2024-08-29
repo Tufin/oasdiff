@@ -24,14 +24,14 @@ func TestResponsePropertyPatternChanged(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyPatternChangedId,
-		Args:        []any{"data/created", "^[a-z]+$", "^(?:([a-z]+-)*([a-z]+)?)$", "200"},
+		Args:        []any{"^[a-z]+$", "^(?:([a-z]+-)*([a-z]+)?)$", "data/created", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_pattern_added_or_changed_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
-	require.Equal(t, "'data/created' response property pattern was changed from '^[a-z]+$' to '^(?:([a-z]+-)*([a-z]+)?)$' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "changed pattern from '^[a-z]+$' to '^(?:([a-z]+-)*([a-z]+)?)$' in property 'data/created' for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding response property pattern
@@ -49,14 +49,14 @@ func TestResponsePropertyPatternAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyPatternAddedId,
-		Args:        []any{"data/created", "^[a-z]+$", "200"},
+		Args:        []any{"^[a-z]+$", "data/created", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_pattern_added_or_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
-	require.Equal(t, "'data/created' response property pattern '^[a-z]+$' was added for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "added pattern '^[a-z]+$' to property 'data/created' for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing response property pattern
@@ -74,12 +74,12 @@ func TestResponsePropertyPatternRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyPatternRemovedId,
-		Args:        []any{"data/created", "^[a-z]+$", "200"},
+		Args:        []any{"^[a-z]+$", "data/created", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_pattern_added_or_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
-	require.Equal(t, "'data/created' response property pattern '^[a-z]+$' was removed for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed pattern '^[a-z]+$' from property 'data/created' for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

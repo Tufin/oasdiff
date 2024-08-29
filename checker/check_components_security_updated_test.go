@@ -111,7 +111,7 @@ func TestComponentSecurityRemoved(t *testing.T) {
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
 	}, errs[0])
-	require.Equal(t, "component security scheme 'BasicAuth' was removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed component security scheme 'BasicAuth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding a new oauth security scope
@@ -151,12 +151,12 @@ func TestComponentSecurityOauthScopeRemoved(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
-		Id:        "api-security-component-oauth-scope-removed",
+		Id:        checker.APIComponentSecurityOauthScopeRemovedId,
 		Args:      []any{"petstore_auth", "admin:pets"},
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,
 	}, errs[0])
-	require.Equal(t, "component security scheme 'petstore_auth' oauth scope 'admin:pets' was removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed component security scheme 'petstore_auth' oauth scope 'admin:pets'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing a new oauth security scope
@@ -173,7 +173,7 @@ func TestComponentSecurityOauthScopeUpdated(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIComponentsSecurityUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ComponentChange{
-		Id:        "api-security-component-oauth-scope-changed",
+		Id:        checker.APIComponentSecurityOauthScopeUpdatedId,
 		Args:      []any{"petstore_auth", "read:pets", "read your pets", "grants access to pets (deprecated)"},
 		Level:     checker.INFO,
 		Component: checker.ComponentSecuritySchemes,

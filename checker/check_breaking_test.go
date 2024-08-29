@@ -245,7 +245,7 @@ func TestBreaking_ResponseHeaderRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequiredResponseHeaderRemovedId, errs[0].GetId())
-	require.Equal(t, "mandatory header 'X-RateLimit-Limit' was removed for response status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed mandatory header 'X-RateLimit-Limit' for response status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing an existing response with successful status is breaking
@@ -364,7 +364,7 @@ func TestBreaking_TagRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APITagRemovedId, errs[0].GetId())
-	require.Equal(t, "api tag 'security' removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed api tag 'security'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: removing/updating a media type enum in response (optional)
@@ -436,7 +436,7 @@ func TestBreaking_OptionalResponseHeaderRemoved(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.OptionalResponseHeaderRemovedId, errs[0].GetId())
-	require.Equal(t, "optional header 'X-RateLimit-Limit' was removed for response status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed optional header 'X-RateLimit-Limit' for response status 'default'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deleting a media-type from response is breaking

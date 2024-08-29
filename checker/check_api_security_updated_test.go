@@ -44,7 +44,7 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 		Args:  []any{"petstore_auth"},
 		Level: checker.INFO,
 	}, errs[0])
-	require.Equal(t, "security scheme 'petstore_auth' was removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing a security scope from an API global security
@@ -64,7 +64,7 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 		Args:  []any{"read:pets", "petstore_auth"},
 		Level: checker.INFO,
 	}, errs[0])
-	require.Equal(t, "security scope 'read:pets' was removed from global security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed security scope 'read:pets' from global security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding a security scope from an API global security
@@ -128,7 +128,7 @@ func TestAPISecurityDeleted(t *testing.T) {
 		Path:      "/subscribe",
 		Source:    load.NewSource("../data/checker/api_security_added_base.yaml"),
 	}, errs[0])
-	require.Equal(t, "endpoint scheme security 'petstore_auth' was removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed endpoint scheme security 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing a security scope from an API endpoint security
@@ -150,7 +150,7 @@ func TestAPISecurityScopeRemoved(t *testing.T) {
 		Path:      "/subscribe",
 		Source:    load.NewSource("../data/checker/api_security_updated_revision.yaml"),
 	}, errs[0])
-	require.Equal(t, "security scope 'read:pets' was removed from endpoint security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed security scope 'read:pets' from endpoint security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding a security scope to an API endpoint security

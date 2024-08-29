@@ -68,11 +68,11 @@ func ResponsePropertyDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 
 							defaultValueDiff := propertyDiff.DefaultDiff
 							if defaultValueDiff.From == nil {
-								appendResultItem(ResponsePropertyDefaultValueAddedId, propertyName, defaultValueDiff.To, responseStatus)
+								appendResultItem(ResponsePropertyDefaultValueAddedId, defaultValueDiff.To, propertyName, responseStatus)
 							} else if defaultValueDiff.To == nil {
-								appendResultItem(ResponsePropertyDefaultValueRemovedId, propertyName, defaultValueDiff.From, responseStatus)
+								appendResultItem(ResponsePropertyDefaultValueRemovedId, defaultValueDiff.From, propertyName, responseStatus)
 							} else {
-								appendResultItem(ResponsePropertyDefaultValueChangedId, propertyName, defaultValueDiff.From, defaultValueDiff.To, responseStatus)
+								appendResultItem(ResponsePropertyDefaultValueChangedId, defaultValueDiff.From, defaultValueDiff.To, propertyName, responseStatus)
 							}
 						})
 				}
