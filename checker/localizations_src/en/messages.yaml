@@ -46,12 +46,11 @@ request-body-enum-value-removed: enum value %s removed from media-type %s of req
 response-mediatype-enum-value-removed: response schema %s enum value removed %s
 request-header-property-became-required: property %s of request header %s became required # done
 request-header-property-became-enum: property %s of request header %s was restricted to a list of enum values # done
-request-parameter-became-required: "%s request parameter %s became required"
-request-parameter-became-optional: "%s request parameter %s became optional"
+request-parameter-became-required: "%s request parameter %s became required" # done
+request-parameter-became-optional: "%s request parameter %s became optional" # done
 request-parameter-became-enum: "%s request parameter %s was restricted to a list of enum values"
 request-parameter-enum-value-removed: removed enum value %s from the %s request parameter %s
 request-parameter-enum-value-added: added enum value %s to the %s request parameter %s
-pattern-changed-warn-comment: This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')
 request-parameter-x-extensible-enum-value-removed: removed x-extensible-enum value %s from the %s request parameter %s
 request-parameter-max-decreased: for %s request parameter %s, max was decreased from %s to %s
 request-parameter-max-increased: for %s request parameter %s, max was increased from %s to %s
@@ -63,9 +62,7 @@ request-parameter-max-length-increased: for %s request parameter %s, maxLength w
 request-parameter-min-length-increased: for %s request parameter %s, minLength was increased from %s to %s
 request-parameter-min-length-decreased: for %s request parameter %s, minLength was decreased from %s to %s
 request-parameter-max-length-set: for %s request parameter %s, maxLength was set to %s
-request-parameter-max-length-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
 request-parameter-max-set: for %s request parameter %s, max was set to %s
-request-parameter-max-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
 request-parameter-min-increased: for %s request parameter %s, min was increased from %s to %s
 request-parameter-min-decreased: for %s request parameter %s, min was decreased from %s to %s
 request-parameter-max-items-decreased: for %s request parameter %s, maxItems was decreased from %s to %s
@@ -73,13 +70,10 @@ request-parameter-max-items-increased: for %s request parameter %s, maxItems was
 request-parameter-min-items-increased: for %s request parameter %s, minItems was increased from %s to %s
 request-parameter-min-items-decreased: for %s request parameter %s, minItems was decreased from %s to %s
 request-parameter-min-items-set: for %s request parameter %s, minItems was set to %s
-request-parameter-min-items-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
 request-parameter-min-set: for %s request parameter %s, min was set to %s
-request-parameter-min-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
 request-parameter-type-changed: for %s request parameter %s, type/format was changed from %s/%s to %s/%s
 request-parameter-type-generalized: for %s request parameter %s, type/format was generalized from %s/%s to %s/%s
 request-parameter-property-type-changed: for %s request parameter %s, type/format of property %s was changed from %s/%s to %s/%s
-request-parameter-property-type-changed-warn-comment: This is a warning because parameter objects can be passed in differnt ways, some of which allow this type change and others do not.
 request-parameter-property-type-generalized: for %s request parameter %s, type/format of property %s was generalized from %s/%s to %s/%s
 request-parameter-property-type-specialized: for %s request parameter %s, type/format of property %s was specialized from %s/%s to %s/%s
 new-request-path-parameter: added path request parameter %s
@@ -109,13 +103,9 @@ request-property-max-increased: max value of request property %s of media-type %
 request-body-max-length-increased: maxLength value of media-type %s of request body was increased from %s to %s
 request-property-max-length-increased: maxLength value of request property %s of media-type %s was increased from %s to %s
 request-body-max-length-set: maxLength value of media-type %s of request body was set to %s
-request-body-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-max-length-set: maxLength value of request property %s of media-type %s was set to %s
-request-property-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-body-max-set: max value of media-type %s of request body was set to %s
-request-body-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-max-set: max value of request property %s of media-type %s was set to %s
-request-property-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-body-min-increased: min value of media-type %s of request body was increased to %s
 request-property-min-increased: min value of request property %s of media-type %s was increased to %s
 request-read-only-property-min-increased: min value of request read-only property %s of media-type %s was increased to %s
@@ -126,13 +116,9 @@ request-property-min-decreased: min value of request property %s of media-type %
 request-body-min-items-decreased: minItems value of media-type %s of request body was decreased from %s to %s
 request-property-min-items-decreased: minItems value of request property %s of media-type %s was decreased from %s to %s
 request-body-min-items-set: minItems value of media-type %s of request body was set to %s
-request-body-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-min-items-set: minItems value of request property %s of media-type %s was set to %s
-request-property-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-body-min-set: min value of media-type %s of request body was set to %s
-request-body-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-min-set: min value of request property %s of media-type %s was set to %s
-request-property-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 request-property-removed: removed request property %s of media-type %s
 request-body-type-changed: type/format of media-type %s of request body changed from %s/%s to %s/%s
 request-body-type-generalized: type/format of media-type %s of request body was generalized from %s/%s to %s/%s
@@ -284,6 +270,21 @@ request-required-property-became-write-only: request required property %s became
 request-required-property-became-not-write-only: request required property %s became not write-only
 new-required-request-default-parameter-to-existing-path: added required %s request parameter %s to all path's operations
 new-optional-request-default-parameter-to-existing-path: added optional %s request parameter %s to all path's operations
+# warnings
+pattern-changed-warn-comment: This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')
+request-parameter-max-length-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-max-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-min-items-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-min-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-property-type-changed-warn-comment: This is a warning because parameter objects can be passed in differnt ways, some of which allow this type change and others do not.
+request-body-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 # descriptions
 request-body-added-required-description: required request body added
 request-body-added-optional-description: optional request body added

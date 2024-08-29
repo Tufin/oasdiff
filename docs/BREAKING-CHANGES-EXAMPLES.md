@@ -208,7 +208,7 @@ These examples are automatically generated from unit tests.
 [changing a response property schema type from a single value to to multiple types](../checker/check_response_property_type_changed_test.go?plain=1#L126)  
 [changing a response property schema type from string to integer](../checker/check_response_property_type_changed_test.go?plain=1#L36)  
 [changing a response schema type](../checker/check_response_property_type_changed_test.go?plain=1#L14)  
-[changing an existing header param from required to optional](../checker/check_request_parameter_required_value_updated_test.go?plain=1#L35)  
+[changing an existing header param from required to optional](../checker/check_request_parameter_required_value_updated_test.go?plain=1#L36)  
 [changing an existing header param to optional](../checker/check_not_breaking_test.go?plain=1#L132)  
 [changing an existing request body from required to optional](../checker/check_not_breaking_test.go?plain=1#L53)  
 [changing discriminator mapping in the request body or request body property](../checker/check_request_discriminator_updated_test.go?plain=1#L113)  
