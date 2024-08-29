@@ -35,9 +35,9 @@ sunset-deleted: api sunset date deleted, but deprecated=true kept
 api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %s days from now
 new-required-request-parameter: added required %s request parameter %s
 new-optional-request-parameter: added optional %s request parameter %s
-new-required-request-property: added required request property %s
+new-required-request-property: added required request property %s to media-type %s
 new-required-request-property-with-default: added required request property %s with a default value to media-type %s
-new-optional-request-property: added optional request property %s
+new-optional-request-property: added optional request property %s to media-type %s
 new-required-request-header-property: added required %s request header's property %s
 request-body-became-required: request body became required
 request-body-became-optional: request body became optional
