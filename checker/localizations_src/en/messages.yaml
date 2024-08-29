@@ -38,14 +38,14 @@ new-optional-request-parameter: added optional %s request parameter %s
 new-required-request-property: added required request property %s to media-type %s # done
 new-required-request-property-with-default: added required request property %s with a default value to media-type %s # done
 new-optional-request-property: added optional request property %s to media-type %s # done
-new-required-request-header-property: added required %s request header's property %s
+new-required-request-header-property: added required %s request header property %s # done
 request-body-became-required: request body became required
 request-body-became-optional: request body became optional
 request-body-became-enum: media-type %s of request body was restricted to a list of enum values # done
 request-body-enum-value-removed: enum value %s removed from media-type %s of request body # done
 response-mediatype-enum-value-removed: response schema %s enum value removed %s
-request-header-property-became-required: "%s request header's property %s became required"
-request-header-property-became-enum: "%s request header's property %s was restricted to a list of enum values"
+request-header-property-became-required: property %s of request header %s became required # done
+request-header-property-became-enum: property %s of request header %s was restricted to a list of enum values # done
 request-parameter-became-required: "%s request parameter %s became required"
 request-parameter-became-optional: "%s request parameter %s became optional"
 request-parameter-became-enum: "%s request parameter %s was restricted to a list of enum values"

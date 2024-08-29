@@ -34,7 +34,7 @@ func TestBreaking_NewRequiredProperty(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.NewRequiredRequestHeaderPropertyId, errs[0].GetId())
-	require.Equal(t, "added required 'network-policies' request header's property 'courseId'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "added required 'network-policies' request header property 'courseId'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: new optional property in request header is not breaking
@@ -79,7 +79,7 @@ func TestBreaking_PropertyRequiredEnabled(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestHeaderPropertyBecameRequiredId, errs[0].GetId())
-	require.Equal(t, "'network-policies' request header's property 'courseId' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "property 'courseId' of request header 'network-policies' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing an existing property in request header to optional is not breaking
@@ -222,7 +222,7 @@ func TestBreaking_ReqParameterHeaderPropertyBecameEnum(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.RequestHeaderPropertyBecameEnumId, errs[0].GetId())
-	require.Equal(t, "'bookId' request header's property 'name' was restricted to a list of enum values", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "property 'name' of request header 'bookId' was restricted to a list of enum values", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing a response body to nullable is breaking
