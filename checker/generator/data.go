@@ -7,6 +7,7 @@ func getAll() ValueSets {
 		getPaths(),
 		getRequest(),
 		getResponse(),
+		getComponents(),
 	)
 }
 
@@ -29,6 +30,33 @@ func getPaths() ValueSets {
 	return NewValueSets(nil, nil, pathsValueSets)
 }
 
+func getComponents() ValueSets {
+	return slices.Concat(
+		getSecurity(),
+	)
+}
+
+func getSecurity() ValueSets {
+	return NewValueSets(nil, nil, securityValueSets)
+}
+
+var securityValueSets = ValueSets{
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		nouns:         []string{"endpoint scheme security"},
+		actions:       []string{"add", "remove"},
+	},
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		hierarchy:     []string{"global security scheme"},
+		attributed:    []bool{false},
+		nouns:         []string{"security scope"},
+		actions:       []string{"add", "remove"},
+	},
+}
+
 var pathsValueSets = ValueSets{
 	ValueSetB{
 		adjective:     "%s",
@@ -36,6 +64,15 @@ var pathsValueSets = ValueSets{
 		nouns:         []string{"success response status", "non-success response status"},
 		actions:       []string{"add", "remove"},
 	},
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		hierarchy:     []string{"endpoint security scheme"},
+		attributed:    []bool{false},
+		nouns:         []string{"security scope"},
+		actions:       []string{"add", "remove"},
+	},
+	// security scope %s was added to endpoint security scheme %s
 }
 
 var schemaValueSets = ValueSets{
@@ -55,6 +92,10 @@ var schemaValueSets = ValueSets{
 	},
 	ValueSetA{
 		nouns:   []string{"pattern"},
+		actions: []string{"change"},
+	},
+	ValueSetA{
+		nouns:   []string{"required property", "optional property"},
 		actions: []string{"change"},
 	},
 	ValueSetB{

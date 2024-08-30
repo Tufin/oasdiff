@@ -82,7 +82,8 @@ func getHierarchyMessage(hierarchy []string, atttibuted []bool) string {
 }
 
 func isTopLevel(s string) bool {
-	return s == "request body" || s == "paths"
+	return s == "request body" ||
+		s == "paths"
 }
 
 func standardizeSpaces(s string) string {
@@ -110,6 +111,8 @@ func conjugate(verb string) string {
 		return "set"
 	case "add":
 		return "added"
+	case "become":
+		return "became"
 	}
 	return verb + "d"
 }
