@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"io"
+	"strings"
 )
 
 type ValueSets []IValueSet
@@ -53,7 +54,7 @@ type ValueSetB ValueSet
 
 func (v ValueSetB) generate(out io.Writer) {
 	generateMessage := func(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
-		return standardizeSpaces(fmt.Sprintf("%s %s %s %s", conjugate(action), addAttribute(noun, adjective, v.adjectiveType), getPreposition(action), getHierarchyMessage(hierarchy, atttibuted)))
+		return standardizeSpaces(strings.Join([]string{conjugate(action), addAttribute(noun, adjective, v.adjectiveType), getHierarchyPostfix(action, hierarchy, atttibuted)}, " "))
 	}
 
 	for _, noun := range v.nouns {

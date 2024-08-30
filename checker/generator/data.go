@@ -4,6 +4,7 @@ import "slices"
 
 func getAll() ValueSets {
 	return slices.Concat(
+		getPaths(),
 		getRequest(),
 		getResponse(),
 	)
@@ -11,20 +12,36 @@ func getAll() ValueSets {
 
 func getRequest() ValueSets {
 	return slices.Concat(
-		getSchema([]string{"media-type", "request body"}, nil),
-		getSchema([]string{"property", "media-type", "request body"}, nil),
-		getSchema([]string{"request parameter"}, []bool{true}),
+		schemaValueSets([]string{"media-type", "request body"}, nil),
+		schemaValueSets([]string{"property", "media-type", "request body"}, nil),
+		schemaValueSets([]string{"request parameter"}, []bool{true}),
 	)
 }
 
 func getResponse() ValueSets {
 	return slices.Concat(
-		getSchema([]string{"media-type", "response"}, nil),
-		getSchema([]string{"property", "media-type", "response"}, nil),
+		schemaValueSets([]string{"media-type", "response"}, nil),
+		schemaValueSets([]string{"property", "media-type", "response"}, nil),
 	)
 }
 
-func getSchema(hierarchy []string, attributed []bool) ValueSets {
+func getPaths() ValueSets {
+	return pathValueSets(nil, nil)
+}
+
+func pathValueSets(hierarchy []string, attributed []bool) ValueSets {
+	return ValueSets{
+		ValueSetB{
+			adjective:     "%s",
+			adjectiveType: PREDICATIVE,
+			hierarchy:     hierarchy,
+			nouns:         []string{"success response status", "non-success response status"},
+			actions:       []string{"add", "remove"},
+		},
+	}
+}
+
+func schemaValueSets(hierarchy []string, attributed []bool) ValueSets {
 	return ValueSets{
 		ValueSetA{
 			adjective:     "value",

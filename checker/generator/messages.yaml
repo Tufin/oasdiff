@@ -1,3 +1,7 @@
+success-response-status-added: added success response status %s
+success-response-status-removed: removed success response status %s
+non-success-response-status-added: added non-success response status %s
+non-success-response-status-removed: removed non-success response status %s
 request-body-media-type-max-set: max value of media-type %s of request body was set to %s
 request-body-media-type-max-increased: max value of media-type %s of request body was increased from %s to %s
 request-body-media-type-max-decreased: max value of media-type %s of request body was decreased from %s to %s

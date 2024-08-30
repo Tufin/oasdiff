@@ -20,17 +20,44 @@ func Generate() error {
 	return nil
 }
 
+func isEmpty(s string) bool {
+	return s == ""
+}
+
+func filterStrings(list []string, f func(string) bool) []string {
+	var result []string
+	for _, s := range list {
+		if !f(s) {
+			result = append(result, s)
+		}
+	}
+	return result
+}
+
 func generateId(hierarchy []string, noun, action string) string {
 	if before, _, found := strings.Cut(noun, "/"); found {
 		noun = before
 	}
-	return strcase.ToKebab(concat(hierarchy) + "-" + noun + "-" + conjugate(action))
+
+	return strcase.ToKebab(strings.Join(filterStrings([]string{concat(hierarchy), noun, conjugate(action)}, isEmpty), "-"))
 }
 
 func concat(list []string) string {
+	if list == nil {
+		return ""
+	}
+
 	copy := slices.Clone(list)
 	slices.Reverse(copy)
 	return strings.Join(copy, "-")
+}
+
+func getHierarchyPostfix(action string, hierarchy []string, atttibuted []bool) string {
+	if hierarchy == nil {
+		return ""
+	}
+
+	return getPreposition(action) + " " + getHierarchyMessage(hierarchy, atttibuted)
 }
 
 func getHierarchyMessage(hierarchy []string, atttibuted []bool) string {
@@ -47,7 +74,7 @@ func getHierarchyMessage(hierarchy []string, atttibuted []bool) string {
 
 	result := strings.Join(copy, " %s of ")
 
-	if !isTopLevel(hierarchy[len(hierarchy)-1]) {
+	if hierarchy != nil && !isTopLevel(hierarchy[len(hierarchy)-1]) {
 		result += " %s"
 	}
 
@@ -55,7 +82,7 @@ func getHierarchyMessage(hierarchy []string, atttibuted []bool) string {
 }
 
 func isTopLevel(s string) bool {
-	return s == "request body"
+	return s == "request body" || s == "paths"
 }
 
 func standardizeSpaces(s string) string {
