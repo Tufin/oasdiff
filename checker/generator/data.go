@@ -27,11 +27,12 @@ func getResponse() ValueSets {
 func getSchema(hierarchy []string, attributed []bool) ValueSets {
 	return ValueSets{
 		ValueSetA{
-			adjective:  "value",
-			hierarchy:  hierarchy,
-			attributed: attributed,
-			nouns:      []string{"max", "maxLength", "min", "minLength", "minItems", "maxItems"},
-			actions:    []string{"set", "increase", "decrease"},
+			adjective:     "value",
+			adjectiveType: PREDICATIVE,
+			hierarchy:     hierarchy,
+			attributed:    attributed,
+			nouns:         []string{"max", "maxLength", "min", "minLength", "minItems", "maxItems"},
+			actions:       []string{"set", "increase", "decrease"},
 		},
 		ValueSetA{
 			hierarchy: hierarchy,
@@ -43,25 +44,50 @@ func getSchema(hierarchy []string, attributed []bool) ValueSets {
 			nouns:     []string{"discriminator property name"},
 			actions:   []string{"change"},
 		},
-		ValueSetB{
-			hierarchy: append([]string{"anyOf list"}, hierarchy...),
-			nouns:     []string{"%s"},
-			actions:   []string{"add", "remove"},
+		ValueSetA{
+			hierarchy: hierarchy,
+			nouns:     []string{"pattern"},
+			actions:   []string{"change"},
 		},
 		ValueSetB{
-			hierarchy: append([]string{"oneOf list"}, hierarchy...),
-			nouns:     []string{"%s"},
-			actions:   []string{"add", "remove"},
-		},
-		ValueSetB{
-			hierarchy: append([]string{"allOf list"}, hierarchy...),
-			nouns:     []string{"%s"},
-			actions:   []string{"add", "remove"},
+			adjective:     "%s",
+			adjectiveType: PREDICATIVE,
+			hierarchy:     hierarchy,
+			nouns:         []string{"pattern"},
+			actions:       []string{"add", "remove"},
 		},
 		ValueSetB{
 			hierarchy: hierarchy,
-			nouns:     []string{"discriminator", "mapping keys"},
+			nouns:     []string{"default value"},
 			actions:   []string{"add", "remove"},
+		},
+		ValueSetB{
+			adjective:     "%s",
+			adjectiveType: PREDICATIVE,
+			hierarchy:     append([]string{"anyOf list"}, hierarchy...),
+			nouns:         []string{"schema"},
+			actions:       []string{"add", "remove"},
+		},
+		ValueSetB{
+			adjective:     "%s",
+			adjectiveType: PREDICATIVE,
+			hierarchy:     append([]string{"oneOf list"}, hierarchy...),
+			nouns:         []string{"schema"},
+			actions:       []string{"add", "remove"},
+		},
+		ValueSetB{
+			adjective:     "%s",
+			adjectiveType: PREDICATIVE,
+			hierarchy:     append([]string{"allOf list"}, hierarchy...),
+			nouns:         []string{"schema"},
+			actions:       []string{"add", "remove"},
+		},
+		ValueSetB{
+			adjective:     "%s",
+			adjectiveType: PREDICATIVE,
+			hierarchy:     hierarchy,
+			nouns:         []string{"discriminator", "mapping keys"},
+			actions:       []string{"add", "remove"},
 		},
 	}
 }

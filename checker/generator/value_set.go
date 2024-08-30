@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-type ValueSets []ValueSet
+type ValueSets []IValueSet
 
 func (vs ValueSets) generate(out io.Writer) {
 	for _, v := range vs {
@@ -13,22 +13,32 @@ func (vs ValueSets) generate(out io.Writer) {
 	}
 }
 
-type ValueSet interface {
+type IValueSet interface {
 	generate(out io.Writer)
 }
 
-// ValueSetA messages start with the noun
-type ValueSetA struct {
-	adjective  string
-	hierarchy  []string
-	attributed []bool
-	nouns      []string
-	actions    []string
+type AdjectiveType bool
+
+const (
+	PREDICATIVE AdjectiveType = false // PREDICATIVE adjectives are added after the noun (default)
+	ATTRIBUTIVE AdjectiveType = true  // ATTRIBUTIVE adjectives are added before the noun
+)
+
+type ValueSet struct {
+	adjective     string // adjective is added to the noun
+	adjectiveType AdjectiveType
+	hierarchy     []string
+	attributed    []bool // attributed levels in the hierarchy are preceded by a name (%s)
+	nouns         []string
+	actions       []string
 }
+
+// ValueSetA messages start with the noun
+type ValueSetA ValueSet
 
 func (v ValueSetA) generate(out io.Writer) {
 	generateMessage := func(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
-		return standardizeSpaces(fmt.Sprintf("%s %s of %s was %s", noun, adjective, getHierarchyMessage(hierarchy, atttibuted), getActionMessage(action)))
+		return standardizeSpaces(fmt.Sprintf("%s of %s was %s", addAttribute(noun, adjective, v.adjectiveType), getHierarchyMessage(hierarchy, atttibuted), getActionMessage(action)))
 	}
 
 	for _, noun := range v.nouns {
@@ -39,17 +49,11 @@ func (v ValueSetA) generate(out io.Writer) {
 }
 
 // ValueSetB messages start with the action
-type ValueSetB struct {
-	adjective  string
-	hierarchy  []string
-	attributed []bool
-	nouns      []string
-	actions    []string
-}
+type ValueSetB ValueSet
 
 func (v ValueSetB) generate(out io.Writer) {
-	generateMessage := func(hierarchy []string, atttibuted []bool, noun, _, action string) string {
-		return standardizeSpaces(fmt.Sprintf("%s %s %s %s", conjugate(action), noun, getPreposition(action), getHierarchyMessage(hierarchy, atttibuted)))
+	generateMessage := func(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
+		return standardizeSpaces(fmt.Sprintf("%s %s %s %s", conjugate(action), addAttribute(noun, adjective, v.adjectiveType), getPreposition(action), getHierarchyMessage(hierarchy, atttibuted)))
 	}
 
 	for _, noun := range v.nouns {
