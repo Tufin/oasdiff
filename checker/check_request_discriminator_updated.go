@@ -50,7 +50,7 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 				))
 			}
 
-			for _, mediaTypeDiff := range operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified {
+			for mediaType, mediaTypeDiff := range operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified {
 				if mediaTypeDiff.SchemaDiff == nil {
 					continue
 				}
@@ -58,6 +58,7 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 				processDiscriminatorDiffForRequest(
 					mediaTypeDiff.SchemaDiff.DiscriminatorDiff,
 					"",
+					mediaType,
 					appendResultItem)
 
 				CheckModifiedPropertiesDiff(
@@ -66,6 +67,7 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 						processDiscriminatorDiffForRequest(
 							propertyDiff.DiscriminatorDiff,
 							propertyFullName(propertyPath, propertyName),
+							mediaType,
 							appendResultItem)
 					})
 
@@ -78,6 +80,7 @@ func RequestDiscriminatorUpdatedCheck(diffReport *diff.Diff, operationsSources *
 func processDiscriminatorDiffForRequest(
 	discriminatorDiff *diff.DiscriminatorDiff,
 	propertyName string,
+	mediaType string,
 	appendResultItem func(messageId string, a ...any)) {
 
 	if discriminatorDiff == nil {
@@ -91,17 +94,17 @@ func processDiscriminatorDiffForRequest(
 
 	if discriminatorDiff.Added {
 		if propertyName == "" {
-			appendResultItem(messageIdPrefix + "-added")
+			appendResultItem(messageIdPrefix+"-added", mediaType)
 		} else {
-			appendResultItem(messageIdPrefix+"-added", propertyName)
+			appendResultItem(messageIdPrefix+"-added", propertyName, mediaType)
 		}
 		return
 	}
 	if discriminatorDiff.Deleted {
 		if propertyName == "" {
-			appendResultItem(messageIdPrefix + "-removed")
+			appendResultItem(messageIdPrefix+"-removed", mediaType)
 		} else {
-			appendResultItem(messageIdPrefix+"-removed", propertyName)
+			appendResultItem(messageIdPrefix+"-removed", propertyName, mediaType)
 		}
 		return
 	}
@@ -110,12 +113,14 @@ func processDiscriminatorDiffForRequest(
 		if propertyName == "" {
 			appendResultItem(messageIdPrefix+"-property-name-changed",
 				discriminatorDiff.PropertyNameDiff.From,
-				discriminatorDiff.PropertyNameDiff.To)
+				discriminatorDiff.PropertyNameDiff.To,
+				mediaType)
 		} else {
 			appendResultItem(messageIdPrefix+"-property-name-changed",
 				propertyName,
 				discriminatorDiff.PropertyNameDiff.From,
-				discriminatorDiff.PropertyNameDiff.To)
+				discriminatorDiff.PropertyNameDiff.To,
+				mediaType)
 		}
 	}
 
@@ -123,22 +128,26 @@ func processDiscriminatorDiffForRequest(
 		if len(discriminatorDiff.MappingDiff.Added) > 0 {
 			if propertyName == "" {
 				appendResultItem(messageIdPrefix+"-mapping-added",
-					discriminatorDiff.MappingDiff.Added)
+					discriminatorDiff.MappingDiff.Added,
+					mediaType)
 			} else {
 				appendResultItem(messageIdPrefix+"-mapping-added",
 					discriminatorDiff.MappingDiff.Added,
-					propertyName)
+					propertyName,
+					mediaType)
 			}
 		}
 
 		if len(discriminatorDiff.MappingDiff.Deleted) > 0 {
 			if propertyName == "" {
 				appendResultItem(messageIdPrefix+"-mapping-deleted",
-					discriminatorDiff.MappingDiff.Deleted)
+					discriminatorDiff.MappingDiff.Deleted,
+					mediaType)
 			} else {
 				appendResultItem(messageIdPrefix+"-mapping-deleted",
 					discriminatorDiff.MappingDiff.Deleted,
-					propertyName)
+					propertyName,
+					mediaType)
 			}
 		}
 
@@ -147,13 +156,15 @@ func processDiscriminatorDiffForRequest(
 				appendResultItem(messageIdPrefix+"-mapping-changed",
 					k,
 					v.From,
-					v.To)
+					v.To,
+					mediaType)
 			} else {
 				appendResultItem(messageIdPrefix+"-mapping-changed",
 					k,
 					v.From,
 					v.To,
-					propertyName)
+					propertyName,
+					mediaType)
 
 			}
 		}

@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-// CL: changing request's body to required is breaking
+// CL: changing request's body to required is breaking: request-body-became-required
 func TestRequestBodyBecameRequired(t *testing.T) {
 	s1, err := open("../data/checker/request_body_became_required_base.yaml")
 	require.NoError(t, err)
@@ -30,9 +30,10 @@ func TestRequestBodyBecameRequired(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_body_became_required_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "request body became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: changing request's body to optional
+// CL: changing request's body to optional: request-body-became-optional
 func TestRequestBodyBecameOptional(t *testing.T) {
 	s1, err := open("../data/checker/request_body_became_optional_base.yaml")
 	require.NoError(t, err)
@@ -53,4 +54,5 @@ func TestRequestBodyBecameOptional(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_body_became_optional_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "request body became optional", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

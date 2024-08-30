@@ -304,7 +304,7 @@ func TestBreaking_OperationIdRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIOperationIdRemovedId, errs[0].GetId())
 	require.Equal(t, "api operation id 'GetSecurityScores' removed and replaced with 'newOperationId'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APIOperationIdRemovedId)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APIOperationIdRemovedId, "api operation id 'GetSecurityScores' removed and replaced with 'newOperationId'")
 }
 
 // BC: removing/updating an enum in request body is breaking (optional): request-body-enum-value-removed

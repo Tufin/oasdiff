@@ -246,12 +246,12 @@ response-body-discriminator-mapping-deleted: removed %s mapping keys from respon
 response-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from %s response property for response status %s
 response-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the response discriminator for response status %s
 response-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s response property for response status %s
-request-body-discriminator-added: added request discriminator
-request-property-discriminator-added: added discriminator to %s request property
-request-body-discriminator-removed: removed request discriminator
-request-property-discriminator-removed: removed discriminator from %s request property
-request-body-discriminator-property-name-changed: request discriminator property name changed from %s to %s
-request-property-discriminator-property-name-changed: request discriminator property name changed for %s request property from %s to %s
+request-body-discriminator-added: added discriminator to media-type %s of request body
+request-property-discriminator-added: added discriminator to property %s of media-type %s of request body
+request-body-discriminator-removed: removed discriminator from media-type %s of request body
+request-property-discriminator-removed: removed discriminator from property %s of media-type %s of request body
+request-body-discriminator-property-name-changed: discriminator property name of media-type %s of request body changed from %s to %s
+request-property-discriminator-property-name-changed: discriminator property name of request property %s of media-type %s changed from %s to %s
 request-body-discriminator-mapping-added: added %s mapping keys to request discriminator
 request-property-discriminator-mapping-added: added %s discriminator mapping keys to %s request property
 request-body-discriminator-mapping-deleted: removed %s mapping keys from request discriminator
