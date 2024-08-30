@@ -50,10 +50,7 @@ type ValueSet struct {
 	actions       []string
 }
 
-// ValueSetA messages start with the noun
-type ValueSetA ValueSet
-
-func (v ValueSetA) setHierarchy(hierarchy []string, attributed []bool) IValueSet {
+func (v ValueSet) setHierarchy(hierarchy []string, attributed []bool) ValueSet {
 	if len(hierarchy) == 0 {
 		return v
 	}
@@ -62,6 +59,13 @@ func (v ValueSetA) setHierarchy(hierarchy []string, attributed []bool) IValueSet
 	v.attributed = append(v.attributed, attributed...)
 
 	return v
+}
+
+// ValueSetA messages start with the noun
+type ValueSetA ValueSet
+
+func (v ValueSetA) setHierarchy(hierarchy []string, attributed []bool) IValueSet {
+	return ValueSetA(ValueSet(v).setHierarchy(hierarchy, attributed))
 }
 
 func (v ValueSetA) generate(out io.Writer) {
@@ -80,14 +84,7 @@ func (v ValueSetA) generate(out io.Writer) {
 type ValueSetB ValueSet
 
 func (v ValueSetB) setHierarchy(hierarchy []string, attributed []bool) IValueSet {
-	if len(hierarchy) == 0 {
-		return v
-	}
-
-	v.hierarchy = append(v.hierarchy, hierarchy...)
-	v.attributed = append(v.attributed, attributed...)
-
-	return v
+	return ValueSetB(ValueSet(v).setHierarchy(hierarchy, attributed))
 }
 
 func (v ValueSetB) generate(out io.Writer) {
