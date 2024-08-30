@@ -12,99 +12,89 @@ func getAll() ValueSets {
 
 func getRequest() ValueSets {
 	return slices.Concat(
-		schemaValueSets([]string{"media-type", "request body"}, nil),
-		schemaValueSets([]string{"property", "media-type", "request body"}, nil),
-		schemaValueSets([]string{"request parameter"}, []bool{true}),
+		NewValueSets([]string{"media-type", "request body"}, nil, schemaValueSets),
+		NewValueSets([]string{"property", "media-type", "request body"}, nil, schemaValueSets),
+		NewValueSets([]string{"request parameter"}, []bool{true}, schemaValueSets),
 	)
 }
 
 func getResponse() ValueSets {
 	return slices.Concat(
-		schemaValueSets([]string{"media-type", "response"}, nil),
-		schemaValueSets([]string{"property", "media-type", "response"}, nil),
+		NewValueSets([]string{"media-type", "response"}, nil, schemaValueSets),
+		NewValueSets([]string{"property", "media-type", "response"}, nil, schemaValueSets),
 	)
 }
 
 func getPaths() ValueSets {
-	return pathValueSets(nil, nil)
+	return NewValueSets(nil, nil, pathsValueSets)
 }
 
-func pathValueSets(hierarchy []string, attributed []bool) ValueSets {
-	return ValueSets{
-		ValueSetB{
-			adjective:     "%s",
-			adjectiveType: PREDICATIVE,
-			hierarchy:     hierarchy,
-			nouns:         []string{"success response status", "non-success response status"},
-			actions:       []string{"add", "remove"},
-		},
-	}
+var pathsValueSets = ValueSets{
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		nouns:         []string{"success response status", "non-success response status"},
+		actions:       []string{"add", "remove"},
+	},
 }
 
-func schemaValueSets(hierarchy []string, attributed []bool) ValueSets {
-	return ValueSets{
-		ValueSetA{
-			adjective:     "value",
-			adjectiveType: PREDICATIVE,
-			hierarchy:     hierarchy,
-			attributed:    attributed,
-			nouns:         []string{"max", "maxLength", "min", "minLength", "minItems", "maxItems"},
-			actions:       []string{"set", "increase", "decrease"},
-		},
-		ValueSetA{
-			hierarchy: hierarchy,
-			nouns:     []string{"type/format"},
-			actions:   []string{"change", "generalize"},
-		},
-		ValueSetA{
-			hierarchy: hierarchy,
-			nouns:     []string{"discriminator property name"},
-			actions:   []string{"change"},
-		},
-		ValueSetA{
-			hierarchy: hierarchy,
-			nouns:     []string{"pattern"},
-			actions:   []string{"change"},
-		},
-		ValueSetB{
-			adjective:     "%s",
-			adjectiveType: PREDICATIVE,
-			hierarchy:     hierarchy,
-			nouns:         []string{"pattern"},
-			actions:       []string{"add", "remove"},
-		},
-		ValueSetB{
-			hierarchy: hierarchy,
-			nouns:     []string{"default value"},
-			actions:   []string{"add", "remove"},
-		},
-		ValueSetB{
-			adjective:     "%s",
-			adjectiveType: PREDICATIVE,
-			hierarchy:     append([]string{"anyOf list"}, hierarchy...),
-			nouns:         []string{"schema"},
-			actions:       []string{"add", "remove"},
-		},
-		ValueSetB{
-			adjective:     "%s",
-			adjectiveType: PREDICATIVE,
-			hierarchy:     append([]string{"oneOf list"}, hierarchy...),
-			nouns:         []string{"schema"},
-			actions:       []string{"add", "remove"},
-		},
-		ValueSetB{
-			adjective:     "%s",
-			adjectiveType: PREDICATIVE,
-			hierarchy:     append([]string{"allOf list"}, hierarchy...),
-			nouns:         []string{"schema"},
-			actions:       []string{"add", "remove"},
-		},
-		ValueSetB{
-			adjective:     "%s",
-			adjectiveType: PREDICATIVE,
-			hierarchy:     hierarchy,
-			nouns:         []string{"discriminator", "mapping keys"},
-			actions:       []string{"add", "remove"},
-		},
-	}
+var schemaValueSets = ValueSets{
+	ValueSetA{
+		adjective:     "value",
+		adjectiveType: PREDICATIVE,
+		nouns:         []string{"max", "maxLength", "min", "minLength", "minItems", "maxItems"},
+		actions:       []string{"set", "increase", "decrease"},
+	},
+	ValueSetA{
+		nouns:   []string{"type/format"},
+		actions: []string{"change", "generalize"},
+	},
+	ValueSetA{
+		nouns:   []string{"discriminator property name"},
+		actions: []string{"change"},
+	},
+	ValueSetA{
+		nouns:   []string{"pattern"},
+		actions: []string{"change"},
+	},
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		nouns:         []string{"pattern"},
+		actions:       []string{"add", "remove"},
+	},
+	ValueSetB{
+		nouns:   []string{"default value"},
+		actions: []string{"add", "remove"},
+	},
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		hierarchy:     []string{"anyOf list"},
+		attributed:    []bool{false},
+		nouns:         []string{"schema"},
+		actions:       []string{"add", "remove"},
+	},
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		hierarchy:     []string{"anyOf list"},
+		attributed:    []bool{false},
+		nouns:         []string{"schema"},
+		actions:       []string{"add", "remove"},
+	},
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		hierarchy:     []string{"anyOf list"},
+		attributed:    []bool{false},
+		nouns:         []string{"schema"},
+		actions:       []string{"add", "remove"},
+	},
+	ValueSetB{
+		adjective:     "%s",
+		adjectiveType: PREDICATIVE,
+		nouns:         []string{"discriminator", "mapping keys"},
+		actions:       []string{"add", "remove"},
+	},
 }

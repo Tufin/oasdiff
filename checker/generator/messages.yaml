@@ -30,10 +30,10 @@ request-body-media-type-default-value-added: added default value to media-type %
 request-body-media-type-default-value-removed: removed default value from media-type %s of request body
 request-body-media-type-any-of-list-schema-added: added schema %s to anyOf list %s of media-type %s of request body
 request-body-media-type-any-of-list-schema-removed: removed schema %s from anyOf list %s of media-type %s of request body
-request-body-media-type-one-of-list-schema-added: added schema %s to oneOf list %s of media-type %s of request body
-request-body-media-type-one-of-list-schema-removed: removed schema %s from oneOf list %s of media-type %s of request body
-request-body-media-type-all-of-list-schema-added: added schema %s to allOf list %s of media-type %s of request body
-request-body-media-type-all-of-list-schema-removed: removed schema %s from allOf list %s of media-type %s of request body
+request-body-media-type-any-of-list-schema-added: added schema %s to anyOf list %s of media-type %s of request body
+request-body-media-type-any-of-list-schema-removed: removed schema %s from anyOf list %s of media-type %s of request body
+request-body-media-type-any-of-list-schema-added: added schema %s to anyOf list %s of media-type %s of request body
+request-body-media-type-any-of-list-schema-removed: removed schema %s from anyOf list %s of media-type %s of request body
 request-body-media-type-discriminator-added: added discriminator %s to media-type %s of request body
 request-body-media-type-discriminator-removed: removed discriminator %s from media-type %s of request body
 request-body-media-type-mapping-keys-added: added mapping keys %s to media-type %s of request body
@@ -66,10 +66,10 @@ request-body-media-type-property-default-value-added: added default value to pro
 request-body-media-type-property-default-value-removed: removed default value from property %s of media-type %s of request body
 request-body-media-type-property-any-of-list-schema-added: added schema %s to anyOf list %s of property %s of media-type %s of request body
 request-body-media-type-property-any-of-list-schema-removed: removed schema %s from anyOf list %s of property %s of media-type %s of request body
-request-body-media-type-property-one-of-list-schema-added: added schema %s to oneOf list %s of property %s of media-type %s of request body
-request-body-media-type-property-one-of-list-schema-removed: removed schema %s from oneOf list %s of property %s of media-type %s of request body
-request-body-media-type-property-all-of-list-schema-added: added schema %s to allOf list %s of property %s of media-type %s of request body
-request-body-media-type-property-all-of-list-schema-removed: removed schema %s from allOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-any-of-list-schema-added: added schema %s to anyOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-any-of-list-schema-removed: removed schema %s from anyOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-any-of-list-schema-added: added schema %s to anyOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-any-of-list-schema-removed: removed schema %s from anyOf list %s of property %s of media-type %s of request body
 request-body-media-type-property-discriminator-added: added discriminator %s to property %s of media-type %s of request body
 request-body-media-type-property-discriminator-removed: removed discriminator %s from property %s of media-type %s of request body
 request-body-media-type-property-mapping-keys-added: added mapping keys %s to property %s of media-type %s of request body
@@ -92,24 +92,24 @@ request-parameter-min-items-decreased: minItems value of %s request parameter %s
 request-parameter-max-items-set: maxItems value of %s request parameter %s was set to %s
 request-parameter-max-items-increased: maxItems value of %s request parameter %s was increased from %s to %s
 request-parameter-max-items-decreased: maxItems value of %s request parameter %s was decreased from %s to %s
-request-parameter-type-changed: type/format of request parameter %s was changed from %s to %s
-request-parameter-type-generalized: type/format of request parameter %s was generalized from %s to %s
-request-parameter-discriminator-property-name-changed: discriminator property name of request parameter %s was changed from %s to %s
-request-parameter-pattern-changed: pattern of request parameter %s was changed from %s to %s
-request-parameter-pattern-added: added pattern %s to request parameter %s
-request-parameter-pattern-removed: removed pattern %s from request parameter %s
-request-parameter-default-value-added: added default value to request parameter %s
-request-parameter-default-value-removed: removed default value from request parameter %s
-request-parameter-any-of-list-schema-added: added schema %s to anyOf list %s of request parameter %s
-request-parameter-any-of-list-schema-removed: removed schema %s from anyOf list %s of request parameter %s
-request-parameter-one-of-list-schema-added: added schema %s to oneOf list %s of request parameter %s
-request-parameter-one-of-list-schema-removed: removed schema %s from oneOf list %s of request parameter %s
-request-parameter-all-of-list-schema-added: added schema %s to allOf list %s of request parameter %s
-request-parameter-all-of-list-schema-removed: removed schema %s from allOf list %s of request parameter %s
-request-parameter-discriminator-added: added discriminator %s to request parameter %s
-request-parameter-discriminator-removed: removed discriminator %s from request parameter %s
-request-parameter-mapping-keys-added: added mapping keys %s to request parameter %s
-request-parameter-mapping-keys-removed: removed mapping keys %s from request parameter %s
+request-parameter-type-changed: type/format of %s request parameter %s was changed from %s to %s
+request-parameter-type-generalized: type/format of %s request parameter %s was generalized from %s to %s
+request-parameter-discriminator-property-name-changed: discriminator property name of %s request parameter %s was changed from %s to %s
+request-parameter-pattern-changed: pattern of %s request parameter %s was changed from %s to %s
+request-parameter-pattern-added: added pattern %s to %s request parameter %s
+request-parameter-pattern-removed: removed pattern %s from %s request parameter %s
+request-parameter-default-value-added: added default value to %s request parameter %s
+request-parameter-default-value-removed: removed default value from %s request parameter %s
+request-parameter-any-of-list-schema-added: added schema %s to anyOf list %s of %s request parameter %s
+request-parameter-any-of-list-schema-removed: removed schema %s from anyOf list %s of %s request parameter %s
+request-parameter-any-of-list-schema-added: added schema %s to anyOf list %s of %s request parameter %s
+request-parameter-any-of-list-schema-removed: removed schema %s from anyOf list %s of %s request parameter %s
+request-parameter-any-of-list-schema-added: added schema %s to anyOf list %s of %s request parameter %s
+request-parameter-any-of-list-schema-removed: removed schema %s from anyOf list %s of %s request parameter %s
+request-parameter-discriminator-added: added discriminator %s to %s request parameter %s
+request-parameter-discriminator-removed: removed discriminator %s from %s request parameter %s
+request-parameter-mapping-keys-added: added mapping keys %s to %s request parameter %s
+request-parameter-mapping-keys-removed: removed mapping keys %s from %s request parameter %s
 response-media-type-max-set: max value of media-type %s of response %s was set to %s
 response-media-type-max-increased: max value of media-type %s of response %s was increased from %s to %s
 response-media-type-max-decreased: max value of media-type %s of response %s was decreased from %s to %s
@@ -138,10 +138,10 @@ response-media-type-default-value-added: added default value to media-type %s of
 response-media-type-default-value-removed: removed default value from media-type %s of response %s
 response-media-type-any-of-list-schema-added: added schema %s to anyOf list %s of media-type %s of response %s
 response-media-type-any-of-list-schema-removed: removed schema %s from anyOf list %s of media-type %s of response %s
-response-media-type-one-of-list-schema-added: added schema %s to oneOf list %s of media-type %s of response %s
-response-media-type-one-of-list-schema-removed: removed schema %s from oneOf list %s of media-type %s of response %s
-response-media-type-all-of-list-schema-added: added schema %s to allOf list %s of media-type %s of response %s
-response-media-type-all-of-list-schema-removed: removed schema %s from allOf list %s of media-type %s of response %s
+response-media-type-any-of-list-schema-added: added schema %s to anyOf list %s of media-type %s of response %s
+response-media-type-any-of-list-schema-removed: removed schema %s from anyOf list %s of media-type %s of response %s
+response-media-type-any-of-list-schema-added: added schema %s to anyOf list %s of media-type %s of response %s
+response-media-type-any-of-list-schema-removed: removed schema %s from anyOf list %s of media-type %s of response %s
 response-media-type-discriminator-added: added discriminator %s to media-type %s of response %s
 response-media-type-discriminator-removed: removed discriminator %s from media-type %s of response %s
 response-media-type-mapping-keys-added: added mapping keys %s to media-type %s of response %s
@@ -174,10 +174,10 @@ response-media-type-property-default-value-added: added default value to propert
 response-media-type-property-default-value-removed: removed default value from property %s of media-type %s of response %s
 response-media-type-property-any-of-list-schema-added: added schema %s to anyOf list %s of property %s of media-type %s of response %s
 response-media-type-property-any-of-list-schema-removed: removed schema %s from anyOf list %s of property %s of media-type %s of response %s
-response-media-type-property-one-of-list-schema-added: added schema %s to oneOf list %s of property %s of media-type %s of response %s
-response-media-type-property-one-of-list-schema-removed: removed schema %s from oneOf list %s of property %s of media-type %s of response %s
-response-media-type-property-all-of-list-schema-added: added schema %s to allOf list %s of property %s of media-type %s of response %s
-response-media-type-property-all-of-list-schema-removed: removed schema %s from allOf list %s of property %s of media-type %s of response %s
+response-media-type-property-any-of-list-schema-added: added schema %s to anyOf list %s of property %s of media-type %s of response %s
+response-media-type-property-any-of-list-schema-removed: removed schema %s from anyOf list %s of property %s of media-type %s of response %s
+response-media-type-property-any-of-list-schema-added: added schema %s to anyOf list %s of property %s of media-type %s of response %s
+response-media-type-property-any-of-list-schema-removed: removed schema %s from anyOf list %s of property %s of media-type %s of response %s
 response-media-type-property-discriminator-added: added discriminator %s to property %s of media-type %s of response %s
 response-media-type-property-discriminator-removed: removed discriminator %s from property %s of media-type %s of response %s
 response-media-type-property-mapping-keys-added: added mapping keys %s to property %s of media-type %s of response %s

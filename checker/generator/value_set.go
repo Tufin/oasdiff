@@ -8,6 +8,21 @@ import (
 
 type ValueSets []IValueSet
 
+func NewValueSets(hierarchy []string, attributed []bool, valueSets ValueSets) ValueSets {
+
+	result := make(ValueSets, len(valueSets))
+
+	if attributed == nil {
+		attributed = make([]bool, len(hierarchy))
+	}
+
+	for i, vs := range valueSets {
+		result[i] = vs.setHierarchy(hierarchy, attributed)
+	}
+
+	return result
+}
+
 func (vs ValueSets) generate(out io.Writer) {
 	for _, v := range vs {
 		v.generate(out)
@@ -16,6 +31,7 @@ func (vs ValueSets) generate(out io.Writer) {
 
 type IValueSet interface {
 	generate(out io.Writer)
+	setHierarchy(hierarchy []string, attributed []bool) IValueSet
 }
 
 type AdjectiveType bool
@@ -37,6 +53,17 @@ type ValueSet struct {
 // ValueSetA messages start with the noun
 type ValueSetA ValueSet
 
+func (v ValueSetA) setHierarchy(hierarchy []string, attributed []bool) IValueSet {
+	if len(hierarchy) == 0 {
+		return v
+	}
+
+	v.hierarchy = append(v.hierarchy, hierarchy...)
+	v.attributed = append(v.attributed, attributed...)
+
+	return v
+}
+
 func (v ValueSetA) generate(out io.Writer) {
 	generateMessage := func(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
 		return standardizeSpaces(fmt.Sprintf("%s of %s was %s", addAttribute(noun, adjective, v.adjectiveType), getHierarchyMessage(hierarchy, atttibuted), getActionMessage(action)))
@@ -51,6 +78,17 @@ func (v ValueSetA) generate(out io.Writer) {
 
 // ValueSetB messages start with the action
 type ValueSetB ValueSet
+
+func (v ValueSetB) setHierarchy(hierarchy []string, attributed []bool) IValueSet {
+	if len(hierarchy) == 0 {
+		return v
+	}
+
+	v.hierarchy = append(v.hierarchy, hierarchy...)
+	v.attributed = append(v.attributed, attributed...)
+
+	return v
+}
 
 func (v ValueSetB) generate(out io.Writer) {
 	generateMessage := func(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
