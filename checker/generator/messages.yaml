@@ -18,12 +18,12 @@ request-body-media-type-max-items-increased: maxItems value of media-type %s of 
 request-body-media-type-max-items-decreased: maxItems value of media-type %s of request body was decreased from %s to %s
 request-body-media-type-type-changed: type/format of media-type %s of request body was changed from %s to %s
 request-body-media-type-type-generalized: type/format of media-type %s of request body was generalized from %s to %s
-request-body-media-type-any-of-added: anyOf of media-type %s of request body was added from %s to %s
-request-body-media-type-any-of-removed: anyOf of media-type %s of request body was removed from %s to %s
-request-body-media-type-one-of-added: oneOf of media-type %s of request body was added from %s to %s
-request-body-media-type-one-of-removed: oneOf of media-type %s of request body was removed from %s to %s
-request-body-media-type-all-of-added: allOf of media-type %s of request body was added from %s to %s
-request-body-media-type-all-of-removed: allOf of media-type %s of request body was removed from %s to %s
+request-body-media-type-any-of-added: added anyOf to media-type %s of request body
+request-body-media-type-any-of-removed: removed anyOf from media-type %s of request body
+request-body-media-type-one-of-added: added oneOf to media-type %s of request body
+request-body-media-type-one-of-removed: removed oneOf from media-type %s of request body
+request-body-media-type-all-of-added: added allOf to media-type %s of request body
+request-body-media-type-all-of-removed: removed allOf from media-type %s of request body
 request-body-media-type-property-max-set: max value of property %s of media-type %s of request body was set to %s
 request-body-media-type-property-max-increased: max value of property %s of media-type %s of request body was increased from %s to %s
 request-body-media-type-property-max-decreased: max value of property %s of media-type %s of request body was decreased from %s to %s
@@ -44,12 +44,12 @@ request-body-media-type-property-max-items-increased: maxItems value of property
 request-body-media-type-property-max-items-decreased: maxItems value of property %s of media-type %s of request body was decreased from %s to %s
 request-body-media-type-property-type-changed: type/format of property %s of media-type %s of request body was changed from %s to %s
 request-body-media-type-property-type-generalized: type/format of property %s of media-type %s of request body was generalized from %s to %s
-request-body-media-type-property-any-of-added: anyOf of property %s of media-type %s of request body was added from %s to %s
-request-body-media-type-property-any-of-removed: anyOf of property %s of media-type %s of request body was removed from %s to %s
-request-body-media-type-property-one-of-added: oneOf of property %s of media-type %s of request body was added from %s to %s
-request-body-media-type-property-one-of-removed: oneOf of property %s of media-type %s of request body was removed from %s to %s
-request-body-media-type-property-all-of-added: allOf of property %s of media-type %s of request body was added from %s to %s
-request-body-media-type-property-all-of-removed: allOf of property %s of media-type %s of request body was removed from %s to %s
+request-body-media-type-property-any-of-added: added anyOf to property %s of media-type %s of request body
+request-body-media-type-property-any-of-removed: removed anyOf from property %s of media-type %s of request body
+request-body-media-type-property-one-of-added: added oneOf to property %s of media-type %s of request body
+request-body-media-type-property-one-of-removed: removed oneOf from property %s of media-type %s of request body
+request-body-media-type-property-all-of-added: added allOf to property %s of media-type %s of request body
+request-body-media-type-property-all-of-removed: removed allOf from property %s of media-type %s of request body
 request-parameter-max-set: max value of %s request parameter %s was set to %s
 request-parameter-max-increased: max value of %s request parameter %s was increased from %s to %s
 request-parameter-max-decreased: max value of %s request parameter %s was decreased from %s to %s
@@ -70,12 +70,12 @@ request-parameter-max-items-increased: maxItems value of %s request parameter %s
 request-parameter-max-items-decreased: maxItems value of %s request parameter %s was decreased from %s to %s
 request-parameter-type-changed: type/format of request parameter %s was changed from %s to %s
 request-parameter-type-generalized: type/format of request parameter %s was generalized from %s to %s
-request-parameter-any-of-added: anyOf of request parameter %s was added from %s to %s
-request-parameter-any-of-removed: anyOf of request parameter %s was removed from %s to %s
-request-parameter-one-of-added: oneOf of request parameter %s was added from %s to %s
-request-parameter-one-of-removed: oneOf of request parameter %s was removed from %s to %s
-request-parameter-all-of-added: allOf of request parameter %s was added from %s to %s
-request-parameter-all-of-removed: allOf of request parameter %s was removed from %s to %s
+request-parameter-any-of-added: added anyOf to request parameter %s
+request-parameter-any-of-removed: removed anyOf from request parameter %s
+request-parameter-one-of-added: added oneOf to request parameter %s
+request-parameter-one-of-removed: removed oneOf from request parameter %s
+request-parameter-all-of-added: added allOf to request parameter %s
+request-parameter-all-of-removed: removed allOf from request parameter %s
 response-media-type-max-set: max value of media-type %s of response %s was set to %s
 response-media-type-max-increased: max value of media-type %s of response %s was increased from %s to %s
 response-media-type-max-decreased: max value of media-type %s of response %s was decreased from %s to %s
@@ -96,12 +96,12 @@ response-media-type-max-items-increased: maxItems value of media-type %s of resp
 response-media-type-max-items-decreased: maxItems value of media-type %s of response %s was decreased from %s to %s
 response-media-type-type-changed: type/format of media-type %s of response %s was changed from %s to %s
 response-media-type-type-generalized: type/format of media-type %s of response %s was generalized from %s to %s
-response-media-type-any-of-added: anyOf of media-type %s of response %s was added from %s to %s
-response-media-type-any-of-removed: anyOf of media-type %s of response %s was removed from %s to %s
-response-media-type-one-of-added: oneOf of media-type %s of response %s was added from %s to %s
-response-media-type-one-of-removed: oneOf of media-type %s of response %s was removed from %s to %s
-response-media-type-all-of-added: allOf of media-type %s of response %s was added from %s to %s
-response-media-type-all-of-removed: allOf of media-type %s of response %s was removed from %s to %s
+response-media-type-any-of-added: added anyOf to media-type %s of response %s
+response-media-type-any-of-removed: removed anyOf from media-type %s of response %s
+response-media-type-one-of-added: added oneOf to media-type %s of response %s
+response-media-type-one-of-removed: removed oneOf from media-type %s of response %s
+response-media-type-all-of-added: added allOf to media-type %s of response %s
+response-media-type-all-of-removed: removed allOf from media-type %s of response %s
 response-media-type-property-max-set: max value of property %s of media-type %s of response %s was set to %s
 response-media-type-property-max-increased: max value of property %s of media-type %s of response %s was increased from %s to %s
 response-media-type-property-max-decreased: max value of property %s of media-type %s of response %s was decreased from %s to %s
@@ -122,9 +122,9 @@ response-media-type-property-max-items-increased: maxItems value of property %s 
 response-media-type-property-max-items-decreased: maxItems value of property %s of media-type %s of response %s was decreased from %s to %s
 response-media-type-property-type-changed: type/format of property %s of media-type %s of response %s was changed from %s to %s
 response-media-type-property-type-generalized: type/format of property %s of media-type %s of response %s was generalized from %s to %s
-response-media-type-property-any-of-added: anyOf of property %s of media-type %s of response %s was added from %s to %s
-response-media-type-property-any-of-removed: anyOf of property %s of media-type %s of response %s was removed from %s to %s
-response-media-type-property-one-of-added: oneOf of property %s of media-type %s of response %s was added from %s to %s
-response-media-type-property-one-of-removed: oneOf of property %s of media-type %s of response %s was removed from %s to %s
-response-media-type-property-all-of-added: allOf of property %s of media-type %s of response %s was added from %s to %s
-response-media-type-property-all-of-removed: allOf of property %s of media-type %s of response %s was removed from %s to %s
+response-media-type-property-any-of-added: added anyOf to property %s of media-type %s of response %s
+response-media-type-property-any-of-removed: removed anyOf from property %s of media-type %s of response %s
+response-media-type-property-one-of-added: added oneOf to property %s of media-type %s of response %s
+response-media-type-property-one-of-removed: removed oneOf from property %s of media-type %s of response %s
+response-media-type-property-all-of-added: added allOf to property %s of media-type %s of response %s
+response-media-type-property-all-of-removed: removed allOf from property %s of media-type %s of response %s

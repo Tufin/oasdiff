@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"fmt"
 	"os"
 	"slices"
 	"strings"
@@ -16,41 +15,9 @@ func Generate() error {
 	}
 	defer out.Close()
 
-	// request
-	getSchemaValues([]string{"media-type", "request body"}, nil).generate(out)
-	getSchemaValues([]string{"property", "media-type", "request body"}, nil).generate(out)
-	getSchemaValues([]string{"request parameter"}, []bool{true}).generate(out)
-
-	// response
-	getSchemaValues([]string{"media-type", "response"}, nil).generate(out)
-	getSchemaValues([]string{"property", "media-type", "response"}, nil).generate(out)
-	// getSchemaValues([]string{"request parameter"}, []bool{true}).generate(out)
+	getAll().generate(out)
 
 	return nil
-}
-
-func getSchemaValues(hierarchy []string, attributed []bool) valueSets {
-	return []valueSet{
-		{
-			adjective:  "value",
-			hierarchy:  hierarchy,
-			attributed: attributed,
-			nouns:      []string{"max", "maxLength", "min", "minLength", "minItems", "maxItems"},
-			actions:    []string{"set", "increase", "decrease"},
-		},
-		{
-			adjective: "",
-			hierarchy: hierarchy,
-			nouns:     []string{"type/format"},
-			actions:   []string{"change", "generalize"},
-		},
-		{
-			adjective: "",
-			hierarchy: hierarchy,
-			nouns:     []string{"anyOf", "oneOf", "allOf"},
-			actions:   []string{"add", "remove"},
-		},
-	}
 }
 
 func generateId(hierarchy []string, noun, action string) string {
@@ -64,10 +31,6 @@ func concat(list []string) string {
 	copy := slices.Clone(list)
 	slices.Reverse(copy)
 	return strings.Join(copy, "-")
-}
-
-func generateMessage(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
-	return standardizeSpaces(fmt.Sprintf("%s %s of %s was %s", noun, adjective, getHierarchyMessage(hierarchy, atttibuted), getActionMessage(action)))
 }
 
 func getHierarchyMessage(hierarchy []string, atttibuted []bool) string {
@@ -122,4 +85,12 @@ func conjugate(verb string) string {
 		return "added"
 	}
 	return verb + "d"
+}
+
+func getPreposition(action string) string {
+	switch action {
+	case "add":
+		return "to"
+	}
+	return "from"
 }
