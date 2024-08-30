@@ -34,15 +34,33 @@ func getSchema(hierarchy []string, attributed []bool) ValueSets {
 			actions:    []string{"set", "increase", "decrease"},
 		},
 		ValueSetA{
-			adjective: "",
 			hierarchy: hierarchy,
 			nouns:     []string{"type/format"},
 			actions:   []string{"change", "generalize"},
 		},
-		ValueSetB{
-			adjective: "",
+		ValueSetA{
 			hierarchy: hierarchy,
-			nouns:     []string{"anyOf", "oneOf", "allOf"},
+			nouns:     []string{"discriminator property name"},
+			actions:   []string{"change"},
+		},
+		ValueSetB{
+			hierarchy: append([]string{"anyOf list"}, hierarchy...),
+			nouns:     []string{"%s"},
+			actions:   []string{"add", "remove"},
+		},
+		ValueSetB{
+			hierarchy: append([]string{"oneOf list"}, hierarchy...),
+			nouns:     []string{"%s"},
+			actions:   []string{"add", "remove"},
+		},
+		ValueSetB{
+			hierarchy: append([]string{"allOf list"}, hierarchy...),
+			nouns:     []string{"%s"},
+			actions:   []string{"add", "remove"},
+		},
+		ValueSetB{
+			hierarchy: hierarchy,
+			nouns:     []string{"discriminator", "mapping keys"},
 			actions:   []string{"add", "remove"},
 		},
 	}

@@ -18,12 +18,17 @@ request-body-media-type-max-items-increased: maxItems value of media-type %s of 
 request-body-media-type-max-items-decreased: maxItems value of media-type %s of request body was decreased from %s to %s
 request-body-media-type-type-changed: type/format of media-type %s of request body was changed from %s to %s
 request-body-media-type-type-generalized: type/format of media-type %s of request body was generalized from %s to %s
-request-body-media-type-any-of-added: added anyOf to media-type %s of request body
-request-body-media-type-any-of-removed: removed anyOf from media-type %s of request body
-request-body-media-type-one-of-added: added oneOf to media-type %s of request body
-request-body-media-type-one-of-removed: removed oneOf from media-type %s of request body
-request-body-media-type-all-of-added: added allOf to media-type %s of request body
-request-body-media-type-all-of-removed: removed allOf from media-type %s of request body
+request-body-media-type-discriminator-property-name-changed: discriminator property name of media-type %s of request body was changed from %s to %s
+request-body-media-type-any-of-list-%s-added: added %s to anyOf list %s of media-type %s of request body
+request-body-media-type-any-of-list-%s-removed: removed %s from anyOf list %s of media-type %s of request body
+request-body-media-type-one-of-list-%s-added: added %s to oneOf list %s of media-type %s of request body
+request-body-media-type-one-of-list-%s-removed: removed %s from oneOf list %s of media-type %s of request body
+request-body-media-type-all-of-list-%s-added: added %s to allOf list %s of media-type %s of request body
+request-body-media-type-all-of-list-%s-removed: removed %s from allOf list %s of media-type %s of request body
+request-body-media-type-discriminator-added: added discriminator to media-type %s of request body
+request-body-media-type-discriminator-removed: removed discriminator from media-type %s of request body
+request-body-media-type-mapping-keys-added: added mapping keys to media-type %s of request body
+request-body-media-type-mapping-keys-removed: removed mapping keys from media-type %s of request body
 request-body-media-type-property-max-set: max value of property %s of media-type %s of request body was set to %s
 request-body-media-type-property-max-increased: max value of property %s of media-type %s of request body was increased from %s to %s
 request-body-media-type-property-max-decreased: max value of property %s of media-type %s of request body was decreased from %s to %s
@@ -44,12 +49,17 @@ request-body-media-type-property-max-items-increased: maxItems value of property
 request-body-media-type-property-max-items-decreased: maxItems value of property %s of media-type %s of request body was decreased from %s to %s
 request-body-media-type-property-type-changed: type/format of property %s of media-type %s of request body was changed from %s to %s
 request-body-media-type-property-type-generalized: type/format of property %s of media-type %s of request body was generalized from %s to %s
-request-body-media-type-property-any-of-added: added anyOf to property %s of media-type %s of request body
-request-body-media-type-property-any-of-removed: removed anyOf from property %s of media-type %s of request body
-request-body-media-type-property-one-of-added: added oneOf to property %s of media-type %s of request body
-request-body-media-type-property-one-of-removed: removed oneOf from property %s of media-type %s of request body
-request-body-media-type-property-all-of-added: added allOf to property %s of media-type %s of request body
-request-body-media-type-property-all-of-removed: removed allOf from property %s of media-type %s of request body
+request-body-media-type-property-discriminator-property-name-changed: discriminator property name of property %s of media-type %s of request body was changed from %s to %s
+request-body-media-type-property-any-of-list-%s-added: added %s to anyOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-any-of-list-%s-removed: removed %s from anyOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-one-of-list-%s-added: added %s to oneOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-one-of-list-%s-removed: removed %s from oneOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-all-of-list-%s-added: added %s to allOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-all-of-list-%s-removed: removed %s from allOf list %s of property %s of media-type %s of request body
+request-body-media-type-property-discriminator-added: added discriminator to property %s of media-type %s of request body
+request-body-media-type-property-discriminator-removed: removed discriminator from property %s of media-type %s of request body
+request-body-media-type-property-mapping-keys-added: added mapping keys to property %s of media-type %s of request body
+request-body-media-type-property-mapping-keys-removed: removed mapping keys from property %s of media-type %s of request body
 request-parameter-max-set: max value of %s request parameter %s was set to %s
 request-parameter-max-increased: max value of %s request parameter %s was increased from %s to %s
 request-parameter-max-decreased: max value of %s request parameter %s was decreased from %s to %s
@@ -70,12 +80,17 @@ request-parameter-max-items-increased: maxItems value of %s request parameter %s
 request-parameter-max-items-decreased: maxItems value of %s request parameter %s was decreased from %s to %s
 request-parameter-type-changed: type/format of request parameter %s was changed from %s to %s
 request-parameter-type-generalized: type/format of request parameter %s was generalized from %s to %s
-request-parameter-any-of-added: added anyOf to request parameter %s
-request-parameter-any-of-removed: removed anyOf from request parameter %s
-request-parameter-one-of-added: added oneOf to request parameter %s
-request-parameter-one-of-removed: removed oneOf from request parameter %s
-request-parameter-all-of-added: added allOf to request parameter %s
-request-parameter-all-of-removed: removed allOf from request parameter %s
+request-parameter-discriminator-property-name-changed: discriminator property name of request parameter %s was changed from %s to %s
+request-parameter-any-of-list-%s-added: added %s to anyOf list %s of request parameter %s
+request-parameter-any-of-list-%s-removed: removed %s from anyOf list %s of request parameter %s
+request-parameter-one-of-list-%s-added: added %s to oneOf list %s of request parameter %s
+request-parameter-one-of-list-%s-removed: removed %s from oneOf list %s of request parameter %s
+request-parameter-all-of-list-%s-added: added %s to allOf list %s of request parameter %s
+request-parameter-all-of-list-%s-removed: removed %s from allOf list %s of request parameter %s
+request-parameter-discriminator-added: added discriminator to request parameter %s
+request-parameter-discriminator-removed: removed discriminator from request parameter %s
+request-parameter-mapping-keys-added: added mapping keys to request parameter %s
+request-parameter-mapping-keys-removed: removed mapping keys from request parameter %s
 response-media-type-max-set: max value of media-type %s of response %s was set to %s
 response-media-type-max-increased: max value of media-type %s of response %s was increased from %s to %s
 response-media-type-max-decreased: max value of media-type %s of response %s was decreased from %s to %s
@@ -96,12 +111,17 @@ response-media-type-max-items-increased: maxItems value of media-type %s of resp
 response-media-type-max-items-decreased: maxItems value of media-type %s of response %s was decreased from %s to %s
 response-media-type-type-changed: type/format of media-type %s of response %s was changed from %s to %s
 response-media-type-type-generalized: type/format of media-type %s of response %s was generalized from %s to %s
-response-media-type-any-of-added: added anyOf to media-type %s of response %s
-response-media-type-any-of-removed: removed anyOf from media-type %s of response %s
-response-media-type-one-of-added: added oneOf to media-type %s of response %s
-response-media-type-one-of-removed: removed oneOf from media-type %s of response %s
-response-media-type-all-of-added: added allOf to media-type %s of response %s
-response-media-type-all-of-removed: removed allOf from media-type %s of response %s
+response-media-type-discriminator-property-name-changed: discriminator property name of media-type %s of response %s was changed from %s to %s
+response-media-type-any-of-list-%s-added: added %s to anyOf list %s of media-type %s of response %s
+response-media-type-any-of-list-%s-removed: removed %s from anyOf list %s of media-type %s of response %s
+response-media-type-one-of-list-%s-added: added %s to oneOf list %s of media-type %s of response %s
+response-media-type-one-of-list-%s-removed: removed %s from oneOf list %s of media-type %s of response %s
+response-media-type-all-of-list-%s-added: added %s to allOf list %s of media-type %s of response %s
+response-media-type-all-of-list-%s-removed: removed %s from allOf list %s of media-type %s of response %s
+response-media-type-discriminator-added: added discriminator to media-type %s of response %s
+response-media-type-discriminator-removed: removed discriminator from media-type %s of response %s
+response-media-type-mapping-keys-added: added mapping keys to media-type %s of response %s
+response-media-type-mapping-keys-removed: removed mapping keys from media-type %s of response %s
 response-media-type-property-max-set: max value of property %s of media-type %s of response %s was set to %s
 response-media-type-property-max-increased: max value of property %s of media-type %s of response %s was increased from %s to %s
 response-media-type-property-max-decreased: max value of property %s of media-type %s of response %s was decreased from %s to %s
@@ -122,9 +142,14 @@ response-media-type-property-max-items-increased: maxItems value of property %s 
 response-media-type-property-max-items-decreased: maxItems value of property %s of media-type %s of response %s was decreased from %s to %s
 response-media-type-property-type-changed: type/format of property %s of media-type %s of response %s was changed from %s to %s
 response-media-type-property-type-generalized: type/format of property %s of media-type %s of response %s was generalized from %s to %s
-response-media-type-property-any-of-added: added anyOf to property %s of media-type %s of response %s
-response-media-type-property-any-of-removed: removed anyOf from property %s of media-type %s of response %s
-response-media-type-property-one-of-added: added oneOf to property %s of media-type %s of response %s
-response-media-type-property-one-of-removed: removed oneOf from property %s of media-type %s of response %s
-response-media-type-property-all-of-added: added allOf to property %s of media-type %s of response %s
-response-media-type-property-all-of-removed: removed allOf from property %s of media-type %s of response %s
+response-media-type-property-discriminator-property-name-changed: discriminator property name of property %s of media-type %s of response %s was changed from %s to %s
+response-media-type-property-any-of-list-%s-added: added %s to anyOf list %s of property %s of media-type %s of response %s
+response-media-type-property-any-of-list-%s-removed: removed %s from anyOf list %s of property %s of media-type %s of response %s
+response-media-type-property-one-of-list-%s-added: added %s to oneOf list %s of property %s of media-type %s of response %s
+response-media-type-property-one-of-list-%s-removed: removed %s from oneOf list %s of property %s of media-type %s of response %s
+response-media-type-property-all-of-list-%s-added: added %s to allOf list %s of property %s of media-type %s of response %s
+response-media-type-property-all-of-list-%s-removed: removed %s from allOf list %s of property %s of media-type %s of response %s
+response-media-type-property-discriminator-added: added discriminator to property %s of media-type %s of response %s
+response-media-type-property-discriminator-removed: removed discriminator from property %s of media-type %s of response %s
+response-media-type-property-mapping-keys-added: added mapping keys to property %s of media-type %s of response %s
+response-media-type-property-mapping-keys-removed: removed mapping keys from property %s of media-type %s of response %s

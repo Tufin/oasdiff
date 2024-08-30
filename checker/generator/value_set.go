@@ -17,6 +17,7 @@ type ValueSet interface {
 	generate(out io.Writer)
 }
 
+// ValueSetA messages start with the noun
 type ValueSetA struct {
 	adjective  string
 	hierarchy  []string
@@ -25,7 +26,6 @@ type ValueSetA struct {
 	actions    []string
 }
 
-// ValueSetA messages start with the noun
 func (v ValueSetA) generate(out io.Writer) {
 	generateMessage := func(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
 		return standardizeSpaces(fmt.Sprintf("%s %s of %s was %s", noun, adjective, getHierarchyMessage(hierarchy, atttibuted), getActionMessage(action)))
