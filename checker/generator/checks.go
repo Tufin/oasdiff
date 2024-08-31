@@ -43,7 +43,7 @@ func generateId(hierarchy []string, noun, action string) string {
 }
 
 func concat(list []string) string {
-	if list == nil {
+	if len(list) == 0 {
 		return ""
 	}
 
@@ -53,7 +53,7 @@ func concat(list []string) string {
 }
 
 func getHierarchyPostfix(action string, hierarchy []string, atttibuted []bool) string {
-	if hierarchy == nil {
+	if len(hierarchy) == 0 {
 		return ""
 	}
 

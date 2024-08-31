@@ -16,6 +16,7 @@ func getRequest() ValueSets {
 		NewValueSets([]string{"media-type", "request body"}, nil, schemaValueSets),
 		NewValueSets([]string{"property", "media-type", "request body"}, nil, schemaValueSets),
 		NewValueSets([]string{"request parameter"}, []bool{true}, schemaValueSets),
+		NewValueSets(nil, nil, operationValueSets),
 	)
 }
 
@@ -72,7 +73,13 @@ var pathsValueSets = ValueSets{
 		nouns:         []string{"security scope"},
 		actions:       []string{"add", "remove"},
 	},
-	// security scope %s was added to endpoint security scheme %s
+}
+
+var operationValueSets = ValueSets{
+	ValueSetB{
+		nouns:   []string{"required request body", "optional request body"},
+		actions: []string{"add", "remove"},
+	},
 }
 
 var schemaValueSets = ValueSets{

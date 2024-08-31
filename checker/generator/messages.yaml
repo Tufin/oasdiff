@@ -118,6 +118,10 @@ request-parameter-discriminator-added: added discriminator %s to %s request para
 request-parameter-discriminator-removed: removed discriminator %s from %s request parameter %s
 request-parameter-mapping-keys-added: added mapping keys %s to %s request parameter %s
 request-parameter-mapping-keys-removed: removed mapping keys %s from %s request parameter %s
+required-request-body-added: added required request body
+required-request-body-removed: removed required request body
+optional-request-body-added: added optional request body
+optional-request-body-removed: removed optional request body
 response-media-type-max-set: max value of media-type %s of response %s was set to %s
 response-media-type-max-increased: max value of media-type %s of response %s was increased from %s to %s
 response-media-type-max-decreased: max value of media-type %s of response %s was decreased from %s to %s
