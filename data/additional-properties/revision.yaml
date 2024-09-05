@@ -1,0 +1,28 @@
+openapi: 3.0.1
+info:
+  title: Test API
+  version: v1
+components:
+  schemas:
+    Schema1:
+      properties:
+        property1:
+          title: Value
+          type: string
+      type: object
+    Schema2:
+      additionalProperties:
+        "$ref": "#/components/schemas/Schema1"
+      title: Composite
+      type: object
+paths:
+  "/value":
+    get:
+      operationId: get_value
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Schema2"
+          description: Successful Response

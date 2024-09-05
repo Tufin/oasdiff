@@ -146,3 +146,47 @@ func TestResponseSchemaTypeMultiCheck(t *testing.T) {
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
+
+// BC: changing an additionalResponse property schema type from integer to string is breaking
+func TestResponseAdditionalPropertyTypeChangedCheck(t *testing.T) {
+	s1, err := open("../data/additional-properties/base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/additional-properties/revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyTypeChangedCheck), d, osm, checker.ERR)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.ResponsePropertyTypeChangedId,
+		Args:        []any{"/additionalProperties/property1", utils.StringList{"integer"}, "", utils.StringList{"string"}, "", "200"},
+		Level:       checker.ERR,
+		Operation:   "GET",
+		Path:        "/value",
+		Source:      load.NewSource("../data/additional-properties/revision.yaml"),
+		OperationId: "get_value",
+	}, errs[0])
+}
+
+// BC: changing an embedded additionalResponse property schema type from integer to string is breaking
+func TestResponseEmbeddedAdditionalPropertyTypeChangedCheck(t *testing.T) {
+	s1, err := open("../data/additional-properties/embedded-base.yaml")
+	require.NoError(t, err)
+	s2, err := open("../data/additional-properties/embedded-revision.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyTypeChangedCheck), d, osm, checker.ERR)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:          checker.ResponsePropertyTypeChangedId,
+		Args:        []any{"composite-property/additionalProperties/property1", utils.StringList{"integer"}, "", utils.StringList{"string"}, "", "200"},
+		Level:       checker.ERR,
+		Operation:   "GET",
+		Path:        "/value",
+		Source:      load.NewSource("../data/additional-properties/embedded-revision.yaml"),
+		OperationId: "get_value",
+	}, errs[0])
+}
