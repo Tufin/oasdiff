@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-// CL: adding a new media type to request body
+// CL: adding a new media type to request body: request-body-media-type-added
 func TestRequestBodyMediaTypeAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_body_media_type_updated_base.yaml")
 	require.NoError(t, err)
@@ -29,9 +29,10 @@ func TestRequestBodyMediaTypeAdded(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_body_media_type_updated_revision.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "added media type 'application/json' to the request body", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing media type from request body
+// CL: removing media type from request body: request-body-media-type-removed
 func TestRequestBodyMediaTypeRemoved(t *testing.T) {
 	s1, err := open("../data/checker/request_body_media_type_updated_revision.yaml")
 	require.NoError(t, err)
@@ -51,4 +52,5 @@ func TestRequestBodyMediaTypeRemoved(t *testing.T) {
 		Source:      load.NewSource("../data/checker/request_body_media_type_updated_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "removed media type 'application/json' from the request body", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

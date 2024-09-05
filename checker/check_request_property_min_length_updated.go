@@ -28,7 +28,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 			}
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				if mediaTypeDiff.SchemaDiff != nil && mediaTypeDiff.SchemaDiff.MinLengthDiff != nil {
 					minLengthDiff := mediaTypeDiff.SchemaDiff.MinLengthDiff
 					if minLengthDiff.From != nil &&
@@ -37,7 +37,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								RequestBodyMinLengthIncreasedId,
 								config,
-								[]any{minLengthDiff.From, minLengthDiff.To},
+								[]any{mediaType, minLengthDiff.From, minLengthDiff.To},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -48,7 +48,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								RequestBodyMinLengthDecreasedId,
 								config,
-								[]any{minLengthDiff.From, minLengthDiff.To},
+								[]any{mediaType, minLengthDiff.From, minLengthDiff.To},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -77,7 +77,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								RequestPropertyMinLengthDecreasedId,
 								config,
-								[]any{propName, minLengthDiff.From, minLengthDiff.To},
+								[]any{propName, mediaType, minLengthDiff.From, minLengthDiff.To},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -88,7 +88,7 @@ func RequestPropertyMinLengthUpdatedCheck(diffReport *diff.Diff, operationsSourc
 							result = append(result, NewApiChange(
 								RequestPropertyMinLengthIncreasedId,
 								config,
-								[]any{propName, minLengthDiff.From, minLengthDiff.To},
+								[]any{propName, mediaType, minLengthDiff.From, minLengthDiff.To},
 								"",
 								operationsSources,
 								operationItem.Revision,

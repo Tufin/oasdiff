@@ -27,7 +27,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 				continue
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				CheckModifiedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyDiff *diff.SchemaDiff, parent *diff.SchemaDiff) {
@@ -42,7 +42,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, NewApiChange(
 								RequestPropertyPatternRemovedId,
 								config,
-								[]any{patternDiff.From, propName},
+								[]any{patternDiff.From, propName, mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -53,7 +53,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, NewApiChange(
 								RequestPropertyPatternAddedId,
 								config,
-								[]any{patternDiff.To, propName},
+								[]any{patternDiff.To, propName, mediaType},
 								PatternChangedCommentId,
 								operationsSources,
 								operationItem.Revision,
@@ -73,7 +73,7 @@ func RequestPropertyPatternUpdatedCheck(diffReport *diff.Diff, operationsSources
 							result = append(result, NewApiChange(
 								id,
 								config,
-								[]any{propName, patternDiff.From, patternDiff.To},
+								[]any{propName, mediaType, patternDiff.From, patternDiff.To},
 								comment,
 								operationsSources,
 								operationItem.Revision,

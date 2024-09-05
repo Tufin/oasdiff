@@ -30,6 +30,7 @@ func TestBreaking_HeaderParamBecameRequired(t *testing.T) {
 		Path:      "/api/{domain}/{project}/install-command",
 		Source:    load.NewSource("../data/openapi-test1.yaml"),
 	}, errs[0])
+	require.Equal(t, "'header' request parameter 'network-policies' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing an existing header param from required to optional
@@ -52,4 +53,5 @@ func TestBreaking_HeaderParamBecameOptional(t *testing.T) {
 		Path:      "/api/{domain}/{project}/install-command",
 		Source:    load.NewSource("../data/openapi-test1.yaml"),
 	}, errs[0])
+	require.Equal(t, "'header' request parameter 'network-policies' became optional", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

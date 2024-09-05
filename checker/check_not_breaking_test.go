@@ -11,7 +11,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *diff.OperationsSourcesMap, changeId string) {
+func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *diff.OperationsSourcesMap, changeId string, text string) {
 	t.Helper()
 
 	// Check no breaking change is detected
@@ -22,6 +22,7 @@ func verifyNonBreakingChangeIsChangelogEntry(t *testing.T, d *diff.Diff, osm *di
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.INFO, errs[0].GetLevel())
 	require.Equal(t, changeId, errs[0].GetId())
+	require.Equal(t, text, errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: no change is not breaking
@@ -50,7 +51,7 @@ func TestBreaking_AddingOptionalRequestBody(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// CL: changing an existing request body from required to optional
+// CL: changing an existing request body from required to optional: request-body-became-optional
 func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -65,7 +66,7 @@ func TestBreaking_RequestBodyRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.RequestBodyBecameOptionalId)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.RequestBodyBecameOptionalId, "request body became optional")
 }
 
 // BC: deleting a tag is not breaking
@@ -129,7 +130,7 @@ func TestBreaking_NewOptionalHeaderParam(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// CL: changing an existing header param to optional
+// CL: changing an existing header param to optional: request-parameter-became-optional
 func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -139,10 +140,7 @@ func TestBreaking_HeaderParamRequiredDisabled(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	changes := checker.CheckBackwardCompatibilityUntilLevel(allChecksConfig(), d, osm, checker.INFO)
-	require.NotEmpty(t, changes)
-	require.Equal(t, checker.RequestParameterBecomeOptionalId, changes[0].GetId())
-	require.Len(t, changes, 1)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.RequestParameterBecomeOptionalId, "'header' request parameter 'network-policies' became optional")
 }
 
 func deleteResponseHeader(response *openapi3.Response, name string) {
@@ -195,7 +193,7 @@ func TestBreaking_ResponseAddMediaType(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// CL: deprecating an operation with sunset greater than min
+// CL: deprecating an operation with sunset greater than min: endpoint-deprecated
 func TestBreaking_DeprecatedOperation(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -205,9 +203,7 @@ func TestBreaking_DeprecatedOperation(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibilityUntilLevel(allChecksConfig(), d, osm, checker.INFO)
-	require.Len(t, errs, 1)
-	require.Equal(t, errs[0].GetLevel(), checker.INFO)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.EndpointDeprecatedId, "endpoint deprecated")
 }
 
 // BC: deprecating a parameter is not breaking
@@ -263,7 +259,7 @@ func TestBreaking_Servers(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: adding a tag is not breaking
+// BC: adding a tag is not breaking: api-tag-added
 func TestBreaking_TagAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -271,10 +267,10 @@ func TestBreaking_TagAdded(t *testing.T) {
 	s2.Spec.Paths.Value(securityScorePath).Get.Tags = append(s2.Spec.Paths.Value(securityScorePath).Get.Tags, "newTag")
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APITagAddedId)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APITagAddedId, "added api tag 'newTag'")
 }
 
-// BC: adding an operation ID is not breaking
+// BC: adding an operation ID is not breaking: api-operation-id-added
 func TestBreaking_OperationIdAdded(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)
@@ -283,10 +279,10 @@ func TestBreaking_OperationIdAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APIOperationIdAddId)
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.APIOperationIdAddId, "api operation id 'GetSecurityScores' was added")
 }
 
-// BC: adding a required property to response is not breaking
+// BC: adding a required property to response is not breaking: response-required-property-added
 func TestBreaking_RequiredResponsePropertyAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_required_property_added_base.yaml")
 	require.NoError(t, err)
@@ -296,5 +292,5 @@ func TestBreaking_RequiredResponsePropertyAdded(t *testing.T) {
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
-	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, "response-required-property-added")
+	verifyNonBreakingChangeIsChangelogEntry(t, d, osm, checker.ResponseRequiredPropertyAddedId, "added required property 'data/new' to response status '200'")
 }

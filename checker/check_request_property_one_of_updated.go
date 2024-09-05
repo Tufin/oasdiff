@@ -30,7 +30,7 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 			}
 
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				if mediaTypeDiff.SchemaDiff == nil {
 					continue
 				}
@@ -39,7 +39,7 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, NewApiChange(
 						RequestBodyOneOfAddedId,
 						config,
-						[]any{mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String()},
+						[]any{mediaTypeDiff.SchemaDiff.OneOfDiff.Added.String(), mediaType},
 						"",
 						operationsSources,
 						operationItem.Revision,
@@ -52,7 +52,7 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 					result = append(result, NewApiChange(
 						RequestBodyOneOfRemovedId,
 						config,
-						[]any{mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String()},
+						[]any{mediaTypeDiff.SchemaDiff.OneOfDiff.Deleted.String(), mediaType},
 						"",
 						operationsSources,
 						operationItem.Revision,
@@ -74,7 +74,7 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, NewApiChange(
 								RequestPropertyOneOfAddedId,
 								config,
-								[]any{propertyDiff.OneOfDiff.Added.String(), propName},
+								[]any{propertyDiff.OneOfDiff.Added.String(), propName, mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -87,7 +87,7 @@ func RequestPropertyOneOfUpdatedCheck(diffReport *diff.Diff, operationsSources *
 							result = append(result, NewApiChange(
 								RequestPropertyOneOfRemovedId,
 								config,
-								[]any{propertyDiff.OneOfDiff.Deleted.String(), propName},
+								[]any{propertyDiff.OneOfDiff.Deleted.String(), propName, mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,

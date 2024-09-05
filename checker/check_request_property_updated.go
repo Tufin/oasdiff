@@ -29,7 +29,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 				continue
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				CheckDeletedPropertiesDiff(
 					mediaTypeDiff.SchemaDiff,
 					func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, parent *diff.SchemaDiff) {
@@ -38,7 +38,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, NewApiChange(
 								RequestPropertyRemovedId,
 								config,
-								[]any{propertyFullName(propertyPath, propertyName)},
+								[]any{propertyFullName(propertyPath, propertyName), mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,
@@ -61,7 +61,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 								result = append(result, NewApiChange(
 									NewRequiredRequestPropertyId,
 									config,
-									[]any{propName},
+									[]any{propName, mediaType},
 									"",
 									operationsSources,
 									operationItem.Revision,
@@ -72,7 +72,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 								result = append(result, NewApiChange(
 									NewRequiredRequestPropertyWithDefaultId,
 									config,
-									[]any{propName},
+									[]any{propName, mediaType},
 									"",
 									operationsSources,
 									operationItem.Revision,
@@ -84,7 +84,7 @@ func RequestPropertyUpdatedCheck(diffReport *diff.Diff, operationsSources *diff.
 							result = append(result, NewApiChange(
 								NewOptionalRequestPropertyId,
 								config,
-								[]any{propName},
+								[]any{propName, mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,

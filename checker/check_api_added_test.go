@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// CL: new paths or path operations
+// CL: new paths or path operations: endpoint-added
 func TestApiAdded_DetectsNewPathsAndNewOperations(t *testing.T) {
 	s1, err := open("../data/new_endpoints/base.yaml")
 	require.NoError(t, err)
@@ -36,7 +36,7 @@ func TestApiAdded_DetectsNewPathsAndNewOperations(t *testing.T) {
 	require.Equal(t, "/api/test3", e1.Path)
 }
 
-// CL: new paths or path operations
+// CL: new paths or path operations: endpoint-added
 func TestApiAdded_DetectsModifiedPathsWithPathParam(t *testing.T) {
 	s1, err := open("../data/new_endpoints/base_with_path_param.yaml")
 	require.NoError(t, err)

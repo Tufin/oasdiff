@@ -48,7 +48,7 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 					result = append(result, NewApiChange(
 						id,
 						config,
-						[]any{getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+						[]any{mediaType, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 						"",
 						operationsSources,
 						operationItem.Revision,
@@ -81,7 +81,7 @@ func RequestPropertyTypeChangedCheck(diffReport *diff.Diff, operationsSources *d
 							result = append(result, NewApiChange(
 								id,
 								config,
-								[]any{propertyFullName(propertyPath, propertyName), getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
+								[]any{propertyFullName(propertyPath, propertyName), mediaType, getBaseType(schemaDiff), getBaseFormat(schemaDiff), getRevisionType(schemaDiff), getRevisionFormat(schemaDiff)},
 								"",
 								operationsSources,
 								operationItem.Revision,

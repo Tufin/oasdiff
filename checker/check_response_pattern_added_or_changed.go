@@ -48,13 +48,13 @@ func ResponsePatternAddedOrChangedCheck(diffReport *diff.Diff, operationsSources
 							propName := propertyFullName(propertyPath, propertyName)
 
 							id := ResponsePropertyPatternChangedId
-							args := []any{propName, patternDiff.From, patternDiff.To, responseStatus}
+							args := []any{patternDiff.From, patternDiff.To, propName, responseStatus}
 							if patternDiff.To == "" || patternDiff.To == nil {
 								id = ResponsePropertyPatternRemovedId
-								args = []any{propName, patternDiff.From, responseStatus}
+								args = []any{patternDiff.From, propName, responseStatus}
 							} else if patternDiff.From == "" || patternDiff.From == nil {
 								id = ResponsePropertyPatternAddedId
-								args = []any{propName, patternDiff.To, responseStatus}
+								args = []any{patternDiff.To, propName, responseStatus}
 							}
 
 							result = append(result, NewApiChange(

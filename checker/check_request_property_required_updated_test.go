@@ -23,13 +23,14 @@ func TestRequestPropertyMarkedRequired(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecameRequiredId,
-		Args:        []any{"name"},
+		Args:        []any{"name", "application/json"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      load.NewSource("../data/checker/request_property_became_required_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
+	require.Equal(t, "request property 'name' of media-type 'application/json' became required", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing request property required value to false
@@ -46,13 +47,14 @@ func TestRequestPropertyMarkedOptional(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecameOptionalId,
-		Args:        []any{"name"},
+		Args:        []any{"name", "application/json"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      load.NewSource("../data/checker/request_property_became_required_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
+	require.Equal(t, "request property 'name' of media-type 'application/json' became optional", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: making request property required, while also giving it a default value
@@ -70,11 +72,12 @@ func TestRequestPropertyWithDefaultMarkedRequired(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyBecameRequiredWithDefaultId,
-		Args:        []any{"name"},
+		Args:        []any{"name", "application/json"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      load.NewSource("../data/checker/request_property_became_required_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
+	require.Equal(t, "request property 'name' with a default value became required in media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

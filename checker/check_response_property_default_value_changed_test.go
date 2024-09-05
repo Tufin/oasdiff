@@ -19,23 +19,28 @@ func TestResponsePropertyDefaultValueUpdatedCheck(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
-	require.ElementsMatch(t, []checker.ApiChange{{
+
+	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyDefaultValueChangedId,
-		Args:        []any{"created", "2020-01-01T00:00:00Z", "2020-02-01T00:00:00Z", "200"},
+		Args:        []any{"2020-01-01T00:00:00Z", "2020-02-01T00:00:00Z", "created", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_property_default_value_changed_revision.yaml"),
 		OperationId: "createOneGroup",
-	}, {
+	}, errs[0])
+	require.Equal(t, "changed default value from '2020-01-01T00:00:00Z' to '2020-02-01T00:00:00Z' for property 'created' for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
+	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyDefaultValueChangedId,
-		Args:        []any{"enabled", false, true, "200"},
+		Args:        []any{false, true, "enabled", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_property_default_value_changed_revision.yaml"),
 		OperationId: "createOneGroup",
-	}}, errs)
+	}, errs[1])
+	require.Equal(t, "changed default value from 'false' to 'true' for property 'enabled' for response status '200'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: changing response body default value
@@ -59,6 +64,7 @@ func TestResponseSchemaDefaultValueUpdatedCheck(t *testing.T) {
 		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
+	require.Equal(t, "response body 'text/plain' default value changed from 'Error' to 'new default value' for status '404'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding response body default value or response body property default value
@@ -75,7 +81,8 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
-	require.ElementsMatch(t, []checker.ApiChange{{
+
+	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseBodyDefaultValueAddedId,
 		Args:        []any{"text/plain", "Error", "404"},
 		Level:       checker.INFO,
@@ -83,15 +90,19 @@ func TestResponsePropertyDefaultValueAddedCheck(t *testing.T) {
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
-	}, {
+	}, errs[0])
+	require.Equal(t, "response body 'text/plain' default value 'Error' was added for status '404'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
+	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyDefaultValueAddedId,
-		Args:        []any{"created", "2020-01-01T00:00:00Z", "200"},
+		Args:        []any{"2020-01-01T00:00:00Z", "created", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
-	}}, errs)
+	}, errs[1])
+	require.Equal(t, "added default value '2020-01-01T00:00:00Z' to response property 'created' for response status '200'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing response body default value or response body property default value
@@ -108,7 +119,8 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ResponsePropertyDefaultValueChangedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 2)
-	require.ElementsMatch(t, []checker.ApiChange{{
+
+	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponseBodyDefaultValueRemovedId,
 		Args:        []any{"text/plain", "Error", "404"},
 		Level:       checker.INFO,
@@ -116,13 +128,17 @@ func TestResponsePropertyDefaultValueRemovedCheck(t *testing.T) {
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
-	}, {
+	}, errs[0])
+	require.Equal(t, "response body 'text/plain' default value 'Error' was removed for status '404'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
+	require.Equal(t, checker.ApiChange{
 		Id:          checker.ResponsePropertyDefaultValueRemovedId,
-		Args:        []any{"created", "2020-01-01T00:00:00Z", "200"},
+		Args:        []any{"2020-01-01T00:00:00Z", "created", "200"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
 		Source:      load.NewSource("../data/checker/response_property_default_value_changed_base.yaml"),
 		OperationId: "createOneGroup",
-	}}, errs)
+	}, errs[1])
+	require.Equal(t, "removed default value '2020-01-01T00:00:00Z' of property 'created' for response status '200'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

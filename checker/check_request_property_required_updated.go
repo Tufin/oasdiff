@@ -27,7 +27,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 				continue
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				if mediaTypeDiff.SchemaDiff == nil {
 					continue
 				}
@@ -43,7 +43,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								result = append(result, NewApiChange(
 									RequestPropertyBecameRequiredId,
 									config,
-									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), mediaType},
 									"",
 									operationsSources,
 									operationItem.Revision,
@@ -55,7 +55,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 								result = append(result, NewApiChange(
 									RequestPropertyBecameRequiredWithDefaultId,
 									config,
-									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+									[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), mediaType},
 									"",
 									operationsSources,
 									operationItem.Revision,
@@ -72,7 +72,7 @@ func RequestPropertyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSource
 							result = append(result, NewApiChange(
 								RequestPropertyBecameOptionalId,
 								config,
-								[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName))},
+								[]any{propertyFullName(propertyPath, propertyFullName(propertyName, changedRequiredPropertyName)), mediaType},
 								"",
 								operationsSources,
 								operationItem.Revision,

@@ -28,13 +28,14 @@ func TestRequestBodyMaxLengthDecreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMaxLengthIncreasedId,
-		Args:        []any{maxLength, newMaxLength},
+		Args:        []any{"application/json", maxLength, newMaxLength},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
+	require.Equal(t, "maxLength value of media-type 'application/json' of request body was increased from '50' to '100'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: decreasing max length of request body
@@ -56,13 +57,14 @@ func TestRequestBodyMaxLengthIncreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestBodyMaxLengthDecreasedId,
-		Args:        []any{newMaxLength},
+		Args:        []any{"application/json", maxLength, newMaxLength},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
+	require.Equal(t, "maxLength value of media-type 'application/json' of request body was decreased from '100' to '50'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: decreasing max length of request property
@@ -83,14 +85,14 @@ func TestRequestPropertyMaxLengthDecreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMaxLengthDecreasedId,
-		Args:        []any{"description", newMaxLength},
+		Args:        []any{"description", "application/json", maxLength, newMaxLength},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
-	require.Equal(t, "the 'description' request property's maxLength was decreased to '50'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "maxLength value of request property 'description' of media-type 'application/json' was decreased from '100' to '50'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: decreasing max length of request read-only property
@@ -113,14 +115,14 @@ func TestRequestReadOnlyPropertyMaxLengthDecreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestReadOnlyPropertyMaxLengthDecreasedId,
-		Args:        []any{"description", newMaxLength},
+		Args:        []any{"description", "application/json", maxLength, newMaxLength},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
-	require.Equal(t, "the 'description' request read-only property's maxLength was decreased to '50'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "maxLength value of request read-only property 'description' of media-type 'application/json' was decreased from '100' to '50'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: increasing max length of request property
@@ -141,11 +143,12 @@ func TestRequestPropertyMaxLengthIncreasedCheck(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyMaxLengthIncreasedId,
-		Args:        []any{"description", maxLength, newMaxLength},
+		Args:        []any{"description", "application/json", maxLength, newMaxLength},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/pets",
 		Source:      load.NewSource("../data/checker/request_body_max_length_decreased_base.yaml"),
 		OperationId: "addPet",
 	}, errs[0])
+	require.Equal(t, "maxLength value of request property 'description' of media-type 'application/json' was increased from '50' to '100'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

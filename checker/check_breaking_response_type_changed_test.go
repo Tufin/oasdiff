@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// BC: changing response's body schema type from string to number is breaking
+// BC: changing response's body schema type from string to number is breaking: response-body-type-changed
 func TestBreaking_RespTypeStringToNumber(t *testing.T) {
 	file := "../data/type-change/simple-response.yaml"
 
@@ -26,10 +26,10 @@ func TestBreaking_RespTypeStringToNumber(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "the response's body type/format changed from 'string'/'' to 'number'/'' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "body type/format changed from 'string'/'' to 'number'/'' for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: changing response's body schema type from number to string is breaking
+// BC: changing response's body schema type from number to string is breaking: response-body-type-changed
 func TestBreaking_RespTypeNumberToString(t *testing.T) {
 	file := "../data/type-change/simple-response.yaml"
 
@@ -46,7 +46,7 @@ func TestBreaking_RespTypeNumberToString(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "the response's body type/format changed from 'number'/'' to 'string'/'' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "body type/format changed from 'number'/'' to 'string'/'' for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing response's body schema type from number to integer is not breaking
@@ -67,7 +67,7 @@ func TestBreaking_RespTypeNumberToInteger(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: changing response's body schema type from integer to number is breaking
+// BC: changing response's body schema type from integer to number is breaking: response-body-type-changed
 func TestBreaking_RespTypeIntegerToNumber(t *testing.T) {
 	file := "../data/type-change/simple-response.yaml"
 
@@ -84,7 +84,7 @@ func TestBreaking_RespTypeIntegerToNumber(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ResponseBodyTypeChangedId, errs[0].GetId())
-	require.Equal(t, "the response's body type/format changed from 'integer'/'' to 'number'/'' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "body type/format changed from 'integer'/'' to 'number'/'' for response status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing response's body schema type from number/none to integer/int32 is not breaking
@@ -106,7 +106,7 @@ func TestBreaking_RespTypeNumberToInt32(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: changing response's embedded property schema type from string/none to integer/int32 is breaking
+// BC: changing response's embedded property schema type from string/none to integer/int32 is breaking: response-property-type-changed
 func TestBreaking_RespTypeChanged(t *testing.T) {
 	s1, err := open("../data/type-change/base-response.yaml")
 	require.NoError(t, err)
@@ -118,6 +118,6 @@ func TestBreaking_RespTypeChanged(t *testing.T) {
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
 	require.Len(t, errs, 1)
-	require.Equal(t, "response-property-type-changed", errs[0].GetId())
-	require.Equal(t, "the '/items/testField' response's property type/format changed from 'string'/'' to 'integer'/'int32' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, checker.ResponsePropertyTypeChangedId, errs[0].GetId())
+	require.Equal(t, "'/items/testField' response property type/format changed from 'string'/'' to 'integer'/'int32' for status '200'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

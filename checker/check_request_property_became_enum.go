@@ -25,7 +25,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 				continue
 			}
 			modifiedMediaTypes := operationItem.RequestBodyDiff.ContentDiff.MediaTypeModified
-			for _, mediaTypeDiff := range modifiedMediaTypes {
+			for mediaType, mediaTypeDiff := range modifiedMediaTypes {
 				if mediaTypeDiff.SchemaDiff == nil {
 					continue
 				}
@@ -41,7 +41,7 @@ func RequestPropertyBecameEnumCheck(diffReport *diff.Diff, operationsSources *di
 						result = append(result, NewApiChange(
 							RequestPropertyBecameEnumId,
 							config,
-							[]any{propertyFullName(propertyPath, propertyName)},
+							[]any{propertyFullName(propertyPath, propertyName), mediaType},
 							"",
 							operationsSources,
 							operationItem.Revision,

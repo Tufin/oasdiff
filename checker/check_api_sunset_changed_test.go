@@ -8,7 +8,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// BC: deleting sunset header for a deprecated endpoint is breaking
+// BC: deleting sunset header for a deprecated endpoint is breaking: sunset-deleted
 func TestBreaking_SunsetDeletedForDeprecatedEndpoint(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-with-sunset.yaml"))
@@ -26,7 +26,7 @@ func TestBreaking_SunsetDeletedForDeprecatedEndpoint(t *testing.T) {
 	require.Equal(t, "api sunset date deleted, but deprecated=true kept", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: changing sunset to an earlier date for a deprecated endpoint with a deprecation policy is breaking
+// BC: changing sunset to an earlier date for a deprecated endpoint with a deprecation policy is breaking: api-sunset-date-changed-too-small
 func TestBreaking_SunsetModifiedForDeprecatedEndpoint(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
@@ -44,7 +44,7 @@ func TestBreaking_SunsetModifiedForDeprecatedEndpoint(t *testing.T) {
 	require.Equal(t, "api sunset date changed to earlier date from '9999-08-10' to '2022-08-10', new sunset date must be not earlier than '9999-08-10' at least '180' days from now", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: changing sunset to an invalid date for a deprecated endpoint is breaking
+// BC: changing sunset to an invalid date for a deprecated endpoint is breaking: api-path-sunset-parse
 func TestBreaking_SunsetModifiedToInvalidForDeprecatedEndpoint(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
@@ -62,7 +62,7 @@ func TestBreaking_SunsetModifiedToInvalidForDeprecatedEndpoint(t *testing.T) {
 	require.Equal(t, "failed to parse sunset date: 'sunset date doesn't conform with RFC3339: invalid-date'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: changing sunset from an invalid date for a deprecated endpoint is breaking
+// BC: changing sunset from an invalid date for a deprecated endpoint is breaking: api-path-sunset-parse
 func TestBreaking_SunsetModifiedFromInvalidForDeprecatedEndpoint(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-invalid.yaml"))

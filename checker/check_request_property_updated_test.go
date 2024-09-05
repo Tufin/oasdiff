@@ -22,16 +22,17 @@ func TestRequiredRequestPropertyAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.NewRequiredRequestPropertyId,
-		Args:        []any{"description"},
+		Args:        []any{"description", "application/json"},
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      load.NewSource("../data/checker/request_property_added_revision.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
+	require.Equal(t, "added required request property 'description' to media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding two new request properties, one required, one optional
+// CL: adding two new request properties, one required, one optional: new-required-request-property, new-optional-request-property
 func TestRequiredRequestPropertiesAdded(t *testing.T) {
 	s1, err := open("../data/checker/request_property_added_base.yaml")
 	require.NoError(t, err)
@@ -41,25 +42,29 @@ func TestRequiredRequestPropertiesAdded(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestPropertyUpdatedCheck), d, osm, checker.INFO)
-	require.ElementsMatch(t, []checker.ApiChange{
-		{
-			Id:          checker.NewRequiredRequestPropertyId,
-			Args:        []any{"description"},
-			Level:       checker.ERR,
-			Operation:   "POST",
-			Path:        "/products",
-			Source:      load.NewSource("../data/checker/request_property_added_revision2.yaml"),
-			OperationId: "addProduct",
-		},
-		{
-			Id:          checker.NewOptionalRequestPropertyId,
-			Args:        []any{"info"},
-			Level:       checker.INFO,
-			Operation:   "POST",
-			Path:        "/products",
-			Source:      load.NewSource("../data/checker/request_property_added_revision2.yaml"),
-			OperationId: "addProduct",
-		}}, errs)
+	require.Len(t, errs, 2)
+
+	require.Equal(t, errs[0], checker.ApiChange{
+		Id:          checker.NewRequiredRequestPropertyId,
+		Args:        []any{"description", "application/json"},
+		Level:       checker.ERR,
+		Operation:   "POST",
+		Path:        "/products",
+		Source:      load.NewSource("../data/checker/request_property_added_revision2.yaml"),
+		OperationId: "addProduct",
+	})
+	require.Equal(t, "added required request property 'description' to media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+
+	require.Equal(t, errs[1], checker.ApiChange{
+		Id:          checker.NewOptionalRequestPropertyId,
+		Args:        []any{"info", "application/json"},
+		Level:       checker.INFO,
+		Operation:   "POST",
+		Path:        "/products",
+		Source:      load.NewSource("../data/checker/request_property_added_revision2.yaml"),
+		OperationId: "addProduct",
+	})
+	require.Equal(t, "added optional request property 'info' to media-type 'application/json'", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: adding a new optional request property
@@ -76,13 +81,14 @@ func TestRequiredOptionalPropertyAdded(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.NewOptionalRequestPropertyId,
-		Args:        []any{"description"},
+		Args:        []any{"description", "application/json"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      load.NewSource("../data/checker/request_property_added_revision.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
+	require.Equal(t, "added optional request property 'description' to media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // CL: removing a required request property
@@ -98,16 +104,17 @@ func TestRequiredRequestPropertyRemoved(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.RequestPropertyRemovedId,
-		Args:        []any{"description"},
+		Args:        []any{"description", "application/json"},
 		Level:       checker.WARN,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      load.NewSource("../data/checker/request_property_added_base.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
+	require.Equal(t, "removed request property 'description' of media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding a new required request property with a default value
+// CL: adding a new required request property with a default value: new-required-request-property-with-default
 func TestRequiredRequestPropertyAddedWithDefault(t *testing.T) {
 	s1, err := open("../data/checker/request_property_added_base.yaml")
 	require.NoError(t, err)
@@ -120,11 +127,12 @@ func TestRequiredRequestPropertyAddedWithDefault(t *testing.T) {
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
 		Id:          checker.NewRequiredRequestPropertyWithDefaultId,
-		Args:        []any{"description"},
+		Args:        []any{"description", "application/json"},
 		Level:       checker.INFO,
 		Operation:   "POST",
 		Path:        "/products",
 		Source:      load.NewSource("../data/checker/request_property_added_with_default.yaml"),
 		OperationId: "addProduct",
 	}, errs[0])
+	require.Equal(t, "added required request property 'description' with a default value to media-type 'application/json'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-// CL: adding a new tag
+// CL: adding a new tag: api-tag-added
 func TestTagAdded(t *testing.T) {
 	s1, err := open("../data/checker/tag_added_base.yaml")
 	require.NoError(t, err)
@@ -31,10 +31,10 @@ func TestTagAdded(t *testing.T) {
 		Source:      load.NewSource("../data/checker/tag_added_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
-	require.Equal(t, "api tag 'newTag' added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "added api tag 'newTag'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing an existing tag
+// CL: removing an existing tag: api-tag-removed
 func TestTagRemoved(t *testing.T) {
 	s1, err := open("../data/checker/tag_removed_base.yaml")
 	require.NoError(t, err)
@@ -57,11 +57,11 @@ func TestTagRemoved(t *testing.T) {
 		Source:      load.NewSource("../data/checker/tag_removed_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
-	require.Equal(t, "api tag 'Test' removed", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed api tag 'Test'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 
 }
 
-// CL: updating an existing tag
+// CL: updating an existing tag: api-tag-removed, api-tag-added
 func TestTagUpdated(t *testing.T) {
 	s1, err := open("../data/checker/tag_removed_base.yaml")
 	require.NoError(t, err)

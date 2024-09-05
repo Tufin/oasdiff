@@ -51,7 +51,7 @@ func RequestHeaderPropertyBecameRequiredCheck(diffReport *diff.Diff, operationsS
 							result = append(result, NewApiChange(
 								RequestHeaderPropertyBecameRequiredId,
 								config,
-								[]any{paramName, changedRequiredPropertyName},
+								[]any{changedRequiredPropertyName, paramName},
 								"",
 								operationsSources,
 								operationItem.Revision,

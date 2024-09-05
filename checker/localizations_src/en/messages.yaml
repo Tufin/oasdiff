@@ -5,20 +5,20 @@ request-body-added-optional: added optional request body
 request-parameter-removed: deleted the %s request parameter %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
-request-parameter-pattern-added: "added the pattern %s to the %s request parameter %s"
-request-parameter-pattern-removed: "removed the pattern %s from the %s request parameter %s"
-request-parameter-pattern-changed: "changed the pattern of the %s request parameter %s from %s to %s"
-request-parameter-pattern-generalized: "changed the pattern of the %s request parameter %s from %s to a more general pattern %s"
-request-property-pattern-added: "added the pattern %s to the request property %s"
-request-property-pattern-removed: "removed the pattern %s from the request property %s"
-request-property-pattern-changed: "changed the pattern of the request property %s from %s to %s"
-request-property-pattern-generalized: "changed the pattern of the request property %s from %s to a more general pattern %s"
-api-deprecated-sunset-parse: "failed to parse sunset date: %v"
+request-parameter-pattern-added: added pattern %s to the %s request parameter %s # tested
+request-parameter-pattern-removed: removed pattern %s from the %s request parameter %s # tested
+request-parameter-pattern-changed: changed pattern of the %s request parameter %s from %s to %s # tested
+request-parameter-pattern-generalized: changed pattern of the %s request parameter %s from %s to a more general pattern %s # tested
+request-property-pattern-added: added pattern %s to the request property %s of media-type %s # tested
+request-property-pattern-removed: removed pattern %s from the request property %s of media-type %s # tested
+request-property-pattern-changed: changed pattern of the request property %s of media-type %s from %s to %s # tested
+request-property-pattern-generalized: changed pattern of the request property %s of media-type %s from %s to a more general pattern %s # tested
+api-deprecated-sunset-parse: "failed to parse sunset date: %v" # tested
 api-path-sunset-parse: "failed to parse sunset date: %v"
-api-stability-decreased: "endpoint stability level decreased from %s to %s"
+api-stability-decreased: endpoint stability level decreased from %s to %s
 api-invalid-stability-level: "failed to parse stability level: %v"
-api-deprecated-sunset-missing: "sunset date is missing for deprecated API"
-api-sunset-date-too-small: "sunset date %s is too small, must be at least %s days from now"
+api-deprecated-sunset-missing: sunset date is missing for deprecated API
+api-sunset-date-too-small: sunset date %s is too small, must be at least %s days from now
 endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated
@@ -28,262 +28,261 @@ api-removed-without-deprecation: api removed without deprecation
 api-removed-before-sunset: api removed before the sunset date %s
 api-operation-id-removed: api operation id %s removed and replaced with %s
 api-operation-id-added: api operation id %s was added
-api-tag-removed: api tag %s removed
-api-tag-added: api tag %s added
-api-schema-removed: removed the schema %s
+api-tag-removed: removed api tag %s
+api-tag-added: added api tag %s
+api-schema-removed: removed schema %s
 sunset-deleted: api sunset date deleted, but deprecated=true kept
 api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %s days from now
-new-required-request-parameter: added the new required %s request parameter %s
-new-optional-request-parameter: added the new optional %s request parameter %s
-new-required-request-property: added the new required request property %s
-new-required-request-property-with-default: added the new required request property %s with a default value
-new-optional-request-property: added the new optional request property %s
-new-required-request-header-property: added the new required %s request header's property %s
+new-required-request-parameter: added required %s request parameter %s
+new-optional-request-parameter: added optional %s request parameter %s
+new-required-request-property: added required request property %s to media-type %s # tested
+new-required-request-property-with-default: added required request property %s with a default value to media-type %s # tested
+new-optional-request-property: added optional request property %s to media-type %s # tested
+new-required-request-header-property: added required %s request header property %s # tested
 request-body-became-required: request body became required
 request-body-became-optional: request body became optional
-request-body-became-enum: request body was restricted to a list of enum values
-request-body-enum-value-removed: request body enum value removed %s
+request-body-became-enum: media-type %s of request body was restricted to a list of enum values # tested
+request-body-enum-value-removed: enum value %s removed from media-type %s of request body # tested
 response-mediatype-enum-value-removed: response schema %s enum value removed %s
-request-header-property-became-required: the %s request header's property %s became required
-request-header-property-became-enum: the %s request header's property %s was restricted to a list of enum values
-request-parameter-became-required: the %s request parameter %s became required
-request-parameter-became-optional: the %s request parameter %s became optional
-request-parameter-became-enum: the %s request parameter %s was restricted to a list of enum values
-request-parameter-enum-value-removed: removed the enum value %s from the %s request parameter %s
-request-parameter-enum-value-added: added the new enum value %s to the %s request parameter %s
-pattern-changed-warn-comment: "This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')"
-request-parameter-x-extensible-enum-value-removed: removed the x-extensible-enum value %s from the %s request parameter %s
-request-parameter-max-decreased: for the %s request parameter %s, the max was decreased from %s to %s
-request-parameter-max-increased: for the %s request parameter %s, the max was increased from %s to %s
-request-parameter-default-value-added: for the %s request parameter %s, default value %s was added
-request-parameter-default-value-changed: for the %s request parameter %s, default value was changed from %s to %s
-request-parameter-default-value-removed: for the %s request parameter %s, default value %s was removed
-request-parameter-max-length-decreased: for the %s request parameter %s, the maxLength was decreased from %s to %s
-request-parameter-max-length-increased: for the %s request parameter %s, the maxLength was increased from %s to %s
-request-parameter-min-length-increased: for the %s request parameter %s, the minLength was increased from %s to %s
-request-parameter-min-length-decreased: for the %s request parameter %s, the minLength was decreased from %s to %s
-request-parameter-max-length-set: for the %s request parameter %s, the maxLength was set to %s
-request-parameter-max-length-set-comment: "This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification."
-request-parameter-max-set: for the %s request parameter %s, the max was set to %s
-request-parameter-max-set-comment: "This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification."
-request-parameter-min-increased: for the %s request parameter %s, the min was increased from %s to %s
-request-parameter-min-decreased: for the %s request parameter %s, the min was decreased from %s to %s
-request-parameter-max-items-decreased: for the %s request parameter %s, the maxItems was decreased from %s to %s
-request-parameter-max-items-increased: for the %s request parameter %s, the maxItems was increased from %s to %s
-request-parameter-min-items-increased: for the %s request parameter %s, the minItems was increased from %s to %s
-request-parameter-min-items-decreased: for the %s request parameter %s, the minItems was decreased from %s to %s
-request-parameter-min-items-set: for the %s request parameter %s, the minItems was set to %s
-request-parameter-min-items-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
-request-parameter-min-set: for the %s request parameter %s, the min was set to %s
-request-parameter-min-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
-request-parameter-type-changed: for the %s request parameter %s, the type/format was changed from %s/%s to %s/%s
-request-parameter-type-generalized: for the %s request parameter %s, the type/format was generalized from %s/%s to %s/%s
-request-parameter-property-type-changed: for the %s request parameter %s, the type/format of property %s was changed from %s/%s to %s/%s
-request-parameter-property-type-changed-warn-comment: This is a warning because parameter objects can be passed in differnt ways, some of which allow this type change and others do not.
-request-parameter-property-type-generalized: for the %s request parameter %s, the type/format of property %s was generalized from %s/%s to %s/%s
-request-parameter-property-type-specialized: for the %s request parameter %s, the type/format of property %s was specialized from %s/%s to %s/%s
-new-request-path-parameter: added the new path request parameter %s
-request-property-became-required: the request property %s became required
-request-property-became-required-with-default: the request property %s with a default value became required
-request-property-became-optional: the request property %s became optional
-request-property-became-not-nullable: the request property %s became not nullable
-request-body-became-not-nullable: the request's body became not nullable
-request-property-became-nullable: the request property %s became nullable
-request-body-became-nullable: the request's body became nullable
-request-property-became-enum: request property %s was restricted to a list of enum values
-request-property-enum-value-removed: removed the enum value %s of the request property %s
-request-read-only-property-enum-value-removed: removed the enum value %s of the request read-only property %s
-request-property-enum-value-added: added the new %s enum value to the request property %s
-request-body-max-decreased: the request's body max was decreased to %s
-request-property-max-decreased: the %s request property's max was decreased to %s
-request-read-only-property-max-decreased: the %s request read-only property's max was decreased to %s
-request-body-max-length-decreased: the request's body maxLength was decreased to %s
-request-property-max-length-decreased: the %s request property's maxLength was decreased to %s
-request-read-only-property-max-length-decreased: the %s request read-only property's maxLength was decreased to %s
-request-body-min-length-increased: the request's body minLength was increased from %s to %s
-request-property-min-length-increased: the %s request property's minLength was increased from %s to %s
-request-body-min-length-decreased: the request's body minLength was decreased from %s to %s
-request-property-min-length-decreased: the %s request property's minLength was decreased from %s to %s
-request-body-max-increased: the request's body max was increased from %s to %s
-request-property-max-increased: the %s request property's max was increased from %s to %s
-request-body-max-length-increased: the request's body maxLength was increased from %s to %s
-request-property-max-length-increased: the %s request property's maxLength was increased from %s to %s
-request-body-max-length-set: the request's body maxLength was set to %s
-request-body-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
-request-property-max-length-set: the %s request property's maxLength was set to %s
-request-property-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
-request-body-max-set: the request's body max was set to %s
-request-body-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
-request-property-max-set: the %s request property's max was set to %s
-request-property-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
-request-body-min-increased: the request's body min was increased to %s
-request-property-min-increased: the %s request property's min was increased to %s
-request-read-only-property-min-increased: the %s request read-only property's min was increased to %s
-request-body-min-items-increased: the request's body minItems was increased to %s
-request-property-min-items-increased: the %s request property's minItems was increased to %s
-request-body-min-decreased: the request's body min was decreased to from %s to %s
-request-property-min-decreased: the %s request property's min was decreased from %s to %s
-request-body-min-items-decreased: the request's body minItems was decreased from %s to %s
-request-property-min-items-decreased: the %s request property's minItems was decreased from %s to %s
-request-body-min-items-set: the request's body minItems was set to %s
-request-body-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
-request-property-min-items-set: the %s request property's minItems was set to %s
-request-property-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
-request-body-min-set: the request's body min was set to %s
-request-body-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
-request-property-min-set: the %s request property's min was set to %s
-request-property-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
-request-property-removed: removed the request property %s
-request-body-type-changed: the request's body type/format changed from %s/%s to %s/%s
-request-body-type-generalized: the request's body type/format was generalized from %s/%s to %s/%s
-request-property-type-changed: the %s request property type/format changed from %s/%s to %s/%s
-request-property-type-generalized: the %s request property type/format was generalized from %s/%s to %s/%s
-request-property-x-extensible-enum-value-removed: removed the x-extensible-enum value %s of the request property %s
-response-header-became-optional: the response header %s became optional for the status %s
-required-response-header-removed: the mandatory response header %s removed for the status %s
-optional-response-header-removed: the optional response header %s removed for the status %s
-response-media-type-removed: removed the media type %s for the response with the status %s
-response-media-type-added: added the media type %s for the response with the status %s
-response-optional-property-removed: removed the optional property %s from the response with the %s status
-response-property-became-optional: the response property %s became optional for the status %s
-response-property-became-nullable: the response property %s became nullable for the status %s
-response-body-became-nullable: the response's body became nullable
-response-property-enum-value-added: added the new %s enum value to the %s response property for the response status %s
+request-header-property-became-required: property %s of request header %s became required # tested
+request-header-property-became-enum: property %s of request header %s was restricted to a list of enum values # tested
+request-parameter-became-required: "%s request parameter %s became required" # tested
+request-parameter-became-optional: "%s request parameter %s became optional" # tested
+request-parameter-became-enum: "%s request parameter %s was restricted to a list of enum values"
+request-parameter-enum-value-removed: removed enum value %s from the %s request parameter %s
+request-parameter-enum-value-added: added enum value %s to the %s request parameter %s
+request-parameter-x-extensible-enum-value-removed: removed x-extensible-enum value %s from the %s request parameter %s
+request-parameter-max-decreased: for %s request parameter %s, max was decreased from %s to %s
+request-parameter-max-increased: for %s request parameter %s, max was increased from %s to %s
+request-parameter-default-value-added: for %s request parameter %s, default value %s was added
+request-parameter-default-value-changed: for %s request parameter %s, default value was changed from %s to %s
+request-parameter-default-value-removed: for %s request parameter %s, default value %s was removed
+request-parameter-max-length-decreased: for %s request parameter %s, maxLength was decreased from %s to %s
+request-parameter-max-length-increased: for %s request parameter %s, maxLength was increased from %s to %s
+request-parameter-min-length-increased: for %s request parameter %s, minLength was increased from %s to %s
+request-parameter-min-length-decreased: for %s request parameter %s, minLength was decreased from %s to %s
+request-parameter-max-length-set: for %s request parameter %s, maxLength was set to %s
+request-parameter-max-set: for %s request parameter %s, max was set to %s
+request-parameter-min-increased: for %s request parameter %s, min was increased from %s to %s
+request-parameter-min-decreased: for %s request parameter %s, min was decreased from %s to %s
+request-parameter-max-items-decreased: for %s request parameter %s, maxItems was decreased from %s to %s
+request-parameter-max-items-increased: for %s request parameter %s, maxItems was increased from %s to %s
+request-parameter-min-items-increased: for %s request parameter %s, minItems was increased from %s to %s
+request-parameter-min-items-decreased: for %s request parameter %s, minItems was decreased from %s to %s
+request-parameter-min-items-set: for %s request parameter %s, minItems was set to %s
+request-parameter-min-set: for %s request parameter %s, min was set to %s
+request-parameter-type-changed: for %s request parameter %s, type/format was changed from %s/%s to %s/%s
+request-parameter-type-generalized: for %s request parameter %s, type/format was generalized from %s/%s to %s/%s
+request-parameter-property-type-changed: for %s request parameter %s, type/format of property %s was changed from %s/%s to %s/%s
+request-parameter-property-type-generalized: for %s request parameter %s, type/format of property %s was generalized from %s/%s to %s/%s
+request-parameter-property-type-specialized: for %s request parameter %s, type/format of property %s was specialized from %s/%s to %s/%s
+new-request-path-parameter: added path request parameter %s
+request-property-became-required: request property %s of media-type %s became required # tested
+request-property-became-required-with-default: request property %s with a default value became required in media-type %s # tested
+request-property-became-optional: request property %s of media-type %s became optional # tested
+request-property-became-not-nullable: request property %s of media-type %s became not nullable
+request-body-became-not-nullable: media-type %s of request body became not nullable
+request-property-became-nullable: request property %s of media-type %s became nullable
+request-body-became-nullable: media-type %s of request body became nullable
+request-property-became-enum: request property %s of media-type %s was restricted to a list of enum values
+request-property-enum-value-removed: removed enum value %s of request property %s of media-type %s
+request-read-only-property-enum-value-removed: removed enum value %s of request read-only property %s of media-type %s
+request-property-enum-value-added: added %s enum value to request property %s of media type %s 
+request-body-max-decreased: max value of media-type %s of request body was decreased from %s to %s
+request-property-max-decreased: max value of request property %s of media type %s was decreased from %s to %s
+request-read-only-property-max-decreased: max value of request read-only property %s of media-type %swas decreased to %s
+request-body-max-length-decreased: maxLength value of media-type %s of request body was decreased from %s to %s
+request-property-max-length-decreased: maxLength value of request property %s of media-type %s was decreased from %s to %s
+request-read-only-property-max-length-decreased: maxLength value of request read-only property %s of media-type %s was decreased from %s to %s
+request-body-min-length-increased: minLength value of media-type %s of request body was increased from %s to %s
+request-property-min-length-increased: minLength value of request property %s of media-type %s was increased from %s to %s
+request-body-min-length-decreased: minLength value of media-type %s of request body was decreased from %s to %s
+request-property-min-length-decreased: minLength value of request property %s of media-type %s was decreased from %s to %s
+request-body-max-increased: max value of media-type %s of request body was increased from %s to %s
+request-property-max-increased: max value of request property %s of media-type %s was increased from %s to %s
+request-body-max-length-increased: maxLength value of media-type %s of request body was increased from %s to %s
+request-property-max-length-increased: maxLength value of request property %s of media-type %s was increased from %s to %s
+request-body-max-length-set: maxLength value of media-type %s of request body was set to %s
+request-property-max-length-set: maxLength value of request property %s of media-type %s was set to %s
+request-body-max-set: max value of media-type %s of request body was set to %s
+request-property-max-set: max value of request property %s of media-type %s was set to %s
+request-body-min-increased: min value of media-type %s of request body was increased to %s
+request-property-min-increased: min value of request property %s of media-type %s was increased to %s
+request-read-only-property-min-increased: min value of request read-only property %s of media-type %s was increased to %s
+request-body-min-items-increased: minItems value of media-type %s of request body was increased to %s
+request-property-min-items-increased: minItems value of request property %s of media-type %s was increased to %s
+request-body-min-decreased: min value of media-type %s of request body was decreased from %s to %s
+request-property-min-decreased: min value of request property %s of media-type %s was decreased from %s to %s
+request-body-min-items-decreased: minItems value of media-type %s of request body was decreased from %s to %s
+request-property-min-items-decreased: minItems value of request property %s of media-type %s was decreased from %s to %s
+request-body-min-items-set: minItems value of media-type %s of request body was set to %s
+request-property-min-items-set: minItems value of request property %s of media-type %s was set to %s
+request-body-min-set: min value of media-type %s of request body was set to %s
+request-property-min-set: min value of request property %s of media-type %s was set to %s
+request-property-removed: removed request property %s of media-type %s
+request-body-type-changed: type/format of media-type %s of request body changed from %s/%s to %s/%s
+request-body-type-generalized: type/format of media-type %s of request body was generalized from %s/%s to %s/%s
+request-property-type-changed: type/format of request property %s of media-type %s changed from %s/%s to %s/%s
+request-property-type-generalized: type/format of request property %s of media-type %s was generalized from %s/%s to %s/%s
+request-property-x-extensible-enum-value-removed: removed x-extensible-enum value %s of request property %s of media-type %s
+response-header-became-optional: header %s became optional for response status %s
+required-response-header-removed: removed mandatory header %s for response status %s
+optional-response-header-removed: removed optional header %s for response status %s
+response-media-type-removed: removed media type %s for response status %s
+response-media-type-added: added media type %s for response status %s
+response-optional-property-removed: removed optional property %s from response status %s
+response-property-became-optional: property %s became optional for response status %s
+response-property-became-nullable: property %s became nullable for response status %s
+response-body-became-nullable: response body became nullable
+response-property-enum-value-added: added %s enum value to the %s response property for response status %s
 response-property-enum-value-added-comment: Adding new enum values to response could be unexpected for clients, use x-extensible-enum instead.
-response-property-enum-value-removed: removed the %s enum value from the %s response property for the response status %s
-response-body-max-length-increased: the response's body maxLength was increased from %s to %s
-response-property-max-length-increased: the %s response property's maxLength was increased from %s to %s for the response status %s
-response-body-max-length-unset: the response's body maxLength was unset from %s
-response-property-max-length-unset: the %s response property's maxLength was unset from %s for the response status %s
-response-body-min-items-decreased: the response's body minItems was decreased from %s to %s
-response-property-min-items-decreased: the %s response property's minItems was decreased from %s to %s for the response status %s
-response-body-min-items-unset: the response's body minItems was unset from %s
-response-property-min-items-unset: the %s response property's minItems was unset from %s for the response status %s
-response-body-min-length-decreased: the response's body minLength was decreased from %s to %s
-response-property-min-length-decreased: the %s response property's minLength was decreased from %s to %s for the response status %s
-response-body-type-changed: the response's body type/format changed from %s/%s to %s/%s for status %s
-response-property-type-changed: the %s response's property type/format changed from %s/%s to %s/%s for status %s
-response-required-property-became-not-write-only: the response required property %s became not write-only for the status %s
+response-property-enum-value-removed: removed %s enum value from %s response property for response status %s
+response-body-max-length-increased: maxLength value of response body was increased from %s to %s
+response-property-max-length-increased: maxLength value of %s response property was increased from %s to %s for response status %s
+response-body-max-length-unset: maxLength value of response body was unset from %s
+response-property-max-length-unset: maxLength value of %s response property was unset from %s for response status %s
+response-body-min-items-decreased: minItems value of response body was decreased from %s to %s
+response-property-min-items-decreased: minItems value of %s response property was decreased from %s to %s for response status %s
+response-body-min-items-unset: minItems value of response body was unset from %s
+response-property-min-items-unset: minItems value of %s response property was unset from %s for response status %s
+response-body-min-length-decreased: minLength value of response body was decreased from %s to %s
+response-property-min-length-decreased: minLength value of %s response property was decreased from %s to %s for response status %s
+response-body-type-changed: body type/format changed from %s/%s to %s/%s for response status %s
+response-property-type-changed: "%s response property type/format changed from %s/%s to %s/%s for status %s"
+response-required-property-became-not-write-only: response required property %s became not write-only for status %s
 response-required-property-became-not-write-only-comment: It is valid only if the property was always returned before the specification has been changed
-response-required-property-removed: removed the required property %s from the response with the %s status
-response-required-property-added: added the required property %s to the response with the %s status
-response-success-status-removed: removed the success response with the status %s
-response-non-success-status-removed: removed the non-success response with the status %s
-response-success-status-added: added the success response with the status %s
-response-non-success-status-added: added the non-success response with the status %s
-response-body-max-increased: the response's body max was increased from %s to %s
-response-property-max-increased: the %s response property's max was increased from %s to %s for the response status %s
-response-body-min-decreased: the response's body min was decreased from %s to %s
-response-property-min-decreased: the %s response property's min was decreased from %s to %s for the response status %s
-api-security-added: the endpoint scheme security %s was added to the API
-api-security-removed: the endpoint scheme security %s was removed from the API
-api-security-updated: the endpoint scheme security %s was updated from %s to %s
-api-global-security-added: the security scheme %s was added to the API
-api-global-security-removed: the security scheme %s was removed from the API
-api-global-security-scope-removed: the security scope %s was removed from the global security scheme %s
-api-global-security-scope-added: the security scope %s was added to the global security scheme %s
-api-security-scope-removed: the security scope %s was removed from the endpoint's security scheme %s
-api-stability-decreased-description: endpoint stability level decreased
-api-security-scope-added: the security scope %s was added to the endpoint's security scheme %s
-api-security-component-type-changed: the component security scheme %s type changed from %s to %s
-api-security-component-oauth-url-changed: the component security scheme %s oauth url changed from %s to %s
-api-security-component-oauth-token-url-changed: the component security scheme %s oauth token url changed from %s to %s
-api-security-component-added: the component security scheme %s was added
-api-security-component-removed: the component security scheme %s was removed
-api-security-component-oauth-scope-added: the component security scheme %s oauth scope %s was added
-api-security-component-oauth-scope-removed: the component security scheme %s oauth scope %s was removed
-api-security-component-oauth-scope-changed: the component security scheme %s oauth scope %s was updated from %s to %s
-response-optional-property-added: added the optional property %s to the response with the %s status
-response-optional-write-only-property-added: added the optional write-only property %s to the response with the %s status
-response-optional-write-only-property-removed: removed the optional write-only property %s from the response with the %s status
-response-required-write-only-property-added: added the required write-only property %s to the response with the %s status
-response-required-write-only-property-removed: removed the required write-only property %s from the response with the %s status
-response-write-only-property-became-optional: the response write-only property %s became optional for the status %s
-response-property-became-required: the response property %s became required for the status %s
-response-write-only-property-became-required: the response write-only property %s became required for the status %s
-request-body-media-type-removed: removed the media type %s from the request body
-request-body-media-type-added: added the media type %s to the request body
-response-write-only-property-enum-value-added: added the new %s enum value to the %s response write-only property for the response status %s
-response-required-property-became-write-only: the response required property %s became write-only for the status %s
-response-required-property-became-read-only: the response required property %s became read-only for the status %s
-response-required-property-became-not-read-only: the response required property %s became not read-only for the status %s
-response-optional-property-became-write-only: the response optional property %s became write-only for the status %s
-response-optional-property-became-read-only: the response optional property %s became read-only for the status %s
-response-optional-property-became-not-write-only: the response optional property %s became not write-only for the status %s
-response-optional-property-became-not-read-only: the response optional property %s became not read-only for the status %s
-response-property-pattern-changed: the %s response's property pattern was changed from %s to %s for the status %s
-response-property-pattern-added: the %s response's property pattern %s was added for the status %s
-response-property-pattern-removed: the %s response's property pattern %s was removed for the status %s
-response-property-default-value-added: the %s response's property default value %s was added for the status %s
-response-property-default-value-changed: the %s response's property default value changed from %s to %s for the status %s
-response-property-default-value-removed: the %s response's property default value %s was removed for the status %s
-response-body-default-value-added: the response body %s default value %s was added for the status %s
-response-body-default-value-changed: the response body %s default value changed from %s to %s for the status %s
-response-body-default-value-removed: the response body %s default value %s was removed for the status %s
-request-property-default-value-added: the %s request property default value %s was added
-request-property-default-value-changed: the %s request property default value changed from %s to %s
-request-property-default-value-removed: the %s request property default value %s was removed
-request-body-default-value-added: the request body %s default value %s was added
-request-body-default-value-changed: the request body %s default value changed from %s to %s
-request-body-default-value-removed: the request body %s default value %s was removed
-request-body-any-of-added: added %s to the request body 'anyOf' list
-request-body-any-of-removed: removed %s from the request body 'anyOf' list
-request-property-any-of-added: added %s to the %s request property 'anyOf' list
-request-property-any-of-removed: removed %s from the %s request property 'anyOf' list
-response-body-any-of-added: added %s to the response body 'anyOf' list for the response status %s
-response-body-any-of-removed: removed %s from the response body 'anyOf' list for the response status %s
-response-property-any-of-added: added %s to the %s response property 'anyOf' list for the response status %s
-response-property-any-of-removed: removed %s from the %s response property 'anyOf' list for the response status %s
-request-body-one-of-added: added %s to the request body 'oneOf' list
-request-body-one-of-removed: removed %s from the request body 'oneOf' list
-request-property-one-of-added: added %s to the %s request property 'oneOf' list
-request-property-one-of-removed: removed %s from the %s request property 'oneOf' list
-response-body-one-of-added: added %s to the response body 'oneOf' list for the response status %s
-response-body-one-of-removed: removed %s from the response body 'oneOf' list for the response status %s
-response-property-one-of-added: added %s to the %s response property 'oneOf' list for the response status %s
-response-property-one-of-removed: removed %s from the %s response property 'oneOf' list for the response status %s
-request-body-all-of-added: added %s to the request body 'allOf' list
-request-body-all-of-removed: removed %s from the request body 'allOf' list
-request-property-all-of-added: added %s to the %s request property 'allOf' list
-request-property-all-of-removed: removed %s from the %s request property 'allOf' list
-response-body-all-of-added: added %s to the response body 'allOf' list for the response status %s
-response-body-all-of-removed: removed %s from the response body 'allOf' list for the response status %s
-response-property-all-of-added: added %s to the %s response property 'allOf' list for the response status %s
-response-property-all-of-removed: removed %s from the %s response property 'allOf' list for the response status %s
-response-body-discriminator-added: added response discriminator for the response status %s
-response-property-discriminator-added: added discriminator to %s response property for the response status %s
-response-body-discriminator-removed: removed response discriminator for the response status %s
-response-property-discriminator-removed: removed discriminator from %s response property for the response status %s
-response-body-discriminator-property-name-changed: response discriminator property name changed from %s to %s for the response status %s
-response-property-discriminator-property-name-changed: response discriminator property name changed for %s response property from %s to %s for the response status %s
-response-body-discriminator-mapping-added: added %s mapping keys to the response discriminator for the response status %s
-response-property-discriminator-mapping-added: added %s discriminator mapping keys to the %s response property for the response status %s
-response-body-discriminator-mapping-deleted: removed %s mapping keys from the response discriminator for the response status %s
-response-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from the %s response property for the response status %s
-response-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the response discriminator for the response status %s
-response-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s response property for the response status %s
-request-body-discriminator-added: added request discriminator
-request-property-discriminator-added: added discriminator to %s request property
-request-body-discriminator-removed: removed request discriminator
-request-property-discriminator-removed: removed discriminator from %s request property
-request-body-discriminator-property-name-changed: request discriminator property name changed from %s to %s
-request-property-discriminator-property-name-changed: request discriminator property name changed for %s request property from %s to %s
-request-body-discriminator-mapping-added: added %s mapping keys to the request discriminator
-request-property-discriminator-mapping-added: added %s discriminator mapping keys to the %s request property
-request-body-discriminator-mapping-deleted: removed %s mapping keys from the request discriminator
-request-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from the %s request property
-request-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the request discriminator
+response-required-property-removed: removed required property %s from response status %s
+response-required-property-added: added required property %s to response status %s
+response-success-status-removed: removed success response status %s
+response-non-success-status-removed: removed non-success response status %s
+response-success-status-added: added success response status %s
+response-non-success-status-added: added non-success response status %s
+response-body-max-increased: max value of response body was increased from %s to %s
+response-property-max-increased: max value of %s response property was increased from %s to %s for response status %s
+response-body-min-decreased: min value of response body was decreased from %s to %s
+response-property-min-decreased: min value of %s response property was decreased from %s to %s for response status %s
+api-security-added: endpoint scheme security %s was added
+api-security-removed: removed endpoint scheme security %s # tested
+api-global-security-added: security scheme %s was added
+api-global-security-removed: removed security scheme %s # tested
+api-global-security-scope-removed: removed security scope %s from global security scheme %s
+api-global-security-scope-added: security scope %s was added to global security scheme %s
+api-security-scope-removed: removed security scope %s from endpoint security scheme %s # tested
+api-security-scope-added: security scope %s was added to endpoint security scheme %s
+api-security-component-type-changed: component security scheme %s type changed from %s to %s
+api-security-component-oauth-url-changed: component security scheme %s oauth url changed from %s to %s
+api-security-component-oauth-token-url-changed: component security scheme %s oauth token url changed from %s to %s
+api-security-component-added: component security scheme %s was added
+api-security-component-removed: removed component security scheme %s # tested
+api-security-component-oauth-scope-added: component security scheme %s oauth scope %s was added
+api-security-component-oauth-scope-removed: removed component security scheme %s oauth scope %s # tested
+api-security-component-oauth-scope-changed: component security scheme %s oauth scope %s was updated from %s to %s
+response-optional-property-added: added optional property %s to response status %s
+response-optional-write-only-property-added: added optional write-only property %s to response status %s
+response-optional-write-only-property-removed: removed optional write-only property %s from response status %s
+response-required-write-only-property-added: added required write-only property %s tohe response status %s
+response-required-write-only-property-removed: removed required write-only property %s from response status %s
+response-write-only-property-became-optional: write-only property %s became optional for response status %s
+response-property-became-required: property %s became required for response status %s
+response-write-only-property-became-required: write-only property %s became required for response status %s
+request-body-media-type-removed: removed media type %s from the request body
+request-body-media-type-added: added media type %s to the request body
+response-write-only-property-enum-value-added: added %s enum value to %s response write-only property for response status %s
+response-required-property-became-write-only: response required property %s became write-only for status %s
+response-required-property-became-read-only: response required property %s became read-only for status %s
+response-required-property-became-not-read-only: response required property %s became not read-only for status %s
+response-optional-property-became-write-only: response optional property %s became write-only for status %s
+response-optional-property-became-read-only: response optional property %s became read-only for status %s
+response-optional-property-became-not-write-only: response optional property %s became not write-only for status %s
+response-optional-property-became-not-read-only: response optional property %s became not read-only for status %s
+response-property-pattern-changed: changed pattern from %s to %s in property %s for response status %s # tested
+response-property-pattern-added: added pattern %s to property %s for response status %s # tested
+response-property-pattern-removed: removed pattern %s from property %s for response status %s # tested
+response-property-default-value-added: added default value %s to response property %s for response status %s
+response-property-default-value-changed: changed default value from %s to %s for property %s for response status %s
+response-property-default-value-removed: removed default value %s of property %s for response status %s
+response-body-default-value-added: response body %s default value %s was added for status %s
+response-body-default-value-changed: response body %s default value changed from %s to %s for status %s
+response-body-default-value-removed: response body %s default value %s was removed for status %s
+request-property-default-value-added: "%s request property default value %s was added"
+request-property-default-value-changed: "%s request property default value changed from %s to %s"
+request-property-default-value-removed: "%s request property default value %s was removed"
+request-body-default-value-added: default value %s was added to media-type %s of request body
+request-body-default-value-changed: default value of media-type %s of request body changed from %s to %s
+request-body-default-value-removed: default value %s was removed from media-type %s of request body
+request-body-any-of-added: added %s to media-type %s of request body 'anyOf' list
+request-body-any-of-removed: removed %s from media-type %s of request body 'anyOf' list
+request-property-any-of-added: added %s to %s request property of media-type %s 'anyOf' list
+request-property-any-of-removed: removed %s from %s request property of media-type %s 'anyOf' list
+response-body-any-of-added: added %s to response body 'anyOf' list for response status %s
+response-body-any-of-removed: removed %s from the response body 'anyOf' list for response status %s
+response-property-any-of-added: added %s to %s response property 'anyOf' list for response status %s
+response-property-any-of-removed: removed %s from %s response property 'anyOf' list for response status %s
+request-body-one-of-added: added %s to media-type %s of request body 'oneOf' list
+request-body-one-of-removed: removed %s from media-type %s of request body 'oneOf' list
+request-property-one-of-added: added %s to %s request property of media-type %s 'oneOf' list
+request-property-one-of-removed: removed %s from %s request property of media-type %s 'oneOf' list
+response-body-one-of-added: added %s to response body 'oneOf' list for response status %s
+response-body-one-of-removed: removed %s from response body 'oneOf' list for response status %s
+response-property-one-of-added: added %s to %s response property 'oneOf' list for response status %s
+response-property-one-of-removed: removed %s from %s response property 'oneOf' list for response status %s
+request-body-all-of-added: added %s to media-type %s of request body 'allOf' list
+request-body-all-of-removed: removed %s from media-type %s of request body 'allOf' list
+request-property-all-of-added: added %s to %s request property of media-type %s 'allOf' list
+request-property-all-of-removed: removed %s from %s request property of media-type %s 'allOf' list
+response-body-all-of-added: added %s to response body 'allOf' list for response status %s
+response-body-all-of-removed: removed %s from response body 'allOf' list for response status %s
+response-property-all-of-added: added %s to %s response property 'allOf' list for response status %s
+response-property-all-of-removed: removed %s from %s response property 'allOf' list for response status %s
+response-body-discriminator-added: added response discriminator for response status %s
+response-property-discriminator-added: added discriminator to %s response property for response status %s
+response-body-discriminator-removed: removed response discriminator for response status %s
+response-property-discriminator-removed: removed discriminator from %s response property for response status %s
+response-body-discriminator-property-name-changed: response discriminator property name changed from %s to %s for response status %s
+response-property-discriminator-property-name-changed: response discriminator property name changed for %s response property from %s to %s for response status %s
+response-body-discriminator-mapping-added: added %s mapping keys to response discriminator for response status %s
+response-property-discriminator-mapping-added: added %s discriminator mapping keys to %s response property for response status %s
+response-body-discriminator-mapping-deleted: removed %s mapping keys from response discriminator for response status %s
+response-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from %s response property for response status %s
+response-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from the response discriminator for response status %s
+response-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s response property for response status %s
+request-body-discriminator-added: added discriminator to media-type %s of request body
+request-property-discriminator-added: added discriminator to property %s of media-type %s of request body
+request-body-discriminator-removed: removed discriminator from media-type %s of request body
+request-property-discriminator-removed: removed discriminator from property %s of media-type %s of request body
+request-body-discriminator-property-name-changed: discriminator property name of media-type %s of request body changed from %s to %s
+request-property-discriminator-property-name-changed: discriminator property name of request property %s of media-type %s changed from %s to %s
+request-body-discriminator-mapping-added: added %s mapping keys to request discriminator
+request-property-discriminator-mapping-added: added %s discriminator mapping keys to %s request property
+request-body-discriminator-mapping-deleted: removed %s mapping keys from request discriminator
+request-property-discriminator-mapping-deleted: removed %s discriminator mapping keys from %s request property
+request-body-discriminator-mapping-changed: mapped value for key %s changed from %s to %s from request discriminator
 request-property-discriminator-mapping-changed: mapped value for discriminator key %s changed from %s to %s for %s request property
-request-required-property-became-read-only: the request required property %s became read-only
-request-required-property-became-not-read-only: the request required property %s became not read-only
-request-optional-property-became-write-only: the request optional property %s became write-only
-request-optional-property-became-read-only: the request optional property %s became read-only
-request-optional-property-became-not-write-only: the request optional property %s became not write-only
-request-optional-property-became-not-read-only: the request optional property %s became not read-only
-request-required-property-became-write-only: the request required property %s became write-only
-request-required-property-became-not-write-only: the request required property %s became not write-only
-new-required-request-default-parameter-to-existing-path: added the new required %s request parameter %s to all path's operations
-new-optional-request-default-parameter-to-existing-path: added the new optional %s request parameter %s to all path's operations
+request-required-property-became-read-only: request required property %s became read-only
+request-required-property-became-not-read-only: request required property %s became not read-only
+request-optional-property-became-write-only: request optional property %s became write-only
+request-optional-property-became-read-only: request optional property %s became read-only
+request-optional-property-became-not-write-only: request optional property %s became not write-only
+request-optional-property-became-not-read-only: request optional property %s became not read-only
+request-required-property-became-write-only: request required property %s became write-only
+request-required-property-became-not-write-only: request required property %s became not write-only
+new-required-request-default-parameter-to-existing-path: added required %s request parameter %s to all path's operations
+new-optional-request-default-parameter-to-existing-path: added optional %s request parameter %s to all path's operations
+# warnings
+pattern-changed-warn-comment: This is a warning because it is difficult to automatically analyze if the new pattern is a superset of the previous pattern (e.g. changed from '[0-9]+' to '[0-9]*')
+request-parameter-max-length-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-max-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-min-items-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-min-set-comment: This is a warning because sometimes it is required to be set because of security reasons or current error in specification. But good clients should be checked to support this restriction before such change in specification.
+request-parameter-property-type-changed-warn-comment: This is a warning because parameter objects can be passed in differnt ways, some of which allow this type change and others do not.
+request-body-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-max-length-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-max-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-min-items-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-body-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
+request-property-min-set-comment: This is a warning because sometimes it is required to be set. But good clients should be checked to support this restriction before such change in specification.
 # descriptions
 request-body-added-required-description: required request body added
 request-body-added-optional-description: optional request body added
@@ -299,6 +298,7 @@ api-operation-id-removed-description: operation ID deleted from an endpoint
 api-path-removed-before-sunset-description: path and endpoint deleted before sunset date
 api-path-removed-without-deprecation-description: path and endpoint deleted without deprecation
 api-path-sunset-parse-description: path and endpoint deleted with invalid or missing sunset date
+api-stability-decreased-description: endpoint stability level decreased
 api-removed-before-sunset-description: endpoint deleted before sunset date
 api-removed-without-deprecation-description: endpoint deleted without deprecation
 api-schema-removed-description: schema deleted from components/schemas

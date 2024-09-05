@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-// CL: adding a new global security to the API
+// CL: adding a new global security to the API: api-global-security-added
 func TestAPIGlobalSecurityyAdded(t *testing.T) {
 	s1, err := open("../data/checker/api_security_global_added_base.yaml")
 	require.NoError(t, err)
@@ -25,10 +25,10 @@ func TestAPIGlobalSecurityyAdded(t *testing.T) {
 		Args:  []any{"petstore_auth"},
 		Level: checker.INFO,
 	}, errs[0])
-	require.Equal(t, "the security scheme 'petstore_auth' was added to the API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "security scheme 'petstore_auth' was added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing a global security from the API
+// CL: removing a global security from the API: api-global-security-removed
 func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 	s1, err := open("../data/checker/api_security_global_added_revision.yaml")
 	require.NoError(t, err)
@@ -44,10 +44,10 @@ func TestAPIGlobalSecurityyDeleted(t *testing.T) {
 		Args:  []any{"petstore_auth"},
 		Level: checker.INFO,
 	}, errs[0])
-	require.Equal(t, "the security scheme 'petstore_auth' was removed from the API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing a security scope from an API global security
+// CL: removing a security scope from an API global security: api-global-security-scope-removed
 func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 	s1, err := open("../data/checker/api_security_global_added_revision.yaml")
 	require.NoError(t, err)
@@ -64,10 +64,10 @@ func TestAPIGlobalSecurityScopeRemoved(t *testing.T) {
 		Args:  []any{"read:pets", "petstore_auth"},
 		Level: checker.INFO,
 	}, errs[0])
-	require.Equal(t, "the security scope 'read:pets' was removed from the global security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed security scope 'read:pets' from global security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding a security scope from an API global security
+// CL: adding a security scope from an API global security: api-global-security-scope-added
 func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 	s1, err := open("../data/checker/api_security_global_added_revision.yaml")
 	require.NoError(t, err)
@@ -84,10 +84,10 @@ func TestAPIGlobalSecurityScopeAdded(t *testing.T) {
 		Args:  []any{"read:pets", "petstore_auth"},
 		Level: checker.INFO,
 	}, errs[0])
-	require.Equal(t, "the security scope 'read:pets' was added to the global security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "security scope 'read:pets' was added to global security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding a new security to the API endpoint
+// CL: adding a new security to the API endpoint: api-security-added
 func TestAPISecurityAdded(t *testing.T) {
 	s1, err := open("../data/checker/api_security_added_base.yaml")
 	require.NoError(t, err)
@@ -106,10 +106,10 @@ func TestAPISecurityAdded(t *testing.T) {
 		Path:      "/subscribe",
 		Source:    load.NewSource("../data/checker/api_security_added_revision.yaml"),
 	}, errs[0])
-	require.Equal(t, "the endpoint scheme security 'petstore_auth' was added to the API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "endpoint scheme security 'petstore_auth' was added", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing a new security to the API endpoint
+// CL: removing a new security to the API endpoint: api-security-removed
 func TestAPISecurityDeleted(t *testing.T) {
 	s1, err := open("../data/checker/api_security_added_revision.yaml")
 	require.NoError(t, err)
@@ -128,10 +128,10 @@ func TestAPISecurityDeleted(t *testing.T) {
 		Path:      "/subscribe",
 		Source:    load.NewSource("../data/checker/api_security_added_base.yaml"),
 	}, errs[0])
-	require.Equal(t, "the endpoint scheme security 'petstore_auth' was removed from the API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed endpoint scheme security 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: removing a security scope from an API endpoint security
+// CL: removing a security scope from an API endpoint security: api-security-scope-removed
 func TestAPISecurityScopeRemoved(t *testing.T) {
 	s1, err := open("../data/checker/api_security_updated_base.yaml")
 	require.NoError(t, err)
@@ -150,10 +150,10 @@ func TestAPISecurityScopeRemoved(t *testing.T) {
 		Path:      "/subscribe",
 		Source:    load.NewSource("../data/checker/api_security_updated_revision.yaml"),
 	}, errs[0])
-	require.Equal(t, "the security scope 'read:pets' was removed from the endpoint's security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "removed security scope 'read:pets' from endpoint security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// CL: adding a security scope to an API endpoint security
+// CL: adding a security scope to an API endpoint security: api-security-scope-added
 func TestAPISecurityScopeAdded(t *testing.T) {
 	s1, err := open("../data/checker/api_security_updated_revision.yaml")
 	require.NoError(t, err)
@@ -172,5 +172,5 @@ func TestAPISecurityScopeAdded(t *testing.T) {
 		Path:      "/subscribe",
 		Source:    load.NewSource("../data/checker/api_security_updated_base.yaml"),
 	}, errs[0])
-	require.Equal(t, "the security scope 'read:pets' was added to the endpoint's security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "security scope 'read:pets' was added to endpoint security scheme 'petstore_auth'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
