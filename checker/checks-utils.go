@@ -105,6 +105,10 @@ func processModifiedPropertiesDiff(propertyPath string, propertyName string, sch
 			processModifiedPropertiesDiff(propertyPath, i, v, schemaDiff, processor)
 		}
 	}
+
+	if schemaDiff.AdditionalPropertiesDiff != nil {
+		processModifiedPropertiesDiff(fmt.Sprintf("%s/additionalProperties", propertyPath), "", schemaDiff.AdditionalPropertiesDiff, schemaDiff, processor)
+	}
 }
 
 func CheckAddedPropertiesDiff(schemaDiff *diff.SchemaDiff, processor func(propertyPath string, propertyName string, propertyItem *openapi3.Schema, propertyParentDiff *diff.SchemaDiff)) {

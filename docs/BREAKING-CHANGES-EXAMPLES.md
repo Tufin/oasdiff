@@ -15,6 +15,8 @@ These examples are automatically generated from unit tests.
 [changing a response body to nullable is breaking](../checker/check_breaking_property_test.go?plain=1#L217)  
 [changing a response property to nullable is breaking](../checker/check_breaking_property_test.go?plain=1#L249)  
 [changing a response property to optional under AllOf, AnyOf or OneOf is breaking](../checker/check_breaking_property_test.go?plain=1#L660)  
+[changing an additionalResponse property schema type from integer to string is breaking](../checker/check_response_property_type_changed_test.go?plain=1#L150)  
+[changing an embedded additionalResponse property schema type from integer to string is breaking](../checker/check_response_property_type_changed_test.go?plain=1#L172)  
 [changing an embedded response property to nullable is breaking](../checker/check_breaking_property_test.go?plain=1#L265)  
 [changing an existing header param from optional to required is breaking](../checker/check_breaking_test.go?plain=1#L190)  
 [changing an existing path param to enum is breaking](../checker/check_breaking_property_test.go?plain=1#L185)  
