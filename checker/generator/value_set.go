@@ -8,6 +8,8 @@ import (
 
 type ValueSets []IValueSet
 
+// NewValueSets creates a new ValueSets object
+// attributed is a list of booleans that indicates if the level in the hierarchy should be preceded by a %s
 func NewValueSets(hierarchy []string, attributed []bool, valueSets ValueSets) ValueSets {
 
 	result := make(ValueSets, len(valueSets))
@@ -34,20 +36,13 @@ type IValueSet interface {
 	setHierarchy(hierarchy []string, attributed []bool) IValueSet
 }
 
-type AdjectiveType bool
-
-const (
-	PREDICATIVE AdjectiveType = false // PREDICATIVE adjectives are added after the noun (default)
-	ATTRIBUTIVE AdjectiveType = true  // ATTRIBUTIVE adjectives are added before the noun
-)
-
 type ValueSet struct {
-	adjective     string // adjective is added to the noun
-	adjectiveType AdjectiveType
-	hierarchy     []string
-	attributed    []bool // attributed levels in the hierarchy are preceded by a name (%s)
-	nouns         []string
-	actions       []string
+	attributiveAdjective string // attributive adjectives are added before the noun
+	predicativeAdjective string // predicative adjectives are added after the noun
+	hierarchy            []string
+	attributed           []bool // attributed levels in the hierarchy are preceded by a name (%s)
+	nouns                []string
+	actions              []string
 }
 
 func (v ValueSet) setHierarchy(hierarchy []string, attributed []bool) ValueSet {
@@ -69,13 +64,13 @@ func (v ValueSetA) setHierarchy(hierarchy []string, attributed []bool) IValueSet
 }
 
 func (v ValueSetA) generate(out io.Writer) {
-	generateMessage := func(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
-		return standardizeSpaces(fmt.Sprintf("%s of %s was %s", addAttribute(noun, adjective, v.adjectiveType), getHierarchyMessage(hierarchy, atttibuted), getActionMessage(action)))
+	generateMessage := func(hierarchy []string, atttibuted []bool, noun, attributiveAdjective, predicativeAdjective, action string) string {
+		return standardizeSpaces(fmt.Sprintf("%s of %s was %s", addAttribute(noun, attributiveAdjective, predicativeAdjective), getHierarchyMessage(hierarchy, atttibuted), getActionMessage(action)))
 	}
 
 	for _, noun := range v.nouns {
 		for _, action := range v.actions {
-			fmt.Fprintln(out, fmt.Sprintf("%s: %s", generateId(v.hierarchy, noun, action), generateMessage(v.hierarchy, v.attributed, noun, v.adjective, action)))
+			fmt.Fprintln(out, fmt.Sprintf("%s: %s", generateId(v.hierarchy, noun, action), generateMessage(v.hierarchy, v.attributed, noun, v.attributiveAdjective, v.predicativeAdjective, action)))
 		}
 	}
 }
@@ -88,13 +83,13 @@ func (v ValueSetB) setHierarchy(hierarchy []string, attributed []bool) IValueSet
 }
 
 func (v ValueSetB) generate(out io.Writer) {
-	generateMessage := func(hierarchy []string, atttibuted []bool, noun, adjective, action string) string {
-		return standardizeSpaces(strings.Join([]string{conjugate(action), addAttribute(noun, adjective, v.adjectiveType), getHierarchyPostfix(action, hierarchy, atttibuted)}, " "))
+	generateMessage := func(hierarchy []string, atttibuted []bool, noun, attributiveAdjective, predicativeAdjective, action string) string {
+		return standardizeSpaces(strings.Join([]string{conjugate(action), addAttribute(noun, attributiveAdjective, predicativeAdjective), getHierarchyPostfix(action, hierarchy, atttibuted)}, " "))
 	}
 
 	for _, noun := range v.nouns {
 		for _, action := range v.actions {
-			fmt.Fprintln(out, fmt.Sprintf("%s: %s", generateId(v.hierarchy, noun, action), generateMessage(v.hierarchy, v.attributed, noun, v.adjective, action)))
+			fmt.Fprintln(out, fmt.Sprintf("%s: %s", generateId(v.hierarchy, noun, action), generateMessage(v.hierarchy, v.attributed, noun, v.attributiveAdjective, v.predicativeAdjective, action)))
 		}
 	}
 }

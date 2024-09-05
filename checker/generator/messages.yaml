@@ -122,6 +122,8 @@ required-request-body-added: added required request body
 required-request-body-removed: removed required request body
 optional-request-body-added: added optional request body
 optional-request-body-removed: removed optional request body
+request-parameter-added: added %s request parameter %s
+request-parameter-removed: removed %s request parameter %s
 response-media-type-max-set: max value of media-type %s of response %s was set to %s
 response-media-type-max-increased: max value of media-type %s of response %s was increased from %s to %s
 response-media-type-max-decreased: max value of media-type %s of response %s was decreased from %s to %s

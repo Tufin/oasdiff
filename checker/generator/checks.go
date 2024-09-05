@@ -125,9 +125,6 @@ func getPreposition(action string) string {
 	return "from"
 }
 
-func addAttribute(noun, adjective string, adjectiveType AdjectiveType) string {
-	if adjectiveType == ATTRIBUTIVE {
-		return adjective + " " + noun
-	}
-	return noun + " " + adjective
+func addAttribute(noun, attributiveAdjective, predicativeAdjective string) string {
+	return strings.Join([]string{attributiveAdjective + " " + noun + " " + predicativeAdjective}, " ")
 }
