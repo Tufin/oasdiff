@@ -1,3 +1,8 @@
+endpoint-added: added endpoint
+endpoint-removed: removed endpoint
+endpoint-deprecated: deprecated endpoint
+endpoint-reactivated: reactivated endpoint
+stability-decreased: stability was decreased from %s to %s
 success-response-status-added: added success response status %s
 success-response-status-removed: removed success response status %s
 non-success-response-status-added: added non-success response status %s
@@ -26,6 +31,7 @@ request-body-media-type-type-changed: type/format of media-type %s of request bo
 request-body-media-type-type-generalized: type/format of media-type %s of request body was generalized from %s to %s
 request-body-media-type-discriminator-property-name-changed: discriminator property name of media-type %s of request body was changed from %s to %s
 request-body-media-type-pattern-changed: pattern of media-type %s of request body was changed from %s to %s
+request-body-media-type-pattern-generalized: pattern of media-type %s of request body was generalized from %s to %s
 request-body-media-type-required-property-changed: required property of media-type %s of request body was changed from %s to %s
 request-body-media-type-optional-property-changed: optional property of media-type %s of request body was changed from %s to %s
 request-body-media-type-pattern-added: added pattern %s to media-type %s of request body
@@ -64,6 +70,7 @@ request-body-media-type-property-type-changed: type/format of property %s of med
 request-body-media-type-property-type-generalized: type/format of property %s of media-type %s of request body was generalized from %s to %s
 request-body-media-type-property-discriminator-property-name-changed: discriminator property name of property %s of media-type %s of request body was changed from %s to %s
 request-body-media-type-property-pattern-changed: pattern of property %s of media-type %s of request body was changed from %s to %s
+request-body-media-type-property-pattern-generalized: pattern of property %s of media-type %s of request body was generalized from %s to %s
 request-body-media-type-property-required-property-changed: required property of property %s of media-type %s of request body was changed from %s to %s
 request-body-media-type-property-optional-property-changed: optional property of property %s of media-type %s of request body was changed from %s to %s
 request-body-media-type-property-pattern-added: added pattern %s to property %s of media-type %s of request body
@@ -102,6 +109,7 @@ request-parameter-type-changed: type/format of %s request parameter %s was chang
 request-parameter-type-generalized: type/format of %s request parameter %s was generalized from %s to %s
 request-parameter-discriminator-property-name-changed: discriminator property name of %s request parameter %s was changed from %s to %s
 request-parameter-pattern-changed: pattern of %s request parameter %s was changed from %s to %s
+request-parameter-pattern-generalized: pattern of %s request parameter %s was generalized from %s to %s
 request-parameter-required-property-changed: required property of %s request parameter %s was changed from %s to %s
 request-parameter-optional-property-changed: optional property of %s request parameter %s was changed from %s to %s
 request-parameter-pattern-added: added pattern %s to %s request parameter %s
@@ -146,6 +154,7 @@ response-media-type-type-changed: type/format of media-type %s of response %s wa
 response-media-type-type-generalized: type/format of media-type %s of response %s was generalized from %s to %s
 response-media-type-discriminator-property-name-changed: discriminator property name of media-type %s of response %s was changed from %s to %s
 response-media-type-pattern-changed: pattern of media-type %s of response %s was changed from %s to %s
+response-media-type-pattern-generalized: pattern of media-type %s of response %s was generalized from %s to %s
 response-media-type-required-property-changed: required property of media-type %s of response %s was changed from %s to %s
 response-media-type-optional-property-changed: optional property of media-type %s of response %s was changed from %s to %s
 response-media-type-pattern-added: added pattern %s to media-type %s of response %s
@@ -184,6 +193,7 @@ response-media-type-property-type-changed: type/format of property %s of media-t
 response-media-type-property-type-generalized: type/format of property %s of media-type %s of response %s was generalized from %s to %s
 response-media-type-property-discriminator-property-name-changed: discriminator property name of property %s of media-type %s of response %s was changed from %s to %s
 response-media-type-property-pattern-changed: pattern of property %s of media-type %s of response %s was changed from %s to %s
+response-media-type-property-pattern-generalized: pattern of property %s of media-type %s of response %s was generalized from %s to %s
 response-media-type-property-required-property-changed: required property of property %s of media-type %s of response %s was changed from %s to %s
 response-media-type-property-optional-property-changed: optional property of property %s of media-type %s of response %s was changed from %s to %s
 response-media-type-property-pattern-added: added pattern %s to property %s of media-type %s of response %s

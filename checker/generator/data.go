@@ -5,6 +5,7 @@ import "slices"
 func getAll() ValueSets {
 	return slices.Concat(
 		getPaths(),
+		getEndpoints(),
 		getRequest(),
 		getResponse(),
 		getComponents(),
@@ -28,7 +29,11 @@ func getResponse() ValueSets {
 }
 
 func getPaths() ValueSets {
-	return NewValueSets(nil, nil, pathsValueSets)
+	return NewValueSets(nil, nil, pathValueSets)
+}
+
+func getEndpoints() ValueSets {
+	return NewValueSets(nil, nil, endpointValueSets)
 }
 
 func getComponents() ValueSets {
@@ -56,7 +61,18 @@ var securityValueSets = ValueSets{
 	},
 }
 
-var pathsValueSets = ValueSets{
+var pathValueSets = ValueSets{
+	ValueSetB{
+		nouns:   []string{"endpoint"},
+		actions: []string{"add", "remove", "deprecate", "reactivate"},
+	},
+}
+
+var endpointValueSets = ValueSets{
+	ValueSetA{
+		nouns:   []string{"stability"},
+		actions: []string{"decrease"},
+	},
 	ValueSetB{
 		predicativeAdjective: "%s",
 		nouns:                []string{"success response status", "non-success response status"},
@@ -100,7 +116,7 @@ var schemaValueSets = ValueSets{
 	},
 	ValueSetA{
 		nouns:   []string{"pattern"},
-		actions: []string{"change"},
+		actions: []string{"change", "generalize"},
 	},
 	ValueSetA{
 		nouns:   []string{"required property", "optional property"},
@@ -142,3 +158,12 @@ var schemaValueSets = ValueSets{
 		actions:              []string{"add", "remove"},
 	},
 }
+
+/*
+missing:
+api-deprecated-sunset-parse
+api-path-sunset-parse
+api-invalid-stability-level
+api-deprecated-sunset-missing
+api-sunset-date-too-small
+*/

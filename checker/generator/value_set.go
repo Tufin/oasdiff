@@ -65,12 +65,19 @@ func (v ValueSetA) setHierarchy(hierarchy []string, attributed []bool) IValueSet
 
 func (v ValueSetA) generate(out io.Writer) {
 	generateMessage := func(hierarchy []string, atttibuted []bool, noun, attributiveAdjective, predicativeAdjective, action string) string {
-		return standardizeSpaces(fmt.Sprintf("%s of %s was %s", addAttribute(noun, attributiveAdjective, predicativeAdjective), getHierarchyMessage(hierarchy, atttibuted), getActionMessage(action)))
+		prefix := addAttribute(noun, attributiveAdjective, predicativeAdjective)
+		if hierarchyMessage := getHierarchyMessage(hierarchy, atttibuted); hierarchyMessage != "" {
+			prefix += " of " + hierarchyMessage
+		}
+
+		return standardizeSpaces(fmt.Sprintf("%s was %s", prefix, getActionMessage(action)))
 	}
 
 	for _, noun := range v.nouns {
 		for _, action := range v.actions {
-			fmt.Fprintln(out, fmt.Sprintf("%s: %s", generateId(v.hierarchy, noun, action), generateMessage(v.hierarchy, v.attributed, noun, v.attributiveAdjective, v.predicativeAdjective, action)))
+			id := generateId(v.hierarchy, noun, action)
+			message := generateMessage(v.hierarchy, v.attributed, noun, v.attributiveAdjective, v.predicativeAdjective, action)
+			fmt.Fprintln(out, fmt.Sprintf("%s: %s", id, message))
 		}
 	}
 }
