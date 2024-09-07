@@ -1,8 +1,8 @@
+stability-decreased: stability was decreased from %s to %s
 endpoint-added: added endpoint
 endpoint-removed: removed endpoint
 endpoint-deprecated: deprecated endpoint
 endpoint-reactivated: reactivated endpoint
-stability-decreased: stability was decreased from %s to %s
 success-response-status-added: added success response status %s
 success-response-status-removed: removed success response status %s
 non-success-response-status-added: added non-success response status %s

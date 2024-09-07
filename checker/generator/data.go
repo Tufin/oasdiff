@@ -4,7 +4,6 @@ import "slices"
 
 func getAll() ValueSets {
 	return slices.Concat(
-		getPaths(),
 		getEndpoints(),
 		getRequest(),
 		getResponse(),
@@ -14,26 +13,22 @@ func getAll() ValueSets {
 
 func getRequest() ValueSets {
 	return slices.Concat(
-		NewValueSets([]string{"media-type", "request body"}, nil, schemaValueSets),
-		NewValueSets([]string{"property", "media-type", "request body"}, nil, schemaValueSets),
-		NewValueSets([]string{"request parameter"}, []bool{true}, schemaValueSets),
-		NewValueSets(nil, nil, operationValueSets),
+		NewValueSets([]string{"media-type", "request body"}, schemaValueSets),
+		NewValueSets([]string{"property", "media-type", "request body"}, schemaValueSets),
+		NewValueSets([]string{"request parameter"}, schemaValueSets),
+		NewValueSets(nil, operationValueSets),
 	)
 }
 
 func getResponse() ValueSets {
 	return slices.Concat(
-		NewValueSets([]string{"media-type", "response"}, nil, schemaValueSets),
-		NewValueSets([]string{"property", "media-type", "response"}, nil, schemaValueSets),
+		NewValueSets([]string{"media-type", "response"}, schemaValueSets),
+		NewValueSets([]string{"property", "media-type", "response"}, schemaValueSets),
 	)
 }
 
-func getPaths() ValueSets {
-	return NewValueSets(nil, nil, pathValueSets)
-}
-
 func getEndpoints() ValueSets {
-	return NewValueSets(nil, nil, endpointValueSets)
+	return NewValueSets(nil, endpointValueSets)
 }
 
 func getComponents() ValueSets {
@@ -43,7 +38,7 @@ func getComponents() ValueSets {
 }
 
 func getSecurity() ValueSets {
-	return NewValueSets(nil, nil, securityValueSets)
+	return NewValueSets(nil, securityValueSets)
 }
 
 var securityValueSets = ValueSets{
@@ -55,33 +50,28 @@ var securityValueSets = ValueSets{
 	ValueSetB{
 		predicativeAdjective: "%s",
 		hierarchy:            []string{"global security scheme"},
-		attributed:           []bool{false},
 		nouns:                []string{"security scope"},
 		actions:              []string{"add", "remove"},
 	},
 }
 
-var pathValueSets = ValueSets{
-	ValueSetB{
-		nouns:   []string{"endpoint"},
-		actions: []string{"add", "remove", "deprecate", "reactivate"},
-	},
-}
-
 var endpointValueSets = ValueSets{
 	ValueSetA{
-		nouns:   []string{"stability"},
+		nouns:   []string{"stability"}, // /Paths/PathItem/Operation
 		actions: []string{"decrease"},
 	},
 	ValueSetB{
+		nouns:   []string{"endpoint"}, // /Paths/PathItem
+		actions: []string{"add", "remove", "deprecate", "reactivate"},
+	},
+	ValueSetB{
 		predicativeAdjective: "%s",
-		nouns:                []string{"success response status", "non-success response status"},
+		nouns:                []string{"success response status", "non-success response status"}, // /Paths/PathItem/Operation/Responses/Response/content/media-type/
 		actions:              []string{"add", "remove"},
 	},
 	ValueSetB{
 		predicativeAdjective: "%s",
 		hierarchy:            []string{"endpoint security scheme"},
-		attributed:           []bool{false},
 		nouns:                []string{"security scope"},
 		actions:              []string{"add", "remove"},
 	},
@@ -134,21 +124,18 @@ var schemaValueSets = ValueSets{
 	ValueSetB{
 		predicativeAdjective: "%s",
 		hierarchy:            []string{"anyOf list"},
-		attributed:           []bool{false},
 		nouns:                []string{"schema"},
 		actions:              []string{"add", "remove"},
 	},
 	ValueSetB{
 		predicativeAdjective: "%s",
 		hierarchy:            []string{"anyOf list"},
-		attributed:           []bool{false},
 		nouns:                []string{"schema"},
 		actions:              []string{"add", "remove"},
 	},
 	ValueSetB{
 		predicativeAdjective: "%s",
 		hierarchy:            []string{"anyOf list"},
-		attributed:           []bool{false},
 		nouns:                []string{"schema"},
 		actions:              []string{"add", "remove"},
 	},

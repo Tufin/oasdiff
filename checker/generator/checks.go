@@ -52,26 +52,23 @@ func concat(list []string) string {
 	return strings.Join(copy, "-")
 }
 
-func getHierarchyPostfix(action string, hierarchy []string, atttibuted []bool) string {
+func getHierarchyPostfix(action string, hierarchy []string) string {
 	if len(hierarchy) == 0 {
 		return ""
 	}
 
-	return getPreposition(action) + " " + getHierarchyMessage(hierarchy, atttibuted)
+	return getPreposition(action) + " " + getHierarchyMessage(hierarchy)
 }
 
-func getHierarchyMessage(hierarchy []string, atttibuted []bool) string {
+func getHierarchyMessage(hierarchy []string) string {
 
 	copy := slices.Clone(hierarchy)
 
-	if atttibuted != nil {
-		for i, s := range hierarchy {
-			if atttibuted[i] {
-				copy[i] = "%s " + s
-			}
+	for i, s := range hierarchy {
+		if isAtttibuted(s) {
+			copy[i] = "%s " + s
 		}
 	}
-
 	result := strings.Join(copy, " %s of ")
 
 	if hierarchy != nil && !isTopLevel(hierarchy[len(hierarchy)-1]) {
@@ -84,6 +81,10 @@ func getHierarchyMessage(hierarchy []string, atttibuted []bool) string {
 func isTopLevel(s string) bool {
 	return s == "request body" ||
 		s == "paths"
+}
+
+func isAtttibuted(s string) bool {
+	return s == "request parameter"
 }
 
 func standardizeSpaces(s string) string {
