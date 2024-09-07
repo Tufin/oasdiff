@@ -35,7 +35,7 @@ type ValueSet struct {
 	attributiveAdjective string // attributive adjectives are added before the noun
 	predicativeAdjective string // predicative adjectives are added after the noun
 	hierarchy            []string
-	nouns                []string
+	objects              []string
 	actions              []string
 	adverb               []string
 }
@@ -58,8 +58,8 @@ func (v ValueSetA) setHierarchy(hierarchy []string) IValueSet {
 }
 
 func (v ValueSetA) generate(out io.Writer) {
-	generateMessage := func(hierarchy []string, noun, attributiveAdjective, predicativeAdjective, action, adverb string) string {
-		prefix := addAttribute(noun, attributiveAdjective, predicativeAdjective)
+	generateMessage := func(hierarchy []string, object, attributiveAdjective, predicativeAdjective, action, adverb string) string {
+		prefix := addAttribute(object, attributiveAdjective, predicativeAdjective)
 		if hierarchyMessage := getHierarchyMessage(hierarchy); hierarchyMessage != "" {
 			prefix += " of " + hierarchyMessage
 		}
@@ -67,16 +67,16 @@ func (v ValueSetA) generate(out io.Writer) {
 		return standardizeSpaces(fmt.Sprintf("%s was %s %s %s", prefix, conjugate(action), getActionMessage(action), adverb))
 	}
 
-	for _, noun := range v.nouns {
+	for _, object := range v.objects {
 		for _, action := range v.actions {
-			id := generateId(v.hierarchy, noun, action)
+			id := generateId(v.hierarchy, object, action)
 
 			adverbs := v.adverb
 			if v.adverb == nil {
 				adverbs = []string{""}
 			}
 			for _, adverb := range adverbs {
-				message := generateMessage(v.hierarchy, noun, v.attributiveAdjective, v.predicativeAdjective, action, adverb)
+				message := generateMessage(v.hierarchy, object, v.attributiveAdjective, v.predicativeAdjective, action, adverb)
 				fmt.Fprintf(out, "%s: %s\n", id, message)
 			}
 		}
@@ -95,7 +95,7 @@ func (v ValueSetB) generate(out io.Writer) {
 		return standardizeSpaces(strings.Join([]string{conjugate(action), addAttribute(noun, attributiveAdjective, predicativeAdjective), getHierarchyPostfix(action, hierarchy)}, " "))
 	}
 
-	for _, noun := range v.nouns {
+	for _, noun := range v.objects {
 		for _, action := range v.actions {
 			fmt.Fprintf(out, "%s: %s\n", generateId(v.hierarchy, noun, action), generateMessage(v.hierarchy, noun, v.attributiveAdjective, v.predicativeAdjective, action))
 		}

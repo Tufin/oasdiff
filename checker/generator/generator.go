@@ -34,12 +34,12 @@ func filterStrings(list []string, f func(string) bool) []string {
 	return result
 }
 
-func generateId(hierarchy []string, noun, action string) string {
-	if before, _, found := strings.Cut(noun, "/"); found {
-		noun = before
+func generateId(hierarchy []string, object, action string) string {
+	if prefix, _, found := strings.Cut(object, "/"); found {
+		object = prefix
 	}
 
-	return strcase.ToKebab(strings.Join(filterStrings([]string{concat(hierarchy), noun, conjugate(action)}, isEmpty), "-"))
+	return strcase.ToKebab(strings.Join(filterStrings([]string{concat(hierarchy), object, conjugate(action)}, isEmpty), "-"))
 }
 
 func concat(list []string) string {
@@ -131,6 +131,6 @@ func getPreposition(action string) string {
 	return "from"
 }
 
-func addAttribute(noun, attributiveAdjective, predicativeAdjective string) string {
-	return strings.Join([]string{attributiveAdjective + " " + noun + " " + predicativeAdjective}, " ")
+func addAttribute(object, attributiveAdjective, predicativeAdjective string) string {
+	return strings.Join([]string{attributiveAdjective + " " + object + " " + predicativeAdjective}, " ")
 }
