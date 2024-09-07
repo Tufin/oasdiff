@@ -120,8 +120,6 @@ func conjugate(verb string) string {
 		return "set"
 	case "add":
 		return "added"
-	case "become":
-		return "became"
 	}
 	return verb + "d"
 }
