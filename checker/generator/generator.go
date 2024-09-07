@@ -92,18 +92,26 @@ func standardizeSpaces(s string) string {
 }
 
 func getActionMessage(action string) string {
-	if isUnary(action) {
-		return conjugate(action) + " to %s"
+	switch getArity(action) {
+	case 0:
+		return ""
+	case 1:
+		return " to %s"
+	case 2:
+		return " from %s to %s"
+	default:
+		return ""
 	}
-	return conjugate(action) + " from %s to %s"
 }
 
-func isUnary(action string) bool {
+func getArity(action string) int {
 	switch action {
+	case "add", "remove":
+		return 0
 	case "set":
-		return true
+		return 1
 	}
-	return false
+	return 2
 }
 
 func conjugate(verb string) string {

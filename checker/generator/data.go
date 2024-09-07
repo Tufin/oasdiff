@@ -60,6 +60,11 @@ var endpointValueSets = ValueSets{
 		nouns:   []string{"stability"}, // /Paths/PathItem/Operation
 		actions: []string{"decrease"},
 	},
+	ValueSetA{
+		nouns:   []string{"api path", "api"},
+		actions: []string{"add", "remove"},
+		adverb:  "without deprecation",
+	},
 	ValueSetB{
 		nouns:   []string{"endpoint"}, // /Paths/PathItem
 		actions: []string{"add", "remove", "deprecate", "reactivate"},

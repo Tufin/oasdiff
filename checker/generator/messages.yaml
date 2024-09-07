@@ -1,4 +1,8 @@
 stability-decreased: stability was decreased from %s to %s
+api-path-added: api path was added without deprecation
+api-path-removed: api path was removed without deprecation
+api-added: api was added without deprecation
+api-removed: api was removed without deprecation
 endpoint-added: added endpoint
 endpoint-removed: removed endpoint
 endpoint-deprecated: deprecated endpoint

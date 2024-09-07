@@ -37,6 +37,7 @@ type ValueSet struct {
 	hierarchy            []string
 	nouns                []string
 	actions              []string
+	adverb               string
 }
 
 func (v ValueSet) setHierarchy(hierarchy []string) ValueSet {
@@ -57,19 +58,19 @@ func (v ValueSetA) setHierarchy(hierarchy []string) IValueSet {
 }
 
 func (v ValueSetA) generate(out io.Writer) {
-	generateMessage := func(hierarchy []string, noun, attributiveAdjective, predicativeAdjective, action string) string {
+	generateMessage := func(hierarchy []string, noun, attributiveAdjective, predicativeAdjective, action, adverb string) string {
 		prefix := addAttribute(noun, attributiveAdjective, predicativeAdjective)
 		if hierarchyMessage := getHierarchyMessage(hierarchy); hierarchyMessage != "" {
 			prefix += " of " + hierarchyMessage
 		}
 
-		return standardizeSpaces(fmt.Sprintf("%s was %s", prefix, getActionMessage(action)))
+		return standardizeSpaces(fmt.Sprintf("%s was %s %s %s", prefix, conjugate(action), getActionMessage(action), adverb))
 	}
 
 	for _, noun := range v.nouns {
 		for _, action := range v.actions {
 			id := generateId(v.hierarchy, noun, action)
-			message := generateMessage(v.hierarchy, noun, v.attributiveAdjective, v.predicativeAdjective, action)
+			message := generateMessage(v.hierarchy, noun, v.attributiveAdjective, v.predicativeAdjective, action, v.adverb)
 			fmt.Fprintln(out, fmt.Sprintf("%s: %s", id, message))
 		}
 	}
