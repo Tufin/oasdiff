@@ -1,8 +1,8 @@
 stability-decreased: stability was decreased from %s to %s
-api-path-added: api path was added without deprecation
 api-path-removed: api path was removed without deprecation
-api-added: api was added without deprecation
+api-path-removed: api path was removed before sunset
 api-removed: api was removed without deprecation
+api-removed: api was removed before sunset
 endpoint-added: added endpoint
 endpoint-removed: removed endpoint
 endpoint-deprecated: deprecated endpoint
@@ -11,6 +11,11 @@ success-response-status-added: added success response status %s
 success-response-status-removed: removed success response status %s
 non-success-response-status-added: added non-success response status %s
 non-success-response-status-removed: removed non-success response status %s
+operation-id-changed: operation id was changed from %s to %s
+operation-id-added: added operation id %s
+operation-id-removed: removed operation id %s
+tag-added: added tag %s
+tag-removed: removed tag %s
 endpoint-security-scheme-security-scope-added: added security scope %s to endpoint security scheme %s
 endpoint-security-scheme-security-scope-removed: removed security scope %s from endpoint security scheme %s
 request-body-media-type-max-set: max value of media-type %s of request body was set to %s

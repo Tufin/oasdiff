@@ -62,8 +62,8 @@ var endpointValueSets = ValueSets{
 	},
 	ValueSetA{
 		nouns:   []string{"api path", "api"},
-		actions: []string{"add", "remove"},
-		adverb:  "without deprecation",
+		actions: []string{"remove"},
+		adverb:  []string{"without deprecation", "before sunset"},
 	},
 	ValueSetB{
 		nouns:   []string{"endpoint"}, // /Paths/PathItem
@@ -72,6 +72,15 @@ var endpointValueSets = ValueSets{
 	ValueSetB{
 		predicativeAdjective: "%s",
 		nouns:                []string{"success response status", "non-success response status"}, // /Paths/PathItem/Operation/Responses/Response/content/media-type/
+		actions:              []string{"add", "remove"},
+	},
+	ValueSetA{
+		nouns:   []string{"operation id"},
+		actions: []string{"change"},
+	},
+	ValueSetB{
+		predicativeAdjective: "%s",
+		nouns:                []string{"operation id", "tag"},
 		actions:              []string{"add", "remove"},
 	},
 	ValueSetB{
