@@ -77,7 +77,7 @@ func (v ValueSetA) generate(out io.Writer) {
 			}
 			for _, adverb := range adverbs {
 				message := generateMessage(v.hierarchy, noun, v.attributiveAdjective, v.predicativeAdjective, action, adverb)
-				fmt.Fprintln(out, fmt.Sprintf("%s: %s", id, message))
+				fmt.Fprintf(out, "%s: %s\n", id, message)
 			}
 		}
 	}
@@ -97,7 +97,7 @@ func (v ValueSetB) generate(out io.Writer) {
 
 	for _, noun := range v.nouns {
 		for _, action := range v.actions {
-			fmt.Fprintln(out, fmt.Sprintf("%s: %s", generateId(v.hierarchy, noun, action), generateMessage(v.hierarchy, noun, v.attributiveAdjective, v.predicativeAdjective, action)))
+			fmt.Fprintf(out, "%s: %s\n", generateId(v.hierarchy, noun, action), generateMessage(v.hierarchy, noun, v.attributiveAdjective, v.predicativeAdjective, action))
 		}
 	}
 }
