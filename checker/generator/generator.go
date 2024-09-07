@@ -79,8 +79,7 @@ func getHierarchyMessage(hierarchy []string) string {
 }
 
 func isTopLevel(s string) bool {
-	return s == "request body" ||
-		s == "paths"
+	return s == "request body"
 }
 
 func isAtttibuted(s string) bool {
