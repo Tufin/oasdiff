@@ -8,5 +8,9 @@ import (
 )
 
 func TestGenerator(t *testing.T) {
-	require.NoError(t, generator.Generate())
+	require.NoError(t, generator.Generate(generator.GetAll))
+}
+
+func TestTreeGenerator(t *testing.T) {
+	require.NoError(t, generator.Generate(generator.GetTree))
 }

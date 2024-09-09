@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"io"
 	"os"
 	"slices"
 	"strings"
@@ -8,15 +9,25 @@ import (
 	"github.com/iancoleman/strcase"
 )
 
-func Generate() error {
+type MessageGenerator interface {
+	generate(out io.Writer)
+}
+
+type Getter func() (MessageGenerator, error)
+
+func Generate(getter Getter) error {
 	out, err := os.Create("messages.yaml")
 	if err != nil {
 		return err
 	}
 	defer out.Close()
 
-	getAll().generate(out)
+	data, err := getter()
+	if err != nil {
+		return err
+	}
 
+	data.generate(out)
 	return nil
 }
 

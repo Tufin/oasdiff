@@ -1,0 +1,60 @@
+paths:
+  excludeFromHierarchy: true
+  actions:
+    remove:
+    - object: path
+      adverbs:
+      - without deprecation
+      - before sunset
+      startWith: object
+  nextLevel:
+    operations:
+      excludeFromHierarchy: true
+      actions:
+        remove:
+        - object: endpoint
+          adverbs:
+          - without deprecation
+          - before sunset
+          startWith: object
+        - object: endpoint
+          startWith: action
+        add:
+        - object: endpoint
+          startWith: action
+        deprecate:
+        - object: endpoint
+          startWith: action
+        reactivate:
+        - object: endpoint
+          startWith: action
+      nextLevel:
+        endpoint:
+          excludeFromHierarchy: true
+          actions:
+            change:
+            - object: operation id
+              startWith: object
+            decrease:
+            - object: stability
+              startWith: object
+          nextLevel:
+            responses:
+              excludeFromHierarchy: true
+              actions:
+                add:
+                - object: success response
+                  predicativeAdjective: "status %s"
+                  startWith: action
+                - object: non-success response
+                  predicativeAdjective: "status %s"
+                  startWith: action
+                remove:
+                - object: success response
+                  predicativeAdjective: "status %s"
+                  startWith: action
+                - object: non-success response
+                  predicativeAdjective: "status %s"
+                  startWith: action
+
+
