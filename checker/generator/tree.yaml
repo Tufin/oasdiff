@@ -2,7 +2,7 @@ paths:
   excludeFromHierarchy: true
   actions:
     remove:
-    - object: path
+    - object: api path
       adverbs:
       - without deprecation
       - before sunset
@@ -35,6 +35,10 @@ paths:
             change:
             - object: operation id
               startWith: object
+            add/remove:
+            - object: operation id
+              predicativeAdjective: "%s"
+              startWith: action
             decrease:
             - object: stability
               startWith: object
@@ -42,19 +46,11 @@ paths:
             responses:
               excludeFromHierarchy: true
               actions:
-                add:
+                add/remove:
                 - object: success response
                   predicativeAdjective: "status %s"
                   startWith: action
                 - object: non-success response
                   predicativeAdjective: "status %s"
                   startWith: action
-                remove:
-                - object: success response
-                  predicativeAdjective: "status %s"
-                  startWith: action
-                - object: non-success response
-                  predicativeAdjective: "status %s"
-                  startWith: action
-
 

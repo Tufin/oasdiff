@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -75,7 +76,7 @@ func getValueSet(object *Object, action string) IValueSet {
 		PredicativeAdjective: object.PredicativeAdjective,
 		Hierarchy:            object.Hierarchy,
 		Names:                []string{object.Object},
-		Actions:              []string{action},
+		Actions:              parseAction(action),
 		Adverbs:              object.Adverbs,
 	}
 
@@ -83,4 +84,11 @@ func getValueSet(object *Object, action string) IValueSet {
 		return ValueSetA(valueSet)
 	}
 	return ValueSetB(valueSet)
+}
+
+func parseAction(action string) []string {
+	if before, after, found := strings.Cut(action, "/"); found {
+		return []string{before, after}
+	}
+	return []string{action}
 }
