@@ -69,3 +69,32 @@ paths:
                         change:
                         - objects: [discriminator property name, required property, optional property]
                           startWith: object
+                        add/remove:
+                        - objects: [pattern]
+                          startWith: action
+                          predicativeAdjective: "%s"
+                        - objects: [default value]
+                          startWith: action
+                        - objects: [discriminator, mapping keys]
+                          startWith: action
+                          predicativeAdjective: "%s"
+                      nextLevel:
+                        anyOf list:
+                          actions:
+                            add/remove:
+                            - objects: [schema]
+                              startWith: action
+                              predicativeAdjective: "%s"
+                        oneOf list:
+                          actions:
+                            add/remove:
+                            - objects: [schema]
+                              startWith: action
+                              predicativeAdjective: "%s"
+                        allOf list:
+                          actions:
+                            add/remove:
+                            - objects: [schema]
+                              startWith: action
+                              predicativeAdjective: "%s"
+                  
