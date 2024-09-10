@@ -2,64 +2,54 @@ paths:
   excludeFromHierarchy: true
   actions:
     remove:
-    - objects: 
-      - api path
-      adverbs:
-      - without deprecation
-      - before sunset
+    - objects: [api path]
+      adverbs: [without deprecation, before sunset]
       startWith: object
   nextLevel:
     operations:
       excludeFromHierarchy: true
       actions:
         remove:
-        - objects: 
-          - endpoint
-          adverbs:
-          - without deprecation
-          - before sunset
+        - objects: [endpoint]
+          adverbs: [without deprecation, before sunset]
           startWith: object
-        - objects: 
-          - endpoint
+        - objects: [endpoint]
           startWith: action
         add:
-        - objects: 
-          - endpoint
+        - objects: [endpoint]
           startWith: action
         deprecate:
-        - objects:
-          - endpoint
+        - objects: [endpoint]
           startWith: action
         reactivate:
-        - objects:
-          - endpoint
+        - objects: [endpoint]
           startWith: action
       nextLevel:
         endpoint:
           excludeFromHierarchy: true
           actions:
             change:
-            - objects: 
-              - operation id
+            - objects: [operation id]
               startWith: object
             add/remove:
-            - objects: 
-              - operation id
-              - tag
+            - objects: [operation id, tag]
               predicativeAdjective: "%s"
               startWith: action
             decrease:
-            - objects: 
-              - stability
+            - objects: [stability]
               startWith: object
           nextLevel:
+            endpoint security scheme:
+              actions:
+                add/remove:
+                - objects: [security scope]
+                  predicativeAdjective: "%s"
+                  startWith: action
             responses:
               excludeFromHierarchy: true
               actions:
                 add/remove:
-                - objects: 
-                  - success response
-                  - non-success response
-                  predicativeAdjective: "status %s"
+                - objects: [success response status, non-success response status]
+                  predicativeAdjective: "%s"
                   startWith: action
 

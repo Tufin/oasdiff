@@ -58,16 +58,21 @@ func (changeMap ChangeMap) generate(out io.Writer) {
 
 func fillHierarchy(changeMap ChangeMap, hierarchy []string) {
 	for container, change := range changeMap {
-		if !change.ExcludeFromHierarchy {
-			hierarchy = append([]string{container}, hierarchy...)
-		}
+		containerHierarchy := getContainerHierarchy(container, change, hierarchy)
 		for _, objects := range change.Actions {
 			for _, object := range objects {
-				object.Hierarchy = hierarchy
+				object.Hierarchy = containerHierarchy
 			}
 		}
 		fillHierarchy(change.NextLevel, hierarchy)
 	}
+}
+
+func getContainerHierarchy(container string, change Changes, hierarchy []string) []string {
+	if change.ExcludeFromHierarchy {
+		return hierarchy
+	}
+	return append([]string{container}, hierarchy...)
 }
 
 func getValueSet(object *Object, action string) IValueSet {
