@@ -52,4 +52,15 @@ paths:
                 - objects: [success response status, non-success response status]
                   predicativeAdjective: "%s"
                   startWith: action
+            request body:
+              nextLevel:
+                media type:
+                  nextLevel:
+                    schema:
+                      excludeFromHierarchy: true
+                      actions:
+                        set/increase/decrease:
+                        - objects: [max, maxLength, min, minLength, minItems, maxItems]
+                          predicativeAdjective: value
+                          startWith: object
 

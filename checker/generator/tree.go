@@ -45,14 +45,17 @@ func GetTree() (MessageGenerator, error) {
 
 func (changeMap ChangeMap) generate(out io.Writer) {
 	fillHierarchy(changeMap, nil)
+	generateRecursive(changeMap, out)
+}
 
+func generateRecursive(changeMap ChangeMap, out io.Writer) {
 	for _, change := range changeMap {
 		for action, objects := range change.Actions {
 			for _, object := range objects {
 				getValueSet(object, action).generate(out)
 			}
 		}
-		change.NextLevel.generate(out)
+		generateRecursive(change.NextLevel, out)
 	}
 }
 
@@ -64,7 +67,7 @@ func fillHierarchy(changeMap ChangeMap, hierarchy []string) {
 				object.Hierarchy = containerHierarchy
 			}
 		}
-		fillHierarchy(change.NextLevel, hierarchy)
+		fillHierarchy(change.NextLevel, containerHierarchy)
 	}
 }
 
@@ -92,8 +95,5 @@ func getValueSet(object *Object, action string) IValueSet {
 }
 
 func parseAction(action string) []string {
-	if before, after, found := strings.Cut(action, "/"); found {
-		return []string{before, after}
-	}
-	return []string{action}
+	return strings.Split(action, "/")
 }
