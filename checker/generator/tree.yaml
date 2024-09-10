@@ -63,4 +63,9 @@ paths:
                         - objects: [max, maxLength, min, minLength, minItems, maxItems]
                           predicativeAdjective: value
                           startWith: object
-
+                        change/generalize:
+                        - objects: [type/format, pattern]
+                          startWith: object
+                        change:
+                        - objects: [discriminator property name, required property, optional property]
+                          startWith: object
