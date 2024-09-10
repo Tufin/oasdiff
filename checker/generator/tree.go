@@ -21,7 +21,7 @@ type Objects []*Object
 
 type Object struct {
 	Hierarchy            []string `yaml:"hierarchy"`
-	Object               string   `yaml:"object"`
+	Objects              []string `yaml:"objects"`
 	Adverbs              []string `yaml:"adverbs"`
 	StartWith            string   `yaml:"startWith"`
 	PredicativeAdjective string   `yaml:"predicativeAdjective"`
@@ -75,7 +75,7 @@ func getValueSet(object *Object, action string) IValueSet {
 		AttributiveAdjective: object.AttributiveAdjective,
 		PredicativeAdjective: object.PredicativeAdjective,
 		Hierarchy:            object.Hierarchy,
-		Names:                []string{object.Object},
+		Names:                object.Objects,
 		Actions:              parseAction(action),
 		Adverbs:              object.Adverbs,
 	}

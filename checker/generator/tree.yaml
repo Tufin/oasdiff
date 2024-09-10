@@ -2,7 +2,8 @@ paths:
   excludeFromHierarchy: true
   actions:
     remove:
-    - object: api path
+    - objects: 
+      - api path
       adverbs:
       - without deprecation
       - before sunset
@@ -12,45 +13,53 @@ paths:
       excludeFromHierarchy: true
       actions:
         remove:
-        - object: endpoint
+        - objects: 
+          - endpoint
           adverbs:
           - without deprecation
           - before sunset
           startWith: object
-        - object: endpoint
+        - objects: 
+          - endpoint
           startWith: action
         add:
-        - object: endpoint
+        - objects: 
+          - endpoint
           startWith: action
         deprecate:
-        - object: endpoint
+        - objects:
+          - endpoint
           startWith: action
         reactivate:
-        - object: endpoint
+        - objects:
+          - endpoint
           startWith: action
       nextLevel:
         endpoint:
           excludeFromHierarchy: true
           actions:
             change:
-            - object: operation id
+            - objects: 
+              - operation id
               startWith: object
             add/remove:
-            - object: operation id
+            - objects: 
+              - operation id
+              - tag
               predicativeAdjective: "%s"
               startWith: action
             decrease:
-            - object: stability
+            - objects: 
+              - stability
               startWith: object
           nextLevel:
             responses:
               excludeFromHierarchy: true
               actions:
                 add/remove:
-                - object: success response
-                  predicativeAdjective: "status %s"
-                  startWith: action
-                - object: non-success response
+                - objects: 
+                  - success response
+                  - non-success response
                   predicativeAdjective: "status %s"
                   startWith: action
 
