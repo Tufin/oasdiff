@@ -1,100 +1,104 @@
-paths:
-  excludeFromHierarchy: true
-  actions:
-    remove:
-    - objects: [api path]
-      adverbs: [without deprecation, before sunset]
-      startWith: object
-  nextLevel:
-    operations:
-      excludeFromHierarchy: true
-      actions:
-        remove:
-        - objects: [endpoint]
-          adverbs: [without deprecation, before sunset]
-          startWith: object
-        - objects: [endpoint]
-          startWith: action
-        add:
-        - objects: [endpoint]
-          startWith: action
-        deprecate:
-        - objects: [endpoint]
-          startWith: action
-        reactivate:
-        - objects: [endpoint]
-          startWith: action
-      nextLevel:
-        endpoint:
-          excludeFromHierarchy: true
-          actions:
-            change:
-            - objects: [operation id]
-              startWith: object
-            add/remove:
-            - objects: [operation id, tag]
-              predicativeAdjective: "%s"
-              startWith: action
-            decrease:
-            - objects: [stability]
-              startWith: object
-          nextLevel:
-            endpoint security scheme:
-              actions:
-                add/remove:
-                - objects: [security scope]
-                  predicativeAdjective: "%s"
-                  startWith: action
-            responses:
-              excludeFromHierarchy: true
-              actions:
-                add/remove:
-                - objects: [success response status, non-success response status]
-                  predicativeAdjective: "%s"
-                  startWith: action
-            request body:
-              nextLevel:
-                media type:
-                  nextLevel:
-                    schema:
-                      excludeFromHierarchy: true
-                      actions:
-                        set/increase/decrease:
-                        - objects: [max, maxLength, min, minLength, minItems, maxItems]
-                          predicativeAdjective: value
-                          startWith: object
-                        change/generalize:
-                        - objects: [type/format, pattern]
-                          startWith: object
-                        change:
-                        - objects: [discriminator property name, required property, optional property]
-                          startWith: object
-                        add/remove:
-                        - objects: [pattern]
-                          startWith: action
-                          predicativeAdjective: "%s"
-                        - objects: [default value]
-                          startWith: action
-                        - objects: [discriminator, mapping keys]
-                          startWith: action
-                          predicativeAdjective: "%s"
-                      nextLevel:
-                        anyOf list:
-                          actions:
-                            add/remove:
-                            - objects: [schema]
-                              startWith: action
-                              predicativeAdjective: "%s"
-                        oneOf list:
-                          actions:
-                            add/remove:
-                            - objects: [schema]
-                              startWith: action
-                              predicativeAdjective: "%s"
-                        allOf list:
-                          actions:
-                            add/remove:
-                            - objects: [schema]
-                              startWith: action
-                              predicativeAdjective: "%s"
-                  
+changes:
+  paths:
+    excludeFromHierarchy: true
+    actions:
+      remove:
+      - objects: [api path]
+        adverbs: [without deprecation, before sunset]
+        startWith: object
+    nextLevel:
+      operations:
+        excludeFromHierarchy: true
+        actions:
+          remove:
+          - objects: [endpoint]
+            adverbs: [without deprecation, before sunset]
+            startWith: object
+          - objects: [endpoint]
+            startWith: action
+          add:
+          - objects: [endpoint]
+            startWith: action
+          deprecate:
+          - objects: [endpoint]
+            startWith: action
+          reactivate:
+          - objects: [endpoint]
+            startWith: action
+        nextLevel:
+          endpoint:
+            excludeFromHierarchy: true
+            actions:
+              change:
+              - objects: [operation id]
+                startWith: object
+              add/remove:
+              - objects: [operation id, tag]
+                predicativeAdjective: "%s"
+                startWith: action
+              decrease:
+              - objects: [stability]
+                startWith: object
+            nextLevel:
+              endpoint security scheme:
+                actions:
+                  add/remove:
+                  - objects: [security scope]
+                    predicativeAdjective: "%s"
+                    startWith: action
+              responses:
+                excludeFromHierarchy: true
+                actions:
+                  add/remove:
+                  - objects: [success response status, non-success response status]
+                    predicativeAdjective: "%s"
+                    startWith: action
+              request body:
+                nextLevel:
+                  media type:
+                    nextLevel:
+                      schema:
+                        $ref: 'schema'
+components:
+  schema:
+    excludeFromHierarchy: true
+    actions:
+      set/increase/decrease:
+      - objects: [max, maxLength, min, minLength, minItems, maxItems]
+        predicativeAdjective: value
+        startWith: object
+      change/generalize:
+      - objects: [type/format, pattern]
+        startWith: object
+      change:
+      - objects: [discriminator property name, required property, optional property]
+        startWith: object
+      add/remove:
+      - objects: [pattern]
+        startWith: action
+        predicativeAdjective: "%s"
+      - objects: [default value]
+        startWith: action
+      - objects: [discriminator, mapping keys]
+        startWith: action
+        predicativeAdjective: "%s"
+    nextLevel:
+      anyOf list:
+        actions:
+          add/remove:
+          - objects: [schema]
+            startWith: action
+            predicativeAdjective: "%s"
+      oneOf list:
+        actions:
+          add/remove:
+          - objects: [schema]
+            startWith: action
+            predicativeAdjective: "%s"
+      allOf list:
+        actions:
+          add/remove:
+          - objects: [schema]
+            startWith: action
+            predicativeAdjective: "%s"
+
