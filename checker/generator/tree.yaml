@@ -53,6 +53,10 @@ changes:
                   - objects: [success response status, non-success response status]
                     predicativeAdjective: "%s"
                     startWith: action
+              request parameter:
+                nextLevel:
+                  schema:
+                    $ref: 'schema'
               request body:
                 nextLevel:
                   media type:
@@ -101,4 +105,48 @@ components:
           - objects: [schema]
             startWith: action
             predicativeAdjective: "%s"
-
+      properties:
+        excludeFromHierarchy: true
+        nextLevel:
+          property:
+            $ref: 'schemaLeaf'
+  schemaLeaf:
+    actions:
+      set/increase/decrease:
+      - objects: [max, maxLength, min, minLength, minItems, maxItems]
+        predicativeAdjective: value
+        startWith: object
+      change/generalize:
+      - objects: [type/format, pattern]
+        startWith: object
+      change:
+      - objects: [discriminator property name, required property, optional property]
+        startWith: object
+      add/remove:
+      - objects: [pattern]
+        startWith: action
+        predicativeAdjective: "%s"
+      - objects: [default value]
+        startWith: action
+      - objects: [discriminator, mapping keys]
+        startWith: action
+        predicativeAdjective: "%s"
+    nextLevel:
+      anyOf list:
+        actions:
+          add/remove:
+          - objects: [schema]
+            startWith: action
+            predicativeAdjective: "%s"
+      oneOf list:
+        actions:
+          add/remove:
+          - objects: [schema]
+            startWith: action
+            predicativeAdjective: "%s"
+      allOf list:
+        actions:
+          add/remove:
+          - objects: [schema]
+            startWith: action
+            predicativeAdjective: "%s"

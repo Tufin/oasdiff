@@ -9,16 +9,18 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type ChangeMap struct {
-	Changes    map[string]Changes `yaml:"changes"`
-	Components map[string]Changes `yaml:"components"`
+type ChangeTree struct {
+	Changes    ChangeMap `yaml:"changes"`
+	Components ChangeMap `yaml:"components"`
 }
 
+type ChangeMap map[string]*Changes
+
 type Changes struct {
-	Ref                  string             `yaml:"$ref"`
-	ExcludeFromHierarchy bool               `yaml:"excludeFromHierarchy"`
-	Actions              map[string]Objects `yaml:"actions"`
-	NextLevel            map[string]Changes `yaml:"nextLevel"`
+	Ref                  string              `yaml:"$ref"`
+	ExcludeFromHierarchy bool                `yaml:"excludeFromHierarchy"`
+	Actions              map[string]*Objects `yaml:"actions"`
+	NextLevel            ChangeMap           `yaml:"nextLevel"`
 }
 
 type Objects []*Object
@@ -32,40 +34,42 @@ type Object struct {
 	AttributiveAdjective string   `yaml:"attributiveAdjective"`
 }
 
-func GetTree() (MessageGenerator, error) {
-	yamlFile, err := os.ReadFile("tree.yaml")
-	if err != nil {
-		return nil, fmt.Errorf("yamlFile.Get err   #%v ", err)
-	}
+func GetTree(file string) func() (MessageGenerator, error) {
+	return func() (MessageGenerator, error) {
+		yamlFile, err := os.ReadFile(file)
+		if err != nil {
+			return nil, fmt.Errorf("yamlFile.Get err   #%v ", err)
+		}
 
-	var changeMap ChangeMap
-	err = yaml.Unmarshal(yamlFile, &changeMap)
-	if err != nil {
-		return nil, fmt.Errorf("unmarshal: %v", err)
-	}
+		var changeMap ChangeTree
+		err = yaml.Unmarshal(yamlFile, &changeMap)
+		if err != nil {
+			return nil, fmt.Errorf("unmarshal: %v", err)
+		}
 
-	return changeMap, nil
+		return changeMap, nil
+	}
 }
 
-func (changeMap ChangeMap) generate(out io.Writer) {
+func (changeMap ChangeTree) generate(out io.Writer) {
 	resolveRefs(changeMap.Changes, changeMap.Components)
 	fillHierarchy(changeMap.Changes, nil)
 	generateRecursive(changeMap.Changes, out)
 }
 
-func resolveRefs(changes map[string]Changes, components map[string]Changes) {
-	for _, change := range changes {
+func resolveRefs(changes ChangeMap, components ChangeMap) {
+	for container, change := range changes {
 		if change.Ref != "" {
-			changes[change.Ref] = components[change.Ref]
+			changes[container] = components[change.Ref]
 		}
-		resolveRefs(change.NextLevel, components)
+		resolveRefs(changes[container].NextLevel, components)
 	}
 }
 
-func generateRecursive(changes map[string]Changes, out io.Writer) {
+func generateRecursive(changes ChangeMap, out io.Writer) {
 	for _, change := range changes {
 		for action, objects := range change.Actions {
-			for _, object := range objects {
+			for _, object := range *objects {
 				getValueSet(object, action).generate(out)
 			}
 		}
@@ -73,11 +77,11 @@ func generateRecursive(changes map[string]Changes, out io.Writer) {
 	}
 }
 
-func fillHierarchy(changes map[string]Changes, hierarchy []string) {
+func fillHierarchy(changes ChangeMap, hierarchy []string) {
 	for container, change := range changes {
 		containerHierarchy := getContainerHierarchy(container, change, hierarchy)
 		for _, objects := range change.Actions {
-			for _, object := range objects {
+			for _, object := range *objects {
 				object.Hierarchy = containerHierarchy
 			}
 		}
@@ -85,7 +89,7 @@ func fillHierarchy(changes map[string]Changes, hierarchy []string) {
 	}
 }
 
-func getContainerHierarchy(container string, change Changes, hierarchy []string) []string {
+func getContainerHierarchy(container string, change *Changes, hierarchy []string) []string {
 	if change.ExcludeFromHierarchy {
 		return hierarchy
 	}

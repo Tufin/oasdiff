@@ -12,5 +12,5 @@ func TestGenerator(t *testing.T) {
 }
 
 func TestTreeGenerator(t *testing.T) {
-	require.NoError(t, generator.Generate(generator.GetTree))
+	require.NoError(t, generator.Generate(generator.GetTree("tree.yaml")))
 }
