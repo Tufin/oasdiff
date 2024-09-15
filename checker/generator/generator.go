@@ -2,7 +2,6 @@ package generator
 
 import (
 	"io"
-	"os"
 	"slices"
 	"strings"
 
@@ -15,13 +14,7 @@ type MessageGenerator interface {
 
 type Getter func() (MessageGenerator, error)
 
-func Generate(getter Getter) error {
-	out, err := os.Create("messages.yaml")
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-
+func Generate(getter Getter, out io.Writer) error {
 	data, err := getter()
 	if err != nil {
 		return err
