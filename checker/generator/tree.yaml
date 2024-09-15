@@ -42,6 +42,9 @@ changes:
                 attributiveAdjective: "%s"
               - objects: [request parameter]
                 startWith: action
+              - objects: [endpoint scheme security]
+                predicativeAdjective: "%s"
+                startWith: action
               decrease:
               - objects: [stability]
                 startWith: object
