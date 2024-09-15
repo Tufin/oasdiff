@@ -59,6 +59,13 @@ changes:
                   - objects: [success response status, non-success response status]
                     predicativeAdjective: "%s"
                     startWith: action
+                nextLevel:
+                  response:
+                    nextLevel:
+                      media-type:
+                        nextLevel:
+                          schema:
+                            $ref: 'schema'
               request parameter:
                 nextLevel:
                   schema:

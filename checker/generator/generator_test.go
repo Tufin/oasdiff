@@ -23,7 +23,7 @@ func TestTreeGenerator(t *testing.T) {
 	require.NoError(t, generator.Generate(generator.GetTree("tree.yaml"), &out))
 	count, err := lineCounter(&out)
 	require.NoError(t, err)
-	require.Equal(t, 176, count)
+	require.Equal(t, 260, count)
 }
 
 func lineCounter(r io.Reader) (int, error) {
