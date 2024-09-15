@@ -36,6 +36,12 @@ changes:
               - objects: [operation id, tag]
                 predicativeAdjective: "%s"
                 startWith: action
+              - objects: [required request body, optional request body]
+                startWith: action
+                predicativeAdjective: "%s"
+                attributiveAdjective: "%s"
+              - objects: [request parameter]
+                startWith: action
               decrease:
               - objects: [stability]
                 startWith: object
