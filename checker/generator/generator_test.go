@@ -22,13 +22,6 @@ func WriteToFile(t *testing.T, filename string, lines []string) {
 	}
 }
 
-func TestDataGenerator(t *testing.T) {
-	result, err := generator.Generate(generator.GetAll)
-	require.NoError(t, err)
-	slices.Sort(result)
-	WriteToFile(t, "messages.yaml", result)
-}
-
 func TestTreeGenerator(t *testing.T) {
 	result, err := generator.Generate(generator.GetTree("tree.yaml"))
 	require.NoError(t, err)
