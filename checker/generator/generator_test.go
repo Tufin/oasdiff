@@ -34,7 +34,7 @@ func TestTreeGenerator(t *testing.T) {
 	require.NoError(t, err)
 	slices.Sort(result)
 	WriteToFile(t, "messages.yaml", result)
-	require.Len(t, result, 262)
+	require.Len(t, result, 263)
 	badId, unique := isUninueIds(result)
 	require.True(t, unique, badId)
 }
