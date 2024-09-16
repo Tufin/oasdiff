@@ -27,9 +27,9 @@ type Objects []*Object
 
 type Object struct {
 	Hierarchy            []string `yaml:"hierarchy"`
-	Objects              []string `yaml:"objects"`
+	Names                []string `yaml:"names"`
 	Adverbs              []string `yaml:"adverbs"`
-	StartWith            string   `yaml:"startWith"`
+	StartWithName        bool     `yaml:"startWith"`
 	PredicativeAdjective string   `yaml:"predicativeAdjective"`
 	AttributiveAdjective string   `yaml:"attributiveAdjective"`
 }
@@ -101,12 +101,12 @@ func getValueSet(object *Object, action string) IValueSet {
 		AttributiveAdjective: object.AttributiveAdjective,
 		PredicativeAdjective: object.PredicativeAdjective,
 		Hierarchy:            object.Hierarchy,
-		Names:                object.Objects,
+		Names:                object.Names,
 		Actions:              parseAction(action),
 		Adverbs:              object.Adverbs,
 	}
 
-	if object.StartWith == "object" {
+	if object.StartWithName {
 		return ValueSetA(valueSet)
 	}
 	return ValueSetB(valueSet)

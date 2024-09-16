@@ -3,65 +3,57 @@ changes:
     excludeFromHierarchy: true
     actions:
       remove:
-      - objects: [api path]
+      - names: [api path]
         adverbs: [without deprecation, before sunset]
-        startWith: object
+        startWithName: true
     nextLevel:
       operations:
         excludeFromHierarchy: true
         actions:
           remove:
-          - objects: [endpoint]
+          - names: [endpoint]
             adverbs: [without deprecation, before sunset]
-            startWith: object
-          - objects: [endpoint]
-            startWith: action
+            startWithName: true
+          - names: [endpoint]
           add:
-          - objects: [endpoint]
-            startWith: action
+          - names: [endpoint]
           deprecate:
-          - objects: [endpoint]
-            startWith: action
+          - names: [endpoint]
           reactivate:
-          - objects: [endpoint]
-            startWith: action
+          - names: [endpoint]
         nextLevel:
           endpoint:
             excludeFromHierarchy: true
             actions:
               change:
-              - objects: [operation id]
-                startWith: object
+              - names: [operation id]
+                startWithName: true
               add/remove:
-              - objects: [operation id, tag]
+              - names: [operation id, tag]
                 predicativeAdjective: "%s"
-                startWith: action
-              - objects: [required request body, optional request body]
-                startWith: action
+              - names: [required request body, optional request body]
                 predicativeAdjective: "%s"
                 attributiveAdjective: "%s"
-              - objects: [request parameter]
-                startWith: action
-              - objects: [endpoint scheme security]
+              - names: [request parameter]
+              - names: [endpoint scheme security]
                 predicativeAdjective: "%s"
-                startWith: action
               decrease:
-              - objects: [stability]
-                startWith: object
+              - names: [stability]
+                startWithName: true
+              fail to parse:
+              - names: [sunset date]   
             nextLevel:
               endpoint security scheme:
                 actions:
                   add/remove:
-                  - objects: [security scope]
+                  - names: [security scope]
                     predicativeAdjective: "%s"
-                    startWith: action
               responses:
                 excludeFromHierarchy: true
                 actions:
                   add/remove:
-                  - objects: [success response status, non-success response status]
+                  - names: [success response status, non-success response status]
                     predicativeAdjective: "%s"
-                    startWith: action
                 nextLevel:
                   response:
                     nextLevel:
@@ -84,42 +76,36 @@ components:
     excludeFromHierarchy: true
     actions:
       set/increase/decrease:
-      - objects: [max, maxLength, min, minLength, minItems, maxItems]
+      - names: [max, maxLength, min, minLength, minItems, maxItems]
         predicativeAdjective: value
-        startWith: object
+        startWithName: true
       change/generalize:
-      - objects: [type/format, pattern]
-        startWith: object
+      - names: [type/format, pattern]
+        startWithName: true
       change:
-      - objects: [discriminator property name, required property, optional property]
-        startWith: object
+      - names: [discriminator property name, required property, optional property]
+        startWithName: true
       add/remove:
-      - objects: [pattern]
-        startWith: action
+      - names: [pattern]
         predicativeAdjective: "%s"
-      - objects: [default value]
-        startWith: action
-      - objects: [discriminator, mapping keys]
-        startWith: action
+      - names: [default value]
+      - names: [discriminator, mapping keys]
         predicativeAdjective: "%s"
     nextLevel:
       anyOf list:
         actions:
           add/remove:
-          - objects: [schema]
-            startWith: action
+          - names: [schema]
             predicativeAdjective: "%s"
       oneOf list:
         actions:
           add/remove:
-          - objects: [schema]
-            startWith: action
+          - names: [schema]
             predicativeAdjective: "%s"
       allOf list:
         actions:
           add/remove:
-          - objects: [schema]
-            startWith: action
+          - names: [schema]
             predicativeAdjective: "%s"
       properties:
         excludeFromHierarchy: true
@@ -129,40 +115,34 @@ components:
   schemaLeaf:
     actions:
       set/increase/decrease:
-      - objects: [max, maxLength, min, minLength, minItems, maxItems]
+      - names: [max, maxLength, min, minLength, minItems, maxItems]
         predicativeAdjective: value
-        startWith: object
+        startWithName: true
       change/generalize:
-      - objects: [type/format, pattern]
-        startWith: object
+      - names: [type/format, pattern]
+        startWithName: true
       change:
-      - objects: [discriminator property name, required property, optional property]
-        startWith: object
+      - names: [discriminator property name, required property, optional property]
+        startWithName: true
       add/remove:
-      - objects: [pattern]
-        startWith: action
+      - names: [pattern]
         predicativeAdjective: "%s"
-      - objects: [default value]
-        startWith: action
-      - objects: [discriminator, mapping keys]
-        startWith: action
+      - names: [default value]
+      - names: [discriminator, mapping keys]
         predicativeAdjective: "%s"
     nextLevel:
       anyOf list:
         actions:
           add/remove:
-          - objects: [schema]
-            startWith: action
+          - names: [schema]
             predicativeAdjective: "%s"
       oneOf list:
         actions:
           add/remove:
-          - objects: [schema]
-            startWith: action
+          - names: [schema]
             predicativeAdjective: "%s"
       allOf list:
         actions:
           add/remove:
-          - objects: [schema]
-            startWith: action
+          - names: [schema]
             predicativeAdjective: "%s"

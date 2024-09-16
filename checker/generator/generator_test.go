@@ -18,6 +18,13 @@ func TestGenerator(t *testing.T) {
 	require.NoError(t, generator.Generate(generator.GetAll, out))
 }
 
+func TestTreeGeneratoFiler(t *testing.T) {
+	file, err := os.Create("messages.yaml")
+	require.NoError(t, err)
+	defer file.Close()
+	require.NoError(t, generator.Generate(generator.GetTree("tree.yaml"), file))
+}
+
 func TestTreeGenerator(t *testing.T) {
 	var out bytes.Buffer
 	require.NoError(t, generator.Generate(generator.GetTree("tree.yaml"), &out))
