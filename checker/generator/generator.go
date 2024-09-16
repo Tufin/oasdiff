@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"io"
 	"slices"
 	"strings"
 
@@ -9,19 +8,18 @@ import (
 )
 
 type MessageGenerator interface {
-	generate(out io.Writer)
+	generate() []string
 }
 
 type Getter func() (MessageGenerator, error)
 
-func Generate(getter Getter, out io.Writer) error {
+func Generate(getter Getter) ([]string, error) {
 	data, err := getter()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	data.generate(out)
-	return nil
+	return data.generate(), nil
 }
 
 func isEmpty(s string) bool {
@@ -38,12 +36,12 @@ func filterStrings(list []string, f func(string) bool) []string {
 	return result
 }
 
-func generateId(hierarchy []string, object, action string) string {
+func generateId(hierarchy []string, object, action, adverb string) string {
 	if prefix, _, found := strings.Cut(object, "/"); found {
 		object = prefix
 	}
 
-	return strcase.ToKebab(strings.Join(filterStrings([]string{concat(hierarchy), object, conjugate(action)}, isEmpty), "-"))
+	return strcase.ToKebab(strings.Join(filterStrings([]string{concat(hierarchy), object, conjugate(action), adverb}, isEmpty), "-"))
 }
 
 func concat(list []string) string {
@@ -135,6 +133,6 @@ func getPreposition(action string) string {
 	return "from"
 }
 
-func addAttribute(object, attributiveAdjective, predicativeAdjective string) string {
-	return strings.Join([]string{attributiveAdjective + " " + object + " " + predicativeAdjective}, " ")
+func addAttribute(name, attributiveAdjective, predicativeAdjective string) string {
+	return strings.Join([]string{attributiveAdjective + " " + name + " " + predicativeAdjective}, " ")
 }

@@ -1,53 +1,52 @@
 package generator_test
 
 import (
-	"bytes"
-	"io"
 	"os"
+	"slices"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker/generator"
 )
 
-func TestGenerator(t *testing.T) {
-	out, err := os.Create("messages.yaml")
-	require.NoError(t, err)
-	defer out.Close()
+func WriteToFile(t *testing.T, filename string, lines []string) {
+	t.Helper()
 
-	require.NoError(t, generator.Generate(generator.GetAll, out))
-}
-
-func TestTreeGeneratoFiler(t *testing.T) {
-	file, err := os.Create("messages.yaml")
+	file, err := os.Create(filename)
 	require.NoError(t, err)
 	defer file.Close()
-	require.NoError(t, generator.Generate(generator.GetTree("tree.yaml"), file))
+	for _, line := range lines {
+		_, err = file.WriteString(line + "\n")
+		require.NoError(t, err)
+	}
+}
+
+func TestDataGenerator(t *testing.T) {
+	result, err := generator.Generate(generator.GetAll)
+	require.NoError(t, err)
+	slices.Sort(result)
+	WriteToFile(t, "messages.yaml", result)
 }
 
 func TestTreeGenerator(t *testing.T) {
-	var out bytes.Buffer
-	require.NoError(t, generator.Generate(generator.GetTree("tree.yaml"), &out))
-	count, err := lineCounter(&out)
+	result, err := generator.Generate(generator.GetTree("tree.yaml"))
 	require.NoError(t, err)
-	require.Equal(t, 260, count)
+	slices.Sort(result)
+	WriteToFile(t, "messages.yaml", result)
+	require.Len(t, result, 262)
+	badId, unique := isUninueIds(result)
+	require.True(t, unique, badId)
 }
 
-func lineCounter(r io.Reader) (int, error) {
-	buf := make([]byte, 32*1024)
-	count := 0
-	lineSep := []byte{'\n'}
-
-	for {
-		c, err := r.Read(buf)
-		count += bytes.Count(buf[:c], lineSep)
-
-		switch {
-		case err == io.EOF:
-			return count, nil
-
-		case err != nil:
-			return count, err
+func isUninueIds(messages []string) (string, bool) {
+	ids := make(map[string]struct{})
+	for _, message := range messages {
+		id := strings.SplitAfter(message, ":")[0]
+		if _, ok := ids[id]; ok {
+			return id, false
 		}
+		ids[id] = struct{}{}
 	}
+	return "", true
 }

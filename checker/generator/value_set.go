@@ -2,7 +2,6 @@ package generator
 
 import (
 	"fmt"
-	"io"
 	"strings"
 )
 
@@ -20,14 +19,16 @@ func NewValueSets(hierarchy []string, valueSets ValueSets) ValueSets {
 	return result
 }
 
-func (vs ValueSets) generate(out io.Writer) {
+func (vs ValueSets) generate() []string {
+	result := []string{}
 	for _, v := range vs {
-		v.generate(out)
+		result = append(result, v.generate()...)
 	}
+	return result
 }
 
 type IValueSet interface {
-	generate(out io.Writer)
+	generate() []string
 	setHierarchy(hierarchy []string) IValueSet
 }
 
@@ -58,9 +59,9 @@ func (v ValueSetA) setHierarchy(hierarchy []string) IValueSet {
 	return ValueSetA(ValueSet(v).setHierarchy(hierarchy))
 }
 
-func (v ValueSetA) generate(out io.Writer) {
-	generateMessage := func(hierarchy []string, object, attributiveAdjective, predicativeAdjective, action, adverb string) string {
-		prefix := addAttribute(object, attributiveAdjective, predicativeAdjective)
+func (v ValueSetA) generate() []string {
+	generateMessage := func(hierarchy []string, name, attributiveAdjective, predicativeAdjective, action, adverb string) string {
+		prefix := addAttribute(name, attributiveAdjective, predicativeAdjective)
 		if hierarchyMessage := getHierarchyMessage(hierarchy); hierarchyMessage != "" {
 			prefix += " of " + hierarchyMessage
 		}
@@ -68,20 +69,17 @@ func (v ValueSetA) generate(out io.Writer) {
 		return standardizeSpaces(fmt.Sprintf("%s was %s %s %s", prefix, conjugate(action), getActionMessage(action), adverb))
 	}
 
-	for _, object := range v.Names {
+	result := []string{}
+	for _, name := range v.Names {
 		for _, action := range v.Actions {
-			id := generateId(v.Hierarchy, object, action)
-
-			adverbs := v.Adverbs
-			if v.Adverbs == nil {
-				adverbs = []string{""}
-			}
-			for _, adverb := range adverbs {
-				message := generateMessage(v.Hierarchy, object, v.AttributiveAdjective, v.PredicativeAdjective, action, adverb)
-				fmt.Fprintf(out, "%s: %s\n", id, message)
+			for _, adverb := range oneAtLeast(v.Adverbs) {
+				id := generateId(v.Hierarchy, name, action, adverb)
+				message := generateMessage(v.Hierarchy, name, v.AttributiveAdjective, v.PredicativeAdjective, action, adverb)
+				result = append(result, fmt.Sprintf("%s: %s", id, message))
 			}
 		}
 	}
+	return result
 }
 
 // ValueSetB messages start with the action
@@ -92,14 +90,24 @@ func (v ValueSetB) setHierarchy(hierarchy []string) IValueSet {
 	return ValueSetB(ValueSet(v).setHierarchy(hierarchy))
 }
 
-func (v ValueSetB) generate(out io.Writer) {
-	generateMessage := func(hierarchy []string, object, attributiveAdjective, predicativeAdjective, action string) string {
-		return standardizeSpaces(strings.Join([]string{conjugate(action), addAttribute(object, attributiveAdjective, predicativeAdjective), getHierarchyPostfix(action, hierarchy)}, " "))
+func (v ValueSetB) generate() []string {
+	generateMessage := func(hierarchy []string, name, attributiveAdjective, predicativeAdjective, action string) string {
+		return standardizeSpaces(strings.Join([]string{conjugate(action), addAttribute(name, attributiveAdjective, predicativeAdjective), getHierarchyPostfix(action, hierarchy)}, " "))
 	}
 
-	for _, object := range v.Names {
+	result := []string{}
+	for _, name := range v.Names {
 		for _, action := range v.Actions {
-			fmt.Fprintf(out, "%s: %s\n", generateId(v.Hierarchy, object, action), generateMessage(v.Hierarchy, object, v.AttributiveAdjective, v.PredicativeAdjective, action))
+			result = append(result, fmt.Sprintf("%s: %s", generateId(v.Hierarchy, name, action, ""), generateMessage(v.Hierarchy, name, v.AttributiveAdjective, v.PredicativeAdjective, action)))
 		}
 	}
+
+	return result
+}
+
+func oneAtLeast(list []string) []string {
+	if len(list) == 0 {
+		return []string{""}
+	}
+	return list
 }
