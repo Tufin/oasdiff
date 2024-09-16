@@ -258,5 +258,6 @@ response-media-type-type-generalized: type/format of media-type %s of response %
 stability-decreased: stability was decreased from %s to %s
 success-response-status-added: added success response status %s
 success-response-status-removed: removed success response status %s
+sunset-date-failed-to-parse: failed to parse sunset date
 tag-added: added tag %s
 tag-removed: removed tag %s
