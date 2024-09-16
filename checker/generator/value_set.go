@@ -7,29 +7,8 @@ import (
 
 type ValueSets []IValueSet
 
-// NewValueSets creates a new ValueSets object
-func NewValueSets(hierarchy []string, valueSets ValueSets) ValueSets {
-
-	result := make(ValueSets, len(valueSets))
-
-	for i, vs := range valueSets {
-		result[i] = vs.setHierarchy(hierarchy)
-	}
-
-	return result
-}
-
-func (vs ValueSets) generate() []string {
-	result := []string{}
-	for _, v := range vs {
-		result = append(result, v.generate()...)
-	}
-	return result
-}
-
 type IValueSet interface {
 	generate() []string
-	setHierarchy(hierarchy []string) IValueSet
 }
 
 type ValueSetList []ValueSet
@@ -43,21 +22,9 @@ type ValueSet struct {
 	Adverbs              []string
 }
 
-func (v ValueSet) setHierarchy(hierarchy []string) ValueSet {
-	if len(hierarchy) > 0 {
-		v.Hierarchy = append(v.Hierarchy, hierarchy...)
-	}
-
-	return v
-}
-
 // ValueSetA messages start with the object
 // for example: "api was removed without deprecation"
 type ValueSetA ValueSet
-
-func (v ValueSetA) setHierarchy(hierarchy []string) IValueSet {
-	return ValueSetA(ValueSet(v).setHierarchy(hierarchy))
-}
 
 func (v ValueSetA) generate() []string {
 	generateMessage := func(hierarchy []string, name, attributiveAdjective, predicativeAdjective, action, adverb string) string {
@@ -85,10 +52,6 @@ func (v ValueSetA) generate() []string {
 // ValueSetB messages start with the action
 // for example: "removed %s request parameter %s"
 type ValueSetB ValueSet
-
-func (v ValueSetB) setHierarchy(hierarchy []string) IValueSet {
-	return ValueSetB(ValueSet(v).setHierarchy(hierarchy))
-}
 
 func (v ValueSetB) generate() []string {
 	generateMessage := func(hierarchy []string, name, attributiveAdjective, predicativeAdjective, action string) string {
