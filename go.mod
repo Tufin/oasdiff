@@ -2,11 +2,11 @@ module github.com/tufin/oasdiff
 
 go 1.22.5
 
-replace gopkg.in/yaml.v3 => github.com/oasdiff/yaml3 v0.0.0-20240819204501-233901bce7fe
+replace gopkg.in/yaml.v3 => github.com/oasdiff/yaml3 v0.0.0-20240920135353-c185dc6ea7c6
 
-replace github.com/invopop/yaml => github.com/oasdiff/yaml v0.0.0-20240822113848-2830227c9671
+replace github.com/invopop/yaml => github.com/oasdiff/yaml v0.0.0-20240920191703-3e5a9fb5bdf3
 
-replace github.com/getkin/kin-openapi => github.com/oasdiff/kin-openapi v0.0.0-20240822114340-77f909bcefa1
+replace github.com/getkin/kin-openapi => github.com/oasdiff/kin-openapi v0.0.0-20240921075217-8a00ba059558
 
 require (
 	cloud.google.com/go v0.115.0

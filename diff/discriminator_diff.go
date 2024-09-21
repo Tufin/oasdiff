@@ -2,6 +2,7 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/tufin/oasdiff/utils"
 )
 
 // DiscriminatorDiff describes the changes between a pair of discriminator objects: https://swagger.io/specification/#discriminator-object
@@ -60,7 +61,7 @@ func getDiscriminatorDiffInternal(config *Config, state *state, discriminator1, 
 		return nil, err
 	}
 	result.PropertyNameDiff = getValueDiff(discriminator1.PropertyName, discriminator2.PropertyName)
-	result.MappingDiff = getStringMapDiff(discriminator1.Mapping, discriminator2.Mapping)
+	result.MappingDiff = getStringMapDiff(utils.StringMap(discriminator1.Mapping), utils.StringMap(discriminator2.Mapping))
 
 	return result, nil
 }
