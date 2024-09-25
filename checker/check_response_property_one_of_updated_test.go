@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/load"
 )
 
-// CL: adding 'oneOf' schema to the response body or response body property
+// BC: adding 'oneOf' schema to the response body or response body property is breaking
 func TestResponsePropertyOneOfAdded(t *testing.T) {
 	s1, err := open("../data/checker/response_property_one_of_added_base.yaml")
 	require.NoError(t, err)
@@ -26,7 +26,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		{
 			Id:          checker.ResponseBodyOneOfAddedId,
 			Args:        []any{"#/components/schemas/Rabbit", "200"},
-			Level:       checker.INFO,
+			Level:       checker.ERR,
 			Operation:   "GET",
 			Path:        "/pets",
 			Source:      load.NewSource("../data/checker/response_property_one_of_added_revision.yaml"),
@@ -35,7 +35,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyOneOfAddedId,
 			Args:        []any{"#/components/schemas/Breed3", "/oneOf[#/components/schemas/Dog]/breed", "200"},
-			Level:       checker.INFO,
+			Level:       checker.ERR,
 			Operation:   "GET",
 			Path:        "/pets",
 			Source:      load.NewSource("../data/checker/response_property_one_of_added_revision.yaml"),
@@ -44,7 +44,7 @@ func TestResponsePropertyOneOfAdded(t *testing.T) {
 		{
 			Id:          checker.ResponsePropertyOneOfAddedId,
 			Args:        []any{"subschema #2: Dark brown types", "/oneOf[#/components/schemas/Fox]/breed", "200"},
-			Level:       checker.INFO,
+			Level:       checker.ERR,
 			Operation:   "GET",
 			Path:        "/pets",
 			Source:      load.NewSource("../data/checker/response_property_one_of_added_revision.yaml"),
