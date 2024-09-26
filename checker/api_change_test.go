@@ -57,6 +57,16 @@ func TestApiChange_MatchIgnore(t *testing.T) {
 	require.True(t, apiChange.MatchIgnore("/test", "error at source, in api get /test this is a breaking change. [change_id]. comment", MockLocalizer))
 }
 
+func TestApiChange_MatchIgnore_Wildcard(t *testing.T) {
+	// Test with wildcard '*', should match on path and operation
+	require.True(t, apiChange.MatchIgnore("/test", "GET *", MockLocalizer))
+}
+
+func TestApiChange_MatchIgnore_NoMatch(t *testing.T) {
+	// Test when ignore does not match, should return false
+	require.False(t, apiChange.MatchIgnore("/different_path", "GET /different_path", MockLocalizer))
+}
+
 func TestApiChange_MultiLineError(t *testing.T) {
 	require.Equal(t, "error\t[change_id] at source\t\n\tin API GET /test\n\t\tThis is a breaking change.\n\t\tcomment", apiChange.MultiLineError(MockLocalizer, checker.ColorNever))
 }

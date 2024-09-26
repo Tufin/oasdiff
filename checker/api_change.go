@@ -74,6 +74,13 @@ func (c ApiChange) MatchIgnore(ignorePath, ignoreLine string, l Localizer) bool 
 		return false
 	}
 
+	// Check if a wildcard '*' is used to ignore all errors related to this path and operation
+	if strings.Contains(ignoreLine, "*") {
+		// Check if the path matches exactly and the wildcard is used for operation
+		return ignorePath == strings.ToLower(c.Path) && strings.HasPrefix(ignoreLine, strings.ToLower(c.Operation))
+	}
+
+	// Default behavior: match the exact operation and path
 	return ignorePath == strings.ToLower(c.Path) &&
 		strings.Contains(ignoreLine, strings.ToLower(c.Operation+" "+c.Path)) &&
 		strings.Contains(ignoreLine, strings.ToLower(c.GetUncolorizedText(l)))
