@@ -6,7 +6,8 @@ import (
 
 // Config includes various settings to control the diff
 type Config struct {
-	PathFilter              string
+	MatchPath               string
+	UnmatchPath             string
 	FilterExtension         string
 	PathPrefixBase          string
 	PathPrefixRevision      string

@@ -540,7 +540,7 @@ func TestSummaryInvalidComponent(t *testing.T) {
 }
 
 func TestFilterByRegex(t *testing.T) {
-	d, err := diff.Get(&diff.Config{PathFilter: "x"}, l(t, 1), l(t, 2))
+	d, err := diff.Get(&diff.Config{MatchPath: "x"}, l(t, 1), l(t, 2))
 	require.NoError(t, err)
 	require.Nil(t, d.GetSummary().Details[diff.PathsDetail])
 }
