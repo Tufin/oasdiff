@@ -8,6 +8,13 @@ For example, this diff includes only endpoints containing "/api" in the path:
 ```
 oasdiff diff --match-path "/api" https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
 ```
+
+Use the `--unmatch-path` option to exclude paths that match the given regular expression.  
+For example, this diff excludes endpoints containing "beta" in the path:
+```
+oasdiff diff --unmatch-path "beta" https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
+```
+
 Note:  
 If a path contains a callback, the filter will be applied both to the path itself and to the callback path.  
 To include both the path and the callback, use a regular expression with a filter for each level, for example: "path|callback-path"

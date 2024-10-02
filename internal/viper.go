@@ -100,6 +100,7 @@ type Config struct {
 	Severity               []string `mapstructure:"severity"`
 	Tags                   []string `mapstructure:"tags"`
 	MatchPath              string   `mapstructure:"match-path"`
+	UnmatchPath            string   `mapstructure:"unmatch-path"`
 	FilterExtension        string   `mapstructure:"filter-extension"`
 	PrefixBase             string   `mapstructure:"prefix-base"`
 	PrefixRevision         string   `mapstructure:"prefix-revision"`

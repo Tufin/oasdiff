@@ -38,7 +38,7 @@ func newPathsDiff() *PathsDiff {
 
 func getPathsDiff(config *Config, state *state, paths1, paths2 *openapi3.Paths) (*PathsDiff, error) {
 
-	if err := filterPaths(config.PathFilter, config.FilterExtension, paths1, paths2); err != nil {
+	if err := filterPaths(config.MatchPath, config.UnmatchPath, config.FilterExtension, paths1, paths2); err != nil {
 		return nil, err
 	}
 
@@ -103,9 +103,13 @@ func (pathsDiff *PathsDiff) addModifiedPath(config *Config, state *state, path1 
 	return pathsDiff.Modified.addPathDiff(config, state, path1, pathItemPair)
 }
 
-func filterPaths(filter, filterExtension string, paths1, paths2 *openapi3.Paths) error {
+func filterPaths(matchPath, unmatchPath, filterExtension string, paths1, paths2 *openapi3.Paths) error {
 
-	if err := filterPathsByName(filter, paths1, paths2); err != nil {
+	if err := filterPathsByName(matchPath, true, paths1, paths2); err != nil {
+		return err
+	}
+
+	if err := filterPathsByName(unmatchPath, false, paths1, paths2); err != nil {
 		return err
 	}
 
@@ -116,7 +120,7 @@ func filterPaths(filter, filterExtension string, paths1, paths2 *openapi3.Paths)
 	return nil
 }
 
-func filterPathsByName(filter string, paths1, paths2 *openapi3.Paths) error {
+func filterPathsByName(filter string, negate bool, paths1, paths2 *openapi3.Paths) error {
 	if filter == "" {
 		return nil
 	}
@@ -126,15 +130,19 @@ func filterPathsByName(filter string, paths1, paths2 *openapi3.Paths) error {
 		return fmt.Errorf("failed to compile filter regex %q: %w", filter, err)
 	}
 
-	filterPathsInternal(paths1, r)
-	filterPathsInternal(paths2, r)
+	filterPathsInternal(paths1, r, negate)
+	filterPathsInternal(paths2, r, negate)
 
 	return nil
 }
 
-func filterPathsInternal(paths *openapi3.Paths, r *regexp.Regexp) {
+func filterPathsInternal(paths *openapi3.Paths, r *regexp.Regexp, negate bool) {
 	for path := range paths.Map() {
-		if !r.MatchString(path) {
+		match := r.MatchString(path)
+		if negate {
+			match = !match
+		}
+		if match {
 			paths.Delete(path)
 		}
 	}

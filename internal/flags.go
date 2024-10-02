@@ -20,7 +20,8 @@ func NewFlags() *Flags {
 
 func (flags *Flags) toConfig() *diff.Config {
 	config := diff.NewConfig().WithExcludeElements(flags.getExcludeElements())
-	config.PathFilter = flags.v.GetString("match-path")
+	config.MatchPath = flags.v.GetString("match-path")
+	config.UnmatchPath = flags.v.GetString("unmatch-path")
 	config.FilterExtension = flags.v.GetString("filter-extension")
 	config.PathPrefixBase = flags.v.GetString("prefix-base")
 	config.PathPrefixRevision = flags.v.GetString("prefix-revision")

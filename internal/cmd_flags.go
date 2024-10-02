@@ -10,6 +10,7 @@ import (
 func addCommonDiffFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().BoolP("composed", "c", false, "work in 'composed' mode, compare paths in all specs matching base and revision globs")
 	cmd.PersistentFlags().StringP("match-path", "p", "", "include only paths that match this regular expression")
+	cmd.PersistentFlags().StringP("unmatch-path", "q", "", "exclude paths that match this regular expression")
 	cmd.PersistentFlags().String("filter-extension", "", "exclude paths and operations with an OpenAPI Extension matching this regular expression")
 	cmd.PersistentFlags().String("prefix-base", "", "add this prefix to paths in base-spec before comparison")
 	cmd.PersistentFlags().String("prefix-revision", "", "add this prefix to paths in revised-spec before comparison")

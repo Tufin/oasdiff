@@ -540,7 +540,13 @@ func TestSummaryInvalidComponent(t *testing.T) {
 }
 
 func TestFilterByRegex(t *testing.T) {
-	d, err := diff.Get(&diff.Config{PathFilter: "x"}, l(t, 1), l(t, 2))
+	d, err := diff.Get(&diff.Config{MatchPath: "x"}, l(t, 1), l(t, 2))
+	require.NoError(t, err)
+	require.Nil(t, d.GetSummary().Details[diff.PathsDetail])
+}
+
+func TestFilterByInvertedRegex(t *testing.T) {
+	d, err := diff.Get(&diff.Config{UnmatchPath: "api|subscribe|register"}, l(t, 1), l(t, 2))
 	require.NoError(t, err)
 	require.Nil(t, d.GetSummary().Details[diff.PathsDetail])
 }
@@ -551,6 +557,16 @@ func TestFilterPathsByExtension(t *testing.T) {
 	require.Equal(t,
 		&diff.SummaryDetails{Added: 1, Deleted: 3, Modified: 0},
 		d.GetSummary().Details[diff.PathsDetail])
+}
+
+func TestFilterByInvalidRegex(t *testing.T) {
+	_, err := diff.Get(&diff.Config{MatchPath: "["}, l(t, 1), l(t, 2))
+	require.EqualError(t, err, "failed to compile filter regex \"[\": error parsing regexp: missing closing ]: `[`")
+}
+
+func TestFilterByInvalidInvertedRegex(t *testing.T) {
+	_, err := diff.Get(&diff.Config{UnmatchPath: "["}, l(t, 1), l(t, 2))
+	require.EqualError(t, err, "failed to compile filter regex \"[\": error parsing regexp: missing closing ]: `[`")
 }
 
 func TestFilterOperationssByExtension(t *testing.T) {
