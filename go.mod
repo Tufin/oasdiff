@@ -5,7 +5,7 @@ go 1.23
 require (
 	cloud.google.com/go v0.115.1
 	github.com/TwiN/go-color v1.4.1
-	github.com/getkin/kin-openapi v0.127.0
+	github.com/getkin/kin-openapi v0.128.0
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
