@@ -3,7 +3,7 @@ module github.com/tufin/oasdiff
 go 1.23
 
 require (
-	cloud.google.com/go v0.115.1
+	cloud.google.com/go v0.116.0
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.128.0
 	github.com/oasdiff/telemetry v0.1.2
@@ -35,8 +35,8 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/sys v0.24.0 // indirect
-	golang.org/x/text v0.17.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
 
