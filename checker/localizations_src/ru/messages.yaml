@@ -22,9 +22,11 @@ api-sunset-date-too-small: дата API sunset date %s слишком рання
 api-path-added: API path добавлено
 api-path-deprecated: API path deprecated
 api-path-reactivated: API path реактивирован
-api-path-removed-without-deprecation: api path удалён без процедуры deprecation
+api-path-removed-without-deprecation: API path удалён без процедуры deprecation
+api-path-removed-with-deprecation: API path удалён с процедурой deprecation
 api-path-removed-before-sunset: API path удалён до даты sunset %s
 api-removed-without-deprecation: API удалён без deprecation
+api-removed-with-deprecation: API удалён с процедурой deprecation
 api-removed-before-sunset: API удалёг до даты sunset %s
 api-operation-id-removed: Идентификатор операции API %s удален и заменен на %s
 api-tag-removed: Тег API %s удален
