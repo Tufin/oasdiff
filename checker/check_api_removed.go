@@ -39,6 +39,11 @@ func checkRemovedPaths(pathsDiff *diff.PathsDiff, operationsSources *diff.Operat
 
 		for operation := range pathsDiff.Base.Value(path).Operations() {
 			op := pathsDiff.Base.Value(path).GetOperation(operation)
+			stability, err := getStabilityLevel(op.Extensions)
+			if err != nil || stability == STABILITY_ALPHA || stability == STABILITY_DRAFT {
+				continue
+			}
+
 			if change := checkAPIRemoval(config, true, op, operationsSources, operation, path); change != nil {
 				result = append(result, change)
 			}

@@ -44,46 +44,36 @@ func TestBreaking_DeprecationNoSunset(t *testing.T) {
 	require.Equal(t, checker.INFO, errs[0].GetLevel())
 }
 
-// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not alpha stability level
+// BC: removing the path without a deprecation policy and without specifying sunset date is breaking for endpoints with non draft/alpha stability level
 func TestBreaking_RemovedPathForAlphaBreaking(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
 	require.NoError(t, err)
 
-	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
+	s2, err := open(getDeprecationFile("sunset-path.yaml"))
 	require.NoError(t, err)
-
-	s2.Spec.Paths.Delete("/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.Len(t, errs, 2)
+	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[0].GetId())
 	require.Equal(t, "api path removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[1].GetId())
-	require.Equal(t, "api path removed without deprecation", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: removing the path without a deprecation policy and without specifying sunset date is breaking if some APIs are not draft stability level
+// BC: removing the path without a deprecation policy and without specifying sunset date is breaking for endpoints with non draft/alpha stability level
 func TestBreaking_RemovedPathForDraftBreaking(t *testing.T) {
-	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-	draft := toJson(t, checker.STABILITY_DRAFT)
-	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
-
-	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
+	s1, err := open(getDeprecationFile("base-draft-stability.yaml"))
 	require.NoError(t, err)
 
-	s2.Spec.Paths.Delete("/api/test")
+	s2, err := open(getDeprecationFile("sunset-path.yaml"))
+	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIRemovedCheck), d, osm)
-	require.Len(t, errs, 2)
+	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[0].GetId())
 	require.Equal(t, "api path removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[1].GetId())
-	require.Equal(t, "api path removed without deprecation", errs[1].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deleting a path with some operations having sunset date in the future is breaking
