@@ -3,7 +3,8 @@ Sometimes APIs need to be removed, for example, when we replace an old API by a 
 As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
 
 OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and other object types as deprecated.  
-Normally, deprecation **is not** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future, in contrast, the eventual removal of a resource **is** considered a breaking change.
+Deprecating a resource **isn't** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future.  
+After deprecating a resource, it can be removed without triggering a breaking change since the client already knows it is going to be removed.
 
 ### Deprecation without a sunset date
 Oasdiff allows you to gracefully remove a resource without getting a breaking change error, as follows:

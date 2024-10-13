@@ -23,8 +23,10 @@ endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated
 api-path-removed-without-deprecation: api path removed without deprecation
+api-path-removed-with-deprecation: api path removed with deprecation
 api-path-removed-before-sunset: api path removed before the sunset date %s
 api-removed-without-deprecation: api removed without deprecation
+api-removed-with-deprecation: api removed with deprecation
 api-removed-before-sunset: api removed before the sunset date %s
 api-operation-id-removed: api operation id %s removed and replaced with %s
 api-operation-id-added: api operation id %s was added

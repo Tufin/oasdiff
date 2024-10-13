@@ -14,10 +14,12 @@ const (
 	APIStabilityDecreasedId = "api-stability-decreased"
 )
 
+// CheckBackwardCompatibility runs the checks with level WARN and ERR
 func CheckBackwardCompatibility(config *Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap) Changes {
 	return CheckBackwardCompatibilityUntilLevel(config, diffReport, operationsSources, WARN)
 }
 
+// CheckBackwardCompatibilityUntilLevel runs the checks with level equal or higher than the given level
 func CheckBackwardCompatibilityUntilLevel(config *Config, diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, level Level) Changes {
 	result := make(Changes, 0)
 
