@@ -19,25 +19,42 @@ const (
 )
 
 func APIRemovedCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
-	result := make(Changes, 0)
-	if diffReport.PathsDiff == nil {
-		return result
+	return append(
+		checkRemovedPaths(diffReport.PathsDiff, operationsSources, config),
+		checkRemovedOperations(diffReport.PathsDiff, operationsSources, config)...,
+	)
+}
+
+func checkRemovedPaths(pathsDiff *diff.PathsDiff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+
+	if pathsDiff == nil {
+		return nil
 	}
 
-	for _, path := range diffReport.PathsDiff.Deleted {
-		if diffReport.PathsDiff.Base.Value(path) == nil {
+	result := make(Changes, 0)
+	for _, path := range pathsDiff.Deleted {
+		if pathsDiff.Base.Value(path) == nil {
 			continue
 		}
 
-		for operation := range diffReport.PathsDiff.Base.Value(path).Operations() {
-			op := diffReport.PathsDiff.Base.Value(path).GetOperation(operation)
+		for operation := range pathsDiff.Base.Value(path).Operations() {
+			op := pathsDiff.Base.Value(path).GetOperation(operation)
 			if change := checkAPIRemoval(config, true, op, operationsSources, operation, path); change != nil {
 				result = append(result, change)
 			}
 		}
 	}
+	return result
+}
 
-	for path, pathItem := range diffReport.PathsDiff.Modified {
+func checkRemovedOperations(pathsDiff *diff.PathsDiff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+	if pathsDiff == nil {
+		return nil
+	}
+
+	result := make(Changes, 0)
+
+	for path, pathItem := range pathsDiff.Modified {
 		if pathItem.OperationsDiff == nil {
 			continue
 		}
