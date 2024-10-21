@@ -119,6 +119,14 @@ Where the file `oasdiff-levels.txt` contains a single line:
 api-security-removed    err
 ```
 
+Checks can be customized with the following levels:
+| Custom Level  | Check Status |
+| ------------- | ------------- |
+| err  | Enabled with level ERR |
+| warn  | Enabled with level WARN |
+| info  | Enabled with level INFO |
+| none  | Disabled  |
+
 ### Customizing Breaking Changes Checks
 If you encounter a change that isn't reported, you may:
 1. Run `oasdiff checks` to see if the check is available, and [customize the level as needed](#customizing-severity-levels).  
