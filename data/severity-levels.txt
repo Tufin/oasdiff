@@ -1,2 +1,3 @@
-api-security-removed                        warn
-request-parameter-enum-value-added          err
+api-security-removed                          warn
+request-parameter-enum-value-added            err
+request-read-only-property-enum-value-removed none
