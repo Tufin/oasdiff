@@ -32,13 +32,11 @@ func TestProcessSeverityLevels_InvalidFile(t *testing.T) {
 
 func TestProcessSeverityLevels_OK(t *testing.T) {
 	m, err := checker.ProcessSeverityLevels("../data/severity-levels.txt")
-	require.Equal(t, map[string]checker.Level{"api-security-removed": 2, "request-parameter-enum-value-added": 3}, m)
-	require.NoError(t, err)
-}
-
-func TestProcessSeverityLevels_WrongFlags(t *testing.T) {
-	m, err := checker.ProcessSeverityLevels("../data/severity-levels.txt")
-	require.Equal(t, map[string]checker.Level{"api-security-removed": 2, "request-parameter-enum-value-added": 3}, m)
+	require.Equal(t, map[string]checker.Level{
+		"api-security-removed":                          checker.WARN,
+		"request-parameter-enum-value-added":            checker.ERR,
+		"request-read-only-property-enum-value-removed": checker.NONE,
+	}, m)
 	require.NoError(t, err)
 }
 
