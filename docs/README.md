@@ -89,6 +89,9 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [flatten](ALLOF.md): replace all instances of allOf by a merged equivalent
 - checks: displays the different checks that oasdiff runs to detect changes
 
+## Roadmap
+[Help us define the roadmap](https://github.com/Tufin/oasdiff/discussions/631)
+
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi).
 
