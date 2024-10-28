@@ -89,6 +89,12 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [flatten](ALLOF.md): replace all instances of allOf by a merged equivalent
 - checks: displays the different checks that oasdiff runs to detect changes
 
+## Roadmap
+I am currently working on the ability to correlate breaking changes and changelog messages with the underlying changes in the original YAML spec.  
+This will allow users to see changes in their original context, investigate, and determine how to handle them.  
+Specifically, github users will be able to click annotations and see the diff at the relevant line as discussed [here](https://github.com/Tufin/oasdiff/issues/574).  
+[Please help us prioritize the roadmap](https://github.com/Tufin/oasdiff/discussions/631).
+
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi).
 
