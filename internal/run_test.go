@@ -8,7 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/oasdiff/telemetry/model"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/formatters"
@@ -21,13 +20,8 @@ func cmdToArgs(cmd string) []string {
 }
 
 func TestMain(m *testing.M) {
-	setup()
 	code := m.Run()
 	os.Exit(code)
-}
-
-func setup() {
-	os.Setenv(model.EnvNoTelemetry, "1")
 }
 
 func Test_InvalidCmd(t *testing.T) {

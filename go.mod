@@ -6,7 +6,6 @@ require (
 	cloud.google.com/go v0.116.0
 	github.com/TwiN/go-color v1.4.1
 	github.com/getkin/kin-openapi v0.128.0
-	github.com/oasdiff/telemetry v0.1.2
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.9.0
@@ -17,7 +16,6 @@ require (
 )
 
 require (
-	github.com/denisbrodbeck/machineid v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -34,6 +32,7 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
+	github.com/ugorji/go/codec v1.2.11 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
