@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'origin'
     tags:
       - 'v*'
 jobs:
@@ -50,7 +51,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           context: ./
           file: ./Dockerfile
-          tags: tufin/oasdiff:${{ github.ref_name }}, tufin/oasdiff:stable, tufin/oasdiff:latest
+          tags: tufin/oasdiff:${{ github.ref_name }}
           labels: ${{ steps.meta.outputs.labels }}
         if: github.ref != 'refs/heads/main' && github.event_name != 'pull_request'
 
