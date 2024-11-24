@@ -6,12 +6,10 @@ replace gopkg.in/yaml.v3 => github.com/oasdiff/yaml3 v0.0.0-20240920135353-c185d
 
 replace github.com/invopop/yaml => github.com/oasdiff/yaml v0.0.0-20240920191703-3e5a9fb5bdf3
 
-replace github.com/getkin/kin-openapi => github.com/oasdiff/kin-openapi v0.0.0-20240921075217-8a00ba059558
-
 require (
 	cloud.google.com/go v0.115.0
 	github.com/TwiN/go-color v1.4.1
-	github.com/getkin/kin-openapi v0.127.0
+	github.com/getkin/kin-openapi v0.128.1-0.20241113210624-e230c133e5ca
 	github.com/oasdiff/telemetry v0.1.2
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0

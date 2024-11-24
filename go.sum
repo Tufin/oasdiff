@@ -13,6 +13,8 @@ github.com/frankban/quicktest v1.14.6 h1:7Xjx+VpznH+oBnejlPUj8oUpdxnVs4f8XU8WnHk
 github.com/frankban/quicktest v1.14.6/go.mod h1:4ptaffx2x8+WTWXmUCuVU6aPUX1/Mz7zb5vbUoiM6w0=
 github.com/fsnotify/fsnotify v1.7.0 h1:8JEhPFa5W2WU7YfeZzPNqzMP6Lwt7L2715Ggo0nosvA=
 github.com/fsnotify/fsnotify v1.7.0/go.mod h1:40Bi/Hjc2AVfZrqy+aj+yEI+/bRxZnMJyTJwOpGvigM=
+github.com/getkin/kin-openapi v0.128.1-0.20241113210624-e230c133e5ca h1:14qX2UfAWKqPdofcSlsK9pPX3UbAlFHYPbRpoYRd0io=
+github.com/getkin/kin-openapi v0.128.1-0.20241113210624-e230c133e5ca/go.mod h1:5MaNKmkfVAFfhyQtzgwYLynYAHgFA0KSykwF6+NoGMc=
 github.com/go-openapi/jsonpointer v0.21.0 h1:YgdVicSA9vH5RiHs9TZW5oyafXZFc6+2Vc1rr/O9oNQ=
 github.com/go-openapi/jsonpointer v0.21.0/go.mod h1:IUyH9l/+uyhIYQ/PXVA41Rexl+kOkAPDdXEYns6fzUY=
 github.com/go-openapi/swag v0.23.0 h1:vsEVJDUo2hPJ2tu0/Xc+4noaxyEffXNIs3cOULZ+GrE=
@@ -41,8 +43,6 @@ github.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyua
 github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9M+97sNutRR1RKhG96O6jWumTTnw=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826/go.mod h1:TaXosZuwdSHYgviHp1DAtfrULt5eUgsSMsZf+YrPgl8=
-github.com/oasdiff/kin-openapi v0.0.0-20240921075217-8a00ba059558 h1:aIfXRW0EbLKQsUA9RdAcIDvShF6I4DqQO3viCFEpnzw=
-github.com/oasdiff/kin-openapi v0.0.0-20240921075217-8a00ba059558/go.mod h1:5MaNKmkfVAFfhyQtzgwYLynYAHgFA0KSykwF6+NoGMc=
 github.com/oasdiff/telemetry v0.1.2 h1:hkmA5YTISVF2/zWa23y29WdPws1Q53pyLOFYMHXoZ1U=
 github.com/oasdiff/telemetry v0.1.2/go.mod h1:Y0DaW/CasxZ+vzR54btj430XsL6DGF+rMbJkRld6u3M=
 github.com/oasdiff/yaml v0.0.0-20240920191703-3e5a9fb5bdf3 h1:nqCxALSUgWobWkFGIrhLRzR/bpImQdGj+3JS4/scTJo=
