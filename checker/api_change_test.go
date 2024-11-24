@@ -3,6 +3,7 @@ package checker_test
 import (
 	"testing"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/load"
@@ -82,4 +83,10 @@ func TestApiChange_SourceUrl(t *testing.T) {
 	apiChangeSourceFile.Source = load.NewSource("http://google.com/spec.yaml")
 
 	require.Equal(t, "", apiChangeSourceFile.GetSourceFile())
+}
+
+func TestApiChange_WithOrigin(t *testing.T) {
+	apiChangeSourceFile := apiChange
+	origin := openapi3.Origin{}
+	require.True(t, &origin == apiChangeSourceFile.WithOrigin(&origin).Origin)
 }
