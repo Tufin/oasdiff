@@ -127,7 +127,7 @@ func TestGitHubActionsFormatter_RenderChangelog_FileLocation(t *testing.T) {
 	// check output
 	output, err := gitHubFormatter.RenderChangelog(testChanges, formatters.NewRenderOpts(), nil)
 	assert.NoError(t, err)
-	expectedOutput := "::error title=change_id,file=openapi.json,col=6,endColumn=11,line=21,endLine=26::in API GET /api/test This is a breaking change.\n"
+	expectedOutput := "::error title=change_id,file=openapi.json,col=5,endColumn=10,line=20,endLine=25::in API GET /api/test This is a breaking change.\n"
 	assert.Equal(t, expectedOutput, string(output))
 }
 

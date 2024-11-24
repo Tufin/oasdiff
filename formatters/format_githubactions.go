@@ -50,16 +50,16 @@ func (f GitHubActionsFormatter) RenderChangelog(changes checker.Changes, opts Re
 			params = append(params, "file="+change.GetSourceFile())
 		}
 		if change.GetSourceColumn() != 0 {
-			params = append(params, "col="+strconv.Itoa(change.GetSourceColumn()+1))
+			params = append(params, "col="+strconv.Itoa(change.GetSourceColumn()))
 		}
 		if change.GetSourceColumnEnd() != 0 {
-			params = append(params, "endColumn="+strconv.Itoa(change.GetSourceColumnEnd()+1))
+			params = append(params, "endColumn="+strconv.Itoa(change.GetSourceColumnEnd()))
 		}
 		if change.GetSourceLine() != 0 {
-			params = append(params, "line="+strconv.Itoa(change.GetSourceLine()+1))
+			params = append(params, "line="+strconv.Itoa(change.GetSourceLine()))
 		}
 		if change.GetSourceLineEnd() != 0 {
-			params = append(params, "endLine="+strconv.Itoa(change.GetSourceLineEnd()+1))
+			params = append(params, "endLine="+strconv.Itoa(change.GetSourceLineEnd()))
 		}
 
 		buf.WriteString(fmt.Sprintf("::%s %s::%s\n", githubActionsSeverity[change.GetLevel()], strings.Join(params, ","), getMessage(change, f.Localizer)))
