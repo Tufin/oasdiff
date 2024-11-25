@@ -22,7 +22,6 @@ type ApiChange struct {
 	OperationId string
 	Path        string
 	Source      *load.Source
-	Origin      *openapi3.Origin
 
 	SourceFile      string
 	SourceLine      int
@@ -50,8 +49,17 @@ func NewApiChange(id string, config *Config, args []any, comment string, operati
 	}
 }
 
-func (c ApiChange) WithOrigin(origin *openapi3.Origin) ApiChange {
-	c.Origin = origin
+func (c ApiChange) WithLocation(origin *openapi3.Origin, field string) ApiChange {
+	if origin == nil {
+		return c
+	}
+	location, ok := origin.Fields[field]
+	if !ok {
+		return c
+	}
+
+	c.SourceLine = location.Line
+	c.SourceColumn = location.Column
 	return c
 }
 

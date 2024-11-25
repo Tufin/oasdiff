@@ -38,7 +38,7 @@ func AddedRequestBodyCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 					operationItem.Revision,
 					operation,
 					path,
-				))
+				).WithLocation(operationItem.Revision.RequestBody.Value.Origin, "required"))
 			}
 		}
 	}

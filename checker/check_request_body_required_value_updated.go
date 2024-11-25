@@ -41,7 +41,7 @@ func RequestBodyRequiredUpdatedCheck(diffReport *diff.Diff, operationsSources *d
 				operationItem.Revision,
 				operation,
 				path,
-			))
+			).WithLocation(operationItem.Revision.RequestBody.Value.Origin, "required"))
 		}
 	}
 	return result

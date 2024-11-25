@@ -18,6 +18,12 @@ func open(file string) (*load.SpecInfo, error) {
 	return load.NewSpecInfo(openapi3.NewLoader(), load.NewSource(file))
 }
 
+func openWithLocation(file string) (*load.SpecInfo, error) {
+	loader := openapi3.NewLoader()
+	loader.IncludeOrigin = true
+	return load.NewSpecInfo(loader, load.NewSource(file))
+}
+
 func getDeprecationFile(file string) string {
 	return fmt.Sprintf("../data/deprecation/%s", file)
 }
