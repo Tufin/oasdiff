@@ -251,6 +251,7 @@ These examples are automatically generated from unit tests.
 [changing request property type](../checker/check_request_property_type_changed_test.go?plain=1#L64)  
 [changing request query parameter format](../checker/check_request_parameters_type_changed_test.go?plain=1#L110)  
 [changing request query parameter type](../checker/check_request_parameters_type_changed_test.go?plain=1#L38)  
+[changing request's body to optional by deletion](../checker/check_request_body_required_value_updated_test.go?plain=1#L58)  
 [changing request's body to optional](../checker/check_request_body_required_value_updated_test.go?plain=1#L35)  
 [changing request's body to required is breaking](../checker/check_request_body_required_value_updated_test.go?plain=1#L12)  
 [changing required request property to not read-only](../checker/check_request_property_write_only_read_only_test.go?plain=1#L187)  

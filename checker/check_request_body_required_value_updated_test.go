@@ -34,23 +34,46 @@ func TestRequestBodyBecameRequired(t *testing.T) {
 
 // CL: changing request's body to optional
 func TestRequestBodyBecameOptional(t *testing.T) {
-	s1, err := open("../data/checker/request_body_became_optional_base.yaml")
+	s1, err := openWithLocation("../data/checker/request_body_became_optional_base.yaml")
 	require.NoError(t, err)
-	s2, err := open("../data/checker/request_body_became_optional_base.yaml")
+	s2, err := openWithLocation("../data/checker/request_body_became_optional_revision.yaml")
 	require.NoError(t, err)
-
-	s2.Spec.Paths.Value("/api/v1.0/groups").Post.RequestBody.Value.Required = false
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestBodyRequiredUpdatedCheck), d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.ApiChange{
-		Id:          checker.RequestBodyBecameOptionalId,
-		Level:       checker.INFO,
-		Operation:   "POST",
-		Path:        "/api/v1.0/groups",
-		Source:      load.NewSource("../data/checker/request_body_became_optional_base.yaml"),
-		OperationId: "createOneGroup",
+		Id:           checker.RequestBodyBecameOptionalId,
+		Level:        checker.INFO,
+		Operation:    "POST",
+		Path:         "/api/v1.0/groups",
+		Source:       load.NewSource("../data/checker/request_body_became_optional_revision.yaml"),
+		OperationId:  "createOneGroup",
+		SourceLine:   19,
+		SourceColumn: 9,
+	}, errs[0])
+}
+
+// CL: changing request's body to optional by deletion
+func TestRequestBodyBecameOptionalDeleted(t *testing.T) {
+	s1, err := openWithLocation("../data/checker/request_body_became_optional_base.yaml")
+	require.NoError(t, err)
+	s2, err := openWithLocation("../data/checker/request_body_became_optional_deleted.yaml")
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestBodyRequiredUpdatedCheck), d, osm, checker.INFO)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.ApiChange{
+		Id:           checker.RequestBodyBecameOptionalId,
+		Level:        checker.INFO,
+		Operation:    "POST",
+		Path:         "/api/v1.0/groups",
+		Source:       load.NewSource("../data/checker/request_body_became_optional_deleted.yaml"),
+		OperationId:  "createOneGroup",
+		SourceLine:   9,
+		SourceColumn: 5,
 	}, errs[0])
 }

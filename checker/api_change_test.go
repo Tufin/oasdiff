@@ -85,7 +85,7 @@ func TestApiChange_SourceUrl(t *testing.T) {
 	require.Equal(t, "", apiChangeSourceFile.GetSourceFile())
 }
 
-func TestApiChange_WithOrigin(t *testing.T) {
+func TestApiChange_WithLocation(t *testing.T) {
 	apiChangeSourceFile := apiChange.WithLocation(&openapi3.Origin{
 		Fields: map[string]openapi3.Location{"field": {
 			Line:   1,
