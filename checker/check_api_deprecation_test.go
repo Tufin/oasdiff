@@ -269,10 +269,10 @@ func TestBreaking_DeprecationPathPast(t *testing.T) {
 
 // CL: path operations that became deprecated
 func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
-	s1, err := open("../data/deprecation/base.yaml")
+	s1, err := open(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := open("../data/deprecation/deprecated-future.yaml")
+	s2, err := open(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -292,10 +292,10 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 
 // CL: path operations that were re-activated
 func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
-	s1, err := open("../data/deprecation/deprecated-future.yaml")
+	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
 
-	s2, err := open("../data/deprecation/base.yaml")
+	s2, err := open(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
