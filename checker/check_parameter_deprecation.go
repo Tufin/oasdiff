@@ -40,6 +40,8 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 						continue
 					}
 
+					param := paramItem.Revision
+
 					if paramItem.DeprecatedDiff.To == nil || paramItem.DeprecatedDiff.To == false {
 						// not breaking changes
 						result = append(result, NewApiChange(
@@ -63,7 +65,7 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 
 					deprecationDays := getDeprecationDays(config, stability)
 
-					sunset, ok := getSunset(op.Extensions)
+					sunset, ok := getSunset(param.Extensions)
 					if !ok {
 						// if deprecation policy is defined and sunset is missing, it's a breaking change
 						if deprecationDays > 0 {
@@ -75,7 +77,7 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 					date, err := getSunsetDate(sunset)
 					if err != nil {
 						result = append(result, NewApiChange(
-							APIDeprecatedSunsetParseId,
+							ParameterDeprecatedSunsetParseId,
 							config,
 							[]any{err},
 							"",
@@ -91,7 +93,7 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 
 					if days < int(deprecationDays) {
 						result = append(result, NewApiChange(
-							APISunsetDateTooSmallId,
+							ParameterSunsetDateTooSmallId,
 							config,
 							[]any{date, deprecationDays},
 							"",
@@ -105,9 +107,9 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 
 					// not breaking changes
 					result = append(result, NewApiChange(
-						EndpointDeprecatedId,
+						ParameterDeprecatedId,
 						config,
-						nil,
+						[]any{paramLocation, paramName},
 						"",
 						operationsSources,
 						op,

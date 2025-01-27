@@ -23,6 +23,7 @@ endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated
 parameter-reactivated: "%s request parameter %s was reactivated"
+parameter-deprecated: "%s request parameter %s was deprecated"
 api-path-removed-without-deprecation: api path removed without deprecation
 api-path-removed-with-deprecation: api path removed with deprecation
 api-path-removed-before-sunset: api path removed before the sunset date %s

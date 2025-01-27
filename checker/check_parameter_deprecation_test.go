@@ -24,7 +24,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
 // 	require.Empty(t, errs)
 // }
 
@@ -39,7 +39,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	c := singleCheckConfig(checker.APIDeprecationCheck).WithDeprecation(0, 10)
+// 	c := singleCheckConfig(checker.ParameterDeprecationCheck).WithDeprecation(0, 10)
 // 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 // 	require.NotEmpty(t, errs)
 // 	require.Len(t, errs, 1)
@@ -58,7 +58,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	c := singleCheckConfig(checker.APIDeprecationCheck).WithDeprecation(0, 10)
+// 	c := singleCheckConfig(checker.ParameterDeprecationCheck).WithDeprecation(0, 10)
 // 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 // 	require.NotEmpty(t, errs)
 // 	require.Len(t, errs, 1)
@@ -78,7 +78,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	c := singleCheckConfig(checker.APIDeprecationCheck).WithDeprecation(0, 0)
+// 	c := singleCheckConfig(checker.ParameterDeprecationCheck).WithDeprecation(0, 0)
 // 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 // 	require.Empty(t, errs)
 // }
@@ -94,7 +94,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	c := singleCheckConfig(checker.APIDeprecationCheck).WithDeprecation(30, 100)
+// 	c := singleCheckConfig(checker.ParameterDeprecationCheck).WithDeprecation(30, 100)
 // 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 // 	require.Len(t, errs, 1)
 // 	require.Equal(t, checker.APIDeprecatedSunsetMissingId, errs[0].GetId())
@@ -112,7 +112,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	c := singleCheckConfig(checker.APIDeprecationCheck)
+// 	c := singleCheckConfig(checker.ParameterDeprecationCheck)
 // 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 // 	require.Empty(t, errs)
 // }
@@ -128,7 +128,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
 // 	require.Empty(t, errs)
 // }
 
@@ -147,7 +147,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
 // 	require.Empty(t, errs)
 // }
 
@@ -164,7 +164,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
 // 	require.Empty(t, errs)
 // }
 
@@ -183,7 +183,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
 // 	require.Empty(t, errs)
 // }
 
@@ -206,7 +206,7 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	c := singleCheckConfig(checker.APIDeprecationCheck).WithDeprecation(0, 10)
+// 	c := singleCheckConfig(checker.ParameterDeprecationCheck).WithDeprecation(0, 10)
 // 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 // 	require.NotEmpty(t, errs)
 // 	require.Len(t, errs, 1)
@@ -226,7 +226,7 @@ func getParameterDeprecationFile(file string) string {
 // 	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	c := singleCheckConfig(checker.APIDeprecationCheck).WithDeprecation(0, 10)
+// 	c := singleCheckConfig(checker.ParameterDeprecationCheck).WithDeprecation(0, 10)
 // 	require.NoError(t, err)
 // 	errs := checker.CheckBackwardCompatibilityUntilLevel(c, d, osm, checker.INFO)
 // 	require.Len(t, errs, 1)
@@ -246,35 +246,35 @@ func getParameterDeprecationFile(file string) string {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
 // 	require.Empty(t, errs)
 // }
 
-// // CL: path operations that became deprecated
-// func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
-// 	s1, err := open("../data/deprecation/base.yaml")
-// 	require.NoError(t, err)
+// CL: parameters that became deprecated
+func TestParameterDeprecated_DetectsDeprecated(t *testing.T) {
+	s1, err := open(getParameterDeprecationFile("base.yaml"))
+	require.NoError(t, err)
 
-// 	s2, err := open("../data/deprecation/deprecated-future.yaml")
-// 	require.NoError(t, err)
+	s2, err := open(getParameterDeprecationFile("deprecated-future.yaml"))
+	require.NoError(t, err)
 
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
 
-// 	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.APIDeprecationCheck), d, osm, checker.INFO)
-// 	require.NotEmpty(t, errs)
-// 	require.Len(t, errs, 1)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm, checker.INFO)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
 
-// 	require.IsType(t, checker.ApiChange{}, errs[0])
-// 	e0 := errs[0].(checker.ApiChange)
-// 	require.Equal(t, checker.EndpointDeprecatedId, e0.Id)
-// 	require.Equal(t, "GET", e0.Operation)
-// 	require.Equal(t, "/api/test", e0.Path)
-// 	require.Equal(t, "endpoint deprecated", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
-// }
+	require.IsType(t, checker.ApiChange{}, errs[0])
+	e0 := errs[0].(checker.ApiChange)
+	require.Equal(t, checker.ParameterDeprecatedId, e0.Id)
+	require.Equal(t, "GET", e0.Operation)
+	require.Equal(t, "/api/test", e0.Path)
+	require.Equal(t, "'query' request parameter 'id' was deprecated", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
 
 // CL: parameters that were re-activated
-func TestParameterDeprecated_DetectsReactivatedOperations(t *testing.T) {
+func TestParameterDeprecated_DetectsReactivated(t *testing.T) {
 	s1, err := open(getParameterDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
 
@@ -306,7 +306,7 @@ func TestParameterDeprecated_DetectsReactivatedOperations(t *testing.T) {
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
+// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
 // 	require.Len(t, errs, 1)
 
 // 	require.IsType(t, checker.ApiChange{}, errs[0])
