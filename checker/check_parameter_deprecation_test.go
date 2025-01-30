@@ -13,28 +13,13 @@ func getParameterDeprecationFile(file string) string {
 	return fmt.Sprintf("../data/param-deprecation/%s", file)
 }
 
-// // BC: deleting an operation after sunset date is not breaking
-// func TestBreaking_DeprecationPast(t *testing.T) {
-
-// 	s1, err := open(getDeprecationFile("deprecated-past.yaml"))
-// 	require.NoError(t, err)
-
-// 	s2, err := open(getDeprecationFile("sunset.yaml"))
-// 	require.NoError(t, err)
-
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
-// 	require.Empty(t, errs)
-// }
-
 // // BC: deprecating an operation with a deprecation policy and an invalid sunset date is breaking
 // func TestBreaking_DeprecationWithInvalidSunset(t *testing.T) {
 
-// 	s1, err := open(getDeprecationFile("base.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("deprecated-with-invalid-sunset.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-with-invalid-sunset.yaml"))
 // 	require.NoError(t, err)
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -50,10 +35,10 @@ func getParameterDeprecationFile(file string) string {
 // // BC: deprecating an operation with a deprecation policy and an invalid stability level is breaking
 // func TestBreaking_DeprecationWithInvalidStabilityLevel(t *testing.T) {
 
-// 	s1, err := open(getDeprecationFile("base.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("deprecated-with-invalid-stability.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-with-invalid-stability.yaml"))
 // 	require.NoError(t, err)
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -70,10 +55,10 @@ func getParameterDeprecationFile(file string) string {
 // // BC: deprecating an operation without a deprecation policy but without specifying sunset date is not breaking
 // func TestBreaking_DeprecationWithoutSunsetNoPolicy(t *testing.T) {
 
-// 	s1, err := open(getDeprecationFile("base.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-no-sunset.yaml"))
 // 	require.NoError(t, err)
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -86,10 +71,10 @@ func getParameterDeprecationFile(file string) string {
 // // BC: deprecating an operation with a deprecation policy but without specifying sunset date is breaking
 // func TestBreaking_DeprecationWithoutSunsetWithPolicy(t *testing.T) {
 
-// 	s1, err := open(getDeprecationFile("base.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-no-sunset.yaml"))
 // 	require.NoError(t, err)
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -104,10 +89,10 @@ func getParameterDeprecationFile(file string) string {
 // // BC: deprecating an operation with a default deprecation policy but without specifying sunset date is not breaking
 // func TestBreaking_DeprecationWithoutSunset(t *testing.T) {
 
-// 	s1, err := open(getDeprecationFile("base.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("deprecated-no-sunset.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-no-sunset.yaml"))
 // 	require.NoError(t, err)
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -120,30 +105,11 @@ func getParameterDeprecationFile(file string) string {
 // // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for alpha level
 // func TestBreaking_DeprecationForAlpha(t *testing.T) {
 
-// 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
 // 	require.NoError(t, err)
-
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
-// 	require.Empty(t, errs)
-// }
-
-// // BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for alpha level
-// func TestBreaking_RemovedPathForAlpha(t *testing.T) {
-// 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
-// 	alpha := toJson(t, checker.STABILITY_ALPHA)
-// 	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = alpha
-// 	s1.Spec.Paths.Value("/api/test").Post.Extensions = map[string]interface{}{"x-stability-level": alpha}
-
-// 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
-
-// 	s2.Spec.Paths.Delete("/api/test")
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
@@ -153,33 +119,14 @@ func getParameterDeprecationFile(file string) string {
 
 // // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for draft level
 // func TestBreaking_DeprecationForDraft(t *testing.T) {
-// 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
 // 	require.NoError(t, err)
 // 	draft := toJson(t, checker.STABILITY_DRAFT)
 // 	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
 
-// 	s2, err := open(getDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
 // 	require.NoError(t, err)
 // 	s2.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
-
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
-// 	require.Empty(t, errs)
-// }
-
-// // BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for draft level
-// func TestBreaking_RemovedPathForDraft(t *testing.T) {
-// 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
-// 	draft := toJson(t, checker.STABILITY_DRAFT)
-// 	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
-// 	s1.Spec.Paths.Value("/api/test").Post.Extensions = map[string]interface{}{"x-stability-level": draft}
-
-// 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
-
-// 	s2.Spec.Paths.Delete("/api/test")
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 // 	require.NoError(t, err)
@@ -196,10 +143,10 @@ func getParameterDeprecationFile(file string) string {
 
 // // BC: deprecating an operation with a deprecation policy and sunset date before required deprecation period is breaking
 // func TestBreaking_DeprecationWithEarlySunset(t *testing.T) {
-// 	s1, err := open(getDeprecationFile("base.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("deprecated-future.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-future.yaml"))
 // 	require.NoError(t, err)
 // 	sunsetDate := civil.DateOf(time.Now()).AddDays(9).String()
 // 	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, sunsetDate)
@@ -217,10 +164,10 @@ func getParameterDeprecationFile(file string) string {
 // // BC: deprecating an operation with a deprecation policy and sunset date after required deprecation period is not breaking
 // func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 
-// 	s1, err := open(getDeprecationFile("base.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("base.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("deprecated-future.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("deprecated-future.yaml"))
 // 	require.NoError(t, err)
 
 // 	s2.Spec.Paths.Value("/api/test").Get.Extensions[diff.SunsetExtension] = toJson(t, civil.DateOf(time.Now()).AddDays(10).String())
@@ -233,21 +180,6 @@ func getParameterDeprecationFile(file string) string {
 // 	// only a non-breaking change detected
 // 	require.Equal(t, checker.INFO, errs[0].GetLevel())
 // 	require.Equal(t, "endpoint deprecated", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
-// }
-
-// // BC: deleting a path after sunset date of all contained operations is not breaking
-// func TestBreaking_DeprecationPathPast(t *testing.T) {
-
-// 	s1, err := open(getDeprecationFile("deprecated-path-past.yaml"))
-// 	require.NoError(t, err)
-
-// 	s2, err := open(getDeprecationFile("sunset-path.yaml"))
-// 	require.NoError(t, err)
-
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
-// 	require.Empty(t, errs)
 // }
 
 // CL: parameters that became deprecated
@@ -298,10 +230,10 @@ func TestParameterDeprecated_DetectsReactivated(t *testing.T) {
 
 // func TestBreaking_InvaidStability(t *testing.T) {
 
-// 	s1, err := open(getDeprecationFile("invalid-stability.yaml"))
+// 	s1, err := open(getParameterDeprecationFile("invalid-stability.yaml"))
 // 	require.NoError(t, err)
 
-// 	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
+// 	s2, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
 // 	require.NoError(t, err)
 
 // 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)

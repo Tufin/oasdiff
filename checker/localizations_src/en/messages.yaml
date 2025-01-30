@@ -3,6 +3,7 @@ in: in
 request-body-added-required: added required request body
 request-body-added-optional: added optional request body
 request-parameter-removed: deleted the %s request parameter %s
+request-parameter-removed-with-deprecation: deleted the %s request parameter %s with deprecation
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
 request-parameter-pattern-added: "added the pattern %s to the %s request parameter %s"

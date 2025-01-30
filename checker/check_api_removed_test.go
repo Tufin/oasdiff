@@ -3,10 +3,35 @@ package checker_test
 import (
 	"testing"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
 	"github.com/tufin/oasdiff/checker"
 	"github.com/tufin/oasdiff/diff"
 )
+
+// BC: deleting a path is breaking
+func TestBreaking_DeletedPath(t *testing.T) {
+	errs := d(t, diff.NewConfig(), 1, 701)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.APIPathRemovedWithoutDeprecationId, errs[0].GetId())
+	require.Equal(t, "api path removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
+
+// BC: deleting an operation is breaking
+func TestBreaking_DeletedOp(t *testing.T) {
+	s1 := l(t, 1)
+	s2 := l(t, 1)
+
+	s1.Spec.Paths.Value(installCommandPath).Put = openapi3.NewOperation()
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.APIRemovedWithoutDeprecationId, errs[0].GetId())
+	require.Equal(t, "api removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
 
 // BC: deleting an operation after sunset date is not breaking
 func TestBreaking_DeprecationPast(t *testing.T) {
