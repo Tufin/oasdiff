@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	RequestParameterRemovedId                = "request-parameter-removed"
+	RequestParameterRemovedId                = "request-parameter-removed" // this is actually the "without deprecation" case but we leave it as is for backward compatibility
 	RequestParameterRemovedWithDeprecationId = "request-parameter-removed-with-deprecation"
 	RequestParameterSunsetParseId            = "request-parameter-sunset-parse"
 	ParameterRemovedBeforeSunsetId           = "request-parameter-removed-before-sunset"

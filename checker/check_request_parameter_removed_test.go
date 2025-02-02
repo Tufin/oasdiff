@@ -77,55 +77,16 @@ func TestBreaking_RemoveParameterWithInvalidSunset(t *testing.T) {
 	require.Equal(t, "../data/param-deprecation/sunset.yaml", errs[0].GetSource())
 }
 
-// // BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for alpha level
-// func TestBreaking_RemovedPathForAlpha(t *testing.T) {
-// 	s1, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
-// 	alpha := toJson(t, checker.STABILITY_ALPHA)
-// 	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = alpha
-// 	s1.Spec.Paths.Value("/api/test").Post.Extensions = map[string]interface{}{"x-stability-level": alpha}
+// BC: removing the parameter without a deprecation policy and without specifying sunset date is not breaking for alpha level
+func TestBreaking_RemovedParameterForAlpha(t *testing.T) {
+	s1, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
 
-// 	s2, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
+	s2, err := open(getParameterDeprecationFile("sunset-alpha-stability.yaml"))
+	require.NoError(t, err)
 
-// 	s2.Spec.Paths.Delete("/api/test")
-
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
-// 	require.Empty(t, errs)
-// }
-
-// // BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for draft level
-// func TestBreaking_RemovedPathForDraft(t *testing.T) {
-// 	s1, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
-// 	draft := toJson(t, checker.STABILITY_DRAFT)
-// 	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
-// 	s1.Spec.Paths.Value("/api/test").Post.Extensions = map[string]interface{}{"x-stability-level": draft}
-
-// 	s2, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
-
-// 	s2.Spec.Paths.Delete("/api/test")
-
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
-// 	require.Empty(t, errs)
-// }
-
-// // BC: deleting a path after sunset date of all contained operations is not breaking
-// func TestBreaking_DeprecationPathPast(t *testing.T) {
-
-// 	s1, err := open(getParameterDeprecationFile("deprecated-path-past.yaml"))
-// 	require.NoError(t, err)
-
-// 	s2, err := open(getParameterDeprecationFile("sunset-path.yaml"))
-// 	require.NoError(t, err)
-
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
-// 	require.Empty(t, errs)
-// }
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
+	require.Empty(t, errs)
+}

@@ -169,6 +169,7 @@ These examples are automatically generated from unit tests.
 [reducing min length in request is not breaking](../checker/check_breaking_min_max_test.go?plain=1#L48)  
 [removing an existing response with error status is not breaking](../checker/check_breaking_test.go?plain=1#L382)  
 [removing an existing response with unparseable status is not breaking](../checker/check_breaking_test.go?plain=1#L366)  
+[removing the parameter without a deprecation policy and without specifying sunset date is not breaking for alpha level](../checker/check_request_parameter_removed_test.go?plain=1#L80)  
 [removing the path without a deprecation policy and without specifying sunset date is not breaking for alpha level](../checker/check_api_removed_test.go?plain=1#L87)  
 [removing the path without a deprecation policy and without specifying sunset date is not breaking for draft level](../checker/check_api_removed_test.go?plain=1#L106)  
 [renaming a path parameter is not breaking](../checker/check_breaking_test.go?plain=1#L112)  
