@@ -29,7 +29,7 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 				continue
 			}
 
-			helper := newHelper(
+			opInfo := newOpInfo(
 				config,
 				operationItem.Revision,
 				operationsSources,
@@ -39,7 +39,7 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 
 			for paramLocation, paramItems := range operationItem.ParametersDiff.Deleted {
 				for _, paramName := range paramItems {
-					if change := helper.checkParameterRemoval(operationItem.Base.Parameters.GetByInAndName(paramLocation, paramName)); change != nil {
+					if change := checkParameterRemoval(opInfo, operationItem.Base.Parameters.GetByInAndName(paramLocation, paramName)); change != nil {
 						result = append(result, change)
 					}
 				}
@@ -49,18 +49,18 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 	return result
 }
 
-func (o helper) checkParameterRemoval(param *openapi3.Parameter) Change {
+func checkParameterRemoval(oi opInfo, param *openapi3.Parameter) Change {
 
 	if !param.Deprecated {
 		return NewApiChange(
 			RequestParameterRemovedId,
-			o.config,
+			oi.config,
 			[]any{param.In, param.Name},
 			commentId(RequestParameterRemovedId),
-			o.operationsSources,
-			o.operation,
-			o.method,
-			o.path,
+			oi.operationsSources,
+			oi.operation,
+			oi.method,
+			oi.path,
 		)
 	}
 
@@ -68,13 +68,13 @@ func (o helper) checkParameterRemoval(param *openapi3.Parameter) Change {
 	if !ok {
 		return NewApiChange(
 			RequestParameterRemovedWithDeprecationId,
-			o.config,
+			oi.config,
 			[]any{param.In, param.Name},
 			"",
-			o.operationsSources,
-			o.operation,
-			o.method,
-			o.path,
+			oi.operationsSources,
+			oi.operation,
+			oi.method,
+			oi.path,
 		)
 	}
 
@@ -82,26 +82,26 @@ func (o helper) checkParameterRemoval(param *openapi3.Parameter) Change {
 	if err != nil {
 		return NewApiChange(
 			RequestParameterSunsetParseId,
-			o.config,
+			oi.config,
 			[]any{param.In, param.Name, err},
 			"",
-			o.operationsSources,
-			o.operation,
-			o.method,
-			o.path,
+			oi.operationsSources,
+			oi.operation,
+			oi.method,
+			oi.path,
 		)
 	}
 
 	if civil.DateOf(time.Now()).Before(date) {
 		return NewApiChange(
 			ParameterRemovedBeforeSunsetId,
-			o.config,
+			oi.config,
 			[]any{param.In, param.Name, date},
 			"",
-			o.operationsSources,
-			o.operation,
-			o.method,
-			o.path,
+			oi.operationsSources,
+			oi.operation,
+			oi.method,
+			oi.path,
 		)
 	}
 	return nil

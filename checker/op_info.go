@@ -5,9 +5,8 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// helper is a struct that can be used as a parameter to the checker functions.
-// it is used to simplify the function signature and to provide a more readable API.
-type helper struct {
+// opInfo is used as an argument in helper functions in order to simplify the function signature.
+type opInfo struct {
 	config            *Config
 	operation         *openapi3.Operation
 	operationsSources *diff.OperationsSourcesMap
@@ -15,8 +14,8 @@ type helper struct {
 	path              string
 }
 
-func newHelper(config *Config, operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method, path string) helper {
-	return helper{
+func newOpInfo(config *Config, operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method, path string) opInfo {
+	return opInfo{
 		config:            config,
 		operation:         operation,
 		operationsSources: operationsSources,
