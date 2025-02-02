@@ -3,7 +3,10 @@ in: in
 request-body-added-required: added required request body
 request-body-added-optional: added optional request body
 request-parameter-removed: deleted the %s request parameter %s
+request-parameter-removed-comment: "This is a warning because some apps may return an error when receiving a parameter that they do not expect. It is recommended to deprecate the parameter first."
 request-parameter-removed-with-deprecation: deleted the %s request parameter %s with deprecation
+request-parameter-sunset-parse: "failed to parse sunset date for the %s request parameter %s: %v"
+request-parameter-removed-before-sunset: deleted the %s request parameter %s before the sunset date %s
 total-errors: "%d breaking changes: %d %s, %d %s\\n"
 total-changes: "%d changes: %d %s, %d %s, %d %s\\n"
 request-parameter-pattern-added: "added the pattern %s to the %s request parameter %s"

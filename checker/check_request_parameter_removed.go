@@ -11,6 +11,7 @@ import (
 const (
 	RequestParameterRemovedId                = "request-parameter-removed"
 	RequestParameterRemovedWithDeprecationId = "request-parameter-removed-with-deprecation"
+	RequestParameterSunsetParseId            = "request-parameter-sunset-parse"
 	ParameterRemovedBeforeSunsetId           = "request-parameter-removed-before-sunset"
 )
 
@@ -28,10 +29,17 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 				continue
 			}
 
+			helper := newHelper(
+				config,
+				operationItem.Revision,
+				operationsSources,
+				operation,
+				path,
+			)
+
 			for paramLocation, paramItems := range operationItem.ParametersDiff.Deleted {
 				for _, paramName := range paramItems {
-					param := operationItem.Base.Parameters.GetByInAndName(paramLocation, paramName)
-					if change := checkParameterRemoval(config, operationItem.Revision, operationsSources, param, operation, path, paramLocation, paramName); change != nil {
+					if change := helper.checkParameterRemoval(operationItem.Base.Parameters.GetByInAndName(paramLocation, paramName)); change != nil {
 						result = append(result, change)
 					}
 				}
@@ -41,17 +49,18 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 	return result
 }
 
-func checkParameterRemoval(config *Config, op *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, param *openapi3.Parameter, method, path, paramLocation, paramName string) Change {
+func (o helper) checkParameterRemoval(param *openapi3.Parameter) Change {
+
 	if !param.Deprecated {
 		return NewApiChange(
 			RequestParameterRemovedId,
-			config,
-			[]any{paramLocation, paramName},
-			"",
-			operationsSources,
-			op,
-			method,
-			path,
+			o.config,
+			[]any{param.In, param.Name},
+			commentId(RequestParameterRemovedId),
+			o.operationsSources,
+			o.operation,
+			o.method,
+			o.path,
 		)
 	}
 
@@ -59,40 +68,40 @@ func checkParameterRemoval(config *Config, op *openapi3.Operation, operationsSou
 	if !ok {
 		return NewApiChange(
 			RequestParameterRemovedWithDeprecationId,
-			config,
-			[]any{paramLocation, paramName},
+			o.config,
+			[]any{param.In, param.Name},
 			"",
-			operationsSources,
-			op,
-			method,
-			path,
+			o.operationsSources,
+			o.operation,
+			o.method,
+			o.path,
 		)
 	}
 
 	date, err := getSunsetDate(sunset)
 	if err != nil {
 		return NewApiChange(
-			APIPathSunsetParseId,
-			config,
-			[]any{err},
+			RequestParameterSunsetParseId,
+			o.config,
+			[]any{param.In, param.Name, err},
 			"",
-			operationsSources,
-			op,
-			method,
-			path,
+			o.operationsSources,
+			o.operation,
+			o.method,
+			o.path,
 		)
 	}
 
 	if civil.DateOf(time.Now()).Before(date) {
 		return NewApiChange(
 			ParameterRemovedBeforeSunsetId,
-			config,
-			[]any{date},
+			o.config,
+			[]any{param.In, param.Name, date},
 			"",
-			operationsSources,
-			op,
-			method,
-			path,
+			o.operationsSources,
+			o.operation,
+			o.method,
+			o.path,
 		)
 	}
 	return nil
