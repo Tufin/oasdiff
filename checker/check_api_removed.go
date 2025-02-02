@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -44,7 +43,8 @@ func checkRemovedPaths(pathsDiff *diff.PathsDiff, operationsSources *diff.Operat
 				continue
 			}
 
-			if change := checkAPIRemoval(config, true, op, operationsSources, operation, path); change != nil {
+			opInfo := newOpInfo(config, op, operationsSources, operation, path)
+			if change := checkAPIRemoval(opInfo, true); change != nil {
 				result = append(result, change)
 			}
 		}
@@ -64,8 +64,8 @@ func checkRemovedOperations(pathsDiff *diff.PathsDiff, operationsSources *diff.O
 			continue
 		}
 		for _, operation := range pathItem.OperationsDiff.Deleted {
-			op := pathItem.Base.GetOperation(operation)
-			if change := checkAPIRemoval(config, false, op, operationsSources, operation, path); change != nil {
+			opInfo := newOpInfo(config, pathItem.Base.GetOperation(operation), operationsSources, operation, path)
+			if change := checkAPIRemoval(opInfo, false); change != nil {
 				result = append(result, change)
 			}
 		}
@@ -74,63 +74,63 @@ func checkRemovedOperations(pathsDiff *diff.PathsDiff, operationsSources *diff.O
 	return result
 }
 
-func checkAPIRemoval(config *Config, isPath bool, op *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method, path string) Change {
-	if !op.Deprecated {
+func checkAPIRemoval(opInfo opInfo, isPath bool) Change {
+	if !opInfo.operation.Deprecated {
 		return NewApiChange(
 			getWithoutDeprecationId(isPath),
-			config,
+			opInfo.config,
 			nil,
 			"",
-			operationsSources,
-			op,
-			method,
-			path,
+			opInfo.operationsSources,
+			opInfo.operation,
+			opInfo.method,
+			opInfo.path,
 		)
 	}
-	sunset, ok := getSunset(op.Extensions)
+	sunset, ok := getSunset(opInfo.operation.Extensions)
 	if !ok {
 		return NewApiChange(
 			getWithDeprecationId(isPath),
-			config,
+			opInfo.config,
 			nil,
 			"",
-			operationsSources,
-			op,
-			method,
-			path,
+			opInfo.operationsSources,
+			opInfo.operation,
+			opInfo.method,
+			opInfo.path,
 		)
 	}
 
 	date, err := getSunsetDate(sunset)
 	if err != nil {
-		return getAPIPathSunsetParse(config, op, operationsSources, method, path, err)
+		return getAPIPathSunsetParse(opInfo, err)
 	}
 
 	if civil.DateOf(time.Now()).Before(date) {
 		return NewApiChange(
 			getBeforeSunsetId(isPath),
-			config,
+			opInfo.config,
 			[]any{date},
 			"",
-			operationsSources,
-			op,
-			method,
-			path,
+			opInfo.operationsSources,
+			opInfo.operation,
+			opInfo.method,
+			opInfo.path,
 		)
 	}
 	return nil
 }
 
-func getAPIPathSunsetParse(config *Config, operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string, err error) Change {
+func getAPIPathSunsetParse(opInfo opInfo, err error) Change {
 	return NewApiChange(
 		APIPathSunsetParseId,
-		config,
+		opInfo.config,
 		[]any{err},
 		"",
-		operationsSources,
-		operation,
-		method,
-		path,
+		opInfo.operationsSources,
+		opInfo.operation,
+		opInfo.method,
+		opInfo.path,
 	)
 }
 

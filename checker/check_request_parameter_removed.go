@@ -49,18 +49,18 @@ func RequestParameterRemovedCheck(diffReport *diff.Diff, operationsSources *diff
 	return result
 }
 
-func checkParameterRemoval(oi opInfo, param *openapi3.Parameter) Change {
+func checkParameterRemoval(opInfo opInfo, param *openapi3.Parameter) Change {
 
 	if !param.Deprecated {
 		return NewApiChange(
 			RequestParameterRemovedId,
-			oi.config,
+			opInfo.config,
 			[]any{param.In, param.Name},
 			commentId(RequestParameterRemovedId),
-			oi.operationsSources,
-			oi.operation,
-			oi.method,
-			oi.path,
+			opInfo.operationsSources,
+			opInfo.operation,
+			opInfo.method,
+			opInfo.path,
 		)
 	}
 
@@ -68,13 +68,13 @@ func checkParameterRemoval(oi opInfo, param *openapi3.Parameter) Change {
 	if !ok {
 		return NewApiChange(
 			RequestParameterRemovedWithDeprecationId,
-			oi.config,
+			opInfo.config,
 			[]any{param.In, param.Name},
 			"",
-			oi.operationsSources,
-			oi.operation,
-			oi.method,
-			oi.path,
+			opInfo.operationsSources,
+			opInfo.operation,
+			opInfo.method,
+			opInfo.path,
 		)
 	}
 
@@ -82,26 +82,26 @@ func checkParameterRemoval(oi opInfo, param *openapi3.Parameter) Change {
 	if err != nil {
 		return NewApiChange(
 			RequestParameterSunsetParseId,
-			oi.config,
+			opInfo.config,
 			[]any{param.In, param.Name, err},
 			"",
-			oi.operationsSources,
-			oi.operation,
-			oi.method,
-			oi.path,
+			opInfo.operationsSources,
+			opInfo.operation,
+			opInfo.method,
+			opInfo.path,
 		)
 	}
 
 	if civil.DateOf(time.Now()).Before(date) {
 		return NewApiChange(
 			ParameterRemovedBeforeSunsetId,
-			oi.config,
+			opInfo.config,
 			[]any{param.In, param.Name, date},
 			"",
-			oi.operationsSources,
-			oi.operation,
-			oi.method,
-			oi.path,
+			opInfo.operationsSources,
+			opInfo.operation,
+			opInfo.method,
+			opInfo.path,
 		)
 	}
 	return nil
