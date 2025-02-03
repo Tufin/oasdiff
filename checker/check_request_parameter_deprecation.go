@@ -9,9 +9,7 @@ import (
 
 const (
 	RequestParameterReactivatedId             = "request-parameter-reactivated"
-	RequestParameterDeprecatedSunsetParseId   = "request-parameter-deprecated-sunset-parse"
 	RequestParameterDeprecatedSunsetMissingId = "request-parameter-deprecated-sunset-missing"
-	RequestParameterInvalidStabilityLevelId   = "request-parameter-invalid-stability-level"
 	RequestParameterSunsetDateTooSmallId      = "request-parameter-sunset-date-too-small"
 	RequestParameterDeprecatedId              = "request-parameter-deprecated"
 )
@@ -77,9 +75,9 @@ func RequestParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *
 					date, err := getSunsetDate(sunset)
 					if err != nil {
 						result = append(result, NewApiChange(
-							RequestParameterDeprecatedSunsetParseId,
+							RequestParameterSunsetParseId,
 							config,
-							[]any{err},
+							[]any{param.In, param.Name, err},
 							"",
 							operationsSources,
 							op,

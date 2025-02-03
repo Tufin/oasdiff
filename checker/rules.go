@@ -98,11 +98,9 @@ func GetAllRules() BackwardCompatibilityRules {
 		newBackwardCompatibilityRule(APIInvalidStabilityLevelId, ERR, APIDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		newBackwardCompatibilityRule(APISunsetDateTooSmallId, ERR, APIDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		newBackwardCompatibilityRule(EndpointDeprecatedId, INFO, APIDeprecationCheck, DirectionNone, LocationNone, ActionNone),
-		// ParameterDeprecationCheck
+		// RequestParameterDeprecationCheck
 		newBackwardCompatibilityRule(RequestParameterReactivatedId, INFO, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
-		newBackwardCompatibilityRule(RequestParameterDeprecatedSunsetParseId, ERR, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		newBackwardCompatibilityRule(RequestParameterDeprecatedSunsetMissingId, ERR, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
-		newBackwardCompatibilityRule(RequestParameterInvalidStabilityLevelId, ERR, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		newBackwardCompatibilityRule(RequestParameterSunsetDateTooSmallId, ERR, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		newBackwardCompatibilityRule(RequestParameterDeprecatedId, INFO, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		// APIRemovedCheck
