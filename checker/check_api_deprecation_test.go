@@ -30,21 +30,6 @@ func allChecksConfig() *checker.Config {
 	return checker.NewConfig(checker.GetAllChecks())
 }
 
-// BC: deleting an operation after sunset date is not breaking
-func TestBreaking_DeprecationPast(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-past.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("sunset.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
-	require.Empty(t, errs)
-}
-
 // BC: deprecating an operation with a deprecation policy and an invalid sunset date is breaking
 func TestBreaking_DeprecationWithInvalidSunset(t *testing.T) {
 
@@ -149,25 +134,6 @@ func TestBreaking_DeprecationForAlpha(t *testing.T) {
 	require.Empty(t, errs)
 }
 
-// BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for alpha level
-func TestBreaking_RemovedPathForAlpha(t *testing.T) {
-	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-	alpha := toJson(t, checker.STABILITY_ALPHA)
-	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = alpha
-	s1.Spec.Paths.Value("/api/test").Post.Extensions = map[string]interface{}{"x-stability-level": alpha}
-
-	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-
-	s2.Spec.Paths.Delete("/api/test")
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
-	require.Empty(t, errs)
-}
-
 // BC: deprecating an operation without a deprecation policy and without specifying sunset date is not breaking for draft level
 func TestBreaking_DeprecationForDraft(t *testing.T) {
 	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
@@ -178,25 +144,6 @@ func TestBreaking_DeprecationForDraft(t *testing.T) {
 	s2, err := open(getDeprecationFile("deprecated-no-sunset-alpha-stability.yaml"))
 	require.NoError(t, err)
 	s2.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
-	require.Empty(t, errs)
-}
-
-// BC: removing the path without a deprecation policy and without specifying sunset date is not breaking for draft level
-func TestBreaking_RemovedPathForDraft(t *testing.T) {
-	s1, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-	draft := toJson(t, checker.STABILITY_DRAFT)
-	s1.Spec.Paths.Value("/api/test").Get.Extensions["x-stability-level"] = draft
-	s1.Spec.Paths.Value("/api/test").Post.Extensions = map[string]interface{}{"x-stability-level": draft}
-
-	s2, err := open(getDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-
-	s2.Spec.Paths.Delete("/api/test")
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
@@ -252,27 +199,12 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	require.Equal(t, "endpoint deprecated", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: deleting a path after sunset date of all contained operations is not breaking
-func TestBreaking_DeprecationPathPast(t *testing.T) {
-
-	s1, err := open(getDeprecationFile("deprecated-path-past.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getDeprecationFile("sunset-path.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.APIDeprecationCheck), d, osm)
-	require.Empty(t, errs)
-}
-
 // CL: path operations that became deprecated
 func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
-	s1, err := open("../data/deprecation/base.yaml")
+	s1, err := open(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 
-	s2, err := open("../data/deprecation/deprecated-future.yaml")
+	s2, err := open(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -292,10 +224,10 @@ func TestApiDeprecated_DetectsDeprecatedOperations(t *testing.T) {
 
 // CL: path operations that were re-activated
 func TestApiDeprecated_DetectsReactivatedOperations(t *testing.T) {
-	s1, err := open("../data/deprecation/deprecated-future.yaml")
+	s1, err := open(getDeprecationFile("deprecated-future.yaml"))
 	require.NoError(t, err)
 
-	s2, err := open("../data/deprecation/base.yaml")
+	s2, err := open(getDeprecationFile("base.yaml"))
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)

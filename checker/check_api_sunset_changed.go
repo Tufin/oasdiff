@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -55,13 +54,15 @@ func APISunsetChangedCheck(diffReport *diff.Diff, operationsSources *diff.Operat
 
 			date, err := getSunsetDate(opRevision.Extensions[diff.SunsetExtension])
 			if err != nil {
-				result = append(result, getAPIPathSunsetParse(config, opRevision, operationsSources, path, operation, err))
+				opInfo := newOpInfo(config, opRevision, operationsSources, operation, path)
+				result = append(result, getAPIPathSunsetParse(opInfo, err))
 				continue
 			}
 
 			baseDate, err := getSunsetDate(opBase.Extensions[diff.SunsetExtension])
 			if err != nil {
-				result = append(result, getAPIPathSunsetParse(config, opBase, operationsSources, path, operation, err))
+				opInfo := newOpInfo(config, opBase, operationsSources, operation, path)
+				result = append(result, getAPIPathSunsetParse(opInfo, err))
 				continue
 			}
 
@@ -115,15 +116,15 @@ func getDeprecationDays(config *Config, stability string) uint {
 	}
 }
 
-func getAPIDeprecatedSunsetMissing(config *Config, operation *openapi3.Operation, operationsSources *diff.OperationsSourcesMap, method string, path string) Change {
+func getAPIDeprecatedSunsetMissing(opInfo opInfo) Change {
 	return NewApiChange(
 		APIDeprecatedSunsetMissingId,
-		config,
+		opInfo.config,
 		nil,
 		"",
-		operationsSources,
-		operation,
-		method,
-		path,
+		opInfo.operationsSources,
+		opInfo.operation,
+		opInfo.method,
+		opInfo.path,
 	)
 }

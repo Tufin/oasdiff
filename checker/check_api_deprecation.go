@@ -60,7 +60,7 @@ func APIDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Operatio
 			if !ok {
 				// if deprecation policy is defined and sunset is missing, it's a breaking change
 				if deprecationDays > 0 {
-					result = append(result, getAPIDeprecatedSunsetMissing(config, op, operationsSources, path, operation))
+					result = append(result, getAPIDeprecatedSunsetMissing(newOpInfo(config, op, operationsSources, operation, path)))
 				}
 				continue
 			}
