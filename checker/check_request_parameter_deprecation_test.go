@@ -193,13 +193,13 @@ func TestParameterDeprecated_DetectsDeprecated(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterDeprecationCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
-	require.Equal(t, checker.ParameterDeprecatedId, e0.Id)
+	require.Equal(t, checker.RequestParameterDeprecatedId, e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
 	require.Equal(t, "'query' request parameter 'id' was deprecated", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
@@ -216,13 +216,13 @@ func TestParameterDeprecated_DetectsReactivated(t *testing.T) {
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
 	require.NoError(t, err)
 
-	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm, checker.INFO)
+	errs := checker.CheckBackwardCompatibilityUntilLevel(singleCheckConfig(checker.RequestParameterDeprecationCheck), d, osm, checker.INFO)
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 
 	require.IsType(t, checker.ApiChange{}, errs[0])
 	e0 := errs[0].(checker.ApiChange)
-	require.Equal(t, checker.ParameterReactivatedId, e0.Id)
+	require.Equal(t, checker.RequestParameterReactivatedId, e0.Id)
 	require.Equal(t, "GET", e0.Operation)
 	require.Equal(t, "/api/test", e0.Path)
 	require.Equal(t, "'query' request parameter 'id' was reactivated", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))

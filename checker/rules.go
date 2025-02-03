@@ -99,12 +99,12 @@ func GetAllRules() BackwardCompatibilityRules {
 		newBackwardCompatibilityRule(APISunsetDateTooSmallId, ERR, APIDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		newBackwardCompatibilityRule(EndpointDeprecatedId, INFO, APIDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		// ParameterDeprecationCheck
-		newBackwardCompatibilityRule(ParameterReactivatedId, INFO, ParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
-		newBackwardCompatibilityRule(ParameterDeprecatedSunsetParseId, ERR, ParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
-		newBackwardCompatibilityRule(ParameterDeprecatedSunsetMissingId, ERR, ParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
-		newBackwardCompatibilityRule(ParameterInvalidStabilityLevelId, ERR, ParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
-		newBackwardCompatibilityRule(ParameterSunsetDateTooSmallId, ERR, ParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
-		newBackwardCompatibilityRule(ParameterDeprecatedId, INFO, ParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
+		newBackwardCompatibilityRule(RequestParameterReactivatedId, INFO, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
+		newBackwardCompatibilityRule(RequestParameterDeprecatedSunsetParseId, ERR, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
+		newBackwardCompatibilityRule(RequestParameterDeprecatedSunsetMissingId, ERR, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
+		newBackwardCompatibilityRule(RequestParameterInvalidStabilityLevelId, ERR, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
+		newBackwardCompatibilityRule(RequestParameterSunsetDateTooSmallId, ERR, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
+		newBackwardCompatibilityRule(RequestParameterDeprecatedId, INFO, RequestParameterDeprecationCheck, DirectionNone, LocationNone, ActionNone),
 		// APIRemovedCheck
 		newBackwardCompatibilityRule(APIPathRemovedWithoutDeprecationId, ERR, APIRemovedCheck, DirectionNone, LocationNone, ActionRemove),
 		newBackwardCompatibilityRule(APIPathRemovedWithDeprecationId, INFO, APIRemovedCheck, DirectionNone, LocationNone, ActionRemove),

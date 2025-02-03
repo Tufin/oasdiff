@@ -8,15 +8,15 @@ import (
 )
 
 const (
-	ParameterReactivatedId             = "parameter-reactivated"
-	ParameterDeprecatedSunsetParseId   = "parameter-deprecated-sunset-parse"
-	ParameterDeprecatedSunsetMissingId = "parameter-deprecated-sunset-missing"
-	ParameterInvalidStabilityLevelId   = "parameter-invalid-stability-level"
-	ParameterSunsetDateTooSmallId      = "parameter-sunset-date-too-small"
-	ParameterDeprecatedId              = "parameter-deprecated"
+	RequestParameterReactivatedId             = "request-parameter-reactivated"
+	RequestParameterDeprecatedSunsetParseId   = "request-parameter-deprecated-sunset-parse"
+	RequestParameterDeprecatedSunsetMissingId = "request-parameter-deprecated-sunset-missing"
+	RequestParameterInvalidStabilityLevelId   = "request-parameter-invalid-stability-level"
+	RequestParameterSunsetDateTooSmallId      = "request-parameter-sunset-date-too-small"
+	RequestParameterDeprecatedId              = "request-parameter-deprecated"
 )
 
-func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
+func RequestParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.OperationsSourcesMap, config *Config) Changes {
 	result := make(Changes, 0)
 	if diffReport.PathsDiff == nil {
 		return result
@@ -45,7 +45,7 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 					if paramItem.DeprecatedDiff.To == nil || paramItem.DeprecatedDiff.To == false {
 						// not breaking changes
 						result = append(result, NewApiChange(
-							ParameterReactivatedId,
+							RequestParameterReactivatedId,
 							config,
 							[]any{paramLocation, paramName},
 							"",
@@ -77,7 +77,7 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 					date, err := getSunsetDate(sunset)
 					if err != nil {
 						result = append(result, NewApiChange(
-							ParameterDeprecatedSunsetParseId,
+							RequestParameterDeprecatedSunsetParseId,
 							config,
 							[]any{err},
 							"",
@@ -93,7 +93,7 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 
 					if days < int(deprecationDays) {
 						result = append(result, NewApiChange(
-							ParameterSunsetDateTooSmallId,
+							RequestParameterSunsetDateTooSmallId,
 							config,
 							[]any{date, deprecationDays},
 							"",
@@ -107,7 +107,7 @@ func ParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *diff.Op
 
 					// not breaking changes
 					result = append(result, NewApiChange(
-						ParameterDeprecatedId,
+						RequestParameterDeprecatedId,
 						config,
 						[]any{paramLocation, paramName},
 						"",
