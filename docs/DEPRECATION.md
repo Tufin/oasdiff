@@ -2,7 +2,7 @@
 Sometimes APIs need to be removed, for example, when we replace an old API by a new version.  
 As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
 
-OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and other object types as deprecated.  
+OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and parameters as deprecated.  
 Deprecating a resource **isn't** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future.  
 After deprecating a resource, it can be removed without triggering a breaking change since the client already knows it is going to be removed.
 
@@ -45,10 +45,9 @@ If you are using [API stability levels](STABILITY.md) you can define different s
 - Stable APIs: with the `--deprecation-days-stable`
 - Beta APIs: with the `--deprecation-days-beta`
 
-### Deprecating Parameters and Schemas
-OpenAPI 3 supports the `deprecation` field for three objects: Operation, Parameter and Schema.  
-Oasdiff currently supports deprecation for `Operations` only.  
-Supporting the other objects is planned too.
+### Deprecating Schemas
+OpenAPI 3 supports the `deprecation` field for three objects: `Operations`, `Parameters` and `Parameters`.  
+Oasdiff currently supports deprecation for `Operations` and `Parameters`.  
 
 ### Notes:
 1. Deprecation days can be set to non-negative integers

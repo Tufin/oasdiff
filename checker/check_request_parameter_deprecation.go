@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/tufin/oasdiff/diff"
 )
 
@@ -30,6 +31,7 @@ func RequestParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *
 			}
 
 			op := pathItem.Revision.GetOperation(operation)
+			opInfo := newOpInfo(config, op, operationsSources, operation, path)
 
 			for paramLocation, paramItems := range operationDiff.ParametersDiff.Modified {
 				for paramName, paramItem := range paramItems {
@@ -55,7 +57,7 @@ func RequestParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *
 						continue
 					}
 
-					stability, err := getStabilityLevel(op.Extensions) // TODO: how to handle stability?
+					stability, err := getStabilityLevel(op.Extensions)
 					if err != nil {
 						// handled in CheckBackwardCompatibility
 						continue
@@ -67,7 +69,7 @@ func RequestParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *
 					if !ok {
 						// if deprecation policy is defined and sunset is missing, it's a breaking change
 						if deprecationDays > 0 {
-							result = append(result, getAPIDeprecatedSunsetMissing(newOpInfo(config, op, operationsSources, operation, path)))
+							result = append(result, getParameterDeprecatedSunsetMissing(opInfo, param))
 						}
 						continue
 					}
@@ -93,7 +95,7 @@ func RequestParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *
 						result = append(result, NewApiChange(
 							RequestParameterSunsetDateTooSmallId,
 							config,
-							[]any{date, deprecationDays},
+							[]any{param.In, param.Name, date, deprecationDays},
 							"",
 							operationsSources,
 							op,
@@ -120,4 +122,17 @@ func RequestParameterDeprecationCheck(diffReport *diff.Diff, operationsSources *
 	}
 
 	return result
+}
+
+func getParameterDeprecatedSunsetMissing(opInfo opInfo, param *openapi3.Parameter) Change {
+	return NewApiChange(
+		RequestParameterDeprecatedSunsetMissingId,
+		opInfo.config,
+		[]any{param.In, param.Name},
+		"",
+		opInfo.operationsSources,
+		opInfo.operation,
+		opInfo.method,
+		opInfo.path,
+	)
 }

@@ -100,7 +100,7 @@ func TestBreaking_DeprecationWithoutSunsetWithPolicy(t *testing.T) {
 	errs := checker.CheckBackwardCompatibility(c, d, osm)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APIDeprecatedSunsetMissingId, errs[0].GetId())
-	require.Equal(t, "sunset date is missing for deprecated API", errs[0].GetText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "sunset date is missing for deprecated API", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: deprecating an operation with a default deprecation policy but without specifying sunset date is not breaking
@@ -195,6 +195,7 @@ func TestBreaking_DeprecationWithProperSunset(t *testing.T) {
 	errs := checker.CheckBackwardCompatibilityUntilLevel(c, d, osm, checker.INFO)
 	require.Len(t, errs, 1)
 	// only a non-breaking change detected
+	require.Equal(t, checker.EndpointDeprecatedId, errs[0].GetId())
 	require.Equal(t, checker.INFO, errs[0].GetLevel())
 	require.Equal(t, "endpoint deprecated", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
