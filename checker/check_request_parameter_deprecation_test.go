@@ -187,25 +187,3 @@ func TestParameterDeprecated_DetectsReactivated(t *testing.T) {
 	require.Equal(t, "/api/test", e0.Path)
 	require.Equal(t, "'query' request parameter 'id' was reactivated", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
-
-// func TestBreaking_InvaidStability(t *testing.T) {
-
-// 	s1, err := open(getParameterDeprecationFile("invalid-stability.yaml"))
-// 	require.NoError(t, err)
-
-// 	s2, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
-// 	require.NoError(t, err)
-
-// 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-// 	require.NoError(t, err)
-// 	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.ParameterDeprecationCheck), d, osm)
-// 	require.Len(t, errs, 1)
-
-// 	require.IsType(t, checker.ApiChange{}, errs[0])
-// 	e0 := errs[0].(checker.ApiChange)
-// 	require.Equal(t, checker.APIInvalidStabilityLevelId, e0.Id)
-// 	require.Equal(t, "GET", e0.Operation)
-// 	require.Equal(t, "/api/test", e0.Path)
-// 	require.Equal(t, "failed to parse stability level: 'value is not one of draft, alpha, beta or stable: \"ga\"'", e0.GetUncolorizedText(checker.NewDefaultLocalizer()))
-// 	require.Equal(t, "../data/deprecation/invalid-stability.yaml", errs[0].GetSource())
-// }
