@@ -58,6 +58,35 @@ func TestBreaking_ParameterDeprecationFuture(t *testing.T) {
 	require.Equal(t, "deleted the 'query' request parameter 'id' before the sunset date '9999-08-10'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
+// BC: deleting a deprecated parameter without sunset date is not breaking
+func TestBreaking_ParameterDeprecationNoSunset(t *testing.T) {
+
+	s1, err := open(getParameterDeprecationFile("deprecated-no-sunset.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getParameterDeprecationFile("sunset.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.RequestParameterRemovedCheck), d, osm)
+	require.Empty(t, errs)
+}
+
+// BC: removing a parameter without a deprecation policy and without specifying sunset date is not breaking for alpha level
+func TestBreaking_RemovedParameterForAlpha(t *testing.T) {
+	s1, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getParameterDeprecationFile("sunset-alpha-stability.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
+	require.Empty(t, errs)
+}
+
 // BC: removing a deprecated parameter with an invalid date is breaking
 func TestBreaking_RemoveParameterWithInvalidSunset(t *testing.T) {
 
@@ -75,18 +104,4 @@ func TestBreaking_RemoveParameterWithInvalidSunset(t *testing.T) {
 	require.Equal(t, checker.RequestParameterSunsetParseId, errs[0].GetId())
 	require.Equal(t, "failed to parse sunset date for the 'query' request parameter 'id': 'sunset date doesn't conform with RFC3339: invalid-date'", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 	require.Equal(t, "../data/param-deprecation/sunset.yaml", errs[0].GetSource())
-}
-
-// BC: removing the parameter without a deprecation policy and without specifying sunset date is not breaking for alpha level
-func TestBreaking_RemovedParameterForAlpha(t *testing.T) {
-	s1, err := open(getParameterDeprecationFile("base-alpha-stability.yaml"))
-	require.NoError(t, err)
-
-	s2, err := open(getParameterDeprecationFile("sunset-alpha-stability.yaml"))
-	require.NoError(t, err)
-
-	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
-	require.NoError(t, err)
-	errs := checker.CheckBackwardCompatibility(allChecksConfig(), d, osm)
-	require.Empty(t, errs)
 }

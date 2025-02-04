@@ -9,7 +9,7 @@ import (
 	"github.com/tufin/oasdiff/diff"
 )
 
-// BC: deleting a path is breaking
+// BC: deleting a path without deprecation is breaking
 func TestBreaking_DeletedPath(t *testing.T) {
 	errs := d(t, diff.NewConfig(), 1, 701)
 	require.Len(t, errs, 1)
