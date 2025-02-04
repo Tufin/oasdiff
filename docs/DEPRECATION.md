@@ -45,11 +45,11 @@ If you are using [API stability levels](STABILITY.md) you can define different s
 - Stable APIs: with the `--deprecation-days-stable`
 - Beta APIs: with the `--deprecation-days-beta`
 
-### Deprecating Schemas
-OpenAPI 3 supports the `deprecation` field for three objects: `Operations`, `Parameters` and `Parameters`.  
-Oasdiff currently supports deprecation for `Operations` and `Parameters`.  
-
-### Notes:
+Notes:
 1. Deprecation days can be set to non-negative integers
 2. Setting deprecation days to a zero value disables enforcement and reverts to the [Deprecation with a sunset date](#deprecation-with-a-sunset-date) behavior
 2. After an `x-sunset` extension is specified, it can only be changed to a future date which respects the sunset grace period relative to date of the change.
+
+### Deprecating Schemas
+OpenAPI 3 supports the `deprecation` field for `Operations`, `Parameters` and `Parameters`.  
+Oasdiff currently supports deprecation for `Operations` and `Parameters`.  
