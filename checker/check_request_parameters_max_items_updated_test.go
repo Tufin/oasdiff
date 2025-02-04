@@ -57,9 +57,9 @@ func TestRequestParameterMaxItemsDecreased(t *testing.T) {
 // BC: decreasing maxItems of common request parameters without --flatten-params is not breaking
 func TestBreaking_RequestParameterMaxItemsWithoutFlatten(t *testing.T) {
 
-	s1, err := open("../data/common-params/request_parameter_max_items_updated_revision.yaml")
+	s1, err := open("../data/checker/common_request_parameter_max_items_updated_revision.yaml")
 	require.NoError(t, err)
-	s2, err := open("../data/common-params/request_parameter_max_items_updated_base.yaml")
+	s2, err := open("../data/checker/common_request_parameter_max_items_updated_base.yaml")
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -73,10 +73,10 @@ func TestBreaking_RequestParameterMaxItemsWithoutFlatten(t *testing.T) {
 func TestBreaking_RequestParameterMaxItemsWithFlatten(t *testing.T) {
 	loader := openapi3.NewLoader()
 
-	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/request_parameter_max_items_updated_revision.yaml"), load.WithFlattenParams())
+	s1, err := load.NewSpecInfo(loader, load.NewSource("../data/checker/common_request_parameter_max_items_updated_revision.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
-	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/common-params/request_parameter_max_items_updated_base.yaml"), load.WithFlattenParams())
+	s2, err := load.NewSpecInfo(loader, load.NewSource("../data/checker/common_request_parameter_max_items_updated_base.yaml"), load.WithFlattenParams())
 	require.NoError(t, err)
 
 	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
@@ -90,7 +90,7 @@ func TestBreaking_RequestParameterMaxItemsWithFlatten(t *testing.T) {
 		Level:       checker.ERR,
 		Operation:   "POST",
 		Path:        "/api/v1.0/groups",
-		Source:      load.NewSource("../data/common-params/request_parameter_max_items_updated_base.yaml"),
+		Source:      load.NewSource("../data/checker/common_request_parameter_max_items_updated_base.yaml"),
 		OperationId: "createOneGroup",
 	}, errs[0])
 }
