@@ -26,10 +26,6 @@ api-sunset-date-too-small: "sunset date %s is too small, must be at least %s day
 endpoint-added: endpoint added
 endpoint-deprecated: endpoint deprecated
 endpoint-reactivated: endpoint reactivated
-request-parameter-reactivated: "%s request parameter %s was reactivated"
-request-parameter-deprecated-sunset-missing: "%s request parameter %s was deprecated without sunset date"
-request-parameter-sunset-date-too-small: "%s request parameter %s sunset date %s is too small, must be at least %s days from now"
-request-parameter-deprecated: "%s request parameter %s was deprecated"
 api-path-removed-without-deprecation: api path removed without deprecation
 api-path-removed-with-deprecation: api path removed with deprecation
 api-path-removed-before-sunset: api path removed before the sunset date %s
@@ -42,7 +38,7 @@ api-tag-removed: api tag %s removed
 api-tag-added: api tag %s added
 api-schema-removed: removed the schema %s
 sunset-deleted: api sunset date deleted, but deprecated=true kept
-api-sunset-date-changed-too-small: api sunset date changed to earlier date from %s to %s, new sunset date must be not earlier than %s at least %s days from now
+api-sunset-date-changed-too-small: api sunset date changed to an earlier date, from %s to %s, new sunset date must be not earlier than %s and at least %s days from now
 new-required-request-parameter: added the new required %s request parameter %s
 new-optional-request-parameter: added the new optional %s request parameter %s
 new-required-request-property: added the new required request property %s
@@ -92,6 +88,12 @@ request-parameter-property-type-changed: for the %s request parameter %s, the ty
 request-parameter-property-type-changed-warn-comment: This is a warning because parameter objects can be passed in differnt ways, some of which allow this type change and others do not.
 request-parameter-property-type-generalized: for the %s request parameter %s, the type/format of property %s was generalized from %s/%s to %s/%s
 request-parameter-property-type-specialized: for the %s request parameter %s, the type/format of property %s was specialized from %s/%s to %s/%s
+request-parameter-reactivated: "%s request parameter %s was reactivated"
+request-parameter-deprecated-sunset-missing: "%s request parameter %s was deprecated without sunset date"
+request-parameter-sunset-date-too-small: "%s request parameter %s sunset date %s is too small, must be at least %s days from now"
+request-parameter-deprecated: "%s request parameter %s was deprecated"
+request-parameter-sunset-deleted: "%s request parameter %s sunset date deleted, but deprecated=true kept"
+request-parameter-sunset-date-changed-too-small: "%s request parameter %s sunset date changed to an earlier date, from %s to %s, new sunset date must be not earlier than %s and at least %s days from now"
 new-request-path-parameter: added the new path request parameter %s
 request-property-became-required: the request property %s became required
 request-property-became-required-with-default: the request property %s with a default value became required

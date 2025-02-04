@@ -41,7 +41,7 @@ func TestBreaking_SunsetModifiedForDeprecatedEndpoint(t *testing.T) {
 	require.NotEmpty(t, errs)
 	require.Len(t, errs, 1)
 	require.Equal(t, checker.APISunsetDateChangedTooSmallId, errs[0].GetId())
-	require.Equal(t, "api sunset date changed to earlier date from '9999-08-10' to '2022-08-10', new sunset date must be not earlier than '9999-08-10' at least '180' days from now", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+	require.Equal(t, "api sunset date changed to an earlier date, from '9999-08-10' to '2022-08-10', new sunset date must be not earlier than '9999-08-10' and at least '180' days from now", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
 // BC: changing sunset to an invalid date for a deprecated endpoint is breaking

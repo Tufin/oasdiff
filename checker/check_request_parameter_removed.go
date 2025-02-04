@@ -80,16 +80,7 @@ func checkParameterRemoval(opInfo opInfo, param *openapi3.Parameter) Change {
 
 	date, err := getSunsetDate(sunset)
 	if err != nil {
-		return NewApiChange(
-			RequestParameterSunsetParseId,
-			opInfo.config,
-			[]any{param.In, param.Name, err},
-			"",
-			opInfo.operationsSources,
-			opInfo.operation,
-			opInfo.method,
-			opInfo.path,
-		)
+		return getRequestParameterSunsetParse(opInfo, param, err)
 	}
 
 	if civil.DateOf(time.Now()).Before(date) {
@@ -105,4 +96,17 @@ func checkParameterRemoval(opInfo opInfo, param *openapi3.Parameter) Change {
 		)
 	}
 	return nil
+}
+
+func getRequestParameterSunsetParse(opInfo opInfo, param *openapi3.Parameter, err error) Change {
+	return NewApiChange(
+		RequestParameterSunsetParseId,
+		opInfo.config,
+		[]any{param.In, param.Name, err},
+		"",
+		opInfo.operationsSources,
+		opInfo.operation,
+		opInfo.method,
+		opInfo.path,
+	)
 }
