@@ -1,6 +1,6 @@
 ## Deprecating APIs and Parameters
-Sometimes resources need to be removed, for example, when we replace an old API by a new version, or when a parameter is no longer supported.  
-As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
+Sometimes [resources](#supported-resources-for-deprecation) need to be removed from the API, for example, when we replace an API endpoint by a new version, or when a parameter is no longer supported.  
+As API owners, we want a process that will allow us to phase out the old resource smoothly as possible and with minimal disruptions to business.
 
 OpenAPI specification supports a ```deprecated``` flag which can be used to mark resources as deprecated.  
 Deprecating a resource **isn't** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future.  
@@ -17,7 +17,7 @@ Oasdiff allows you to gracefully remove a resource without getting a breaking ch
 2. Subsequently, the resource can be removed without triggering a breaking change error.
 
 ### Deprecation with a sunset date
-A more mature deprecation process includes a sunset date which tells the API clients how long they can still use the deprecated API before sunset:
+A more mature deprecation process includes a sunset date which tells the API clients how long they can still use the deprecated resource before sunset:
 1. The resource is marked as ```deprecated``` and a [special extension](https://swagger.io/specification/#specification-extensions) ```x-sunset``` is added to announce the date at which the resource will be removed:
    ```
    /api/test:
@@ -29,7 +29,7 @@ A more mature deprecation process includes a sunset date which tells the API cli
 2. At the sunset date or anytime later, the resource can be removed without triggering a breaking change error. An earlier removal will be considered a breaking change.
 
 Notes:
-1. In this mode, oasdiff considers the `x-sunset` extension as **optional** allowing developers to deprecate APIs with or without the `x-sunset` extension.  
+1. In this mode, oasdiff considers the `x-sunset` extension as **optional** allowing developers to deprecate resources with or without the `x-sunset` extension.  
 2. After an `x-sunset` extension is specified, changing it to an earlier date will trigger a breaking change.  
 
 ### Enforcing Sunset Grace Period
@@ -50,6 +50,6 @@ Notes:
 2. Setting deprecation days to a zero value disables enforcement and reverts to the [Deprecation with a sunset date](#deprecation-with-a-sunset-date) behavior
 2. After an `x-sunset` extension is specified, it can only be changed to a future date which respects the sunset grace period relative to date of the change.
 
-### Deprecating Schemas
+### Supported Resources for Deprecation
 OpenAPI 3 supports the `deprecation` field for `Operations`, `Parameters` and `Parameters`.  
 Oasdiff currently supports deprecation for `Operations` and `Parameters`.  
