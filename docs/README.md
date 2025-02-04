@@ -58,7 +58,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - Compare local files or remote files over http/s
 - Compare specs in YAML or JSON format
 - [Compare two collections of specs](COMPOSED.md)
-- [API deprecation](DEPRECATION.md)
+- [Deprecating APIs and Parameters](DEPRECATION.md)
 - [API stability levels](STABILITY.md)
 - [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md#duplicate-endpoints)
 - [Merge allOf schemas](ALLOF.md)

@@ -1,8 +1,8 @@
-## Deprecating APIs
-Sometimes APIs need to be removed, for example, when we replace an old API by a new version.  
+## Deprecating APIs and Parameters
+Sometimes resources need to be removed, for example, when we replace an old API by a new version, or when a parameter is no longer supported.  
 As API owners, we want a process that will allow us to phase out the old API version and transition to the new one smoothly as possible and with minimal disruptions to business.
 
-OpenAPI specification supports a ```deprecated``` flag which can be used to mark operations and parameters as deprecated.  
+OpenAPI specification supports a ```deprecated``` flag which can be used to mark resources as deprecated.  
 Deprecating a resource **isn't** considered a breaking change since it doesn't break the client but only serves as an indication of an intent to remove something in the future.  
 After deprecating a resource, it can be removed without triggering a breaking change since the client already knows it is going to be removed.
 
@@ -34,9 +34,9 @@ Notes:
 
 ### Enforcing Sunset Grace Period
 Oasdiff allows you to enforce a sunset grace period: the minimal number of days required between deprecating a resource and removing it.  
-In this mode oasdiff considers the `x-sunset` extension **mandatory**, so that deprecating an API must be acompanied with an `x-sunset` extension, otherwise it is considered breaking.  
+In this mode oasdiff considers the `x-sunset` extension **mandatory**, so that deprecating a resource must be acompanied with an `x-sunset` extension, otherwise it is considered breaking.  
 
-For example, the following command requires deprecation of APIs to be accompanied by an ```x-sunset``` extension with a date which is at least 180 days away, otherwise the deprecation itself will be considered a breaking change:
+For example, the following command requires deprecation of resources to be accompanied by an ```x-sunset``` extension with a date which is at least 180 days away, otherwise the deprecation itself will be considered a breaking change:
 ```
 oasdiff breaking data/deprecation/base.yaml data/deprecation/deprecated-past.yaml --deprecation-days-stable=180
 ```
