@@ -30,6 +30,8 @@ type ApiChange struct {
 	SourceColumnEnd int
 }
 
+// NewApiChange creates a new ApiChange
+// TODO: use opInfo to simplify the function signature
 func NewApiChange(id string, config *Config, args []any, comment string, operationsSources *diff.OperationsSourcesMap, operation *openapi3.Operation, method, path string) ApiChange {
 	return ApiChange{
 		Id:          id,
