@@ -62,7 +62,7 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 - [API stability levels](STABILITY.md)
 - [Multiple versions of the same endpoint](MATCHING-ENDPOINTS.md#duplicate-endpoints)
 - [Merge allOf schemas](ALLOF.md)
-- [Merge common parameters](COMMON-PARAMS.md)
+- [Merge common (path-level) parameters](COMMON-PARAMS.md)
 - [Case-insensitive header comparison](HEADER-DIFF.md)
 - [Path prefix modification](PATH-PREFIX.md)
 - [Path parameter renaming](PATH-PARAM-RENAME.md)

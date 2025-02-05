@@ -63,7 +63,7 @@ These examples are automatically generated from unit tests.
 [deleting an embedded optional property in request is breaking with warn](../checker/check_breaking_property_test.go?plain=1#L386)  
 [deleting an enum value is breaking](../checker/check_breaking_test.go?plain=1#L77)  
 [deleting an operation before sunset date is breaking](../checker/check_api_removed_test.go?plain=1#L51)  
-[deleting an operation is breaking](../checker/check_api_removed_test.go?plain=1#L20)  
+[deleting an operation without deprecation is breaking](../checker/check_api_removed_test.go?plain=1#L20)  
 [deleting sunset header for a deprecated endpoint is breaking](../checker/check_api_sunset_changed_test.go?plain=1#L11)  
 [deleting sunset header for a deprecated parameter is breaking](../checker/check_request_parameter_sunset_changed_test.go?plain=1#L11)  
 [deprecating a parameter with a deprecation policy and an invalid sunset date is breaking](../checker/check_request_parameter_deprecation_test.go?plain=1#L18)  

@@ -17,7 +17,7 @@ func TestBreaking_DeletedPath(t *testing.T) {
 	require.Equal(t, "api path removed without deprecation", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
-// BC: deleting an operation is breaking
+// BC: deleting an operation without deprecation is breaking
 func TestBreaking_DeletedOp(t *testing.T) {
 	s1 := l(t, 1)
 	s2 := l(t, 1)

@@ -26,9 +26,6 @@ func RequestParameterSunsetChangedCheck(diffReport *diff.Diff, operationsSources
 			opRevision := pathItem.Revision.GetOperation(operation)
 			opBase := pathItem.Base.GetOperation(operation)
 
-			// op := pathItem.Revision.GetOperation(operation)
-			// opInfo := newOpInfo(config, op, operationsSources, operation, path)
-
 			if operationDiff.ParametersDiff == nil {
 				continue
 			}
