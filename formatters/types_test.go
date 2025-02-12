@@ -8,5 +8,5 @@ import (
 )
 
 func TestTypes(t *testing.T) {
-	require.Equal(t, formatters.GetSupportedFormats(), []string{"yaml", "json", "text", "markup", "singleline", "html", "githubactions", "junit", "sarif"})
+	require.Equal(t, formatters.GetSupportedFormats(), []string{"yaml", "json", "text", "markup", "markdown", "singleline", "html", "githubactions", "junit", "sarif"})
 }

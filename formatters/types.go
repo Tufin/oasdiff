@@ -9,6 +9,7 @@ const (
 	FormatJSON          Format = "json"
 	FormatText          Format = "text"
 	FormatMarkup        Format = "markup"
+	FormatMarkdown      Format = "markdown"
 	FormatSingleLine    Format = "singleline"
 	FormatHTML          Format = "html"
 	FormatGithubActions Format = "githubactions"
@@ -22,6 +23,7 @@ func GetSupportedFormats() []string {
 		string(FormatJSON),
 		string(FormatText),
 		string(FormatMarkup),
+		string(FormatMarkdown),
 		string(FormatSingleLine),
 		string(FormatHTML),
 		string(FormatGithubActions),
