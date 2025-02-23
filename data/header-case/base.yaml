@@ -13,6 +13,14 @@ paths:
     get:
       tags:
         - Test
+      parameters:
+        - in: header
+          name: X-Case      
       responses:
         "200":
           description: Success
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Request limit per hour.
