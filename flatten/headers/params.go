@@ -24,9 +24,7 @@ func lowerHeaderNames(spec *openapi3.T) {
 			}
 
 			for _, responseRef := range op.Responses.Map() {
-				for _, headerRef := range responseRef.Value.Headers {
-					lowerHeaderName(&headerRef.Value.Parameter)
-				}
+				responseRef.Value.Headers = lowerResponseHeaders(responseRef.Value.Headers)
 			}
 		}
 	}
@@ -38,4 +36,18 @@ func lowerHeaderName(param *openapi3.Parameter) {
 	}
 
 	param.Name = strings.ToLower(param.Name)
+}
+
+// lowerResponseHeaders returns a new headers map with lowercase keys
+// Explanation:
+// According to the openapi spec, the Header Object follows the structure of the Parameter Object with the following changes:
+// 1. name MUST NOT be specified, it is given in the corresponding headers map.
+// 2. in MUST NOT be specified, it is implicitly in header.
+// See: https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#header-object
+func lowerResponseHeaders(headers openapi3.Headers) openapi3.Headers {
+	result := make(openapi3.Headers, len(headers))
+	for k, v := range headers {
+		result[strings.ToLower(k)] = v
+	}
+	return result
 }
