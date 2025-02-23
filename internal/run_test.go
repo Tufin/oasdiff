@@ -291,7 +291,7 @@ func Test_BreakingChangesFlattenCommonParams(t *testing.T) {
 }
 
 func Test_BreakingChangesCaseInsensitiveHeaders(t *testing.T) {
-	require.Zero(t, internal.Run(cmdToArgs("oasdiff breaking ../data/header-case/base.yaml ../data/header-case/revision.yaml --case-insensitive-headers --fail-on ERR"), io.Discard, io.Discard))
+	require.Zero(t, internal.Run(cmdToArgs("oasdiff diff ../data/header-case/base.yaml ../data/header-case/revision.yaml --case-insensitive-headers --fail-on-diff"), io.Discard, io.Discard))
 }
 
 func Test_FlattenCmdOK(t *testing.T) {
