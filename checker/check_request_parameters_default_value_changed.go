@@ -38,12 +38,12 @@ func RequestParameterDefaultValueChangedCheck(diffReport *diff.Diff, operationsS
 			for paramLocation, paramDiffs := range operationItem.ParametersDiff.Modified {
 				for paramName, paramDiff := range paramDiffs {
 
-					baseParam := operationItem.Base.Parameters.GetByInAndName(paramLocation, paramName)
+					baseParam := paramDiff.Base
 					if baseParam == nil || baseParam.Required {
 						continue
 					}
 
-					revisionParam := operationItem.Revision.Parameters.GetByInAndName(paramLocation, paramName)
+					revisionParam := paramDiff.Revision
 					if revisionParam == nil || revisionParam.Required {
 						continue
 					}

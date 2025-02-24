@@ -33,8 +33,8 @@ func RequestParameterSunsetChangedCheck(diffReport *diff.Diff, operationsSources
 			for paramLocation, paramItems := range operationDiff.ParametersDiff.Modified {
 				for paramName, paramItem := range paramItems {
 
-					paramBase := opBase.Parameters.GetByInAndName(paramLocation, paramName)
-					paramRevision := opRevision.Parameters.GetByInAndName(paramLocation, paramName)
+					paramBase := paramItem.Base
+					paramRevision := paramItem.Revision
 
 					if !paramRevision.Deprecated {
 						continue
