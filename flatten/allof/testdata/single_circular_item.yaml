@@ -1,0 +1,15 @@
+openapi: 3.0.0
+info:
+  title: Single circular item
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    GameResult:
+      type: object
+      properties:
+        MainCharacter:
+          allOf:
+            - type: array
+              items:
+                $ref: '#/components/schemas/GameResult'

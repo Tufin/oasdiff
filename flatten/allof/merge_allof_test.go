@@ -1909,6 +1909,16 @@ func TestMerge_ComplexOneOfIsNotPruned(t *testing.T) {
 	require.Len(t, merged.OneOf, 2)
 }
 
+func TestMerge_SingleCircularItemInAllOf(t *testing.T) {
+	doc := loadSpec(t, "testdata/single_circular_item.yaml")
+	merged, err := allof.Merge(*doc.Components.Schemas["GameResult"])
+	require.NoError(t, err)
+	require.Empty(t, merged.Properties["MainCharacter"].Value.AllOf)
+	require.Len(t, *merged.Properties["MainCharacter"].Value.Type, 1)
+	require.Contains(t, *merged.Properties["MainCharacter"].Value.Type, "array")
+	require.Equal(t, "#/components/schemas/GameResult", merged.Properties["MainCharacter"].Value.Items.Ref)
+}
+
 func loadSpec(t *testing.T, path string) *openapi3.T {
 	ctx := context.Background()
 	sl := openapi3.NewLoader()

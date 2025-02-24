@@ -476,6 +476,10 @@ func resolveItems(state *state, schema *openapi3.Schema, collection *SchemaColle
 		schema.Items = nil
 		return schema, nil
 	}
+	if len(items) == 1 {
+		schema.Items = items[0]
+		return schema, nil
+	}
 	result := openapi3.NewSchemaRef("", openapi3.NewSchema())
 	err := flattenSchemas(state, result, items)
 	if err != nil {
