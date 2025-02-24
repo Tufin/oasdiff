@@ -26,6 +26,24 @@ func TestBreaking_SunsetDeletedForDeprecatedParameter(t *testing.T) {
 	require.Equal(t, "'query' request parameter 'id' sunset date deleted, but deprecated=true kept", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
 }
 
+// BC: deleting sunset header for a deprecated parameter is breaking even if the parameter is renamed
+func TestBreaking_SunsetDeletedForDeprecatedAndRenamedParameter(t *testing.T) {
+
+	s1, err := open(getParameterDeprecationFile("deprecated-with-sunset-path.yaml"))
+	require.NoError(t, err)
+
+	s2, err := open(getParameterDeprecationFile("deprecated-no-sunset-path-renamed.yaml"))
+	require.NoError(t, err)
+
+	d, osm, err := diff.GetWithOperationsSourcesMap(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+	errs := checker.CheckBackwardCompatibility(singleCheckConfig(checker.RequestParameterSunsetChangedCheck), d, osm)
+	require.NotEmpty(t, errs)
+	require.Len(t, errs, 1)
+	require.Equal(t, checker.RequestParameterSunsetDeletedId, errs[0].GetId())
+	require.Equal(t, "'path' request parameter 'id' sunset date deleted, but deprecated=true kept", errs[0].GetUncolorizedText(checker.NewDefaultLocalizer()))
+}
+
 // BC: changing sunset to an earlier date for a deprecated parameter with a deprecation policy is breaking
 func TestBreaking_SunsetModifiedForDeprecatedParameter(t *testing.T) {
 
