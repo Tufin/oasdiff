@@ -7,15 +7,15 @@ import (
 )
 
 // JsonPatch is a wrapper to jsondiff.JsonPatch with proper serialization for json and yaml
-type JsonPatch []*jsonOperation
+type JsonPatch []*JsonOperation
 
 // Empty indicates whether a change was found in this element
 func (p JsonPatch) Empty() bool {
 	return len(p) == 0
 }
 
-// jsonOperation is a wrapper to jsondiff.jsonOperation with proper serialization for json and yaml
-type jsonOperation struct {
+// JsonOperation is a wrapper to jsondiff.JsonOperation with proper serialization for json and yaml
+type JsonOperation struct {
 	OldValue any    `json:"oldValue" yaml:"oldValue"`
 	Value    any    `json:"value" yaml:"value"`
 	Type     string `json:"op" yaml:"op"`
@@ -23,7 +23,7 @@ type jsonOperation struct {
 	Path     string `json:"path" yaml:"path"`
 }
 
-func (op *jsonOperation) String() string {
+func (op *JsonOperation) String() string {
 	switch op.Type {
 	case "add":
 		return fmt.Sprintf("Added %s with value: '%v'", op.Path, op.Value)
@@ -48,8 +48,8 @@ func toJsonPatch(patch jsondiff.Patch) JsonPatch {
 	return result
 }
 
-func newJsonOperation(op jsondiff.Operation) *jsonOperation {
-	return &jsonOperation{
+func newJsonOperation(op jsondiff.Operation) *JsonOperation {
+	return &JsonOperation{
 		OldValue: op.OldValue,
 		Value:    op.Value,
 		Type:     op.Type,
