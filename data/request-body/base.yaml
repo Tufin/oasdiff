@@ -1,0 +1,33 @@
+openapi: 3.0.1
+info:
+  title: Tufin
+  version: "1.0"
+paths:
+  /api/v1.0/groups:
+    post:
+      operationId: createOneGroup
+      requestBody:
+        x-nonschema: true
+        content:
+          application/json:
+            example: [1, 2, 3]
+            examples: {
+              example1: {
+                value: [1, 2, 3]
+              }
+            }
+            schema:
+              type: array
+              items:
+                type: string
+          application/xml:
+            schema:
+              type: array
+              items:
+                type: string
+        description: Creates one project.
+        required: true
+      responses:
+        "200":
+          description: OK
+      summary: Create One Project
