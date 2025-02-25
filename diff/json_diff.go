@@ -1,28 +1,47 @@
 package diff
 
 import (
+	"fmt"
+
 	"github.com/wI2L/jsondiff"
 )
 
-// jsonPatch is a wrapper to jsondiff.jsonPatch with proper serialization for json and yaml
-type jsonPatch []*jsonOperation
+// JsonPatch is a wrapper to jsondiff.JsonPatch with proper serialization for json and yaml
+type JsonPatch []*jsonOperation
 
 // Empty indicates whether a change was found in this element
-func (p jsonPatch) Empty() bool {
+func (p JsonPatch) Empty() bool {
 	return len(p) == 0
 }
 
 // jsonOperation is a wrapper to jsondiff.jsonOperation with proper serialization for json and yaml
 type jsonOperation struct {
-	OldValue interface{} `json:"oldValue" yaml:"oldValue"`
-	Value    interface{} `json:"value" yaml:"value"`
-	Type     string      `json:"op" yaml:"op"`
-	From     string      `json:"from" yaml:"from"`
-	Path     string      `json:"path" yaml:"path"`
+	OldValue any    `json:"oldValue" yaml:"oldValue"`
+	Value    any    `json:"value" yaml:"value"`
+	Type     string `json:"op" yaml:"op"`
+	From     string `json:"from" yaml:"from"`
+	Path     string `json:"path" yaml:"path"`
 }
 
-func toJsonPatch(patch jsondiff.Patch) jsonPatch {
-	result := make(jsonPatch, len(patch))
+func (op *jsonOperation) String() string {
+	switch op.Type {
+	case "add":
+		return fmt.Sprintf("Added %s with value: '%v'", op.Path, op.Value)
+	case "remove":
+		return fmt.Sprintf("Removed %s with value: '%v'", op.Path, op.OldValue)
+	case "replace":
+		path := op.Path
+		if path == "" {
+			path = "value"
+		}
+		return fmt.Sprintf("Modified %s from '%v' to '%v'", path, op.OldValue, op.Value)
+	default:
+		return fmt.Sprintf("%s %s", op.Type, op.Path)
+	}
+}
+
+func toJsonPatch(patch jsondiff.Patch) JsonPatch {
+	result := make(JsonPatch, len(patch))
 	for i, op := range patch {
 		result[i] = newJsonOperation(op)
 	}
@@ -39,7 +58,7 @@ func newJsonOperation(op jsondiff.Operation) *jsonOperation {
 	}
 }
 
-func compareJson(source, target interface{}, opts ...jsondiff.Option) (jsonPatch, error) {
+func compareJson(source, target interface{}, opts ...jsondiff.Option) (JsonPatch, error) {
 	patch, err := jsondiff.Compare(source, target, opts...)
 	if err != nil {
 		return nil, err

@@ -57,6 +57,23 @@ func (r *report) output(d *diff.Diff) {
 		r.printEndpoints(d.EndpointsDiff)
 	}
 
+	if d.ExtensionsDiff.Empty() &&
+		d.SecurityDiff.Empty() &&
+		d.ServersDiff.Empty() {
+		return
+	}
+
+	r.print("Other Changes")
+	r.print("-------------")
+
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
+		r.print("")
+	}
+
+	r.printValue(d.OpenAPIDiff, "Version")
+
 	if !d.SecurityDiff.Empty() {
 		r.print("Security Requirements changed")
 		r.indent().printSecurityRequirements(d.SecurityDiff)
@@ -122,7 +139,15 @@ func (r *report) printMethod(d *diff.MethodDiff) {
 		return
 	}
 
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
+	}
+
+	r.printStrings(d.TagsDiff, "Tags")
+	r.printValue(d.SummaryDiff, "Summary")
 	r.printValue(d.DescriptionDiff, "Description")
+	r.printValue(d.OperationIDDiff, "OperationID")
 	r.printParams(d.ParametersDiff)
 
 	if !d.RequestBodyDiff.Empty() {
@@ -180,6 +205,14 @@ func (r *report) printParams(d *diff.ParametersDiffByLocation) {
 }
 
 func (r *report) printParam(d *diff.ParameterDiff) {
+	r.printValue(d.NameDiff, "Name")
+	r.printValue(d.InDiff, "In")
+
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
+	}
+
 	r.printValue(d.DescriptionDiff, "Description")
 	r.printValue(d.StyleDiff, "Style")
 	r.printValue(d.ExplodeDiff, "Explode")
@@ -232,6 +265,11 @@ func (r *report) printExample(d *diff.ExampleDiff) {
 		return
 	}
 
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
+	}
+
 	r.printValue(d.SummaryDiff, "Summary")
 	r.printValue(d.DescriptionDiff, "Description")
 	r.printValue(d.ValueDiff, "Value")
@@ -261,6 +299,12 @@ func (r *report) printServer(d *diff.ServerDiff) {
 
 	r.printConditional(d.Added, "Server added")
 	r.printConditional(d.Deleted, "Server deleted")
+
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
+	}
+
 	r.printValue(d.URLDiff, "URL")
 	r.printValue(d.DescriptionDiff, "Description")
 	if !d.VariablesDiff.Empty() {
@@ -295,12 +339,48 @@ func (r *report) printVariable(d *diff.VariableDiff) {
 		return
 	}
 
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
+	}
+
 	if !d.EnumDiff.Empty() {
 		r.printConditional(len(d.EnumDiff.Added) > 0, "New enum values:", d.EnumDiff.Added)
 		r.printConditional(len(d.EnumDiff.Deleted) > 0, "Deleted enum values:", d.EnumDiff.Deleted)
 	}
 	r.printValue(d.DefaultDiff, "Default")
 	r.printValue(d.DescriptionDiff, "Description")
+}
+
+func (r *report) printExtensions(d *diff.ExtensionsDiff) {
+	if d.Empty() {
+		return
+	}
+
+	sort.Sort(d.Added)
+	for _, added := range d.Added {
+		r.print("New extension:", added)
+	}
+
+	sort.Sort(d.Deleted)
+	for _, deleted := range d.Deleted {
+		r.print("Deleted extension:", deleted)
+	}
+
+	for extension, patch := range d.Modified {
+		r.print("Modified extension:", extension)
+		r.indent().printExtension(patch)
+	}
+}
+
+func (r *report) printExtension(d diff.JsonPatch) {
+	if d.Empty() {
+		return
+	}
+
+	for _, op := range d {
+		r.print(op.String())
+	}
 }
 
 func (r *report) printSchema(d *diff.SchemaDiff) {
@@ -311,6 +391,11 @@ func (r *report) printSchema(d *diff.SchemaDiff) {
 	r.printConditional(d.SchemaAdded, "Schema added")
 	r.printConditional(d.SchemaDeleted, "Schema deleted")
 	r.printConditional(d.CircularRefDiff, "Schema circular referecnce changed")
+
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
+	}
 
 	if !d.OneOfDiff.Empty() {
 		r.print("Property 'OneOf' changed")
@@ -460,6 +545,11 @@ func (r *report) printResponse(d *diff.ResponseDiff) {
 		return
 	}
 
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
+	}
+
 	r.printValue(d.DescriptionDiff, "Description")
 
 	if !d.ContentDiff.Empty() {
@@ -476,6 +566,11 @@ func (r *report) printResponse(d *diff.ResponseDiff) {
 func (r *report) printRequestBody(d *diff.RequestBodyDiff) {
 	if d.Empty() {
 		return
+	}
+
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
 	}
 
 	r.printValue(d.DescriptionDiff, "Description")
@@ -510,6 +605,11 @@ func (r *report) printContent(d *diff.ContentDiff) {
 func (r *report) printMediaType(d *diff.MediaTypeDiff) {
 	if d.Empty() {
 		return
+	}
+
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
 	}
 
 	if !d.SchemaDiff.Empty() {
@@ -567,6 +667,11 @@ func (r *report) printHeaders(d *diff.HeadersDiff) {
 func (r *report) printHeader(d *diff.HeaderDiff) {
 	if d.Empty() {
 		return
+	}
+
+	if !d.ExtensionsDiff.Empty() {
+		r.print("Extensions changed")
+		r.indent().printExtensions(d.ExtensionsDiff)
 	}
 
 	r.printValue(d.DescriptionDiff, "Description")
