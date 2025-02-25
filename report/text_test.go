@@ -88,3 +88,19 @@ func TestText_DerefUint64Nil(t *testing.T) {
 	textReport := report.GetTextReportAsString(d(t, &diff.Config{}, 1, 5))
 	require.Contains(t, textReport, "MaxLength changed from 29 to null")
 }
+
+func TestText_RequestBody(t *testing.T) {
+	loader := openapi3.NewLoader()
+
+	s1, err := loader.LoadFromFile("../data/request-body/base.yaml")
+	require.NoError(t, err)
+
+	s2, err := loader.LoadFromFile("../data/request-body/revision.yaml")
+	require.NoError(t, err)
+
+	dd, err := diff.Get(diff.NewConfig(), s1, s2)
+	require.NoError(t, err)
+
+	textReport := report.GetTextReportAsString(dd)
+	require.Contains(t, textReport, "Request body changed")
+}

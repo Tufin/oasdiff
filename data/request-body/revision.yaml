@@ -1,0 +1,40 @@
+openapi: 3.0.1
+info:
+  title: Tufin
+  version: "1.0"
+paths:
+  /api/v1.0/groups:
+    post:
+      operationId: createOneGroup
+      requestBody:
+        content:
+          application/json:
+            example: [1, 2, 3, 4]
+            examples: 
+              example1: 
+                value: [1, 2, 3]
+            schema:
+              type: array
+              items:
+                type: number
+          application/octet-stream:
+            schema:
+              type: array
+              items:
+                type: number
+        description: Creates one project.
+        required: true
+      responses:
+        "200":
+          description: OK
+      summary: Create One Project
+      servers:
+        - url: 'https://www.oasdiff.com'
+          description: "1"
+          variables:
+            title:
+              default: "CEO"
+              x-nonschema: true
+          x-extension-test:
+            test: "test"
+            x-nonschema: true

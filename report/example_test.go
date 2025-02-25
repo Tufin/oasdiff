@@ -43,11 +43,19 @@ func ExampleGetTextReportAsString() {
 	// ### Modified Endpoints: 4
 	// -------------------------
 	// GET /api/{domain}/{project}/badges/security-score
+	// - Extensions changed
+	//   - Deleted extension: x-extension-test
+	// - Tags changed from 'security' to ''
+	// - OperationID changed from 'GetSecurityScores' to 'GetSecurityScore'
 	// - Deleted query param: filter
 	// - Deleted header param: user
 	// - Deleted cookie param: test
 	// - Modified query param: image
+	//   - Extensions changed
+	//     - New extension: x-extension-test
 	//   - Schema changed
+	//     - Extensions changed
+	//       - Deleted extension: x-extension-test
 	//     - Property 'Not' changed
 	//       - Schema added
 	//     - Type changed from 'string' to ''
@@ -76,9 +84,14 @@ func ExampleGetTextReportAsString() {
 	//     - New enum values: [test1]
 	// - Responses changed
 	//   - Modified response: default
+	//     - Extensions changed
+	//       - New extension: x-extension-test
+	//       - New extension: x-test
 	//     - Description changed from 'Tufin1' to 'Tufin'
 	//     - Headers changed
 	//       - Modified header: X-RateLimit-Limit
+	//         - Extensions changed
+	//           - New extension: x-test
 	//         - Description changed from 'Request limit per hour.' to 'Request limit per min.'
 	// - Servers changed
 	//   - New server: https://api.oasdiff.com
@@ -93,6 +106,13 @@ func ExampleGetTextReportAsString() {
 	//
 	// POST /subscribe
 	// - Callbacks changed
+	//
+	// Other Changes
+	// -------------
+	// Extensions changed
+	// - Deleted extension: x-extension-test
+	// - Modified extension: x-extension-test2
+	//   - Modified value from 'go' to 'nogo'
 	//
 	// Security Requirements changed
 	// - Deleted security requirements: bearerAuth
@@ -141,13 +161,30 @@ func ExampleGetHTMLReportAsString() {
 	// <hr>
 	// <p>GET /api/{domain}/{project}/badges/security-score</p>
 	// <ul>
+	// <li>Extensions changed
+	// <ul>
+	// <li>Deleted extension: x-extension-test</li>
+	// </ul>
+	// </li>
+	// <li>Tags changed from 'security' to ''</li>
+	// <li>OperationID changed from 'GetSecurityScores' to 'GetSecurityScore'</li>
 	// <li>Deleted query param: filter</li>
 	// <li>Deleted header param: user</li>
 	// <li>Deleted cookie param: test</li>
 	// <li>Modified query param: image
 	// <ul>
+	// <li>Extensions changed
+	// <ul>
+	// <li>New extension: x-extension-test</li>
+	// </ul>
+	// </li>
 	// <li>Schema changed
 	// <ul>
+	// <li>Extensions changed
+	// <ul>
+	// <li>Deleted extension: x-extension-test</li>
+	// </ul>
+	// </li>
 	// <li>Property 'Not' changed
 	// <ul>
 	// <li>Schema added</li>
@@ -207,11 +244,22 @@ func ExampleGetHTMLReportAsString() {
 	// <ul>
 	// <li>Modified response: default
 	// <ul>
+	// <li>Extensions changed
+	// <ul>
+	// <li>New extension: x-extension-test</li>
+	// <li>New extension: x-test</li>
+	// </ul>
+	// </li>
 	// <li>Description changed from 'Tufin1' to 'Tufin'</li>
 	// <li>Headers changed
 	// <ul>
 	// <li>Modified header: X-RateLimit-Limit
 	// <ul>
+	// <li>Extensions changed
+	// <ul>
+	// <li>New extension: x-test</li>
+	// </ul>
+	// </li>
 	// <li>Description changed from 'Request limit per hour.' to 'Request limit per min.'</li>
 	// </ul>
 	// </li>
@@ -245,6 +293,16 @@ func ExampleGetHTMLReportAsString() {
 	// <p>POST /subscribe</p>
 	// <ul>
 	// <li>Callbacks changed</li>
+	// </ul>
+	// <h2 id="other-changes">Other Changes</h2>
+	// <p>Extensions changed</p>
+	// <ul>
+	// <li>Deleted extension: x-extension-test</li>
+	// <li>Modified extension: x-extension-test2
+	// <ul>
+	// <li>Modified value from 'go' to 'nogo'</li>
+	// </ul>
+	// </li>
 	// </ul>
 	// <p>Security Requirements changed</p>
 	// <ul>
