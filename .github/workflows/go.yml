@@ -76,7 +76,7 @@ jobs:
     - if: runner.os == 'Linux'
       name: Errors must not be capitalized https://github.com/golang/go/wiki/CodeReviewComments#error-strings
       run: |
-        ! git grep -E '(fmt|errors)[^(]+\(.[A-Z]'
+        ! git grep -E '(fmt\.Errorf|errors\.New)\(.[A-Z]'
         
     # - if: runner.os == 'Linux'
     #   name: Did you mean %q
