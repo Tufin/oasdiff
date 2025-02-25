@@ -11,12 +11,12 @@ paths:
         content:
           application/json:
             example: [1, 2, 3]
-            examples: {
-              example1: {
+            examples: 
+              example1: 
                 value: [1, 2, 3]
-              }
-            }
+                x-nonschema: true
             schema:
+              x-nonschema: true
               type: array
               items:
                 type: string
@@ -29,5 +29,15 @@ paths:
         required: true
       responses:
         "200":
+          x-nonschema: true
           description: OK
       summary: Create One Project
+      servers:
+        - url: 'https://www.oasdiff.com'
+          description: "1"
+          variables:
+            title:
+              default: "CEO"
+          x-extension-test:
+            test: "test"
+            x-nonschema: true
