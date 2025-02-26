@@ -4,6 +4,6 @@
 ## {{ $endpoint.Operation }} {{ $endpoint.Path }}
 
 {{ range $changes }}
-- **{{ .Level }}**: {{ .Text }}
+- {{ if .IsBreaking }}**{{ .Level }}**:{{ end }} {{ .Text }}
 {{ end }}
 {{ end }}
