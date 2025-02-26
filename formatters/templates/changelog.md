@@ -1,6 +1,9 @@
 # API Changelog {{ .BaseVersion }}{{ if ne .BaseVersion .RevisionVersion }} vs. {{ .RevisionVersion }}{{ end }}
+
 {{ range $endpoint, $changes := .APIChanges }}
 ## {{ $endpoint.Operation }} {{ $endpoint.Path }}
-{{ range $changes }}- {{ if .IsBreaking }}:warning:{{ end }} {{ .Text }}
+
+{{ range $changes }}
+- **{{ .Level }}**: {{ .Text }}
 {{ end }}
 {{ end }}
