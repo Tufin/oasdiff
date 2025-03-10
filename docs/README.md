@@ -2,7 +2,7 @@
 [![CI](https://github.com/oasdiff/oasdiff/workflows/go/badge.svg)](https://github.com/oasdiff/oasdiff/actions)
 [![codecov](https://codecov.io/gh/oasdiff/oasdiff/branch/main/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/oasdiff/oasdiff)
 [![Go Report Card](https://goreportcard.com/badge/github.com/oasdiff/oasdiff)](https://goreportcard.com/report/github.com/oasdiff/oasdiff)
-[![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
+[![GoDoc](https://godoc.org/github.com/oasdiff/oasdiff?status.svg)](https://godoc.org/github.com/oasdiff/oasdiff)
 [![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
 [![Slack](https://img.shields.io/badge/slack-&#64;oasdiff-green.svg?logo=slack)](https://join.slack.com/t/oasdiff/shared_invite/zt-1wvo7wois-ttncNBmyjyRXqBzyg~P6oA)
 
