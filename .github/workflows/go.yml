@@ -39,19 +39,19 @@ jobs:
     - run: echo ${{ steps.go-cache-paths.outputs.go-mod }}
 
     - name: Go Build Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ steps.go-cache-paths.outputs.go-build }}
         key: ${{ runner.os }}-go-${{ matrix.go }}-build-${{ hashFiles('**/go.sum') }}
 
     - name: Go Mod Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ steps.go-cache-paths.outputs.go-build }}
         key: ${{ runner.os }}-go-${{ matrix.go }}-build-${{ hashFiles('**/go.sum') }}
 
     - name: Check out code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - run: go mod download && go mod tidy && go mod verify
     - run: git --no-pager diff --exit-code
@@ -88,7 +88,7 @@ jobs:
       run: |
         ! git grep -InE 'json:"' | grep -v _test.go | grep -v yaml:
 
-    - uses: codecov/codecov-action@v4
+    - uses: codecov/codecov-action@v5
       with:
         files: ./coverage.txt
         flags: unittests # optional
