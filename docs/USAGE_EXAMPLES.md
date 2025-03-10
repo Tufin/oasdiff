@@ -87,17 +87,17 @@ oasdiff summary https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/open
 To run with docker just replace the `oasdiff` command by `docker run --rm -t oasdiff/oasdiff`, for example:
 
 ```bash
-docker run --rm -t oasdiff/oasdiff diff https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test3.yaml -f text
+docker run --rm -t tufin/oasdiff diff https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test3.yaml -f text
 ```
 
 ### Breaking changes with Docker
 ```bash
-docker run --rm -t oasdiff/oasdiff breaking https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test3.yaml
+docker run --rm -t tufin/oasdiff breaking https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Comparing local files with Docker
 ```bash
-docker run --rm -t -v $(pwd)/data:/data:ro oasdiff/oasdiff diff /data/openapi-test1.yaml /data/openapi-test3.yaml
+docker run --rm -t -v $(pwd)/data:/data:ro tufin/oasdiff diff /data/openapi-test1.yaml /data/openapi-test3.yaml
 ```
 
 Replace `$(pwd)/data` by the path that contains your files.  

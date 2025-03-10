@@ -49,7 +49,7 @@ oasdiff changelog https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/op
 
 ### With Docker
 ```
-docker run --rm -t oasdiff/oasdiff changelog https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test5.yaml
+docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test5.yaml
 ```
 
 ## Features 
