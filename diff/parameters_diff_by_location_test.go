@@ -3,9 +3,9 @@ package diff_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/utils"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/utils"
 )
 
 func TestParamNamesByLocation_Len(t *testing.T) {

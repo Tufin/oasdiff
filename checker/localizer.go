@@ -3,7 +3,7 @@ package checker
 import (
 	"fmt"
 
-	"github.com/tufin/oasdiff/checker/localizations"
+	"github.com/oasdiff/oasdiff/checker/localizations"
 )
 
 type Localizer func(key string, args ...interface{}) string

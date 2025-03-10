@@ -3,9 +3,9 @@ package formatters_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/formatters"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/formatters"
 )
 
 var changes = checker.Changes{

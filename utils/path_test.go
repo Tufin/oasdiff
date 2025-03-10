@@ -3,8 +3,8 @@ package utils_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/utils"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/utils"
 )
 
 func Test_NormalizeTemplatedPath(t *testing.T) {

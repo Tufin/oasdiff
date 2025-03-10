@@ -3,8 +3,8 @@ package lint_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/lint"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/lint"
 )
 
 func TestRequirePropertiesCheck_OK(t *testing.T) {

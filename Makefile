@@ -1,7 +1,7 @@
 # A Self-Documenting Makefile: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 
 VERSION=$(shell git describe --always --tags | cut -d "v" -f 2)
-LINKER_FLAGS=-s -w -X github.com/tufin/oasdiff/build.Version=${VERSION}
+LINKER_FLAGS=-s -w -X github.com/oasdiff/oasdiff/build.Version=${VERSION}
 GOLANGCILINT_VERSION=v1.52.2
 
 .PHONY: test

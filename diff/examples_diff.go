@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // ExamplesDiff describes the changes between a pair of sets of example objects: https://swagger.io/specification/#example-object

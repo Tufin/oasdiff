@@ -3,9 +3,9 @@ package report_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/report"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/report"
 )
 
 func TestHTML(t *testing.T) {

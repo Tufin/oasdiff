@@ -4,8 +4,8 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/oasdiff/oasdiff/diff"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/diff"
 )
 
 func TestEndpointsSort(t *testing.T) {

@@ -1,6 +1,6 @@
 package internal
 
-import "github.com/tufin/oasdiff/checker"
+import "github.com/oasdiff/oasdiff/checker"
 
 func getAllTags() []string {
 	return []string{"request", "response", "add", "remove", "change", "generalize", "specialize", "increase", "decrease", "set", "body", "parameters", "properties", "headers", "security", "components"}

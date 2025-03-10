@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/load"
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/load"
 )
 
 type SingleLineFormatter struct {

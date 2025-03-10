@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/oasdiff/oasdiff/checker/generator"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/checker/generator"
 )
 
 func WriteToFile(t *testing.T, filename string, lines []string) {

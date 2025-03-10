@@ -4,8 +4,8 @@ import (
 	"errors"
 	"io"
 
+	"github.com/oasdiff/oasdiff/load"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/load"
 )
 
 const specHelp = `

@@ -6,12 +6,12 @@ These commands are typically used in the CI to report or prevent breaking change
 
 ### Example: display breaking changes
 ```
-oasdiff breaking https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff breaking https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Example: display a changelog
 ```
-oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff changelog https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Checks
@@ -48,14 +48,14 @@ Additional formats can be generated using the `--format` flag:
 - yaml
 - githubactions: suitable for integration with github
 - junit: suitable for integration with gitlab
-- html: [see example](https://html-preview.github.io/?url=https://github.com/Tufin/oasdiff/blob/main/docs/changelog.html)
+- html: [see example](https://html-preview.github.io/?url=https://github.com/oasdiff/oasdiff/blob/main/docs/changelog.html)
 - markdown: [see example](changelog.md)
 - text: the default, human-readable, format
 - singleline: displays each change on a single line, this can be useful to prepare [ignore files](#ignoring-specific-breaking-changes)
 
 For example:
 ```
-oasdiff breaking -f yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml
+oasdiff breaking -f yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test3.yaml
 ```
 
 ### Color
@@ -105,7 +105,7 @@ If you don't use the `x-extensible-enum` in your OpenAPI specifications, nothing
 ### Localization
 To display changes in other languages, use the `--lang` flag.  
 Currently English and Russian are supported.  
-[Please improve oasdiff by adding your own language](https://github.com/Tufin/oasdiff/issues/383).
+[Please improve oasdiff by adding your own language](https://github.com/oasdiff/oasdiff/issues/383).
 
 ### Customizing Severity Levels
 Oasdiff allows you to change the default severity levels according to your needs.  

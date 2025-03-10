@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/checker/localizations"
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/formatters"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/checker/localizations"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/formatters"
 	"golang.org/x/exp/slices"
 )
 

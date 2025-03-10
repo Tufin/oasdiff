@@ -3,8 +3,8 @@ package internal
 import (
 	"io"
 
+	"github.com/oasdiff/oasdiff/checker"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/checker"
 )
 
 func getBreakingChangesCmd() *cobra.Command {

@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/oasdiff/oasdiff/flatten/commonparams"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/flatten/commonparams"
 )
 
 func TestMove(t *testing.T) {

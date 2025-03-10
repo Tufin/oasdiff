@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/oasdiff/oasdiff/internal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/internal"
 )
 
 type ViperMock struct {

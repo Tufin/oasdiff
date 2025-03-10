@@ -3,7 +3,7 @@ package checker
 import (
 	"fmt"
 
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 type Direction int8

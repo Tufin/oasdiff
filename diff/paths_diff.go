@@ -5,7 +5,7 @@ import (
 	"regexp"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // PathsDiff describes the changes between a pair of Paths objects: https://swagger.io/specification/#paths-object

@@ -2,7 +2,7 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // StringMapDiff describes the changes between a pair of string maps

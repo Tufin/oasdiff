@@ -30,5 +30,4 @@
 3. Make sure that [BREAKING-CHANGES-EXAMPLES.md](BREAKING-CHANGES-EXAMPLES.md) was updated with your use-cases
 
 ## Example
-See this example of adding a custom check: https://github.com/Tufin/oasdiff/pull/208/files
-
+See this example of adding a custom check: https://github.com/oasdiff/oasdiff/pull/208/files

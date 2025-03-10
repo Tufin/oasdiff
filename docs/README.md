@@ -1,9 +1,9 @@
 
-[![CI](https://github.com/Tufin/oasdiff/workflows/go/badge.svg)](https://github.com/Tufin/oasdiff/actions)
-[![codecov](https://codecov.io/gh/tufin/oasdiff/branch/main/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/tufin/oasdiff)
-[![Go Report Card](https://goreportcard.com/badge/github.com/tufin/oasdiff)](https://goreportcard.com/report/github.com/tufin/oasdiff)
-[![GoDoc](https://godoc.org/github.com/tufin/oasdiff?status.svg)](https://godoc.org/github.com/tufin/oasdiff)
-[![Docker Image Version](https://img.shields.io/docker/v/tufin/oasdiff?sort=semver)](https://hub.docker.com/r/tufin/oasdiff/tags)
+[![CI](https://github.com/oasdiff/oasdiff/workflows/go/badge.svg)](https://github.com/oasdiff/oasdiff/actions)
+[![codecov](https://codecov.io/gh/oasdiff/oasdiff/branch/main/graph/badge.svg?token=Y8BM6X77JY)](https://codecov.io/gh/oasdiff/oasdiff)
+[![Go Report Card](https://goreportcard.com/badge/github.com/oasdiff/oasdiff)](https://goreportcard.com/report/github.com/oasdiff/oasdiff)
+[![GoDoc](https://godoc.org/github.com/oasdiff/oasdiff?status.svg)](https://godoc.org/github.com/oasdiff/oasdiff)
+[![Docker Image Version](https://img.shields.io/docker/v/oasdiff/oasdiff?sort=semver)](https://hub.docker.com/r/oasdiff/oasdiff/tags)
 [![Slack](https://img.shields.io/badge/slack-&#64;oasdiff-green.svg?logo=slack)](https://join.slack.com/t/oasdiff/shared_invite/zt-1wvo7wois-ttncNBmyjyRXqBzyg~P6oA)
 
 ![oasdiff banner](https://github.com/yonatanmgr/oasdiff/assets/31913495/ac9b154e-72d1-4969-bc3b-f527bbe7751d)
@@ -15,19 +15,19 @@ Command-line and Go package to compare and detect breaking changes in OpenAPI sp
 
 ### Install with Go
 ```bash
-go install github.com/tufin/oasdiff@latest
+go install github.com/oasdiff/oasdiff@latest
 ```
 
 ### Install on macOS with Brew
 ```bash
-brew tap tufin/homebrew-tufin
+brew tap oasdiff/homebrew-oasdiff
 brew install oasdiff
 ```
 
 ### Install on macOS and Linux using curl
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tufin/oasdiff/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/oasdiff/oasdiff/main/install.sh | sh
 ```
 
 ### Install with asdf
@@ -35,19 +35,19 @@ curl -fsSL https://raw.githubusercontent.com/tufin/oasdiff/main/install.sh | sh
 https://github.com/oasdiff/asdf-oasdiff
 
 ### Manually install on macOS, Windows and Linux
-Copy binaries from [latest release](https://github.com/Tufin/oasdiff/releases/)
+Copy binaries from [latest release](https://github.com/oasdiff/oasdiff/releases/)
 
 
 ## Try it
 
 ### Locally
 ```
-oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test5.yaml
+oasdiff changelog https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test5.yaml
 ```
 
 ### With Docker
 ```
-docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test5.yaml
+docker run --rm -t oasdiff/oasdiff changelog https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test5.yaml
 ```
 
 ## Features 
@@ -92,12 +92,12 @@ docker run --rm -t tufin/oasdiff changelog https://raw.githubusercontent.com/Tuf
 ## Roadmap
 I am currently working on the ability to correlate breaking changes and changelog messages with the underlying changes in the original YAML spec.  
 This will allow users to see changes in their original context, investigate, and determine how to handle them.  
-Specifically, github users will be able to click annotations and see the diff at the relevant line as discussed [here](https://github.com/Tufin/oasdiff/issues/574).  
-[Please help us prioritize the roadmap](https://github.com/Tufin/oasdiff/discussions/631).
+Specifically, github users will be able to click annotations and see the diff at the relevant line as discussed [here](https://github.com/oasdiff/oasdiff/issues/574).  
+[Please help us prioritize the roadmap](https://github.com/oasdiff/oasdiff/discussions/631).
 
 ## Credits
 This project relies on the excellent implementation of OpenAPI 3.0 for Go: [kin-openapi](https://github.com/getkin/kin-openapi).
 
 ## Feedback
 We welcome your feedback.  
-If you have ideas for improvement or additional needs around APIs, please [let us know](https://github.com/Tufin/oasdiff/discussions/new?category=ideas).
+If you have ideas for improvement or additional needs around APIs, please [let us know](https://github.com/oasdiff/oasdiff/discussions/new?category=ideas).

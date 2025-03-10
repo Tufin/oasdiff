@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/oasdiff/oasdiff/flatten/allof"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/flatten/allof"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"

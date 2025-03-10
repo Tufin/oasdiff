@@ -54,7 +54,7 @@ endpoints:
 ### Complex Mapping Keys
 The modified endpoints section has two items per key, method and path, this is called a [complex mapping key](https://stackoverflow.com/questions/33987316/what-is-a-complex-mapping-key-in-yaml) in YAML.  
 Some YAML libraries don't support complex mapping keys, for exampple:
-- python PyYAML: see https://github.com/Tufin/oasdiff/issues/94#issuecomment-1087468450
+- python PyYAML: see https://github.com/oasdiff/oasdiff/issues/94#issuecomment-1087468450
 - golang gopkg.in/yaml.v3 fails to unmarshal the oasdiff output. This package offers a solution: https://github.com/tliron/yamlkeys
 
 To overcome this limitation, oasdiff allows you to exclude the endpoints section by adding the following flag: `--exclude-elements=endpoints`.  
@@ -133,7 +133,7 @@ To view all diff details, use `yaml` or `json` formats.
 
 #### Comparing remote files over http/s
 ```
-oasdiff diff https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/Tufin/oasdiff/main/data/openapi-test3.yaml -f text
+oasdiff diff https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test1.yaml https://raw.githubusercontent.com/oasdiff/oasdiff/main/data/openapi-test3.yaml -f text
 ```
 
 #### Diff across multiple specs with globs

@@ -1,7 +1,7 @@
 package diff
 
 import (
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // PathParamsMap handles path param renaming

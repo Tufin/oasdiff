@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 func checkRequireProperties(schema *openapi3.Schema, s *state) *Error {

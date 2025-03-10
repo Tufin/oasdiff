@@ -2,7 +2,7 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // RequiredPropertiesDiff describes the changes between a pair of lists of required properties

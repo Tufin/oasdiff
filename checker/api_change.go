@@ -6,8 +6,8 @@ import (
 
 	"github.com/TwiN/go-color"
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/load"
 )
 
 // ApiChange represnts a change in the Paths Section of an OpenAPI spec

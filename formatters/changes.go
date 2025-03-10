@@ -1,7 +1,7 @@
 package formatters
 
 import (
-	"github.com/tufin/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/checker"
 )
 
 type Change struct {

@@ -3,9 +3,9 @@ package load
 import (
 	"fmt"
 
-	"github.com/tufin/oasdiff/flatten/allof"
-	"github.com/tufin/oasdiff/flatten/commonparams"
-	"github.com/tufin/oasdiff/flatten/headers"
+	"github.com/oasdiff/oasdiff/flatten/allof"
+	"github.com/oasdiff/oasdiff/flatten/commonparams"
+	"github.com/oasdiff/oasdiff/flatten/headers"
 )
 
 // Option functions can be used to preprocess specs after loading them

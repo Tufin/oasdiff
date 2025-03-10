@@ -2,7 +2,7 @@ package checker
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/diff"
 	"golang.org/x/exp/slices"
 )
 

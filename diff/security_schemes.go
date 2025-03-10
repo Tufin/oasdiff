@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // SecuritySchemesDiff describes the changes between a pair of sets of security scheme objects: https://swagger.io/specification/#security-scheme-object

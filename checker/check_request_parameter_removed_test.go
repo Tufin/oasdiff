@@ -3,9 +3,9 @@ package checker_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/diff"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/diff"
 )
 
 // BC: deleting a parameter without deprecation is breaking

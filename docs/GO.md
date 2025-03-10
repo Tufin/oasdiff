@@ -7,8 +7,8 @@ diff.Get(&diff.Config{}, spec1, spec2)
 ```
 
 ### Advanced Examples
-- [diff](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-Get)
-- [breaking changes](https://pkg.go.dev/github.com/tufin/oasdiff/diff#example-GetPathsDiff)
+- [diff](https://pkg.go.dev/github.com/oasdiff/oasdiff/diff#example-Get)
+- [breaking changes](https://pkg.go.dev/github.com/oasdiff/oasdiff/diff#example-GetPathsDiff)
 
 
 ### OpenAPI References

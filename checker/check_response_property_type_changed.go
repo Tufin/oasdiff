@@ -1,7 +1,7 @@
 package checker
 
 import (
-	"github.com/tufin/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/diff"
 )
 
 const (

@@ -1,9 +1,9 @@
 package internal
 
 import (
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/load"
 	"github.com/spf13/viper"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
 )
 
 type Flags struct {

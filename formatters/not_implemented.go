@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/load"
 )
 
 type notImplementedFormatter struct{}
