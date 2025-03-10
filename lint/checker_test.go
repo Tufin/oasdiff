@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/oasdiff/oasdiff/lint"
+	"github.com/oasdiff/oasdiff/load"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/lint"
-	"github.com/tufin/oasdiff/load"
 )
 
 func loadFrom(t *testing.T, path string) *load.SpecInfo {

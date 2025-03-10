@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/formatters"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/formatters"
 )
 
 const summaryCmd = "summary"

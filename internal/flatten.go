@@ -5,9 +5,9 @@ import (
 	"io"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/oasdiff/oasdiff/formatters"
+	"github.com/oasdiff/oasdiff/load"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/formatters"
-	"github.com/tufin/oasdiff/load"
 )
 
 const flattenCmd = "flatten"

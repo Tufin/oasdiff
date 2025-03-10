@@ -3,8 +3,8 @@ package formatters_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/formatters"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/formatters"
 )
 
 func TestTypes(t *testing.T) {

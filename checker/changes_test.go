@@ -4,8 +4,8 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/oasdiff/oasdiff/checker"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/checker"
 )
 
 var changes = checker.Changes{

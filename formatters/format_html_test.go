@@ -7,10 +7,10 @@ import (
 
 	_ "embed"
 
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/formatters"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/formatters"
 )
 
 func MockLocalizer(id string, args ...interface{}) string {

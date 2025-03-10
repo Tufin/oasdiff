@@ -11,7 +11,7 @@ COPY . .
 RUN VERSION=$(git describe --always --tags) && \
     CGO_ENABLED=0 GOOS=linux go build \
     -mod=readonly \
-    -ldflags "-s -w -X github.com/tufin/oasdiff/build.Version=${VERSION}"
+    -ldflags "-s -w -X github.com/oasdiff/oasdiff/build.Version=${VERSION}"
 
 ### Create image ###
 FROM alpine:3

@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/diff"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/diff"
 )
 
 // BC: deleting a path without deprecation is breaking
@@ -231,7 +231,7 @@ func TestBreaking_RemoveEndpointWithInvalidSunset(t *testing.T) {
 	require.Equal(t, "../data/deprecation/deprecated-invalid.yaml", errs[0].GetSource())
 }
 
-// test sunset date without double quotes, see https://github.com/Tufin/oasdiff/pull/198/files
+// test sunset date without double quotes, see https://github.com/oasdiff/oasdiff/pull/198/files
 func TestBreaking_DeprecationPathMixed_RFC3339_Sunset(t *testing.T) {
 
 	s1, err := open(getDeprecationFile("deprecated-path-mixed-rfc3339-sunset.yaml"))

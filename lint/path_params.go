@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/load"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/load"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 func PathParamsCheck(source string, s *load.SpecInfo) []*Error {

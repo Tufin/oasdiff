@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/oasdiff/oasdiff/load"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/load"
 )
 
 func TestSpecInfo_File(t *testing.T) {

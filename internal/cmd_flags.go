@@ -1,10 +1,10 @@
 package internal
 
 import (
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/checker/localizations"
+	"github.com/oasdiff/oasdiff/formatters"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/checker/localizations"
-	"github.com/tufin/oasdiff/formatters"
 )
 
 func addCommonDiffFlags(cmd *cobra.Command) {

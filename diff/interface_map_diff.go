@@ -1,7 +1,7 @@
 package diff
 
 import (
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // InterfaceMap is a map of string to interface

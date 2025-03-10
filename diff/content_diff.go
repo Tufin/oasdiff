@@ -2,7 +2,7 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // ContentDiff describes the changes between content properties each containing media type objects: https://swagger.io/specification/#media-type-object

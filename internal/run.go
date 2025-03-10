@@ -4,8 +4,8 @@ import (
 	"io"
 	"strconv"
 
+	"github.com/oasdiff/oasdiff/build"
 	"github.com/spf13/cobra"
-	"github.com/tufin/oasdiff/build"
 )
 
 func Run(args []string, stdout io.Writer, stderr io.Writer) int {

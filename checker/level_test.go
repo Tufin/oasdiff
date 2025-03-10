@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/TwiN/go-color"
+	"github.com/oasdiff/oasdiff/checker"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/checker"
 )
 
 func TestStringCond_Info(t *testing.T) {

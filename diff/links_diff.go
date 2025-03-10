@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // LinksDiff describes the changes between a pair of sets of link objects: https://swagger.io/specification/#link-object

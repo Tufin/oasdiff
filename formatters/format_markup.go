@@ -6,10 +6,10 @@ import (
 
 	_ "embed"
 
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/load"
-	"github.com/tufin/oasdiff/report"
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/load"
+	"github.com/oasdiff/oasdiff/report"
 )
 
 type MarkupFormatter struct {

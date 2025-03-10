@@ -8,7 +8,7 @@ import (
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
 
-	"github.com/tufin/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/diff"
 )
 
 // GetHTMLReportAsString returns an HTML diff report as a string

@@ -3,9 +3,9 @@ package checker_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/checker"
+	"github.com/oasdiff/oasdiff/diff"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/checker"
-	"github.com/tufin/oasdiff/diff"
 )
 
 // CL: changing security component oauth's url

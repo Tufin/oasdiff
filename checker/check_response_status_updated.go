@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tufin/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/diff"
 )
 
 const (

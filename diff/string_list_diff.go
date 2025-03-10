@@ -1,6 +1,6 @@
 package diff
 
-import "github.com/tufin/oasdiff/utils"
+import "github.com/oasdiff/oasdiff/utils"
 
 // StringsDiff describes the changes between a pair of lists of strings
 type StringsDiff struct {

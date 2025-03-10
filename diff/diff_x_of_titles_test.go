@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/oasdiff/oasdiff/diff"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/diff"
 )
 
 func getXOfTitlesFile(file string) string {

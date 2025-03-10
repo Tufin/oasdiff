@@ -1,7 +1,7 @@
 package checker
 
 import (
-	"github.com/tufin/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/diff"
 )
 
 // BackwardCompatibilityCheck, or a check, is a function that receives a diff report and returns a list of changes

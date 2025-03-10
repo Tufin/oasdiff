@@ -4,8 +4,8 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/diff"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // breakingTypeFormatChangedInResponseProperty checks if the type or format of a response property was changed in a breaking way

@@ -3,8 +3,8 @@ package utils_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/utils"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/utils"
 )
 
 func TestMinus_Self(t *testing.T) {

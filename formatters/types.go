@@ -1,6 +1,6 @@
 package formatters
 
-import "github.com/tufin/oasdiff/checker"
+import "github.com/oasdiff/oasdiff/checker"
 
 type Format string
 

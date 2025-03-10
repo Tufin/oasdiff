@@ -2,7 +2,7 @@ package diff
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // EncodingsDiff describes the changes between a pair of sets of encoding objects: https://swagger.io/specification/#encoding-object

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 // ModifiedSubschemas is list of modified subschemas with their diffs

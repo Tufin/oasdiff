@@ -3,8 +3,8 @@ package load_test
 import (
 	"testing"
 
+	"github.com/oasdiff/oasdiff/load"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/load"
 )
 
 func TestSource_NewStdin(t *testing.T) {

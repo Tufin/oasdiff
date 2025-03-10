@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/TwiN/go-color"
-	"github.com/tufin/oasdiff/utils"
+	"github.com/oasdiff/oasdiff/utils"
 )
 
 type Level int

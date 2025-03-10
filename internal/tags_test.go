@@ -4,8 +4,8 @@ import (
 	"io"
 	"testing"
 
+	"github.com/oasdiff/oasdiff/internal"
 	"github.com/stretchr/testify/require"
-	"github.com/tufin/oasdiff/internal"
 )
 
 func Test_ChecksNoTags(t *testing.T) {

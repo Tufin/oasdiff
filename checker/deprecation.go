@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
-	"github.com/tufin/oasdiff/diff"
+	"github.com/oasdiff/oasdiff/diff"
 )
 
 func getSunset(Extensions map[string]interface{}) (interface{}, bool) {

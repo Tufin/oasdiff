@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/tufin/oasdiff/flatten/allof"
+	"github.com/oasdiff/oasdiff/flatten/allof"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/require"
