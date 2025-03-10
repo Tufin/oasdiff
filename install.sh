@@ -4,17 +4,17 @@ set -e
 # Adapted from https://raw.githubusercontent.com/railwayapp/cli/master/install.sh
 #
 # oasdiff
-# https://github.com/Tufin/oasdiff
+# https://github.com/oasdiff/oasdiff
 
 
 INSTALL_DIR=${INSTALL_DIR:-"/usr/local/bin"}
 BINARY_NAME=${BINARY_NAME:-"oasdiff"}
 
-REPO_NAME="Tufin/oasdiff"
-ISSUE_URL="https://github.com/Tufin/oasdiff/issues/new"
+REPO_NAME="oasdiff/oasdiff"
+ISSUE_URL="https://github.com/oasdiff/oasdiff/issues/new"
 
 get_latest_release() {
-  curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
+  curl --silent -L "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
     grep '"tag_name":' |                                            # Get tag line
     sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
 }
@@ -25,11 +25,11 @@ get_asset_name() {
 
 get_download_url() {
   local asset_name=$(get_asset_name $1 $2 $3)
-  echo "https://github.com/Tufin/oasdiff/releases/download/v$1/${asset_name}"
+  echo "https://github.com/oasdiff/oasdiff/releases/download/v$1/${asset_name}"
 }
 
 get_checksum_url() {
-  echo "https://github.com/Tufin/oasdiff/releases/download/v$1/checksums.txt"
+  echo "https://github.com/oasdiff/oasdiff/releases/download/v$1/checksums.txt"
 }
 
 command_exists() {
